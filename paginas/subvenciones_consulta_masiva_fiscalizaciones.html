@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta Masiva de Fiscalizaciones</title>
+    <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../recursos/css/style.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .search-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .search-header {
+            font-weight: 600;
+            color: #343a40;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .results-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+
+        .table {
+            font-size: 0.875rem;
+        }
+
+        .badge-cerrada {
+            background-color: #6c757d;
+        }
+
+        .badge-pendiente {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        .badge-observada {
+            background-color: #dc3545;
+        }
+
+        .badge-aprobada {
+            background-color: #28a745;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <h2 class="mb-1">Consulta Masiva de Fiscalizaciones</h2>
+        <p class="text-muted mb-4">Búsqueda y generación de reportes de fiscalizaciones</p>
+
+        <!-- Filtros de Búsqueda -->
+        <div class="search-card">
+            <div class="search-header">Filtros de Búsqueda</div>
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Subvención</label>
+                    <input type="text" class="form-control" id="filtro_subvencion" placeholder="Ej: SUB-2024-001">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Fiscalización</label>
+                    <input type="text" class="form-control" id="filtro_fiscalizacion" placeholder="Ej: FISC-2024-001">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Fecha (Inicio)</label>
+                    <input type="date" class="form-control" id="filtro_fecha_inicio">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Fecha Fin (Inicio)</label>
+                    <input type="date" class="form-control" id="filtro_fecha_fin_inicio">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Fecha de Ingreso</label>
+                    <input type="date" class="form-control" id="filtro_fecha_ingreso">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Fecha de Ingreso (Inicio)</label>
+                    <input type="date" class="form-control" id="filtro_fecha_ingreso_inicio">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Fecha de Ingreso (Fin)</label>
+                    <input type="date" class="form-control" id="filtro_fecha_ingreso_fin">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">RUT Fiscalizador</label>
+                    <input type="text" class="form-control" id="filtro_rut_fiscalizador" placeholder="XX.XXX.XXX-X">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Fiscalización</label>
+                    <input type="text" class="form-control" id="filtro_fiscalizacion2"
+                        placeholder="Buscar por fiscalización">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Resultado</label>
+                    <input type="text" class="form-control" id="filtro_resultado" placeholder="Estado del resultado">
+                </div>
+
+                <div class="col-12 d-flex gap-2 mt-3">
+                    <button class="btn btn-dark" onclick="buscarFiscalizaciones()">
+                        🔍 Buscar
+                    </button>
+                    <button class="btn btn-link text-primary" onclick="limpiarFiltros()">
+                        Limpiar Filtros
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resultados -->
+        <div class="results-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="fw-semibold">Resultados (4)</div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-outline-secondary">
+                        📊 Exportar a Excel
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary">
+                        📄 Exportar a PDF
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover" id="tablaFiscalizaciones">
+                    <thead class="table-light">
+                        <tr>
+                            <th>SUBVENCIÓN</th>
+                            <th>FISCALIZACIÓN</th>
+                            <th>FECHA</th>
+                            <th>ESTADO</th>
+                            <th>FECHA DE ESTADO</th>
+                            <th>NÚMERO DE INGRESO</th>
+                            <th>FECHA DE INGRESO</th>
+                            <th>RUT FISCALIZADOR</th>
+                            <th>FISCALIZACIÓN</th>
+                            <th>RESULTADO</th>
+                        </tr>
+                    </thead>
+                    <tbody><!-- Data loaded dynamically from subvenciones_consulta_masiva_fiscalizaciones_mock.json --></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="../recursos/js/subvenciones_consulta_masiva_fiscalizaciones.js"></script></body>
+
+</html>

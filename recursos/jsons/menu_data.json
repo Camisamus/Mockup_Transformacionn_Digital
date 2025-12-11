@@ -229,37 +229,44 @@
                     {
                         "id": "3.1.1",
                         "tipo": "Pagina",
-                        "nombre": "Consulta de Subvención"
+                        "nombre": "Consulta de Subvención",
+                        "Enlace": "paginas/subvenciones_consulta_subvencion.html"
                     },
                     {
                         "id": "3.1.2",
                         "tipo": "Pagina",
-                        "nombre": "Consulta Masiva de Subvenciones"
+                        "nombre": "Consulta Masiva de Subvenciones",
+                        "Enlace": "paginas/subvenciones_consulta_masiva.html"
                     },
                     {
                         "id": "3.1.3",
                         "tipo": "Pagina",
-                        "nombre": "Consulta Masiva de Aprobaciones"
+                        "nombre": "Consulta Masiva de Aprobaciones",
+                        "Enlace": "paginas/subvenciones_consulta_masiva_aprobaciones.html"
                     },
                     {
                         "id": "3.1.4",
                         "tipo": "Pagina",
-                        "nombre": "Consulta Masiva de Rendiciones"
+                        "nombre": "Consulta Masiva de Rendiciones",
+                        "Enlace": "paginas/subvenciones_consulta_masiva_rendiciones.html"
                     },
                     {
                         "id": "3.1.5",
                         "tipo": "Pagina",
-                        "nombre": "Consulta Masiva de Fiscalizaciones"
+                        "nombre": "Consulta Masiva de Fiscalizaciones",
+                        "Enlace": "paginas/subvenciones_consulta_masiva_fiscalizaciones.html"
                     },
                     {
                         "id": "3.1.6",
                         "tipo": "Pagina",
-                        "nombre": "Consulta de Pago"
+                        "nombre": "Consulta de Pago",
+                        "Enlace": "paginas/subvenciones_consulta_pago.html"
                     },
                     {
                         "id": "3.1.7",
                         "tipo": "Pagina",
-                        "nombre": "Consulta Masiva de Pagos"
+                        "nombre": "Consulta Masiva de Pagos",
+                        "Enlace": "paginas/subvenciones_consulta_masiva_pagos.html"
                     }
                 ]
             }
