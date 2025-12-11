@@ -1,0 +1,514 @@
+{
+    "Documento": [
+        {
+            "id": 1,
+            "descripcion": "Llenar solicitud de Patente y Firmar por ambos lados"
+        },
+        {
+            "id": 2,
+            "descripcion": "Fotocopia E-RUT y fotocopia C.I. Representante Legal y/o Socios"
+        },
+        {
+            "id": 3,
+            "descripcion": "Fotocopia C.I. Persona Natural"
+        },
+        {
+            "id": 4,
+            "descripcion": "Fotocopia legalizada Contrato de Arriendo y/o Certificado de dominio Vigente"
+        },
+        {
+            "id": 5,
+            "descripcion": "Fotocopia escritura sociedad legalizada ante notario + Extracto Legalizado ante Notario y Certificado Vigente Sociedad (No más de 30 días) o Estatuto y vigencia Sociedad actualizados (Empresa en un día)"
+        },
+        {
+            "id": 6,
+            "descripcion": "Fotocopia Resolución Sanitaria y/o Informe Sanitario (Quinta N° 231)"
+        },
+        {
+            "id": 7,
+            "descripcion": "Título Profesional legalizado ante notario"
+        },
+        {
+            "id": 8,
+            "descripcion": "Certificado SEC (3 Norte N° 898, esquina 2 Oriente)"
+        },
+        {
+            "id": 9,
+            "descripcion": "Opinión Junta de Vecinos sector"
+        },
+        {
+            "id": 10,
+            "descripcion": "Inscripción en Servicio Nacional de Capacitación (Agencia de Empleos) Victoria 2338 (SENCE)"
+        },
+        {
+            "id": 11,
+            "descripcion": "Un croquis de ubicación simple (de calles) Adjunto en Carpeta patente"
+        },
+        {
+            "id": 12,
+            "descripcion": "Declaración Notarial Art. 4 Ley 19.925 (no estar afecto) (Ante Notario) de todos los socios"
+        },
+        {
+            "id": 13,
+            "descripcion": "Certificado de Antecedentes (Registro Civil) de todos los socios"
+        },
+        {
+            "id": 14,
+            "descripcion": "Poder ante Notario del Representante Legal (En caso de realizar un tercero el trámite)"
+        },
+        {
+            "id": 15,
+            "descripcion": "Factibilidad Uso de Suelo (Dpto. Obras Municipales) Quillota 0152 3er Piso"
+        },
+        {
+            "id": 16,
+            "descripcion": "Certificado Técnico Urbanístico (Dpto. Obras Municipales) Quillota 0152 3er Piso"
+        },
+        {
+            "id": 17,
+            "descripcion": "Recepción Definitiva (Dpto. Obras Municipales) Quillota 0152 3er Piso"
+        },
+        {
+            "id": 18,
+            "descripcion": "Certificado de Distribución de Capital Propio (emitido por Municipalidad Casa Matriz)"
+        },
+        {
+            "id": 19,
+            "descripcion": "Certificado No Deuda (Sólo para cambio de Comuna) (emitido por Municipalidad de origen)"
+        },
+        {
+            "id": 20,
+            "descripcion": "Certificado de Junta Nacional de Jardines Infantiles"
+        },
+        {
+            "id": 21,
+            "descripcion": "Certificado Sernatur"
+        },
+        {
+            "id": 22,
+            "descripcion": "Fotocopia iniciación de Actividades S.I.I. y/o Carpeta Tributaria (Arlegui 525 Viña del Mar)"
+        },
+        {
+            "id": 23,
+            "descripcion": "Fotocopia Apertura de Sucursal S.I.I. y/o modificación de domicilio)"
+        },
+        {
+            "id": 24,
+            "descripcion": "Certificado Avalúo Fiscal (Rol de la Propiedad)"
+        },
+        {
+            "id": 25,
+            "descripcion": "F-22 (Renta) Balance Comercial y Determinación de Capital Propio"
+        },
+        {
+            "id": 26,
+            "descripcion": "Certificado de Bomberos"
+        },
+        {
+            "id": 27,
+            "descripcion": "Certificado de Evaluación de Ruidos"
+        },
+        {
+            "id": 28,
+            "descripcion": "Informe de Evaluación de Carabineros Art. 8 Ley 19.925 (Patente Alcohol Letras \"D\" \"E\" \"O\")"
+        },
+        {
+            "id": 29,
+            "descripcion": "Certificación de Actividad \"INOFENSIVA\" (Quinta 231)"
+        },
+        {
+            "id": 30,
+            "descripcion": "(2) Fotografías (impresas) de Local u Oficina (Exterior - Interior)"
+        },
+        {
+            "id": 31,
+            "descripcion": "Autorización ante notario para uso de la propiedad como Domicilio Postal"
+        },
+        {
+            "id": 32,
+            "descripcion": "Declaración ante notario de DOMICILIO POSTAL (Formulario)"
+        },
+        {
+            "id": 33,
+            "descripcion": "Fotocopia de la Patente de quien le arriende la Oficina Virtual"
+        }
+    ],
+    "TramitePatente": [
+        {
+            "tramite_base": "COMERCIAL",
+            "documentos_generales": [
+                1,
+                3,
+                4,
+                11,
+                14,
+                15,
+                16,
+                22,
+                24,
+                30
+            ],
+            "variaciones_adicionales": [
+                {
+                    "variacion": "¿El contribuyente es una sociedad comercial?",
+                    "documentos_adicionales": [
+                        2,
+                        5
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de elaboración y/o expendio de alimentos?",
+                    "documentos_adicionales": [
+                        6
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades relacionadas a estación de servicios, gas y combustible?",
+                    "documentos_adicionales": [
+                        8
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades relacionadas a capacitaciones a personas de manera presencial?",
+                    "documentos_adicionales": [
+                        10
+                    ]
+                },
+                {
+                    "variacion": "¿El contribuyente declara tener casa matriz en otra comuna?",
+                    "documentos_adicionales": [
+                        18,
+                        19
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de jardín y/o sala cuna JUNJI?",
+                    "documentos_adicionales": [
+                        20
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de una actividad de alojamiento?",
+                    "documentos_adicionales": [
+                        21
+                    ]
+                },
+                {
+                    "variacion": "¿El contribuyente apertura un nuevo domicilio como sucursal?",
+                    "documentos_adicionales": [
+                        23
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de una actividad comercial que tenga más de un año desde el inicio de actividad realizado en el SII?",
+                    "documentos_adicionales": [
+                        25
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades relacionadas a electricidad y/o combustible?",
+                    "documentos_adicionales": [
+                        26
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de una actividad de discoteca, salón de baile, etc.?",
+                    "documentos_adicionales": [
+                        27
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de seguridad privada o actividades de las letras \"D, E y O\" de alcohol?",
+                    "documentos_adicionales": [
+                        28
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de taller o realizadas en bodegas?",
+                    "documentos_adicionales": [
+                        29
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades realizadas en una oficina establecida y denominada como oficina virtual?",
+                    "documentos_adicionales": [
+                        33
+                    ]
+                }
+            ]
+        },
+        {
+            "tramite_base": "COMERCIAL DOMICILIO POSTAL",
+            "documentos_generales": [
+                1,
+                3,
+                4,
+                11,
+                14,
+                16,
+                22,
+                24,
+                30,
+                31,
+                32
+            ],
+            "variaciones_adicionales": [
+                {
+                    "variacion": "¿El contribuyente es una sociedad comercial?",
+                    "documentos_adicionales": [
+                        2,
+                        5
+                    ]
+                },
+                {
+                    "variacion": "¿El contribuyente declara tener casa matriz en otra comuna?",
+                    "documentos_adicionales": [
+                        18,
+                        19
+                    ]
+                },
+                {
+                    "variacion": "¿El contribuyente apertura un nuevo domicilio como sucursal?",
+                    "documentos_adicionales": [
+                        23
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de una actividad comercial que tenga más de un año desde el inicio de actividad realizado en el SII?",
+                    "documentos_adicionales": [
+                        25
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de seguridad privada o actividades de las letras \"D, E y O\" de alcohol?",
+                    "documentos_adicionales": [
+                        28
+                    ]
+                }
+            ]
+        },
+        {
+            "tramite_base": "PROFESIONAL",
+            "documentos_generales": [
+                1,
+                3,
+                4,
+                7,
+                11,
+                14,
+                15,
+                16,
+                22,
+                24,
+                30
+            ],
+            "variaciones_adicionales": [
+                {
+                    "variacion": "¿El contribuyente declara tener casa matriz en otra comuna?",
+                    "documentos_adicionales": [
+                        18,
+                        19
+                    ]
+                },
+                {
+                    "variacion": "¿El contribuyente apertura un nuevo domicilio como sucursal?",
+                    "documentos_adicionales": [
+                        23
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de una actividad comercial que tenga más de un año desde el inicio de actividad realizado en el SII?",
+                    "documentos_adicionales": [
+                        25
+                    ]
+                }
+            ]
+        },
+        {
+            "tramite_base": "PROFESIONAL DOMICILIO POSTAL",
+            "documentos_generales": [
+                1,
+                3,
+                4,
+                7,
+                11,
+                14,
+                16,
+                22,
+                24,
+                30
+            ],
+            "variaciones_adicionales": [
+                {
+                    "variacion": "¿El contribuyente es persona natural y/o representante legal?",
+                    "documentos_adicionales": [
+                        3
+                    ]
+                },
+                {
+                    "variacion": "¿El contribuyente declara tener casa matriz en otra comuna?",
+                    "documentos_adicionales": [
+                        18,
+                        19
+                    ]
+                },
+                {
+                    "variacion": "¿El contribuyente apertura un nuevo domicilio como sucursal?",
+                    "documentos_adicionales": [
+                        23
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de una actividad comercial que tenga más de un año desde el inicio de actividad realizado en el SII?",
+                    "documentos_adicionales": [
+                        25
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de solicitudes de patentes como Domicilio Postal?",
+                    "documentos_adicionales": [
+                        30,
+                        31
+                    ]
+                }
+            ]
+        },
+        {
+            "tramite_base": "INDUSTRIAL",
+            "documentos_generales": [
+                1,
+                3,
+                4,
+                11,
+                14,
+                15,
+                16,
+                22,
+                24,
+                30
+            ],
+            "variaciones_adicionales": [
+                {
+                    "variacion": "¿El contribuyente es una sociedad comercial?",
+                    "documentos_adicionales": [
+                        2,
+                        5
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de elaboración y/o expendio de alimentos?",
+                    "documentos_adicionales": [
+                        6
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades relacionadas a estación de servicios, gas y combustible?",
+                    "documentos_adicionales": [
+                        8
+                    ]
+                },
+                {
+                    "variacion": "¿El contribuyente declara tener casa matriz en otra comuna?",
+                    "documentos_adicionales": [
+                        18,
+                        19
+                    ]
+                },
+                {
+                    "variacion": "¿El contribuyente apertura un nuevo domicilio como sucursal?",
+                    "documentos_adicionales": [
+                        23
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de una actividad comercial que tenga más de un año desde el inicio de actividad realizado en el SII?",
+                    "documentos_adicionales": [
+                        25
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades relacionadas a electricidad y/o combustible?",
+                    "documentos_adicionales": [
+                        26
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de taller o realizadas en bodegas?",
+                    "documentos_adicionales": [
+                        29
+                    ]
+                }
+            ]
+        },
+        {
+            "tramite_base": "ALCOHOL",
+            "documentos_generales": [],
+            "variaciones_adicionales": [
+                {
+                    "variacion": "¿El contribuyente es una sociedad comercial?",
+                    "documentos_adicionales": [
+                        2,
+                        5
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de elaboración y/o expendio de alimentos?",
+                    "documentos_adicionales": [
+                        6
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades relacionadas a estación de servicios, gas y combustible?",
+                    "documentos_adicionales": [
+                        8
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de expendio y/o consumo de alcohol?",
+                    "documentos_adicionales": [
+                        9,
+                        12,
+                        13
+                    ]
+                },
+                {
+                    "variacion": "¿El contribuyente declara tener casa matriz en otra comuna?",
+                    "documentos_adicionales": [
+                        18,
+                        19
+                    ]
+                },
+                {
+                    "variacion": "¿El contribuyente apertura un nuevo domicilio como sucursal?",
+                    "documentos_adicionales": [
+                        23
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de una actividad comercial que tenga más de un año desde el inicio de actividad realizado en el SII?",
+                    "documentos_adicionales": [
+                        25
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades relacionadas a electricidad y/o combustible?",
+                    "documentos_adicionales": [
+                        26
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de una actividad de discoteca, salón de baile, etc.?",
+                    "documentos_adicionales": [
+                        27
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de seguridad privada o actividades de las letras \"D, E y O\" de alcohol?",
+                    "documentos_adicionales": [
+                        28
+                    ]
+                }
+            ]
+        }
+    ]
+}

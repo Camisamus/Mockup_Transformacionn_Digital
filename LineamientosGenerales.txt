@@ -1,0 +1,45 @@
+LINEAMIENTOS GENERALES DEL SISTEMA DE PATENTES
+
+1. ESTRUCTURA DE CARPETAS
+   - Todas las páginas HTML (excepto page.html) deben ir en la carpeta "paginas".
+   - Todos los recursos CSS, JS e imágenes deben ir en la carpeta "recursos" (subcarpetas css, js, img).
+   - Todos los archivos de datos JSON deben ir en la carpeta "recursos/jsons".
+   - El archivo principal de entrada es "page.html" en la raíz.
+
+2. NOMENCLATURA DE ARCHIVOS
+   - Usar minúsculas para nombrar carpetas y archivos.
+   - Usar guiones bajos (_) para separar palabras.
+   - Los archivos de página deben seguir la estructura {Categoria}_{NombrePagina} (ej: patentes_solicitar_patente_comercial.html).
+
+3. ESTILO Y DISEÑO
+   - Utilizar Bootstrap 5 para el diseño responsivo y componentes UI.
+   - Mantener estilos personalizados en "recursos/css/style.css".
+   - Usar iconos de Feather Icons (feather.replace).
+
+4. COMPONENTES
+   - El Sidebar (menú lateral) es un componente modular.
+   - El Sidebar se carga dinámicamente desde "paginas/sidebar.html" mediante "recursos/js/sidebar.js".
+   - El contenido principal se carga en el iframe "content-frame".
+
+5. DATOS
+   - La configuración del menú y datos estáticos deben residir en archivos JSON independientes.
+   - Las páginas deben consumir estos JSONs para renderizar opciones dinámicas (ej: checkboxes, selects).
+
+6. ACCESIBILIDAD Y CODIFICACIÓN
+   - Usar UTF-8 para todos los archivos.
+   - Asegurar que todas las rutas sean relativas para permitir la portabilidad del proyecto.
+
+7. EXPORTACIÓN DE DATOS
+   - Siempre que el sistema tenga una tabla, esta debe tener un botón que permita exportar a Excel.
+   - Siempre que el sistema tenga una tabla, debe tener un botón que permita exportar a PDF.
+   - Siempre que el sistema tenga un formulario, debe tener la opción de exportar a PDF.
+
+8. DATOS MOCK PARA TABLAS
+   - Todas las vistas que contengan tablas deben alimentarse desde archivos JSON que repliquen la respuesta de la base de datos.
+   - Los archivos JSON mock deben ubicarse en "recursos/jsons/" con el sufijo "_mock.json".
+   - Nomenclatura: {modulo}_{entidad}_mock.json (ej: patentes_solicitudes_mock.json).
+   - Las tablas NO deben tener datos hardcodeados en el HTML.
+   - El JavaScript correspondiente debe cargar y renderizar los datos dinámicamente.
+
+9. ESTÁNDARES DE DESARROLLO HTML
+   - Todos los elementos de entrada (inputs, selects, textareas) deben tener un atributo 'id' único y descriptivo.

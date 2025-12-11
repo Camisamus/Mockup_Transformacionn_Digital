@@ -1,0 +1,82 @@
+/* CSS Reset & Basics match Bootstrap but adding custom tweaks */
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+    /* Prevent body scroll, handle in containers */
+}
+
+/* Sidebar Customization */
+#sidebar {
+    background-color: #0d6efd !important;
+    /* Bootstrap Primary Blue */
+    transition: all 0.3s;
+}
+
+#sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 2px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+#sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+#sidebar .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-weight: 500;
+}
+
+/* Nested Menus */
+.submenu {
+    padding-left: 1.2rem;
+    display: none;
+    /* Hidden by default */
+    list-style: none;
+    padding-top: 2px;
+}
+
+.submenu.show {
+    display: block;
+}
+
+.submenu .nav-link {
+    font-size: 0.9em;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+}
+
+/* Login Styling */
+#login-screen {
+    background: #f0f2f5;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
