@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Atenciones</title>
+    <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../recursos/css/style.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .search-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .search-header {
+            font-weight: 600;
+            color: #343a40;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .results-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+
+        .table {
+            font-size: 0.875rem;
+        }
+
+        .badge-completada {
+            background-color: #28a745;
+        }
+
+        .badge-proceso {
+            background-color: #0dcaf0;
+            color: #000;
+        }
+
+        .badge-pendiente {
+            background-color: #ffc107;
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="mb-1">Listado de Atenciones</h2>
+                <p class="text-muted mb-0">Visualiza y gestiona todas las atenciones registradas</p>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary btn-sm">📊 Exportar Excel</button>
+                <button class="btn btn-outline-secondary btn-sm">📄 Exportar PDF</button>
+            </div>
+        </div>
+
+        <!-- Filtros de Búsqueda -->
+        <div class="search-card">
+            <div class="search-header">Filtros de Búsqueda</div>
+            <p class="text-muted small mb-3">Filtra las atenciones según criterios deseados</p>
+
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Fecha Desde</label>
+                    <input type="date" class="form-control" id="filtro_fecha_desde">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha Hasta</label>
+                    <input type="date" class="form-control" id="filtro_fecha_hasta">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Estado</label>
+                    <select class="form-select" id="filtro_estado">
+                        <option value="">Todos</option>
+                        <option value="completada">Completada</option>
+                        <option value="proceso">En Proceso</option>
+                        <option value="pendiente">Pendiente</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Tipo de Atención</label>
+                    <select class="form-select" id="filtro_tipo">
+                        <option value="">Todos</option>
+                        <option value="consulta">Consulta</option>
+                        <option value="tramite">Trámite</option>
+                        <option value="reclamo">Reclamo</option>
+                        <option value="seguimiento">Seguimiento</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Organización</label>
+                    <input type="text" class="form-control" id="filtro_organizacion" placeholder="Buscar...">
+                </div>
+
+                <div class="col-12 d-flex gap-2 mt-3">
+                    <button class="btn btn-dark" onclick="buscarAtenciones()">
+                        🔍 Buscar
+                    </button>
+                    <button class="btn btn-link text-primary" onclick="limpiarFiltros()">
+                        Limpiar Filtros
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resultados -->
+        <div class="results-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="fw-semibold">Resultados (<span id="resultados_count">4</span>)</div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover" id="tablaAtenciones">
+                    <thead class="table-light">
+                        <tr>
+                            <th>N° ATENCIÓN</th>
+                            <th>FECHA</th>
+                            <th>TIPO</th>
+                            <th>ORGANIZACIÓN</th>
+                            <th>PROYECTO</th>
+                            <th>ESTADO</th>
+                            <th>USUARIO</th>
+                            <th>ÁREA</th>
+                            <th>ACCIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data loaded dynamically from atenciones_listado_mock.json -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="../recursos/js/atenciones_listado_atenciones.js"></script>
+</body>
+
+</html>
