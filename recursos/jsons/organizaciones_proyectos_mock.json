@@ -1,0 +1,18 @@
+{
+    "proyectos": [
+        {
+            "unidad": "Desarrollo Social",
+            "anio": "2024",
+            "numeroIngreso": "ING-2024-001",
+            "nombreProyecto": "Mejoramiento Plaza Vecinal",
+            "tipoFondo": "Municipal"
+        },
+        {
+            "unidad": "Cultura",
+            "anio": "2024",
+            "numeroIngreso": "ING-2024-015",
+            "nombreProyecto": "Festival Cultural Comunitario",
+            "tipoFondo": "Regional"
+        }
+    ]
+}

@@ -1,0 +1,93 @@
+[
+    {
+        "rut": "76.123.456-7",
+        "nombre": "Junta de Vecinos Los Aromos",
+        "codigo": "ORG-001",
+        "rpj": "RPJ-2020-001",
+        "fechaInscripcion": "2020-03-15",
+        "fechaTerminoVigencia": "2025-03-15",
+        "directivaActual": [
+            {
+                "nombre": "Rosa María González",
+                "cargo": "Presidenta"
+            },
+            {
+                "nombre": "Pedro Rojas",
+                "cargo": "Tesorero"
+            }
+        ],
+        "directivasAnteriores": [
+            {
+                "periodo": "2015-2020",
+                "miembros": [
+                    {
+                        "nombre": "Carlos Muñoz",
+                        "cargo": "Presidente"
+                    },
+                    {
+                        "nombre": "María Silva",
+                        "cargo": "Vicepresidenta"
+                    }
+                ]
+            }
+        ],
+        "representanteLegal": "Juan Pérez López",
+        "unidadVecinal": "UV-12"
+    },
+    {
+        "rut": "76.234.567-8",
+        "nombre": "Club Deportivo Las Palmas",
+        "codigo": "ORG-002",
+        "rpj": "RPJ-2019-045",
+        "fechaInscripcion": "2019-06-20",
+        "fechaTerminoVigencia": "2024-06-20",
+        "directivaActual": [
+            {
+                "nombre": "Roberto Sánchez",
+                "cargo": "Presidente"
+            },
+            {
+                "nombre": "Laura Fernández",
+                "cargo": "Secretaria"
+            }
+        ],
+        "directivasAnteriores": [
+            {
+                "periodo": "2014-2019",
+                "miembros": [
+                    {
+                        "nombre": "Diego Torres",
+                        "cargo": "Presidente"
+                    }
+                ]
+            }
+        ],
+        "representanteLegal": "Roberto Sánchez Díaz",
+        "unidadVecinal": "UV-08"
+    },
+    {
+        "rut": "76.345.678-9",
+        "nombre": "Centro Cultural El Bosque",
+        "codigo": "ORG-003",
+        "rpj": "RPJ-2021-012",
+        "fechaInscripcion": "2021-01-10",
+        "fechaTerminoVigencia": "2026-01-10",
+        "directivaActual": [
+            {
+                "nombre": "Carmen Ruiz",
+                "cargo": "Presidenta"
+            },
+            {
+                "nombre": "Felipe Morales",
+                "cargo": "Tesorero"
+            },
+            {
+                "nombre": "Andrea Castro",
+                "cargo": "Secretaria"
+            }
+        ],
+        "directivasAnteriores": [],
+        "representanteLegal": "Carmen Ruiz Herrera",
+        "unidadVecinal": "UV-15"
+    }
+]

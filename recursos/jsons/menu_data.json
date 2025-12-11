@@ -197,13 +197,13 @@
                         "id": "2.1.1",
                         "tipo": "Pagina",
                         "nombre": "Consulta Organizacion",
-                        "Enlace": "paginas/patentes_solicitar_patente_comercial.html"
+                        "Enlace": "paginas/organizaciones_consulta_organizacion.html"
                     },
                     {
                         "id": "2.1.2",
                         "tipo": "Pagina",
                         "nombre": "Consulta Masiva Organizaciones",
-                        "Enlace": "paginas/patentes_solicitar_patente_comercial.html"
+                        "Enlace": "paginas/organizaciones_consulta_masiva.html"
                     }
                 ]
             }

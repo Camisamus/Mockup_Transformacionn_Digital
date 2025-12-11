@@ -1,0 +1,22 @@
+{
+    "atenciones": [
+        {
+            "numeroAtencion": "AT-001",
+            "fecha": "2024-01-15",
+            "atencion": "Consulta de subvención",
+            "proyecto": "Proyecto Comunitario 2024",
+            "estado": "Completada",
+            "estadoClass": "bg-success",
+            "usuario": "Juan Pérez"
+        },
+        {
+            "numeroAtencion": "AT-002",
+            "fecha": "2024-02-20",
+            "atencion": "Actualización de datos",
+            "proyecto": "N/A",
+            "estado": "En proceso",
+            "estadoClass": "bg-warning",
+            "usuario": "María González"
+        }
+    ]
+}
