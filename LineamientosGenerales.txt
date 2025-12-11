@@ -41,5 +41,8 @@ LINEAMIENTOS GENERALES DEL SISTEMA DE PATENTES
    - Las tablas NO deben tener datos hardcodeados en el HTML.
    - El JavaScript correspondiente debe cargar y renderizar los datos dinámicamente.
 
-9. ESTÁNDARES DE DESARROLLO HTML
+9. GEOLOCALIZACIÓN ESTANDARIZADA
+   - En todos los formularios que requerían un "Croquis" o mapa de ubicación, se debe reemplazar por el componente de integración con Google Maps. Debe incluir inputs para Calle, Número, Comuna y Región, botón de búsqueda, contenedor de mapa y campos readonly para Latitud/Longitud. Usar `maps_integration.js`.
+
+10. ESTÁNDARES DE DESARROLLO HTML
    - Todos los elementos de entrada (inputs, selects, textareas) deben tener un atributo 'id' único y descriptivo.
