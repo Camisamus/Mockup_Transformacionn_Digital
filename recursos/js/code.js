@@ -71,15 +71,17 @@ function showApp() {
 }
 
 // --- Navigation Handler ---
-// --- Navigation Handler ---
 window.handleNavClick = function (label, url) {
     pageTitle.textContent = label;
     const iframe = document.getElementById('content-frame');
 
     if (url) {
+        // Clear srcdoc first to ensure src takes effect
+        iframe.removeAttribute('srcdoc');
         iframe.src = url;
     } else {
-        // Fallback for demo / pages without explicit link
+        // Clear src and use srcdoc for fallback message
+        iframe.removeAttribute('src');
         iframe.srcdoc = `
             <!DOCTYPE html>
             <html lang="es">
