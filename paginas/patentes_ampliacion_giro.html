@@ -198,15 +198,50 @@
 
             </div>
 
-            <!-- 3. Croquis -->
+            <!-- 3. Geolocalización (Google Maps) -->
             <div class="section-card">
-                <div class="section-title">3. Croquis de Ubicación</div>
-                <p class="small text-muted">Dibuje un croquis indicando puntos de referencia (paradero, plaza, Bomberos,
-                    Carabineros) para facilitar la visita inspectiva.</p>
-                <div class="croquis-box">
-                    <div class="text-center">
-                        <i data-feather="map" style="width: 48px; height: 48px; opacity: 0.2;"></i>
-                        <div class="mt-2">[Área de Dibujo / Carga de Imagen]</div>
+                <div class="section-title">3. Geolocalización del Establecimiento</div>
+                <div class="alert alert-info small" role="alert">
+                    <i data-feather="map-pin" class="me-1"></i> Ingrese la dirección exacta para ubicarla en el mapa.
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Calle</label>
+                        <input type="text" class="form-control" id="mapCalle" placeholder="Ej: Av. Providencia">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Número</label>
+                        <input type="text" class="form-control" id="mapNumero" placeholder="Ej: 1234">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Comuna</label>
+                        <input type="text" class="form-control" id="mapComuna" value="Santiago">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Región</label>
+                        <input type="text" class="form-control" id="mapRegion" value="Metropolitana" readonly>
+                    </div>
+                    <div class="col-12 text-end">
+                        <button class="btn btn-primary btn-sm" onclick="buscarDireccion()">
+                            <i data-feather="search" class="me-1"></i> Buscar en Mapa
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Map Container -->
+                <div id="map" style="height: 400px; width: 100%; border-radius: 8px; border: 1px solid #ddd;"
+                    class="mb-3"></div>
+
+                <!-- Coordinates -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Latitud</label>
+                        <input type="text" class="form-control form-control-sm bg-light" id="mapLat" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Longitud</label>
+                        <input type="text" class="form-control form-control-sm bg-light" id="mapLng" readonly>
                     </div>
                 </div>
             </div>
@@ -226,6 +261,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="../recursos/js/export_utils.js"></script>
     <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom Maps Integration -->
+    <script src="../recursos/js/maps_integration.js"></script>
+
+    <!-- Google Maps API (Replace YOUR_API_KEY_HERE) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE&callback=initMap" async defer></script>
+
     <script src="https://unpkg.com/feather-icons"></script>
     <script>
         feather.replace();
