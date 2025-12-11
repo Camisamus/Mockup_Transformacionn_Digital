@@ -45,17 +45,20 @@
                             {
                                 "id": "1.1.2.1",
                                 "tipo": "Pagina",
-                                "nombre": "Cambio de Domicilio"
+                                "nombre": "Cambio de Domicilio",
+                                "Enlace": "paginas/patentes_modificacion_domicilio.html"
                             },
                             {
                                 "id": "1.1.2.2",
                                 "tipo": "Pagina",
-                                "nombre": "Modificación Razón Social"
+                                "nombre": "Modificación Razón Social",
+                                "Enlace": "paginas/patentes_modificacion_razon_social.html"
                             },
                             {
                                 "id": "1.1.2.3",
                                 "tipo": "Pagina",
-                                "nombre": "Ampliación de Giro"
+                                "nombre": "Ampliación de Giro",
+                                "Enlace": "paginas/patentes_ampliacion_giro.html"
                             },
                             {
                                 "id": "1.2.4",
@@ -65,24 +68,42 @@
                             {
                                 "id": "1.2.5",
                                 "tipo": "Pagina",
-                                "nombre": "Cambio de Nombre"
+                                "nombre": "Cambio de Nombre",
+                                "Enlace": "paginas/patentes_cambio_nombre.html"
                             }
                         ]
                     },
                     {
                         "id": "1.1.3",
                         "tipo": "subcategoia",
-                        "nombre": "Gestión Financiera",
+                        "nombre": "Gestión Tributaria",
                         "contenido": [
                             {
                                 "id": "1.1.3.1",
                                 "tipo": "Pagina",
-                                "nombre": "Declaración de Capital Propio"
+                                "nombre": "Declaración de Propaganda"
                             },
                             {
                                 "id": "1.1.3.2",
-                                "tipo": "Pagina",
-                                "nombre": "Gestión de Cobro"
+                                "tipo": "subcategoia",
+                                "nombre": "Gestión Financiera",
+                                "contenido": [
+                                    {
+                                        "id": "1.1.3.2.1",
+                                        "tipo": "Pagina",
+                                        "nombre": "Revisión de Cobro"
+                                    },
+                                    {
+                                        "id": "1.1.3.2.2",
+                                        "tipo": "Pagina",
+                                        "nombre": "Certificado de No Deuda"
+                                    },
+                                    {
+                                        "id": "1.1.3.2.3",
+                                        "tipo": "Pagina",
+                                        "nombre": "Declaración de Capital Propio"
+                                    }
+                                ]
                             }
                         ]
                     },

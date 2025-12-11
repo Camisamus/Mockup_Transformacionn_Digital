@@ -34,12 +34,5 @@ LINEAMIENTOS GENERALES DEL SISTEMA DE PATENTES
    - Siempre que el sistema tenga una tabla, debe tener un botón que permita exportar a PDF.
    - Siempre que el sistema tenga un formulario, debe tener la opción de exportar a PDF.
 
-8. DATOS MOCK PARA TABLAS
-   - Todas las vistas que contengan tablas deben alimentarse desde archivos JSON que repliquen la respuesta de la base de datos.
-   - Los archivos JSON mock deben ubicarse en "recursos/jsons/" con el sufijo "_mock.json".
-   - Nomenclatura: {modulo}_{entidad}_mock.json (ej: patentes_solicitudes_mock.json).
-   - Las tablas NO deben tener datos hardcodeados en el HTML.
-   - El JavaScript correspondiente debe cargar y renderizar los datos dinámicamente.
-
-9. ESTÁNDARES DE DESARROLLO HTML
+8. ESTÁNDARES DE DESARROLLO HTML
    - Todos los elementos de entrada (inputs, selects, textareas) deben tener un atributo 'id' único y descriptivo.

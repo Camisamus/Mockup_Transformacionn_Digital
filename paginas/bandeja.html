@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bandeja de Entrada</title>
+    <!-- Use relative paths assuming this file is in 'paginas/' and resources are in '../recursos/' -->
+    <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../recursos/css/style.css" rel="stylesheet">
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid p-0">
+
+        <!-- Top Stats Row -->
+        <div class="row g-3 mb-4">
+            <!-- Card 1: Cumplimiento -->
+            <div class="col-md-4 col-lg-3">
+                <div class="card card-stat card-stat-blue">
+                    <div class="card-body">
+                        <h6 class="card-title">Cumplimiento</h6>
+                        <div class="stat-value">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Atrasadas / Vencidas -->
+            <div class="col-md-4 col-lg-3">
+                <div class="card card-stat card-stat-red">
+                    <div class="card-body">
+                        <h6 class="card-title">Atrasadas / Vencidas</h6>
+                        <div class="stat-value">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Total Tareas -->
+            <div class="col-md-4 col-lg-3">
+                <div class="card card-stat card-stat-yellow">
+                    <div class="card-body">
+                        <h6 class="card-title">Total Tareas (Vista)</h6>
+                        <div class="stat-value">5</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Task Button -->
+            <div class="col-md-12 col-lg-3 d-flex align-items-stretch">
+                <button class="btn btn-gold w-100 d-flex align-items-center justify-content-center"
+                    style="font-size: 1.1rem;">
+                    <i data-feather="plus" class="me-2"></i> Nueva Tarea
+                </button>
+            </div>
+        </div>
+
+        <!-- Task List Section -->
+        <div class="card shadow-sm border-0">
+            <!-- Header -->
+            <div class="table-header-custom border-bottom">
+                <span>Listado de Tareas</span>
+                <div class="d-flex gap-2 align-items-center">
+                    <div class="btn-group btn-group-sm me-2">
+                        <button class="btn btn-outline-success"
+                            onclick="exportTableToExcel('tablaTareas', 'bandeja_tareas')">Excel</button>
+                        <button class="btn btn-outline-danger"
+                            onclick="exportElementToPDF('tablaTareas', 'bandeja_tareas')">PDF</button>
+                    </div>
+                    <select class="form-select form-select-sm" style="width: auto;">
+                        <option>Todos los estados</option>
+                        <option>Pendiente</option>
+                        <option>Completada</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" id="tablaTareas">
+                    <thead class="bg-light">
+                        <tr>
+                            <th style="width: 25%;">Título</th>
+                            <th style="width: 15%;">Rol en Tarea</th>
+                            <th style="width: 15%;">Responsable / Creador</th>
+                            <th style="width: 15%;">Proyecto / Sector</th>
+                            <th style="width: 10%;">Entrega</th>
+                            <th style="width: 10%;">Estado</th>
+                            <th style="width: 5%; text-align: center;">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Row 1 -->
+                        <tr>
+                            <td>
+                                <span class="fw-normal">Reunión con Natalia</span>
+                            </td>
+                            <td>
+                                <span class="badge badge-role-creator rounded-pill me-1">Creador</span>
+                                <span class="badge badge-role-assigned rounded-pill">Asignado</span>
+                            </td>
+                            <td>
+                                <div>Resp: Ramon Martínez</div>
+                                <div class="sub-text fst-italic">Crea: Ramon Martínez</div>
+                            </td>
+                            <td>
+                                <div>-</div>
+                                <div class="sub-text">-</div>
+                            </td>
+                            <td>26/11/2025</td>
+                            <td><span class="badge badge-status-pending">PENDIENTE</span></td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-primary p-1"><i data-feather="edit-2"
+                                        style="width: 16px; height: 16px;"></i></button>
+                            </td>
+                        </tr>
+
+                        <!-- Row 2 -->
+                        <tr>
+                            <td>
+                                <span class="fw-normal">Mensaje de Prueba</span>
+                            </td>
+                            <td>
+                                <span class="badge badge-role-creator rounded-pill">Creador</span>
+                            </td>
+                            <td>
+                                <div>Resp: Usuario Prueba</div>
+                                <div class="sub-text fst-italic">Crea: Ramon Martínez</div>
+                            </td>
+                            <td>
+                                <a href="#" class="project-text">Reparación Borde Costero</a>
+                                <div class="sub-text">Achupallas</div>
+                            </td>
+                            <td>28/11/2025</td>
+                            <td><span class="badge badge-status-pending">PENDIENTE</span></td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-primary p-1"><i data-feather="edit-2"
+                                        style="width: 16px; height: 16px;"></i></button>
+                            </td>
+                        </tr>
+
+                        <!-- Row 3 -->
+                        <tr>
+                            <td>
+                                <span class="fw-normal">OT azucenas</span>
+                            </td>
+                            <td>
+                                <!-- No badges in screenshot for this one -->
+                            </td>
+                            <td>
+                                <div>Resp: María José Machuca</div>
+                                <div class="sub-text fst-italic">Crea: María José Machuca</div>
+                            </td>
+                            <td>
+                                <div>-</div>
+                                <div class="sub-text">Achupallas</div>
+                            </td>
+                            <td>29/11/2025</td>
+                            <td><span class="badge badge-status-pending">PENDIENTE</span></td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-primary p-1"><i data-feather="edit-2"
+                                        style="width: 16px; height: 16px;"></i></button>
+                            </td>
+                        </tr>
+
+                        <!-- Row 4 -->
+                        <tr>
+                            <td>
+                                <span class="fw-normal">Presentación de Maqueta de Francisco</span>
+                            </td>
+                            <td>
+                                <span class="badge badge-role-creator rounded-pill me-1">Creador</span>
+                                <span class="badge badge-role-assigned rounded-pill">Asignado</span>
+                            </td>
+                            <td>
+                                <div>Resp: Ramon Martínez</div>
+                                <div class="sub-text fst-italic">Crea: Ramon Martínez</div>
+                            </td>
+                            <td>
+                                <a href="#" class="project-text">Reparación Borde Costero</a>
+                                <div class="sub-text">Palmares</div>
+                            </td>
+                            <td>12/12/2025</td>
+                            <td><span class="badge badge-status-pending">PENDIENTE</span></td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-primary p-1"><i data-feather="edit-2"
+                                        style="width: 16px; height: 16px;"></i></button>
+                            </td>
+                        </tr>
+
+                        <!-- Row 5 -->
+                        <tr>
+                            <td>
+                                <span class="fw-normal">Licitación Arriendo Inmueble Licencias de Conducir</span>
+                            </td>
+                            <td>
+                                <!-- No badges -->
+                            </td>
+                            <td>
+                                <div>Resp: Daniela Ruiz</div>
+                                <div class="sub-text fst-italic">Crea: Daniela Ruiz</div>
+                            </td>
+                            <td>
+                                <div>-</div>
+                                <div class="sub-text">Plan</div>
+                            </td>
+                            <td>26/12/2025</td>
+                            <td><span class="badge badge-status-pending">PENDIENTE</span></td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-primary p-1"><i data-feather="edit-2"
+                                        style="width: 16px; height: 16px;"></i></button>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- Footer pagination could go here -->
+        </div>
+
+    </div>
+
+    <!-- Init Icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="../recursos/js/export_utils.js"></script>
+    <script>
+        feather.replace();
+    </script>
+</body>
+
+</html>
