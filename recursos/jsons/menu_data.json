@@ -212,15 +212,141 @@
     {
         "id": "3",
         "tipo": "categoia",
-        "nombre": "Subenciones",
-        "icon": "file-text",
-        "contenido": []
+        "nombre": "Subvenciones",
+        "icon": "dollar-sign",
+        "contenido": [
+            {
+                "id": "3.1",
+                "tipo": "subcategoia",
+                "nombre": "Subvenciones",
+                "contenido": [
+                    {
+                        "id": "3.1.1",
+                        "tipo": "Pagina",
+                        "nombre": "Consulta de Subvención"
+                    },
+                    {
+                        "id": "3.1.2",
+                        "tipo": "Pagina",
+                        "nombre": "Consulta Masiva de Subvenciones"
+                    },
+                    {
+                        "id": "3.1.3",
+                        "tipo": "Pagina",
+                        "nombre": "Consulta Masiva de Aprobaciones"
+                    },
+                    {
+                        "id": "3.1.4",
+                        "tipo": "Pagina",
+                        "nombre": "Consulta Masiva de Rendiciones"
+                    },
+                    {
+                        "id": "3.1.5",
+                        "tipo": "Pagina",
+                        "nombre": "Consulta Masiva de Fiscalizaciones"
+                    },
+                    {
+                        "id": "3.1.6",
+                        "tipo": "Pagina",
+                        "nombre": "Consulta de Pago"
+                    },
+                    {
+                        "id": "3.1.7",
+                        "tipo": "Pagina",
+                        "nombre": "Consulta Masiva de Pagos"
+                    }
+                ]
+            }
+        ]
     },
     {
         "id": "4",
         "tipo": "categoia",
         "nombre": "Postulaciones",
-        "icon": "file-text",
-        "contenido": []
+        "icon": "clipboard",
+        "contenido": [
+            {
+                "id": "4.1",
+                "tipo": "subcategoia",
+                "nombre": "Postulaciones",
+                "contenido": [
+                    {
+                        "id": "4.1.1",
+                        "tipo": "Pagina",
+                        "nombre": "Consulta de Postulación"
+                    },
+                    {
+                        "id": "4.1.2",
+                        "tipo": "Pagina",
+                        "nombre": "Consulta Masiva de Postulaciones"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "5",
+        "tipo": "categoia",
+        "nombre": "Atenciones",
+        "icon": "headphones",
+        "contenido": [
+            {
+                "id": "5.1",
+                "tipo": "subcategoia",
+                "nombre": "Atenciones",
+                "contenido": [
+                    {
+                        "id": "5.1.1",
+                        "tipo": "Pagina",
+                        "nombre": "Nueva Atención"
+                    },
+                    {
+                        "id": "5.1.2",
+                        "tipo": "Pagina",
+                        "nombre": "Lista de Espera"
+                    },
+                    {
+                        "id": "5.1.3",
+                        "tipo": "Pagina",
+                        "nombre": "Tomar Atención"
+                    },
+                    {
+                        "id": "5.1.4",
+                        "tipo": "Pagina",
+                        "nombre": "Consulta de Atención"
+                    },
+                    {
+                        "id": "5.1.5",
+                        "tipo": "Pagina",
+                        "nombre": "Listado de Atenciones"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "6",
+        "tipo": "categoia",
+        "nombre": "Logs del Sistema",
+        "icon": "activity",
+        "contenido": [
+            {
+                "id": "6.1",
+                "tipo": "subcategoia",
+                "nombre": "Logs del Sistema",
+                "contenido": [
+                    {
+                        "id": "6.1.1",
+                        "tipo": "Pagina",
+                        "nombre": "Consulta de Log"
+                    },
+                    {
+                        "id": "6.1.2",
+                        "tipo": "Pagina",
+                        "nombre": "Listado de Logs"
+                    }
+                ]
+            }
+        ]
     }
 ]
