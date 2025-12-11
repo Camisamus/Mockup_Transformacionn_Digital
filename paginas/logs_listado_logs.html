@@ -78,8 +78,9 @@
                 <p class="text-muted mb-0">Visualiza y gestiona todos los eventos del sistema</p>
             </div>
             <div class="d-flex gap-2">
-                <button class="btn btn-outline-secondary btn-sm">📊 Exportar Excel</button>
-                <button class="btn btn-outline-secondary btn-sm">📄 Exportar PDF</button>
+                <button class="btn btn-outline-secondary btn-sm"><i data-feather="file-text"></i> Exportar
+                    Excel</button>
+                <button class="btn btn-outline-secondary btn-sm"><i data-feather="file-text"></i> Exportar PDF</button>
             </div>
         </div>
 
@@ -125,7 +126,7 @@
 
                 <div class="col-12 d-flex gap-2 mt-3">
                     <button class="btn btn-dark" onclick="buscarLogs()">
-                        🔍 Buscar
+                        <i data-feather="search"></i> Buscar
                     </button>
                     <button class="btn btn-link text-primary" onclick="limpiarFiltros()">
                         Limpiar Filtros
@@ -165,6 +166,10 @@
     </div>
 
     <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
     <script src="../recursos/js/logs_listado_logs.js"></script>
 </body>
 

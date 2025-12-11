@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consulta de Atención</title>
     <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="../recursos/css/style.css" rel="stylesheet">
     <style>
         body {
@@ -133,19 +132,19 @@
             </div>
             <div class="toolbar">
                 <button class="btn btn-toolbar" onclick="buscarAtencion()">
-                    <i class="bi bi-search"></i> Buscar
+                    <i data-feather="search"></i> Buscar
                 </button>
                 <button class="btn btn-toolbar" onclick="nuevaAtencion()">
-                    <i class="bi bi-plus-lg"></i> Nueva
+                    <i data-feather="plus"></i> Nueva
                 </button>
                 <button class="btn btn-toolbar" onclick="modificarAtencion()">
-                    <i class="bi bi-pencil"></i> Modificar
+                    <i data-feather="edit"></i> Modificar
                 </button>
                 <button class="btn btn-toolbar" onclick="exportarPDF()">
-                    <i class="bi bi-file-earmark-pdf"></i> Exportar PDF
+                    <i data-feather="file-text"></i> Exportar PDF
                 </button>
                 <button class="btn btn-toolbar btn-dark-custom" onclick="guardarAtencion()">
-                    <i class="bi bi-hdd"></i> Guardar
+                    <i data-feather="save"></i> Guardar
                 </button>
             </div>
         </div>
@@ -262,10 +261,14 @@
 
     <!-- Help Button -->
     <button class="btn btn-dark rounded-circle position-fixed bottom-0 end-0 m-4" style="width: 50px; height: 50px;">
-        <i class="bi bi-question-lg"></i>
+        <i data-feather="help-circle"></i>
     </button>
 
     <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
     <script src="../recursos/js/atenciones_consulta_atencion.js"></script>
 </body>
 

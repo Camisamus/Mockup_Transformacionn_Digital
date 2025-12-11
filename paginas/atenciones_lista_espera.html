@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Espera</title>
     <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="../recursos/css/style.css" rel="stylesheet">
     <style>
         body {
@@ -195,10 +194,10 @@
             </div>
             <div class="d-flex gap-2">
                 <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
-                    <i class="bi bi-file-earmark-excel"></i> Exportar Excel
+                    <i data-feather="file-text"></i> Exportar Excel
                 </button>
                 <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
-                    <i class="bi bi-file-earmark-pdf"></i> Exportar PDF
+                    <i data-feather="file-text"></i> Exportar PDF
                 </button>
             </div>
         </div>
@@ -239,7 +238,7 @@
                     <p class="text-muted small mb-0">Listado ordenado por tiempo de espera</p>
                 </div>
                 <div class="text-muted small">
-                    <i class="bi bi-clock"></i> Actualizado hace 1 min
+                    <i data-feather="clock"></i> Actualizado hace 1 min
                 </div>
             </div>
 
@@ -261,96 +260,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Ejemplo Data Row 1 -->
-                        <tr>
-                            <td><span class="badge-normal">NORMAL</span></td>
-                            <td>AT-001234</td>
-                            <td><span class="type-badge">Consulta</span></td>
-                            <td>Junta de Vecinos N°1 El Progreso</td>
-                            <td>76.123.456-7</td>
-                            <td>Desarrollo Social</td>
-                            <td>UV-15</td>
-                            <td>2024-12-03 09:15</td>
-                            <td><span class="tiempo-badge"><i class="bi bi-clock"></i> 45 min</span></td>
-                            <td>Juan Pérez</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <i class="bi bi-eye action-icon"></i>
-                                    <button class="action-btn-tomar" onclick="abrirModalAtencion('AT-001234')">
-                                        <i class="bi bi-person-fill"></i> Tomar
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- Ejemplo Data Row 2 -->
-                        <tr>
-                            <td><span class="badge-alta">ALTA</span></td>
-                            <td>AT-001235</td>
-                            <td><span class="type-badge">Reclamo</span></td>
-                            <td>Club Deportivo Los Robles</td>
-                            <td>76.789.012-3</td>
-                            <td>Deportes</td>
-                            <td>UV-22</td>
-                            <td>2024-12-03 09:30</td>
-                            <td><span class="tiempo-badge"><i class="bi bi-clock"></i> 30 min</span></td>
-                            <td>Maria González</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <i class="bi bi-eye action-icon"></i>
-                                    <button class="action-btn-tomar" onclick="abrirModalAtencion('AT-001235')">
-                                        <i class="bi bi-person-fill"></i> Tomar
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- Ejemplo Data Row 3 -->
-                        <tr>
-                            <td><span class="badge-normal">NORMAL</span></td>
-                            <td>AT-001236</td>
-                            <td><span class="type-badge">Trámite</span></td>
-                            <td>Centro Cultural Las Artes</td>
-                            <td>76.345.678-9</td>
-                            <td>Cultura</td>
-                            <td>UV-08</td>
-                            <td>2024-12-03 09:45</td>
-                            <td><span class="tiempo-badge"><i class="bi bi-clock"></i> 15 min</span></td>
-                            <td>Carlos Ramírez</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <i class="bi bi-eye action-icon"></i>
-                                    <button class="action-btn-tomar" onclick="abrirModalAtencion('AT-001236')">
-                                        <i class="bi bi-person-fill"></i> Tomar
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <!-- Ejemplo Data Row 4 -->
-                        <tr>
-                            <td><span class="badge-baja">BAJA</span></td>
-                            <td>AT-001237</td>
-                            <td><span class="type-badge">Solicitud</span></td>
-                            <td>Agrupación Vecinal El Futuro</td>
-                            <td>76.901.234-5</td>
-                            <td>Medio Ambiente</td>
-                            <td>UV-31</td>
-                            <td>2024-12-03 09:50</td>
-                            <td><span class="tiempo-badge"><i class="bi bi-clock"></i> 10 min</span></td>
-                            <td>Ana Silva</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <i class="bi bi-eye action-icon"></i>
-                                    <button class="action-btn-tomar" onclick="abrirModalAtencion('AT-001237')">
-                                        <i class="bi bi-person-fill"></i> Tomar
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                        <!-- Data loaded dynamically from atenciones_lista_espera_mock.json -->
                     </tbody>
                 </table>
             </div>
 
             <div class="info-alert">
-                <i class="bi bi-clock h5 mb-0"></i>
+                <i data-feather="clock"></i>
                 <div>
                     Nota: Las atenciones se ordenan automáticamente por prioridad y tiempo de espera. Las atenciones de
                     alta prioridad se muestran primero.
@@ -362,7 +278,7 @@
 
     <!-- Help Button -->
     <button class="btn btn-dark rounded-circle position-fixed bottom-0 end-0 m-4" style="width: 50px; height: 50px;">
-        <i class="bi bi-question-lg"></i>
+        <i data-feather="help-circle"></i>
     </button>
 
     <!-- Modal Atender Atención -->
@@ -473,7 +389,7 @@
                     <button type="button" class="btn btn-white border px-4" data-bs-dismiss="modal"
                         style="color: #6c757d; font-weight: 500;">✕ Cancelar</button>
                     <button type="button" class="btn btn-dark px-4" style="font-weight: 500;">
-                        <i class="bi bi-check2-circle"></i> Completar Atención
+                        <i data-feather="check-circle"></i> Completar Atención
                     </button>
                 </div>
             </div>
@@ -481,6 +397,10 @@
     </div>
 
     <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
     <script src="../recursos/js/atenciones_lista_espera.js"></script>
 </body>
 

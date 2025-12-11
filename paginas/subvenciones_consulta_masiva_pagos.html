@@ -119,7 +119,7 @@
 
                 <div class="col-12 d-flex gap-2 mt-3">
                     <button class="btn btn-dark" onclick="buscarPagos()">
-                        🔍 Buscar
+                        <i data-feather="search"></i> Buscar
                     </button>
                     <button class="btn btn-link text-primary" onclick="limpiarFiltros()">
                         Limpiar Filtros
@@ -134,10 +134,10 @@
                 <div class="fw-semibold">Resultados (6)</div>
                 <div class="d-flex gap-2">
                     <button class="btn btn-sm btn-outline-secondary">
-                        📊 Exportar a Excel
+                        <i data-feather="file-text"></i> Exportar a Excel
                     </button>
                     <button class="btn btn-sm btn-outline-secondary">
-                        📄 Imprimir PDF
+                        <i data-feather="file-text"></i> Imprimir PDF
                     </button>
                 </div>
             </div>
@@ -163,6 +163,11 @@
     </div>
 
     <script src="../recursos/js/bootstrap.bundle.min.js"></script>
-    <script src="../recursos/js/subvenciones_consulta_masiva_pagos.js"></script></body>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
+    <script src="../recursos/js/subvenciones_consulta_masiva_pagos.js"></script>
+</body>
 
 </html>

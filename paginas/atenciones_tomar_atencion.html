@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tomar Atención</title>
     <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="../recursos/css/style.css" rel="stylesheet">
     <style>
         body {
@@ -194,7 +193,7 @@
                         <div class="metric-label">En Espera</div>
                         <div class="metric-value">2</div>
                     </div>
-                    <i class="bi bi-clock icon-metric text-warning-custom"></i>
+                    <i data-feather="clock"></i>
                 </div>
             </div>
             <div class="col-md-4">
@@ -203,12 +202,7 @@
                         <div class="metric-label">En Atención</div>
                         <div class="metric-value">0</div>
                     </div>
-                    <div class="text-info-custom">
-                        <i class="bi bi-person icon-metric"></i>
-                        <i class="bi bi-check" style="font-size: 1rem; margin-left: -5px; vertical-align: top;"></i>
-                        <!-- Attempt to match complex icon if any, otherwise simple person -->
-                    </div>
-                    <!-- Correction: The image shows a simple person icon with a checkmark maybe? No, it looks like a person with a gear or just a person. Let's stick to person for now. -->
+                    <i data-feather="person"></i>
                 </div>
             </div>
             <div class="col-md-4">
@@ -217,7 +211,7 @@
                         <div class="metric-label">Completadas Hoy</div>
                         <div class="metric-value">8</div>
                     </div>
-                    <i class="bi bi-check-circle icon-metric text-success-custom"></i>
+                    <i data-feather="check-circle"></i>
                 </div>
             </div>
         </div>
@@ -244,37 +238,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Row 1 -->
-                        <tr>
-                            <td class="col-id">AT-001234</td>
-                            <td><span class="type-badge">Consulta</span></td>
-                            <td>Junta de Vecinos N°1 El Progreso</td>
-                            <td>76.123.456-7</td>
-                            <td>Desarrollo Social</td>
-                            <td><span class="tiempo-badge"><i class="bi bi-clock"></i> 45 min</span></td>
-                            <td class="col-desc">Consulta sobre proceso de postulación a subvenciones municipales</td>
-                            <td class="text-end">
-                                <button class="action-btn-tomar float-end" onclick="abrirModalAtencion('AT-001234')">
-                                    <i class="bi bi-person-fill"></i> Tomar
-                                </button>
-                            </td>
-                        </tr>
-                        <!-- Row 2 -->
-                        <tr>
-                            <td class="col-id">AT-001235</td>
-                            <td><span class="type-badge">Reclamo</span></td>
-                            <td>Club Deportivo Los Robles</td>
-                            <td>76.789.012-3</td>
-                            <td>Deportes</td>
-                            <td><span class="tiempo-badge"><i class="bi bi-clock"></i> 30 min</span></td>
-                            <td class="col-desc">Reclamo por demora en respuesta a solicitud de implementos deportivos
-                            </td>
-                            <td class="text-end">
-                                <button class="action-btn-tomar float-end" onclick="abrirModalAtencion('AT-001235')">
-                                    <i class="bi bi-person-fill"></i> Tomar
-                                </button>
-                            </td>
-                        </tr>
+                        <!-- Data loaded dynamically from atenciones_tomar_atencion_mock.json -->
                     </tbody>
                 </table>
             </div>
@@ -390,7 +354,7 @@
                     <button type="button" class="btn btn-white border px-4" data-bs-dismiss="modal"
                         style="color: #6c757d; font-weight: 500;">✕ Cancelar</button>
                     <button type="button" class="btn btn-dark px-4" style="font-weight: 500;">
-                        <i class="bi bi-check2-circle"></i> Completar Atención
+                        <i data-feather="check-circle"></i> Completar Atención
                     </button>
                 </div>
             </div>
@@ -402,10 +366,14 @@
     <!-- Help Button -->
     <button class="btn btn-dark rounded-circle position-fixed bottom-0 end-0 m-4"
         style="width: 50px; height: 50px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
-        <i class="bi bi-question-lg"></i>
+        <i data-feather="help-circle"></i>
     </button>
 
     <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
     <script src="../recursos/js/atenciones_tomar_atencion.js"></script>
 </body>
 

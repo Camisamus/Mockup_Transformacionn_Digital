@@ -126,7 +126,7 @@
 
                 <div class="col-12 d-flex gap-2 mt-3">
                     <button class="btn btn-dark" onclick="buscarFiscalizaciones()">
-                        🔍 Buscar
+                        <i data-feather="search"></i> Buscar
                     </button>
                     <button class="btn btn-link text-primary" onclick="limpiarFiltros()">
                         Limpiar Filtros
@@ -141,10 +141,10 @@
                 <div class="fw-semibold">Resultados (4)</div>
                 <div class="d-flex gap-2">
                     <button class="btn btn-sm btn-outline-secondary">
-                        📊 Exportar a Excel
+                        <i data-feather="file-text"></i> Exportar a Excel
                     </button>
                     <button class="btn btn-sm btn-outline-secondary">
-                        📄 Exportar a PDF
+                        <i data-feather="file-text"></i> Exportar a PDF
                     </button>
                 </div>
             </div>
@@ -165,7 +165,8 @@
                             <th>RESULTADO</th>
                         </tr>
                     </thead>
-                    <tbody><!-- Data loaded dynamically from subvenciones_consulta_masiva_fiscalizaciones_mock.json --></tbody>
+                    <tbody><!-- Data loaded dynamically from subvenciones_consulta_masiva_fiscalizaciones_mock.json -->
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -173,6 +174,11 @@
     </div>
 
     <script src="../recursos/js/bootstrap.bundle.min.js"></script>
-    <script src="../recursos/js/subvenciones_consulta_masiva_fiscalizaciones.js"></script></body>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
+    <script src="../recursos/js/subvenciones_consulta_masiva_fiscalizaciones.js"></script>
+</body>
 
 </html>
