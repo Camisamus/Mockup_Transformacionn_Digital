@@ -1,0 +1,72 @@
+[
+    {
+        "patente": "1001-5",
+        "tipo": "Comercial",
+        "periodo": "1-2024",
+        "estado": "Pagado",
+        "neto": 50000,
+        "ipc": 1500,
+        "multa": 0,
+        "total": 51500,
+        "vencimiento": "31-01-2024",
+        "fecha_pago": "15-01-2024",
+        "forma_pago": "Webpay",
+        "acciones": "Ver Recibo"
+    },
+    {
+        "patente": "2002-8",
+        "tipo": "Alcoholes",
+        "periodo": "2-2024",
+        "estado": "Pendiente",
+        "neto": 120000,
+        "ipc": 0,
+        "multa": 0,
+        "total": 120000,
+        "vencimiento": "31-07-2024",
+        "fecha_pago": "-",
+        "forma_pago": "-",
+        "acciones": "Pagar"
+    },
+    {
+        "patente": "3003-K",
+        "tipo": "Profesional",
+        "periodo": "1-2023",
+        "estado": "Vencido",
+        "neto": 45000,
+        "ipc": 3500,
+        "multa": 5000,
+        "total": 53500,
+        "vencimiento": "31-01-2023",
+        "fecha_pago": "-",
+        "forma_pago": "-",
+        "acciones": "Regularizar"
+    },
+    {
+        "patente": "1001-5",
+        "tipo": "Comercial",
+        "periodo": "2-2023",
+        "estado": "Pagado",
+        "neto": 48000,
+        "ipc": 1200,
+        "multa": 0,
+        "total": 49200,
+        "vencimiento": "31-07-2023",
+        "fecha_pago": "20-07-2023",
+        "forma_pago": "Caja Presencial",
+        "acciones": "Ver Recibo"
+    },
+    {
+        "patente": "4004-2",
+        "tipo": "Industrial",
+        "periodo": "1-2024",
+        "estado": "Pagado",
+        "neto": 250000,
+        "ipc": 7500,
+        "multa": 0,
+        "total": 257500,
+        "vencimiento": "31-01-2024",
+        "fecha_pago": "30-01-2024",
+        "forma_pago": "Transferencia",
+        "acciones": "Ver Recibo"
+    }
+]
