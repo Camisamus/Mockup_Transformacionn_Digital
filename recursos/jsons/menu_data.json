@@ -287,12 +287,14 @@
                     {
                         "id": "4.1.1",
                         "tipo": "Pagina",
-                        "nombre": "Consulta de Postulación"
+                        "nombre": "Consulta de Postulación",
+                        "Enlace": "paginas/postulaciones_consulta_postulacion.html"
                     },
                     {
                         "id": "4.1.2",
                         "tipo": "Pagina",
-                        "nombre": "Consulta Masiva de Postulaciones"
+                        "nombre": "Consulta Masiva de Postulaciones",
+                        "Enlace": "paginas/postulaciones_consulta_masiva.html"
                     }
                 ]
             }
@@ -312,27 +314,26 @@
                     {
                         "id": "5.1.1",
                         "tipo": "Pagina",
-                        "nombre": "Nueva Atención"
+                        "nombre": "Consulta de Atención",
+                        "Enlace": "paginas/atenciones_consulta_atencion.html"
                     },
                     {
                         "id": "5.1.2",
                         "tipo": "Pagina",
-                        "nombre": "Lista de Espera"
+                        "nombre": "Lista de Espera",
+                        "Enlace": "paginas/atenciones_lista_espera.html"
                     },
                     {
                         "id": "5.1.3",
                         "tipo": "Pagina",
-                        "nombre": "Tomar Atención"
+                        "nombre": "Tomar Atención",
+                        "Enlace": "paginas/atenciones_tomar_atencion.html"
                     },
                     {
                         "id": "5.1.4",
                         "tipo": "Pagina",
-                        "nombre": "Consulta de Atención"
-                    },
-                    {
-                        "id": "5.1.5",
-                        "tipo": "Pagina",
-                        "nombre": "Listado de Atenciones"
+                        "nombre": "Listado de Atenciones",
+                        "Enlace": "paginas/atenciones_listado_atenciones.html"
                     }
                 ]
             }
@@ -352,12 +353,14 @@
                     {
                         "id": "6.1.1",
                         "tipo": "Pagina",
-                        "nombre": "Consulta de Log"
+                        "nombre": "Consulta de Log",
+                        "Enlace": "paginas/logs_consulta_log.html"
                     },
                     {
                         "id": "6.1.2",
                         "tipo": "Pagina",
-                        "nombre": "Listado de Logs"
+                        "nombre": "Listado de Logs",
+                        "Enlace": "paginas/logs_listado_logs.html"
                     }
                 ]
             }

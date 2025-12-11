@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta Masiva de Postulaciones</title>
+    <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../recursos/css/style.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .search-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .search-header {
+            font-weight: 600;
+            color: #343a40;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .results-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table {
+            font-size: 0.875rem;
+            min-width: 2400px;
+            /* Increased for 16 columns */
+            white-space: nowrap;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .badge-aprobado {
+            background-color: #28a745;
+        }
+
+        .badge-evaluacion {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        .badge-pendiente {
+            background-color: #6c757d;
+        }
+
+        .badge-finalizado {
+            background-color: #0d6efd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <h2 class="mb-1">Consulta Masiva de Postulaciones</h2>
+        <p class="text-muted mb-4">Búsqueda y generación de reportes de postulaciones</p>
+
+        <!-- Filtros de Búsqueda -->
+        <div class="search-card">
+            <div class="search-header">Filtros de Búsqueda</div>
+
+            <div class="row g-3">
+                <div class="col-md-2">
+                    <label class="form-label">ID</label>
+                    <input type="number" class="form-control" id="filtro_id" placeholder="Ej: 1">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">RUT</label>
+                    <input type="text" class="form-control" id="filtro_rut" placeholder="XX.XXX.XXX-X">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Nombre Organización</label>
+                    <input type="text" class="form-control" id="filtro_nombre_org" placeholder="Buscar por nombre">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Tipo de Postulación</label>
+                    <select class="form-select" id="filtro_tipo_postulacion">
+                        <option value="">Todos</option>
+                        <option value="nueva">Nueva</option>
+                        <option value="renovacion">Renovación</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Tipo de Proyecto</label>
+                    <select class="form-select" id="filtro_tipo_proyecto">
+                        <option value="">Todos</option>
+                        <option value="infraestructura">Infraestructura</option>
+                        <option value="equipamiento">Equipamiento</option>
+                        <option value="capacitacion">Capacitación</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Etapa del Proyecto</label>
+                    <select class="form-select" id="filtro_etapa">
+                        <option value="">Todas</option>
+                        <option value="planificacion">Planificación</option>
+                        <option value="ejecucion">En ejecución</option>
+                        <option value="finalizado">Finalizado</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Tipo Fondo</label>
+                    <select class="form-select" id="filtro_tipo_fondo">
+                        <option value="">Todos</option>
+                        <option value="municipal">Municipal</option>
+                        <option value="regional">Regional</option>
+                        <option value="nacional">Nacional</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Unidad</label>
+                    <input type="text" class="form-control" id="filtro_unidad" placeholder="Ej: UV-12">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Monto Máximo ($)</label>
+                    <input type="number" class="form-control" id="filtro_monto_maximo" placeholder="0">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha de Ingreso (Inicio)</label>
+                    <input type="date" class="form-control" id="filtro_fecha_inicio">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha de Ingreso (Fin)</label>
+                    <input type="date" class="form-control" id="filtro_fecha_fin">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Estado</label>
+                    <select class="form-select" id="filtro_estado">
+                        <option value="">Todos</option>
+                        <option value="aprobado">Aprobado</option>
+                        <option value="evaluacion">En Evaluación</option>
+                        <option value="pendiente">Pendiente</option>
+                        <option value="finalizado">Finalizado</option>
+                    </select>
+                </div>
+
+                <div class="col-12 d-flex gap-2 mt-3">
+                    <button class="btn btn-dark" onclick="buscarPostulaciones()">
+                        🔍 Buscar
+                    </button>
+                    <button class="btn btn-link text-primary" onclick="limpiarFiltros()">
+                        Limpiar Filtros
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resultados -->
+        <div class="results-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="fw-semibold">Resultados (<span id="resultados_count">4</span>)</div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-outline-secondary">
+                        📊 Exportar a Excel
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary">
+                        📄 Imprimir PDF
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover" id="tablaPostulaciones">
+                    <thead class="table-light">
+                        <tr>
+                            <th>RPJ</th>
+                            <th>RUT</th>
+                            <th>NOMBRE ORGANIZACIÓN</th>
+                            <th>TIPO DE ORGANIZACIÓN</th>
+                            <th>CÓDIGO DE ORGANIZACIÓN</th>
+                            <th>NÚMERO DE PROYECTO</th>
+                            <th>NÚMERO DE SUBVENCIÓN</th>
+                            <th>NOMBRE (PROYECTO)</th>
+                            <th>FINALIDAD (PROYECTO)</th>
+                            <th>TIPO FONDO</th>
+                            <th>UNIDAD</th>
+                            <th>FECHA DE INGRESO</th>
+                            <th>MONTO</th>
+                            <th>ESTADO</th>
+                            <th>AÑO INGRESO</th>
+                            <th>NÚMERO DE INGRESO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data loaded dynamically from postulaciones_consulta_masiva_mock.json -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="../recursos/js/postulaciones_consulta_masiva.js"></script>
+</body>
+
+</html>
