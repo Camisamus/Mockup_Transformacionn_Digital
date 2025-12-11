@@ -63,7 +63,8 @@
                             {
                                 "id": "1.2.4",
                                 "tipo": "Pagina",
-                                "nombre": "Retiro de Socio"
+                                "nombre": "Regularización patente de alcoholes",
+                                "Enlace": "paginas/patentes_regularizacion_alcoholes.html"
                             },
                             {
                                 "id": "1.2.5",
@@ -81,7 +82,8 @@
                             {
                                 "id": "1.1.3.1",
                                 "tipo": "Pagina",
-                                "nombre": "Declaración de Propaganda"
+                                "nombre": "Declaración de Propaganda",
+                                "Enlace": "paginas/patentes_declaracion_propaganda.html"
                             },
                             {
                                 "id": "1.1.3.2",
@@ -91,12 +93,14 @@
                                     {
                                         "id": "1.1.3.2.1",
                                         "tipo": "Pagina",
-                                        "nombre": "Revisión de Cobro"
+                                        "nombre": "Revisión de Cobro",
+                                        "Enlace": "paginas/patentes_revision_cobro.html"
                                     },
                                     {
                                         "id": "1.1.3.2.2",
                                         "tipo": "Pagina",
-                                        "nombre": "Certificado de No Deuda"
+                                        "nombre": "Certificado de No Deuda",
+                                        "Enlace": "paginas/patentes_certificado_no_deuda.html"
                                     },
                                     {
                                         "id": "1.1.3.2.3",
@@ -115,7 +119,8 @@
                             {
                                 "id": "1.1.4.1",
                                 "tipo": "Pagina",
-                                "nombre": "Solicitud Término Negocio"
+                                "nombre": "Solicitud Término Negocio",
+                                "Enlace": "paginas/patentes_termino_negocio.html"
                             }
                         ]
                     }
@@ -135,7 +140,8 @@
                             {
                                 "id": "1.2.1.1",
                                 "tipo": "Pagina",
-                                "nombre": "Patentes"
+                                "nombre": "Patentes",
+                                "Enlace": "paginas/patentes_estado_pago_patentes.html"
                             },
                             {
                                 "id": "1.2.1.2",
