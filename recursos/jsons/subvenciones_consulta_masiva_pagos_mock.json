@@ -1,0 +1,56 @@
+[
+    {
+        "numero_subvencion": "SUB-2024-001",
+        "fecha_evento": "2024-09-15",
+        "estado_evento": "TERMINADA",
+        "fecha_digitalizacion": "2024-09-20",
+        "responsable_evento": "María González López",
+        "glosa_evento": "Pago primera cuota subvención municipal",
+        "observaciones": "Pago procesado correctamente según resolución N° 123/2024"
+    },
+    {
+        "numero_subvencion": "SUB-2024-002",
+        "fecha_evento": "2024-08-10",
+        "estado_evento": "TERMINADA",
+        "fecha_digitalizacion": "2024-08-15",
+        "responsable_evento": "Carlos Ramírez Pérez",
+        "glosa_evento": "Pago subvención deportiva anual",
+        "observaciones": "Documentos y comprobantes según dirección"
+    },
+    {
+        "numero_subvencion": "SUB-2024-003",
+        "fecha_evento": "2024-07-05",
+        "estado_evento": "PENDIENTE",
+        "fecha_digitalizacion": null,
+        "responsable_evento": "Ana Martínez Díaz",
+        "glosa_evento": "Pago subvención cultural bimensual",
+        "observaciones": "Pendiente validación de documentación"
+    },
+    {
+        "numero_subvencion": "SUB-2024-004",
+        "fecha_evento": "2024-08-20",
+        "estado_evento": "TERMINADA",
+        "fecha_digitalizacion": "2024-08-22",
+        "responsable_evento": "Pedro Torres Núñez",
+        "glosa_evento": "Pago segunda cuota proyecto infraestructura",
+        "observaciones": "Pago parcial, resto condicionado a rendición"
+    },
+    {
+        "numero_subvencion": "SUB-2023-015",
+        "fecha_evento": "2024-06-01",
+        "estado_evento": "PENDIENTE",
+        "fecha_digitalizacion": null,
+        "responsable_evento": "Laura Fernández Rojas",
+        "glosa_evento": "Pago final subvención mayo 2023",
+        "observaciones": "Requiere aprobación de rendición final"
+    },
+    {
+        "numero_subvencion": "SUB-2024-005",
+        "fecha_evento": "2024-10-15",
+        "estado_evento": "TERMINADA",
+        "fecha_digitalizacion": "2024-10-18",
+        "responsable_evento": "Roberto Sánchez Díaz",
+        "glosa_evento": "Pago subvención actividades lúdicas educa",
+        "observaciones": "Pago realizado conforme a cronograma establecido"
+    }
+]
