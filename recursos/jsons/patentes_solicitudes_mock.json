@@ -4,6 +4,8 @@
       "numero": "PC-2024-001",
       "rut": "12.345.678-9",
       "fechaIngreso": "01/11/2024",
+      "tipoTramite": "Solicitud de Patente Comercial",
+      "grupo": "Solicitudes",
       "estado": "En Proceso",
       "estadoClass": "bg-info"
     },
@@ -11,6 +13,8 @@
       "numero": "PC-2024-002",
       "rut": "12.345.678-9",
       "fechaIngreso": "05/11/2024",
+      "tipoTramite": "Cambio de Domicilio",
+      "grupo": "Modificación de Actividad",
       "estado": "En Proceso",
       "estadoClass": "bg-info"
     },
@@ -18,6 +22,8 @@
       "numero": "PC-2024-003",
       "rut": "12.345.678-9",
       "fechaIngreso": "12/11/2024",
+      "tipoTramite": "Modificación Razón Social",
+      "grupo": "Modificación de Actividad",
       "estado": "Pendiente",
       "estadoClass": "bg-warning"
     },
@@ -25,6 +31,8 @@
       "numero": "PC-2024-004",
       "rut": "12.345.678-9",
       "fechaIngreso": "07/12/2024",
+      "tipoTramite": "Declaración de Propaganda",
+      "grupo": "Gestión Tributaria",
       "estado": "Pendiente",
       "estadoClass": "bg-warning"
     },
@@ -32,6 +40,8 @@
       "numero": "PC-2024-005",
       "rut": "12.345.678-9",
       "fechaIngreso": "09/12/2024",
+      "tipoTramite": "Ampliación de Giro",
+      "grupo": "Modificación de Actividad",
       "estado": "En Proceso",
       "estadoClass": "bg-info"
     },
@@ -39,6 +49,8 @@
       "numero": "PC-2024-006",
       "rut": "98.765.432-1",
       "fechaIngreso": "15/10/2024",
+      "tipoTramite": "Solicitud de Patente Comercial",
+      "grupo": "Solicitudes",
       "estado": "Aprobado",
       "estadoClass": "bg-success"
     },
@@ -46,6 +58,8 @@
       "numero": "PC-2024-007",
       "rut": "11.222.333-4",
       "fechaIngreso": "20/09/2024",
+      "tipoTramite": "Solicitud Término Negocio",
+      "grupo": "Cese Definitivo",
       "estado": "Rechazado",
       "estadoClass": "bg-danger"
     },
@@ -53,6 +67,8 @@
       "numero": "PC-2024-008",
       "rut": "12.345.678-9",
       "fechaIngreso": "03/12/2024",
+      "tipoTramite": "Certificado de No Deuda",
+      "grupo": "Gestión Tributaria",
       "estado": "En Proceso",
       "estadoClass": "bg-info"
     }
