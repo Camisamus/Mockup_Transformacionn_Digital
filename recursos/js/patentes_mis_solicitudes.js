@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (solicitudes.length === 0) {
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="5" class="text-center text-muted">No se encontraron solicitudes</td>
+                    <td colspan="7" class="text-center text-muted">No se encontraron solicitudes</td>
                 </tr>
             `;
             return;
@@ -63,6 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td><a href="#" class="text-primary">${solicitud.numero}</a></td>
                 <td>${solicitud.rut}</td>
                 <td>${solicitud.fechaIngreso}</td>
+                <td>${solicitud.tipoTramite || '-'}</td>
+                <td>${solicitud.grupo || '-'}</td>
                 <td><span class="badge ${solicitud.estadoClass}">${solicitud.estado}</span></td>
                 <td><button class="btn btn-sm btn-outline-primary" onclick="descargarSolicitud('${solicitud.numero}')">📄 Descargar Solicitud</button></td>
             `;

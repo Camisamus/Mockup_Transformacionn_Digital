@@ -14,60 +14,53 @@
         "contenido": [
             {
                 "id": "1.1",
+                "tipo": "Pagina",
+                "nombre": "Mis Solicitudes",
+                "Enlace": "paginas/patentes_mis_solicitudes.html"
+            },
+            {
+                "id": "1.2",
                 "tipo": "subcategoia",
                 "nombre": "Solicitudes",
                 "icon": "file-text",
                 "contenido": [
                     {
-                        "id": "1.1.1",
-                        "tipo": "subcategoia",
+                        "id": "1.2.1",
+                        "tipo": "Pagina",
                         "nombre": "Solicitud de Patente Comercial",
-                        "contenido": [
-                            {
-                                "id": "1.1.1.1",
-                                "tipo": "Pagina",
-                                "nombre": "Solicitar patente comercial",
-                                "Enlace": "paginas/patentes_solicitar_patente_comercial.html"
-                            },
-                            {
-                                "id": "1.1.1.2",
-                                "tipo": "Pagina",
-                                "nombre": "Mis Solicitudes",
-                                "Enlace": "paginas/patentes_mis_solicitudes.html"
-                            }
-                        ]
+                        "Enlace": "paginas/patentes_solicitar_patente_comercial.html"
                     },
                     {
-                        "id": "1.1.2",
+                        "id": "1.2.2",
                         "tipo": "subcategoia",
                         "nombre": "Modificación de Actividad",
                         "contenido": [
                             {
-                                "id": "1.1.2.1",
+                                "id": "1.2.2.1",
                                 "tipo": "Pagina",
                                 "nombre": "Cambio de Domicilio",
                                 "Enlace": "paginas/patentes_modificacion_domicilio.html"
                             },
                             {
-                                "id": "1.1.2.2",
+                                "id": "1.2.2.2",
                                 "tipo": "Pagina",
                                 "nombre": "Modificación Razón Social",
                                 "Enlace": "paginas/patentes_modificacion_razon_social.html"
                             },
                             {
-                                "id": "1.1.2.3",
+                                "id": "1.2.2.3",
                                 "tipo": "Pagina",
                                 "nombre": "Ampliación de Giro",
                                 "Enlace": "paginas/patentes_ampliacion_giro.html"
                             },
                             {
-                                "id": "1.2.4",
+                                "id": "1.2.2.4",
                                 "tipo": "Pagina",
                                 "nombre": "Regularización patente de alcoholes",
                                 "Enlace": "paginas/patentes_regularizacion_alcoholes.html"
                             },
                             {
-                                "id": "1.2.5",
+                                "id": "1.2.2.5",
                                 "tipo": "Pagina",
                                 "nombre": "Cambio de Nombre",
                                 "Enlace": "paginas/patentes_cambio_nombre.html"
@@ -75,35 +68,35 @@
                         ]
                     },
                     {
-                        "id": "1.1.3",
+                        "id": "1.2.3",
                         "tipo": "subcategoia",
                         "nombre": "Gestión Tributaria",
                         "contenido": [
                             {
-                                "id": "1.1.3.1",
+                                "id": "1.2.3.1",
                                 "tipo": "Pagina",
                                 "nombre": "Declaración de Propaganda",
                                 "Enlace": "paginas/patentes_declaracion_propaganda.html"
                             },
                             {
-                                "id": "1.1.3.2",
+                                "id": "1.2.3.2",
                                 "tipo": "subcategoia",
                                 "nombre": "Gestión Financiera",
                                 "contenido": [
                                     {
-                                        "id": "1.1.3.2.1",
+                                        "id": "1.2.3.2.1",
                                         "tipo": "Pagina",
                                         "nombre": "Revisión de Cobro",
                                         "Enlace": "paginas/patentes_revision_cobro.html"
                                     },
                                     {
-                                        "id": "1.1.3.2.2",
+                                        "id": "1.2.3.2.2",
                                         "tipo": "Pagina",
                                         "nombre": "Certificado de No Deuda",
                                         "Enlace": "paginas/patentes_certificado_no_deuda.html"
                                     },
                                     {
-                                        "id": "1.1.3.2.3",
+                                        "id": "1.2.3.2.3",
                                         "tipo": "Pagina",
                                         "nombre": "Declaración de Capital Propio"
                                     }
@@ -112,12 +105,12 @@
                         ]
                     },
                     {
-                        "id": "1.1.4",
+                        "id": "1.2.4",
                         "tipo": "subcategoia",
                         "nombre": "Cese Definitivo",
                         "contenido": [
                             {
-                                "id": "1.1.4.1",
+                                "id": "1.2.4.1",
                                 "tipo": "Pagina",
                                 "nombre": "Solicitud Término Negocio",
                                 "Enlace": "paginas/patentes_termino_negocio.html"
@@ -127,59 +120,59 @@
                 ]
             },
             {
-                "id": "1.2",
+                "id": "1.3",
                 "tipo": "categoia",
                 "nombre": "Documentación",
                 "icon": "folder",
                 "contenido": [
                     {
-                        "id": "1.2.1",
+                        "id": "1.3.1",
                         "tipo": "subcategoia",
                         "nombre": "Estado de Pago",
                         "contenido": [
                             {
-                                "id": "1.2.1.1",
+                                "id": "1.3.1.1",
                                 "tipo": "Pagina",
                                 "nombre": "Patentes",
                                 "Enlace": "paginas/patentes_estado_pago_patentes.html"
                             },
                             {
-                                "id": "1.2.1.2",
+                                "id": "1.3.1.2",
                                 "tipo": "Pagina",
                                 "nombre": "Aseo"
                             }
                         ]
                     },
                     {
-                        "id": "1.2.2",
+                        "id": "1.3.2",
                         "tipo": "Pagina",
                         "nombre": "Historial de Pagos",
                         "Enlace": "paginas/patentes_historial_pagos.html"
                     },
                     {
-                        "id": "1.2.3",
+                        "id": "1.3.3",
                         "tipo": "subcategoia",
                         "nombre": "Declaraciones",
                         "contenido": [
                             {
-                                "id": "1.2.3.1",
+                                "id": "1.3.3.1",
                                 "tipo": "Pagina",
                                 "nombre": "Capital Propio"
                             },
                             {
-                                "id": "1.2.3.2",
+                                "id": "1.3.3.2",
                                 "tipo": "Pagina",
                                 "nombre": "Trabajadores"
                             }
                         ]
                     },
                     {
-                        "id": "1.2.4",
+                        "id": "1.3.4",
                         "tipo": "subcategoia",
                         "nombre": "Certificados",
                         "contenido": [
                             {
-                                "id": "1.2.4.1",
+                                "id": "1.3.4.1",
                                 "tipo": "Pagina",
                                 "nombre": "Certificado de Inversión"
                             }
