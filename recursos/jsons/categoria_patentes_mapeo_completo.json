@@ -1,0 +1,884 @@
+{
+    "categoria_principal": "Patentes",
+    "total_paginas": 13,
+    "fecha_analisis": "2025-12-12",
+    "paginas": [
+        {
+            "categoria": "Patentes > Solicitudes > Solicitud de Patente Comercial",
+            "nombre_pagina": "Solicitar patente comercial",
+            "archivo_html": "patentes_solicitar_patente_comercial.html",
+            "campos_encontrados": [
+                1,
+                2,
+                3,
+                7,
+                8
+            ],
+            "campos_no_encontrados": [
+                {
+                    "nombre": "REPRESENTANTE LEGAL",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "representanteLegal"
+                },
+                {
+                    "nombre": "DIRECCIÓN COMERCIAL <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "direccionComercial",
+                    "similar_a": "Dirección (id: 6)"
+                },
+                {
+                    "nombre": "DIRECCIÓN PARTICULAR <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "direccionParticular",
+                    "similar_a": "Dirección (id: 6)"
+                },
+                {
+                    "nombre": "ROL AVALÚO",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "rolAvaluo"
+                },
+                {
+                    "nombre": "E-MAIL <-----------------",
+                    "tipo": "email",
+                    "elemento": "input",
+                    "id_html": "email",
+                    "similar_a": "Correo Electrónico (id: 8)"
+                },
+                {
+                    "nombre": "GIRO <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "giro",
+                    "similar_a": "Giro de la patente (id: 4)"
+                },
+                {
+                    "nombre": "CÓDIGO ACTIVIDAD S.I.I",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "codigoSII"
+                },
+                {
+                    "nombre": "CASA MATRIZ",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "casaMatriz"
+                },
+                {
+                    "nombre": "SUCURSAL",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "sucursal"
+                },
+                {
+                    "nombre": "MUNICIPALIDAD CASA MATRIZ",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "muniCasaMatriz"
+                },
+                {
+                    "nombre": "N° TRABAJADORES",
+                    "tipo": "number",
+                    "elemento": "input",
+                    "id_html": "vinaTrabajadores_0"
+                },
+                {
+                    "nombre": "LUMINOSA <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "propagandaLuminosa",
+                    "similar_a": "Tipo Propaganda - Luminosa (id: 47)"
+                },
+                {
+                    "nombre": "NO LUMINOSA",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "propagandaNoLuminosa"
+                },
+                {
+                    "nombre": "TOTAL MTS CUADRADOS",
+                    "tipo": "number",
+                    "elemento": "input",
+                    "id_html": "propagandaTotalM2"
+                },
+                {
+                    "nombre": "CAPITAL PROPIO",
+                    "tipo": "number",
+                    "elemento": "input",
+                    "id_html": "capitalPropio"
+                },
+                {
+                    "nombre": "TIPO TRÁMITE",
+                    "tipo": "select",
+                    "elemento": "select",
+                    "id_html": "tipoTrámite"
+                }
+            ]
+        },
+        {
+            "categoria": "Patentes > Solicitudes > Solicitud de Patente Comercial",
+            "nombre_pagina": "Mis Solicitudes",
+            "archivo_html": "patentes_mis_solicitudes.html",
+            "campos_encontrados": [],
+            "campos_no_encontrados": [],
+            "nota": "Página de consulta/listado sin formulario de entrada"
+        },
+        {
+            "categoria": "Patentes > Solicitudes > Modificación de Actividad",
+            "nombre_pagina": "Cambio de Domicilio",
+            "archivo_html": "patentes_modificacion_domicilio.html",
+            "campos_encontrados": [
+                1,
+                2,
+                3,
+                4,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25
+            ],
+            "campos_no_encontrados": [
+                {
+                    "nombre": "Dirección Anterior",
+                    "tipo": "textarea",
+                    "elemento": "textarea",
+                    "id_html": "direccionAnterior"
+                },
+                {
+                    "nombre": "Dirección Nueva <-----------------",
+                    "tipo": "textarea",
+                    "elemento": "textarea",
+                    "id_html": "direccionNueva",
+                    "similar_a": "Dirección Nueva (id: 5)"
+                },
+                {
+                    "nombre": "Dirección Particular <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "dirParticular",
+                    "similar_a": "Dirección (id: 6)"
+                }
+            ]
+        },
+        {
+            "categoria": "Patentes > Solicitudes > Modificación de Actividad",
+            "nombre_pagina": "Modificación Razón Social",
+            "archivo_html": "patentes_modificacion_razon_social.html",
+            "campos_encontrados": [
+                1,
+                2,
+                3,
+                4,
+                6,
+                7,
+                8,
+                9,
+                10,
+                12,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30,
+                31,
+                32,
+                33
+            ],
+            "campos_no_encontrados": [
+                {
+                    "nombre": "Razón Social Anterior",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "razonSocialAnterior"
+                },
+                {
+                    "nombre": "Dirección Comercial <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "direccionComercial",
+                    "similar_a": "Dirección (id: 6)"
+                },
+                {
+                    "nombre": "Nombre Contacto <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "nombreContacto",
+                    "similar_a": "Nombre Contacto (id: 33)"
+                },
+                {
+                    "nombre": "Dirección Particular <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "dirParticular",
+                    "similar_a": "Dirección (id: 6)"
+                }
+            ]
+        },
+        {
+            "categoria": "Patentes > Solicitudes > Modificación de Actividad",
+            "nombre_pagina": "Ampliación de Giro",
+            "archivo_html": "patentes_ampliacion_giro.html",
+            "campos_encontrados": [
+                1,
+                2,
+                3,
+                6,
+                9,
+                11,
+                12,
+                14,
+                15,
+                16,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                34,
+                35
+            ],
+            "campos_no_encontrados": [
+                {
+                    "nombre": "Giro Anterior",
+                    "tipo": "textarea",
+                    "elemento": "textarea",
+                    "id_html": "giroAnterior"
+                },
+                {
+                    "nombre": "Giro Actual <-----------------",
+                    "tipo": "textarea",
+                    "elemento": "textarea",
+                    "id_html": "giroActual",
+                    "similar_a": "Giro Actual (id: 34)"
+                },
+                {
+                    "nombre": "Dirección Comercial <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "direccionCommercial",
+                    "similar_a": "Dirección (id: 6)"
+                },
+                {
+                    "nombre": "Fotocopia Identidad <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "docIdentidad",
+                    "similar_a": "Fotocopia Cédula (id: 10)"
+                },
+                {
+                    "nombre": "Aviso SII Ampliación <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "docAviso",
+                    "similar_a": "Aviso SII (id: 11)"
+                }
+            ]
+        },
+        {
+            "categoria": "Patentes > Solicitudes > Modificación de Actividad",
+            "nombre_pagina": "Regularización patente de alcoholes",
+            "archivo_html": "patentes_regularizacion_alcoholes.html",
+            "campos_encontrados": [
+                1,
+                2,
+                3,
+                6,
+                7,
+                8,
+                14,
+                16,
+                18,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                31,
+                32,
+                33,
+                36,
+                37,
+                38,
+                39
+            ],
+            "campos_no_encontrados": [
+                {
+                    "nombre": "Giro <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "giro",
+                    "similar_a": "Giro de la patente (id: 4)"
+                },
+                {
+                    "nombre": "Nombre Contacto / Rep. Legal <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "nombreContacto",
+                    "similar_a": "Nombre Contacto (id: 33)"
+                },
+                {
+                    "nombre": "Dirección Particular <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "dirParticular",
+                    "similar_a": "Dirección (id: 6)"
+                },
+                {
+                    "nombre": "Patente Adjudicada <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "docAdjudicacion",
+                    "similar_a": "Patente Adjudicada (id: 36)"
+                },
+                {
+                    "nombre": "Contrato Propiedad <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "docPropiedad",
+                    "similar_a": "Contrato Propiedad (id: 37)"
+                },
+                {
+                    "nombre": "Inicio Actividades SII <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "docSII",
+                    "similar_a": "Inicio Actividades SII (id: 38)"
+                },
+                {
+                    "nombre": "Fotocopia Identidad",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "docIdentidad"
+                },
+                {
+                    "nombre": "Opinión Junta Vecinos <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "docVecinos",
+                    "similar_a": "Opinión Junta Vecinos (id: 39)"
+                },
+                {
+                    "nombre": "Informe Uso Suelo <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "docUsoSuelo",
+                    "similar_a": "Informe Factibilidad Uso Suelo (id: 15)"
+                }
+            ]
+        },
+        {
+            "categoria": "Patentes > Solicitudes > Modificación de Actividad",
+            "nombre_pagina": "Cambio de Nombre",
+            "archivo_html": "patentes_cambio_nombre.html",
+            "campos_encontrados": [
+                1,
+                2,
+                6,
+                7,
+                8,
+                9,
+                10,
+                14,
+                16,
+                18,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                28,
+                29,
+                33,
+                38,
+                40,
+                41,
+                42,
+                43,
+                44,
+                45
+            ],
+            "campos_no_encontrados": [
+                {
+                    "nombre": "Giro <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "giroPatente",
+                    "similar_a": "Giro de la patente (id: 4)"
+                },
+                {
+                    "nombre": "Nombre Anterior",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "nombreAnterior"
+                },
+                {
+                    "nombre": "Nombre Actual <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "nombreActual",
+                    "similar_a": "Nombre Actual (id: 40)"
+                },
+                {
+                    "nombre": "Dirección <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "direccion",
+                    "similar_a": "Dirección (id: 6)"
+                },
+                {
+                    "nombre": "Nombre Contacto <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "nombreContacto",
+                    "similar_a": "Nombre Contacto (id: 33)"
+                },
+                {
+                    "nombre": "Dirección Particular <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "dirParticular",
+                    "similar_a": "Dirección (id: 6)"
+                },
+                {
+                    "nombre": "Contrato Compraventa <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "docCompraventa",
+                    "similar_a": "Contrato Compraventa (id: 41)"
+                },
+                {
+                    "nombre": "Contrato Arriendo",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "docArriendo"
+                },
+                {
+                    "nombre": "Inicio Actividades SII <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "docSII",
+                    "similar_a": "Inicio Actividades SII (id: 38)"
+                },
+                {
+                    "nombre": "Fotocopia RUT Sociedad <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "docSociedad",
+                    "similar_a": "Fotocopia RUT Sociedad (id: 42)"
+                },
+                {
+                    "nombre": "Escritura <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "docEscritura",
+                    "similar_a": "Escritura (id: 29)"
+                },
+                {
+                    "nombre": "Informe Sanitario <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "docInformeSanitario",
+                    "similar_a": "Informe Sanitario (id: 43)"
+                },
+                {
+                    "nombre": "Cert. Alcoholes <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "docAlcohol",
+                    "similar_a": "Certificado Alcoholes (id: 44)"
+                },
+                {
+                    "nombre": "Apertura Sucursal <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "docSucursal",
+                    "similar_a": "Apertura Sucursal (id: 45)"
+                }
+            ]
+        },
+        {
+            "categoria": "Patentes > Solicitudes > Gestión Tributaria",
+            "nombre_pagina": "Declaración de Propaganda",
+            "archivo_html": "patentes_declaracion_propaganda.html",
+            "campos_encontrados": [
+                1,
+                2,
+                3,
+                6,
+                7,
+                8,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                46,
+                47,
+                48
+            ],
+            "campos_no_encontrados": [
+                {
+                    "nombre": "Giro <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "giro",
+                    "similar_a": "Giro de la patente (id: 4)"
+                },
+                {
+                    "nombre": "Tipo Trámite - Instala <-----------------",
+                    "tipo": "radio",
+                    "elemento": "input",
+                    "id_html": "tramiteInstala",
+                    "similar_a": "Tipo Trámite - Instala (id: 46)"
+                },
+                {
+                    "nombre": "Tipo Trámite - Modifica",
+                    "tipo": "radio",
+                    "elemento": "input",
+                    "id_html": "tramiteModifica"
+                },
+                {
+                    "nombre": "Tipo Trámite - Retira",
+                    "tipo": "radio",
+                    "elemento": "input",
+                    "id_html": "tramiteRetira"
+                },
+                {
+                    "nombre": "Tipo Propaganda - Luminosa <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "tipoLuminosa",
+                    "similar_a": "Tipo Propaganda - Luminosa (id: 47)"
+                },
+                {
+                    "nombre": "Tipo Propaganda - No Luminosa",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "tipoNoLuminosa"
+                },
+                {
+                    "nombre": "Tipo Propaganda - Iluminada",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "tipoIluminada"
+                },
+                {
+                    "nombre": "Plano ubicación",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "adjPlano"
+                },
+                {
+                    "nombre": "Fotografías propaganda <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "adjFotos",
+                    "similar_a": "Fotografías propaganda (id: 48)"
+                }
+            ]
+        },
+        {
+            "categoria": "Patentes > Solicitudes > Gestión Tributaria > Gestión Financiera",
+            "nombre_pagina": "Revisión de Cobro",
+            "archivo_html": "patentes_revision_cobro.html",
+            "campos_encontrados": [
+                1,
+                2,
+                3,
+                6,
+                7,
+                8,
+                33,
+                50,
+                51,
+                52,
+                53,
+                54,
+                55,
+                56,
+                57,
+                58,
+                59,
+                60,
+                61,
+                62,
+                63,
+                64,
+                65
+            ],
+            "campos_no_encontrados": [
+                {
+                    "nombre": "Giro <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "giro",
+                    "similar_a": "Giro de la patente (id: 4)"
+                },
+                {
+                    "nombre": "Nombre de Contacto <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "nombreContacto",
+                    "similar_a": "Nombre de Contacto (id: 33)"
+                },
+                {
+                    "nombre": "E-MAIL <-----------------",
+                    "tipo": "email",
+                    "elemento": "input",
+                    "id_html": "emailContacto",
+                    "similar_a": "Correo Electrónico (id: 8)"
+                },
+                {
+                    "nombre": "Teléfono Contacto <-----------------",
+                    "tipo": "tel",
+                    "elemento": "input",
+                    "id_html": "fonoContacto",
+                    "similar_a": "Teléfono (id: 7)"
+                },
+                {
+                    "nombre": "Motivo - Cálculo Patente <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "motivoCalculo",
+                    "similar_a": "Motivo - Cálculo Patente (id: 50)"
+                },
+                {
+                    "nombre": "Motivo - Doble Cobro Aseo <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "motivoAseo",
+                    "similar_a": "Motivo - Doble Cobro Aseo (id: 51)"
+                },
+                {
+                    "nombre": "Motivo - Cálculo Propaganda <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "motivoPropaganda",
+                    "similar_a": "Motivo - Cálculo Propaganda (id: 52)"
+                },
+                {
+                    "nombre": "Motivo - Otro <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "motivoOtroCheck",
+                    "similar_a": "Motivo - Otro (id: 53)"
+                },
+                {
+                    "nombre": "Motivo Otro - Texto <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "motivoOtroText",
+                    "similar_a": "Motivo Otro - Texto (id: 54)"
+                }
+            ]
+        },
+        {
+            "categoria": "Patentes > Solicitudes > Gestión Tributaria > Gestión Financiera",
+            "nombre_pagina": "Certificado de No Deuda",
+            "archivo_html": "patentes_certificado_no_deuda.html",
+            "campos_encontrados": [
+                1,
+                2,
+                3,
+                6,
+                7,
+                8,
+                66,
+                67,
+                68,
+                69
+            ],
+            "campos_no_encontrados": [
+                {
+                    "nombre": "Giro <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "giro",
+                    "similar_a": "Giro de la patente (id: 4)"
+                },
+                {
+                    "nombre": "Municipalidad Destino <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "muniDestino",
+                    "similar_a": "Municipalidad Destino (id: 66)"
+                },
+                {
+                    "nombre": "Fotocopia Patente",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "adjPatente"
+                },
+                {
+                    "nombre": "Ingreso Término <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "adjTermino",
+                    "similar_a": "Ingreso Término (id: 67)"
+                },
+                {
+                    "nombre": "Número Término <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "numTermino",
+                    "similar_a": "Número Término (id: 68)"
+                },
+                {
+                    "nombre": "Formulario SII <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "adjSII",
+                    "similar_a": "Formulario SII (id: 69)"
+                }
+            ]
+        },
+        {
+            "categoria": "Patentes > Solicitudes > Cese Definitivo",
+            "nombre_pagina": "Solicitud Término Negocio",
+            "archivo_html": "patentes_termino_negocio.html",
+            "campos_encontrados": [
+                1,
+                2,
+                3,
+                6,
+                7,
+                8,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                67,
+                68,
+                69,
+                70,
+                71,
+                72,
+                73,
+                74,
+                75,
+                76
+            ],
+            "campos_no_encontrados": [
+                {
+                    "nombre": "Giro <-----------------",
+                    "tipo": "text",
+                    "elemento": "input",
+                    "id_html": "giro",
+                    "similar_a": "Giro de la patente (id: 4)"
+                },
+                {
+                    "nombre": "Estado Deuda - Sin Deuda <-----------------",
+                    "tipo": "radio",
+                    "elemento": "input",
+                    "id_html": "deudaSinDeuda",
+                    "similar_a": "Estado Deuda - Sin Deuda (id: 70)"
+                },
+                {
+                    "nombre": "Estado Deuda - Con Deuda <-----------------",
+                    "tipo": "radio",
+                    "elemento": "input",
+                    "id_html": "deudaConDeuda",
+                    "similar_a": "Estado Deuda - Con Deuda (id: 71)"
+                },
+                {
+                    "nombre": "Estado Deuda - Con Convenio <-----------------",
+                    "tipo": "radio",
+                    "elemento": "input",
+                    "id_html": "deudaConvenio",
+                    "similar_a": "Estado Deuda - Con Convenio (id: 72)"
+                },
+                {
+                    "nombre": "Fotocopia Patente",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "adjPatente"
+                },
+                {
+                    "nombre": "Término de Giro <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "adjTerminoGiro",
+                    "similar_a": "Término de Giro (id: 73)"
+                },
+                {
+                    "nombre": "Fotocopia F-29 <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "adjF29",
+                    "similar_a": "Fotocopia F-29 (id: 74)"
+                },
+                {
+                    "nombre": "Resumen Boletas Honorarios <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "adjHonorarios",
+                    "similar_a": "Resumen Boletas Honorarios (id: 75)"
+                },
+                {
+                    "nombre": "Certificado Cobranzas <-----------------",
+                    "tipo": "checkbox",
+                    "elemento": "input",
+                    "id_html": "adjCobranzas",
+                    "similar_a": "Certificado Cobranzas (id: 76)"
+                }
+            ]
+        },
+        {
+            "categoria": "Patentes > Documentación > Estado de Pago",
+            "nombre_pagina": "Patentes",
+            "archivo_html": "patentes_estado_pago_patentes.html",
+            "campos_encontrados": [],
+            "campos_no_encontrados": [],
+            "nota": "Página de consulta/listado sin formulario de entrada"
+        },
+        {
+            "categoria": "Patentes > Documentación",
+            "nombre_pagina": "Historial de Pagos",
+            "archivo_html": "patentes_historial_pagos.html",
+            "campos_encontrados": [],
+            "campos_no_encontrados": [],
+            "nota": "Página de consulta/listado sin formulario de entrada"
+        }
+    ],
+    "resumen_general": {
+        "total_paginas_analizadas": 13,
+        "paginas_con_formularios": 11,
+        "paginas_solo_consulta": 2,
+        "campos_unicos_encontrados_en_bd": 76,
+        "total_campos_similares_marcados": 87
+    }
+}

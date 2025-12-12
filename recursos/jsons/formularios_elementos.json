@@ -1,0 +1,458 @@
+﻿[
+    {
+        "id_numerico":  1,
+        "elemento":  "Rol Patente",
+        "tipo":  "text",
+        "nombre":  "Rol Patente"
+    },
+    {
+        "id_numerico":  2,
+        "elemento":  "RUT",
+        "tipo":  "text",
+        "nombre":  "RUT"
+    },
+    {
+        "id_numerico":  3,
+        "elemento":  "Nombre o Razón Social",
+        "tipo":  "text",
+        "nombre":  "Nombre o Razón Social"
+    },
+    {
+        "id_numerico":  4,
+        "elemento":  "Giro de la patente",
+        "tipo":  "text",
+        "nombre":  "Giro de la patente(s) a modificar"
+    },
+    {
+        "id_numerico":  5,
+        "elemento":  "Dirección Nueva",
+        "tipo":  "textarea",
+        "nombre":  "Dirección Modificada (Nueva)"
+    },
+    {
+        "id_numerico":  6,
+        "elemento":  "Dirección",
+        "tipo":  "text",
+        "nombre":  "Dirección"
+    },
+    {
+        "id_numerico":  7,
+        "elemento":  "Teléfono",
+        "tipo":  "tel",
+        "nombre":  "Teléfono"
+    },
+    {
+        "id_numerico":  8,
+        "elemento":  "Correo Electrónico",
+        "tipo":  "email",
+        "nombre":  "Correo Electrónico"
+    },
+    {
+        "id_numerico":  9,
+        "elemento":  "Fotocopia patente pagada",
+        "tipo":  "checkbox",
+        "nombre":  "Fotocopia simple de la(s) última(s) patente(s) pagada(s)"
+    },
+    {
+        "id_numerico":  10,
+        "elemento":  "Fotocopia Cédula",
+        "tipo":  "checkbox",
+        "nombre":  "Fotocopia Cédula de Identidad (P. Natural) o RUT Sociedad y Rep. Legal"
+    },
+    {
+        "id_numerico":  11,
+        "elemento":  "Aviso SII",
+        "tipo":  "checkbox",
+        "nombre":  "Fotocopia Aviso de Modificación de Domicilio ante S.I.I."
+    },
+    {
+        "id_numerico":  12,
+        "elemento":  "Recibo Contribuciones",
+        "tipo":  "checkbox",
+        "nombre":  "Fotocopia Recibo de Contribuciones o N° Rol Avalúo"
+    },
+    {
+        "id_numerico":  13,
+        "elemento":  "Certificado de Número",
+        "tipo":  "checkbox",
+        "nombre":  "Certificado de Número"
+    },
+    {
+        "id_numerico":  14,
+        "elemento":  "Fotografías",
+        "tipo":  "checkbox",
+        "nombre":  "2 Fotografías (interior y exterior) del establecimiento"
+    },
+    {
+        "id_numerico":  15,
+        "elemento":  "Informe Factibilidad Uso Suelo",
+        "tipo":  "checkbox",
+        "nombre":  "Informe Factibilidad Uso Suelo"
+    },
+    {
+        "id_numerico":  16,
+        "elemento":  "Certificado Técnico Urbanístico (DOM)",
+        "tipo":  "checkbox",
+        "nombre":  "Certificado Técnico Urbanístico (DOM)"
+    },
+    {
+        "id_numerico":  17,
+        "elemento":  "Recepción Definitiva",
+        "tipo":  "checkbox",
+        "nombre":  "Recepción Definitiva"
+    },
+    {
+        "id_numerico":  18,
+        "elemento":  "Resolución Sanitaria",
+        "tipo":  "checkbox",
+        "nombre":  "Resolución Sanitaria favorable (Seremi de Salud - Quinta N° 231)"
+    },
+    {
+        "id_numerico":  19,
+        "elemento":  "Calificación Actividad Inofensiva",
+        "tipo":  "checkbox",
+        "nombre":  "Calificación de Actividad Inofensiva y/o Molesta (Seremi de Salud)"
+    },
+    {
+        "id_numerico":  20,
+        "elemento":  "Calle (Mapa)",
+        "tipo":  "text",
+        "nombre":  "Calle"
+    },
+    {
+        "id_numerico":  21,
+        "elemento":  "Número (Mapa)",
+        "tipo":  "text",
+        "nombre":  "Número"
+    },
+    {
+        "id_numerico":  22,
+        "elemento":  "Comuna (Mapa)",
+        "tipo":  "text",
+        "nombre":  "Comuna"
+    },
+    {
+        "id_numerico":  23,
+        "elemento":  "Región (Mapa)",
+        "tipo":  "text",
+        "nombre":  "Región"
+    },
+    {
+        "id_numerico":  24,
+        "elemento":  "Latitud",
+        "tipo":  "text",
+        "nombre":  "Latitud"
+    },
+    {
+        "id_numerico":  25,
+        "elemento":  "Longitud",
+        "tipo":  "text",
+        "nombre":  "Longitud"
+    },
+    {
+        "id_numerico":  26,
+        "elemento":  "Razón Social Actual",
+        "tipo":  "text",
+        "nombre":  "Razón Social ACTUAL (Nueva)"
+    },
+    {
+        "id_numerico":  27,
+        "elemento":  "Aviso Modificación Razón Social",
+        "tipo":  "checkbox",
+        "nombre":  "Aviso de Modificación de Razón Social y/o RUT ante S.I.I."
+    },
+    {
+        "id_numerico":  28,
+        "elemento":  "RUT Sociedad",
+        "tipo":  "checkbox",
+        "nombre":  "Fotocopia RUT sociedad y C.I. Rep. Legal"
+    },
+    {
+        "id_numerico":  29,
+        "elemento":  "Escritura",
+        "tipo":  "checkbox",
+        "nombre":  "Escrituras (Constitución/Modif.), Extracto y Vigencia"
+    },
+    {
+        "id_numerico":  30,
+        "elemento":  "Acta Directorio",
+        "tipo":  "checkbox",
+        "nombre":  "Acta de Directorio (solo S.A.)"
+    },
+    {
+        "id_numerico":  31,
+        "elemento":  "Certificado Antecedentes",
+        "tipo":  "checkbox",
+        "nombre":  "Certificado de Antecedentes (Todos los socios)"
+    },
+    {
+        "id_numerico":  32,
+        "elemento":  "Declaración Jurada Art. 4",
+        "tipo":  "checkbox",
+        "nombre":  "Declaración Jurada Art. 4° Ley N° 19.925 (Notarial)"
+    },
+    {
+        "id_numerico":  33,
+        "elemento":  "Nombre Contacto",
+        "tipo":  "text",
+        "nombre":  "Nombre Contacto"
+    },
+    {
+        "id_numerico":  34,
+        "elemento":  "Giro Actual",
+        "tipo":  "textarea",
+        "nombre":  "Giro ACTUAL (Nuevo/Ampliado)"
+    },
+    {
+        "id_numerico":  35,
+        "elemento":  "Calificación Actividad",
+        "tipo":  "checkbox",
+        "nombre":  "Calificación de Actividad Inofensiva y/o Molesta (SEREMI de Salud)"
+    },
+    {
+        "id_numerico":  36,
+        "elemento":  "Patente Adjudicada",
+        "tipo":  "checkbox",
+        "nombre":  "Patente adjudicada y Decreto de adjudicación"
+    },
+    {
+        "id_numerico":  37,
+        "elemento":  "Contrato Propiedad",
+        "tipo":  "checkbox",
+        "nombre":  "Contrato Arriendo o Escritura Propiedad (Legalizado)"
+    },
+    {
+        "id_numerico":  38,
+        "elemento":  "Inicio Actividades SII",
+        "tipo":  "checkbox",
+        "nombre":  "Inicio Actividades S.I.I. / Modificaciones"
+    },
+    {
+        "id_numerico":  39,
+        "elemento":  "Opinión Junta Vecinos",
+        "tipo":  "checkbox",
+        "nombre":  "Opinión de Junta de Vecinos del sector"
+    },
+    {
+        "id_numerico":  40,
+        "elemento":  "Nombre Actual",
+        "tipo":  "text",
+        "nombre":  "Nombre ACTUAL (Nuevo)"
+    },
+    {
+        "id_numerico":  41,
+        "elemento":  "Contrato Compraventa",
+        "tipo":  "checkbox",
+        "nombre":  "Contrato Compraventa legalizado ante notario"
+    },
+    {
+        "id_numerico":  42,
+        "elemento":  "Fotocopia RUT Sociedad",
+        "tipo":  "checkbox",
+        "nombre":  "Fotocopia RUT Sociedad y C.I. Rep. Legal"
+    },
+    {
+        "id_numerico":  43,
+        "elemento":  "Informe Sanitario",
+        "tipo":  "checkbox",
+        "nombre":  "Informe Sanitario / Calif. Inofensiva o Molesta (Talleres, Bodegas)"
+    },
+    {
+        "id_numerico":  44,
+        "elemento":  "Certificado Alcoholes",
+        "tipo":  "checkbox",
+        "nombre":  "Cert. Antecedentes y DJ Art. 4° Ley 19.925 (Alcoholes)"
+    },
+    {
+        "id_numerico":  45,
+        "elemento":  "Apertura Sucursal",
+        "tipo":  "checkbox",
+        "nombre":  "Apertura Sucursal S.I.I. y Cert. Distribución Capital (Sucursales)"
+    },
+    {
+        "id_numerico":  46,
+        "elemento":  "Tipo Trámite - Instala",
+        "tipo":  "radio",
+        "nombre":  "tipoTramite"
+    },
+    {
+        "id_numerico":  47,
+        "elemento":  "Tipo Propaganda - Luminosa",
+        "tipo":  "checkbox",
+        "nombre":  "Tipo Propaganda - Luminosa"
+    },
+    {
+        "id_numerico":  48,
+        "elemento":  "Fotografías propaganda",
+        "tipo":  "checkbox",
+        "nombre":  "Fotografías con elementos publicitarios (con medidas)"
+    },
+    {
+        "id_numerico":  49,
+        "elemento":  "Nombre de Contacto",
+        "tipo":  "text",
+        "nombre":  "Nombre de Contacto"
+    },
+    {
+        "id_numerico":  50,
+        "elemento":  "Motivo - Cálculo Patente",
+        "tipo":  "checkbox",
+        "nombre":  "Cálculo de Patente"
+    },
+    {
+        "id_numerico":  51,
+        "elemento":  "Motivo - Doble Cobro Aseo",
+        "tipo":  "checkbox",
+        "nombre":  "Doble Cobro de Aseo"
+    },
+    {
+        "id_numerico":  52,
+        "elemento":  "Motivo - Cálculo Propaganda",
+        "tipo":  "checkbox",
+        "nombre":  "Cálculo Propaganda"
+    },
+    {
+        "id_numerico":  53,
+        "elemento":  "Motivo - Otro",
+        "tipo":  "checkbox",
+        "nombre":  "Otro (especificar)"
+    },
+    {
+        "id_numerico":  54,
+        "elemento":  "Motivo Otro - Texto",
+        "tipo":  "text",
+        "nombre":  "Detalle del motivo"
+    },
+    {
+        "id_numerico":  55,
+        "elemento":  "Titular Cuenta",
+        "tipo":  "text",
+        "nombre":  "Titular de la Cuenta"
+    },
+    {
+        "id_numerico":  56,
+        "elemento":  "RUT Titular",
+        "tipo":  "text",
+        "nombre":  "RUT Titular"
+    },
+    {
+        "id_numerico":  57,
+        "elemento":  "Banco",
+        "tipo":  "text",
+        "nombre":  "Banco"
+    },
+    {
+        "id_numerico":  58,
+        "elemento":  "Tipo de Cuenta",
+        "tipo":  "select",
+        "nombre":  "Tipo de Cuenta"
+    },
+    {
+        "id_numerico":  59,
+        "elemento":  "Número de Cuenta",
+        "tipo":  "text",
+        "nombre":  "Número de Cuenta"
+    },
+    {
+        "id_numerico":  60,
+        "elemento":  "Declaración Renta",
+        "tipo":  "checkbox",
+        "nombre":  "Declaración de Renta S.I.I."
+    },
+    {
+        "id_numerico":  61,
+        "elemento":  "Años Renta",
+        "tipo":  "text",
+        "nombre":  "Indicar Años (ej: 2023, 2024)"
+    },
+    {
+        "id_numerico":  62,
+        "elemento":  "Patentes Anteriores",
+        "tipo":  "checkbox",
+        "nombre":  "Patentes Anteriores"
+    },
+    {
+        "id_numerico":  63,
+        "elemento":  "Años Patentes",
+        "tipo":  "text",
+        "nombre":  "Indicar Años / Semestres"
+    },
+    {
+        "id_numerico":  64,
+        "elemento":  "Otros Antecedentes",
+        "tipo":  "checkbox",
+        "nombre":  "Otros Antecedentes Fundantes"
+    },
+    {
+        "id_numerico":  65,
+        "elemento":  "Otros Documentos",
+        "tipo":  "textarea",
+        "nombre":  "Describa otros documentos adjuntos"
+    },
+    {
+        "id_numerico":  66,
+        "elemento":  "Municipalidad Destino",
+        "tipo":  "text",
+        "nombre":  "Para ser presentado en la Ilustre Municipalidad de"
+    },
+    {
+        "id_numerico":  67,
+        "elemento":  "Ingreso Término",
+        "tipo":  "checkbox",
+        "nombre":  "Ingreso Término de Negocio Nº (Si aplica)"
+    },
+    {
+        "id_numerico":  68,
+        "elemento":  "Número Término",
+        "tipo":  "text",
+        "nombre":  "N° de Ingreso"
+    },
+    {
+        "id_numerico":  69,
+        "elemento":  "Formulario SII",
+        "tipo":  "checkbox",
+        "nombre":  "Formulario del S.I.I con cambio de domicilio"
+    },
+    {
+        "id_numerico":  70,
+        "elemento":  "Estado Deuda - Sin Deuda",
+        "tipo":  "radio",
+        "nombre":  "estadoDeuda"
+    },
+    {
+        "id_numerico":  71,
+        "elemento":  "Estado Deuda - Con Deuda",
+        "tipo":  "radio",
+        "nombre":  "estadoDeuda"
+    },
+    {
+        "id_numerico":  72,
+        "elemento":  "Estado Deuda - Con Convenio",
+        "tipo":  "radio",
+        "nombre":  "estadoDeuda"
+    },
+    {
+        "id_numerico":  73,
+        "elemento":  "Término de Giro",
+        "tipo":  "checkbox",
+        "nombre":  "Término de Giro / Cierre Sucursal (S.I.I.)"
+    },
+    {
+        "id_numerico":  74,
+        "elemento":  "Fotocopia F-29",
+        "tipo":  "checkbox",
+        "nombre":  "Fotocopia F-29 sin movimientos (o fundantes actividad)"
+    },
+    {
+        "id_numerico":  75,
+        "elemento":  "Resumen Boletas Honorarios",
+        "tipo":  "checkbox",
+        "nombre":  "Resumen Boletas Honorarios (Patente Profesional)"
+    },
+    {
+        "id_numerico":  76,
+        "elemento":  "Certificado Cobranzas",
+        "tipo":  "checkbox",
+        "nombre":  "Certificado Depto. Cobranzas (si hay deuda/convenio)"
+    }
+]
