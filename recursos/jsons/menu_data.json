@@ -20,7 +20,7 @@
             },
             {
                 "id": "1.2",
-                "tipo": "subcategoia",
+                "tipo": "subcategoria",
                 "nombre": "Solicitudes",
                 "icon": "file-text",
                 "contenido": [
@@ -32,7 +32,7 @@
                     },
                     {
                         "id": "1.2.2",
-                        "tipo": "subcategoia",
+                        "tipo": "subcategoria",
                         "nombre": "Modificación de Actividad",
                         "contenido": [
                             {
@@ -69,7 +69,7 @@
                     },
                     {
                         "id": "1.2.3",
-                        "tipo": "subcategoia",
+                        "tipo": "subcategoria",
                         "nombre": "Gestión Tributaria",
                         "contenido": [
                             {
@@ -80,7 +80,7 @@
                             },
                             {
                                 "id": "1.2.3.2",
-                                "tipo": "subcategoia",
+                                "tipo": "subcategoria",
                                 "nombre": "Gestión Financiera",
                                 "contenido": [
                                     {
@@ -94,11 +94,6 @@
                                         "tipo": "Pagina",
                                         "nombre": "Certificado de No Deuda",
                                         "Enlace": "paginas/patentes_certificado_no_deuda.html"
-                                    },
-                                    {
-                                        "id": "1.2.3.2.3",
-                                        "tipo": "Pagina",
-                                        "nombre": "Declaración de Capital Propio"
                                     }
                                 ]
                             }
@@ -106,7 +101,7 @@
                     },
                     {
                         "id": "1.2.4",
-                        "tipo": "subcategoia",
+                        "tipo": "subcategoria",
                         "nombre": "Cese Definitivo",
                         "contenido": [
                             {
@@ -121,13 +116,13 @@
             },
             {
                 "id": "1.3",
-                "tipo": "categoia",
+                "tipo": "categoria",
                 "nombre": "Documentación",
                 "icon": "folder",
                 "contenido": [
                     {
                         "id": "1.3.1",
-                        "tipo": "subcategoia",
+                        "tipo": "subcategoria",
                         "nombre": "Estado de Pago",
                         "contenido": [
                             {
@@ -151,24 +146,26 @@
                     },
                     {
                         "id": "1.3.3",
-                        "tipo": "subcategoia",
+                        "tipo": "subcategoria",
                         "nombre": "Declaraciones",
                         "contenido": [
                             {
                                 "id": "1.3.3.1",
                                 "tipo": "Pagina",
-                                "nombre": "Capital Propio"
+                                "nombre": "Capital Propio",
+                                "Enlace": "paginas/patentes_capital_propio.html"
                             },
                             {
                                 "id": "1.3.3.2",
                                 "tipo": "Pagina",
-                                "nombre": "Trabajadores"
+                                "nombre": "Trabajadores",
+                                "Enlace": "paginas/patentes_apertura_sucursal.html"
                             }
                         ]
                     },
                     {
                         "id": "1.3.4",
-                        "tipo": "subcategoia",
+                        "tipo": "subcategoria",
                         "nombre": "Certificados",
                         "contenido": [
                             {
