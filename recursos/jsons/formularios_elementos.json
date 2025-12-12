@@ -1,458 +1,541 @@
 ﻿[
     {
-        "id_numerico":  1,
-        "elemento":  "Rol Patente",
-        "tipo":  "text",
-        "nombre":  "Rol Patente"
+        "id_numerico": "GPER0001",
+        "elemento": "Rol Patente",
+        "tipo": "text",
+        "nombre": "Rol Patente",
+        "grupo": "Personas"
     },
     {
-        "id_numerico":  2,
-        "elemento":  "RUT",
-        "tipo":  "text",
-        "nombre":  "RUT"
+        "id_numerico": "GPER0002",
+        "elemento": "RUT",
+        "tipo": "text",
+        "nombre": "RUT",
+        "grupo": "Personas"
     },
     {
-        "id_numerico":  3,
-        "elemento":  "Nombre o Razón Social",
-        "tipo":  "text",
-        "nombre":  "Nombre o Razón Social"
+        "id_numerico": "GPER0003",
+        "elemento": "Nombre o Razón Social",
+        "tipo": "text",
+        "nombre": "Nombre o Razón Social",
+        "grupo": "Personas"
     },
     {
-        "id_numerico":  4,
-        "elemento":  "Giro de la patente",
-        "tipo":  "text",
-        "nombre":  "Giro de la patente(s) a modificar"
+        "id_numerico": "GPER0004",
+        "elemento": "REPRESENTANTE LEGAL",
+        "tipo": "text",
+        "nombre": "Representante Legal",
+        "grupo": "Personas"
     },
     {
-        "id_numerico":  5,
-        "elemento":  "Dirección Nueva",
-        "tipo":  "textarea",
-        "nombre":  "Dirección Modificada (Nueva)"
+        "id_numerico": "GPER0005",
+        "elemento": "Nombre Contacto",
+        "tipo": "text",
+        "nombre": "Nombre Contacto",
+        "grupo": "Personas"
     },
     {
-        "id_numerico":  6,
-        "elemento":  "Dirección",
-        "tipo":  "text",
-        "nombre":  "Dirección"
+        "id_numerico": "GPER0006",
+        "elemento": "Nombre de Contacto",
+        "tipo": "text",
+        "nombre": "Nombre de Contacto",
+        "grupo": "Personas"
     },
     {
-        "id_numerico":  7,
-        "elemento":  "Teléfono",
-        "tipo":  "tel",
-        "nombre":  "Teléfono"
+        "id_numerico": "GCOM0007",
+        "elemento": "Teléfono",
+        "tipo": "tel",
+        "nombre": "Teléfono",
+        "grupo": "Contacto"
     },
     {
-        "id_numerico":  8,
-        "elemento":  "Correo Electrónico",
-        "tipo":  "email",
-        "nombre":  "Correo Electrónico"
+        "id_numerico": "GCOM0008",
+        "elemento": "Correo Electrónico",
+        "tipo": "email",
+        "nombre": "Correo Electrónico",
+        "grupo": "Contacto"
     },
     {
-        "id_numerico":  9,
-        "elemento":  "Fotocopia patente pagada",
-        "tipo":  "checkbox",
-        "nombre":  "Fotocopia simple de la(s) última(s) patente(s) pagada(s)"
+        "id_numerico": "GDIR0009",
+        "elemento": "Dirección",
+        "tipo": "text",
+        "nombre": "Dirección",
+        "grupo": "Dirección"
     },
     {
-        "id_numerico":  10,
-        "elemento":  "Fotocopia Cédula",
-        "tipo":  "checkbox",
-        "nombre":  "Fotocopia Cédula de Identidad (P. Natural) o RUT Sociedad y Rep. Legal"
+        "id_numerico": "GDIR0010",
+        "elemento": "Calle (Mapa)",
+        "tipo": "text",
+        "nombre": "Calle",
+        "grupo": "Dirección"
     },
     {
-        "id_numerico":  11,
-        "elemento":  "Aviso SII",
-        "tipo":  "checkbox",
-        "nombre":  "Fotocopia Aviso de Modificación de Domicilio ante S.I.I."
+        "id_numerico": "GDIR0011",
+        "elemento": "Número (Mapa)",
+        "tipo": "text",
+        "nombre": "Número",
+        "grupo": "Dirección"
     },
     {
-        "id_numerico":  12,
-        "elemento":  "Recibo Contribuciones",
-        "tipo":  "checkbox",
-        "nombre":  "Fotocopia Recibo de Contribuciones o N° Rol Avalúo"
+        "id_numerico": "GDIR0012",
+        "elemento": "Comuna (Mapa)",
+        "tipo": "text",
+        "nombre": "Comuna",
+        "grupo": "Dirección"
     },
     {
-        "id_numerico":  13,
-        "elemento":  "Certificado de Número",
-        "tipo":  "checkbox",
-        "nombre":  "Certificado de Número"
+        "id_numerico": "GDIR0013",
+        "elemento": "Región (Mapa)",
+        "tipo": "text",
+        "nombre": "Región",
+        "grupo": "Dirección"
     },
     {
-        "id_numerico":  14,
-        "elemento":  "Fotografías",
-        "tipo":  "checkbox",
-        "nombre":  "2 Fotografías (interior y exterior) del establecimiento"
+        "id_numerico": "GDIR0014",
+        "elemento": "Latitud",
+        "tipo": "text",
+        "nombre": "Latitud",
+        "grupo": "Dirección"
     },
     {
-        "id_numerico":  15,
-        "elemento":  "Informe Factibilidad Uso Suelo",
-        "tipo":  "checkbox",
-        "nombre":  "Informe Factibilidad Uso Suelo"
+        "id_numerico": "GDIR0015",
+        "elemento": "Longitud",
+        "tipo": "text",
+        "nombre": "Longitud",
+        "grupo": "Dirección"
     },
     {
-        "id_numerico":  16,
-        "elemento":  "Certificado Técnico Urbanístico (DOM)",
-        "tipo":  "checkbox",
-        "nombre":  "Certificado Técnico Urbanístico (DOM)"
+        "id_numerico": "GDOM0016",
+        "elemento": "Dirección Nueva",
+        "tipo": "textarea",
+        "nombre": "Dirección Modificada (Nueva)",
+        "grupo": "Domicilio"
     },
     {
-        "id_numerico":  17,
-        "elemento":  "Recepción Definitiva",
-        "tipo":  "checkbox",
-        "nombre":  "Recepción Definitiva"
+        "id_numerico": "GDOM0017",
+        "elemento": "Municipalidad Destino",
+        "tipo": "text",
+        "nombre": "Para ser presentado en la Ilustre Municipalidad de",
+        "grupo": "Domicilio"
     },
     {
-        "id_numerico":  18,
-        "elemento":  "Resolución Sanitaria",
-        "tipo":  "checkbox",
-        "nombre":  "Resolución Sanitaria favorable (Seremi de Salud - Quinta N° 231)"
+        "id_numerico": "GTRI0018",
+        "elemento": "Giro de la patente",
+        "tipo": "select",
+        "nombre": "Giro de la patente(s) a modificar",
+        "grupo": "Tributario"
     },
     {
-        "id_numerico":  19,
-        "elemento":  "Calificación Actividad Inofensiva",
-        "tipo":  "checkbox",
-        "nombre":  "Calificación de Actividad Inofensiva y/o Molesta (Seremi de Salud)"
+        "id_numerico": "GTRI0019",
+        "elemento": "Giro Actual",
+        "tipo": "select",
+        "nombre": "Giro ACTUAL (Nuevo/Ampliado)",
+        "grupo": "Tributario"
     },
     {
-        "id_numerico":  20,
-        "elemento":  "Calle (Mapa)",
-        "tipo":  "text",
-        "nombre":  "Calle"
+        "id_numerico": "GTRI0020",
+        "elemento": "Razón Social Actual",
+        "tipo": "text",
+        "nombre": "Razón Social ACTUAL (Nueva)",
+        "grupo": "Tributario"
     },
     {
-        "id_numerico":  21,
-        "elemento":  "Número (Mapa)",
-        "tipo":  "text",
-        "nombre":  "Número"
+        "id_numerico": "GTRI0021",
+        "elemento": "Nombre Actual",
+        "tipo": "text",
+        "nombre": "Nombre ACTUAL (Nuevo)",
+        "grupo": "Tributario"
     },
     {
-        "id_numerico":  22,
-        "elemento":  "Comuna (Mapa)",
-        "tipo":  "text",
-        "nombre":  "Comuna"
+        "id_numerico": "GTRA0022",
+        "elemento": "Tipo Trámite - Instala , Modifica, Retira",
+        "tipo": "radio",
+        "nombre": "tipoTramite",
+        "grupo": "Trámite"
     },
     {
-        "id_numerico":  23,
-        "elemento":  "Región (Mapa)",
-        "tipo":  "text",
-        "nombre":  "Región"
+        "id_numerico": "GPRO0023",
+        "elemento": "Tipo Propaganda - Luminosa/No Luminosa",
+        "tipo": "checkbox",
+        "nombre": "Tipo Propaganda - Luminosa/No Luminosa",
+        "grupo": "Propaganda"
     },
     {
-        "id_numerico":  24,
-        "elemento":  "Latitud",
-        "tipo":  "text",
-        "nombre":  "Latitud"
+        "id_numerico": "GFIN0024",
+        "elemento": "Titular Cuenta",
+        "tipo": "text",
+        "nombre": "Titular de la Cuenta",
+        "grupo": "Financiero"
     },
     {
-        "id_numerico":  25,
-        "elemento":  "Longitud",
-        "tipo":  "text",
-        "nombre":  "Longitud"
+        "id_numerico": "GFIN0025",
+        "elemento": "RUT Titular",
+        "tipo": "text",
+        "nombre": "RUT Titular",
+        "grupo": "Financiero"
     },
     {
-        "id_numerico":  26,
-        "elemento":  "Razón Social Actual",
-        "tipo":  "text",
-        "nombre":  "Razón Social ACTUAL (Nueva)"
+        "id_numerico": "GFIN0026",
+        "elemento": "Banco",
+        "tipo": "text",
+        "nombre": "Banco",
+        "grupo": "Financiero"
     },
     {
-        "id_numerico":  27,
-        "elemento":  "Aviso Modificación Razón Social",
-        "tipo":  "checkbox",
-        "nombre":  "Aviso de Modificación de Razón Social y/o RUT ante S.I.I."
+        "id_numerico": "GFIN0027",
+        "elemento": "Tipo de Cuenta",
+        "tipo": "select",
+        "nombre": "Tipo de Cuenta",
+        "grupo": "Financiero"
     },
     {
-        "id_numerico":  28,
-        "elemento":  "RUT Sociedad",
-        "tipo":  "checkbox",
-        "nombre":  "Fotocopia RUT sociedad y C.I. Rep. Legal"
+        "id_numerico": "GFIN0028",
+        "elemento": "Número de Cuenta",
+        "tipo": "text",
+        "nombre": "Número de Cuenta",
+        "grupo": "Financiero"
     },
     {
-        "id_numerico":  29,
-        "elemento":  "Escritura",
-        "tipo":  "checkbox",
-        "nombre":  "Escrituras (Constitución/Modif.), Extracto y Vigencia"
+        "id_numerico": "GDEU0029",
+        "elemento": "Estado Deuda - Sin Deuda",
+        "tipo": "radio",
+        "nombre": "estadoDeuda",
+        "grupo": "Deuda"
     },
     {
-        "id_numerico":  30,
-        "elemento":  "Acta Directorio",
-        "tipo":  "checkbox",
-        "nombre":  "Acta de Directorio (solo S.A.)"
+        "id_numerico": "GDEU0030",
+        "elemento": "Estado Deuda - Con Deuda",
+        "tipo": "radio",
+        "nombre": "estadoDeuda",
+        "grupo": "Deuda"
     },
     {
-        "id_numerico":  31,
-        "elemento":  "Certificado Antecedentes",
-        "tipo":  "checkbox",
-        "nombre":  "Certificado de Antecedentes (Todos los socios)"
+        "id_numerico": "GDEU0031",
+        "elemento": "Estado Deuda - Con Convenio",
+        "tipo": "radio",
+        "nombre": "estadoDeuda",
+        "grupo": "Deuda"
     },
     {
-        "id_numerico":  32,
-        "elemento":  "Declaración Jurada Art. 4",
-        "tipo":  "checkbox",
-        "nombre":  "Declaración Jurada Art. 4° Ley N° 19.925 (Notarial)"
+        "id_numerico": "GMOT0032",
+        "elemento": "Motivo - Cálculo Patente",
+        "tipo": "checkbox",
+        "nombre": "Cálculo de Patente",
+        "grupo": "Motivo"
     },
     {
-        "id_numerico":  33,
-        "elemento":  "Nombre Contacto",
-        "tipo":  "text",
-        "nombre":  "Nombre Contacto"
+        "id_numerico": "GMOT0033",
+        "elemento": "Motivo - Doble Cobro Aseo",
+        "tipo": "checkbox",
+        "nombre": "Doble Cobro de Aseo",
+        "grupo": "Motivo"
     },
     {
-        "id_numerico":  34,
-        "elemento":  "Giro Actual",
-        "tipo":  "textarea",
-        "nombre":  "Giro ACTUAL (Nuevo/Ampliado)"
+        "id_numerico": "GMOT0034",
+        "elemento": "Motivo - Cálculo Propaganda",
+        "tipo": "checkbox",
+        "nombre": "Cálculo Propaganda",
+        "grupo": "Motivo"
     },
     {
-        "id_numerico":  35,
-        "elemento":  "Calificación Actividad",
-        "tipo":  "checkbox",
-        "nombre":  "Calificación de Actividad Inofensiva y/o Molesta (SEREMI de Salud)"
+        "id_numerico": "GMOT0035",
+        "elemento": "Motivo - Otro",
+        "tipo": "checkbox",
+        "nombre": "Otro (especificar)",
+        "grupo": "Motivo"
     },
     {
-        "id_numerico":  36,
-        "elemento":  "Patente Adjudicada",
-        "tipo":  "checkbox",
-        "nombre":  "Patente adjudicada y Decreto de adjudicación"
+        "id_numerico": "GMOT0036",
+        "elemento": "Motivo Otro - Texto",
+        "tipo": "text",
+        "nombre": "Detalle del motivo",
+        "grupo": "Motivo"
     },
     {
-        "id_numerico":  37,
-        "elemento":  "Contrato Propiedad",
-        "tipo":  "checkbox",
-        "nombre":  "Contrato Arriendo o Escritura Propiedad (Legalizado)"
+        "id_numerico": "GDOC0037",
+        "elemento": "Fotocopia patente pagada",
+        "tipo": "file",
+        "nombre": "Fotocopia simple de la(s) última(s) patente(s) pagada(s)",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  38,
-        "elemento":  "Inicio Actividades SII",
-        "tipo":  "checkbox",
-        "nombre":  "Inicio Actividades S.I.I. / Modificaciones"
+        "id_numerico": "GDOC0038",
+        "elemento": "Fotocopia Cédula",
+        "tipo": "file",
+        "nombre": "Fotocopia Cédula de Identidad (P. Natural) o RUT Sociedad y Rep. Legal",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  39,
-        "elemento":  "Opinión Junta Vecinos",
-        "tipo":  "checkbox",
-        "nombre":  "Opinión de Junta de Vecinos del sector"
+        "id_numerico": "GDOC0039",
+        "elemento": "Aviso SII",
+        "tipo": "file",
+        "nombre": "Fotocopia Aviso de Modificación de Domicilio ante S.I.I.",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  40,
-        "elemento":  "Nombre Actual",
-        "tipo":  "text",
-        "nombre":  "Nombre ACTUAL (Nuevo)"
+        "id_numerico": "GDOC0040",
+        "elemento": "Recibo Contribuciones",
+        "tipo": "file",
+        "nombre": "Fotocopia Recibo de Contribuciones o N° Rol Avalúo",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  41,
-        "elemento":  "Contrato Compraventa",
-        "tipo":  "checkbox",
-        "nombre":  "Contrato Compraventa legalizado ante notario"
+        "id_numerico": "GDOC0041",
+        "elemento": "Certificado de Número",
+        "tipo": "file",
+        "nombre": "Certificado de Número",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  42,
-        "elemento":  "Fotocopia RUT Sociedad",
-        "tipo":  "checkbox",
-        "nombre":  "Fotocopia RUT Sociedad y C.I. Rep. Legal"
+        "id_numerico": "GDOC0042",
+        "elemento": "Fotografías",
+        "tipo": "file",
+        "nombre": "2 Fotografías (interior y exterior) del establecimiento",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  43,
-        "elemento":  "Informe Sanitario",
-        "tipo":  "checkbox",
-        "nombre":  "Informe Sanitario / Calif. Inofensiva o Molesta (Talleres, Bodegas)"
+        "id_numerico": "GDOC0043",
+        "elemento": "Informe Factibilidad Uso Suelo",
+        "tipo": "file",
+        "nombre": "Informe Factibilidad Uso Suelo",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  44,
-        "elemento":  "Certificado Alcoholes",
-        "tipo":  "checkbox",
-        "nombre":  "Cert. Antecedentes y DJ Art. 4° Ley 19.925 (Alcoholes)"
+        "id_numerico": "GDOC0044",
+        "elemento": "Certificado Técnico Urbanístico (DOM)",
+        "tipo": "file",
+        "nombre": "Certificado Técnico Urbanístico (DOM)",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  45,
-        "elemento":  "Apertura Sucursal",
-        "tipo":  "checkbox",
-        "nombre":  "Apertura Sucursal S.I.I. y Cert. Distribución Capital (Sucursales)"
+        "id_numerico": "GDOC0045",
+        "elemento": "Recepción Definitiva",
+        "tipo": "file",
+        "nombre": "Recepción Definitiva",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  46,
-        "elemento":  "Tipo Trámite - Instala",
-        "tipo":  "radio",
-        "nombre":  "tipoTramite"
+        "id_numerico": "GDOC0046",
+        "elemento": "Resolución Sanitaria",
+        "tipo": "file",
+        "nombre": "Resolución Sanitaria favorable (Seremi de Salud - Quinta N° 231)",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  47,
-        "elemento":  "Tipo Propaganda - Luminosa",
-        "tipo":  "checkbox",
-        "nombre":  "Tipo Propaganda - Luminosa"
+        "id_numerico": "GDOC0047",
+        "elemento": "Calificación Actividad Inofensiva",
+        "tipo": "file",
+        "nombre": "Calificación de Actividad Inofensiva y/o Molesta (Seremi de Salud)",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  48,
-        "elemento":  "Fotografías propaganda",
-        "tipo":  "checkbox",
-        "nombre":  "Fotografías con elementos publicitarios (con medidas)"
+        "id_numerico": "GDOC0048",
+        "elemento": "Aviso Modificación Razón Social",
+        "tipo": "file",
+        "nombre": "Aviso de Modificación de Razón Social y/o RUT ante S.I.I.",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  49,
-        "elemento":  "Nombre de Contacto",
-        "tipo":  "text",
-        "nombre":  "Nombre de Contacto"
+        "id_numerico": "GDOC0049",
+        "elemento": "RUT Sociedad",
+        "tipo": "file",
+        "nombre": "Fotocopia RUT sociedad y C.I. Rep. Legal",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  50,
-        "elemento":  "Motivo - Cálculo Patente",
-        "tipo":  "checkbox",
-        "nombre":  "Cálculo de Patente"
+        "id_numerico": "GDOC0050",
+        "elemento": "Escritura",
+        "tipo": "file",
+        "nombre": "Escrituras (Constitución/Modif.), Extracto y Vigencia",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  51,
-        "elemento":  "Motivo - Doble Cobro Aseo",
-        "tipo":  "checkbox",
-        "nombre":  "Doble Cobro de Aseo"
+        "id_numerico": "GDOC0051",
+        "elemento": "Acta Directorio",
+        "tipo": "file",
+        "nombre": "Acta de Directorio (solo S.A.)",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  52,
-        "elemento":  "Motivo - Cálculo Propaganda",
-        "tipo":  "checkbox",
-        "nombre":  "Cálculo Propaganda"
+        "id_numerico": "GDOC0052",
+        "elemento": "Certificado Antecedentes",
+        "tipo": "file",
+        "nombre": "Certificado de Antecedentes (Todos los socios)",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  53,
-        "elemento":  "Motivo - Otro",
-        "tipo":  "checkbox",
-        "nombre":  "Otro (especificar)"
+        "id_numerico": "GDOC0053",
+        "elemento": "Declaración Jurada Art. 4",
+        "tipo": "file",
+        "nombre": "Declaración Jurada Art. 4° Ley N° 19.925 (Notarial)",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  54,
-        "elemento":  "Motivo Otro - Texto",
-        "tipo":  "text",
-        "nombre":  "Detalle del motivo"
+        "id_numerico": "GDOC0054",
+        "elemento": "Calificación Actividad",
+        "tipo": "file",
+        "nombre": "Calificación de Actividad Inofensiva y/o Molesta (SEREMI de Salud)",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  55,
-        "elemento":  "Titular Cuenta",
-        "tipo":  "text",
-        "nombre":  "Titular de la Cuenta"
+        "id_numerico": "GDOC0055",
+        "elemento": "Patente Adjudicada",
+        "tipo": "file",
+        "nombre": "Patente adjudicada y Decreto de adjudicación",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  56,
-        "elemento":  "RUT Titular",
-        "tipo":  "text",
-        "nombre":  "RUT Titular"
+        "id_numerico": "GDOC0056",
+        "elemento": "Contrato Arriendo o Escritura Propiedad",
+        "tipo": "file",
+        "nombre": "Contrato Arriendo o Escritura Propiedad (Legalizado)",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  57,
-        "elemento":  "Banco",
-        "tipo":  "text",
-        "nombre":  "Banco"
+        "id_numerico": "GDOC0057",
+        "elemento": "Inicio Actividades SII",
+        "tipo": "file",
+        "nombre": "Inicio Actividades S.I.I. / Modificaciones",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  58,
-        "elemento":  "Tipo de Cuenta",
-        "tipo":  "select",
-        "nombre":  "Tipo de Cuenta"
+        "id_numerico": "GDOC0058",
+        "elemento": "Opinión Junta Vecinos",
+        "tipo": "file",
+        "nombre": "Opinión de Junta de Vecinos del sector",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  59,
-        "elemento":  "Número de Cuenta",
-        "tipo":  "text",
-        "nombre":  "Número de Cuenta"
+        "id_numerico": "GDOC0059",
+        "elemento": "Contrato Compraventa",
+        "tipo": "file",
+        "nombre": "Contrato Compraventa legalizado ante notario",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  60,
-        "elemento":  "Declaración Renta",
-        "tipo":  "checkbox",
-        "nombre":  "Declaración de Renta S.I.I."
+        "id_numerico": "GDOC0060",
+        "elemento": "Fotocopia RUT Sociedad",
+        "tipo": "file",
+        "nombre": "Fotocopia RUT Sociedad y C.I. Rep. Legal",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  61,
-        "elemento":  "Años Renta",
-        "tipo":  "text",
-        "nombre":  "Indicar Años (ej: 2023, 2024)"
+        "id_numerico": "GDOC0061",
+        "elemento": "Informe Sanitario",
+        "tipo": "file",
+        "nombre": "Informe Sanitario / Calif. Inofensiva o Molesta (Talleres, Bodegas)",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  62,
-        "elemento":  "Patentes Anteriores",
-        "tipo":  "checkbox",
-        "nombre":  "Patentes Anteriores"
+        "id_numerico": "GDOC0062",
+        "elemento": "Certificado Alcoholes",
+        "tipo": "file",
+        "nombre": "Cert. Antecedentes y DJ Art. 4° Ley 19.925 (Alcoholes)",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  63,
-        "elemento":  "Años Patentes",
-        "tipo":  "text",
-        "nombre":  "Indicar Años / Semestres"
+        "id_numerico": "GDOC0063",
+        "elemento": "Apertura Sucursal",
+        "tipo": "file",
+        "nombre": "Apertura Sucursal S.I.I. y Cert. Distribución Capital (Sucursales)",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  64,
-        "elemento":  "Otros Antecedentes",
-        "tipo":  "checkbox",
-        "nombre":  "Otros Antecedentes Fundantes"
+        "id_numerico": "GDOC0064",
+        "elemento": "Fotografías propaganda",
+        "tipo": "file",
+        "nombre": "Fotografías con elementos publicitarios (con medidas)",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  65,
-        "elemento":  "Otros Documentos",
-        "tipo":  "textarea",
-        "nombre":  "Describa otros documentos adjuntos"
+        "id_numerico": "GDOC0065",
+        "elemento": "Declaración Renta",
+        "tipo": "file",
+        "nombre": "Declaración de Renta S.I.I.",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  66,
-        "elemento":  "Municipalidad Destino",
-        "tipo":  "text",
-        "nombre":  "Para ser presentado en la Ilustre Municipalidad de"
+        "id_numerico": "GDOC0066",
+        "elemento": "Patentes Anteriores",
+        "tipo": "file",
+        "nombre": "Patentes Anteriores",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  67,
-        "elemento":  "Ingreso Término",
-        "tipo":  "checkbox",
-        "nombre":  "Ingreso Término de Negocio Nº (Si aplica)"
+        "id_numerico": "GDOC0067",
+        "elemento": "Otros Antecedentes",
+        "tipo": "file",
+        "nombre": "Otros Antecedentes Fundantes",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  68,
-        "elemento":  "Número Término",
-        "tipo":  "text",
-        "nombre":  "N° de Ingreso"
+        "id_numerico": "GDOC0068",
+        "elemento": "Ingreso Término",
+        "tipo": "file",
+        "nombre": "Ingreso Término de Negocio Nº (Si aplica)",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  69,
-        "elemento":  "Formulario SII",
-        "tipo":  "checkbox",
-        "nombre":  "Formulario del S.I.I con cambio de domicilio"
+        "id_numerico": "GDOC0069",
+        "elemento": "Formulario SII",
+        "tipo": "file",
+        "nombre": "Formulario del S.I.I con cambio de domicilio",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  70,
-        "elemento":  "Estado Deuda - Sin Deuda",
-        "tipo":  "radio",
-        "nombre":  "estadoDeuda"
+        "id_numerico": "GDOC0070",
+        "elemento": "Término de Giro",
+        "tipo": "file",
+        "nombre": "Término de Giro / Cierre Sucursal (S.I.I.)",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  71,
-        "elemento":  "Estado Deuda - Con Deuda",
-        "tipo":  "radio",
-        "nombre":  "estadoDeuda"
+        "id_numerico": "GDOC0071",
+        "elemento": "Fotocopia F-29",
+        "tipo": "file",
+        "nombre": "Fotocopia F-29 sin movimientos (o fundantes actividad)",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  72,
-        "elemento":  "Estado Deuda - Con Convenio",
-        "tipo":  "radio",
-        "nombre":  "estadoDeuda"
+        "id_numerico": "GDOC0072",
+        "elemento": "Resumen Boletas Honorarios",
+        "tipo": "file",
+        "nombre": "Resumen Boletas Honorarios (Patente Profesional)",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  73,
-        "elemento":  "Término de Giro",
-        "tipo":  "checkbox",
-        "nombre":  "Término de Giro / Cierre Sucursal (S.I.I.)"
+        "id_numerico": "GDOC0073",
+        "elemento": "Certificado Cobranzas",
+        "tipo": "file",
+        "nombre": "Certificado Depto. Cobranzas (si hay deuda/convenio)",
+        "grupo": "Documento"
     },
     {
-        "id_numerico":  74,
-        "elemento":  "Fotocopia F-29",
-        "tipo":  "checkbox",
-        "nombre":  "Fotocopia F-29 sin movimientos (o fundantes actividad)"
+        "id_numerico": "GGEN0074",
+        "elemento": "Años Renta",
+        "tipo": "text",
+        "nombre": "Indicar Años (ej: 2023, 2024)",
+        "grupo": "General"
     },
     {
-        "id_numerico":  75,
-        "elemento":  "Resumen Boletas Honorarios",
-        "tipo":  "checkbox",
-        "nombre":  "Resumen Boletas Honorarios (Patente Profesional)"
+        "id_numerico": "GGEN0075",
+        "elemento": "Años Patentes",
+        "tipo": "text",
+        "nombre": "Indicar Años / Semestres",
+        "grupo": "General"
     },
     {
-        "id_numerico":  76,
-        "elemento":  "Certificado Cobranzas",
-        "tipo":  "checkbox",
-        "nombre":  "Certificado Depto. Cobranzas (si hay deuda/convenio)"
+        "id_numerico": "GGEN0076",
+        "elemento": "Otros Documentos",
+        "tipo": "textarea",
+        "nombre": "Describa otros documentos adjuntos",
+        "grupo": "General"
+    },
+    {
+        "id_numerico": "GGEN0077",
+        "elemento": "Número Término",
+        "tipo": "text",
+        "nombre": "N° de Ingreso",
+        "grupo": "General"
     }
 ]
