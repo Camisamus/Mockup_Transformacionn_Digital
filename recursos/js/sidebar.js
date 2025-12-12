@@ -42,7 +42,7 @@ function buildMenuHtml(items, level = 0) {
 
         html += `<li class="nav-item">`;
 
-        if (item.tipo === 'categoia' || item.tipo === 'subcategoia') {
+        if (item.tipo === 'categoria' || item.tipo === 'subcategoria') {
             const hasChildren = item.contenido && item.contenido.length > 0;
             if (hasChildren) {
                 html += `
