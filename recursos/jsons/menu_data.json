@@ -8,19 +8,19 @@
     },
     {
         "id": "1",
-        "tipo": "categoia",
+        "tipo": "categoria",
         "nombre": "Patentes",
         "icon": "file-text",
         "contenido": [
             {
                 "id": "1.1",
-                "tipo": "subcategoia",
+                "tipo": "subcategoria",
                 "nombre": "Solicitudes",
                 "icon": "file-text",
                 "contenido": [
                     {
                         "id": "1.1.1",
-                        "tipo": "subcategoia",
+                        "tipo": "subcategoria",
                         "nombre": "Solicitud de Patente Comercial",
                         "contenido": [
                             {
@@ -39,7 +39,7 @@
                     },
                     {
                         "id": "1.1.2",
-                        "tipo": "subcategoia",
+                        "tipo": "subcategoria",
                         "nombre": "Modificación de Actividad",
                         "contenido": [
                             {
@@ -76,7 +76,7 @@
                     },
                     {
                         "id": "1.1.3",
-                        "tipo": "subcategoia",
+                        "tipo": "subcategoria",
                         "nombre": "Gestión Tributaria",
                         "contenido": [
                             {
@@ -87,7 +87,7 @@
                             },
                             {
                                 "id": "1.1.3.2",
-                                "tipo": "subcategoia",
+                                "tipo": "subcategoria",
                                 "nombre": "Gestión Financiera",
                                 "contenido": [
                                     {
@@ -113,7 +113,7 @@
                     },
                     {
                         "id": "1.1.4",
-                        "tipo": "subcategoia",
+                        "tipo": "subcategoria",
                         "nombre": "Cese Definitivo",
                         "contenido": [
                             {
@@ -128,13 +128,13 @@
             },
             {
                 "id": "1.2",
-                "tipo": "categoia",
+                "tipo": "categoria",
                 "nombre": "Documentación",
                 "icon": "folder",
                 "contenido": [
                     {
                         "id": "1.2.1",
-                        "tipo": "subcategoia",
+                        "tipo": "subcategoria",
                         "nombre": "Estado de Pago",
                         "contenido": [
                             {
@@ -158,7 +158,7 @@
                     },
                     {
                         "id": "1.2.3",
-                        "tipo": "subcategoia",
+                        "tipo": "subcategoria",
                         "nombre": "Declaraciones",
                         "contenido": [
                             {
@@ -175,7 +175,7 @@
                     },
                     {
                         "id": "1.2.4",
-                        "tipo": "subcategoia",
+                        "tipo": "subcategoria",
                         "nombre": "Certificados",
                         "contenido": [
                             {
@@ -191,13 +191,13 @@
     },
     {
         "id": "2",
-        "tipo": "categoia",
+        "tipo": "categoria",
         "nombre": "Organizaciones Comunitaias",
         "icon": "file-text",
         "contenido": [
             {
                 "id": "2.1",
-                "tipo": "subcategoia",
+                "tipo": "subcategoria",
                 "nombre": "Organizaciones",
                 "contenido": [
                     {
@@ -218,13 +218,13 @@
     },
     {
         "id": "3",
-        "tipo": "categoia",
+        "tipo": "categoria",
         "nombre": "Subvenciones",
         "icon": "dollar-sign",
         "contenido": [
             {
                 "id": "3.1",
-                "tipo": "subcategoia",
+                "tipo": "subcategoria",
                 "nombre": "Subvenciones",
                 "contenido": [
                     {
@@ -275,13 +275,13 @@
     },
     {
         "id": "4",
-        "tipo": "categoia",
+        "tipo": "categoria",
         "nombre": "Postulaciones",
         "icon": "clipboard",
         "contenido": [
             {
                 "id": "4.1",
-                "tipo": "subcategoia",
+                "tipo": "subcategoria",
                 "nombre": "Postulaciones",
                 "contenido": [
                     {
@@ -302,13 +302,13 @@
     },
     {
         "id": "5",
-        "tipo": "categoia",
+        "tipo": "categoria",
         "nombre": "Atenciones",
         "icon": "headphones",
         "contenido": [
             {
                 "id": "5.1",
-                "tipo": "subcategoia",
+                "tipo": "subcategoria",
                 "nombre": "Atenciones",
                 "contenido": [
                     {
@@ -341,13 +341,13 @@
     },
     {
         "id": "6",
-        "tipo": "categoia",
+        "tipo": "categoria",
         "nombre": "Logs del Sistema",
         "icon": "activity",
         "contenido": [
             {
                 "id": "6.1",
-                "tipo": "subcategoia",
+                "tipo": "subcategoria",
                 "nombre": "Logs del Sistema",
                 "contenido": [
                     {
