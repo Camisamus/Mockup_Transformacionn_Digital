@@ -37,58 +37,77 @@
 <body>
 
     <div class="container-fluid">
-        <!-- Selección de Trámite -->
-        <div class="section-card" id="seleccionTramiteSection">
-            <div class="section-title">Selección de Trámite</div>
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <label class="form-label">Seleccione el tipo de trámite a realizar:</label>
-                    <select class="form-select" id="selectTramite">
-                        <option value="">Seleccione...</option>
-                    </select>
-                </div>
+        <!-- Step 1: Selección de Trámites -->
+        <div class="section-card" id="step1_Section">
+            <div class="section-title">Paso 1: Selección de Trámites</div>
+            <div class="alert alert-info">
+                <small><i data-feather="info" class="me-1"></i> Seleccione uno o más trámites para realizar en una sola
+                    solicitud.</small>
+            </div>
 
-                <!-- Variaciones dinámicas -->
-                <div class="col-12 d-none" id="variacionesContainer">
-                    <label class="form-label mb-2 fw-bold text-primary">Detalles adicionales del trámite:</label>
-                    <div class="alert alert-info py-2 mb-2">
-                        <small><i data-feather="info" class="me-1"></i> Seleccione todas las opciones que apliquen a su
-                            caso para generar el formulario correcto.</small>
-                    </div>
-                    <div id="listaVariaciones" class="d-flex flex-wrap gap-3">
-                        <!-- Checkboxes inyectados aquí -->
-                    </div>
-                </div>
+            <div id="tramitesContainer" class="row g-3">
+                <!-- Checkboxes injected by JS -->
             </div>
 
             <div class="mt-4 text-end">
-                <button id="btnGenerarFormulario" class="btn btn-primary d-none">
-                    <i data-feather="settings" class="me-1"></i> Generar Formulario
+                <button id="btnIrPaso2" class="btn btn-primary" disabled>
+                    Continuar <i data-feather="arrow-right" class="ms-1"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Formulario Generado Dinámicamente -->
-        <div id="formularioGenerado" class="d-none">
-            <div class="d-flex justify-content-end mb-3">
-                <button class="btn btn-sm btn-danger me-2" onclick="window.print()"> <!-- Placeholder export -->
-                    <i data-feather="file-text" class="me-1"></i> Exportar a PDF
-                </button>
-                <button class="btn btn-sm btn-outline-secondary" id="btnVolverSeleccion">
-                    <i data-feather="arrow-left" class="me-1"></i> Cambiar Trámite
-                </button>
+        <!-- Drafts Section -->
+        <div class="section-card d-none" id="borradoresSection">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="section-title mb-0 text-secondary"><i data-feather="save" class="me-2"></i>Borradores
+                    Guardados</div>
+                <span class="badge bg-secondary" id="borradoresCount">0</span>
+            </div>
+            <div id="borradoresContainer" class="list-group list-group-flush">
+                <!-- Drafts injected by JS -->
+            </div>
+        </div>
+
+        <!-- Step 2: Preguntas de Variación -->
+        <div class="section-card d-none" id="step2_Section">
+            <div class="section-title">Paso 2: Detalles Específicos</div>
+            <p class="text-muted mb-3">Responda las siguientes preguntas para determinar los requisitos exactos.</p>
+
+            <div id="preguntasContainer" class="d-flex flex-column gap-3">
+                <!-- Questions injected by JS -->
             </div>
 
-            <!-- Aquí se inyectarán las secciones -->
+            <div class="mt-4 d-flex justify-content-between">
+                <button class="btn btn-outline-secondary" onclick="changeStep(1)">
+                    <i data-feather="arrow-left" class="me-1"></i> Volver
+                </button>
+                <button id="btnGenerarFormulario" class="btn btn-success">
+                    Generar Formulario <i data-feather="check-circle" class="ms-1"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Formulario Generado -->
+        <div id="step3_Section" class="d-none">
+            <div class="d-flex justify-content-end mb-3">
+                <button class="btn btn-sm btn-outline-secondary me-2" onclick="changeStep(2)">
+                    <i data-feather="edit" class="me-1"></i> Editar Respuestas
+                </button>
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-outline-danger" onclick="window.print()">
+                        <i data-feather="file" class="me-1"></i> PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Form Container -->
             <div id="contenedorSecciones"></div>
 
-            <!-- Botones de Acción -->
-            <div class="d-flex justify-content-end mb-5 mt-4">
-                <button class="btn btn-secondary me-2">Cancelar</button>
-                <button class="btn btn-outline-primary me-2" onclick="alert('Borrador guardado')">Guardar
-                    Borrador</button>
-                <button class="btn btn-primary btn-lg" onclick="alert('Solicitud enviada con éxito')">Enviar
-                    Solicitud</button>
+            <!-- Botones Finales -->
+            <div class="d-flex justify-content-end mb-5 mt-4 gap-2">
+                <button class="btn btn-secondary">Cancelar</button>
+                <button class="btn btn-outline-primary" onclick="alert('Borrador guardado')">Guardar Borrador</button>
+                <button class="btn btn-primary btn-lg" onclick="alert('Solicitud enviada')">Enviar Solicitud</button>
             </div>
         </div>
     </div>
@@ -98,6 +117,7 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/feather-icons"></script>
+    <script src="../recursos/js/layout_manager.js"></script>
     <script>feather.replace()</script>
     <script src="../recursos/js/patentes_solicitud_unica.js"></script>
 </body>
