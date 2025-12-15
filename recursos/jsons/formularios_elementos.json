@@ -851,5 +851,44 @@
         "tipo": "file",
         "nombre": "Poder Ante Noterio del Representante Legal",
         "grupo": "Trámite"
+    },
+    {
+        "id_numerico": "GDOM0080",
+        "elemento": "Tipo de Domicilio",
+        "tipo": "radio",
+        "nombre": "Tipo de Domicilio",
+        "grupo": "Domicilio",
+        "opciones": [
+            "Casa Matriz",
+            "Sucursal"
+        ]
+    },
+    {
+        "id_numerico": "GGEN0081",
+        "elemento": "Observaciones Generales",
+        "tipo": "textarea",
+        "nombre": "Observaciones Generales",
+        "grupo": "General"
+    },
+    {
+        "id_numerico": "GGEN0082",
+        "elemento": "Comuna (Otras Patentes)",
+        "tipo": "text",
+        "nombre": "Comuna (Otras Patentes)",
+        "grupo": "General"
+    },
+    {
+        "id_numerico": "GGEN0083",
+        "elemento": "N° Trabajadores (Otras Patentes)",
+        "tipo": "number",
+        "nombre": "N° Trabajadores (Otras Patentes)",
+        "grupo": "General"
+    },
+    {
+        "id_numerico": "GPRO0084",
+        "elemento": "Propaganda Luminosa (mts)",
+        "tipo": "text",
+        "nombre": "Propaganda Luminosa (mts)",
+        "grupo": "Propaganda"
     }
 ]

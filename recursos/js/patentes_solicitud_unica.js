@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         selectedTramites.forEach(tramite => {
             // General docs
-            (tramite.documentos_generales || []).forEach(id => requiredIds.add(id));
+            (tramite.campos_generales || []).forEach(id => requiredIds.add(id));
 
             // Variation docs (checked only)
             const checks = document.querySelectorAll(`.variation-check[data-tramite="${tramite.tramite_base}"]:checked`);
@@ -319,17 +319,44 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- Region & Comuna Data (Chile) ---
+    // Prioritizing V Región and Viña del Mar as requested
+    const chileData = {
+        "Región de Valparaíso": ["Viña del Mar", "Valparaíso", "Quilpué", "Villa Alemana", "Concón", "Limache", "Olmué", "Quillota", "San Antonio", "Los Andes", "San Felipe"],
+        "Región Metropolitana": ["Santiago", "Providencia", "Las Condes", "Maipú", "La Florida", "Puente Alto"],
+        "Región de Arica y Parinacota": ["Arica", "Camarones", "Putre", "General Lagos"],
+        "Región de Tarapacá": ["Iquique", "Alto Hospicio"],
+        "Región de Antofagasta": ["Antofagasta", "Mejillones", "Tocopilla", "Calama"],
+        "Región de Atacama": ["Copiapó", "Caldera", "Vallenar"],
+        "Región de Coquimbo": ["La Serena", "Coquimbo", "Ovalle"],
+        "Región del Libertador Gral. Bernardo O'Higgins": ["Rancagua", "Machalí", "San Fernando"],
+        "Región del Maule": ["Talca", "Curicó", "Linares"],
+        "Región de Ñuble": ["Chillán", "San Carlos"],
+        "Región del Biobío": ["Concepción", "Talcahuano", "Los Ángeles"],
+        "Región de La Araucanía": ["Temuco", "Padre Las Casas", "Villarrica"],
+        "Región de Los Ríos": ["Valdivia", "Corral"],
+        "Región de Los Lagos": ["Puerto Montt", "Puerto Varas", "Osorno"],
+        "Región de Aysén": ["Coyhaique", "Aysén"],
+        "Región de Magallanes": ["Punta Arenas", "Puerto Natales"]
+    };
+
+    const addressTitles = {
+        "GDOMDCM": "Dirección Casa Matriz",
+        "GDOMDCO": "Dirección Comercial",
+        "GDOMDLO": "Dirección Local",
+        "GDOMDPN": "Dirección Persona Natural",
+        "GDOMDRL": "Dirección Rep. Legal",
+        "GDOMDNU": "Nueva Dirección",
+        "GDOM": "Otros Domicilios"
+    };
+
     function renderDomicilioGroup(campos, title) {
-        // Reuse similar logic but wrapped in our new structure
         // Sub-group fields by address entity (GDOMDCM, etc)
         const subGrupos = {};
 
         campos.forEach(campo => {
             const match = campo.id_numerico.match(/^([A-Z]+)/);
             const prefix = match ? match[0] : 'OTHER';
-
-            // Try to infer subgroup name from field name if possible, or just use prefix
-            // Typically "Direccion Casa Matriz ..."
             if (!subGrupos[prefix]) subGrupos[prefix] = { fields: [] };
             subGrupos[prefix].fields.push(campo);
         });
@@ -337,53 +364,128 @@ document.addEventListener('DOMContentLoaded', () => {
         Object.keys(subGrupos).forEach(prefix => {
             const subGrupo = subGrupos[prefix];
 
-            // Deduce subtitle
-            const referenceField = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('direccion'));
-            let subTitle = referenceField ? referenceField.nombre.replace(/direccion/i, '').replace(/calle/i, '').replace(/región/i, '').trim() : 'Dirección';
-            if (subTitle === '') subTitle = "Ubicación";
+            // Determine Title
+            // Use mapped title if available, else deduce or fallback
+            let subTitle = addressTitles[prefix];
+            if (!subTitle) {
+                // Heuristic Fallback
+                const referenceField = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('direccion'));
+                if (referenceField) {
+                    const keywords = ['Calle', 'Número', 'Numero', 'Región', 'Comuna', 'Latitud', 'Longitud', 'Observacion'];
+                    const regex = new RegExp(`(${keywords.join('|')}).*`, 'i');
+                    subTitle = referenceField.nombre.replace(regex, '').trim();
+                } else {
+                    subTitle = "Ubicación";
+                }
+            }
+
+            // Check if this subgroup actually LOOKS like an address (has Calle or Region)
+            // If it's just generic fields (like GDOM0016), render simply.
+            const hasAddressStructure = subGrupo.fields.some(f =>
+                f.nombre.toLowerCase().includes('calle') ||
+                f.nombre.toLowerCase().includes('región') ||
+                f.nombre.toLowerCase().includes('region')
+            );
 
             const section = document.createElement('div');
             section.className = 'section-card border-warning';
-            section.style.borderLeftColor = '#ffc107'; // Keep yellow style for address
+            section.style.borderLeftColor = '#ffc107';
 
-            let sectionHTML = `<div class="section-title">${title}: ${subTitle}</div><div class="row g-3">`;
+            // Use ONLY the subtitle for this section to keep it short/friendly as requested
+            // (Ignoring the parent 'title' which was 'Domicilio Comercial y Ubicacion')
+            let sectionHTML = `<div class="section-title text-warning-emphasis">${subTitle}</div><div class="row g-3">`;
 
-            // Logic fields
-            const fCalle = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('calle'));
-            const fNumero = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('número') || f.nombre.toLowerCase().includes('numero'));
-            const fComuna = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('comuna'));
-            const fRegion = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('región'));
-            const fLat = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('latitud'));
-            const fLng = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('longitud'));
+            if (hasAddressStructure) {
+                // --- RENDER AS MAP/ADDRESS COMPLEX ---
 
-            // Render Key Address fields first
-            const ordered = [fRegion, fComuna, fCalle, fNumero].filter(x => x);
-            ordered.forEach(f => sectionHTML += `<div class="col-md-3">${generateInputHTML(f)}</div>`);
+                // Identify key fields
+                const fCalle = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('calle'));
+                const fNumero = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('número') || f.nombre.toLowerCase().includes('numero'));
+                const fComuna = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('comuna'));
+                const fRegion = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('región'));
+                const fLat = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('latitud'));
+                const fLng = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('longitud'));
 
-            // Map Button
-            const mapId = `map_${prefix}`;
-            sectionHTML += `
-                <div class="col-12 text-end">
-                    <button type="button" class="btn btn-warning btn-sm" onclick="initMapFor('${prefix}', '${mapId}', '${fCalle?.id_numerico}', '${fNumero?.id_numerico}', '${fComuna?.id_numerico}', '${fRegion?.id_numerico}', '${fLat?.id_numerico}', '${fLng?.id_numerico}')">
-                        <i data-feather="map-pin"></i> Ubicar en Mapa
-                    </button>
-                </div>
-                <div class="col-12">
-                     <div id="${mapId}" style="height: 350px; width: 100%; border-radius: 8px; border: 1px solid #ddd; background: #eee;"></div>
-                </div>
-            `;
+                // Override Types & Shorten Labels
+                [fCalle, fNumero, fComuna, fRegion, fLat, fLng].forEach(f => {
+                    if (f) {
+                        if (f === fCalle) f.shortName = 'Calle';
+                        else if (f === fNumero) f.shortName = 'Número';
+                        else if (f === fRegion) f.shortName = 'Región';
+                        else if (f === fComuna) f.shortName = 'Comuna';
+                        else f.shortName = f.nombre; // fallback
+                    }
+                });
 
-            // Lat/Lng
-            if (fLat) sectionHTML += `<div class="col-md-6">${generateInputHTML(fLat, true)}</div>`;
-            if (fLng) sectionHTML += `<div class="col-md-6">${generateInputHTML(fLng, true)}</div>`;
+                // Region & Comuna Logic
+                let regionHTML = '', comunaHTML = '';
 
-            // Others
-            const usedIds = [fCalle, fNumero, fComuna, fRegion, fLat, fLng].map(x => x?.id_numerico);
-            subGrupo.fields.forEach(f => {
-                if (!usedIds.includes(f.id_numerico)) {
-                    sectionHTML += `<div class="col-12">${generateInputHTML(f)}</div>`;
+                if (fRegion) {
+                    const regions = Object.keys(chileData);
+                    const firstRegion = "Región de Valparaíso";
+                    const otherRegions = regions.filter(r => r !== firstRegion);
+                    const sortedRegions = [firstRegion, ...otherRegions];
+                    const options = sortedRegions.map(r => `<option value="${r}">${r}</option>`).join('');
+                    const onchange = fComuna ? `onchange="updateComunas('${fComuna.id_numerico}', this.value)"` : '';
+
+                    regionHTML = `
+                        <div class="col-md-3">
+                            <label class="form-label">${fRegion.shortName || 'Región'}</label>
+                            <select class="form-select" id="${fRegion.id_numerico}" ${onchange}>
+                                <option value="">Seleccione...</option>
+                                ${options}
+                            </select>
+                        </div>
+                    `;
                 }
-            });
+
+                if (fComuna) {
+                    comunaHTML = `
+                        <div class="col-md-3">
+                            <label class="form-label">${fComuna.shortName || 'Comuna'}</label>
+                            <select class="form-select" id="${fComuna.id_numerico}" disabled>
+                                <option value="">Seleccione Región...</option>
+                            </select>
+                        </div>
+                    `;
+                }
+
+                const calleHTML = fCalle ? `<div class="col-md-3">${generateInputHTML(fCalle, false, fCalle.shortName)}</div>` : '';
+                const numeroHTML = fNumero ? `<div class="col-md-3">${generateInputHTML(fNumero, false, fNumero.shortName)}</div>` : '';
+
+                sectionHTML += regionHTML + comunaHTML + calleHTML + numeroHTML;
+
+                // Map Button
+                const mapId = `map_${prefix}`;
+                sectionHTML += `
+                    <div class="col-12 text-end">
+                        <button type="button" class="btn btn-warning btn-sm" onclick="initMapFor('${prefix}', '${mapId}', '${fCalle?.id_numerico}', '${fNumero?.id_numerico}', '${fComuna?.id_numerico}', '${fRegion?.id_numerico}', '${fLat?.id_numerico}', '${fLng?.id_numerico}')">
+                            <i data-feather="map-pin"></i> Ubicar en Mapa
+                        </button>
+                        <small class="d-block text-muted mt-1" style="font-size: 0.75rem;">(Seleccione la ubicación exacta arrastrando el marcador)</small>
+                    </div>
+                    <div class="col-12">
+                         <div id="${mapId}" style="height: 350px; width: 100%; border-radius: 8px; border: 1px solid #ddd; background: #eee;"></div>
+                    </div>
+                `;
+
+                if (fLat) sectionHTML += `<div class="col-md-6">${generateInputHTML(fLat, true, fLat.shortName)}</div>`;
+                if (fLng) sectionHTML += `<div class="col-md-6">${generateInputHTML(fLng, true, fLng.shortName)}</div>`;
+
+                const usedIds = [fCalle, fNumero, fComuna, fRegion, fLat, fLng].filter(x => x).map(x => x.id_numerico);
+                subGrupo.fields.forEach(f => {
+                    if (!usedIds.includes(f.id_numerico)) {
+                        sectionHTML += `<div class="col-12">${generateInputHTML(f)}</div>`;
+                    }
+                });
+
+            } else {
+                // --- RENDER AS SIMPLE FIELDS ---
+                // For generic GDOM groups that don't have map structure
+                subGrupo.fields.forEach(f => {
+                    sectionHTML += `<div class="col-md-6">${generateInputHTML(f)}</div>`;
+                });
+            }
 
             sectionHTML += `</div>`;
             section.innerHTML = sectionHTML;
@@ -391,7 +493,33 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Reuse helper functions
+    // Helper: Update Comunas based on Region
+    window.updateComunas = function (comunaId, regionName) {
+        const comunaSelect = document.getElementById(comunaId);
+        if (!comunaSelect) return;
+
+        comunaSelect.innerHTML = '<option value="">Seleccione...</option>';
+        comunaSelect.disabled = true;
+
+        if (regionName && chileData[regionName]) {
+            comunaSelect.disabled = false;
+            let comunas = [...chileData[regionName]]; // Copy
+            // If Region is Valparaiso, Viña first
+            if (regionName === "Región de Valparaíso") {
+                const spec = "Viña del Mar";
+                comunas = comunas.filter(c => c !== spec);
+                comunas.unshift(spec);
+            }
+
+            comunas.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c;
+                opt.textContent = c;
+                comunaSelect.appendChild(opt);
+            });
+        }
+    };
+
     window.initMapFor = function (prefix, mapDivId, idCalle, idNumero, idComuna, idRegion, idLat, idLng) {
         if (!window.google) { alert("Google Maps API no cargada."); return; }
         const calle = document.getElementById(idCalle)?.value;
@@ -434,8 +562,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'col-md-6';
     }
 
-    function generateInputHTML(campo, forceDisabled = false) {
-        const label = `<label class="form-label">${campo.nombre}</label>`;
+    function generateInputHTML(campo, forceDisabled = false, customLabel = null) {
+        const labelText = customLabel || campo.nombre;
+        const label = `<label class="form-label">${labelText}</label>`;
         const disabledAttr = forceDisabled ? 'readonly style="background-color: #e9ecef;"' : '';
         let input = '';
 
@@ -450,7 +579,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 input = `<input type="file" class="form-control" id="${campo.id_numerico}">`;
                 break;
             case 'checkbox':
-                return `<div class="form-check mt-3"><input class="form-check-input" type="checkbox" id="${campo.id_numerico}"><label class="form-check-label" for="${campo.id_numerico}">${campo.nombre}</label></div>`;
+                return `<div class="form-check mt-3"><input class="form-check-input" type="checkbox" id="${campo.id_numerico}"><label class="form-check-label" for="${campo.id_numerico}">${labelText}</label></div>`;
             default:
                 input = `<input type="${campo.tipo || 'text'}" class="form-control" id="${campo.id_numerico}" ${disabledAttr}>`;
         }

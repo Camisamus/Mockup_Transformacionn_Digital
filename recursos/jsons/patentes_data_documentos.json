@@ -136,7 +136,7 @@
     "TramitePatente": [
         {
             "tramite_base": "COMERCIAL",
-            "documentos_generales": [
+            "campos_generales": [
                 1,
                 3,
                 4,
@@ -239,7 +239,7 @@
         },
         {
             "tramite_base": "COMERCIAL DOMICILIO POSTAL",
-            "documentos_generales": [
+            "campos_generales": [
                 1,
                 3,
                 4,
@@ -289,7 +289,7 @@
         },
         {
             "tramite_base": "PROFESIONAL",
-            "documentos_generales": [
+            "campos_generales": [
                 1,
                 3,
                 4,
@@ -326,7 +326,7 @@
         },
         {
             "tramite_base": "PROFESIONAL DOMICILIO POSTAL",
-            "documentos_generales": [
+            "campos_generales": [
                 1,
                 3,
                 4,
@@ -375,7 +375,7 @@
         },
         {
             "tramite_base": "INDUSTRIAL",
-            "documentos_generales": [
+            "campos_generales": [
                 1,
                 3,
                 4,
@@ -442,7 +442,7 @@
         },
         {
             "tramite_base": "ALCOHOL",
-            "documentos_generales": [],
+            "campos_generales": [],
             "variaciones_adicionales": [
                 {
                     "variacion": "¿El contribuyente es una sociedad comercial?",
