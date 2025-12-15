@@ -94,11 +94,6 @@
                                         "tipo": "Pagina",
                                         "nombre": "Certificado de No Deuda",
                                         "Enlace": "paginas/patentes_certificado_no_deuda.html"
-                                    },
-                                    {
-                                        "id": "1.2.3.2.3",
-                                        "tipo": "Pagina",
-                                        "nombre": "Declaración de Capital Propio"
                                     }
                                 ]
                             }
@@ -157,12 +152,14 @@
                             {
                                 "id": "1.3.3.1",
                                 "tipo": "Pagina",
-                                "nombre": "Capital Propio"
+                                "nombre": "Capital Propio",
+                                "Enlace": "paginas/patentes_capital_propio.html"
                             },
                             {
                                 "id": "1.3.3.2",
                                 "tipo": "Pagina",
-                                "nombre": "Trabajadores"
+                                "nombre": "Trabajadores",
+                                "Enlace": "paginas/patentes_apertura_sucursal.html"
                             }
                         ]
                     },
