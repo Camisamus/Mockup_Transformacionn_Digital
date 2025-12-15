@@ -338,7 +338,7 @@
     {
         "ID": "PROP005",
         "NOMBRE": "Acción Propaganda",
-        "TIPO": "checkbox",
+        "TIPO": "Select",
         "GRUPO": "Propaganda (Declaración Propaganda)",
         "OPCIONES": [
             "Instala",
@@ -480,9 +480,9 @@
     },
     {
         "ID": "PROFE005",
-        "NOMBRE": "Declaración Domicilio Postal Tributario (Sólo si es SIN OFICINA)",
+        "NOMBRE": "Declaro que, en mi domicilio particular, destinado a vivienda, ejerceré las actividades propias de un domicilio postal tributario, exclusivamente para la recepción de correspondencia.",
         "TIPO": "checkbox",
-        "GRUPO": "Tributación Profesional"
+        "GRUPO": "Declaración Domicilio Postal Tributario (Sólo si es SIN OFICINA)"
     },
     {
         "ID": "TRABA001",
