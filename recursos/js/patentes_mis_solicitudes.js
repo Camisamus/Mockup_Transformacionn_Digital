@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('../recursos/jsons/patentes_solicitudes_mock.json')
             .then(response => response.json())
             .then(data => {
-                solicitudesData = data.solicitudes;
+                solicitudesData = data.solicitudes || [];
                 renderSolicitudes(solicitudesData);
             })
             .catch(error => console.error('Error loading solicitudes:', error));
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fetch('../recursos/jsons/patentes_historial_mock.json')
             .then(response => response.json())
             .then(data => {
-                historialData = data.historial;
+                historialData = data.historial || [];
                 renderHistorial(historialData);
             })
             .catch(error => console.error('Error loading historial:', error));
@@ -59,18 +59,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
         solicitudes.forEach(solicitud => {
             const row = document.createElement('tr');
+
+            // Group Logic
+            let grupoCell = '-';
+            if (solicitud.total_grupo && solicitud.total_grupo > 1) {
+                grupoCell = `
+                    <button class="btn btn-sm btn-outline-info" onclick="verHermanas('${solicitud.grupo_id}')">
+                        ${solicitud.posicion_grupo}/${solicitud.total_grupo} <i data-feather="users"></i>
+                    </button>
+                `;
+            } else if (solicitud.total_grupo === 1) {
+                grupoCell = '1/1';
+            }
+
             row.innerHTML = `
-                <td><a href="#" class="text-primary">${solicitud.numero}</a></td>
+                <td><a href="#" class="text-primary fw-bold">${solicitud.numero}</a></td>
                 <td>${solicitud.rut}</td>
                 <td>${solicitud.fechaIngreso}</td>
                 <td>${solicitud.tipoTramite || '-'}</td>
-                <td>${solicitud.grupo || '-'}</td>
+                <td>${grupoCell}</td>
                 <td><span class="badge ${solicitud.estadoClass}">${solicitud.estado}</span></td>
-                <td><button class="btn btn-sm btn-outline-primary" onclick="descargarSolicitud('${solicitud.numero}')">📄 Descargar Solicitud</button></td>
+                <td><button class="btn btn-sm btn-outline-primary" onclick="descargarSolicitud('${solicitud.numero}')"><i data-feather="download"></i> Descargar</button></td>
             `;
             tbody.appendChild(row);
         });
+        feather.replace();
     }
+
+    // Modal Logic for Groups
+    window.verHermanas = function (grupoId) {
+        const siblings = solicitudesData.filter(s => s.grupo_id === grupoId);
+
+        const modalBody = document.getElementById('modalHermanasBody');
+        if (!modalBody) return; // Should be in HTML
+
+        let html = `
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead><tr><th>Solicitud</th><th>Trámite</th><th>Estado</th></tr></thead>
+                    <tbody>
+        `;
+
+        siblings.forEach(s => {
+            html += `
+                <tr>
+                    <td>${s.numero}</td>
+                    <td>${s.tipoTramite}</td>
+                    <td><span class="badge ${s.estadoClass}">${s.estado}</span></td>
+                </tr>
+            `;
+        });
+
+        html += '</tbody></table></div>';
+        modalBody.innerHTML = html;
+
+        const modal = new bootstrap.Modal(document.getElementById('modalHermanas'));
+        modal.show();
+    };
+
 
     // Render historial timeline
     function renderHistorial(historial) {
@@ -100,13 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Setup event listeners
     function setupEventListeners() {
-        if (btnBuscar) {
-            btnBuscar.addEventListener('click', handleSearch);
-        }
-
-        if (btnLimpiar) {
-            btnLimpiar.addEventListener('click', handleClear);
-        }
+        if (btnBuscar) btnBuscar.addEventListener('click', handleSearch);
+        if (btnLimpiar) btnLimpiar.addEventListener('click', handleClear);
     }
 
     // Handle search/filter
@@ -128,7 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
         renderSolicitudes(filtered);
     }
 
-    // Handle clear filters
     function handleClear() {
         searchNumero.value = '';
         searchRut.value = '';
@@ -137,14 +177,13 @@ document.addEventListener('DOMContentLoaded', () => {
         renderSolicitudes(solicitudesData);
     }
 
-    // Format date from input (YYYY-MM-DD) to display format (DD/MM/YYYY)
     function formatDate(dateString) {
         const [year, month, day] = dateString.split('-');
         return `${day}/${month}/${year}`;
     }
 });
 
-// Global function for download button (placeholder)
+// Global function placeholder
 function descargarSolicitud(numero) {
     alert(`Descargando solicitud ${numero}...\n(Funcionalidad de mockup)`);
 }

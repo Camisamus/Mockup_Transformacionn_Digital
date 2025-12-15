@@ -5,7 +5,7 @@
       "rut": "12.345.678-9",
       "fechaIngreso": "01/11/2024",
       "tipoTramite": "Solicitud de Patente Comercial",
-      "grupo": "Solicitudes",
+      "grupo": "1/1",
       "estado": "En Proceso",
       "estadoClass": "bg-info"
     },
@@ -14,7 +14,7 @@
       "rut": "12.345.678-9",
       "fechaIngreso": "05/11/2024",
       "tipoTramite": "Cambio de Domicilio",
-      "grupo": "Modificación de Actividad",
+      "grupo": "1/2",
       "estado": "En Proceso",
       "estadoClass": "bg-info"
     },
@@ -23,7 +23,7 @@
       "rut": "12.345.678-9",
       "fechaIngreso": "12/11/2024",
       "tipoTramite": "Modificación Razón Social",
-      "grupo": "Modificación de Actividad",
+      "grupo": "2/2",
       "estado": "Pendiente",
       "estadoClass": "bg-warning"
     },
@@ -32,7 +32,7 @@
       "rut": "12.345.678-9",
       "fechaIngreso": "07/12/2024",
       "tipoTramite": "Declaración de Propaganda",
-      "grupo": "Gestión Tributaria",
+      "grupo": "1/1",
       "estado": "Pendiente",
       "estadoClass": "bg-warning"
     },
@@ -41,7 +41,7 @@
       "rut": "12.345.678-9",
       "fechaIngreso": "09/12/2024",
       "tipoTramite": "Ampliación de Giro",
-      "grupo": "Modificación de Actividad",
+      "grupo": "1/1",
       "estado": "En Proceso",
       "estadoClass": "bg-info"
     },
@@ -50,7 +50,7 @@
       "rut": "98.765.432-1",
       "fechaIngreso": "15/10/2024",
       "tipoTramite": "Solicitud de Patente Comercial",
-      "grupo": "Solicitudes",
+      "grupo": "1/1",
       "estado": "Aprobado",
       "estadoClass": "bg-success"
     },
@@ -59,7 +59,7 @@
       "rut": "11.222.333-4",
       "fechaIngreso": "20/09/2024",
       "tipoTramite": "Solicitud Término Negocio",
-      "grupo": "Cese Definitivo",
+      "grupo": "1/1",
       "estado": "Rechazado",
       "estadoClass": "bg-danger"
     },
@@ -68,7 +68,7 @@
       "rut": "12.345.678-9",
       "fechaIngreso": "03/12/2024",
       "tipoTramite": "Certificado de No Deuda",
-      "grupo": "Gestión Tributaria",
+      "grupo": "1/1",
       "estado": "En Proceso",
       "estadoClass": "bg-info"
     }

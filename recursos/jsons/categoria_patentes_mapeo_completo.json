@@ -1,116 +1,460 @@
 {
-    "categoria_principal": "Patentes",
-    "total_paginas": 13,
-    "fecha_analisis": "2025-12-12",
-    "paginas": [
+    "Maestro_Tramites": [
         {
-            "categoria": "Patentes > Solicitudes > Solicitud de Patente Comercial",
-            "nombre_pagina": "Solicitar patente comercial",
-            "archivo_html": "patentes_solicitar_patente_comercial.html",
-            "campos_encontrados": [
+            "tramite_base": "COMERCIAL",
+            "documentos_generales": [
                 "GPER0001",
                 "GPER0002",
                 "GPER0003",
+                "GPER0004",
                 "GCOM0007",
                 "GCOM0008",
-                "GPER0004",
-                "GDIR0009",
-                "GDOM0016",
                 "GTRI0018",
-                "GPRO0023"
+                "GPRO0023",
+                "GDOMDLO39",
+                "GDOMDLO40",
+                "GDOMDLO41",
+                "GDOMDLO42",
+                "GDOMDLO43",
+                "GDOMDLO44",
+                "GDOMDLO4",
+                "GDOMDLO45",
+                "GDOMDPN22",
+                "GDOMDPN21",
+                "GDOMDPN19",
+                "GDOMDPN20",
+                "GDOMDPN23",
+                "GDOMDPN24",
+                "GDOMDPN25",
+                "GDOMDCM36",
+                "GDOMDCM35",
+                "GDOMDCM33",
+                "GDOMDCM34",
+                "GDOMDCM37",
+                "GDOMDCM38",
+                "GDOMDCM39",
+                "GDOC0056",
+                "GDOM0061",
+                "GTRI0062",
+                "GDOM0063",
+                "GDOM0064",
+                "GDOM0065",
+                "GGEN0066",
+                "GPRO0067",
+                "GPRO0068",
+                "GTRI0069",
+                "GTRA0070",
+                "GDOC0037",
+                "GDOC0057",
+                "GDOC0079",
+                "GDOC0040",
+                "GDOC0042",
+                "GDOC0043",
+                "GDOC0047",
+                "GDOC0050",
+                "GDOC0051",
+                "GDOC0052",
+                "GDOC0058",
+                "GDOC0060",
+                "GDOC0044",
+                "GDOC0049",
+                "GDOC0066"
             ],
-            "campos_no_encontrados": [
+            "variaciones_adicionales": [
                 {
-                    "nombre": "ROL AVALÚO",
-                    "tipo": "text",
-                    "elemento": "input",
-                    "id_html": "rolAvaluo",
-                    "id_nuevo": "GNEW0001"
+                    "variacion": "Cuando el contribuyente es una sociedad comercial",
+                    "documentos_adicionales": [
+                        "GDOC0038",
+                        "GDOC0041"
+                    ]
                 },
                 {
-                    "nombre": "CÓDIGO ACTIVIDAD S.I.I",
-                    "tipo": "text",
-                    "elemento": "input",
-                    "id_html": "codigoSII",
-                    "id_nuevo": "GNEW0002"
+                    "variacion": "Cuando se trate de actividades de elaboración y/o expendio de alimentos",
+                    "documentos_adicionales": [
+                        "GDOC0042"
+                    ]
                 },
                 {
-                    "nombre": "CASA MATRIZ",
-                    "tipo": "text",
-                    "elemento": "input",
-                    "id_html": "casaMatriz",
-                    "id_nuevo": "GNEW0003"
+                    "variacion": "Cuando se trate de actividades relacionadas a estación de servicios, gas y combustible",
+                    "documentos_adicionales": [
+                        "GDOC0044"
+                    ]
                 },
                 {
-                    "nombre": "SUCURSAL",
-                    "tipo": "text",
-                    "elemento": "input",
-                    "id_html": "sucursal",
-                    "id_nuevo": "GNEW0004"
+                    "variacion": "Cuando se trate de actividades relacionadas a capacitaciones a personas de manera presencial",
+                    "documentos_adicionales": [
+                        "GDOC0046"
+                    ]
                 },
                 {
-                    "nombre": "MUNICIPALIDAD CASA MATRIZ",
-                    "tipo": "text",
-                    "elemento": "input",
-                    "id_html": "muniCasaMatriz",
-                    "id_nuevo": "GNEW0005"
+                    "variacion": "Cuando el contribuyente declare tener casa matriz en otra comuna",
+                    "documentos_adicionales": [
+                        "GDOC0054",
+                        "GDOC0055"
+                    ]
                 },
                 {
-                    "nombre": "N° TRABAJADORES",
-                    "tipo": "number",
-                    "elemento": "input",
-                    "id_html": "vinaTrabajadores_0",
-                    "id_nuevo": "GNEW0006"
+                    "variacion": "Cuando se trate de actividades de jardín y/o sala cuna JUNJI",
+                    "documentos_adicionales": [
+                        "GDOC0056"
+                    ]
                 },
                 {
-                    "nombre": "NO LUMINOSA",
-                    "tipo": "text",
-                    "elemento": "input",
-                    "id_html": "propagandaNoLuminosa",
-                    "id_nuevo": "GNEW0007"
+                    "variacion": "Cuando se trate de una actividad de alojamiento",
+                    "documentos_adicionales": [
+                        "GDOC0057"
+                    ]
                 },
                 {
-                    "nombre": "TOTAL MTS CUADRADOS",
-                    "tipo": "number",
-                    "elemento": "input",
-                    "id_html": "propagandaTotalM2",
-                    "id_nuevo": "GNEW0008"
+                    "variacion": "Cuando el contribuyente apertura un nuevo domicilio como sucursal",
+                    "documentos_adicionales": [
+                        "GDOC0059"
+                    ]
                 },
                 {
-                    "nombre": "CAPITAL PROPIO",
-                    "tipo": "number",
-                    "elemento": "input",
-                    "id_html": "capitalPropio",
-                    "id_nuevo": "GNEW0009"
+                    "variacion": "Cuando se trate de una actividad comercial que tenga más de un año desde el inicio de actividad realizado en el SII",
+                    "documentos_adicionales": [
+                        "GDOC0061"
+                    ]
                 },
                 {
-                    "nombre": "TIPO TRÁMITE",
-                    "tipo": "select",
-                    "elemento": "select",
-                    "id_html": "tipoTrámite",
-                    "id_nuevo": "GNEW0010"
+                    "variacion": "Cuando se trate de actividades relacionadas a electricidad y/o combustible",
+                    "documentos_adicionales": [
+                        "GDOC0062"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de una actividad de discoteca, salon de baile, etc.",
+                    "documentos_adicionales": [
+                        "GDOC0063"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de actividades de seguridad privada o actividades de las letras \"D, E y O\" de alcohol",
+                    "documentos_adicionales": [
+                        "GDOC0064"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de actividades de taller o realizadas en bodegas",
+                    "documentos_adicionales": [
+                        "GDOC0065"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de actividades realizadas en una oficina establecida y denominada como oficina virtual",
+                    "documentos_adicionales": [
+                        "GDOC0069"
+                    ]
                 }
             ]
         },
         {
-            "categoria": "Patentes > Solicitudes > Solicitud de Patente Comercial",
-            "nombre_pagina": "Mis Solicitudes",
-            "archivo_html": "patentes_mis_solicitudes.html",
-            "campos_encontrados": [],
-            "campos_no_encontrados": [],
-            "nota": "Página de consulta/listado sin formulario de entrada"
+            "tramite_base": "COMERCIAL DOMICILIO POSTAL",
+            "documentos_generales": [
+                "GDOC0037",
+                "GDOC0039",
+                "GDOC0040",
+                "GDOC0047",
+                "GDOC0050",
+                "GDOC0052",
+                "GDOC0058",
+                "GDOC0060",
+                "GDOC0066",
+                "GDOC0067",
+                "GDOC0068"
+            ],
+            "variaciones_adicionales": [
+                {
+                    "variacion": "Cuando el contribuyente es una sociedad comercial",
+                    "documentos_adicionales": [
+                        "GDOC0038",
+                        "GDOC0041"
+                    ]
+                },
+                {
+                    "variacion": "Cuando el contribuyente declare tener casa matriz en otra comuna",
+                    "documentos_adicionales": [
+                        "GDOC0054",
+                        "GDOC0055"
+                    ]
+                },
+                {
+                    "variacion": "Cuando el contribuyente apertura un nuevo domicilio como sucursal",
+                    "documentos_adicionales": [
+                        "GDOC0059"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de una actividad comercial que tenga más de un año desde el inicio de actividad realizado en el SII",
+                    "documentos_adicionales": [
+                        "GDOC0061"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de actividades de seguridad privada o actividades de las letras \"D, E y O\" de alcohol",
+                    "documentos_adicionales": [
+                        "GDOC0064"
+                    ]
+                }
+            ]
         },
         {
-            "categoria": "Patentes > Solicitudes > Modificación de Actividad",
-            "nombre_pagina": "Cambio de Domicilio",
-            "archivo_html": "patentes_modificacion_domicilio.html",
-            "campos_encontrados": [
+            "tramite_base": "PROFESIONAL",
+            "documentos_generales": [
+                "GDOC0037",
+                "GDOC0039",
+                "GDOC0040",
+                "GDOC0043",
+                "GDOC0047",
+                "GDOC0050",
+                "GDOC0051",
+                "GDOC0052",
+                "GDOC0058",
+                "GDOC0060",
+                "GDOC0066"
+            ],
+            "variaciones_adicionales": [
+                {
+                    "variacion": "Cuando el contribuyente declare tener casa matriz en otra comuna",
+                    "documentos_adicionales": [
+                        "GDOC0054",
+                        "GDOC0055"
+                    ]
+                },
+                {
+                    "variacion": "Cuando el contribuyente apertura un nuevo domicilio como sucursal",
+                    "documentos_adicionales": [
+                        "GDOC0059"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de una actividad comercial que tenga más de un año desde el inicio de actividad realizado en el SII",
+                    "documentos_adicionales": [
+                        "GDOC0061"
+                    ]
+                }
+            ]
+        },
+        {
+            "tramite_base": "PROFESIONAL DOMICILIO POSTAL",
+            "documentos_generales": [
+                "GDOC0037",
+                "GDOC0039",
+                "GDOC0040",
+                "GDOC0043",
+                "GDOC0047",
+                "GDOC0050",
+                "GDOC0052",
+                "GDOC0058",
+                "GDOC0060",
+                "GDOC0066"
+            ],
+            "variaciones_adicionales": [
+                {
+                    "variacion": "Cuando el contribuyente es persona natural y/o representante legal",
+                    "documentos_adicionales": [
+                        "GDOC0039"
+                    ]
+                },
+                {
+                    "variacion": "Cuando el contribuyente declare tener casa matriz en otra comuna",
+                    "documentos_adicionales": [
+                        "GDOC0054",
+                        "GDOC0055"
+                    ]
+                },
+                {
+                    "variacion": "Cuando el contribuyente apertura un nuevo domicilio como sucursal",
+                    "documentos_adicionales": [
+                        "GDOC0059"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de una actividad comercial que tenga más de un año desde el inicio de actividad realizado en el SII",
+                    "documentos_adicionales": [
+                        "GDOC0061"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de solicitudes de patentes como Domicilio Postal",
+                    "documentos_adicionales": [
+                        "GDOC0066",
+                        "GDOC0067"
+                    ]
+                }
+            ]
+        },
+        {
+            "tramite_base": "INDUSTRIAL",
+            "documentos_generales": [
+                "GDOC0037",
+                "GDOC0039",
+                "GDOC0040",
+                "GDOC0047",
+                "GDOC0050",
+                "GDOC0051",
+                "GDOC0052",
+                "GDOC0058",
+                "GDOC0060",
+                "GDOC0066"
+            ],
+            "variaciones_adicionales": [
+                {
+                    "variacion": "Cuando el contribuyente es una sociedad comercial",
+                    "documentos_adicionales": [
+                        "GDOC0038",
+                        "GDOC0041"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de actividades de elaboración y/o expendio de alimentos",
+                    "documentos_adicionales": [
+                        "GDOC0042"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de actividades relacionadas a estación de servicios, gas y combustible",
+                    "documentos_adicionales": [
+                        "GDOC0044"
+                    ]
+                },
+                {
+                    "variacion": "Cuando el contribuyente declare tener casa matriz en otra comuna",
+                    "documentos_adicionales": [
+                        "GDOC0054",
+                        "GDOC0055"
+                    ]
+                },
+                {
+                    "variacion": "Cuando el contribuyente apertura un nuevo domicilio como sucursal",
+                    "documentos_adicionales": [
+                        "GDOC0059"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de una actividad comercial que tenga más de un año desde el inicio de actividad realizado en el SII",
+                    "documentos_adicionales": [
+                        "GDOC0061"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de actividades relacionadas a electricidad y/o combustible",
+                    "documentos_adicionales": [
+                        "GDOC0062"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de actividades de taller o realizadas en bodegas",
+                    "documentos_adicionales": [
+                        "GDOC0065"
+                    ]
+                }
+            ]
+        },
+        {
+            "tramite_base": "ALCOHOL",
+            "documentos_generales": [],
+            "variaciones_adicionales": [
+                {
+                    "variacion": "Cuando el contribuyente es una sociedad comercial",
+                    "documentos_adicionales": [
+                        "GDOC0038",
+                        "GDOC0041"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de actividades de elaboración y/o expendio de alimentos",
+                    "documentos_adicionales": [
+                        "GDOC0042"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de actividades relacionadas a estación de servicios, gas y combustible",
+                    "documentos_adicionales": [
+                        "GDOC0044"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de actividades de expendio y/o consumo de alcohol",
+                    "documentos_adicionales": [
+                        "GDOC0045",
+                        "GDOC0048",
+                        "GDOC0060"
+                    ]
+                },
+                {
+                    "variacion": "Cuando el contribuyente declare tener casa matriz en otra comuna",
+                    "documentos_adicionales": [
+                        "GDOC0054",
+                        "GDOC0055"
+                    ]
+                },
+                {
+                    "variacion": "Cuando el contribuyente apertura un nuevo domicilio como sucursal",
+                    "documentos_adicionales": [
+                        "GDOC0059"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de una actividad comercial que tenga más de un año desde el inicio de actividad realizado en el SII",
+                    "documentos_adicionales": [
+                        "GDOC0061"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de actividades relacionadas a electricidad y/o combustible",
+                    "documentos_adicionales": [
+                        "GDOC0062"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de una actividad de discoteca, salon de baile, etc.",
+                    "documentos_adicionales": [
+                        "GDOC0063"
+                    ]
+                },
+                {
+                    "variacion": "Cuando se trate de actividades de seguridad privada o actividades de las letras \"D, E y O\" de alcohol",
+                    "documentos_adicionales": [
+                        "GDOC0064"
+                    ]
+                }
+            ]
+        },
+        {
+            "tramite_base": "Cambio de Domicilio",
+            "documentos_generales": [
                 "GPER0001",
                 "GPER0002",
                 "GPER0003",
-                "GTRI0018",
                 "GCOM0007",
                 "GCOM0008",
+                "GTRI0018",
+                "GDOM0016",
+                "GDOMDCO46",
+                "GDOMDCO47",
+                "GDOMDCO48",
+                "GDOMDCO49",
+                "GDOMDCO50",
+                "GDOMDCO51",
+                "GDOMDCO52",
+                "GDOMDCO53",
+                "GDOMDPN18",
+                "GDOMDPN19",
+                "GDOMDPN20",
+                "GDOMDPN21",
+                "GDOMDPN22",
+                "GDOMDPN23",
+                "GDOMDPN24",
+                "GDOMDPN25",
+                "GDOMDLO39",
+                "GDOMDLO40",
+                "GDOMDLO41",
+                "GDOMDLO42",
+                "GDOMDLO43",
+                "GDOMDLO44",
+                "GDOMDLO45",
                 "GDOC0037",
                 "GDOC0038",
                 "GDOC0039",
@@ -121,280 +465,320 @@
                 "GDOC0044",
                 "GDOC0045",
                 "GDOC0046",
-                "GDOC0047",
-                "GDIR0010",
-                "GDIR0011",
-                "GDIR0012",
-                "GDIR0013",
-                "GDIR0014",
-                "GDIR0015",
-                "GDOM0016",
-                "GDIR0009"
+                "GDOC0047"
             ],
-            "campos_no_encontrados": []
+            "variaciones_adicionales": []
         },
         {
-            "categoria": "Patentes > Solicitudes > Modificación de Actividad",
-            "nombre_pagina": "Modificación Razón Social",
-            "archivo_html": "patentes_modificacion_razon_social.html",
-            "campos_encontrados": [
+            "tramite_base": "Modificación Razón Social",
+            "documentos_generales": [
                 "GPER0001",
                 "GPER0002",
                 "GPER0003",
-                "GTRI0018",
-                "GDIR0009",
+                "GPER0005",
                 "GCOM0007",
                 "GCOM0008",
+                "GTRI0018",
+                "GTRI0020",
+                "GDOMDCO46",
+                "GDOMDCO47",
+                "GDOMDCO48",
+                "GDOMDCO49",
+                "GDOMDCO50",
+                "GDOMDCO51",
+                "GDOMDCO52",
+                "GDOMDCO53",
+                "GDOMDPN18",
+                "GDOMDPN19",
+                "GDOMDPN20",
+                "GDOMDPN21",
+                "GDOMDPN22",
+                "GDOMDPN23",
+                "GDOMDPN24",
+                "GDOMDPN25",
+                "GDOMDLO39",
+                "GDOMDLO40",
+                "GDOMDLO41",
+                "GDOMDLO42",
+                "GDOMDLO43",
+                "GDOMDLO44",
+                "GDOMDLO45",
                 "GDOC0037",
                 "GDOC0038",
                 "GDOC0040",
                 "GDOC0046",
                 "GDOC0047",
-                "GDIR0010",
-                "GDIR0011",
-                "GDIR0012",
-                "GDIR0013",
-                "GDIR0014",
-                "GDIR0015",
-                "GTRI0020",
                 "GDOC0048",
-                "GDOC0049",
+                "GDOC0060",
                 "GDOC0050",
                 "GDOC0051",
                 "GDOC0052",
-                "GDOC0053",
-                "GPER0005"
+                "GDOC0053"
             ],
-            "campos_no_encontrados": []
+            "variaciones_adicionales": []
         },
         {
-            "categoria": "Patentes > Solicitudes > Modificación de Actividad",
-            "nombre_pagina": "Ampliación de Giro",
-            "archivo_html": "patentes_ampliacion_giro.html",
-            "campos_encontrados": [
+            "tramite_base": "Ampliación de Giro",
+            "documentos_generales": [
                 "GPER0001",
                 "GPER0002",
                 "GPER0003",
-                "GDIR0009",
+                "GTRI0019",
+                "GDOMDCO46",
+                "GDOMDCO47",
+                "GDOMDCO48",
+                "GDOMDCO49",
+                "GDOMDCO50",
+                "GDOMDCO51",
+                "GDOMDCO52",
+                "GDOMDCO53",
+                "GDOMDLO39",
+                "GDOMDLO40",
+                "GDOMDLO41",
+                "GDOMDLO42",
+                "GDOMDLO43",
+                "GDOMDLO44",
+                "GDOMDLO45",
                 "GDOC0037",
+                "GDOC0038",
                 "GDOC0039",
                 "GDOC0040",
                 "GDOC0042",
                 "GDOC0043",
                 "GDOC0044",
+                "GDOC0045",
                 "GDOC0046",
                 "GDOC0047",
-                "GDIR0010",
-                "GDIR0011",
-                "GDIR0012",
-                "GDIR0013",
-                "GDIR0014",
-                "GDIR0015",
-                "GTRI0019",
-                "GDOC0054",
-                "GDOC0038"
+                "GDOC0054"
             ],
-            "campos_no_encontrados": []
+            "variaciones_adicionales": []
         },
         {
-            "categoria": "Patentes > Solicitudes > Modificación de Actividad",
-            "nombre_pagina": "Regularización patente de alcoholes",
-            "archivo_html": "patentes_regularizacion_alcoholes.html",
-            "campos_encontrados": [
+            "tramite_base": "Regularización patente de alcoholes",
+            "documentos_generales": [
                 "GPER0001",
                 "GPER0002",
                 "GPER0003",
-                "GDIR0009",
+                "GPER0005",
                 "GCOM0007",
                 "GCOM0008",
+                "GTRI0018",
+                "GDOMDCO46",
+                "GDOMDCO47",
+                "GDOMDCO48",
+                "GDOMDCO49",
+                "GDOMDCO50",
+                "GDOMDCO51",
+                "GDOMDCO52",
+                "GDOMDCO53",
+                "GDOMDPN18",
+                "GDOMDPN19",
+                "GDOMDPN20",
+                "GDOMDPN21",
+                "GDOMDPN22",
+                "GDOMDPN23",
+                "GDOMDPN24",
+                "GDOMDPN25",
+                "GDOMDLO39",
+                "GDOMDLO40",
+                "GDOMDLO41",
+                "GDOMDLO42",
+                "GDOMDLO43",
+                "GDOMDLO44",
+                "GDOMDLO45",
+                "GDOC0038",
                 "GDOC0042",
+                "GDOC0043",
                 "GDOC0044",
                 "GDOC0046",
-                "GDIR0010",
-                "GDIR0011",
-                "GDIR0012",
-                "GDIR0013",
-                "GDIR0014",
-                "GDIR0015",
                 "GDOC0052",
                 "GDOC0053",
-                "GPER0005",
                 "GDOC0055",
                 "GDOC0056",
                 "GDOC0057",
-                "GDOC0058",
-                "GTRI0018",
-                "GDOC0043",
-                "GDOC0038"
+                "GDOC0058"
             ],
-            "campos_no_encontrados": []
+            "variaciones_adicionales": []
         },
         {
-            "categoria": "Patentes > Solicitudes > Modificación de Actividad",
-            "nombre_pagina": "Cambio de Nombre",
-            "archivo_html": "patentes_cambio_nombre.html",
-            "campos_encontrados": [
+            "tramite_base": "Cambio de Nombre",
+            "documentos_generales": [
                 "GPER0001",
                 "GPER0002",
-                "GDIR0009",
+                "GPER0005",
                 "GCOM0007",
                 "GCOM0008",
+                "GTRI0018",
+                "GTRI0021",
+                "GDOMDLO39",
+                "GDOMDLO40",
+                "GDOMDLO41",
+                "GDOMDLO42",
+                "GDOMDLO43",
+                "GDOMDLO44",
+                "GDOMDLO45",
+                "GDOMDRL25",
+                "GDOMDRL26",
+                "GDOMDRL27",
+                "GDOMDRL28",
+                "GDOMDRL29",
+                "GDOMDRL30",
+                "GDOMDRL31",
+                "GDOMDRL32",
+                "GDOMDCO46",
+                "GDOMDCO47",
+                "GDOMDCO48",
+                "GDOMDCO49",
+                "GDOMDCO50",
+                "GDOMDCO51",
+                "GDOMDCO52",
+                "GDOMDCO53",
                 "GDOC0037",
                 "GDOC0038",
                 "GDOC0042",
+                "GDOC0043",
                 "GDOC0044",
                 "GDOC0046",
-                "GDIR0010",
-                "GDIR0011",
-                "GDIR0012",
-                "GDIR0013",
-                "GDIR0014",
-                "GDIR0015",
-                "GDOC0049",
                 "GDOC0050",
-                "GPER0005",
+                "GDOC0056",
                 "GDOC0057",
-                "GTRI0021",
                 "GDOC0059",
                 "GDOC0060",
                 "GDOC0061",
                 "GDOC0062",
-                "GDOC0063",
-                "GTRI0018",
-                "GDOC0056"
+                "GDOC0063"
             ],
-            "campos_no_encontrados": []
+            "variaciones_adicionales": []
         },
         {
-            "categoria": "Patentes > Solicitudes > Gestión Tributaria",
-            "nombre_pagina": "Declaración de Propaganda",
-            "archivo_html": "patentes_declaracion_propaganda.html",
-            "campos_encontrados": [
+            "tramite_base": "Declaración de Propaganda",
+            "documentos_generales": [
                 "GPER0001",
                 "GPER0002",
                 "GPER0003",
-                "GDIR0009",
                 "GCOM0007",
                 "GCOM0008",
-                "GDIR0010",
-                "GDIR0011",
-                "GDIR0012",
-                "GDIR0013",
-                "GDIR0014",
-                "GDIR0015",
                 "GTRA0022",
                 "GPRO0023",
-                "GDOC0064",
-                "GTRI0018"
+                "GTRI0018",
+                "GDOMDCO46",
+                "GDOMDCO47",
+                "GDOMDCO48",
+                "GDOMDCO49",
+                "GDOMDCO50",
+                "GDOMDCO51",
+                "GDOMDCO52",
+                "GDOMDCO53",
+                "GDOMDLO39",
+                "GDOMDLO40",
+                "GDOMDLO41",
+                "GDOMDLO42",
+                "GDOMDLO43",
+                "GDOMDLO44",
+                "GDOMDLO45",
+                "GDOC0064"
             ],
-            "campos_no_encontrados": []
+            "variaciones_adicionales": []
         },
         {
-            "categoria": "Patentes > Solicitudes > Gestión Tributaria > Gestión Financiera",
-            "nombre_pagina": "Revisión de Cobro",
-            "archivo_html": "patentes_revision_cobro.html",
-            "campos_encontrados": [
+            "tramite_base": "Revisión de Cobro",
+            "documentos_generales": [
                 "GPER0001",
                 "GPER0002",
                 "GPER0003",
-                "GDIR0009",
+                "GPER0005",
                 "GCOM0007",
                 "GCOM0008",
-                "GPER0005",
-                "GMOT0032",
-                "GMOT0033",
-                "GMOT0034",
-                "GMOT0035",
-                "GMOT0036",
+                "GTRI0018",
                 "GFIN0024",
                 "GFIN0025",
                 "GFIN0026",
                 "GFIN0027",
                 "GFIN0028",
+                "GMOT0032",
+                "GMOT0033",
+                "GMOT0034",
+                "GMOT0035",
+                "GMOT0036",
+                "GDOMDCO46",
+                "GDOMDCO47",
+                "GDOMDCO48",
+                "GDOMDCO49",
+                "GDOMDCO50",
+                "GDOMDCO51",
+                "GDOMDCO52",
+                "GDOMDCO53",
                 "GDOC0065",
-                "GGEN0074",
-                "GDOC0066",
                 "GGEN0075",
-                "GDOC0067",
+                "GDOC0066",
                 "GGEN0076",
-                "GTRI0018"
+                "GDOC0067",
+                "GGEN0077"
             ],
-            "campos_no_encontrados": []
+            "variaciones_adicionales": []
         },
         {
-            "categoria": "Patentes > Solicitudes > Gestión Tributaria > Gestión Financiera",
-            "nombre_pagina": "Certificado de No Deuda",
-            "archivo_html": "patentes_certificado_no_deuda.html",
-            "campos_encontrados": [
+            "tramite_base": "Certificado de No Deuda",
+            "documentos_generales": [
                 "GPER0001",
                 "GPER0002",
                 "GPER0003",
-                "GDIR0009",
                 "GCOM0007",
                 "GCOM0008",
-                "GDOM0017",
-                "GDOC0068",
-                "GGEN0077",
-                "GDOC0069",
                 "GTRI0018",
-                "GDOC0066"
+                "GDOM0017",
+                "GDOMDCO46",
+                "GDOMDCO47",
+                "GDOMDCO48",
+                "GDOMDCO49",
+                "GDOMDCO50",
+                "GDOMDCO51",
+                "GDOMDCO52",
+                "GDOMDCO53",
+                "GDEU0029",
+                "GDOC0037",
+                "GDOC0068",
+                "GGEN0078",
+                "GDOC0069",
+                "GDOC0067"
             ],
-            "campos_no_encontrados": []
+            "variaciones_adicionales": []
         },
         {
-            "categoria": "Patentes > Solicitudes > Cese Definitivo",
-            "nombre_pagina": "Solicitud Término Negocio",
-            "archivo_html": "patentes_termino_negocio.html",
-            "campos_encontrados": [
+            "tramite_base": "Solicitud Término Negocio",
+            "documentos_generales": [
                 "GPER0001",
                 "GPER0002",
                 "GPER0003",
-                "GDIR0009",
                 "GCOM0007",
                 "GCOM0008",
-                "GDIR0010",
-                "GDIR0011",
-                "GDIR0012",
-                "GDIR0013",
-                "GDIR0014",
-                "GDIR0015",
-                "GDOC0068",
-                "GGEN0077",
-                "GDOC0069",
+                "GTRI0018",
                 "GDEU0029",
-                "GDEU0030",
-                "GDEU0031",
+                "GDOMDCO46",
+                "GDOMDCO47",
+                "GDOMDCO48",
+                "GDOMDCO49",
+                "GDOMDCO50",
+                "GDOMDCO51",
+                "GDOMDCO52",
+                "GDOMDCO53",
+                "GDOMDLO39",
+                "GDOMDLO40",
+                "GDOMDLO41",
+                "GDOMDLO42",
+                "GDOMDLO43",
+                "GDOMDLO44",
+                "GDOMDLO45",
+                "GDOC0037",
+                "GDOC0068",
+                "GGEN0078",
+                "GDOC0069",
                 "GDOC0070",
                 "GDOC0071",
                 "GDOC0072",
-                "GDOC0073",
-                "GTRI0018"
+                "GDOC0073"
             ],
-            "campos_no_encontrados": []
-        },
-        {
-            "categoria": "Patentes > Documentación > Estado de Pago",
-            "nombre_pagina": "Patentes",
-            "archivo_html": "patentes_estado_pago_patentes.html",
-            "campos_encontrados": [],
-            "campos_no_encontrados": [],
-            "nota": "Página de consulta/listado sin formulario de entrada"
-        },
-        {
-            "categoria": "Patentes > Documentación",
-            "nombre_pagina": "Historial de Pagos",
-            "archivo_html": "patentes_historial_pagos.html",
-            "campos_encontrados": [],
-            "campos_no_encontrados": [],
-            "nota": "Página de consulta/listado sin formulario de entrada"
+            "variaciones_adicionales": []
         }
-    ],
-    "resumen_general": {
-        "total_paginas_analizadas": 13,
-        "paginas_con_formularios": 11,
-        "paginas_solo_consulta": 2,
-        "campos_unicos_encontrados_en_bd": 77,
-        "total_campos_similares_marcados": 87,
-        "nuevos_campos_necesarios": 10
-    }
+    ]
 }

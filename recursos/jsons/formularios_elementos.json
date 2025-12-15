@@ -56,55 +56,6 @@
         "grupo": "Contacto"
     },
     {
-        "id_numerico": "GDIR0009",
-        "elemento": "Dirección",
-        "tipo": "text",
-        "nombre": "Dirección",
-        "grupo": "Dirección"
-    },
-    {
-        "id_numerico": "GDIR0010",
-        "elemento": "Calle (Mapa)",
-        "tipo": "text",
-        "nombre": "Calle",
-        "grupo": "Dirección"
-    },
-    {
-        "id_numerico": "GDIR0011",
-        "elemento": "Número (Mapa)",
-        "tipo": "text",
-        "nombre": "Número",
-        "grupo": "Dirección"
-    },
-    {
-        "id_numerico": "GDIR0012",
-        "elemento": "Comuna (Mapa)",
-        "tipo": "text",
-        "nombre": "Comuna",
-        "grupo": "Dirección"
-    },
-    {
-        "id_numerico": "GDIR0013",
-        "elemento": "Región (Mapa)",
-        "tipo": "text",
-        "nombre": "Región",
-        "grupo": "Dirección"
-    },
-    {
-        "id_numerico": "GDIR0014",
-        "elemento": "Latitud",
-        "tipo": "text",
-        "nombre": "Latitud",
-        "grupo": "Dirección"
-    },
-    {
-        "id_numerico": "GDIR0015",
-        "elemento": "Longitud",
-        "tipo": "text",
-        "nombre": "Longitud",
-        "grupo": "Dirección"
-    },
-    {
         "id_numerico": "GDOM0016",
         "elemento": "Dirección Nueva",
         "tipo": "textarea",
@@ -116,6 +67,300 @@
         "elemento": "Municipalidad Destino",
         "tipo": "text",
         "nombre": "Para ser presentado en la Ilustre Municipalidad de",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDCM36",
+        "elemento": "Región",
+        "tipo": "text",
+        "nombre": "Direccion Casa Matriz Región",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDCM35",
+        "elemento": "Comuna",
+        "tipo": "text",
+        "nombre": "Direccion Casa Matriz Comuna",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDCM33",
+        "elemento": "Calle",
+        "tipo": "text",
+        "nombre": "Direccion Casa Matriz Calle",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDCM34",
+        "elemento": "Número",
+        "tipo": "text",
+        "nombre": "Direccion Casa Matriz Número",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDCM37",
+        "elemento": "Latitud",
+        "tipo": "text",
+        "nombre": "Direccion Casa Matriz Latitud",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDCM38",
+        "elemento": "Longitud",
+        "tipo": "text",
+        "nombre": "Direccion Casa Matriz Longitud",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDCM39",
+        "elemento": "Observacion",
+        "tipo": "textarea",
+        "nombre": "Direccion Casa Matriz Observacion",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDCO50",
+        "elemento": "Región",
+        "tipo": "text",
+        "nombre": "Direccion Comercial Región",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDCO49",
+        "elemento": "Comuna",
+        "tipo": "text",
+        "nombre": "Direccion Comercial Comuna",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDCO47",
+        "elemento": "Calle",
+        "tipo": "text",
+        "nombre": "Direccion Comercial Calle",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDCO48",
+        "elemento": "Número",
+        "tipo": "text",
+        "nombre": "Direccion Comercial Número",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDCO51",
+        "elemento": "Latitud",
+        "tipo": "text",
+        "nombre": "Direccion Comercial Latitud",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDCO52",
+        "elemento": "Longitud",
+        "tipo": "text",
+        "nombre": "Direccion Comercial Longitud",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDCO53",
+        "elemento": "Observacion",
+        "tipo": "textarea",
+        "nombre": "Direccion Comercial Observacion",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDLO43",
+        "elemento": "Región",
+        "tipo": "text",
+        "nombre": "Direccion Local Región",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDLO42",
+        "elemento": "Comuna",
+        "tipo": "text",
+        "nombre": "Direccion Local Comuna",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDLO40",
+        "elemento": "Calle",
+        "tipo": "text",
+        "nombre": "Direccion Local Calle",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDLO41",
+        "elemento": "Número",
+        "tipo": "text",
+        "nombre": "Direccion Local Número",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDLO44",
+        "elemento": "Latitud",
+        "tipo": "text",
+        "nombre": "Direccion Local Latitud",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDLO45",
+        "elemento": "Longitud",
+        "tipo": "text",
+        "nombre": "Direccion Local Longitud",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDLO46",
+        "elemento": "Observacion",
+        "tipo": "textarea",
+        "nombre": "Direccion Local Observacion",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDPN22",
+        "elemento": "Región",
+        "tipo": "text",
+        "nombre": "Direccion Persona Natural Región",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDPN21",
+        "elemento": "Comuna",
+        "tipo": "text",
+        "nombre": "Direccion Persona Natural Comuna",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDPN19",
+        "elemento": "Calle",
+        "tipo": "text",
+        "nombre": "Direccion Persona Natural Calle",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDPN20",
+        "elemento": "Número",
+        "tipo": "text",
+        "nombre": "Direccion Persona Natural Número",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDPN23",
+        "elemento": "Latitud",
+        "tipo": "text",
+        "nombre": "Direccion Persona Natural Latitud",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDPN24",
+        "elemento": "Longitud",
+        "tipo": "text",
+        "nombre": "Direccion Persona Natural Longitud",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDPN25",
+        "elemento": "Observacion",
+        "tipo": "textarea",
+        "nombre": "Direccion Persona Natural Observacion",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDRL29",
+        "elemento": "Región",
+        "tipo": "text",
+        "nombre": "Direccion Representante legal Región",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDRL28",
+        "elemento": "Comuna",
+        "tipo": "text",
+        "nombre": "Direccion Representante legal Comuna",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDRL26",
+        "elemento": "Calle",
+        "tipo": "text",
+        "nombre": "Direccion Representante legal Calle",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDRL27",
+        "elemento": "Número",
+        "tipo": "text",
+        "nombre": "Direccion Representante legal Número",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDRL30",
+        "elemento": "Latitud",
+        "tipo": "text",
+        "nombre": "Direccion Representante legal Latitud",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDRL31",
+        "elemento": "Longitud",
+        "tipo": "text",
+        "nombre": "Direccion Representante legal Longitud",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDRL32",
+        "elemento": "Observacion",
+        "tipo": "textarea",
+        "nombre": "Direccion Representante legal Observacion",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDNU57",
+        "elemento": "Región",
+        "tipo": "text",
+        "nombre": "Nueva Direccion Región",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDNU56",
+        "elemento": "Comuna",
+        "tipo": "text",
+        "nombre": "Nueva Direccion Comuna",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDNU54",
+        "elemento": "Calle",
+        "tipo": "text",
+        "nombre": "Nueva Direccion Calle",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDNU55",
+        "elemento": "Número",
+        "tipo": "text",
+        "nombre": "Nueva Direccion Número",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDNU58",
+        "elemento": "Latitud",
+        "tipo": "text",
+        "nombre": "Nueva Direccion Latitud",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDNU59",
+        "elemento": "Longitud",
+        "tipo": "text",
+        "nombre": "Nueva Direccion Longitud",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOMDNU60",
+        "elemento": "Observacion",
+        "tipo": "textarea",
+        "nombre": "Nueva Direccion Observacion",
         "grupo": "Domicilio"
     },
     {
@@ -147,18 +392,16 @@
         "grupo": "Tributario"
     },
     {
-        "id_numerico": "GTRA0022",
-        "elemento": "Tipo Trámite - Instala , Modifica, Retira",
-        "tipo": "radio",
-        "nombre": "tipoTramite",
-        "grupo": "Trámite"
-    },
-    {
         "id_numerico": "GPRO0023",
-        "elemento": "Tipo Propaganda - Luminosa/No Luminosa",
-        "tipo": "checkbox",
-        "nombre": "Tipo Propaganda - Luminosa/No Luminosa",
-        "grupo": "Propaganda"
+        "elemento": "Tipo Propaganda",
+        "tipo": "select",
+        "nombre": "Tipo Propaganda - Luminosa/No Luminosa/Iluminada",
+        "grupo": "Propaganda",
+        "opciones": [
+            "Luminosa",
+            "No Luminosa",
+            "Iluminada"
+        ]
     },
     {
         "id_numerico": "GFIN0024",
@@ -197,24 +440,15 @@
     },
     {
         "id_numerico": "GDEU0029",
-        "elemento": "Estado Deuda - Sin Deuda",
-        "tipo": "radio",
-        "nombre": "estadoDeuda",
-        "grupo": "Deuda"
-    },
-    {
-        "id_numerico": "GDEU0030",
-        "elemento": "Estado Deuda - Con Deuda",
-        "tipo": "radio",
-        "nombre": "estadoDeuda",
-        "grupo": "Deuda"
-    },
-    {
-        "id_numerico": "GDEU0031",
-        "elemento": "Estado Deuda - Con Convenio",
-        "tipo": "radio",
-        "nombre": "estadoDeuda",
-        "grupo": "Deuda"
+        "elemento": "Estado Deuda Patente",
+        "tipo": "select",
+        "nombre": "Estado de Deuda Patente",
+        "grupo": "Deuda",
+        "opciones": [
+            "Sin Deuda",
+            "Con Deuda",
+            "Con Convenio"
+        ]
     },
     {
         "id_numerico": "GMOT0032",
@@ -263,7 +497,8 @@
         "elemento": "Fotocopia Cédula",
         "tipo": "file",
         "nombre": "Fotocopia Cédula de Identidad (P. Natural) o RUT Sociedad y Rep. Legal",
-        "grupo": "Documento"
+        "grupo": "Documento",
+        "nota": "Puede ser de múltiple ingreso (socios/representantes)"
     },
     {
         "id_numerico": "GDOC0039",
@@ -288,16 +523,16 @@
     },
     {
         "id_numerico": "GDOC0042",
-        "elemento": "Fotografías",
+        "elemento": "Fotografía Interior",
         "tipo": "file",
-        "nombre": "2 Fotografías (interior y exterior) del establecimiento",
+        "nombre": "Fotografía Interior del establecimiento",
         "grupo": "Documento"
     },
     {
         "id_numerico": "GDOC0043",
-        "elemento": "Informe Factibilidad Uso Suelo",
+        "elemento": "Fotografía Exterior",
         "tipo": "file",
-        "nombre": "Informe Factibilidad Uso Suelo",
+        "nombre": "Fotografía Exterior del establecimiento",
         "grupo": "Documento"
     },
     {
@@ -305,6 +540,13 @@
         "elemento": "Certificado Técnico Urbanístico (DOM)",
         "tipo": "file",
         "nombre": "Certificado Técnico Urbanístico (DOM)",
+        "grupo": "Documento"
+    },
+    {
+        "id_numerico": "GDOC0049",
+        "elemento": "Certificado de Factibilidad De Uso De Suelo (DOM)",
+        "tipo": "file",
+        "nombre": "Certificado de Factibilidad De Uso De Suelo (DOM)",
         "grupo": "Documento"
     },
     {
@@ -336,13 +578,6 @@
         "grupo": "Documento"
     },
     {
-        "id_numerico": "GDOC0049",
-        "elemento": "RUT Sociedad",
-        "tipo": "file",
-        "nombre": "Fotocopia RUT sociedad y C.I. Rep. Legal",
-        "grupo": "Documento"
-    },
-    {
         "id_numerico": "GDOC0050",
         "elemento": "Escritura",
         "tipo": "file",
@@ -361,14 +596,16 @@
         "elemento": "Certificado Antecedentes",
         "tipo": "file",
         "nombre": "Certificado de Antecedentes (Todos los socios)",
-        "grupo": "Documento"
+        "grupo": "Documento",
+        "nota": "Puede ser de múltiple ingreso (socios/representantes)"
     },
     {
         "id_numerico": "GDOC0053",
         "elemento": "Declaración Jurada Art. 4",
         "tipo": "file",
         "nombre": "Declaración Jurada Art. 4° Ley N° 19.925 (Notarial)",
-        "grupo": "Documento"
+        "grupo": "Documento",
+        "nota": "Puede ser de múltiple ingreso (socios/representantes)"
     },
     {
         "id_numerico": "GDOC0054",
@@ -396,6 +633,13 @@
         "elemento": "Inicio Actividades SII",
         "tipo": "file",
         "nombre": "Inicio Actividades S.I.I. / Modificaciones",
+        "grupo": "Documento"
+    },
+    {
+        "id_numerico": "GDOC0079",
+        "elemento": "Certificado de Avalúo fiscal",
+        "tipo": "file",
+        "nombre": "Certificado de Avalúo fiscal (Todos los socios)",
         "grupo": "Documento"
     },
     {
@@ -511,31 +755,101 @@
         "grupo": "Documento"
     },
     {
-        "id_numerico": "GGEN0074",
+        "id_numerico": "GGEN0075",
         "elemento": "Años Renta",
         "tipo": "text",
         "nombre": "Indicar Años (ej: 2023, 2024)",
         "grupo": "General"
     },
     {
-        "id_numerico": "GGEN0075",
+        "id_numerico": "GGEN0076",
         "elemento": "Años Patentes",
         "tipo": "text",
         "nombre": "Indicar Años / Semestres",
         "grupo": "General"
     },
     {
-        "id_numerico": "GGEN0076",
+        "id_numerico": "GGEN0077",
         "elemento": "Otros Documentos",
         "tipo": "textarea",
         "nombre": "Describa otros documentos adjuntos",
         "grupo": "General"
     },
     {
-        "id_numerico": "GGEN0077",
+        "id_numerico": "GGEN0078",
         "elemento": "Número Término",
         "tipo": "text",
         "nombre": "N° de Ingreso",
         "grupo": "General"
+    },
+    {
+        "id_numerico": "GDOM0061",
+        "elemento": "ROL AVALÚO",
+        "tipo": "text",
+        "nombre": "ROL AVALÚO",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GTRI0062",
+        "elemento": "CÓDIGO ACTIVIDAD S.I.I",
+        "tipo": "text",
+        "nombre": "Código de Actividad S.I.I.",
+        "grupo": "Tributario"
+    },
+    {
+        "id_numerico": "GDOM0063",
+        "elemento": "CASA MATRIZ",
+        "tipo": "text",
+        "nombre": "Casa Matriz (Dirección o Comuna)",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOM0064",
+        "elemento": "SUCURSAL",
+        "tipo": "text",
+        "nombre": "Sucursal (Dirección o Comuna)",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GDOM0065",
+        "elemento": "MUNICIPALIDAD CASA MATRIZ",
+        "tipo": "text",
+        "nombre": "Municipalidad de Casa Matriz (si es Sucursal)",
+        "grupo": "Domicilio"
+    },
+    {
+        "id_numerico": "GGEN0066",
+        "elemento": "N° TRABAJADORES",
+        "tipo": "number",
+        "nombre": "Número de Trabajadores",
+        "grupo": "General"
+    },
+    {
+        "id_numerico": "GPRO0067",
+        "elemento": "NO LUMINOSA",
+        "tipo": "text",
+        "nombre": "Propaganda No Luminosa (mts)",
+        "grupo": "Propaganda"
+    },
+    {
+        "id_numerico": "GPRO0068",
+        "elemento": "TOTAL MTS CUADRADOS",
+        "tipo": "number",
+        "nombre": "Total Metros Cuadrados de Propaganda",
+        "grupo": "Propaganda"
+    },
+    {
+        "id_numerico": "GTRI0069",
+        "elemento": "CAPITAL PROPIO",
+        "tipo": "number",
+        "nombre": "Monto del Capital Propio",
+        "grupo": "Tributario"
+    },
+    {
+        "id_numerico": "GTRA0070",
+        "elemento": "Poder Ante Noterio del Representante Legal",
+        "tipo": "file",
+        "nombre": "Poder Ante Noterio del Representante Legal",
+        "grupo": "Trámite"
     }
 ]

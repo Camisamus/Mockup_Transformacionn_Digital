@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud Única de Patentes</title>
+    <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../recursos/css/style.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #0d6efd;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #343a40;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <!-- Selección de Trámite -->
+        <div class="section-card" id="seleccionTramiteSection">
+            <div class="section-title">Selección de Trámite</div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Seleccione el tipo de trámite a realizar:</label>
+                    <select class="form-select" id="selectTramite">
+                        <option value="">Seleccione...</option>
+                    </select>
+                </div>
+
+                <!-- Variaciones dinámicas -->
+                <div class="col-12 d-none" id="variacionesContainer">
+                    <label class="form-label mb-2 fw-bold text-primary">Detalles adicionales del trámite:</label>
+                    <div class="alert alert-info py-2 mb-2">
+                        <small><i data-feather="info" class="me-1"></i> Seleccione todas las opciones que apliquen a su
+                            caso para generar el formulario correcto.</small>
+                    </div>
+                    <div id="listaVariaciones" class="d-flex flex-wrap gap-3">
+                        <!-- Checkboxes inyectados aquí -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 text-end">
+                <button id="btnGenerarFormulario" class="btn btn-primary d-none">
+                    <i data-feather="settings" class="me-1"></i> Generar Formulario
+                </button>
+            </div>
+        </div>
+
+        <!-- Formulario Generado Dinámicamente -->
+        <div id="formularioGenerado" class="d-none">
+            <div class="d-flex justify-content-end mb-3">
+                <button class="btn btn-sm btn-danger me-2" onclick="window.print()"> <!-- Placeholder export -->
+                    <i data-feather="file-text" class="me-1"></i> Exportar a PDF
+                </button>
+                <button class="btn btn-sm btn-outline-secondary" id="btnVolverSeleccion">
+                    <i data-feather="arrow-left" class="me-1"></i> Cambiar Trámite
+                </button>
+            </div>
+
+            <!-- Aquí se inyectarán las secciones -->
+            <div id="contenedorSecciones"></div>
+
+            <!-- Botones de Acción -->
+            <div class="d-flex justify-content-end mb-5 mt-4">
+                <button class="btn btn-secondary me-2">Cancelar</button>
+                <button class="btn btn-outline-primary me-2" onclick="alert('Borrador guardado')">Guardar
+                    Borrador</button>
+                <button class="btn btn-primary btn-lg" onclick="alert('Solicitud enviada con éxito')">Enviar
+                    Solicitud</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE&libraries=places"></script>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>feather.replace()</script>
+    <script src="../recursos/js/patentes_solicitud_unica.js"></script>
+</body>
+
+</html>
