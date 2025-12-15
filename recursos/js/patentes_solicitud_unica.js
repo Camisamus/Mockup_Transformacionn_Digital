@@ -48,8 +48,14 @@ document.addEventListener('DOMContentLoaded', () => {
             fetch('../recursos/jsons/categoria_patentes_mapeo_completo.json').then(r => r.json()),
             fetch('../recursos/jsons/formularios_elementos.json').then(r => r.json())
         ]).then(([tramitesResult, elementosResult]) => {
-            // New Schema: tramitesResult is Array, items have 'Campos'
-            tramiteData = Array.isArray(tramitesResult) ? tramitesResult : tramitesResult.Maestro_Tramites;
+            // New Schema: tramitesResult has 'categorias' and 'tramites_detalle'
+            if (tramitesResult.categorias && tramitesResult.tramites_detalle) {
+                window.categoriasData = tramitesResult.categorias;
+                tramiteData = tramitesResult.tramites_detalle;
+            } else {
+                // Fallback for old schema
+                tramiteData = Array.isArray(tramitesResult) ? tramitesResult : tramitesResult.Maestro_Tramites;
+            }
             elementosData = elementosResult;
             renderTramitesSelection();
             setupEventListeners();
@@ -100,24 +106,106 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderTramitesSelection() {
         elements.tramitesContainer.innerHTML = '';
-        tramiteData.forEach((tramite, index) => {
-            const col = document.createElement('div');
-            col.className = 'col-md-4 col-sm-6';
-            col.innerHTML = `
-                <div class="card h-100 border-0 shadow-sm tramite-card" style="cursor: pointer;" onclick="toggleTramite(event, this)">
-                    <div class="card-body d-flex align-items-center">
-                        <div class="form-check">
-                            <input class="form-check-input tramite-check" type="checkbox" value="${tramite.tramite_base}" id="t_${index}">
-                        </div>
-                        <label class="form-check-label ms-2 fw-semibold" style="cursor: pointer;">
-                            ${tramite.tramite_base}
-                        </label>
+
+        // Check if we have categorized data
+        if (window.categoriasData && window.categoriasData.length > 0) {
+            // Create a row to hold the 3 columns
+            const mainRow = document.createElement('div');
+            mainRow.className = 'row g-4';
+
+            // Render categorized view - each category as a column
+            window.categoriasData.forEach((categoria, catIndex) => {
+                // Create category column
+                const categoryCol = document.createElement('div');
+                categoryCol.className = 'col-md-4';
+
+                const categoryCard = document.createElement('div');
+                categoryCard.className = 'card border-0 shadow-sm h-100';
+                categoryCard.style.borderTop = `4px solid ${categoria.color}`;
+
+                categoryCard.innerHTML = `
+                    <div class="card-header bg-white border-0 py-3">
+                        <h5 class="mb-0 d-flex align-items-center" style="color: ${categoria.color};">
+                            <i data-feather="${categoria.icono}" class="me-2" style="width: 24px; height: 24px;"></i>
+                            ${categoria.nombre}
+                        </h5>
                     </div>
-                </div>
-            `;
-            elements.tramitesContainer.appendChild(col);
-        });
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush" id="cat_${catIndex}"></div>
+                    </div>
+                `;
+
+                categoryCol.appendChild(categoryCard);
+                mainRow.appendChild(categoryCol);
+
+                const tramitesContainer = categoryCard.querySelector(`#cat_${catIndex}`);
+
+                // Render tramites for this category as list items
+                categoria.tramites.forEach((tramiteName, index) => {
+                    const listItem = document.createElement('div');
+                    listItem.className = 'list-group-item list-group-item-action border-0 py-3 tramite-list-item';
+                    listItem.style.cursor = 'pointer';
+                    listItem.style.transition = 'background-color 0.2s';
+                    listItem.onclick = function (event) { toggleTramiteList(event, this); };
+
+                    listItem.innerHTML = `
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input tramite-check" type="checkbox" value="${tramiteName}" id="t_${catIndex}_${index}">
+                                <label class="form-check-label ms-2" style="cursor: pointer; font-size: 0.95rem; color: #495057;">
+                                    ${tramiteName}
+                                </label>
+                            </div>
+                            <i data-feather="chevron-right" style="width: 18px; height: 18px; color: #adb5bd;"></i>
+                        </div>
+                    `;
+                    tramitesContainer.appendChild(listItem);
+                });
+            });
+
+            elements.tramitesContainer.appendChild(mainRow);
+        } else {
+            // Fallback: render flat list (old schema)
+            tramiteData.forEach((tramite, index) => {
+                const col = document.createElement('div');
+                col.className = 'col-md-4 col-sm-6';
+                col.innerHTML = `
+                    <div class="card h-100 border-0 shadow-sm tramite-card" style="cursor: pointer;" onclick="toggleTramite(event, this)">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="form-check">
+                                <input class="form-check-input tramite-check" type="checkbox" value="${tramite.tramite_base}" id="t_${index}">
+                            </div>
+                            <label class="form-check-label ms-2 fw-semibold" style="cursor: pointer;">
+                                ${tramite.tramite_base}
+                            </label>
+                        </div>
+                    </div>
+                `;
+                elements.tramitesContainer.appendChild(col);
+            });
+        }
+
+        feather.replace();
     }
+
+    // Helper for list item toggle
+    window.toggleTramiteList = function (event, listItem) {
+        const checkbox = listItem.querySelector('input[type="checkbox"]');
+
+        // If the click target is NOT the checkbox itself, we manually toggle it
+        if (event.target !== checkbox) {
+            checkbox.checked = !checkbox.checked;
+        }
+
+        // Update visual style based on final state
+        if (checkbox.checked) {
+            listItem.style.backgroundColor = '#f8f9fa';
+        } else {
+            listItem.style.backgroundColor = '';
+        }
+
+        validateStep1();
+    };
 
     // Helper exposed to click on card
     window.toggleTramite = function (event, card) {
