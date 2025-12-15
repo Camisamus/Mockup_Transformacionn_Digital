@@ -338,7 +338,7 @@
     {
         "ID": "PROP005",
         "NOMBRE": "Acción Propaganda",
-        "TIPO": "Select",
+        "TIPO": "select",
         "GRUPO": "Propaganda (Declaración Propaganda)",
         "OPCIONES": [
             "Instala",
@@ -648,7 +648,7 @@
         "ID": "DOC004",
         "NOMBRE": "Juan Francisco Hervas",
         "TIPO": "Creador",
-        "GRUPO": "Juan Hervas Creo lalogica de este sistema completa"
+        "GRUPO": "Juan Hervas Creo la logica de este sistema completo"
     },
     {
         "ID": "DOC005",
@@ -841,5 +841,65 @@
         "NOMBRE": "Fotografía del Establecimiento (Interior)",
         "TIPO": "document",
         "GRUPO": "Requisitos Inmueble/Domicilio"
+    },
+    {
+        "ID": "DOC037",
+        "NOMBRE": "Certificado SEC",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Sanitarios/Operacionales"
+    },
+    {
+        "ID": "DOC038",
+        "NOMBRE": "Inscripción en Servicio Nacional de Capacitación (SENCE)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Operacionales"
+    },
+    {
+        "ID": "DOC039",
+        "NOMBRE": "Poder ante Notario del Representante Legal (si lo realiza un tercero)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos P. Jurídica/Sociedad"
+    },
+    {
+        "ID": "DOC040",
+        "NOMBRE": "F-22 (Renta), Balance Comercial y Determinación de Capital Propio",
+        "TIPO": "document",
+        "GRUPO": "Requisitos S.I.I."
+    },
+    {
+        "ID": "DOC041",
+        "NOMBRE": "Certificado de Bomberos",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Sanitarios/Operacionales"
+    },
+    {
+        "ID": "DOC042",
+        "NOMBRE": "Certificado de Evaluación de Ruidos",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Sanitarios/Operacionales"
+    },
+    {
+        "ID": "DOC043",
+        "NOMBRE": "Informe de Evaluación de Carabineros Art. 8 Ley 19.925 (Patente Alcohol Letras 'D', 'E', 'O')",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Alcoholes"
+    },
+    {
+        "ID": "DOC044",
+        "NOMBRE": "Autorización notarial para uso de la propiedad como Domicilio Postal",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Domicilio Postal"
+    },
+    {
+        "ID": "DOC045",
+        "NOMBRE": "Declaración ante Notario de DOMICILIO POSTAL (Formulario)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Domicilio Postal"
+    },
+    {
+        "ID": "DOC046",
+        "NOMBRE": "Fotocopia de la Patente de quien arriende la Oficina Virtual",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Domicilio Postal"
     }
 ]
