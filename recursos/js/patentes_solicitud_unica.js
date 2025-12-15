@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         selectedTramites.forEach(tramite => {
             // General docs
-            (tramite.documentos_generales || []).forEach(id => requiredIds.add(id));
+            (tramite.campos_generales || []).forEach(id => requiredIds.add(id));
 
             // Variation docs (checked only)
             const checks = document.querySelectorAll(`.variation-check[data-tramite="${tramite.tramite_base}"]:checked`);
