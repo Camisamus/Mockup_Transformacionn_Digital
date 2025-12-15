@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablero de Control - Municipalidad</title>
+    <!-- CSS Dependencies -->
+    <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../recursos/css/style.css" rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+
+<body>
+
+    <div class="row g-4">
+        <!-- Welcome Card -->
+        <div class="col-12">
+            <div class="card bg-primary text-white border-0 shadow">
+                <div class="card-body p-5">
+                    <h2 class="fw-bold">Bienvenido al Sistema de Gestión Municipal</h2>
+                    <p class="lead mb-0">Seleccione una opción del menú lateral para comenzar a trabajar.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm border-start border-4 border-info">
+                <div class="card-body">
+                    <h6 class="text-muted text-uppercase mb-2">Solicitudes Pendientes</h6>
+                    <h3 class="fw-bold">12</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm border-start border-4 border-success">
+                <div class="card-body">
+                    <h6 class="text-muted text-uppercase mb-2">Patentes Aprobadas (Mes)</h6>
+                    <h3 class="fw-bold">45</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm border-start border-4 border-warning">
+                <div class="card-body">
+                    <h6 class="text-muted text-uppercase mb-2">Por Revisar</h6>
+                    <h3 class="fw-bold">8</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100 border-0 shadow-sm border-start border-4 border-danger">
+                <div class="card-body">
+                    <h6 class="text-muted text-uppercase mb-2">Rechazadas</h6>
+                    <h3 class="fw-bold">3</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="../recursos/js/layout_manager.js"></script>
+</body>
+
+</html>

@@ -4,81 +4,66 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sistema de Patentes - Mockup</title>
-    <!-- Bootstrap CSS (Local) -->
+    <title>Sistema de Patentes - Login</title>
+    <!-- Bootstrap CSS -->
     <link href="recursos/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
     <link href="recursos/css/style.css" rel="stylesheet">
-    <!-- Icons -->
     <script src="https://unpkg.com/feather-icons"></script>
 </head>
 
-<body>
+<body class="bg-light">
 
-    <!-- Login Screen -->
-    <div id="login-screen" class="d-flex align-items-center justify-content-center vh-100 bg-light">
-        <div class="card shadow-sm" style="width: 350px;">
+    <!-- Login Screen Only -->
+    <div id="login-screen" class="d-flex align-items-center justify-content-center vh-100">
+        <div class="card shadow-sm border-0" style="width: 350px;">
             <div class="card-body p-4">
-                <h3 class="text-center mb-4 text-primary fw-bold">Gestión Patentes</h3>
+                <div class="text-center mb-4">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                        style="width: 64px; height: 64px;">
+                        <i data-feather="lock" style="width: 32px; height: 32px;"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark">Acceso Municipal</h3>
+                    <p class="text-muted small">Gestión de Patentes y Solicitudes</p>
+                </div>
+
                 <form id="login-form">
                     <div class="mb-3">
                         <label for="username" class="form-label">Usuario</label>
-                        <input type="text" class="form-control" id="username" placeholder="" required>
+                        <input type="text" class="form-control" id="username" placeholder="admin" required
+                            value="admin">
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Contraseña</label>
-                        <input type="password" class="form-control" id="password" required>
+                        <input type="password" class="form-control" id="password" required value="admin">
                     </div>
                     <div class="d-grid">
                         <button type="submit" class="btn btn-primary">Ingresar</button>
                     </div>
                     <div id="login-error" class="text-danger text-center mt-3 small d-none">
-                        Credenciales incorrectas (use admin/admin)
+                        Credenciales incorrectas
                     </div>
                 </form>
+            </div>
+            <div class="card-footer bg-white text-center py-3">
+                <small class="text-muted">Municipalidad 2024</small>
             </div>
         </div>
     </div>
 
-    <!-- App Screen (Hidden by default) -->
-    <div id="app-screen" class="d-none">
-        <div class="d-flex h-100">
-            <!-- Sidebar -->
-            <!-- Sidebar Container -->
-            <div id="sidebar-container"></div>
+    <!-- No Iframe. No Sidebar. Just Login. -->
 
-            <!-- Main Content -->
-            <main class="flex-grow-1 p-4 bg-light d-flex flex-column" style="height: 100vh; overflow: hidden;">
-                <div class="container-fluid d-flex flex-column h-100">
-                    <header class="d-flex justify-content-between align-items-center mb-4 flex-shrink-0">
-                        <h2 id="page-title" class="fw-bold text-dark">Inicio</h2>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-outline-secondary" onclick="alert('Funcionalidad en desarrollo')">
-                                <i data-feather="key" class="me-2"></i>Cambiar Contraseña
-                            </button>
-                            <button class="btn btn-outline-danger" onclick="logout()">
-                                <i data-feather="log-out" class="me-2"></i>Cerrar Sesión
-                            </button>
-                        </div>
-                    </header>
-
-                    <!-- Iframe for Content Loading -->
-                    <div class="card shadow-sm flex-grow-1 overflow-hidden border-0">
-                        <iframe id="content-frame" src="about:blank"
-                            style="width: 100%; height: 100%; border: none;"></iframe>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </div>
-
-    <!-- Bootstrap Bundle with Popper (Local) -->
     <script src="recursos/js/bootstrap.bundle.min.js"></script>
-    <!-- Component JS -->
-    <script src="recursos/js/sidebar.js"></script>
-    <!-- Custom JS -->
     <script src="recursos/js/code.js"></script>
-    <script>feather.replace()</script>
+    <script>
+        feather.replace();
+        // Force check login on load
+        document.addEventListener('DOMContentLoaded', () => {
+            // If already logged in, redirect immediately
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                window.location.href = 'paginas/dashboard.html';
+            }
+        });
+    </script>
 </body>
 
 </html>
