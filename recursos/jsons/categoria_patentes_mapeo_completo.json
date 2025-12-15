@@ -796,31 +796,5 @@
             "DATOS001"
         ],
         "variaciones_adicionales": []
-    },
-    {
-        "tramite_base": "Declaración Trabajadores (Certificado Distribución Capital)",
-        "Campos": [
-            "DATOSXX003",
-            "DATOSXX004",
-            "PATEN001",
-            "CONT001",
-            "RUTXX001",
-            "DIRE_C_REG",
-            "DIRE_C_COM",
-            "DIRE_C_CAL",
-            "DIRE_C_NUM",
-            "DIRE_C_OBS",
-            "DIRE_C_LAT",
-            "DIRE_C_LON",
-            "GIRO001",
-            "DATOS003",
-            "DATOS004",
-            "CAPIT003",
-            "CAPIT004",
-            "CAPIT005",
-            "DATOS001",
-            "DOC001"
-        ],
-        "variaciones_adicionales": []
     }
 ]
