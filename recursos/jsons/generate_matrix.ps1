@@ -8,26 +8,36 @@ $outputPath = Join-Path $baseDir "matriz_tramites.csv"
 Write-Host "Reading JSONs..."
 $tramitesData = Get-Content -LiteralPath $tramitesPath -Raw -Encoding UTF8 | ConvertFrom-Json
 $elementosData = Get-Content -LiteralPath $elementosPath -Raw -Encoding UTF8 | ConvertFrom-Json
+Write-Host "DEBUG: Elementos Count: $($elementosData.Count)"
 
 $elementosMap = @{}
+$isFirst = $true
 foreach ($el in $elementosData) {
-    if ($el.id_numerico) {
-        $elementosMap[$el.id_numerico] = $el
+    if ($isFirst) {
+        Write-Host "First Element JSON:"
+        $el | ConvertTo-Json -Depth 2
+        $isFirst = $false
+    }
+    if ($el.ID) {
+        $elementosMap[$el.ID] = $el
     }
 }
+Write-Host "DEBUG: Map Count: $($elementosMap.Count)"
 
 $columns = @()
-$maestro = $tramitesData.Maestro_Tramites
-if (-not $maestro) { $maestro = $tramitesData }
+# New Schema: Root is array
+$maestro = $tramitesData
+if ($tramitesData.Maestro_Tramites) { $maestro = $tramitesData.Maestro_Tramites }
+Write-Host "DEBUG: Maestro Count: $($maestro.Count)"
 
 foreach ($tram in $maestro) {
     $tName = $tram.tramite_base
     $baseIds = [System.Collections.Generic.HashSet[string]]::new()
     # Normalize input which might be object or array depending on usage
-    if ($tram.campos_generales) {
+    if ($tram.Campos) {
+        foreach ($id in $tram.Campos) { [void]$baseIds.Add($id) }
+    } elseif ($tram.campos_generales) {
         foreach ($id in $tram.campos_generales) { [void]$baseIds.Add($id) }
-    } elseif ($tram.documentos_generales) {
-        foreach ($id in $tram.documentos_generales) { [void]$baseIds.Add($id) }
     }
     
     $columns += [PSCustomObject]@{
@@ -60,7 +70,7 @@ foreach ($col in $columns) { foreach ($id in $col.ids) { [void]$allIdsSet.Add($i
 
 $sortedIds = $allIdsSet | Sort-Object { 
     $el = $elementosMap[$_]
-    if ($el) { return $el.grupo + $el.nombre }
+    if ($el) { return $el.GRUPO + $el.NOMBRE }
     return "ZZ" + $_ 
 }
 
@@ -77,8 +87,8 @@ $row2 = ";;" + $variacionStr + ";" + (($columns | ForEach-Object { $_.h2 }) -joi
 foreach ($id in $sortedIds) {
     if ($elementosMap.ContainsKey($id)) {
         $el = $elementosMap[$id]
-        $grupo = $el.grupo
-        $nombre = $el.nombre
+        $grupo = $el.GRUPO
+        $nombre = $el.NOMBRE
     } else {
         $grupo = "Sin Grupo"
         $nombre = "Desconocido (" + $id + ")" 

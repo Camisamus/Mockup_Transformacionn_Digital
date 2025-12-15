@@ -1,127 +1,136 @@
-﻿﻿Grupo;ID Campo;Nombre Campo;COMERCIAL;COMERCIAL;COMERCIAL;COMERCIAL;COMERCIAL;COMERCIAL;COMERCIAL;COMERCIAL;COMERCIAL;COMERCIAL;COMERCIAL;COMERCIAL;COMERCIAL;COMERCIAL;COMERCIAL;COMERCIAL DOMICILIO POSTAL;COMERCIAL DOMICILIO POSTAL;COMERCIAL DOMICILIO POSTAL;COMERCIAL DOMICILIO POSTAL;COMERCIAL DOMICILIO POSTAL;COMERCIAL DOMICILIO POSTAL;PROFESIONAL;PROFESIONAL;PROFESIONAL;PROFESIONAL;PROFESIONAL DOMICILIO POSTAL;PROFESIONAL DOMICILIO POSTAL;PROFESIONAL DOMICILIO POSTAL;PROFESIONAL DOMICILIO POSTAL;PROFESIONAL DOMICILIO POSTAL;PROFESIONAL DOMICILIO POSTAL;INDUSTRIAL;INDUSTRIAL;INDUSTRIAL;INDUSTRIAL;INDUSTRIAL;INDUSTRIAL;INDUSTRIAL;INDUSTRIAL;INDUSTRIAL;ALCOHOL;ALCOHOL;ALCOHOL;ALCOHOL;ALCOHOL;ALCOHOL;ALCOHOL;ALCOHOL;ALCOHOL;ALCOHOL;ALCOHOL;Cambio de Domicilio;Modificación Razón Social;Ampliación de Giro;Regularización patente de alcoholes;Cambio de Nombre;Declaración de Propaganda;Revisión de Cobro;Certificado de No Deuda;Solicitud Término Negocio
-;;VARIACION;Base / General;Cuando el contribuyente es una sociedad comercial;Cuando se trate de actividades de elaboración y/o expendio de alimentos;Cuando se trate de actividades relacionadas a estación de servicios, gas y combustible;Cuando se trate de actividades relacionadas a capacitaciones a personas de manera presencial;Cuando el contribuyente declare tener casa matriz en otra comuna;Cuando se trate de actividades de jardín y/o sala cuna JUNJI;Cuando se trate de una actividad de alojamiento;Cuando el contribuyente apertura un nuevo domicilio como sucursal;Cuando se trate de una actividad comercial que tenga más de un año desde el inicio de actividad realizado en el SII;Cuando se trate de actividades relacionadas a electricidad y/o combustible;Cuando se trate de una actividad de discoteca, salon de baile, etc.;Cuando se trate de actividades de seguridad privada o actividades de las letras "D, E y O" de alcohol;Cuando se trate de actividades de taller o realizadas en bodegas;Cuando se trate de actividades realizadas en una oficina establecida y denominada como oficina virtual;Base / General;Cuando el contribuyente es una sociedad comercial;Cuando el contribuyente declare tener casa matriz en otra comuna;Cuando el contribuyente apertura un nuevo domicilio como sucursal;Cuando se trate de una actividad comercial que tenga más de un año desde el inicio de actividad realizado en el SII;Cuando se trate de actividades de seguridad privada o actividades de las letras "D, E y O" de alcohol;Base / General;Cuando el contribuyente declare tener casa matriz en otra comuna;Cuando el contribuyente apertura un nuevo domicilio como sucursal;Cuando se trate de una actividad comercial que tenga más de un año desde el inicio de actividad realizado en el SII;Base / General;Cuando el contribuyente es persona natural y/o representante legal;Cuando el contribuyente declare tener casa matriz en otra comuna;Cuando el contribuyente apertura un nuevo domicilio como sucursal;Cuando se trate de una actividad comercial que tenga más de un año desde el inicio de actividad realizado en el SII;Cuando se trate de solicitudes de patentes como Domicilio Postal;Base / General;Cuando el contribuyente es una sociedad comercial;Cuando se trate de actividades de elaboración y/o expendio de alimentos;Cuando se trate de actividades relacionadas a estación de servicios, gas y combustible;Cuando el contribuyente declare tener casa matriz en otra comuna;Cuando el contribuyente apertura un nuevo domicilio como sucursal;Cuando se trate de una actividad comercial que tenga más de un año desde el inicio de actividad realizado en el SII;Cuando se trate de actividades relacionadas a electricidad y/o combustible;Cuando se trate de actividades de taller o realizadas en bodegas;Base / General;Cuando el contribuyente es una sociedad comercial;Cuando se trate de actividades de elaboración y/o expendio de alimentos;Cuando se trate de actividades relacionadas a estación de servicios, gas y combustible;Cuando se trate de actividades de expendio y/o consumo de alcohol;Cuando el contribuyente declare tener casa matriz en otra comuna;Cuando el contribuyente apertura un nuevo domicilio como sucursal;Cuando se trate de una actividad comercial que tenga más de un año desde el inicio de actividad realizado en el SII;Cuando se trate de actividades relacionadas a electricidad y/o combustible;Cuando se trate de una actividad de discoteca, salon de baile, etc.;Cuando se trate de actividades de seguridad privada o actividades de las letras "D, E y O" de alcohol;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General
-Contacto;GCOM0008;Correo Electrónico;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;X;X;;X;X;X;X;X;X
-Contacto;GCOM0007;Teléfono;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;X;X;;X;X;X;X;X;X
-Deuda;GDEU0029;Estado de Deuda Patente;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X
-Documento;GDOC0051;Acta de Directorio (solo S.A.);X;;;;;;;;;;;;;;;;;;;;;X;;;;;;;;;;X;;;;;;;;;;;;;;;;;;;;;X;;;;;;;
-Documento;GDOC0063;Apertura Sucursal S.I.I. y Cert. Distribución Capital (Sucursales);;;;;;;;;;;;X;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;;;;X;;;;
-Documento;GDOC0048;Aviso de Modificación de Razón Social y/o RUT ante S.I.I.;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;;;;;;X;;;;;;;
-Documento;GDOC0047;Calificación de Actividad Inofensiva y/o Molesta (Seremi de Salud);X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;;;;;;;;;;;;X;X;X;;;;;;
-Documento;GDOC0054;Calificación de Actividad Inofensiva y/o Molesta (SEREMI de Salud);;;;;;X;;;;;;;;;;;;X;;;;;X;;;;;X;;;;;;;;X;;;;;;;;;;X;;;;;;;;X;;;;;;
-Documento;GDOC0062;Cert. Antecedentes y DJ Art. 4° Ley 19.925 (Alcoholes);;;;;;;;;;;X;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;;;;;;;;X;;;;;;;X;;;;
-Documento;GDOC0052;Certificado de Antecedentes (Todos los socios);X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;;;;;;;;;;;;;X;;X;;;;;
-Documento;GDOC0079;Certificado de Avalúo fiscal (Todos los socios);X;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Documento;GDOC0049;Certificado de Factibilidad De Uso De Suelo (DOM);X;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Documento;GDOC0041;Certificado de Número;;X;;;;;;;;;;;;;;;X;;;;;;;;;;;;;;;;X;;;;;;;;;X;;;;;;;;;;X;;;;;;;;
-Documento;GDOC0073;Certificado Depto. Cobranzas (si hay deuda/convenio);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X
-Documento;GDOC0044;Certificado Técnico Urbanístico (DOM);X;;;X;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;;;;;;;X;;;;;;;;X;;X;X;X;;;;
-Documento;GDOC0056;Contrato Arriendo o Escritura Propiedad (Legalizado);X;;;;;;X;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X;;;;
-Documento;GDOC0059;Contrato Compraventa legalizado ante notario;;;;;;;;;X;;;;;;;;;;X;;;;;X;;;;;X;;;;;;;;X;;;;;;;;;;X;;;;;;;;;X;;;;
-Documento;GDOC0065;Declaración de Renta S.I.I.;;;;;;;;;;;;;;X;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;;;;;;;;;;;;;;;;X;;
-Documento;GDOC0053;Declaración Jurada Art. 4° Ley N° 19.925 (Notarial);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;X;;;;;
-Documento;GDOC0050;Escrituras (Constitución/Modif.), Extracto y Vigencia;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;;;;;;;;;;;;;X;;;X;;;;
-Documento;GDOC0069;Formulario del S.I.I con cambio de domicilio;;;;;;;;;;;;;;;X;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X
-Documento;GDOC0039;Fotocopia Aviso de Modificación de Domicilio ante S.I.I.;;;;;;;;;;;;;;;;X;;;;;;X;;;;X;X;;;;;X;;;;;;;;;;;;;;;;;;;;X;;X;;;;;;
-Documento;GDOC0038;Fotocopia Cédula de Identidad (P. Natural) o RUT Sociedad y Rep. Legal;;X;;;;;;;;;;;;;;;X;;;;;;;;;;;;;;;;X;;;;;;;;;X;;;;;;;;;;X;X;X;X;X;;;;
-Documento;GDOC0071;Fotocopia F-29 sin movimientos (o fundantes actividad);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X
-Documento;GDOC0040;Fotocopia Recibo de Contribuciones o N° Rol Avalúo;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;;;;;;;;;;;;X;X;X;;;;;;
-Documento;GDOC0060;Fotocopia RUT Sociedad y C.I. Rep. Legal;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;X;;;;;;;;X;;;X;;;;
-Documento;GDOC0037;Fotocopia simple de la(s) última(s) patente(s) pagada(s);X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;;;;;;;;;;;;X;X;X;;X;;;X;X
-Documento;GDOC0043;Fotografía Exterior del establecimiento;X;;;;;;;;;;;;;;;;;;;;;X;;;;X;;;;;;;;;;;;;;;;;;;;;;;;;;X;;X;X;X;;;;
-Documento;GDOC0042;Fotografía Interior del establecimiento;X;;X;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;;;;;;;X;;;;;;;;;X;;X;X;X;;;;
-Documento;GDOC0064;Fotografías con elementos publicitarios (con medidas);;;;;;;;;;;;;X;;;;;;;;X;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;;;;X;;;
-Documento;GDOC0061;Informe Sanitario / Calif. Inofensiva o Molesta (Talleres, Bodegas);;;;;;;;;;X;;;;;;;;;;X;;;;;X;;;;;X;;;;;;;;X;;;;;;;;;;X;;;;;;;;X;;;;
-Documento;GDOC0068;Ingreso Término de Negocio Nº (Si aplica);;;;;;;;;;;;;;;;X;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X
-Documento;GDOC0057;Inicio Actividades S.I.I. / Modificaciones;X;;;;;;;X;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X;;;;
-Documento;GDOC0058;Opinión de Junta de Vecinos del sector;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;;;;;;;;;;;;;;;X;;;;;
-Documento;GDOC0067;Otros Antecedentes Fundantes;;;;;;;;;;;;;;;;X;;;;;;;;;;;;;;;X;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X;
-Documento;GDOC0055;Patente adjudicada y Decreto de adjudicación;;;;;;X;;;;;;;;;;;;X;;;;;X;;;;;X;;;;;;;;X;;;;;;;;;;X;;;;;;;;;X;;;;;
-Documento;GDOC0066;Patentes Anteriores;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;X;X;;;;;;;;;;;;;;;;;;;;;;;;;;X;;
-Documento;GDOC0045;Recepción Definitiva;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;;;;;X;;X;;;;;;
-Documento;GDOC0046;Resolución Sanitaria favorable (Seremi de Salud - Quinta N° 231);;;;;X;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X;X;X;X;;;;
-Documento;GDOC0072;Resumen Boletas Honorarios (Patente Profesional);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X
-Documento;GDOC0070;Término de Giro / Cierre Sucursal (S.I.I.);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X
-Domicilio;GDOM0063;Casa Matriz (Dirección o Comuna);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOMDCM33;Direccion Casa Matriz Calle;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOMDCM35;Direccion Casa Matriz Comuna;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOMDCM37;Direccion Casa Matriz Latitud;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOMDCM38;Direccion Casa Matriz Longitud;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOMDCM34;Direccion Casa Matriz Número;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOMDCM39;Direccion Casa Matriz Observacion;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOMDCM36;Direccion Casa Matriz Región;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOMDCO47;Direccion Comercial Calle;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;X;X;X;X;X;X;X;X;X
-Domicilio;GDOMDCO49;Direccion Comercial Comuna;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;X;X;X;X;X;X;X;X;X
-Domicilio;GDOMDCO51;Direccion Comercial Latitud;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X;X;X;X;X;X;X;X
-Domicilio;GDOMDCO52;Direccion Comercial Longitud;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X;X;X;X;X;X;X;X
-Domicilio;GDOMDCO48;Direccion Comercial Número;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;X;X;X;X;X;X;X;X;X
-Domicilio;GDOMDCO53;Direccion Comercial Observacion;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X;X;X;X;X;X;X;X
-Domicilio;GDOMDCO50;Direccion Comercial Región;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;X;X;X;X;X;X;X;X;X
-Domicilio;GDOMDLO40;Direccion Local Calle;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X;X;X;X;X;;;X
-Domicilio;GDOMDLO42;Direccion Local Comuna;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X;X;X;X;X;;;X
-Domicilio;GDOMDLO44;Direccion Local Latitud;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X;X;X;X;X;;;X
-Domicilio;GDOMDLO45;Direccion Local Longitud;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X;X;X;X;X;;;X
-Domicilio;GDOMDLO41;Direccion Local Número;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X;X;X;X;X;;;X
-Domicilio;GDOMDLO46;Direccion Local Observacion;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOMDLO43;Direccion Local Región;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X;X;X;X;X;;;X
-Domicilio;GDOM0016;Dirección Modificada (Nueva);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;;;;;;
-Domicilio;GDOMDPN19;Direccion Persona Natural Calle;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;X;X;;X;;;;;
-Domicilio;GDOMDPN21;Direccion Persona Natural Comuna;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;X;X;;X;;;;;
-Domicilio;GDOMDPN23;Direccion Persona Natural Latitud;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X;;X;;;;;
-Domicilio;GDOMDPN24;Direccion Persona Natural Longitud;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X;;X;;;;;
-Domicilio;GDOMDPN20;Direccion Persona Natural Número;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;X;X;;X;;;;;
-Domicilio;GDOMDPN25;Direccion Persona Natural Observacion;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X;;X;;;;;
-Domicilio;GDOMDPN22;Direccion Persona Natural Región;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;X;X;;X;;;;;
-Domicilio;GDOMDRL26;Direccion Representante legal Calle;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;;
-Domicilio;GDOMDRL28;Direccion Representante legal Comuna;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;;
-Domicilio;GDOMDRL30;Direccion Representante legal Latitud;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;;
-Domicilio;GDOMDRL31;Direccion Representante legal Longitud;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;;
-Domicilio;GDOMDRL27;Direccion Representante legal Número;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;;
-Domicilio;GDOMDRL32;Direccion Representante legal Observacion;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;;
-Domicilio;GDOMDRL29;Direccion Representante legal Región;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;;
-Domicilio;GDOM0065;Municipalidad de Casa Matriz (si es Sucursal);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOMDNU54;Nueva Direccion Calle;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOMDNU56;Nueva Direccion Comuna;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOMDNU58;Nueva Direccion Latitud;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOMDNU59;Nueva Direccion Longitud;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOMDNU55;Nueva Direccion Número;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOMDNU60;Nueva Direccion Observacion;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOMDNU57;Nueva Direccion Región;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOM0017;Para ser presentado en la Ilustre Municipalidad de;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;
-Domicilio;GDOM0061;ROL AVALÚO;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOM0064;Sucursal (Dirección o Comuna);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Domicilio;GDOM0080;Tipo de Domicilio;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;;;;;;;;;
-Financiero;GFIN0026;Banco;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;
-Financiero;GFIN0028;Número de Cuenta;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;
-Financiero;GFIN0025;RUT Titular;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;
-Financiero;GFIN0027;Tipo de Cuenta;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;
-Financiero;GFIN0024;Titular de la Cuenta;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;
-General;GGEN0082;Comuna (Otras Patentes);X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;;;;;;;;;
-General;GGEN0077;Describa otros documentos adjuntos;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;
-General;GGEN0075;Indicar Años (ej: 2023, 2024);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;
-General;GGEN0076;Indicar Años / Semestres;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;
-General;GGEN0078;N° de Ingreso;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X
-General;GGEN0083;N° Trabajadores (Otras Patentes);X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;;;;;;;;;
-General;GGEN0066;Número de Trabajadores;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;;;;;;;;;
-General;GGEN0081;Observaciones Generales;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;;;;;;;;;
-Motivo;GMOT0032;Cálculo de Patente;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;
-Motivo;GMOT0034;Cálculo Propaganda;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;
-Motivo;GMOT0036;Detalle del motivo;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;
-Motivo;GMOT0033;Doble Cobro de Aseo;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;
-Motivo;GMOT0035;Otro (especificar);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;
-Personas;GPER0005;Nombre Contacto;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;X;X;;X;;
-Personas;GPER0006;Nombre de Contacto;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Personas;GPER0003;Nombre o Razón Social;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;X;X;X;X;;X;X;X;X
-Personas;GPER0004;Representante Legal;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;;;;;;;;;
-Personas;GPER0001;Rol Patente;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;X;X;X;X;X;X;X;X;X
-Personas;GPER0002;RUT;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;X;X;X;X;X;X;X;X;X
-Propaganda;GPRO0084;Propaganda Luminosa (mts);X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;;;;;;;;;
-Propaganda;GPRO0067;Propaganda No Luminosa (mts);X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;;;;;;;;;
-Propaganda;GPRO0023;Tipo Propaganda - Luminosa/No Luminosa/Iluminada;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;
-Propaganda;GPRO0068;Total Metros Cuadrados de Propaganda;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;;;;;;;;;
-Trámite;GTRA0070;Poder Ante Noterio del Representante Legal;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-Tributario;GTRI0062;Código de Actividad S.I.I.;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;;;;;;;;;
-Tributario;GTRI0019;Giro ACTUAL (Nuevo/Ampliado);X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;;;X;;;;;;
-Tributario;GTRI0018;Giro de la patente(s) a modificar;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;X;;X;X;X;X;X;X
-Tributario;GTRI0069;Monto del Capital Propio;X;;;;;;;;;;;;;;;X;;;;;;X;;;;X;;;;;;X;;;;;;;;;X;;;;;;;;;;;;;;;;;;;
-Tributario;GTRI0021;Nombre ACTUAL (Nuevo);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;;
-Tributario;GTRI0020;Razón Social ACTUAL (Nueva);;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;X;;;;;;;
+﻿﻿Grupo;ID Campo;Nombre Campo;;;;;;;;;;;;;;;;;;;;;
+;;VARIACION;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General;Base / General
+Actividad Comercial;GIRO001;Giro (Actividad Económica);;;;;;;;;;;;;;;;;;;;;
+Actividad Comercial;GIRO003;Giro Actual (Ampliación y/o Cambio de Giro);;;;;;;;;;;;;;;;;;;;;
+Actividad Comercial;GIRO005;Giro Alcohol (Patente Alcohol);;;;;;;;;;;;;;;;;;;;;
+Actividad Comercial;GIRO002;Giro Anterior (Ampliación y/o Cambio de Giro);;;;;;;;;;;;;;;;;;;;;
+Actividad Comercial;GIRO004;Giro Comercial (Patente Alcohol);;;;;;;;;;;;;;;;;;;;;
+Arrendamiento;DATOS006;Nombre Arrendador (Arrendamiento Patente);;;;;;;;;;;;;;;;;;;;;
+Arrendamiento;DATOS007;Nombre Arrendatario (Arrendamiento Patente);;;;;;;;;;;;;;;;;;;;;
+Cambio Nombre/Razón Social;DATOS009;Nombre Actual (Cambio de Nombre / Razón Social);;;;;;;;;;;;;;;;;;;;;
+Cambio Nombre/Razón Social;DATOS008;Nombre Anterior (Cambio de Nombre / Razón Social);;;;;;;;;;;;;;;;;;;;;
+Cambio Nombre/Razón Social;DATOS011;Razón Social Actual (Modificación Razón Social/RUT);;;;;;;;;;;;;;;;;;;;;
+Cambio Nombre/Razón Social;DATOS010;Razón Social Anterior (Modificación Razón Social/RUT);;;;;;;;;;;;;;;;;;;;;
+Capital Propio;DATOS013;Institución Presentación Certificado Distribución Capital Propio (Otro Motivo);;;;;;;;;;;;;;;;;;;;;
+Capital Propio;CAPIT001;Monto del Capital Propio (en $);;;;;;;;;;;;;;;;;;;;;
+Capital Propio;CAPIT003;Municipalidad Presentación Certificado Distribución Capital;;;;;;;;;;;;;;;;;;;;;
+Capital Propio;CAPIT005;Número Trabajadores Casa Matriz Viña del Mar (Certificado Distribución Capital);;;;;;;;;;;;;;;;;;;;;
+Capital Propio;CAPIT004;Número Trabajadores Sucursal (Certificado Distribución Capital);;;;;;;;;;;;;;;;;;;;;
+Capital Propio;CAPIT002;Total de Trabajadores Empresa al 30/04/.... (Certificado Distribución Capital Propio);;;;;;;;;;;;;;;;;;;;;
+Certificado No Deuda;DATOS012;Municipalidad Presentación Certificado No Deuda;;;;;;;;;;;;;;;;;;;;;
+Contacto y Firma;DATOS004;Correo Electrónico;;;;;;;;;;;;;;;;;;;;;
+Contacto y Firma;DATOS005;Nombre Contacto (Revisión Cobro);;;;;;;;;;;;;;;;;;;;;
+Contacto y Firma;DATOS001;Nombre Contribuyente o Representante Legal (Firma);;;;;;;;;;;;;;;;;;;;;
+Contacto y Firma;DATOS003;Teléfono;;;;;;;;;;;;;;;;;;;;;
+Datos Contribuyente;CONT001;Nombre o Razón Social;;;;;;;;;;;;;;;;;;;;;
+Datos Contribuyente;CONT002;Representante Legal;;;;;;;;;;;;;;;;;;;;;
+Detalle Patentes;TRABA002;Comuna (Patentes Otras Comunas);;;;;;;;;;;;;;;;;;;;;
+Detalle Patentes;TRABA001;N° Trabajadores (Patentes Comuna Viña del Mar);;;;;;;;;;;;;;;;;;;;;
+Detalle Patentes;TRABA003;N° Trabajadores (Patentes Otras Comunas);;;;;;;;;;;;;;;;;;;;;
+Devolución Fondos;DEVOL003;Banco (Devolución);;;;;;;;;;;;;;;;;;;;;
+Devolución Fondos;DEVOL005;N° Cuenta (Devolución);;;;;;;;;;;;;;;;;;;;;
+Devolución Fondos;DEVOL002;RUT (Devolución);;;;;;;;;;;;;;;;;;;;;
+Devolución Fondos;DEVOL004;Tipo de Cuenta (Devolución);;;;;;;;;;;;;;;;;;;;;
+Devolución Fondos;DEVOL001;Titular (Devolución);;;;;;;;;;;;;;;;;;;;;
+Dirección Actual / Modificada;DIRE_M_CAL;Calle;;;;;;;;;;;;;;;;;;;;;
+Dirección Actual / Modificada;DIRE_M_COM;Comuna;;;;;;;;;;;;;;;;;;;;;
+Dirección Actual / Modificada;DIRE_M_LAT;Latitud;;;;;;;;;;;;;;;;;;;;;
+Dirección Actual / Modificada;DIRE_M_LON;Longitud;;;;;;;;;;;;;;;;;;;;;
+Dirección Actual / Modificada;DIRE_M_NUM;Número;;;;;;;;;;;;;;;;;;;;;
+Dirección Actual / Modificada;DIRE_M_OBS;Observación;;;;;;;;;;;;;;;;;;;;;
+Dirección Actual / Modificada;DIRE_M_REG;Región;;;;;;;;;;;;;;;;;;;;;
+Dirección Anterior;DIRE_A_CAL;Calle;;;;;;;;;;;;;;;;;;;;;
+Dirección Anterior;DIRE_A_COM;Comuna;;;;;;;;;;;;;;;;;;;;;
+Dirección Anterior;DIRE_A_LAT;Latitud;;;;;;;;;;;;;;;;;;;;;
+Dirección Anterior;DIRE_A_LON;Longitud;;;;;;;;;;;;;;;;;;;;;
+Dirección Anterior;DIRE_A_NUM;Número;;;;;;;;;;;;;;;;;;;;;
+Dirección Anterior;DIRE_A_OBS;Observación;;;;;;;;;;;;;;;;;;;;;
+Dirección Anterior;DIRE_A_REG;Región;;;;;;;;;;;;;;;;;;;;;
+Dirección Comercial / Tributaria;DIRE_C_CAL;Calle;;;;;;;;;;;;;;;;;;;;;
+Dirección Comercial / Tributaria;DIRE_C_COM;Comuna;;;;;;;;;;;;;;;;;;;;;
+Dirección Comercial / Tributaria;DIRE_C_LAT;Latitud;;;;;;;;;;;;;;;;;;;;;
+Dirección Comercial / Tributaria;DIRE_C_LON;Longitud;;;;;;;;;;;;;;;;;;;;;
+Dirección Comercial / Tributaria;DIRE_C_NUM;Número;;;;;;;;;;;;;;;;;;;;;
+Dirección Comercial / Tributaria;DIRE_C_OBS;Observación;;;;;;;;;;;;;;;;;;;;;
+Dirección Comercial / Tributaria;DIRE_C_REG;Región;;;;;;;;;;;;;;;;;;;;;
+Dirección Particular / Domicilio Postal Tributario;DIRE_P_CAL;Calle;;;;;;;;;;;;;;;;;;;;;
+Dirección Particular / Domicilio Postal Tributario;DIRE_P_COM;Comuna;;;;;;;;;;;;;;;;;;;;;
+Dirección Particular / Domicilio Postal Tributario;DIRE_P_LAT;Latitud;;;;;;;;;;;;;;;;;;;;;
+Dirección Particular / Domicilio Postal Tributario;DIRE_P_LON;Longitud;;;;;;;;;;;;;;;;;;;;;
+Dirección Particular / Domicilio Postal Tributario;DIRE_P_NUM;Número;;;;;;;;;;;;;;;;;;;;;
+Dirección Particular / Domicilio Postal Tributario;DIRE_P_OBS;Observación;;;;;;;;;;;;;;;;;;;;;
+Dirección Particular / Domicilio Postal Tributario;DIRE_P_REG;Región;;;;;;;;;;;;;;;;;;;;;
+Identificación Tributaria;SIIXX001;Código Actividad S.I.I.;;;;;;;;;;;;;;;;;;;;;
+Identificación Tributaria;RUTXX001;RUT N°;;;;;;;;;;;;;;;;;;;;;
+Identificación Tributaria;RUTXX002;RUT Sociedad;;;;;;;;;;;;;;;;;;;;;
+Patente (Término Negocio);PATEN008;Patente con Convenio;;;;;;;;;;;;;;;;;;;;;
+Patente (Término Negocio);PATEN006;Patente con Deuda;;;;;;;;;;;;;;;;;;;;;
+Patente (Término Negocio);PATEN007;Patente Sin Deuda;;;;;;;;;;;;;;;;;;;;;
+Patente;PATEN005;Ficha Registro MEF N° (Patente Microempresa Familiar);;;;;;;;;;;;;;;;;;;;;
+Patente;PATEN009;Ingreso Término de Negocio N° (Certificado No Deuda);;;;;;;;;;;;;;;;;;;;;
+Patente;PATEN001;ROL Patente;;;;;;;;;;;;;;;;;;;;;
+Patente;PATEN003;ROL Patente Alcohol (Patente Alcohol);;;;;;;;;;;;;;;;;;;;;
+Patente;PATEN002;ROL Patente Comercial (Patente Alcohol);;;;;;;;;;;;;;;;;;;;;
+Patente;PATEN004;ROL Patente(s) Adjudicada(s) (Regularización Alcoholes);;;;;;;;;;;;;;;;;;;;;
+Propaganda (Declaración Propaganda);PROP005;Acción Propaganda;;;;;;;;;;;;;;;;;;;;;
+Propaganda;PROP004;Propaganda Iluminada (m²) (Declaración Propaganda);;;;;;;;;;;;;;;;;;;;;
+Propaganda;PROP001;Propaganda Luminosa (m²);;;;;;;;;;;;;;;;;;;;;
+Propaganda;PROP002;Propaganda No Luminosa (m²);;;;;;;;;;;;;;;;;;;;;
+Propaganda;PROP003;Total MTS. Cuadrados (Propaganda);;;;;;;;;;;;;;;;;;;;;
+Requisitos Alcoholes;DOC013;Certificado de Antecedentes - Registro Civil (Patentes de Alcohol y Cambio de Nombre/Razón Social);;;;;;;;;;;;;;;;;;;;;
+Requisitos Alcoholes;DOC014;Declaración Jurada Art. 4° Ley N° 19.925-Notaría (Patentes de Alcohol y Cambio de Nombre/Razón Social);;;;;;;;;;;;;;;;;;;;;
+Requisitos Alcoholes;DOC012;Opinión de la Junta de Vecinos del Sector (Sólo para Patentes de Alcohol);;;;;;;;;;;;;;;;;;;;;
+Requisitos Ampliación/Cambio Giro;DOC032;Fotocopia simple Aviso de Ampliación o Cambio de Giro ante S.I.I.;;;;;;;;;;;;;;;;;;;;;
+Requisitos Arrendamiento;DOC029;Fotocopia legalizada Contrato de Arrendamiento de la Patente (Arrendamiento Patente);;;;;;;;;;;;;;;;;;;;;
+Requisitos Cambio de Nombre;DOC028;Fotocopia legalizada Contrato de Compraventa del Establecimiento Comercial (Patente Comercial) (Cambio de Nombre);;;;;;;;;;;;;;;;;;;;;
+Requisitos Cambio Nombre/Razón Social;DOC033;Fotocopia simple Aviso de Modificación de Razón Social y/o RUT efectuado ante S.I.I.;;;;;;;;;;;;;;;;;;;;;
+Requisitos Comunes;DOC002;Fotocopia Cédula de Identidad (Persona Natural);;;;;;;;;;;;;;;;;;;;;
+Requisitos Comunes;DOC003;Fotocopia RUT Sociedad y Cédula de Identidad del Representante Legal (P.J.);;;;;;;;;;;;;;;;;;;;;
+Requisitos Comunes;DOC001;Fotocopia simple última(s) Patente(s) pagada(s) (al día);;;;;;;;;;;;;;;;;;;;;
+Requisitos Domicilio;DOC027;Certificado de Número otorgado por el Dpto. de Obras (Rectificación/Modificación Domicilio);;;;;;;;;;;;;;;;;;;;;
+Requisitos Inmueble/Domicilio;DOC009;2 Fotografías del Establecimiento (Interior y Exterior);;;;;;;;;;;;;;;;;;;;;
+Requisitos Inmueble/Domicilio;DOC020;Certificado Avalúo Fiscal (N° de Rol Avalúo con datos del propietario);;;;;;;;;;;;;;;;;;;;;
+Requisitos Inmueble/Domicilio;DOC010;Certificado Técnico Urbanístico;;;;;;;;;;;;;;;;;;;;;
+Requisitos Inmueble/Domicilio;DOC004;Fotocopia legalizada ante Notario de Contrato de Arrendamiento o Escritura de la propiedad;;;;;;;;;;;;;;;;;;;;;
+Requisitos Inmueble/Domicilio;DOC008;Fotocopia simple Recibo de Contribuciones o N° de Rol Avalúo de la Propiedad;;;;;;;;;;;;;;;;;;;;;
+Requisitos Inmueble/Domicilio;DOC011;Informe Factibilidad Uso de Suelo;;;;;;;;;;;;;;;;;;;;;
+Requisitos Inmueble/Domicilio;DOC021;Recepción Definitiva;;;;;;;;;;;;;;;;;;;;;
+Requisitos P. Jurídica/Sociedad;DOC015;Fotocopia legalizada de Escritura de Sociedad + Extracto + Certificado de Vigencia (no más de 30 días) (Para P.J.);;;;;;;;;;;;;;;;;;;;;
+Requisitos P. Jurídica/Sociedad;DOC034;Fotocopia legalizada Escritura de Constitución de Sociedad + Escritura de Modificación(es) + Extracto + Certificado de Vigencia (Modificación Razón Social/RUT);;;;;;;;;;;;;;;;;;;;;
+Requisitos Profesionales;DOC022;Fotocopia legalizada Título Profesional;;;;;;;;;;;;;;;;;;;;;
+Requisitos Regularización Alcoholes;DOC030;Fotocopia simple Decreto Adjudicación de Patente de Alcohol (Regularización Alcoholes);;;;;;;;;;;;;;;;;;;;;
+Requisitos Regularización Alcoholes;DOC031;Fotocopia simple Patente(s) Adjudicada(s) (Regularización Alcoholes);;;;;;;;;;;;;;;;;;;;;
+Requisitos S.I.I.;DOC017;Fotocopia de Apertura de Sucursal ante S.I.I. (Sólo si es Sucursal en esta comuna);;;;;;;;;;;;;;;;;;;;;
+Requisitos S.I.I.;DOC007;Fotocopia simple Aviso de Modificación de Dirección ante S.I.I. / Modificación de Domicilio S.I.I. / Rectificación Domicilio S.I.I.;;;;;;;;;;;;;;;;;;;;;
+Requisitos S.I.I.;DOC016;Fotocopia simple Iniciación de Actividades ante S.I.I. y/o Avisos de Modificaciones realizadas (giros y/o domicilio);;;;;;;;;;;;;;;;;;;;;
+Requisitos Sanitarios/Operacionales;DOC006;Calificación de la Actividad Inofensiva y/o Molesta;;;;;;;;;;;;;;;;;;;;;
+Requisitos Sanitarios/Operacionales;DOC005;Resolución Sanitaria Favorable o Informe Sanitario (Giros de Alimentos, Talleres, Bodegas, etc.);;;;;;;;;;;;;;;;;;;;;
+Requisitos Sede Comercial;DOC018;Certificado de Distribución de Capital Propio emitido por Municipio Casa Matriz o Determinación de Capital Propio (sólo sucursal);;;;;;;;;;;;;;;;;;;;;
+Requisitos Sede Comercial;DOC019;Certificado No Deuda, emitido por Municipalidad de origen (Sólo para cambio de comuna de Casa Matriz);;;;;;;;;;;;;;;;;;;;;
+Requisitos Término Negocio;DOC024;Fotocopia Cierre de Sucursal ante S.I.I.;;;;;;;;;;;;;;;;;;;;;
+Requisitos Término Negocio;DOC025;Fotocopia F-29 sin movimientos;;;;;;;;;;;;;;;;;;;;;
+Requisitos Término Negocio;DOC023;Fotocopia Formulario Término de Giro ante S.I.I.;;;;;;;;;;;;;;;;;;;;;
+Requisitos Término Negocio;DOC026;Resumen de Boletas de Honorarios (Patente Profesional);;;;;;;;;;;;;;;;;;;;;
+Revisión Cobro Patente;REVIS006;Declaración de Renta S.I.I. Años (Revisión Cobro);;;;;;;;;;;;;;;;;;;;;
+Revisión Cobro Patente;REVIS001;Motivo Revisión Cobro: Cálculo de Patente;;;;;;;;;;;;;;;;;;;;;
+Revisión Cobro Patente;REVIS003;Motivo Revisión Cobro: Cálculo Propaganda;;;;;;;;;;;;;;;;;;;;;
+Revisión Cobro Patente;REVIS002;Motivo Revisión Cobro: Doble Cobro de Aseo;;;;;;;;;;;;;;;;;;;;;
+Revisión Cobro Patente;REVIS004;Motivo Revisión Cobro: Otro;;;;;;;;;;;;;;;;;;;;;
+Revisión Cobro Patente;REVIS008;Otros Antecedentes (Revisión Cobro);;;;;;;;;;;;;;;;;;;;;
+Revisión Cobro Patente;REVIS007;Patentes Años (Revisión Cobro);;;;;;;;;;;;;;;;;;;;;
+Revisión Cobro Patente;REVIS005;Señalar Motivo de Revisión (Detalle);;;;;;;;;;;;;;;;;;;;;
+Sede Comercial;SEDE001;Casa Matriz;;;;;;;;;;;;;;;;;;;;;
+Sede Comercial;SEDE003;Municipalidad de Casa Matriz (si es sucursal);;;;;;;;;;;;;;;;;;;;;
+Sede Comercial;SEDE002;Sucursal;;;;;;;;;;;;;;;;;;;;;
+Tributación Profesional;PROFE003;2ª Categoría (Patente Profesional);;;;;;;;;;;;;;;;;;;;;
+Tributación Profesional;PROFE004;Contabilidad Simplificada (Patente Profesional);;;;;;;;;;;;;;;;;;;;;
+Tributación Profesional;PROFE005;Declaración Domicilio Postal Tributario (Sólo si es SIN OFICINA);;;;;;;;;;;;;;;;;;;;;
+Tributación Profesional;PROFE002;Régimen Tributario 14 BIS (Patente Profesional);;;;;;;;;;;;;;;;;;;;;
+Tributación Profesional;PROFE001;Régimen Tributario 14 TER (Patente Profesional);;;;;;;;;;;;;;;;;;;;;
+Uso Emisión Certificado Capital Propio;USOEM001;Apertura de Sucursal en otra Comuna (Motivo Certificado Capital Propio);;;;;;;;;;;;;;;;;;;;;
+Uso Emisión Certificado Capital Propio;USOEM002;Otro Motivo (Motivo Certificado Capital Propio);;;;;;;;;;;;;;;;;;;;;
+Uso Interno;DATOSXX001;Consultor (Término Negocio);;;;;;;;;;;;;;;;;;;;;
+Uso Interno;DATOSXX003;Fecha Ingreso;;;;;;;;;;;;;;;;;;;;;
+Uso Interno;DATOSXX004;Fecha Solicitud;;;;;;;;;;;;;;;;;;;;;
+Uso Interno;DATOSXX002;Observación (Término Negocio);;;;;;;;;;;;;;;;;;;;;
+Uso Interno;DATOSXX005;Solicitud N°;;;;;;;;;;;;;;;;;;;;;

@@ -1,894 +1,845 @@
 ﻿[
     {
-        "id_numerico": "GPER0001",
-        "elemento": "Rol Patente",
-        "tipo": "text",
-        "nombre": "Rol Patente",
-        "grupo": "Personas"
+        "ID": "CONT001",
+        "NOMBRE": "Nombre o Razón Social",
+        "TIPO": "text",
+        "GRUPO": "Datos Contribuyente"
     },
     {
-        "id_numerico": "GPER0002",
-        "elemento": "RUT",
-        "tipo": "text",
-        "nombre": "RUT",
-        "grupo": "Personas"
+        "ID": "CONT002",
+        "NOMBRE": "Representante Legal",
+        "TIPO": "text",
+        "GRUPO": "Datos Contribuyente"
     },
     {
-        "id_numerico": "GPER0003",
-        "elemento": "Nombre o Razón Social",
-        "tipo": "text",
-        "nombre": "Nombre o Razón Social",
-        "grupo": "Personas"
+        "ID": "RUTXX001",
+        "NOMBRE": "RUT N°",
+        "TIPO": "text",
+        "GRUPO": "Identificación Tributaria"
     },
     {
-        "id_numerico": "GPER0004",
-        "elemento": "REPRESENTANTE LEGAL",
-        "tipo": "text",
-        "nombre": "Representante Legal",
-        "grupo": "Personas"
+        "ID": "RUTXX002",
+        "NOMBRE": "RUT Sociedad",
+        "TIPO": "text",
+        "GRUPO": "Identificación Tributaria"
     },
     {
-        "id_numerico": "GPER0005",
-        "elemento": "Nombre Contacto",
-        "tipo": "text",
-        "nombre": "Nombre Contacto",
-        "grupo": "Personas"
+        "ID": "DIRE_C_REG",
+        "NOMBRE": "Región",
+        "TIPO": "text",
+        "GRUPO": "Dirección Comercial / Tributaria"
     },
     {
-        "id_numerico": "GPER0006",
-        "elemento": "Nombre de Contacto",
-        "tipo": "text",
-        "nombre": "Nombre de Contacto",
-        "grupo": "Personas"
+        "ID": "DIRE_C_COM",
+        "NOMBRE": "Comuna",
+        "TIPO": "text",
+        "GRUPO": "Dirección Comercial / Tributaria"
     },
     {
-        "id_numerico": "GCOM0007",
-        "elemento": "Teléfono",
-        "tipo": "tel",
-        "nombre": "Teléfono",
-        "grupo": "Contacto"
+        "ID": "DIRE_C_CAL",
+        "NOMBRE": "Calle",
+        "TIPO": "text",
+        "GRUPO": "Dirección Comercial / Tributaria"
     },
     {
-        "id_numerico": "GCOM0008",
-        "elemento": "Correo Electrónico",
-        "tipo": "email",
-        "nombre": "Correo Electrónico",
-        "grupo": "Contacto"
+        "ID": "DIRE_C_NUM",
+        "NOMBRE": "Número",
+        "TIPO": "text",
+        "GRUPO": "Dirección Comercial / Tributaria"
     },
     {
-        "id_numerico": "GDOM0016",
-        "elemento": "Dirección Nueva",
-        "tipo": "textarea",
-        "nombre": "Dirección Modificada (Nueva)",
-        "grupo": "Domicilio"
+        "ID": "DIRE_C_OBS",
+        "NOMBRE": "Observación",
+        "TIPO": "textarea",
+        "GRUPO": "Dirección Comercial / Tributaria"
     },
     {
-        "id_numerico": "GDOM0017",
-        "elemento": "Municipalidad Destino",
-        "tipo": "text",
-        "nombre": "Para ser presentado en la Ilustre Municipalidad de",
-        "grupo": "Domicilio"
+        "ID": "DIRE_C_LAT",
+        "NOMBRE": "Latitud",
+        "TIPO": "text",
+        "GRUPO": "Dirección Comercial / Tributaria"
     },
     {
-        "id_numerico": "GDOMDCM36",
-        "elemento": "Región",
-        "tipo": "text",
-        "nombre": "Direccion Casa Matriz Región",
-        "grupo": "Domicilio"
+        "ID": "DIRE_C_LON",
+        "NOMBRE": "Longitud",
+        "TIPO": "text",
+        "GRUPO": "Dirección Comercial / Tributaria"
     },
     {
-        "id_numerico": "GDOMDCM35",
-        "elemento": "Comuna",
-        "tipo": "text",
-        "nombre": "Direccion Casa Matriz Comuna",
-        "grupo": "Domicilio"
+        "ID": "DIRE_P_REG",
+        "NOMBRE": "Región",
+        "TIPO": "text",
+        "GRUPO": "Dirección Particular / Domicilio Postal Tributario"
     },
     {
-        "id_numerico": "GDOMDCM33",
-        "elemento": "Calle",
-        "tipo": "text",
-        "nombre": "Direccion Casa Matriz Calle",
-        "grupo": "Domicilio"
+        "ID": "DIRE_P_COM",
+        "NOMBRE": "Comuna",
+        "TIPO": "text",
+        "GRUPO": "Dirección Particular / Domicilio Postal Tributario"
     },
     {
-        "id_numerico": "GDOMDCM34",
-        "elemento": "Número",
-        "tipo": "text",
-        "nombre": "Direccion Casa Matriz Número",
-        "grupo": "Domicilio"
+        "ID": "DIRE_P_CAL",
+        "NOMBRE": "Calle",
+        "TIPO": "text",
+        "GRUPO": "Dirección Particular / Domicilio Postal Tributario"
     },
     {
-        "id_numerico": "GDOMDCM37",
-        "elemento": "Latitud",
-        "tipo": "text",
-        "nombre": "Direccion Casa Matriz Latitud",
-        "grupo": "Domicilio"
+        "ID": "DIRE_P_NUM",
+        "NOMBRE": "Número",
+        "TIPO": "text",
+        "GRUPO": "Dirección Particular / Domicilio Postal Tributario"
     },
     {
-        "id_numerico": "GDOMDCM38",
-        "elemento": "Longitud",
-        "tipo": "text",
-        "nombre": "Direccion Casa Matriz Longitud",
-        "grupo": "Domicilio"
+        "ID": "DIRE_P_OBS",
+        "NOMBRE": "Observación",
+        "TIPO": "textarea",
+        "GRUPO": "Dirección Particular / Domicilio Postal Tributario"
     },
     {
-        "id_numerico": "GDOMDCM39",
-        "elemento": "Observacion",
-        "tipo": "textarea",
-        "nombre": "Direccion Casa Matriz Observacion",
-        "grupo": "Domicilio"
+        "ID": "DIRE_P_LAT",
+        "NOMBRE": "Latitud",
+        "TIPO": "text",
+        "GRUPO": "Dirección Particular / Domicilio Postal Tributario"
     },
     {
-        "id_numerico": "GDOMDCO50",
-        "elemento": "Región",
-        "tipo": "text",
-        "nombre": "Direccion Comercial Región",
-        "grupo": "Domicilio"
+        "ID": "DIRE_P_LON",
+        "NOMBRE": "Longitud",
+        "TIPO": "text",
+        "GRUPO": "Dirección Particular / Domicilio Postal Tributario"
     },
     {
-        "id_numerico": "GDOMDCO49",
-        "elemento": "Comuna",
-        "tipo": "text",
-        "nombre": "Direccion Comercial Comuna",
-        "grupo": "Domicilio"
+        "ID": "DIRE_A_REG",
+        "NOMBRE": "Región",
+        "TIPO": "text",
+        "GRUPO": "Dirección Anterior"
     },
     {
-        "id_numerico": "GDOMDCO47",
-        "elemento": "Calle",
-        "tipo": "text",
-        "nombre": "Direccion Comercial Calle",
-        "grupo": "Domicilio"
+        "ID": "DIRE_A_COM",
+        "NOMBRE": "Comuna",
+        "TIPO": "text",
+        "GRUPO": "Dirección Anterior"
     },
     {
-        "id_numerico": "GDOMDCO48",
-        "elemento": "Número",
-        "tipo": "text",
-        "nombre": "Direccion Comercial Número",
-        "grupo": "Domicilio"
+        "ID": "DIRE_A_CAL",
+        "NOMBRE": "Calle",
+        "TIPO": "text",
+        "GRUPO": "Dirección Anterior"
     },
     {
-        "id_numerico": "GDOMDCO51",
-        "elemento": "Latitud",
-        "tipo": "text",
-        "nombre": "Direccion Comercial Latitud",
-        "grupo": "Domicilio"
+        "ID": "DIRE_A_NUM",
+        "NOMBRE": "Número",
+        "TIPO": "text",
+        "GRUPO": "Dirección Anterior"
     },
     {
-        "id_numerico": "GDOMDCO52",
-        "elemento": "Longitud",
-        "tipo": "text",
-        "nombre": "Direccion Comercial Longitud",
-        "grupo": "Domicilio"
+        "ID": "DIRE_A_OBS",
+        "NOMBRE": "Observación",
+        "TIPO": "textarea",
+        "GRUPO": "Dirección Anterior"
     },
     {
-        "id_numerico": "GDOMDCO53",
-        "elemento": "Observacion",
-        "tipo": "textarea",
-        "nombre": "Direccion Comercial Observacion",
-        "grupo": "Domicilio"
+        "ID": "DIRE_A_LAT",
+        "NOMBRE": "Latitud",
+        "TIPO": "text",
+        "GRUPO": "Dirección Anterior"
     },
     {
-        "id_numerico": "GDOMDLO43",
-        "elemento": "Región",
-        "tipo": "text",
-        "nombre": "Direccion Local Región",
-        "grupo": "Domicilio"
+        "ID": "DIRE_A_LON",
+        "NOMBRE": "Longitud",
+        "TIPO": "text",
+        "GRUPO": "Dirección Anterior"
     },
     {
-        "id_numerico": "GDOMDLO42",
-        "elemento": "Comuna",
-        "tipo": "text",
-        "nombre": "Direccion Local Comuna",
-        "grupo": "Domicilio"
+        "ID": "DIRE_M_REG",
+        "NOMBRE": "Región",
+        "TIPO": "text",
+        "GRUPO": "Dirección Actual / Modificada"
     },
     {
-        "id_numerico": "GDOMDLO40",
-        "elemento": "Calle",
-        "tipo": "text",
-        "nombre": "Direccion Local Calle",
-        "grupo": "Domicilio"
+        "ID": "DIRE_M_COM",
+        "NOMBRE": "Comuna",
+        "TIPO": "text",
+        "GRUPO": "Dirección Actual / Modificada"
     },
     {
-        "id_numerico": "GDOMDLO41",
-        "elemento": "Número",
-        "tipo": "text",
-        "nombre": "Direccion Local Número",
-        "grupo": "Domicilio"
+        "ID": "DIRE_M_CAL",
+        "NOMBRE": "Calle",
+        "TIPO": "text",
+        "GRUPO": "Dirección Actual / Modificada"
     },
     {
-        "id_numerico": "GDOMDLO44",
-        "elemento": "Latitud",
-        "tipo": "text",
-        "nombre": "Direccion Local Latitud",
-        "grupo": "Domicilio"
+        "ID": "DIRE_M_NUM",
+        "NOMBRE": "Número",
+        "TIPO": "text",
+        "GRUPO": "Dirección Actual / Modificada"
     },
     {
-        "id_numerico": "GDOMDLO45",
-        "elemento": "Longitud",
-        "tipo": "text",
-        "nombre": "Direccion Local Longitud",
-        "grupo": "Domicilio"
+        "ID": "DIRE_M_OBS",
+        "NOMBRE": "Observación",
+        "TIPO": "textarea",
+        "GRUPO": "Dirección Actual / Modificada"
     },
     {
-        "id_numerico": "GDOMDLO46",
-        "elemento": "Observacion",
-        "tipo": "textarea",
-        "nombre": "Direccion Local Observacion",
-        "grupo": "Domicilio"
+        "ID": "DIRE_M_LAT",
+        "NOMBRE": "Latitud",
+        "TIPO": "text",
+        "GRUPO": "Dirección Actual / Modificada"
     },
     {
-        "id_numerico": "GDOMDPN22",
-        "elemento": "Región",
-        "tipo": "text",
-        "nombre": "Direccion Persona Natural Región",
-        "grupo": "Domicilio"
+        "ID": "DIRE_M_LON",
+        "NOMBRE": "Longitud",
+        "TIPO": "text",
+        "GRUPO": "Dirección Actual / Modificada"
     },
     {
-        "id_numerico": "GDOMDPN21",
-        "elemento": "Comuna",
-        "tipo": "text",
-        "nombre": "Direccion Persona Natural Comuna",
-        "grupo": "Domicilio"
+        "ID": "GIRO001",
+        "NOMBRE": "Giro (Actividad Económica)",
+        "TIPO": "text",
+        "GRUPO": "Actividad Comercial"
     },
     {
-        "id_numerico": "GDOMDPN19",
-        "elemento": "Calle",
-        "tipo": "text",
-        "nombre": "Direccion Persona Natural Calle",
-        "grupo": "Domicilio"
+        "ID": "GIRO002",
+        "NOMBRE": "Giro Anterior (Ampliación y/o Cambio de Giro)",
+        "TIPO": "text",
+        "GRUPO": "Actividad Comercial"
     },
     {
-        "id_numerico": "GDOMDPN20",
-        "elemento": "Número",
-        "tipo": "text",
-        "nombre": "Direccion Persona Natural Número",
-        "grupo": "Domicilio"
+        "ID": "GIRO003",
+        "NOMBRE": "Giro Actual (Ampliación y/o Cambio de Giro)",
+        "TIPO": "text",
+        "GRUPO": "Actividad Comercial"
     },
     {
-        "id_numerico": "GDOMDPN23",
-        "elemento": "Latitud",
-        "tipo": "text",
-        "nombre": "Direccion Persona Natural Latitud",
-        "grupo": "Domicilio"
+        "ID": "GIRO004",
+        "NOMBRE": "Giro Comercial (Patente Alcohol)",
+        "TIPO": "text",
+        "GRUPO": "Actividad Comercial"
     },
     {
-        "id_numerico": "GDOMDPN24",
-        "elemento": "Longitud",
-        "tipo": "text",
-        "nombre": "Direccion Persona Natural Longitud",
-        "grupo": "Domicilio"
+        "ID": "GIRO005",
+        "NOMBRE": "Giro Alcohol (Patente Alcohol)",
+        "TIPO": "text",
+        "GRUPO": "Actividad Comercial"
     },
     {
-        "id_numerico": "GDOMDPN25",
-        "elemento": "Observacion",
-        "tipo": "textarea",
-        "nombre": "Direccion Persona Natural Observacion",
-        "grupo": "Domicilio"
+        "ID": "SIIXX001",
+        "NOMBRE": "Código Actividad S.I.I.",
+        "TIPO": "number",
+        "GRUPO": "Identificación Tributaria"
     },
     {
-        "id_numerico": "GDOMDRL29",
-        "elemento": "Región",
-        "tipo": "text",
-        "nombre": "Direccion Representante legal Región",
-        "grupo": "Domicilio"
+        "ID": "PATEN001",
+        "NOMBRE": "ROL Patente",
+        "TIPO": "text",
+        "GRUPO": "Patente"
     },
     {
-        "id_numerico": "GDOMDRL28",
-        "elemento": "Comuna",
-        "tipo": "text",
-        "nombre": "Direccion Representante legal Comuna",
-        "grupo": "Domicilio"
+        "ID": "PATEN002",
+        "NOMBRE": "ROL Patente Comercial (Patente Alcohol)",
+        "TIPO": "text",
+        "GRUPO": "Patente"
     },
     {
-        "id_numerico": "GDOMDRL26",
-        "elemento": "Calle",
-        "tipo": "text",
-        "nombre": "Direccion Representante legal Calle",
-        "grupo": "Domicilio"
+        "ID": "PATEN003",
+        "NOMBRE": "ROL Patente Alcohol (Patente Alcohol)",
+        "TIPO": "text",
+        "GRUPO": "Patente"
     },
     {
-        "id_numerico": "GDOMDRL27",
-        "elemento": "Número",
-        "tipo": "text",
-        "nombre": "Direccion Representante legal Número",
-        "grupo": "Domicilio"
+        "ID": "PATEN004",
+        "NOMBRE": "ROL Patente(s) Adjudicada(s) (Regularización Alcoholes)",
+        "TIPO": "text",
+        "GRUPO": "Patente"
     },
     {
-        "id_numerico": "GDOMDRL30",
-        "elemento": "Latitud",
-        "tipo": "text",
-        "nombre": "Direccion Representante legal Latitud",
-        "grupo": "Domicilio"
+        "ID": "PATEN005",
+        "NOMBRE": "Ficha Registro MEF N° (Patente Microempresa Familiar)",
+        "TIPO": "text",
+        "GRUPO": "Patente"
     },
     {
-        "id_numerico": "GDOMDRL31",
-        "elemento": "Longitud",
-        "tipo": "text",
-        "nombre": "Direccion Representante legal Longitud",
-        "grupo": "Domicilio"
-    },
-    {
-        "id_numerico": "GDOMDRL32",
-        "elemento": "Observacion",
-        "tipo": "textarea",
-        "nombre": "Direccion Representante legal Observacion",
-        "grupo": "Domicilio"
-    },
-    {
-        "id_numerico": "GDOMDNU57",
-        "elemento": "Región",
-        "tipo": "text",
-        "nombre": "Nueva Direccion Región",
-        "grupo": "Domicilio"
-    },
-    {
-        "id_numerico": "GDOMDNU56",
-        "elemento": "Comuna",
-        "tipo": "text",
-        "nombre": "Nueva Direccion Comuna",
-        "grupo": "Domicilio"
-    },
-    {
-        "id_numerico": "GDOMDNU54",
-        "elemento": "Calle",
-        "tipo": "text",
-        "nombre": "Nueva Direccion Calle",
-        "grupo": "Domicilio"
-    },
-    {
-        "id_numerico": "GDOMDNU55",
-        "elemento": "Número",
-        "tipo": "text",
-        "nombre": "Nueva Direccion Número",
-        "grupo": "Domicilio"
-    },
-    {
-        "id_numerico": "GDOMDNU58",
-        "elemento": "Latitud",
-        "tipo": "text",
-        "nombre": "Nueva Direccion Latitud",
-        "grupo": "Domicilio"
-    },
-    {
-        "id_numerico": "GDOMDNU59",
-        "elemento": "Longitud",
-        "tipo": "text",
-        "nombre": "Nueva Direccion Longitud",
-        "grupo": "Domicilio"
-    },
-    {
-        "id_numerico": "GDOMDNU60",
-        "elemento": "Observacion",
-        "tipo": "textarea",
-        "nombre": "Nueva Direccion Observacion",
-        "grupo": "Domicilio"
-    },
-    {
-        "id_numerico": "GTRI0018",
-        "elemento": "Giro de la patente",
-        "tipo": "select",
-        "nombre": "Giro de la patente(s) a modificar",
-        "grupo": "Tributario"
-    },
-    {
-        "id_numerico": "GTRI0019",
-        "elemento": "Giro Actual",
-        "tipo": "select",
-        "nombre": "Giro ACTUAL (Nuevo/Ampliado)",
-        "grupo": "Tributario"
-    },
-    {
-        "id_numerico": "GTRI0020",
-        "elemento": "Razón Social Actual",
-        "tipo": "text",
-        "nombre": "Razón Social ACTUAL (Nueva)",
-        "grupo": "Tributario"
-    },
-    {
-        "id_numerico": "GTRI0021",
-        "elemento": "Nombre Actual",
-        "tipo": "text",
-        "nombre": "Nombre ACTUAL (Nuevo)",
-        "grupo": "Tributario"
-    },
-    {
-        "id_numerico": "GPRO0023",
-        "elemento": "Tipo Propaganda",
-        "tipo": "select",
-        "nombre": "Tipo Propaganda - Luminosa/No Luminosa/Iluminada",
-        "grupo": "Propaganda",
-        "opciones": [
-            "Luminosa",
-            "No Luminosa",
-            "Iluminada"
+        "ID": "PATEN006",
+        "NOMBRE": "Patente con Deuda",
+        "TIPO": "radio",
+        "GRUPO": "Patente (Término Negocio)",
+        "OPCIONES": [
+            "Sí",
+            "No"
         ]
     },
     {
-        "id_numerico": "GFIN0024",
-        "elemento": "Titular Cuenta",
-        "tipo": "text",
-        "nombre": "Titular de la Cuenta",
-        "grupo": "Financiero"
-    },
-    {
-        "id_numerico": "GFIN0025",
-        "elemento": "RUT Titular",
-        "tipo": "text",
-        "nombre": "RUT Titular",
-        "grupo": "Financiero"
-    },
-    {
-        "id_numerico": "GFIN0026",
-        "elemento": "Banco",
-        "tipo": "text",
-        "nombre": "Banco",
-        "grupo": "Financiero"
-    },
-    {
-        "id_numerico": "GFIN0027",
-        "elemento": "Tipo de Cuenta",
-        "tipo": "select",
-        "nombre": "Tipo de Cuenta",
-        "grupo": "Financiero"
-    },
-    {
-        "id_numerico": "GFIN0028",
-        "elemento": "Número de Cuenta",
-        "tipo": "text",
-        "nombre": "Número de Cuenta",
-        "grupo": "Financiero"
-    },
-    {
-        "id_numerico": "GDEU0029",
-        "elemento": "Estado Deuda Patente",
-        "tipo": "select",
-        "nombre": "Estado de Deuda Patente",
-        "grupo": "Deuda",
-        "opciones": [
-            "Sin Deuda",
-            "Con Deuda",
-            "Con Convenio"
+        "ID": "PATEN007",
+        "NOMBRE": "Patente Sin Deuda",
+        "TIPO": "radio",
+        "GRUPO": "Patente (Término Negocio)",
+        "OPCIONES": [
+            "Sí",
+            "No"
         ]
     },
     {
-        "id_numerico": "GMOT0032",
-        "elemento": "Motivo - Cálculo Patente",
-        "tipo": "checkbox",
-        "nombre": "Cálculo de Patente",
-        "grupo": "Motivo"
-    },
-    {
-        "id_numerico": "GMOT0033",
-        "elemento": "Motivo - Doble Cobro Aseo",
-        "tipo": "checkbox",
-        "nombre": "Doble Cobro de Aseo",
-        "grupo": "Motivo"
-    },
-    {
-        "id_numerico": "GMOT0034",
-        "elemento": "Motivo - Cálculo Propaganda",
-        "tipo": "checkbox",
-        "nombre": "Cálculo Propaganda",
-        "grupo": "Motivo"
-    },
-    {
-        "id_numerico": "GMOT0035",
-        "elemento": "Motivo - Otro",
-        "tipo": "checkbox",
-        "nombre": "Otro (especificar)",
-        "grupo": "Motivo"
-    },
-    {
-        "id_numerico": "GMOT0036",
-        "elemento": "Motivo Otro - Texto",
-        "tipo": "text",
-        "nombre": "Detalle del motivo",
-        "grupo": "Motivo"
-    },
-    {
-        "id_numerico": "GDOC0037",
-        "elemento": "Fotocopia patente pagada",
-        "tipo": "file",
-        "nombre": "Fotocopia simple de la(s) última(s) patente(s) pagada(s)",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0038",
-        "elemento": "Fotocopia Cédula",
-        "tipo": "file",
-        "nombre": "Fotocopia Cédula de Identidad (P. Natural) o RUT Sociedad y Rep. Legal",
-        "grupo": "Documento",
-        "nota": "Puede ser de múltiple ingreso (socios/representantes)"
-    },
-    {
-        "id_numerico": "GDOC0039",
-        "elemento": "Aviso SII",
-        "tipo": "file",
-        "nombre": "Fotocopia Aviso de Modificación de Domicilio ante S.I.I.",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0040",
-        "elemento": "Recibo Contribuciones",
-        "tipo": "file",
-        "nombre": "Fotocopia Recibo de Contribuciones o N° Rol Avalúo",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0041",
-        "elemento": "Certificado de Número",
-        "tipo": "file",
-        "nombre": "Certificado de Número",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0042",
-        "elemento": "Fotografía Interior",
-        "tipo": "file",
-        "nombre": "Fotografía Interior del establecimiento",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0043",
-        "elemento": "Fotografía Exterior",
-        "tipo": "file",
-        "nombre": "Fotografía Exterior del establecimiento",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0044",
-        "elemento": "Certificado Técnico Urbanístico (DOM)",
-        "tipo": "file",
-        "nombre": "Certificado Técnico Urbanístico (DOM)",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0049",
-        "elemento": "Certificado de Factibilidad De Uso De Suelo (DOM)",
-        "tipo": "file",
-        "nombre": "Certificado de Factibilidad De Uso De Suelo (DOM)",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0045",
-        "elemento": "Recepción Definitiva",
-        "tipo": "file",
-        "nombre": "Recepción Definitiva",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0046",
-        "elemento": "Resolución Sanitaria",
-        "tipo": "file",
-        "nombre": "Resolución Sanitaria favorable (Seremi de Salud - Quinta N° 231)",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0047",
-        "elemento": "Calificación Actividad Inofensiva",
-        "tipo": "file",
-        "nombre": "Calificación de Actividad Inofensiva y/o Molesta (Seremi de Salud)",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0048",
-        "elemento": "Aviso Modificación Razón Social",
-        "tipo": "file",
-        "nombre": "Aviso de Modificación de Razón Social y/o RUT ante S.I.I.",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0050",
-        "elemento": "Escritura",
-        "tipo": "file",
-        "nombre": "Escrituras (Constitución/Modif.), Extracto y Vigencia",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0051",
-        "elemento": "Acta Directorio",
-        "tipo": "file",
-        "nombre": "Acta de Directorio (solo S.A.)",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0052",
-        "elemento": "Certificado Antecedentes",
-        "tipo": "file",
-        "nombre": "Certificado de Antecedentes (Todos los socios)",
-        "grupo": "Documento",
-        "nota": "Puede ser de múltiple ingreso (socios/representantes)"
-    },
-    {
-        "id_numerico": "GDOC0053",
-        "elemento": "Declaración Jurada Art. 4",
-        "tipo": "file",
-        "nombre": "Declaración Jurada Art. 4° Ley N° 19.925 (Notarial)",
-        "grupo": "Documento",
-        "nota": "Puede ser de múltiple ingreso (socios/representantes)"
-    },
-    {
-        "id_numerico": "GDOC0054",
-        "elemento": "Calificación Actividad",
-        "tipo": "file",
-        "nombre": "Calificación de Actividad Inofensiva y/o Molesta (SEREMI de Salud)",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0055",
-        "elemento": "Patente Adjudicada",
-        "tipo": "file",
-        "nombre": "Patente adjudicada y Decreto de adjudicación",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0056",
-        "elemento": "Contrato Arriendo o Escritura Propiedad",
-        "tipo": "file",
-        "nombre": "Contrato Arriendo o Escritura Propiedad (Legalizado)",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0057",
-        "elemento": "Inicio Actividades SII",
-        "tipo": "file",
-        "nombre": "Inicio Actividades S.I.I. / Modificaciones",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0079",
-        "elemento": "Certificado de Avalúo fiscal",
-        "tipo": "file",
-        "nombre": "Certificado de Avalúo fiscal (Todos los socios)",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0058",
-        "elemento": "Opinión Junta Vecinos",
-        "tipo": "file",
-        "nombre": "Opinión de Junta de Vecinos del sector",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0059",
-        "elemento": "Contrato Compraventa",
-        "tipo": "file",
-        "nombre": "Contrato Compraventa legalizado ante notario",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0060",
-        "elemento": "Fotocopia RUT Sociedad",
-        "tipo": "file",
-        "nombre": "Fotocopia RUT Sociedad y C.I. Rep. Legal",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0061",
-        "elemento": "Informe Sanitario",
-        "tipo": "file",
-        "nombre": "Informe Sanitario / Calif. Inofensiva o Molesta (Talleres, Bodegas)",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0062",
-        "elemento": "Certificado Alcoholes",
-        "tipo": "file",
-        "nombre": "Cert. Antecedentes y DJ Art. 4° Ley 19.925 (Alcoholes)",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0063",
-        "elemento": "Apertura Sucursal",
-        "tipo": "file",
-        "nombre": "Apertura Sucursal S.I.I. y Cert. Distribución Capital (Sucursales)",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0064",
-        "elemento": "Fotografías propaganda",
-        "tipo": "file",
-        "nombre": "Fotografías con elementos publicitarios (con medidas)",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0065",
-        "elemento": "Declaración Renta",
-        "tipo": "file",
-        "nombre": "Declaración de Renta S.I.I.",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0066",
-        "elemento": "Patentes Anteriores",
-        "tipo": "file",
-        "nombre": "Patentes Anteriores",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0067",
-        "elemento": "Otros Antecedentes",
-        "tipo": "file",
-        "nombre": "Otros Antecedentes Fundantes",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0068",
-        "elemento": "Ingreso Término",
-        "tipo": "file",
-        "nombre": "Ingreso Término de Negocio Nº (Si aplica)",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0069",
-        "elemento": "Formulario SII",
-        "tipo": "file",
-        "nombre": "Formulario del S.I.I con cambio de domicilio",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0070",
-        "elemento": "Término de Giro",
-        "tipo": "file",
-        "nombre": "Término de Giro / Cierre Sucursal (S.I.I.)",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0071",
-        "elemento": "Fotocopia F-29",
-        "tipo": "file",
-        "nombre": "Fotocopia F-29 sin movimientos (o fundantes actividad)",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0072",
-        "elemento": "Resumen Boletas Honorarios",
-        "tipo": "file",
-        "nombre": "Resumen Boletas Honorarios (Patente Profesional)",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GDOC0073",
-        "elemento": "Certificado Cobranzas",
-        "tipo": "file",
-        "nombre": "Certificado Depto. Cobranzas (si hay deuda/convenio)",
-        "grupo": "Documento"
-    },
-    {
-        "id_numerico": "GGEN0075",
-        "elemento": "Años Renta",
-        "tipo": "text",
-        "nombre": "Indicar Años (ej: 2023, 2024)",
-        "grupo": "General"
-    },
-    {
-        "id_numerico": "GGEN0076",
-        "elemento": "Años Patentes",
-        "tipo": "text",
-        "nombre": "Indicar Años / Semestres",
-        "grupo": "General"
-    },
-    {
-        "id_numerico": "GGEN0077",
-        "elemento": "Otros Documentos",
-        "tipo": "textarea",
-        "nombre": "Describa otros documentos adjuntos",
-        "grupo": "General"
-    },
-    {
-        "id_numerico": "GGEN0078",
-        "elemento": "Número Término",
-        "tipo": "text",
-        "nombre": "N° de Ingreso",
-        "grupo": "General"
-    },
-    {
-        "id_numerico": "GDOM0061",
-        "elemento": "ROL AVALÚO",
-        "tipo": "text",
-        "nombre": "ROL AVALÚO",
-        "grupo": "Domicilio"
-    },
-    {
-        "id_numerico": "GTRI0062",
-        "elemento": "CÓDIGO ACTIVIDAD S.I.I",
-        "tipo": "text",
-        "nombre": "Código de Actividad S.I.I.",
-        "grupo": "Tributario"
-    },
-    {
-        "id_numerico": "GDOM0063",
-        "elemento": "CASA MATRIZ",
-        "tipo": "text",
-        "nombre": "Casa Matriz (Dirección o Comuna)",
-        "grupo": "Domicilio"
-    },
-    {
-        "id_numerico": "GDOM0064",
-        "elemento": "SUCURSAL",
-        "tipo": "text",
-        "nombre": "Sucursal (Dirección o Comuna)",
-        "grupo": "Domicilio"
-    },
-    {
-        "id_numerico": "GDOM0065",
-        "elemento": "MUNICIPALIDAD CASA MATRIZ",
-        "tipo": "text",
-        "nombre": "Municipalidad de Casa Matriz (si es Sucursal)",
-        "grupo": "Domicilio"
-    },
-    {
-        "id_numerico": "GGEN0066",
-        "elemento": "N° TRABAJADORES",
-        "tipo": "number",
-        "nombre": "Número de Trabajadores",
-        "grupo": "General"
-    },
-    {
-        "id_numerico": "GPRO0067",
-        "elemento": "NO LUMINOSA",
-        "tipo": "text",
-        "nombre": "Propaganda No Luminosa (mts)",
-        "grupo": "Propaganda"
-    },
-    {
-        "id_numerico": "GPRO0068",
-        "elemento": "TOTAL MTS CUADRADOS",
-        "tipo": "number",
-        "nombre": "Total Metros Cuadrados de Propaganda",
-        "grupo": "Propaganda"
-    },
-    {
-        "id_numerico": "GTRI0069",
-        "elemento": "CAPITAL PROPIO",
-        "tipo": "number",
-        "nombre": "Monto del Capital Propio",
-        "grupo": "Tributario"
-    },
-    {
-        "id_numerico": "GTRA0070",
-        "elemento": "Poder Ante Noterio del Representante Legal",
-        "tipo": "file",
-        "nombre": "Poder Ante Noterio del Representante Legal",
-        "grupo": "Trámite"
-    },
-    {
-        "id_numerico": "GDOM0080",
-        "elemento": "Tipo de Domicilio",
-        "tipo": "radio",
-        "nombre": "Tipo de Domicilio",
-        "grupo": "Domicilio",
-        "opciones": [
-            "Casa Matriz",
-            "Sucursal"
+        "ID": "PATEN008",
+        "NOMBRE": "Patente con Convenio",
+        "TIPO": "radio",
+        "GRUPO": "Patente (Término Negocio)",
+        "OPCIONES": [
+            "Sí",
+            "No"
         ]
     },
     {
-        "id_numerico": "GGEN0081",
-        "elemento": "Observaciones Generales",
-        "tipo": "textarea",
-        "nombre": "Observaciones Generales",
-        "grupo": "General"
+        "ID": "PATEN009",
+        "NOMBRE": "Ingreso Término de Negocio N° (Certificado No Deuda)",
+        "TIPO": "text",
+        "GRUPO": "Patente"
     },
     {
-        "id_numerico": "GGEN0082",
-        "elemento": "Comuna (Otras Patentes)",
-        "tipo": "text",
-        "nombre": "Comuna (Otras Patentes)",
-        "grupo": "General"
+        "ID": "SEDE001",
+        "NOMBRE": "Casa Matriz",
+        "TIPO": "radio",
+        "GRUPO": "Sede Comercial"
     },
     {
-        "id_numerico": "GGEN0083",
-        "elemento": "N° Trabajadores (Otras Patentes)",
-        "tipo": "number",
-        "nombre": "N° Trabajadores (Otras Patentes)",
-        "grupo": "General"
+        "ID": "SEDE002",
+        "NOMBRE": "Sucursal",
+        "TIPO": "radio",
+        "GRUPO": "Sede Comercial"
     },
     {
-        "id_numerico": "GPRO0084",
-        "elemento": "Propaganda Luminosa (mts)",
-        "tipo": "text",
-        "nombre": "Propaganda Luminosa (mts)",
-        "grupo": "Propaganda"
+        "ID": "SEDE003",
+        "NOMBRE": "Municipalidad de Casa Matriz (si es sucursal)",
+        "TIPO": "text",
+        "GRUPO": "Sede Comercial"
+    },
+    {
+        "ID": "PROP001",
+        "NOMBRE": "Propaganda Luminosa (m²)",
+        "TIPO": "number",
+        "GRUPO": "Propaganda"
+    },
+    {
+        "ID": "PROP002",
+        "NOMBRE": "Propaganda No Luminosa (m²)",
+        "TIPO": "number",
+        "GRUPO": "Propaganda"
+    },
+    {
+        "ID": "PROP003",
+        "NOMBRE": "Total MTS. Cuadrados (Propaganda)",
+        "TIPO": "number",
+        "GRUPO": "Propaganda"
+    },
+    {
+        "ID": "PROP004",
+        "NOMBRE": "Propaganda Iluminada (m²) (Declaración Propaganda)",
+        "TIPO": "number",
+        "GRUPO": "Propaganda"
+    },
+    {
+        "ID": "PROP005",
+        "NOMBRE": "Acción Propaganda",
+        "TIPO": "checkbox",
+        "GRUPO": "Propaganda (Declaración Propaganda)",
+        "OPCIONES": [
+            "Instala",
+            "Modifica",
+            "Retira"
+        ]
+    },
+    {
+        "ID": "CAPIT001",
+        "NOMBRE": "Monto del Capital Propio (en $)",
+        "TIPO": "number",
+        "GRUPO": "Capital Propio"
+    },
+    {
+        "ID": "CAPIT002",
+        "NOMBRE": "Total de Trabajadores Empresa al 30/04/.... (Certificado Distribución Capital Propio)",
+        "TIPO": "number",
+        "GRUPO": "Capital Propio"
+    },
+    {
+        "ID": "CAPIT003",
+        "NOMBRE": "Municipalidad Presentación Certificado Distribución Capital",
+        "TIPO": "text",
+        "GRUPO": "Capital Propio"
+    },
+    {
+        "ID": "CAPIT004",
+        "NOMBRE": "Número Trabajadores Sucursal (Certificado Distribución Capital)",
+        "TIPO": "number",
+        "GRUPO": "Capital Propio"
+    },
+    {
+        "ID": "CAPIT005",
+        "NOMBRE": "Número Trabajadores Casa Matriz Viña del Mar (Certificado Distribución Capital)",
+        "TIPO": "number",
+        "GRUPO": "Capital Propio"
+    },
+    {
+        "ID": "REVIS001",
+        "NOMBRE": "Motivo Revisión Cobro: Cálculo de Patente",
+        "TIPO": "checkbox",
+        "GRUPO": "Revisión Cobro Patente"
+    },
+    {
+        "ID": "REVIS002",
+        "NOMBRE": "Motivo Revisión Cobro: Doble Cobro de Aseo",
+        "TIPO": "checkbox",
+        "GRUPO": "Revisión Cobro Patente"
+    },
+    {
+        "ID": "REVIS003",
+        "NOMBRE": "Motivo Revisión Cobro: Cálculo Propaganda",
+        "TIPO": "checkbox",
+        "GRUPO": "Revisión Cobro Patente"
+    },
+    {
+        "ID": "REVIS004",
+        "NOMBRE": "Motivo Revisión Cobro: Otro",
+        "TIPO": "checkbox",
+        "GRUPO": "Revisión Cobro Patente"
+    },
+    {
+        "ID": "REVIS005",
+        "NOMBRE": "Señalar Motivo de Revisión (Detalle)",
+        "TIPO": "textarea",
+        "GRUPO": "Revisión Cobro Patente"
+    },
+    {
+        "ID": "REVIS006",
+        "NOMBRE": "Declaración de Renta S.I.I. Años (Revisión Cobro)",
+        "TIPO": "text",
+        "GRUPO": "Revisión Cobro Patente"
+    },
+    {
+        "ID": "REVIS007",
+        "NOMBRE": "Patentes Años (Revisión Cobro)",
+        "TIPO": "text",
+        "GRUPO": "Revisión Cobro Patente"
+    },
+    {
+        "ID": "REVIS008",
+        "NOMBRE": "Otros Antecedentes (Revisión Cobro)",
+        "TIPO": "text",
+        "GRUPO": "Revisión Cobro Patente"
+    },
+    {
+        "ID": "DEVOL001",
+        "NOMBRE": "Titular (Devolución)",
+        "TIPO": "text",
+        "GRUPO": "Devolución Fondos"
+    },
+    {
+        "ID": "DEVOL002",
+        "NOMBRE": "RUT (Devolución)",
+        "TIPO": "text",
+        "GRUPO": "Devolución Fondos"
+    },
+    {
+        "ID": "DEVOL003",
+        "NOMBRE": "Banco (Devolución)",
+        "TIPO": "text",
+        "GRUPO": "Devolución Fondos"
+    },
+    {
+        "ID": "DEVOL004",
+        "NOMBRE": "Tipo de Cuenta (Devolución)",
+        "TIPO": "text",
+        "GRUPO": "Devolución Fondos"
+    },
+    {
+        "ID": "DEVOL005",
+        "NOMBRE": "N° Cuenta (Devolución)",
+        "TIPO": "number",
+        "GRUPO": "Devolución Fondos"
+    },
+    {
+        "ID": "PROFE001",
+        "NOMBRE": "Régimen Tributario 14 TER (Patente Profesional)",
+        "TIPO": "checkbox",
+        "GRUPO": "Tributación Profesional"
+    },
+    {
+        "ID": "PROFE002",
+        "NOMBRE": "Régimen Tributario 14 BIS (Patente Profesional)",
+        "TIPO": "checkbox",
+        "GRUPO": "Tributación Profesional"
+    },
+    {
+        "ID": "PROFE003",
+        "NOMBRE": "2ª Categoría (Patente Profesional)",
+        "TIPO": "checkbox",
+        "GRUPO": "Tributación Profesional"
+    },
+    {
+        "ID": "PROFE004",
+        "NOMBRE": "Contabilidad Simplificada (Patente Profesional)",
+        "TIPO": "checkbox",
+        "GRUPO": "Tributación Profesional"
+    },
+    {
+        "ID": "PROFE005",
+        "NOMBRE": "Declaración Domicilio Postal Tributario (Sólo si es SIN OFICINA)",
+        "TIPO": "checkbox",
+        "GRUPO": "Tributación Profesional"
+    },
+    {
+        "ID": "TRABA001",
+        "NOMBRE": "N° Patente (Patentes Comuna Viña del Mar)",
+        "TIPO": "text",
+        "GRUPO": "Detalle Patentes",
+        "TABLA": "PATENTES VIÑA DEL MAR"
+    },
+    {
+        "ID": "TRABA002",
+        "NOMBRE": "N° Trabajadores (Patentes Comuna Viña del Mar)",
+        "TIPO": "number",
+        "GRUPO": "Detalle Patentes",
+        "TABLA": "PATENTES VIÑA DEL MAR"
+    },
+    {
+        "ID": "TRABA003",
+        "NOMBRE": "N° Trabajadores (Patentes Otras Comunas)",
+        "TIPO": "number",
+        "GRUPO": "Detalle Patentes",
+        "TABLA": "PATENTES OTRAS COMUNAS"
+    },
+    {
+        "ID": "TRABA004",
+        "NOMBRE": "Comuna (Patentes Otras Comunas)",
+        "TIPO": "text",
+        "GRUPO": "Detalle Patentes",
+        "TABLA": "PATENTES OTRAS COMUNAS"
+    },
+    {
+        "ID": "DATOS001",
+        "NOMBRE": "Nombre Contribuyente o Representante Legal (Firma)",
+        "TIPO": "text",
+        "GRUPO": "Contacto y Firma"
+    },
+    {
+        "ID": "DATOS003",
+        "NOMBRE": "Teléfono",
+        "TIPO": "tel",
+        "GRUPO": "Contacto y Firma"
+    },
+    {
+        "ID": "DATOS004",
+        "NOMBRE": "Correo Electrónico",
+        "TIPO": "email",
+        "GRUPO": "Contacto y Firma"
+    },
+    {
+        "ID": "DATOS005",
+        "NOMBRE": "Nombre Contacto (Revisión Cobro)",
+        "TIPO": "text",
+        "GRUPO": "Contacto y Firma"
+    },
+    {
+        "ID": "DATOS006",
+        "NOMBRE": "Nombre Arrendador (Arrendamiento Patente)",
+        "TIPO": "text",
+        "GRUPO": "Arrendamiento"
+    },
+    {
+        "ID": "DATOS007",
+        "NOMBRE": "Nombre Arrendatario (Arrendamiento Patente)",
+        "TIPO": "text",
+        "GRUPO": "Arrendamiento"
+    },
+    {
+        "ID": "DATOS008",
+        "NOMBRE": "Nombre Anterior (Cambio de Nombre / Razón Social)",
+        "TIPO": "text",
+        "GRUPO": "Cambio Nombre/Razón Social"
+    },
+    {
+        "ID": "DATOS009",
+        "NOMBRE": "Nombre Actual (Cambio de Nombre / Razón Social)",
+        "TIPO": "text",
+        "GRUPO": "Cambio Nombre/Razón Social"
+    },
+    {
+        "ID": "DATOS010",
+        "NOMBRE": "Razón Social Anterior (Modificación Razón Social/RUT)",
+        "TIPO": "text",
+        "GRUPO": "Cambio Nombre/Razón Social"
+    },
+    {
+        "ID": "DATOS011",
+        "NOMBRE": "Razón Social Actual (Modificación Razón Social/RUT)",
+        "TIPO": "text",
+        "GRUPO": "Cambio Nombre/Razón Social"
+    },
+    {
+        "ID": "DATOS012",
+        "NOMBRE": "Municipalidad Presentación Certificado No Deuda",
+        "TIPO": "text",
+        "GRUPO": "Certificado No Deuda"
+    },
+    {
+        "ID": "DATOS013",
+        "NOMBRE": "Institución Presentación Certificado Distribución Capital Propio (Otro Motivo)",
+        "TIPO": "text",
+        "GRUPO": "Capital Propio"
+    },
+    {
+        "ID": "USOEM001",
+        "NOMBRE": "Apertura de Sucursal en otra Comuna (Motivo Certificado Capital Propio)",
+        "TIPO": "checkbox",
+        "GRUPO": "Uso Emisión Certificado Capital Propio"
+    },
+    {
+        "ID": "USOEM002",
+        "NOMBRE": "Otro Motivo (Motivo Certificado Capital Propio)",
+        "TIPO": "checkbox",
+        "GRUPO": "Uso Emisión Certificado Capital Propio"
+    },
+    {
+        "ID": "DATOSXX001",
+        "NOMBRE": "Consultor (Término Negocio)",
+        "TIPO": "text",
+        "GRUPO": "Uso Interno"
+    },
+    {
+        "ID": "DATOSXX002",
+        "NOMBRE": "Observación (Término Negocio)",
+        "TIPO": "textarea",
+        "GRUPO": "Uso Interno"
+    },
+    {
+        "ID": "DATOSXX003",
+        "NOMBRE": "Fecha Ingreso",
+        "TIPO": "date",
+        "GRUPO": "Uso Interno"
+    },
+    {
+        "ID": "DATOSXX004",
+        "NOMBRE": "Fecha Solicitud",
+        "TIPO": "date",
+        "GRUPO": "Uso Interno"
+    },
+    {
+        "ID": "DATOSXX005",
+        "NOMBRE": "Solicitud N°",
+        "TIPO": "text",
+        "GRUPO": "Uso Interno"
+    },
+    {
+        "ID": "DOC001",
+        "NOMBRE": "Fotocopia simple última(s) Patente(s) pagada(s) (al día)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Comunes"
+    },
+    {
+        "ID": "DOC002",
+        "NOMBRE": "Fotocopia Cédula de Identidad (Persona Natural)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Comunes"
+    },
+    {
+        "ID": "DOC003",
+        "NOMBRE": "Fotocopia RUT Sociedad y Cédula de Identidad del Representante Legal (P.J.)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Comunes"
+    },
+    {
+        "ID": "DOC004",
+        "NOMBRE": "Juan Francisco Hervas",
+        "TIPO": "Creador",
+        "GRUPO": "Juan Hervas Creo lalogica de este sistema completa"
+    },
+    {
+        "ID": "DOC005",
+        "NOMBRE": "Resolución Sanitaria Favorable o Informe Sanitario (Giros de Alimentos, Talleres, Bodegas, etc.)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Sanitarios/Operacionales"
+    },
+    {
+        "ID": "DOC006",
+        "NOMBRE": "Calificación de la Actividad Inofensiva y/o Molesta",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Sanitarios/Operacionales"
+    },
+    {
+        "ID": "DOC007",
+        "NOMBRE": "Fotocopia simple Aviso de Modificación de Dirección ante S.I.I. / Modificación de Domicilio S.I.I. / Rectificación Domicilio S.I.I.",
+        "TIPO": "document",
+        "GRUPO": "Requisitos S.I.I."
+    },
+    {
+        "ID": "DOC008",
+        "NOMBRE": "Fotocopia simple Recibo de Contribuciones o N° de Rol Avalúo de la Propiedad",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Inmueble/Domicilio"
+    },
+    {
+        "ID": "DOC009",
+        "NOMBRE": "Fotocopia legalizada ante Notario de Contrato de Arrendamiento o Escritura de la propiedad",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Inmueble/Domicilio"
+    },
+    {
+        "ID": "DOC010",
+        "NOMBRE": "Certificado Técnico Urbanístico",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Inmueble/Domicilio"
+    },
+    {
+        "ID": "DOC011",
+        "NOMBRE": "Informe Factibilidad Uso de Suelo",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Inmueble/Domicilio"
+    },
+    {
+        "ID": "DOC012",
+        "NOMBRE": "Opinión de la Junta de Vecinos del Sector (Sólo para Patentes de Alcohol)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Alcoholes"
+    },
+    {
+        "ID": "DOC013",
+        "NOMBRE": "Certificado de Antecedentes - Registro Civil (Patentes de Alcohol y Cambio de Nombre/Razón Social)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Alcoholes"
+    },
+    {
+        "ID": "DOC014",
+        "NOMBRE": "Declaración Jurada Art. 4° Ley N° 19.925-Notaría (Patentes de Alcohol y Cambio de Nombre/Razón Social)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Alcoholes"
+    },
+    {
+        "ID": "DOC015",
+        "NOMBRE": "Fotocopia legalizada de Escritura de Sociedad + Extracto + Certificado de Vigencia (no más de 30 días) (Para P.J.)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos P. Jurídica/Sociedad"
+    },
+    {
+        "ID": "DOC016",
+        "NOMBRE": "Fotocopia simple Iniciación de Actividades ante S.I.I. y/o Avisos de Modificaciones realizadas (giros y/o domicilio)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos S.I.I."
+    },
+    {
+        "ID": "DOC017",
+        "NOMBRE": "Fotocopia de Apertura de Sucursal ante S.I.I. (Sólo si es Sucursal en esta comuna)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos S.I.I."
+    },
+    {
+        "ID": "DOC018",
+        "NOMBRE": "Certificado de Distribución de Capital Propio emitido por Municipio Casa Matriz o Determinación de Capital Propio (sólo sucursal)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Sede Comercial"
+    },
+    {
+        "ID": "DOC019",
+        "NOMBRE": "Certificado No Deuda, emitido por Municipalidad de origen (Sólo para cambio de comuna de Casa Matriz)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Sede Comercial"
+    },
+    {
+        "ID": "DOC020",
+        "NOMBRE": "Certificado Avalúo Fiscal (N° de Rol Avalúo con datos del propietario)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Inmueble/Domicilio"
+    },
+    {
+        "ID": "DOC021",
+        "NOMBRE": "Recepción Definitiva",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Inmueble/Domicilio"
+    },
+    {
+        "ID": "DOC022",
+        "NOMBRE": "Fotocopia legalizada Título Profesional",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Profesionales"
+    },
+    {
+        "ID": "DOC023",
+        "NOMBRE": "Fotocopia Formulario Término de Giro ante S.I.I.",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Término Negocio"
+    },
+    {
+        "ID": "DOC024",
+        "NOMBRE": "Fotocopia Cierre de Sucursal ante S.I.I.",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Término Negocio"
+    },
+    {
+        "ID": "DOC025",
+        "NOMBRE": "Fotocopia F-29 sin movimientos",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Término Negocio"
+    },
+    {
+        "ID": "DOC026",
+        "NOMBRE": "Resumen de Boletas de Honorarios (Patente Profesional)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Término Negocio"
+    },
+    {
+        "ID": "DOC027",
+        "NOMBRE": "Certificado de Número otorgado por el Dpto. de Obras (Rectificación/Modificación Domicilio)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Domicilio"
+    },
+    {
+        "ID": "DOC028",
+        "NOMBRE": "Fotocopia legalizada Contrato de Compraventa del Establecimiento Comercial (Patente Comercial) (Cambio de Nombre)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Cambio de Nombre"
+    },
+    {
+        "ID": "DOC029",
+        "NOMBRE": "Fotocopia legalizada Contrato de Arrendamiento de la Patente (Arrendamiento Patente)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Arrendamiento"
+    },
+    {
+        "ID": "DOC030",
+        "NOMBRE": "Fotocopia simple Decreto Adjudicación de Patente de Alcohol (Regularización Alcoholes)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Regularización Alcoholes"
+    },
+    {
+        "ID": "DOC031",
+        "NOMBRE": "Fotocopia simple Patente(s) Adjudicada(s) (Regularización Alcoholes)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Regularización Alcoholes"
+    },
+    {
+        "ID": "DOC032",
+        "NOMBRE": "Fotocopia simple Aviso de Ampliación o Cambio de Giro ante S.I.I.",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Ampliación/Cambio Giro"
+    },
+    {
+        "ID": "DOC033",
+        "NOMBRE": "Fotocopia simple Aviso de Modificación de Razón Social y/o RUT efectuado ante S.I.I.",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Cambio Nombre/Razón Social"
+    },
+    {
+        "ID": "DOC034",
+        "NOMBRE": "Fotocopia legalizada Escritura de Constitución de Sociedad + Escritura de Modificación(es) + Extracto + Certificado de Vigencia (Modificación Razón Social/RUT)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos P. Jurídica/Sociedad"
+    },
+    {
+        "ID": "DOC035",
+        "NOMBRE": "Fotografía del Establecimiento (Exterior)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Inmueble/Domicilio"
+    },
+    {
+        "ID": "DOC036",
+        "NOMBRE": "Fotografía del Establecimiento (Interior)",
+        "TIPO": "document",
+        "GRUPO": "Requisitos Inmueble/Domicilio"
     }
 ]

@@ -23,18 +23,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedTramites = []; // Array of tramite objects
     const mapInstances = {};
 
-    // Group Title Mapping (User Request: "Identificacion persona", etc)
+    // Group Title Mapping (New Schema)
     const friendlyGroups = {
-        "Personas": "Identificación del Solicitante / Representante",
-        "Domicilio": "Domicilio Comercial y Ubicación",
-        "Contacto": "Datos de Contacto",
-        "Tributario": "Identificación de la Empresa (Tributaria)",
-        "Financiero": "Datos Bancarios",
-        "Propaganda": "Detalles de Propaganda",
-        "Deuda": "Situación de Deuda",
-        "Documento": "Documentación Requerida",
-        "Motivo": "Motivo de la Solicitud",
-        "General": "Otros Antecedentes"
+        "Datos Contribuyente": "Identificación del Solicitante",
+        "Identificación Tributaria": "Identificación Tributaria",
+        "Dirección Comercial / Tributaria": "Domicilio Comercial",
+        "Dirección Particular / Domicilio Postal Tributario": "Domicilio Postal / Particular",
+        "Actividad Comercial": "Actividad Económica",
+        "Patente": "Datos de la Patente",
+        "Contacto y Firma": "Datos de Contacto",
+        "Propaganda": "Declaración de Propaganda",
+        "Capital Propio": "Declaración de Capital Propio",
+        "Requisitos Comunes": "Documentación General",
+        "Requisitos Inmueble/Domicilio": "Documentación Inmueble",
+        "Requisitos Sanitarios/Operacionales": "Resoluciones Sanitarias",
+        "Requisitos S.I.I.": "Antecedentes S.I.I."
     };
 
     // Initialize
@@ -45,7 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
             fetch('../recursos/jsons/categoria_patentes_mapeo_completo.json').then(r => r.json()),
             fetch('../recursos/jsons/formularios_elementos.json').then(r => r.json())
         ]).then(([tramitesResult, elementosResult]) => {
-            tramiteData = tramitesResult.Maestro_Tramites || tramitesResult;
+            // New Schema: tramitesResult is Array, items have 'Campos'
+            tramiteData = Array.isArray(tramitesResult) ? tramitesResult : tramitesResult.Maestro_Tramites;
             elementosData = elementosResult;
             renderTramitesSelection();
             setupEventListeners();
@@ -234,8 +238,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const requiredIds = new Set();
 
         selectedTramites.forEach(tramite => {
-            // General docs
-            (tramite.campos_generales || []).forEach(id => requiredIds.add(id));
+            // New Schema: 'Campos' instead of 'campos_generales'
+            (tramite.Campos || []).forEach(id => requiredIds.add(id));
 
             // Variation docs (checked only)
             const checks = document.querySelectorAll(`.variation-check[data-tramite="${tramite.tramite_base}"]:checked`);
@@ -246,60 +250,16 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Map IDs to Objects
+        // Map IDs to Objects (New Schema: ID instead of id_numerico)
         const campos = Array.from(requiredIds).map(id => {
-            return elementosData.find(el => el.id_numerico === id);
+            return elementosData.find(el => el.ID === id);
         }).filter(el => el != null);
 
         renderUnifiedFields(campos);
         window.changeStep(3);
     }
 
-    function renderUnifiedFields(campos) {
-        elements.contenedorSecciones.innerHTML = '';
-
-        // Group logic using the new friendly mapping
-        const grupos = {};
-
-        // Custom order for sections
-        const groupOrder = [
-            "Personas",
-            "Domicilio",
-            "Tributario",
-            "Contacto",
-            "Financiero",
-            "Deuda",
-            "Motivo",
-            "General",
-            "Propaganda",
-            "Documento"
-        ];
-
-        campos.forEach(campo => {
-            const rawGroup = campo.grupo || 'General';
-            if (!grupos[rawGroup]) grupos[rawGroup] = [];
-            // Handle array initialization if not exists
-            if (!grupos[rawGroup]) grupos[rawGroup] = [];
-            grupos[rawGroup].push(campo);
-        });
-
-        // Loop using defined order, then any others
-        const allKeys = Object.keys(grupos);
-        const sortedKeys = groupOrder.filter(k => allKeys.includes(k)).concat(allKeys.filter(k => !groupOrder.includes(k)));
-
-        sortedKeys.forEach(rawGroup => {
-            const cleanTitle = friendlyGroups[rawGroup] || rawGroup;
-            const fields = grupos[rawGroup];
-
-            if (rawGroup === 'Domicilio') {
-                renderDomicilioGroup(fields, cleanTitle);
-            } else {
-                renderStandardGroup(fields, cleanTitle);
-            }
-        });
-
-        feather.replace();
-    }
+    // Old renderUnifiedFields removed. Grouping logic handled in new implementation.
 
     function renderStandardGroup(campos, title) {
         const section = document.createElement('div');
@@ -313,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         campos.forEach(campo => {
             const col = document.createElement('div');
-            col.className = defineColumnSize(campo.tipo);
+            col.className = defineColumnSize(campo.TIPO);
             col.innerHTML = generateInputHTML(campo);
             container.appendChild(col);
         });
@@ -341,22 +301,22 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const addressTitles = {
-        "GDOMDCM": "Dirección Casa Matriz",
-        "GDOMDCO": "Dirección Comercial",
-        "GDOMDLO": "Dirección Local",
-        "GDOMDPN": "Dirección Persona Natural",
-        "GDOMDRL": "Dirección Rep. Legal",
-        "GDOMDNU": "Nueva Dirección",
-        "GDOM": "Otros Domicilios"
+        "DIRE_C": "Dirección Comercial",
+        "DIRE_P": "Dirección Particular / Postal",
+        "DIRE_A": "Dirección Anterior",
+        "DIRE_M": "Dirección Modificada",
+        "SEDE": "Sede Comercial"
     };
 
     function renderDomicilioGroup(campos, title) {
-        // Sub-group fields by address entity (GDOMDCM, etc)
+        // Sub-group fields by address entity prefix (e.g., DIRE_C, DIRE_P)
         const subGrupos = {};
 
         campos.forEach(campo => {
-            const match = campo.id_numerico.match(/^([A-Z]+)/);
-            const prefix = match ? match[0] : 'OTHER';
+            // Extract prefix like DIRE_C from DIRE_C_CAL
+            const parts = campo.ID.split('_');
+            const prefix = parts.length > 1 ? parts.slice(0, 2).join('_') : parts[0];
+
             if (!subGrupos[prefix]) subGrupos[prefix] = { fields: [] };
             subGrupos[prefix].fields.push(campo);
         });
@@ -365,46 +325,34 @@ document.addEventListener('DOMContentLoaded', () => {
             const subGrupo = subGrupos[prefix];
 
             // Determine Title
-            // Use mapped title if available, else deduce or fallback
             let subTitle = addressTitles[prefix];
             if (!subTitle) {
-                // Heuristic Fallback
-                const referenceField = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('direccion'));
-                if (referenceField) {
-                    const keywords = ['Calle', 'Número', 'Numero', 'Región', 'Comuna', 'Latitud', 'Longitud', 'Observacion'];
-                    const regex = new RegExp(`(${keywords.join('|')}).*`, 'i');
-                    subTitle = referenceField.nombre.replace(regex, '').trim();
-                } else {
-                    subTitle = "Ubicación";
-                }
+                // Formatting fallback
+                subTitle = title;
             }
 
-            // Check if this subgroup actually LOOKS like an address (has Calle or Region)
-            // If it's just generic fields (like GDOM0016), render simply.
             const hasAddressStructure = subGrupo.fields.some(f =>
-                f.nombre.toLowerCase().includes('calle') ||
-                f.nombre.toLowerCase().includes('región') ||
-                f.nombre.toLowerCase().includes('region')
+                f.NOMBRE.toLowerCase().includes('calle') ||
+                f.NOMBRE.toLowerCase().includes('región') ||
+                f.NOMBRE.toLowerCase().includes('region')
             );
 
             const section = document.createElement('div');
             section.className = 'section-card border-warning';
             section.style.borderLeftColor = '#ffc107';
 
-            // Use ONLY the subtitle for this section to keep it short/friendly as requested
-            // (Ignoring the parent 'title' which was 'Domicilio Comercial y Ubicacion')
             let sectionHTML = `<div class="section-title text-warning-emphasis">${subTitle}</div><div class="row g-3">`;
 
             if (hasAddressStructure) {
                 // --- RENDER AS MAP/ADDRESS COMPLEX ---
 
-                // Identify key fields
-                const fCalle = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('calle'));
-                const fNumero = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('número') || f.nombre.toLowerCase().includes('numero'));
-                const fComuna = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('comuna'));
-                const fRegion = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('región'));
-                const fLat = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('latitud'));
-                const fLng = subGrupo.fields.find(f => f.nombre.toLowerCase().includes('longitud'));
+                // Identify key fields by Name logic or Suffix
+                const fCalle = subGrupo.fields.find(f => f.ID.endsWith('_CAL') || f.NOMBRE.toLowerCase().includes('calle'));
+                const fNumero = subGrupo.fields.find(f => f.ID.endsWith('_NUM') || f.NOMBRE.toLowerCase().includes('número'));
+                const fComuna = subGrupo.fields.find(f => f.ID.endsWith('_COM') || f.NOMBRE.toLowerCase().includes('comuna'));
+                const fRegion = subGrupo.fields.find(f => f.ID.endsWith('_REG') || f.NOMBRE.toLowerCase().includes('región'));
+                const fLat = subGrupo.fields.find(f => f.ID.endsWith('_LAT'));
+                const fLng = subGrupo.fields.find(f => f.ID.endsWith('_LON'));
 
                 // Override Types & Shorten Labels
                 [fCalle, fNumero, fComuna, fRegion, fLat, fLng].forEach(f => {
@@ -413,7 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         else if (f === fNumero) f.shortName = 'Número';
                         else if (f === fRegion) f.shortName = 'Región';
                         else if (f === fComuna) f.shortName = 'Comuna';
-                        else f.shortName = f.nombre; // fallback
+                        else f.shortName = f.NOMBRE;
                     }
                 });
 
@@ -426,12 +374,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     const otherRegions = regions.filter(r => r !== firstRegion);
                     const sortedRegions = [firstRegion, ...otherRegions];
                     const options = sortedRegions.map(r => `<option value="${r}">${r}</option>`).join('');
-                    const onchange = fComuna ? `onchange="updateComunas('${fComuna.id_numerico}', this.value)"` : '';
+                    const onchange = fComuna ? `onchange="updateComunas('${fComuna.ID}', this.value)"` : '';
 
                     regionHTML = `
                         <div class="col-md-3">
                             <label class="form-label">${fRegion.shortName || 'Región'}</label>
-                            <select class="form-select" id="${fRegion.id_numerico}" ${onchange}>
+                            <select class="form-select" id="${fRegion.ID}" ${onchange}>
                                 <option value="">Seleccione...</option>
                                 ${options}
                             </select>
@@ -443,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     comunaHTML = `
                         <div class="col-md-3">
                             <label class="form-label">${fComuna.shortName || 'Comuna'}</label>
-                            <select class="form-select" id="${fComuna.id_numerico}" disabled>
+                            <select class="form-select" id="${fComuna.ID}" disabled>
                                 <option value="">Seleccione Región...</option>
                             </select>
                         </div>
@@ -459,7 +407,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const mapId = `map_${prefix}`;
                 sectionHTML += `
                     <div class="col-12 text-end">
-                        <button type="button" class="btn btn-warning btn-sm" onclick="initMapFor('${prefix}', '${mapId}', '${fCalle?.id_numerico}', '${fNumero?.id_numerico}', '${fComuna?.id_numerico}', '${fRegion?.id_numerico}', '${fLat?.id_numerico}', '${fLng?.id_numerico}')">
+                        <button type="button" class="btn btn-warning btn-sm" onclick="initMapFor('${prefix}', '${mapId}', '${fCalle?.ID}', '${fNumero?.ID}', '${fComuna?.ID}', '${fRegion?.ID}', '${fLat?.ID}', '${fLng?.ID}')">
                             <i data-feather="map-pin"></i> Ubicar en Mapa
                         </button>
                         <small class="d-block text-muted mt-1" style="font-size: 0.75rem;">(Seleccione la ubicación exacta arrastrando el marcador)</small>
@@ -472,16 +420,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (fLat) sectionHTML += `<div class="col-md-6">${generateInputHTML(fLat, true, fLat.shortName)}</div>`;
                 if (fLng) sectionHTML += `<div class="col-md-6">${generateInputHTML(fLng, true, fLng.shortName)}</div>`;
 
-                const usedIds = [fCalle, fNumero, fComuna, fRegion, fLat, fLng].filter(x => x).map(x => x.id_numerico);
+                const usedIds = [fCalle, fNumero, fComuna, fRegion, fLat, fLng].filter(x => x).map(x => x.ID);
                 subGrupo.fields.forEach(f => {
-                    if (!usedIds.includes(f.id_numerico)) {
+                    if (!usedIds.includes(f.ID)) {
                         sectionHTML += `<div class="col-12">${generateInputHTML(f)}</div>`;
                     }
                 });
 
             } else {
                 // --- RENDER AS SIMPLE FIELDS ---
-                // For generic GDOM groups that don't have map structure
                 subGrupo.fields.forEach(f => {
                     sectionHTML += `<div class="col-md-6">${generateInputHTML(f)}</div>`;
                 });
@@ -520,6 +467,157 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    function renderTableGroup(tableName, fields) {
+        const section = document.createElement('div');
+        section.className = 'section-card border-info';
+        section.style.borderLeftColor = '#0dcaf0';
+
+        // Generate unique ID for this table section
+        const tableId = `tbl_${tableName.replace(/\s+/g, '_')}`;
+
+        // 1. Inputs Area
+        let inputsHTML = `<div class="section-title text-info-emphasis">${tableName}</div>
+                          <div class="row g-3 mb-3 p-3 bg-light rounded inputs-container">`;
+
+        fields.forEach(f => {
+            // Force inputs to use a temporary ID for adding logic, avoiding collision with main form if re-rendered? 
+            // Actually, we can just use their original IDs but strictly for this "Add" row context.
+            // Since these fields are 'repeater' fields, we shouldn't use their ID as the final form ID for the row.
+            // But for the input fields *used to add* a row, we can use the ID from JSON.
+            inputsHTML += `<div class="${defineColumnSize(f.TIPO)}">${generateInputHTML(f)}</div>`;
+        });
+
+        const btnAddId = `btn_add_${tableId}`;
+
+        inputsHTML += `
+            <div class="col-12 text-end">
+                <button type="button" class="btn btn-info text-white" id="${btnAddId}">
+                    <i data-feather="plus"></i> Agregar a ${tableName}
+                </button>
+            </div>
+        </div>`;
+
+        // 2. Table Area
+        let tableHTML = `
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-bordered" id="${tableId}">
+                    <thead class="table-light">
+                        <tr>
+                            ${fields.map(f => `<th>${f.NOMBRE}</th>`).join('')}
+                            <th style="width: 50px;">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows will be added here -->
+                    </tbody>
+                </table>
+            </div>
+        `;
+
+        section.innerHTML = inputsHTML + tableHTML;
+        elements.contenedorSecciones.appendChild(section);
+
+        // 3. Attach Event Listener
+        const btn = section.querySelector(`#${btnAddId}`);
+        btn.addEventListener('click', () => {
+            const tbody = section.querySelector('tbody');
+            const tr = document.createElement('tr');
+
+            let rowDataHTML = '';
+            let allEmpty = true;
+
+            fields.forEach(f => {
+                const input = document.getElementById(f.ID);
+                let val = '';
+
+                if (input.type === 'checkbox') val = input.checked ? 'Sí' : 'No';
+                else val = input.value;
+
+                if (val && val.trim() !== '') allEmpty = false;
+
+                rowDataHTML += `<td>${val}</td>`;
+
+                // Clear input after adding
+                if (input.type === 'checkbox') input.checked = false;
+                else input.value = '';
+            });
+
+            if (allEmpty) {
+                alert("Por favor complete al menos un campo para agregar un registro.");
+                return;
+            }
+
+            rowDataHTML += `
+                <td class="text-center">
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('tr').remove()">
+                        <i data-feather="trash-2"></i>
+                    </button>
+                </td>
+             `;
+
+            tr.innerHTML = rowDataHTML;
+            tbody.appendChild(tr);
+            feather.replace();
+        });
+    }
+
+    renderUnifiedFields = function (campos) { // Overwriting the previous function definition to insert logic
+        elements.contenedorSecciones.innerHTML = '';
+
+        // Group logic using the new friendly mapping
+        const grupos = {};
+        const tablas = {}; // Store table fields
+
+        // Custom order for sections based on New Groups
+        const groupOrder = [
+            "Datos Contribuyente",
+            "Identificación Tributaria",
+            "Dirección Comercial / Tributaria",
+            "Dirección Particular / Domicilio Postal Tributario",
+            "Actividad Comercial",
+            "Patente",
+            "Sede Comercial",
+            "Contacto y Firma",
+            "Propaganda",
+            "Capital Propio",
+            "Requisitos Comunes",
+            "Requisitos Inmueble/Domicilio"
+        ];
+
+        campos.forEach(campo => {
+            // Check for TABLA attribute
+            if (campo.TABLA) {
+                if (!tablas[campo.TABLA]) tablas[campo.TABLA] = [];
+                tablas[campo.TABLA].push(campo);
+            } else {
+                const rawGroup = campo.GRUPO || 'General';
+                if (!grupos[rawGroup]) grupos[rawGroup] = [];
+                grupos[rawGroup].push(campo);
+            }
+        });
+
+        // Loop using defined order, then any others
+        const allKeys = Object.keys(grupos);
+        const sortedKeys = groupOrder.filter(k => allKeys.includes(k)).concat(allKeys.filter(k => !groupOrder.includes(k)));
+
+        sortedKeys.forEach(rawGroup => {
+            const cleanTitle = friendlyGroups[rawGroup] || rawGroup;
+            const fields = grupos[rawGroup];
+
+            if (rawGroup.includes('Dirección')) {
+                renderDomicilioGroup(fields, cleanTitle);
+            } else {
+                renderStandardGroup(fields, cleanTitle);
+            }
+        });
+
+        // Render Tables at the end (or we could interleave them if we had order info)
+        Object.keys(tablas).forEach(tableName => {
+            renderTableGroup(tableName, tablas[tableName]);
+        });
+
+        feather.replace();
+    };
     window.initMapFor = function (prefix, mapDivId, idCalle, idNumero, idComuna, idRegion, idLat, idLng) {
         if (!window.google) { alert("Google Maps API no cargada."); return; }
         const calle = document.getElementById(idCalle)?.value;
@@ -558,30 +656,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function defineColumnSize(tipo) {
-        if (['textarea', 'file'].includes(tipo)) return 'col-12';
+        if (['textarea', 'file', 'document'].includes(tipo)) return 'col-12';
         return 'col-md-6';
     }
 
     function generateInputHTML(campo, forceDisabled = false, customLabel = null) {
-        const labelText = customLabel || campo.nombre;
+        const labelText = customLabel || campo.NOMBRE;
         const label = `<label class="form-label">${labelText}</label>`;
         const disabledAttr = forceDisabled ? 'readonly style="background-color: #e9ecef;"' : '';
         let input = '';
 
-        switch (campo.tipo) {
+        // TIPO handling with new schema
+        switch (campo.TIPO) {
             case 'select':
-                input = `<select class="form-select" id="${campo.id_numerico}" ${disabledAttr}><option value="">Seleccione...</option>${(campo.opciones || []).map(o => `<option value="${o}">${o}</option>`).join('')}</select>`;
+                input = `<select class="form-select" id="${campo.ID}" ${disabledAttr}><option value="">Seleccione...</option>${(campo.OPCIONES || []).map(o => `<option value="${o}">${o}</option>`).join('')}</select>`;
                 break;
             case 'textarea':
-                input = `<textarea class="form-control" id="${campo.id_numerico}" rows="3" ${disabledAttr}></textarea>`;
+                input = `<textarea class="form-control" id="${campo.ID}" rows="3" ${disabledAttr}></textarea>`;
                 break;
             case 'file':
-                input = `<input type="file" class="form-control" id="${campo.id_numerico}">`;
+            case 'document': // New type 'document' in schema
+                input = `<input type="file" class="form-control" id="${campo.ID}">`;
                 break;
             case 'checkbox':
-                return `<div class="form-check mt-3"><input class="form-check-input" type="checkbox" id="${campo.id_numerico}"><label class="form-check-label" for="${campo.id_numerico}">${labelText}</label></div>`;
+                return `<div class="form-check mt-3"><input class="form-check-input" type="checkbox" id="${campo.ID}"><label class="form-check-label" for="${campo.ID}">${labelText}</label></div>`;
+            case 'radio':
+                // Assuming OPCIONES exists for radio
+                if (campo.OPCIONES) {
+                    input = `<div>`;
+                    campo.OPCIONES.forEach((opt, idx) => {
+                        input += `<div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="${campo.ID}" id="${campo.ID}_${idx}" value="${opt}">
+                                    <label class="form-check-label" for="${campo.ID}_${idx}">${opt}</label>
+                                  </div>`;
+                    });
+                    input += `</div>`;
+                } else {
+                    input = `<input type="radio" class="form-check-input" id="${campo.ID}">`; // Fallback
+                }
+                return `<div>${label}${input}</div>`;
             default:
-                input = `<input type="${campo.tipo || 'text'}" class="form-control" id="${campo.id_numerico}" ${disabledAttr}>`;
+                input = `<input type="${campo.TIPO || 'text'}" class="form-control" id="${campo.ID}" ${disabledAttr}>`;
         }
         return `<div>${label}${input}</div>`;
     }
