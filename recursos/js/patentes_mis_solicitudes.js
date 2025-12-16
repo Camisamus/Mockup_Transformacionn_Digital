@@ -73,24 +73,13 @@ document.addEventListener('DOMContentLoaded', () => {
         solicitudes.forEach(solicitud => {
             const row = document.createElement('tr');
 
-            // Group Logic
-            let grupoCell = '-';
-            if (solicitud.total_grupo && solicitud.total_grupo > 1) {
-                grupoCell = `
-                    <button class="btn btn-sm btn-outline-info" onclick="verHermanas('${solicitud.grupo_id}')">
-                        ${solicitud.posicion_grupo}/${solicitud.total_grupo} <i data-feather="users"></i>
-                    </button>
-                `;
-            } else if (solicitud.total_grupo === 1) {
-                grupoCell = '1/1';
-            }
 
             row.innerHTML = `
                 <td><a href="patentes_consulta_solicitud.html?id=${solicitud.numero}" class="text-primary fw-bold">${solicitud.numero}</a></td>
                 <td>${solicitud.rut}</td>
                 <td>${solicitud.fechaIngreso}</td>
                 <td>${solicitud.tipoTramite || '-'}</td>
-                <td>${grupoCell}</td>
+                <td>${solicitud.grupo}</td>
                 <td>${solicitud.tramitador || '-'}</td>
                 <td><span class="badge ${solicitud.estadoClass}">${solicitud.estado}</span></td>
                 <td><button class="btn btn-sm btn-outline-primary" onclick="descargarSolicitud('${solicitud.numero}')"><i data-feather="download"></i> Descargar</button></td>
