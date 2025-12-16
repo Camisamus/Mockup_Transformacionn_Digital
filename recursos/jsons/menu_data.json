@@ -31,6 +31,13 @@
                 "nombre": "Solicitud Única de Patentes",
                 "icon": "file-plus",
                 "Enlace": "paginas/patentes_solicitud_unica.html"
+            },
+            {
+                "id": "1.4",
+                "tipo": "Pagina",
+                "nombre": "Consulta de Solicitud",
+                "icon": "search",
+                "Enlace": "paginas/patentes_consulta_solicitud.html"
             }
         ]
     },

@@ -21,13 +21,26 @@ document.addEventListener('DOMContentLoaded', () => {
     loadHistorial();
     setupEventListeners();
 
+    // Check for tramitador URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const tramitadorFilter = urlParams.get('tramitador');
+
     // Load solicitudes data from JSON
     function loadSolicitudes() {
         fetch('../recursos/jsons/patentes_solicitudes_mock.json')
             .then(response => response.json())
             .then(data => {
                 solicitudesData = data.solicitudes || [];
-                renderSolicitudes(solicitudesData);
+
+                // Apply tramitador filter if present
+                let filteredData = solicitudesData;
+                if (tramitadorFilter) {
+                    filteredData = solicitudesData.filter(s =>
+                        s.tramitador && s.tramitador.toUpperCase() === tramitadorFilter.toUpperCase()
+                    );
+                }
+
+                renderSolicitudes(filteredData);
             })
             .catch(error => console.error('Error loading solicitudes:', error));
     }
@@ -51,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (solicitudes.length === 0) {
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="7" class="text-center text-muted">No se encontraron solicitudes</td>
+                    <td colspan="8" class="text-center text-muted">No se encontraron solicitudes</td>
                 </tr>
             `;
             return;
@@ -73,11 +86,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             row.innerHTML = `
-                <td><a href="#" class="text-primary fw-bold">${solicitud.numero}</a></td>
+                <td><a href="patentes_consulta_solicitud.html?id=${solicitud.numero}" class="text-primary fw-bold">${solicitud.numero}</a></td>
                 <td>${solicitud.rut}</td>
                 <td>${solicitud.fechaIngreso}</td>
                 <td>${solicitud.tipoTramite || '-'}</td>
                 <td>${grupoCell}</td>
+                <td>${solicitud.tramitador || '-'}</td>
                 <td><span class="badge ${solicitud.estadoClass}">${solicitud.estado}</span></td>
                 <td><button class="btn btn-sm btn-outline-primary" onclick="descargarSolicitud('${solicitud.numero}')"><i data-feather="download"></i> Descargar</button></td>
             `;

@@ -7,7 +7,10 @@
       "tipoTramite": "Solicitud de Patente Comercial",
       "grupo": "1/1",
       "estado": "En Proceso",
-      "estadoClass": "bg-info"
+      "estadoClass": "bg-info",
+      "tramitador": "JUAN",
+      "grupoId": null,
+      "grupoSolicitudes": []
     },
     {
       "numero": "PC-2024-002",
@@ -16,7 +19,13 @@
       "tipoTramite": "Cambio de Domicilio",
       "grupo": "1/2",
       "estado": "En Proceso",
-      "estadoClass": "bg-info"
+      "estadoClass": "bg-info",
+      "tramitador": "MARIA",
+      "grupoId": "GRUPO-A",
+      "grupoSolicitudes": [
+        "PC-2024-002",
+        "PC-2024-003"
+      ]
     },
     {
       "numero": "PC-2024-003",
@@ -25,7 +34,13 @@
       "tipoTramite": "Modificación Razón Social",
       "grupo": "2/2",
       "estado": "Pendiente",
-      "estadoClass": "bg-warning"
+      "estadoClass": "bg-warning",
+      "tramitador": "MARIA",
+      "grupoId": "GRUPO-A",
+      "grupoSolicitudes": [
+        "PC-2024-002",
+        "PC-2024-003"
+      ]
     },
     {
       "numero": "PC-2024-004",
@@ -34,7 +49,10 @@
       "tipoTramite": "Declaración de Propaganda",
       "grupo": "1/1",
       "estado": "Pendiente",
-      "estadoClass": "bg-warning"
+      "estadoClass": "bg-warning",
+      "tramitador": "PEDRO",
+      "grupoId": null,
+      "grupoSolicitudes": []
     },
     {
       "numero": "PC-2024-005",
@@ -43,7 +61,10 @@
       "tipoTramite": "Ampliación de Giro",
       "grupo": "1/1",
       "estado": "En Proceso",
-      "estadoClass": "bg-info"
+      "estadoClass": "bg-info",
+      "tramitador": "JUAN",
+      "grupoId": null,
+      "grupoSolicitudes": []
     },
     {
       "numero": "PC-2024-006",
@@ -52,7 +73,10 @@
       "tipoTramite": "Solicitud de Patente Comercial",
       "grupo": "1/1",
       "estado": "Aprobado",
-      "estadoClass": "bg-success"
+      "estadoClass": "bg-success",
+      "tramitador": "JUAN",
+      "grupoId": null,
+      "grupoSolicitudes": []
     },
     {
       "numero": "PC-2024-007",
@@ -61,7 +85,10 @@
       "tipoTramite": "Solicitud Término Negocio",
       "grupo": "1/1",
       "estado": "Rechazado",
-      "estadoClass": "bg-danger"
+      "estadoClass": "bg-danger",
+      "tramitador": "MARIA",
+      "grupoId": null,
+      "grupoSolicitudes": []
     },
     {
       "numero": "PC-2024-008",
@@ -70,7 +97,10 @@
       "tipoTramite": "Certificado de No Deuda",
       "grupo": "1/1",
       "estado": "En Proceso",
-      "estadoClass": "bg-info"
+      "estadoClass": "bg-info",
+      "tramitador": "PEDRO",
+      "grupoId": null,
+      "grupoSolicitudes": []
     }
   ]
 }
