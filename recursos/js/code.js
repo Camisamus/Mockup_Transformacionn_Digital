@@ -13,11 +13,22 @@ const loginError = document.getElementById('login-error');
 if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
+
+        // Check if we are on the Contribuyente page
+        if (window.location.pathname.includes('page_Contribuyente.html')) {
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('is_contribuyente', 'true'); // Standardized key
+            window.location.href = 'paginas/patentes_mis_solicitudes_C.html';
+            return;
+        }
+
         const user = usernameInput.value.trim();
         const pass = passwordInput.value.trim();
 
         if (user === 'admin' && pass === 'admin') {
-            login();
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.removeItem('is_contribuyente'); // Ensure admin is not contribuyente
+            window.location.href = 'paginas/dashboard.html';
         } else {
             loginError.classList.remove('d-none');
         }
@@ -34,6 +45,7 @@ function login() {
 // Helper: Logout (Used by layout_manager or others)
 window.logout = function () {
     state.isLoggedIn = false;
+    state.is_Contribuyente = false;
     localStorage.removeItem('isLoggedIn');
     // Redirect to root login
     // Assume we are in paginas/ subdir usually

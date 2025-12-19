@@ -7,6 +7,12 @@
         "Enlace": "paginas/Bandeja.html"
     },
     {
+        "id": "1.c",
+        "tipo": "Pagina",
+        "nombre": "Gestión de Empresas",
+        "Enlace": "paginas/contribuyente_empresas.html"
+    },
+    {
         "id": "1",
         "tipo": "categoria",
         "nombre": "Patentes",
@@ -17,6 +23,12 @@
                 "tipo": "Pagina",
                 "nombre": "Mis Solicitudes",
                 "Enlace": "paginas/patentes_mis_solicitudes.html"
+            },
+            {
+                "id": "1.1.b",
+                "tipo": "Pagina",
+                "nombre": "Mis Solicitudes",
+                "Enlace": "paginas/patentes_mis_solicitudes_C.html"
             },
             {
                 "id": "1.2",

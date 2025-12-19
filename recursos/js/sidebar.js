@@ -35,6 +35,10 @@ function loadMenu() {
 
 function buildMenuHtml(items, level = 0) {
     let html = '';
+    if (state.is_Contribuyente) {
+        alert("Contribuyente");
+        return;
+    }
     items.forEach((item, index) => {
         const uniqueId = `menu-${level}-${index}-${Math.random().toString(36).substr(2, 9)}`;
         // Indentation padding

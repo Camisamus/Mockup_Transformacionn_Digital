@@ -83,7 +83,25 @@ document.addEventListener('DOMContentLoaded', () => {
             if (window.feather) window.feather.replace();
         });
     }
+
+    // Identify Logout Button and attach Global Logout (if dynamic header)
+    // Note: Header is injected dynamically, so we can't select it immediately easily unless we do it after injection.
+    // However, the button has `onclick="logout()"`, so defining window.logout is sufficient.
 });
+
+// Global Logout Function
+window.logout = function () {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('is_contribuyente');
+    localStorage.removeItem('current_representation');
+
+    // Redirect to root login. 
+    // If we are deep in paginas/, we go to ../page.html. 
+    // If we are at root, we go to page.html
+    const isRoot = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
+    const target = isRoot ? 'page.html' : '../page.html';
+    window.location.href = target;
+};
 
 function loadDependencies(prefix, callback) {
     const head = document.head;
@@ -153,20 +171,73 @@ function loadDependencies(prefix, callback) {
 
 function loadSidebar(prefix) {
     const container = document.getElementById('sidebar-container');
-    // Load absolute or relative path to sidebar.html? 
-    // We construct the "sidebar.html" content manually or fetch it? 
-    // Better to fetch to keep it modular.
     fetch(`${prefix}paginas/sidebar.html`)
         .then(r => r.text())
         .then(html => {
-            // Fix image/link paths in raw HTML if any
             const fixedHtml = html.replace(/src="/g, `src="${prefix}`).replace(/href="/g, `href="${prefix}`);
             container.innerHTML = fixedHtml;
 
-            // Load Menu Data
+            // Inject Company Selector if Contribuyente
+            if (localStorage.getItem('is_contribuyente') === 'true') {
+                renderRepresentationSelector();
+            }
+
             loadMenuData(prefix);
             if (window.feather) window.feather.replace();
         });
+}
+
+function renderRepresentationSelector() {
+    const nav = document.querySelector('#sidebar-container nav');
+    const menuContainer = document.getElementById('menu-container');
+
+    if (nav && menuContainer) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'mb-3 px-2';
+        wrapper.innerHTML = `
+            <label class="form-label text-white-50 small text-uppercase fw-bold mb-1">Sesión representando a:</label>
+            <select class="form-select form-select-sm bg-primary-subtle border-0" id="representation-selector">
+                <option value="personal">Persona Natural</option>
+            </select>
+        `;
+
+        // Insert before menu
+        nav.insertBefore(wrapper, menuContainer);
+
+        // Populate Options
+        const selector = document.getElementById('representation-selector');
+        const companies = JSON.parse(localStorage.getItem('local_companies')) || [];
+
+        companies.forEach(company => {
+            const option = document.createElement('option');
+            option.value = company.rut;
+            option.textContent = company.nombre;
+            selector.appendChild(option);
+        });
+
+        // Set current selection
+        const current = localStorage.getItem('current_representation') || 'personal';
+        selector.value = current;
+
+        // Change Event without reload, just alert
+        selector.addEventListener('change', (e) => {
+            const newVal = e.target.value;
+            localStorage.setItem('current_representation', newVal);
+
+            // User requested alert
+            const name = e.target.options[e.target.selectedIndex].text;
+            alert(`Verificando representación: ${name}\n\nUsted está actuando ahora en nombre de esta entidad.`);
+
+            // Optional: Reload if logic requires it, but user didn't explicitly ask for reload.
+            // Just "Siempre visible y que salga una alerta que pida verificar"
+        });
+
+        // Listen for external updates (e.g. adding a company)
+        window.addEventListener('companiesUpdated', () => {
+            // Re-render options? Simplest is to just reload page or re-run this function logic if we clear it.
+            // For now, let's keep it simple.
+        });
+    }
 }
 
 function loadMenuData(prefix) {
@@ -175,6 +246,25 @@ function loadMenuData(prefix) {
         .then(data => {
             const menuContainer = document.getElementById('menu-container');
             if (menuContainer) {
+                // Filter for Contribuyente
+                if (localStorage.getItem('is_contribuyente') === 'true') {
+                    // Filter: Keep 'Patentes' (id="1") AND 'Gestion de Empresas' (id="1.c")
+                    // Note: 'Gestion de Empresas' is now a top level item "1.c" as per user edit? 
+                    // No, wait, user added "1.c" as top level item in menu_data.json step 79?
+                    // Let's re-read menu_data.json content from user edit in step 79.
+                    // Yes, user added { "id": "1.c", "tipo": "Pagina", ... } at root level.
+
+                    data = data.filter(item => item.id === "1" || item.id === "1.c");
+
+                    // Filter sub-items of Patentes (id="1"): Keep 'Mis Solicitudes' (1.1.b) and 'Solicitud Única' (1.3)
+                    const patentes = data.find(item => item.id === "1");
+                    if (patentes && patentes.contenido) {
+                        patentes.contenido = patentes.contenido.filter(subItem =>
+                            subItem.id === "1.1.b" || subItem.id === "1.3"
+                        );
+                    }
+                }
+
                 // We need a modified buildMenuHtml that creates direct links
                 menuContainer.innerHTML = buildDirectMenuHtml(data, 0, prefix);
                 if (window.feather) window.feather.replace();
