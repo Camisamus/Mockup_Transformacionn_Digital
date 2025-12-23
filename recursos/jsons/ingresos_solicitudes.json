@@ -1,0 +1,41 @@
+[
+    {
+        "ID_Solicitud": 1001,
+        "Ingreso_Desve": "DSV-001",
+        "Nombre_expediente": "Expediente de Prueba A",
+        "Origen_solicitud": 1,
+        "Fecha_ultima_recepcion_Erwin": "2023-10-01",
+        "Prioridad": 1,
+        "Funcionario_Interno": 101,
+        "Sector": 1,
+        "Origen_solicitud_texto": "Ministerio de Vivienda",
+        "Fecha_vecimiento": "2023-11-01",
+        "Entrego_Coordinador": true,
+        "Fecha_respuesta_coordinador": "2023-10-15",
+        "Estado_de_entrega": true,
+        "Dias_transcurridos_vencimiento": 0,
+        "OBSERVACIONES": "Ninguna",
+        "Detalle_ingreso": "Se solicita revisión técnica del muro perimetral debido a filtraciones detectadas en la inspección visual de Octubre.",
+        "Dias_transcurridos": 14,
+        "Reingreso": null
+    },
+    {
+        "ID_Solicitud": 1002,
+        "Ingreso_Desve": "DSV-002",
+        "Nombre_expediente": "Reingreso de Prueba A",
+        "Origen_solicitud": 1,
+        "Fecha_ultima_recepcion_Erwin": "2023-10-20",
+        "Prioridad": 2,
+        "Funcionario_Interno": 101,
+        "Sector": 1,
+        "Fecha_vecimiento": "2023-11-20",
+        "Entrego_Coordinador": false,
+        "Fecha_respuesta_coordinador": null,
+        "Estado_de_entrega": false,
+        "Dias_transcurridos_vencimiento": 30,
+        "OBSERVACIONES": "Urgente",
+        "Detalle_ingreso": "Reingreso por falta de antecedentes en el primer envío. Se adjuntan planos corregidos.",
+        "Dias_transcurridos": 2,
+        "Reingreso": 1001
+    }
+]

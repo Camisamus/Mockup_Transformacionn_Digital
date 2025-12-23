@@ -1,0 +1,20 @@
+[
+    {
+        "ID_Prioridad": 1,
+        "Nombre_Prioridad": "Alta",
+        "Tiempo_establecido": 3,
+        "Estado": true
+    },
+    {
+        "ID_Prioridad": 2,
+        "Nombre_Prioridad": "Media",
+        "Tiempo_establecido": 8,
+        "Estado": true
+    },
+    {
+        "ID_Prioridad": 3,
+        "Nombre_Prioridad": "Baja",
+        "Tiempo_establecido": 10,
+        "Estado": true
+    }
+]

@@ -1,0 +1,37 @@
+[
+    {
+        "ID_Tipo_de_organizacion": 1,
+        "Tipo_de_organizacion": "Organizacion Territorial",
+        "Prioridad": 1
+    },
+    {
+        "ID_Tipo_de_organizacion": 2,
+        "Tipo_de_organizacion": "Organizacion Funcional",
+        "Prioridad": 1
+    },
+    {
+        "ID_Tipo_de_organizacion": 3,
+        "Tipo_de_organizacion": "Particular",
+        "Prioridad": 1
+    },
+    {
+        "ID_Tipo_de_organizacion": 4,
+        "Tipo_de_organizacion": "Consejales",
+        "Prioridad": 2
+    },
+    {
+        "ID_Tipo_de_organizacion": 5,
+        "Tipo_de_organizacion": "Ley de Transparencia",
+        "Prioridad": 3
+    },
+    {
+        "ID_Tipo_de_organizacion": 6,
+        "Tipo_de_organizacion": "Contraloria General",
+        "Prioridad": 3
+    },
+    {
+        "ID_Tipo_de_organizacion": 7,
+        "Tipo_de_organizacion": "Congreso Nacional",
+        "Prioridad": 3
+    }
+]

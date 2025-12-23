@@ -260,7 +260,7 @@ function loadMenuData(prefix) {
                     const patentes = data.find(item => item.id === "1");
                     if (patentes && patentes.contenido) {
                         patentes.contenido = patentes.contenido.filter(subItem =>
-                            subItem.id === "1.1.b" || subItem.id === "1.3"
+                            subItem.id === "1.1.b" || subItem.id === "1.2" || subItem.id === "1.3"
                         );
                     }
                 }
