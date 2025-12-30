@@ -1,19 +1,63 @@
 // Universal Layout Manager
 // Injects Sidebar and Header into every page
 // Handles path resolution for resources
+// Global API Configuration
+window.API_BASE_URL = 'http://127.0.0.1:8081/api';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // 1. Determine if we are in root or subdirectory
-    // Simple heuristic: check if 'recursos' folder exists in current level or parent
     const isRoot = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
     const pathPrefix = isRoot ? '' : '../';
 
-    // 2. Inject Layout Structure if not present
-    // We expect the page to have a <body> content. We wrap it.
-
-    // Check if map or special full screen
+    // 2. Verify Session BEFORE rendering layout (except for login page)
     const isLogin = document.getElementById('login-screen');
-    if (isLogin) return; // Don't mess with login page index.html logic if handled there
+    if (isLogin) {
+        // If on login screen, maybe check if already logged in and redirect?
+        // Already handled in page.html script
+        return;
+    }
+
+    // Verify Session Endpoint
+    try {
+        const response = await fetch(`${window.API_BASE_URL}/verify_session.php`, {
+            method: 'GET',
+            credentials: 'include',
+            //headers: {
+            //    'X-Requested-With': 'XMLHttpRequest'
+            //}
+        });
+
+        // if (!response.ok) throw new Error('Session check failed'); // API might return 200 with isAuthenticated: false
+        const data = await response.json();
+
+        if (data.isAuthenticated === true) {
+            // Update Local Storage with latest data
+            // Structure: user: {}, permissions: []
+            // Create a standardized user_data object
+            const sessionData = {
+                user: data.user,
+                // Map permissions to 'menu' and 'rol' as needed
+                menu: data.permissions || [],
+                rol: data.user.rol || 'admin' // Fallback
+            };
+
+            localStorage.setItem('user_data', JSON.stringify(sessionData));
+        } else {
+            // Session Invalid
+            console.warn('Session verification returned false');
+            //window.logout();
+            return;
+        }
+    } catch (e) {
+        console.error('Error verifying session:', e);
+        // If network error, might be offline dev? 
+        // For now, enforce logout on error
+        // window.logout();
+        // return;
+    }
+
+    // 3. Inject Layout Structure if not present
+    // ... (rest of the logic)
 
     // If we are in a subpage, wrap the body content
     if (!document.getElementById('wrapper-layout')) {
@@ -90,10 +134,18 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Global Logout Function
-window.logout = function () {
+// Global Logout Function
+window.logout = async function () {
+    try {
+        await fetch(`${window.API_BASE_URL}/logout.php`);
+    } catch (e) {
+        console.error('Logout failed on server', e);
+    }
+
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('is_contribuyente');
     localStorage.removeItem('current_representation');
+    localStorage.removeItem('user_data');
 
     // Redirect to root login. 
     // If we are deep in paginas/, we go to ../page.html. 
@@ -182,6 +234,15 @@ function loadSidebar(prefix) {
                 renderRepresentationSelector();
             }
 
+            // Attach Logout Listener to Sidebar Button
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.logout();
+                });
+            }
+
             loadMenuData(prefix);
             if (window.feather) window.feather.replace();
         });
@@ -241,36 +302,96 @@ function renderRepresentationSelector() {
 }
 
 function loadMenuData(prefix) {
+    // 1. Try to get menu from Local Storage (Session Data)
+    const userData = JSON.parse(localStorage.getItem('user_data') || '{}');
+    if (userData && userData.menu && Array.isArray(userData.menu) && userData.menu.length > 0) {
+        // The API returns a flat list (e.g. "7", "7.1"). 
+        // We need to transform it to hierarchy if the renderer expects hierarchy.
+        const hierarchicalMenu = buildMenuHierarchy(userData.menu);
+        renderMenu(hierarchicalMenu, prefix);
+        return;
+    }
+
+    // 2. Fallback: Fetch from JSON (Dev/Legacy/Contribuyente Default)
     fetch(`${prefix}recursos/jsons/menu_data.json`)
         .then(r => r.json())
         .then(data => {
-            const menuContainer = document.getElementById('menu-container');
-            if (menuContainer) {
-                // Filter for Contribuyente
-                if (localStorage.getItem('is_contribuyente') === 'true') {
-                    // Filter: Keep 'Patentes' (id="1") AND 'Gestion de Empresas' (id="1.c")
-                    // Note: 'Gestion de Empresas' is now a top level item "1.c" as per user edit? 
-                    // No, wait, user added "1.c" as top level item in menu_data.json step 79?
-                    // Let's re-read menu_data.json content from user edit in step 79.
-                    // Yes, user added { "id": "1.c", "tipo": "Pagina", ... } at root level.
+            // Apply Legacy Filters if needed (e.g. for Contribuyente mocked flow)
+            const role = userData.rol || userData.role || userData.tipo_usuario || '';
+            const isContribuyente = role.toLowerCase() === 'contribuyente' || localStorage.getItem('is_contribuyente') === 'true';
 
-                    data = data.filter(item => item.id === "1" || item.id === "1.c");
-
-                    // Filter sub-items of Patentes (id="1"): Keep 'Mis Solicitudes' (1.1.b) and 'Solicitud Única' (1.3)
-                    const patentes = data.find(item => item.id === "1");
-                    if (patentes && patentes.contenido) {
-                        patentes.contenido = patentes.contenido.filter(subItem =>
-                            subItem.id === "1.1.b" || subItem.id === "1.2" || subItem.id === "1.3"
-                        );
-                    }
+            if (isContribuyente) {
+                // ... same filter logic as before ...
+                data = data.filter(item => item.id === "1" || item.id === "1.c");
+                const patentes = data.find(item => item.id === "1");
+                if (patentes && patentes.contenido) {
+                    patentes.contenido = patentes.contenido.filter(subItem =>
+                        subItem.id === "1.1.b" || subItem.id === "1.2" || subItem.id === "1.3"
+                    );
                 }
-
-                // We need a modified buildMenuHtml that creates direct links
-                menuContainer.innerHTML = buildDirectMenuHtml(data, 0, prefix);
-                if (window.feather) window.feather.replace();
-                highlightCurrentPage();
             }
-        });
+            renderMenu(data, prefix);
+        })
+        .catch(err => console.error('Error loading menu:', err));
+}
+
+// Helper to transform flat list (id="7", id="7.1") to nested structure
+function buildMenuHierarchy(flatItems) {
+    // Deep copy to avoid mutating original source if needed
+    const items = JSON.parse(JSON.stringify(flatItems));
+    const map = {};
+    const roots = [];
+
+    // 1. Normalize and Map all items by ID
+    items.forEach(item => {
+        // Normalize fields from DB (rol_*) to UI expectations
+        item.id = item.rol_id || item.id;
+        item.nombre = item.rol_nombre || item.nombre;
+        item.tipo = item.rol_tipo || item.tipo;
+        item.Enlace = item.rol_enlace || item.Enlace;
+        item.icon = item.rol_icono || item.icon; // Assuming rol_icono might exist or just icon
+
+        item.contenido = []; // Initialize children array
+        if (item.id) {
+            map[item.id] = item;
+        }
+    });
+
+    // 2. Link children to parents
+    items.forEach(item => {
+        if (!item.id) return;
+
+        const idParts = item.id.split('.');
+        if (idParts.length > 1) {
+            // It has a parent?
+            // e.g. "7.1" -> parent is "7"
+            // e.g. "7.1.1" -> parent is "7.1"
+            const parentId = idParts.slice(0, -1).join('.');
+            const parent = map[parentId];
+
+            if (parent) {
+                parent.contenido.push(item);
+            } else {
+                // Parent not found? Treat as root.
+                roots.push(item);
+            }
+        } else {
+            // No dots, top level
+            roots.push(item);
+        }
+    });
+
+    return roots;
+}
+
+
+function renderMenu(data, prefix) {
+    const menuContainer = document.getElementById('menu-container');
+    if (menuContainer) {
+        menuContainer.innerHTML = buildDirectMenuHtml(data, 0, prefix);
+        if (window.feather) window.feather.replace();
+        highlightCurrentPage();
+    }
 }
 
 function buildDirectMenuHtml(items, level, prefix) {
