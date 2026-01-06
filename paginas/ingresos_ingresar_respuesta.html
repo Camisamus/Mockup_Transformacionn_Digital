@@ -42,18 +42,12 @@
 
 <body>
     <div class="container">
-        <!-- Step 1: Password -->
-        <div id="step-1" class="card-auth text-center">
-            <i data-feather="lock" class="mb-3 text-primary" style="width: 48px; height: 48px;"></i>
-            <h4 class="mb-3">Verificación de Seguridad</h4>
-            <p class="text-muted small">Ingrese su clave para autorizar la respuesta de la solicitud <strong
-                    id="auth-display-id">#</strong></p>
-            <div class="mb-3">
-                <input type="password" id="input-password" class="form-control text-center"
-                    placeholder="Clave de funcionario">
+        <!-- Loading State -->
+        <div id="loading-check" class="text-center mt-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Verificando acceso...</span>
             </div>
-            <button class="btn btn-primary w-100" onclick="verifyPassword()">Ingresar</button>
-            <div id="auth-error" class="text-danger small mt-2 d-none">Clave incorrecta. Reintente.</div>
+            <p class="mt-2 text-muted">Verificando permisos...</p>
         </div>
 
         <!-- Step 2: Form -->
@@ -84,6 +78,15 @@
                         placeholder="Escriba aquí la respuesta técnica o administrativa..."></textarea>
                 </div>
 
+                <div class="mb-4">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="check-respuesta-definitiva">
+                        <label class="form-check-label fw-bold" for="check-respuesta-definitiva">Es Respuesta
+                            Definitiva</label>
+                        <div class="form-text">Marque esta opción si esta respuesta finaliza el trámite.</div>
+                    </div>
+                </div>
+
                 <div class="d-flex justify-content-end gap-2">
                     <button class="btn btn-outline-secondary" onclick="window.history.back()">Cancelar</button>
                     <button class="btn btn-success" onclick="saveResponse()">Finalizar y Guardar</button>
@@ -94,6 +97,7 @@
         <script src="../recursos/js/bootstrap.bundle.min.js"></script>
         <script src="https://unpkg.com/feather-icons"></script>
         <script>feather.replace();</script>
+        <script src="../recursos/js/layout_manager.js"></script>
         <script src="../recursos/js/ingresos_ingresar_respuesta.js"></script>
 </body>
 

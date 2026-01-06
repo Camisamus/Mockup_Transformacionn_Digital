@@ -3,9 +3,13 @@ let organizaciones = [];
 let prioridades = [];
 let funcionarios = [];
 let sectores = [];
-let mails_enviados = [];
 
 document.addEventListener('DOMContentLoaded', async function () {
+    // Ensure API_BASE_URL is available
+    if (!window.API_BASE_URL) {
+        window.API_BASE_URL = 'http://127.0.0.1/api';
+    }
+
     await loadInitialData();
     renderTable(allSolicitudes);
 
@@ -15,24 +19,35 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 async function loadInitialData() {
     try {
-        const [solData, orgData, prioData, funcData, secData, mailData] = await Promise.all([
-            fetch('../recursos/jsons/ingresos_solicitudes.json').then(r => r.json()),
-            fetch('../recursos/jsons/ingresos_organizaciones.json').then(r => r.json()),
-            fetch('../recursos/jsons/ingresos_prioridades.json').then(r => r.json()),
-            fetch('../recursos/jsons/ingresos_funcionarios.json').then(r => r.json()),
-            fetch('../recursos/jsons/ingresos_sectores.json').then(r => r.json()),
-            fetch('../recursos/jsons/ingresos_mails_enviados.json').then(r => r.json())
+        const fetchOptions = {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ACCION: "CONSULTAM" })
+        };
+        const [solRes, orgRes, prioRes, funcRes, secRes] = await Promise.all([
+            fetch(`${window.API_BASE_URL}/solicitudes.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/prioridades.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/funcionarios.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sectores.php`, fetchOptions).then(r => r.json())
         ]);
 
-        allSolicitudes = solData;
-        organizaciones = orgData;
-        prioridades = prioData;
-        funcionarios = funcData;
-        sectores = secData;
-        mails_enviados = mailData;
+        allSolicitudes = extractData(solRes);
+        organizaciones = extractData(orgRes);
+        prioridades = extractData(prioRes);
+        funcionarios = extractData(funcRes);
+        sectores = extractData(secRes);
+
     } catch (error) {
         console.error('Error loading data:', error);
     }
+}
+
+function extractData(response) {
+    if (Array.isArray(response)) return response;
+    if (response.data && Array.isArray(response.data)) return response.data;
+    return [];
 }
 
 function renderTable(data) {
@@ -44,39 +59,43 @@ function renderTable(data) {
     resultsCount.innerText = filteredData.length;
 
     filteredData.forEach(item => {
-        const org = organizaciones.find(o => o.ID_Organizacion === item.Origen_solicitud) || {};
-        const prio = prioridades.find(p => p.ID_Prioridad === item.Prioridad) || {};
-        const func = funcionarios.find(f => f.ID_Funcionarios === item.Funcionario_Interno) || {};
-        const sec = sectores.find(s => s.ID_Sector === item.Sector) || {};
-        const mails = mails_enviados.filter(m => m.Assunto === item.ID_Solicitud);
-        const lastMail = mails.length > 0 ? mails[mails.length - 1] : {};
+        // Find related data using new API field names
+        const org = organizaciones.find(o => o.org_id == item.sol_origen_id) || {};
+        const prio = prioridades.find(p => p.pri_id == item.sol_prioridad_id) || {};
+        const func = funcionarios.find(f => f.fnc_id == item.sol_funcionario_id) || {};
+        const sec = sectores.find(s => s.sec_id == item.sol_sector_id) || {};
+
+        // Mails count and last mail potentially handled differently or not available in mass consultation
+        // depending on what solicitudes.php returns. If it doesn't return count, we use 0.
+        const mailsCount = item.sol_mails_count || 0;
+        const lastMailDate = item.sol_mail_enviado_fecha || 'N/A';
 
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>
-                <button class="btn btn-sm btn-primary" onclick="verMantenedor(${item.ID_Solicitud})">
+                <button class="btn btn-sm btn-primary" onclick="verMantenedor(${item.sol_id})">
                     Ver
                 </button>
             </td>
-            <td>${item.ID_Solicitud}</td>
-            <td>${item.Ingreso_Desve}</td>
-            <td class="text-nowrap">${item.Nombre_expediente}</td>
-            <td>${org.Nombre_organizacion || 'N/A'}</td>
-            <td>${item.Origen_solicitud}</td>
-            <td>${item.Fecha_ultima_recepcion_Erwin}</td>
-            <td><span class="badge bg-info text-dark">${prio.Nombre_Prioridad || 'N/A'}</span></td>
-            <td>${func.Nombre || 'N/A'}</td>
-            <td>${sec.Nombre_Sector || 'N/A'}</td>
-            <td>${lastMail.Fecha || 'N/A'}</td>
-            <td>${mails.length}</td>
-            <td>${item.Fecha_vecimiento}</td>
-            <td>${item.Entrego_Coordinador ? 'Sí' : 'No'}</td>
-            <td>${item.Fecha_respuesta_coordinador || '-'}</td>
-            <td>${item.Estado_de_entrega ? 'Entregado' : 'Pendiente'}</td>
-            <td>${item.Dias_transcurridos_vencimiento}</td>
-            <td>${item.OBSERVACIONES || ''}</td>
-            <td>${item.Dias_transcurridos}</td>
-            <td>${item.Reingreso || '-'}</td>
+            <td>${item.sol_id}</td>
+            <td>${item.sol_ingreso_desve || ''}</td>
+            <td class="text-nowrap">${item.sol_nombre_expediente || ''}</td>
+            <td>${org.org_nombre || 'N/A'}</td>
+            <td>${item.sol_origen_texto || '-'}</td>
+            <td>${item.sol_fecha_recepcion || ''}</td>
+            <td><span class="badge bg-info text-dark">${prio.pri_nombre || 'N/A'}</span></td>
+            <td>${func.fnc_nombre || 'N/A'}</td>
+            <td>${sec.sec_nombre || 'N/A'}</td>
+            <td>${lastMailDate}</td>
+            <td>${mailsCount}</td>
+            <td>${item.sol_fecha_vencimiento || ''}</td>
+            <td>${(item.sol_entrego_coordinador == 1 || item.sol_entrego_coordinador === true) ? 'Sí' : 'No'}</td>
+            <td>${item.sol_fecha_respuesta_coordinador || '-'}</td>
+            <td>${(item.sol_estado_entrega == 1 || item.sol_estado_entrega === true) ? 'Entregado' : 'Pendiente'}</td>
+            <td>${item.sol_dias_vencimiento || 0}</td>
+            <td>${item.sol_observaciones || ''}</td>
+            <td>${item.sol_dias_transcurridos || 0}</td>
+            <td>${item.sol_reingreso_id || '-'}</td>
         `;
         tbody.appendChild(row);
     });
@@ -90,10 +109,10 @@ function aplicarFiltros(data) {
     const fechaHasta = document.getElementById('filtro_fecha_hasta').value;
 
     return data.filter(item => {
-        if (hideReingresos && item.Reingreso) return false;
+        if (hideReingresos && item.sol_reingreso_id) return false;
 
-        if (fechaDesde && item.Fecha_ultima_recepcion_Erwin < fechaDesde) return false;
-        if (fechaHasta && item.Fecha_ultima_recepcion_Erwin > fechaHasta) return false;
+        if (fechaDesde && item.sol_fecha_recepcion < fechaDesde) return false;
+        if (fechaHasta && item.sol_fecha_recepcion > fechaHasta) return false;
 
         return true;
     });

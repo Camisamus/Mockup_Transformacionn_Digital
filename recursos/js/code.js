@@ -1,5 +1,5 @@
 // --- App State ---
-const API_BASE_URL = 'http://127.0.0.1:8081/api';
+const API_BASE_URL = window.location.origin + '/api';
 
 const state = {
     isLoggedIn: localStorage.getItem('isLoggedIn') === 'true'
@@ -38,7 +38,8 @@ if (loginForm) {
                 //body: formData
                 body: JSON.stringify({
                     usuario: user,
-                    password: pass
+                    password: pass,
+                    ACCION: "login"
                 }),
                 credentials: 'include'
             })
@@ -85,18 +86,30 @@ function login() {
 // Helper: Logout (Used by layout_manager or others)
 // Helper: Logout (Used by layout_manager or others)
 window.logout = async function () {
+    // Attempt backend logout
     try {
         await fetch(`${API_BASE_URL}/logout.php`);
     } catch (e) {
         console.error('Logout failed on server', e);
     }
 
+    // Clear Google State if available
+    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+        google.accounts.id.disableAutoSelect();
+    }
+
+    // Clear Local State
     state.isLoggedIn = false;
     state.is_Contribuyente = false;
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('user_data');
 
     // Redirect to root login
-    // Assume we are in paginas/ subdir usually
-    window.location.href = '../page.html';
+    // Detect if we are in a subdirectory (paginas/) or root
+    // If current path has 'paginas', go up one level.
+    if (window.location.pathname.includes('/paginas/')) {
+        window.location.href = '../page.html';
+    } else {
+        window.location.href = 'page.html';
+    }
 }

@@ -2,7 +2,7 @@
 // Injects Sidebar and Header into every page
 // Handles path resolution for resources
 // Global API Configuration
-window.API_BASE_URL = 'http://127.0.0.1:8081/api';
+window.API_BASE_URL = window.location.origin + '/api';
 
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Determine if we are in root or subdirectory
@@ -19,12 +19,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Verify Session Endpoint
     try {
+        // Check for Google Token
+        let googleToken = null;
+        if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+            // We can't easily get the ID token from google.accounts.id state directly without re-prompting or having stored it.
+            // Usually, on login, we should store the credential.
+        }
+        // Check local storage for stored token from login
+        googleToken = localStorage.getItem('google_token');
+
         const response = await fetch(`${window.API_BASE_URL}/verify_session.php`, {
-            method: 'GET',
+            method: 'POST',
             credentials: 'include',
-            //headers: {
-            //    'X-Requested-With': 'XMLHttpRequest'
-            //}
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                ACCION: "",
+                google_token: googleToken
+            })
         });
 
         // if (!response.ok) throw new Error('Session check failed'); // API might return 200 with isAuthenticated: false
@@ -137,7 +148,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Global Logout Function
 window.logout = async function () {
     try {
-        await fetch(`${window.API_BASE_URL}/logout.php`);
+        await fetch(`${window.API_BASE_URL}/logout.php`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ACCION: "logout" })
+        });
     } catch (e) {
         console.error('Logout failed on server', e);
     }
@@ -304,24 +320,50 @@ function renderRepresentationSelector() {
 function loadMenuData(prefix) {
     // 1. Try to get menu from Local Storage (Session Data)
     const userData = JSON.parse(localStorage.getItem('user_data') || '{}');
-    if (userData && userData.menu && Array.isArray(userData.menu) && userData.menu.length > 0) {
+    let userMenu = userData.menu;
+
+    // Standardize empty checks
+    if (!userMenu || userMenu.length === 0) {
+        // DEFAULT VIEW FOR USERS WITH NO ROLES: BANDEJA ONLY
+        // We do NOT fallback to menu_data.json which has everything.
+        // Unless it is explicitly marked as contribuyente in a way that requires the JSON (legacy).
+        // But the requirement says "todos los usuarios que no tengan pefil asignado deberan tener disponible la vista de banjeda por defecto".
+
+        const defaultMenu = [
+            {
+                "id": "default-0",
+                "tipo": "Pagina",
+                "nombre": "Bandeja",
+                "icon": "inbox", // using 'inbox' feather icon if available, or 'file-text'
+                "Enlace": "paginas/bandeja.html"
+            }
+        ];
+
+        // Render this default menu directly
+        renderMenu(defaultMenu, prefix);
+        return;
+    }
+
+    // If we have menu data from API
+    if (userMenu && Array.isArray(userMenu) && userMenu.length > 0) {
         // The API returns a flat list (e.g. "7", "7.1"). 
         // We need to transform it to hierarchy if the renderer expects hierarchy.
-        const hierarchicalMenu = buildMenuHierarchy(userData.menu);
+        const hierarchicalMenu = buildMenuHierarchy(userMenu);
         renderMenu(hierarchicalMenu, prefix);
         return;
     }
 
-    // 2. Fallback: Fetch from JSON (Dev/Legacy/Contribuyente Default)
-    fetch(`${prefix}recursos/jsons/menu_data.json`)
-        .then(r => r.json())
-        .then(data => {
-            // Apply Legacy Filters if needed (e.g. for Contribuyente mocked flow)
-            const role = userData.rol || userData.role || userData.tipo_usuario || '';
-            const isContribuyente = role.toLowerCase() === 'contribuyente' || localStorage.getItem('is_contribuyente') === 'true';
+    // Fallback Code (Legacy/Dev) - Only if we really want to support local JSON for debug
+    // In production with real auth, we should probably hit the default view above.
+    // However, keeping this for 'contribuyente' flow if it relies on local storage flags not coming from API menu.
+    const role = userData.rol || userData.role || userData.tipo_usuario || '';
+    const isContribuyente = role.toLowerCase() === 'contribuyente' || localStorage.getItem('is_contribuyente') === 'true';
 
-            if (isContribuyente) {
-                // ... same filter logic as before ...
+    if (isContribuyente) {
+        fetch(`${prefix}recursos/jsons/menu_data.json`)
+            .then(r => r.json())
+            .then(data => {
+                // ... filter logic as before ...
                 data = data.filter(item => item.id === "1" || item.id === "1.c");
                 const patentes = data.find(item => item.id === "1");
                 if (patentes && patentes.contenido) {
@@ -329,10 +371,10 @@ function loadMenuData(prefix) {
                         subItem.id === "1.1.b" || subItem.id === "1.2" || subItem.id === "1.3"
                     );
                 }
-            }
-            renderMenu(data, prefix);
-        })
-        .catch(err => console.error('Error loading menu:', err));
+                renderMenu(data, prefix);
+            })
+            .catch(err => console.error('Error loading menu:', err));
+    }
 }
 
 // Helper to transform flat list (id="7", id="7.1") to nested structure
