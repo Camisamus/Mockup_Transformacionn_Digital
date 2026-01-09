@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Atención</title>
+    <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../recursos/css/style.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header-title h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-title p {
+            color: #6c757d;
+            margin-bottom: 0;
+            font-size: 0.9rem;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-toolbar {
+            background-color: white;
+            border: 1px solid #dee2e6;
+            color: #212529;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-toolbar:hover {
+            background-color: #f8f9fa;
+            border-color: #cdd4da;
+        }
+
+        .btn-toolbar i {
+            font-size: 1rem;
+        }
+
+        .btn-dark-custom {
+            background-color: #000;
+            color: white;
+            border: 1px solid #000;
+        }
+
+        .btn-dark-custom:hover {
+            background-color: #333;
+            color: white;
+        }
+
+        .card-custom {
+            background: white;
+            border-radius: 8px;
+            border: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            padding: 24px;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #343a40;
+            margin-bottom: 0.25rem;
+        }
+
+        .section-subtitle {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #495057;
+            margin-bottom: 6px;
+        }
+
+        .form-control,
+        .form-select {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            font-size: 0.9rem;
+            padding: 0.6rem 0.75rem;
+        }
+
+        .form-control::placeholder {
+            color: #adb5bd;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background-color: white;
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <!-- Header & Toolbar -->
+        <div class="main-header">
+            <div class="header-title">
+                <h2>Consulta de Atención</h2>
+                <p>Consulta y gestiona información de atenciones individuales</p>
+            </div>
+            <div class="toolbar">
+                <button class="btn btn-toolbar" onclick="buscarAtencion()">
+                    <i data-feather="search"></i> Buscar
+                </button>
+                <button class="btn btn-toolbar" onclick="nuevaAtencion()">
+                    <i data-feather="plus"></i> Nueva
+                </button>
+                <button class="btn btn-toolbar" onclick="modificarAtencion()">
+                    <i data-feather="edit"></i> Modificar
+                </button>
+                <button class="btn btn-toolbar" onclick="exportarPDF()">
+                    <i data-feather="file-text"></i> Exportar PDF
+                </button>
+                <button class="btn btn-toolbar btn-dark-custom" onclick="guardarAtencion()">
+                    <i data-feather="save"></i> Guardar
+                </button>
+            </div>
+        </div>
+
+        <!-- Información de la Atención -->
+        <div class="card-custom">
+            <h3 class="section-title">Información de la Atención</h3>
+            <p class="section-subtitle">Datos generales de la atención realizada</p>
+
+            <form id="formConsultaAtencion">
+                <!-- Row 1 -->
+                <div class="row g-4 mb-3">
+                    <div class="col-md-4">
+                        <label for="tipoAtencion" class="form-label">Tipo de Atención</label>
+                        <select class="form-select" id="tipoAtencion">
+                            <option selected disabled>Seleccione...</option>
+                            <option value="consulta">Consulta</option>
+                            <option value="tramite">Trámite</option>
+                            <option value="reclamo">Reclamo</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="codigoAtencion" class="form-label">Código de Atención</label>
+                        <input type="text" class="form-control" id="codigoAtencion" placeholder="AT-XXXX">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="codigoOrganizacion" class="form-label">Código de Organización</label>
+                        <input type="text" class="form-control" id="codigoOrganizacion" placeholder="OC-XXXX">
+                    </div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="row g-4 mb-3">
+                    <div class="col-md-4">
+                        <label for="rut" class="form-label">RUT</label>
+                        <input type="text" class="form-control" id="rut" placeholder="12345678-9">
+                    </div>
+                    <div class="col-md-8">
+                        <label for="nombreOrganizacion" class="form-label">Nombre de la Organización</label>
+                        <input type="text" class="form-control" id="nombreOrganizacion"
+                            placeholder="Nombre de la Organización">
+                    </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="row g-4 mb-3">
+                    <div class="col-md-4">
+                        <label for="estado" class="form-label">Estado</label>
+                        <select class="form-select" id="estado">
+                            <option selected disabled>Seleccione...</option>
+                            <option value="pendiente">Pendiente</option>
+                            <option value="en_proceso">En Proceso</option>
+                            <option value="completada">Completada</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="proyecto" class="form-label">Proyecto</label>
+                        <input type="text" class="form-control" id="proyecto" placeholder="Proyecto relacionado">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="area" class="form-label">Área</label>
+                        <select class="form-select" id="area">
+                            <option selected disabled>Seleccione...</option>
+                            <option value="social">Social</option>
+                            <option value="legal">Legal</option>
+                            <option value="tecnica">Técnica</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="row g-4 mb-3">
+                    <div class="col-md-4">
+                        <label for="unidadVecinal" class="form-label">Unidad Vecinal</label>
+                        <input type="text" class="form-control" id="unidadVecinal" placeholder="Unidad vecinal">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="fechaAtencion" class="form-label">Fecha de Atención</label>
+                        <input type="date" class="form-control" id="fechaAtencion">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="usuarioIngreso" class="form-label">Usuario de Ingreso</label>
+                        <input type="text" class="form-control" id="usuarioIngreso" placeholder="Nombre del usuario"
+                            value="Carlos Pérez">
+                    </div>
+                </div>
+
+                <!-- Row 5 -->
+                <div class="row g-4 mb-3">
+                    <div class="col-md-4">
+                        <label for="usuarioResponsable" class="form-label">Usuario Responsable</label>
+                        <input type="text" class="form-control" id="usuarioResponsable"
+                            placeholder="Nombre del usuario">
+                    </div>
+                </div>
+
+                <!-- Descripción -->
+                <div class="mb-3">
+                    <label for="descripcionAtencion" class="form-label">Descripción de la Atención</label>
+                    <textarea class="form-control" id="descripcionAtencion" rows="3"
+                        placeholder="Describa detalladamente la atención realizada..."></textarea>
+                </div>
+
+                <!-- Observaciones -->
+                <div class="mb-3">
+                    <label for="observaciones" class="form-label">Observaciones</label>
+                    <textarea class="form-control" id="observaciones" rows="3"
+                        placeholder="Observaciones adicionales..."></textarea>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- Help Button -->
+    <button class="btn btn-dark rounded-circle position-fixed bottom-0 end-0 m-4" style="width: 50px; height: 50px;">
+        <i data-feather="help-circle"></i>
+    </button>
+
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
+    <script src="../recursos/js/atenciones_consulta_atencion.js"></script>
+<script src='../recursos/js/layout_manager.js'></script>
+</body>
+
+</html>

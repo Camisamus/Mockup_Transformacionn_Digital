@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Subvención</title>
+    <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../recursos/css/style.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #0d6efd;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #343a40;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .page-header {
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #212529;
+        }
+
+        .page-subtitle {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn-action {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 16px;
+            font-size: 0.875rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+
+        .form-control,
+        .form-select {
+            font-size: 0.875rem;
+        }
+
+        .required-field::after {
+            content: " *";
+            color: #dc3545;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h2 class="page-title">Consulta de Subvención</h2>
+            <p class="page-subtitle">Búsqueda, creación y modificación de subvenciones</p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-dark btn-action" onclick="buscarSubvencion()">
+                <i data-feather="search"></i> Buscar
+            </button>
+            <button class="btn btn-outline-secondary btn-action" onclick="crearNuevo()">
+                <i data-feather="plus"></i> Crear Nuevo
+            </button>
+            <button class="btn btn-outline-secondary btn-action" onclick="modificar()">
+                <i data-feather="edit"></i> Modificar
+            </button>
+            <button class="btn btn-outline-secondary btn-action" onclick="cambiarEstado()">
+                <i data-feather="refresh-cw"></i> Cambiar
+            </button>
+            <button class="btn btn-outline-secondary btn-action" onclick="imprimirPDF()">
+                <i data-feather="file-text"></i> Imprimir PDF
+            </button>
+        </div>
+
+        <!-- Datos de la Subvención -->
+        <div class="section-card">
+            <div class="section-title">Datos de la Subvención</div>
+
+            <div class="row g-3">
+                <!-- Row 1 -->
+                <div class="col-md-4">
+                    <label class="form-label required-field">Número</label>
+                    <input type="text" class="form-control" id="numero" placeholder="Ej: SUB-2024-001">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Estado</label>
+                    <select class="form-select" id="estado">
+                        <option value="">Seleccione...</option>
+                        <option value="vigente">Vigente</option>
+                        <option value="finalizada">Finalizada</option>
+                        <option value="pendiente">Pendiente</option>
+                        <option value="rechazada">Rechazada</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label required-field">Fecha</label>
+                    <input type="date" class="form-control" id="fecha">
+                </div>
+
+                <!-- Row 2 -->
+                <div class="col-md-4">
+                    <label class="form-label">Tipo de Subvención</label>
+                    <select class="form-select" id="tipo_subvencion">
+                        <option value="">Seleccione...</option>
+                        <option value="deportiva">Deportiva</option>
+                        <option value="cultural">Cultural</option>
+                        <option value="social">Social</option>
+                        <option value="educacional">Educacional</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label required-field">RUT Organización</label>
+                    <input type="text" class="form-control" id="rut_organizacion" placeholder="XX.XXX.XXX-X">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label required-field">Nombre Organización</label>
+                    <input type="text" class="form-control" id="nombre_organizacion"
+                        placeholder="Nombre de la organización">
+                </div>
+
+                <!-- Row 3 -->
+                <div class="col-md-4">
+                    <label class="form-label required-field">Monto Solicitado ($)</label>
+                    <input type="number" class="form-control" id="monto_solicitado" placeholder="0" step="1000">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Organismo Aprobador</label>
+                    <input type="text" class="form-control" id="organismo_aprobador" placeholder="Nombre del organismo">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Año</label>
+                    <input type="number" class="form-control" id="anio" placeholder="2024" min="2000" max="2100">
+                </div>
+
+                <!-- Row 4 -->
+                <div class="col-md-4">
+                    <label class="form-label">Año de Decreto</label>
+                    <input type="number" class="form-control" id="anio_decreto" placeholder="2024" min="2000"
+                        max="2100">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Número de Decreto</label>
+                    <input type="text" class="form-control" id="numero_decreto" placeholder="Ej: DEC-2024-123">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Número de Monto</label>
+                    <input type="number" class="form-control" id="numero_monto" placeholder="0" step="1000">
+                </div>
+
+                <!-- Row 5 -->
+                <div class="col-md-6">
+                    <label class="form-label">Año de Matriz</label>
+                    <input type="number" class="form-control" id="anio_matriz" placeholder="2024" min="2000" max="2100">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Finalidad del Proyecto</label>
+                    <input type="text" class="form-control" id="finalidad_proyecto"
+                        placeholder="Descripción breve de la finalidad">
+                </div>
+
+                <!-- Row 6 - Objetivo de la Subvención -->
+                <div class="col-12">
+                    <label class="form-label">Objetivo de la Subvención</label>
+                    <textarea class="form-control" id="objetivo_subvencion" rows="3"
+                        placeholder="Describa el objetivo de la subvención..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons Bottom -->
+        <div class="d-flex justify-content-end gap-2 mb-5">
+            <button class="btn btn-outline-secondary" onclick="limpiarFormulario()">
+                <i data-feather="trash-2"></i> Limpiar
+            </button>
+            <button class="btn btn-outline-primary" onclick="guardarBorrador()">
+                <i data-feather="save"></i> Guardar Borrador
+            </button>
+            <button class="btn btn-primary" onclick="guardarSubvencion()">
+                <i data-feather="check-circle"></i> Guardar Subvención
+            </button>
+        </div>
+
+    </div>
+
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
+    <script src="../recursos/js/subvenciones_consulta_subvencion.js"></script>
+<script src='../recursos/js/layout_manager.js'></script>
+</body>
+
+</html>

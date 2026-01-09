@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Postulación</title>
+    <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../recursos/css/style.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #0d6efd;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #343a40;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+
+        .required-field::after {
+            content: " *";
+            color: #dc3545;
+        }
+
+        .table {
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <h2 class="mb-1">Consulta de Postulación</h2>
+        <p class="text-muted mb-4">Búsqueda, creación y modificación de postulaciones</p>
+
+        <!-- Action Buttons -->
+        <div class="d-flex gap-2 mb-3">
+            <button class="btn btn-dark btn-sm" onclick="buscarPostulacion()"><i data-feather="search"></i>
+                Buscar</button>
+            <button class="btn btn-outline-secondary btn-sm" onclick="crearNueva()"><i data-feather="plus"></i> Crear
+                Nueva</button>
+            <button class="btn btn-outline-secondary btn-sm" onclick="modificar()"><i data-feather="edit"></i>
+                Modificar</button>
+            <button class="btn btn-outline-secondary btn-sm" onclick="guardar()"><i data-feather="save"></i>
+                Guardar</button>
+            <button class="btn btn-outline-secondary btn-sm" onclick="cancelar()"><i data-feather="x"></i>
+                Cancelar</button>
+            <button class="btn btn-outline-secondary btn-sm" onclick="imprimirPDF()"><i data-feather="file-text"></i>
+                Imprimir PDF</button>
+        </div>
+
+        <!-- Datos Principales -->
+        <div class="section-card">
+            <div class="section-title">Datos Principales</div>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label required-field">Organización</label>
+                    <input type="text" class="form-control" id="organizacion" placeholder="Nombre de la organización">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label required-field">RUT</label>
+                    <input type="text" class="form-control" id="rut" placeholder="XX.XXX.XXX-X">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">RPJ</label>
+                    <input type="text" class="form-control" id="rpj" placeholder="Ej: RPJ-2020-001">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Unidad</label>
+                    <input type="text" class="form-control" id="unidad" placeholder="Ej: UV-12">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Número de Ingreso</label>
+                    <input type="text" class="form-control" id="numero_ingreso" placeholder="Ej: POST-2024-001">
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Tipo</label>
+                    <select class="form-select" id="tipo">
+                        <option value="">Seleccione tipo</option>
+                        <option value="social">Social</option>
+                        <option value="cultural">Cultural</option>
+                        <option value="deportivo">Deportivo</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Código</label>
+                    <input type="text" class="form-control" id="codigo" placeholder="Ej: COD-2024-001">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Proyecto</label>
+                    <input type="text" class="form-control" id="proyecto" placeholder="Nombre del proyecto">
+                </div>
+            </div>
+        </div>
+
+        <!-- 1. Antecedentes del Proyecto -->
+        <div class="section-card">
+            <div class="section-title">1. Antecedentes del Proyecto</div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label required-field">Nombre</label>
+                    <input type="text" class="form-control" id="ant_nombre" placeholder="Nombre del proyecto">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Finalidad del Proyecto</label>
+                    <input type="text" class="form-control" id="ant_finalidad"
+                        placeholder="Descripción de la finalidad">
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Objetivo del Proyecto</label>
+                    <textarea class="form-control" id="ant_objetivo" rows="2"
+                        placeholder="Descripción detallada del objetivo"></textarea>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Tipo de Proyecto</label>
+                    <select class="form-select" id="ant_tipo_proyecto">
+                        <option value="">Seleccione tipo</option>
+                        <option value="infraestructura">Infraestructura</option>
+                        <option value="equipamiento">Equipamiento</option>
+                        <option value="capacitacion">Capacitación</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Tipo de Postulación</label>
+                    <select class="form-select" id="ant_tipo_postulacion">
+                        <option value="">Seleccione tipo</option>
+                        <option value="nueva">Nueva</option>
+                        <option value="renovacion">Renovación</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Número de Participantes</label>
+                    <input type="number" class="form-control" id="ant_num_participantes" placeholder="Ej: 150">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Fecha de Ingreso</label>
+                    <input type="date" class="form-control" id="ant_fecha_ingreso">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Duración del Proyecto</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="ant_duracion_meses" placeholder="Meses">
+                        <input type="number" class="form-control" id="ant_duracion_dias" placeholder="Días">
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Etapa del Proyecto</label>
+                    <select class="form-select" id="ant_etapa">
+                        <option value="">Ej: En ejecución</option>
+                        <option value="planificacion">Planificación</option>
+                        <option value="ejecucion">En ejecución</option>
+                        <option value="finalizado">Finalizado</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Ubicación del Proyecto -->
+        <div class="section-card">
+            <div class="section-title">2. Ubicación del Proyecto</div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Referencia Calle</label>
+                    <input type="text" class="form-control" id="ubi_referencia" placeholder="Ej: Av. Libertador 1234">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Sector</label>
+                    <input type="text" class="form-control" id="ubi_sector" placeholder="Ej: Centro">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Sub Sector</label>
+                    <input type="text" class="form-control" id="ubi_subsector" placeholder="Ej: Zona A">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Unidad Vecinal</label>
+                    <input type="text" class="form-control" id="ubi_unidad_vecinal" placeholder="Ej: UV-12">
+                </div>
+                <div class="col-md-8">
+                    <label class="form-label">Población</label>
+                    <input type="text" class="form-control" id="ubi_poblacion" placeholder="Nombre de la población">
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Financiamientos -->
+        <div class="section-card">
+            <div class="section-title">3. Financiamientos</div>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Tipo de Fondo</label>
+                    <select class="form-select" id="fin_tipo_fondo">
+                        <option value="">Seleccione tipo</option>
+                        <option value="municipal">Municipal</option>
+                        <option value="regional">Regional</option>
+                        <option value="nacional">Nacional</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Monto Solicitado ($)</label>
+                    <input type="number" class="form-control" id="fin_monto_solicitado" placeholder="0">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Monto Propuesto ($)</label>
+                    <input type="number" class="form-control" id="fin_monto_propuesto" placeholder="0">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Aporte Municipal ($)</label>
+                    <input type="number" class="form-control" id="fin_aporte_municipal" placeholder="0">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Aporte de la Organización ($)</label>
+                    <input type="number" class="form-control" id="fin_aporte_organizacion" placeholder="0">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Aporte de Otras Instituciones ($)</label>
+                    <input type="number" class="form-control" id="fin_aporte_otras" placeholder="0">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Modalidad de Ejecución</label>
+                    <select class="form-select" id="fin_modalidad">
+                        <option value="">Seleccione modalidad</option>
+                        <option value="directa">Ejecución directa</option>
+                        <option value="terceros">Por terceros</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Tramitación Subvenciones -->
+        <div class="section-card">
+            <div class="section-title">4. Tramitación Subvenciones</div>
+            <div class="row g-3">
+                <div class="col-md-2">
+                    <label class="form-label">Año Aprobación</label>
+                    <input type="number" class="form-control" id="tram_anio_aprobacion" placeholder="2024">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Número Aprobación</label>
+                    <input type="text" class="form-control" id="tram_numero_aprobacion" placeholder="Ej: APR-2024-045">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Monto Aprobado ($)</label>
+                    <input type="number" class="form-control" id="tram_monto_aprobado" placeholder="0">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Año Decreto</label>
+                    <input type="number" class="form-control" id="tram_anio_decreto" placeholder="2024">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Número Decreto</label>
+                    <input type="text" class="form-control" id="tram_numero_decreto" placeholder="DEC-2024-123">
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label">Año Matriz</label>
+                    <input type="number" class="form-control" id="tram_anio_matriz" placeholder="2024">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Número Matriz</label>
+                    <input type="text" class="form-control" id="tram_numero_matriz" placeholder="MAT-2024-089">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Número Subvención</label>
+                    <input type="text" class="form-control" id="tram_numero_subvencion" placeholder="SUB-2024-001">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Pagado a la Fecha ($)</label>
+                    <input type="number" class="form-control" id="tram_pagado_fecha" placeholder="0">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Estado de la Subvención</label>
+                    <input type="text" class="form-control" id="tram_estado" placeholder="Ej: EN EJECUCIÓN">
+                </div>
+            </div>
+        </div>
+
+        <!-- Refrendaciones -->
+        <div class="section-card">
+            <div class="section-title">Refrendaciones</div>
+            <div class="d-flex justify-content-end gap-2 mb-2">
+                <button class="btn btn-sm btn-outline-secondary"><i data-feather="file-text"></i> Excel</button>
+                <button class="btn btn-sm btn-outline-secondary"><i data-feather="file-text"></i> PDF</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-sm table-hover" id="tablaRefrendaciones">
+                    <thead class="table-light">
+                        <tr>
+                            <th>NÚMERO DE DECRETO</th>
+                            <th>TIPO REFRENDACIÓN</th>
+                            <th>AÑO REFRENDACIÓN</th>
+                            <th>NÚMERO REFRENDACIÓN</th>
+                            <th>CUOTA</th>
+                            <th>FECHA CHEQUE</th>
+                            <th>FECHA RETIRO</th>
+                            <th>QUIEN RETIRA EL CHEQUE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>DEC-2024-123</td>
+                            <td>Total</td>
+                            <td>2024</td>
+                            <td>REF-2024-045</td>
+                            <td>1/3</td>
+                            <td>2024-06-15</td>
+                            <td>2024-06-20</td>
+                            <td>Juan Pérez López</td>
+                        </tr>
+                        <tr>
+                            <td>DEC-2024-125</td>
+                            <td>Parcial</td>
+                            <td>2024</td>
+                            <td>REF-2024-067</td>
+                            <td>2/3</td>
+                            <td>2024-08-10</td>
+                            <td>2024-08-15</td>
+                            <td>Juan Pérez López</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Evaluación (Solo Lectura) -->
+        <div class="section-card">
+            <div class="section-title">Evaluación (Solo Lectura)</div>
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Estado</label>
+                    <input type="text" class="form-control" id="eval_estado" readonly>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Puntaje Evaluación</label>
+                    <input type="text" class="form-control" id="eval_puntaje" readonly>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Fecha</label>
+                    <input type="date" class="form-control" id="eval_fecha" readonly>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Número</label>
+                    <input type="text" class="form-control" id="eval_numero" readonly>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Observación</label>
+                    <textarea class="form-control" id="eval_observacion" rows="2" readonly></textarea>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
+    <script src="../recursos/js/postulaciones_consulta_postulacion.js"></script>
+<script src='../recursos/js/layout_manager.js'></script>
+</body>
+
+</html>

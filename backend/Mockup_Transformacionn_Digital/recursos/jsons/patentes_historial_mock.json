@@ -1,0 +1,39 @@
+{
+    "historial": [
+        {
+            "encargado": "Ana Pérez",
+            "fecha": "06/11/2025",
+            "hora": "11:00 AM",
+            "estado": "Aprobado el pago de patente y se envió el mensaje de cobro al contribuyente.",
+            "detalle": "PC-2024-001"
+        },
+        {
+            "encargado": "Carlos Rojas",
+            "fecha": "06/11/2025",
+            "hora": "08:00 AM",
+            "estado": "Completó fiscalización 2025 por la actividad desarrollada.",
+            "detalle": "PC-2024-001"
+        },
+        {
+            "encargado": "María Santana",
+            "fecha": "05/11/2025",
+            "hora": "03:30 PM",
+            "estado": "Validó certificado 2025 por la actividad desarrollada.",
+            "detalle": "PC-2024-001"
+        },
+        {
+            "encargado": "Juan Silva",
+            "fecha": "04/11/2025",
+            "hora": "10:15 AM",
+            "estado": "Revisó documentación presentada y solicitó correcciones menores.",
+            "detalle": "PC-2024-001"
+        },
+        {
+            "encargado": "Patricia González",
+            "fecha": "01/11/2025",
+            "hora": "09:00 AM",
+            "estado": "Solicitud ingresada al sistema y asignada para revisión inicial.",
+            "detalle": "PC-2024-001"
+        }
+    ]
+}

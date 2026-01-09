@@ -1,0 +1,17 @@
+[
+    {
+        "rut": "76.123.456-7",
+        "nombre": "Cocacola",
+        "doc": "Escritura.pdf"
+    },
+    {
+        "rut": "77.987.654-3",
+        "nombre": "Falabella",
+        "doc": "Poder.pdf"
+    },
+    {
+        "rut": "78.456.123-9",
+        "nombre": "Farmacias Dr. Simi",
+        "doc": "Constitucion.pdf"
+    }
+]

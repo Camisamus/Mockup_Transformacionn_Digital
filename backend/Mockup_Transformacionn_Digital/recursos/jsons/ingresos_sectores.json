@@ -1,0 +1,12 @@
+[
+    {
+        "ID_Sector": 1,
+        "Nombre_Sector": "Norte",
+        "Codigo_Sector": "SEC-N"
+    },
+    {
+        "ID_Sector": 2,
+        "Nombre_Sector": "Sur",
+        "Codigo_Sector": "SEC-S"
+    }
+]

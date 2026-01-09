@@ -1,0 +1,30 @@
+{
+    "deudas": [],
+    "pagadas": [
+        {
+            "nPatente": "200350",
+            "tipo": "COMERCIAL",
+            "periodo": "1-2024",
+            "pagadoEn": "Portal Web",
+            "total": "$45.000",
+            "vencimiento": "31-01-2024"
+        },
+        {
+            "nPatente": "200350",
+            "tipo": "COMERCIAL",
+            "periodo": "2-2023",
+            "pagadoEn": "Caja Municipal",
+            "total": "$43.500",
+            "vencimiento": "31-07-2023"
+        },
+        {
+            "nPatente": "200350",
+            "tipo": "COMERCIAL",
+            "periodo": "1-2023",
+            "pagadoEn": "Portal Web",
+            "total": "$42.000",
+            "vencimiento": "31-01-2023"
+        }
+    ],
+    "historica": []
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Empresas</title>
+    <style>
+        .section-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #0d6efd;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #343a40;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <h2 class="mb-4">Gestión de Empresas Representadas</h2>
+        <p class="text-muted mb-4">Inscriba las empresas que representa para realizar trámites en su nombre.</p>
+
+        <div class="row">
+            <!-- Form Column -->
+            <div class="col-md-5">
+                <div class="section-card">
+                    <div class="section-title">Inscribir Nueva Empresa</div>
+                    <form id="form-empresa">
+                        <div class="mb-3">
+                            <label for="empresaRut" class="form-label">RUT Empresa</label>
+                            <input type="text" class="form-control" id="empresaRut" placeholder="12.345.678-9" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="empresaNombre" class="form-label">Razón Social</label>
+                            <input type="text" class="form-control" id="empresaNombre"
+                                placeholder="Nombre de la Empresa SpA" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="empresaDoc" class="form-label">Documento de Representación</label>
+                            <input type="file" class="form-control" id="empresaDoc" required>
+                            <div class="form-text">Adjunte escritura o poder notarial (PDF, JPG).</div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i data-feather="plus-circle" class="me-2"></i> Agregar Empresa
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Table Column -->
+            <div class="col-md-7">
+                <div class="section-card">
+                    <div class="section-title">Empresas Registradas</div>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0 align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>RUT</th>
+                                    <th>Razón Social</th>
+                                    <th>Documento</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-empresas">
+                                <!-- Dynamic Content -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="empty-state" class="text-center p-4" style="display: none;">
+                        <p class="text-muted mb-0">No hay empresas registradas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts (Managed by layout_manager usually, but specific logic here) -->
+    <script src="../recursos/js/contribuyente_empresas.js"></script>
+    <script src="../recursos/js/layout_manager.js"></script>
+</body>
+
+</html>

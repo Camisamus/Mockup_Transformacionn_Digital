@@ -1,0 +1,1087 @@
+{
+    "categorias": [
+        {
+            "nombre": "Solicitud Patente",
+            "icono": "briefcase",
+            "color": "#0072c6",
+            "tramites": [
+                "Solicitud de Patente Comercial",
+                "Solicitud de Patente Alcohol",
+                "Solicitud de Patente Industrial",
+                "Solicitud de Patente Profesional",
+                "Solicitud de Patente Microempresa Familiar (MEF)",
+                "Solicitud de Patente Sociedad de Inversiones"
+            ]
+        },
+        {
+            "nombre": "Modificaciones",
+            "icono": "edit",
+            "color": "#28a745",
+            "tramites": [
+                "Solicitud de Cambio de Nombre",
+                "Solicitud de Traslado",
+                "Solicitud de Rectificación y/o Modificación de Domicilio",
+                "Solicitud de Regularización Patentes de Alcoholes",
+                "Solicitud de Término de Negocio",
+                "Solicitud de Ampliación y/o Cambio de Giro",
+                "Declaración de Propaganda",
+                "Solicitud de Revisión Cobro de Patente",
+                "Solicitud de Arrendamiento de Patente",
+                "Solicitud de Modificación de Razón Social y/o RUT",
+                "Solicitud de Traslado para Sociedad de Inversiones"
+            ]
+        },
+        {
+            "nombre": "Certificados",
+            "icono": "award",
+            "color": "#7c3aed",
+            "tramites": [
+                "Solicitud de Certificado de Distribución Capital (Apertura Sucursal)",
+                "Solicitud de Certificado de No Deuda Patente",
+                "Solicitud de Certificado de Distribución de Capital Propio"
+            ]
+        }
+    ],
+    "tramites_detalle": [
+        {
+            "tramite_base": "Solicitud de Patente Comercial",
+            "Campos": [
+                "RUTXX001",
+                "CONT001",
+                "CONT002",
+                "DIRE_C_REG",
+                "DIRE_C_COM",
+                "DIRE_C_CAL",
+                "DIRE_C_NUM",
+                "DIRE_C_OBS",
+                "DIRE_C_LAT",
+                "DIRE_C_LON",
+                "DIRE_P_REG",
+                "DIRE_P_COM",
+                "DIRE_P_CAL",
+                "DIRE_P_NUM",
+                "DIRE_P_OBS",
+                "DIRE_P_LAT",
+                "DIRE_P_LON",
+                "DATOS003",
+                "PATEN001",
+                "DATOS004",
+                "GIRO001",
+                "SIIXX001",
+                "SEDE001",
+                "SEDE002",
+                "SEDE003",
+                "TRABA001",
+                "TRABA002",
+                "TRABA003",
+                "TRABA004",
+                "PROP001",
+                "PROP002",
+                "PROP003",
+                "CAPIT001",
+                "DATOS001",
+                "DOC002",
+                "DOC003",
+                "DOC009",
+                "DOC015",
+                "DOC005",
+                "DOC006",
+                "DOC016",
+                "DOC020",
+                "DOC036",
+                "DOC035",
+                "DOC010",
+                "DOC011",
+                "DOC021"
+            ],
+            "variaciones_adicionales": [
+                {
+                    "variacion": "¿El contribuyente es una sociedad comercial (Persona Jurídica)?",
+                    "documentos_adicionales": [
+                        "DOC003",
+                        "DOC015",
+                        "DOC039"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de elaboración y/o expendio de alimentos?",
+                    "documentos_adicionales": [
+                        "DOC005"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades relacionadas a estación de servicios, gas y combustible?",
+                    "documentos_adicionales": [
+                        "DOC037",
+                        "DOC041"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades relacionadas a capacitaciones a personas de manera presencial?",
+                    "documentos_adicionales": [
+                        "DOC038"
+                    ]
+                },
+                {
+                    "variacion": "¿El contribuyente declara tener casa matriz en otra comuna?",
+                    "documentos_adicionales": [
+                        "DOC018",
+                        "DOC019"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de jardín y/o sala cuna JUNJI?",
+                    "documentos_adicionales": [
+                        "DOC020"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de una actividad de alojamiento (Sernatur)?",
+                    "documentos_adicionales": []
+                },
+                {
+                    "variacion": "¿El contribuyente apertura un nuevo domicilio como sucursal?",
+                    "documentos_adicionales": [
+                        "DOC017"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de una actividad comercial que tiene más de un año desde el inicio de actividad realizado en el SII?",
+                    "documentos_adicionales": [
+                        "DOC040"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades relacionadas a electricidad y/o combustible?",
+                    "documentos_adicionales": [
+                        "DOC037",
+                        "DOC041"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de discoteca, salón de baile, etc. (Certificado de Ruidos)?",
+                    "documentos_adicionales": [
+                        "DOC042"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de seguridad privada o actividades de alcohol de las letras \"D, E y O\"?",
+                    "documentos_adicionales": [
+                        "DOC043"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de taller o realizadas en bodegas (Informe Sanitario)?",
+                    "documentos_adicionales": [
+                        "DOC005",
+                        "DOC006"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de solicitudes de patentes como Domicilio Postal?",
+                    "documentos_adicionales": [
+                        "DOC035",
+                        "DOC036",
+                        "DOC044",
+                        "DOC045"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades realizadas en una oficina establecida y denominada como oficina virtual?",
+                    "documentos_adicionales": [
+                        "DOC046"
+                    ]
+                }
+            ]
+        },
+        {
+            "tramite_base": "Solicitud de Patente Industrial",
+            "Campos": [
+                "RUTXX001",
+                "PATEN001",
+                "CONT001",
+                "CONT002",
+                "DIRE_C_REG",
+                "DIRE_C_COM",
+                "DIRE_C_CAL",
+                "DIRE_C_NUM",
+                "DIRE_C_OBS",
+                "DIRE_C_LAT",
+                "DIRE_C_LON",
+                "DIRE_P_REG",
+                "DIRE_P_COM",
+                "DIRE_P_CAL",
+                "DIRE_P_NUM",
+                "DIRE_P_OBS",
+                "DIRE_P_LAT",
+                "DIRE_P_LON",
+                "DATOS003",
+                "DATOS004",
+                "GIRO001",
+                "SIIXX001",
+                "SEDE001",
+                "SEDE002",
+                "SEDE003",
+                "TRABA001",
+                "TRABA002",
+                "TRABA003",
+                "TRABA004",
+                "PROP001",
+                "PROP002",
+                "PROP003",
+                "CAPIT001",
+                "DATOS001",
+                "DOC002",
+                "DOC003",
+                "DOC009",
+                "DOC015",
+                "DOC005",
+                "DOC006",
+                "DOC016",
+                "DOC020",
+                "DOC036",
+                "DOC035",
+                "DOC010",
+                "DOC011",
+                "DOC021"
+            ],
+            "variaciones_adicionales": [
+                {
+                    "variacion": "¿El contribuyente es una sociedad comercial (Persona Jurídica)?",
+                    "documentos_adicionales": [
+                        "DOC003",
+                        "DOC015",
+                        "DOC039"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de elaboración y/o expendio de alimentos?",
+                    "documentos_adicionales": [
+                        "DOC005"
+                    ]
+                },
+                {
+                    "variacion": "¿El contribuyente declara tener casa matriz en otra comuna?",
+                    "documentos_adicionales": [
+                        "DOC018",
+                        "DOC019"
+                    ]
+                },
+                {
+                    "variacion": "¿El contribuyente apertura un nuevo domicilio como sucursal?",
+                    "documentos_adicionales": [
+                        "DOC017"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de una actividad comercial que tiene más de un año desde el inicio de actividad realizado en el SII?",
+                    "documentos_adicionales": [
+                        "DOC040"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades relacionadas a electricidad y/o combustible?",
+                    "documentos_adicionales": [
+                        "DOC037",
+                        "DOC041"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de taller o realizadas en bodegas (Informe Sanitario)?",
+                    "documentos_adicionales": [
+                        "DOC005",
+                        "DOC006"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de solicitudes de patentes como Domicilio Postal?",
+                    "documentos_adicionales": [
+                        "DOC035",
+                        "DOC036",
+                        "DOC044",
+                        "DOC045"
+                    ]
+                }
+            ]
+        },
+        {
+            "tramite_base": "Solicitud de Patente Profesional",
+            "Campos": [
+                "RUTXX001",
+                "PATEN001",
+                "CONT001",
+                "DIRE_C_REG",
+                "DIRE_C_COM",
+                "DIRE_C_CAL",
+                "DIRE_C_NUM",
+                "DIRE_C_OBS",
+                "DIRE_C_LAT",
+                "DIRE_C_LON",
+                "DIRE_P_REG",
+                "DIRE_P_COM",
+                "DIRE_P_CAL",
+                "DIRE_P_NUM",
+                "DIRE_P_OBS",
+                "DIRE_P_LAT",
+                "DIRE_P_LON",
+                "DATOS003",
+                "DATOS004",
+                "GIRO001",
+                "SIIXX001",
+                "PROFE001",
+                "PROFE002",
+                "PROFE003",
+                "PROFE004",
+                "PROP001",
+                "PROP002",
+                "PROP003",
+                "PROFE005",
+                "DATOS001",
+                "DOC002",
+                "DOC009",
+                "DOC005",
+                "DOC022",
+                "DOC016",
+                "DOC020",
+                "DOC036",
+                "DOC035",
+                "DOC010",
+                "DOC011"
+            ],
+            "variaciones_adicionales": [
+                {
+                    "variacion": "¿El contribuyente es una sociedad comercial (Persona Jurídica)?",
+                    "documentos_adicionales": [
+                        "DOC003",
+                        "DOC039"
+                    ]
+                },
+                {
+                    "variacion": "¿El contribuyente declara tener casa matriz en otra comuna?",
+                    "documentos_adicionales": [
+                        "DOC018",
+                        "DOC019"
+                    ]
+                },
+                {
+                    "variacion": "¿El contribuyente apertura un nuevo domicilio como sucursal?",
+                    "documentos_adicionales": [
+                        "DOC017"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de solicitudes de patentes como Domicilio Postal?",
+                    "documentos_adicionales": [
+                        "DOC035",
+                        "DOC036",
+                        "DOC044",
+                        "DOC045"
+                    ]
+                }
+            ]
+        },
+        {
+            "tramite_base": "Solicitud de Patente Alcohol",
+            "Campos": [
+                "RUTXX001",
+                "CONT001",
+                "CONT002",
+                "DIRE_C_REG",
+                "DIRE_C_COM",
+                "DIRE_C_CAL",
+                "DIRE_C_NUM",
+                "DIRE_C_OBS",
+                "DIRE_C_LAT",
+                "DIRE_C_LON",
+                "DIRE_P_REG",
+                "DIRE_P_COM",
+                "DIRE_P_CAL",
+                "DIRE_P_NUM",
+                "DIRE_P_OBS",
+                "DIRE_P_LAT",
+                "DIRE_P_LON",
+                "DATOS003",
+                "PATEN002",
+                "PATEN003",
+                "DATOS004",
+                "GIRO004",
+                "GIRO005",
+                "SIIXX001",
+                "SEDE001",
+                "SEDE002",
+                "SEDE003",
+                "TRABA001",
+                "TRABA002",
+                "TRABA003",
+                "TRABA004",
+                "PROP001",
+                "PROP002",
+                "PROP003",
+                "CAPIT001",
+                "DATOS001",
+                "DOC002",
+                "DOC003",
+                "DOC009",
+                "DOC015",
+                "DOC005",
+                "DOC006",
+                "DOC016",
+                "DOC020",
+                "DOC036",
+                "DOC035",
+                "DOC010",
+                "DOC011",
+                "DOC021"
+            ],
+            "variaciones_adicionales": [
+                {
+                    "variacion": "¿El contribuyente es una sociedad comercial (Persona Jurídica)?",
+                    "documentos_adicionales": [
+                        "DOC003",
+                        "DOC015",
+                        "DOC039"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de elaboración y/o expendio de alimentos?",
+                    "documentos_adicionales": [
+                        "DOC005"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de expendio y/o consumo de alcohol?",
+                    "documentos_adicionales": [
+                        "DOC012",
+                        "DOC014",
+                        "DOC013"
+                    ]
+                },
+                {
+                    "variacion": "¿El contribuyente declara tener casa matriz en otra comuna?",
+                    "documentos_adicionales": [
+                        "DOC018",
+                        "DOC019"
+                    ]
+                },
+                {
+                    "variacion": "¿El contribuyente apertura un nuevo domicilio como sucursal?",
+                    "documentos_adicionales": [
+                        "DOC017"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de discoteca, salón de baile, etc. (Certificado de Ruidos)?",
+                    "documentos_adicionales": [
+                        "DOC042"
+                    ]
+                },
+                {
+                    "variacion": "¿Se trata de actividades de seguridad privada o actividades de alcohol de las letras \"D, E y O\"?",
+                    "documentos_adicionales": [
+                        "DOC043"
+                    ]
+                }
+            ]
+        },
+        {
+            "tramite_base": "Solicitud de Patente Microempresa Familiar (MEF)",
+            "Campos": [
+                "RUTXX001",
+                "PATEN001",
+                "PATEN005",
+                "CONT001",
+                "CONT002",
+                "DIRE_C_REG",
+                "DIRE_C_COM",
+                "DIRE_C_CAL",
+                "DIRE_C_NUM",
+                "DIRE_C_OBS",
+                "DIRE_C_LAT",
+                "DIRE_C_LON",
+                "DIRE_P_REG",
+                "DIRE_P_COM",
+                "DIRE_P_CAL",
+                "DIRE_P_NUM",
+                "DIRE_P_OBS",
+                "DIRE_P_LAT",
+                "DIRE_P_LON",
+                "DATOS003",
+                "DATOS004",
+                "GIRO001",
+                "SIIXX001",
+                "SEDE001",
+                "SEDE002",
+                "SEDE003",
+                "TRABA001",
+                "TRABA002",
+                "TRABA003",
+                "TRABA004",
+                "PROP001",
+                "PROP002",
+                "PROP003",
+                "CAPIT001",
+                "DATOS001",
+                "DOC002",
+                "DOC009",
+                "DOC005",
+                "DOC006"
+            ],
+            "variaciones_adicionales": []
+        },
+        {
+            "tramite_base": "Solicitud de Cambio de Nombre",
+            "Campos": [
+                "DATOSXX003",
+                "DATOSXX004",
+                "PATEN001",
+                "GIRO001",
+                "DATOS008",
+                "DATOS009",
+                "RUTXX001",
+                "DIRE_C_REG",
+                "DIRE_C_COM",
+                "DIRE_C_CAL",
+                "DIRE_C_NUM",
+                "DIRE_C_OBS",
+                "DIRE_C_LAT",
+                "DIRE_C_LON",
+                "CONT001",
+                "DIRE_P_REG",
+                "DIRE_P_COM",
+                "DIRE_P_CAL",
+                "DIRE_P_NUM",
+                "DIRE_P_OBS",
+                "DIRE_P_LAT",
+                "DIRE_P_LON",
+                "DATOS003",
+                "DATOS004",
+                "DATOS001",
+                "DOC001",
+                "DOC002",
+                "DOC003",
+                "DOC028",
+                "DOC009",
+                "DOC015",
+                "DOC005",
+                "DOC006",
+                "DOC016",
+                "DOC008",
+                "DOC036",
+                "DOC035",
+                "DOC010",
+                "DOC011"
+            ],
+            "variaciones_adicionales": [
+                {
+                    "variacion": "¿El contribuyente es una sociedad comercial (Persona Jurídica)?",
+                    "documentos_adicionales": [
+                        "DOC003",
+                        "DOC015",
+                        "DOC039"
+                    ]
+                }
+            ]
+        },
+        {
+            "tramite_base": "Solicitud de Traslado",
+            "Campos": [
+                "DATOSXX003",
+                "DATOSXX004",
+                "PATEN001",
+                "CONT001",
+                "DIRE_A_REG",
+                "DIRE_A_COM",
+                "DIRE_A_CAL",
+                "DIRE_A_NUM",
+                "DIRE_A_OBS",
+                "DIRE_A_LAT",
+                "DIRE_A_LON",
+                "DIRE_M_REG",
+                "DIRE_M_COM",
+                "DIRE_M_CAL",
+                "DIRE_M_NUM",
+                "DIRE_M_OBS",
+                "DIRE_M_LAT",
+                "DIRE_M_LON",
+                "RUTXX001",
+                "GIRO001",
+                "DIRE_P_REG",
+                "DIRE_P_COM",
+                "DIRE_P_CAL",
+                "DIRE_P_NUM",
+                "DIRE_P_OBS",
+                "DIRE_P_LAT",
+                "DIRE_P_LON",
+                "DATOS003",
+                "DATOS004",
+                "DATOS001",
+                "DOC001",
+                "DOC002",
+                "DOC003",
+                "DOC009",
+                "DOC005",
+                "DOC006",
+                "DOC007",
+                "DOC008",
+                "DOC036",
+                "DOC035",
+                "DOC010",
+                "DOC011"
+            ],
+            "variaciones_adicionales": []
+        },
+        {
+            "tramite_base": "Solicitud de Rectificación y/o Modificación de Domicilio",
+            "Campos": [
+                "DATOSXX003",
+                "DATOSXX004",
+                "PATEN001",
+                "CONT001",
+                "DIRE_A_REG",
+                "DIRE_A_COM",
+                "DIRE_A_CAL",
+                "DIRE_A_NUM",
+                "DIRE_A_OBS",
+                "DIRE_A_LAT",
+                "DIRE_A_LON",
+                "DIRE_M_REG",
+                "DIRE_M_COM",
+                "DIRE_M_CAL",
+                "DIRE_M_NUM",
+                "DIRE_M_OBS",
+                "DIRE_M_LAT",
+                "DIRE_M_LON",
+                "RUTXX001",
+                "GIRO001",
+                "DIRE_P_REG",
+                "DIRE_P_COM",
+                "DIRE_P_CAL",
+                "DIRE_P_NUM",
+                "DIRE_P_OBS",
+                "DIRE_P_LAT",
+                "DIRE_P_LON",
+                "DATOS003",
+                "DATOS004",
+                "DATOS001",
+                "DOC001",
+                "DOC002",
+                "DOC003",
+                "DOC005",
+                "DOC006",
+                "DOC007",
+                "DOC008",
+                "DOC027",
+                "DOC036",
+                "DOC035",
+                "DOC010",
+                "DOC011",
+                "DOC021"
+            ],
+            "variaciones_adicionales": []
+        },
+        {
+            "tramite_base": "Solicitud de Regularización Patentes de Alcoholes",
+            "Campos": [
+                "DATOSXX003",
+                "DATOSXX004",
+                "PATEN004",
+                "GIRO001",
+                "CONT001",
+                "RUTXX001",
+                "DIRE_C_REG",
+                "DIRE_C_COM",
+                "DIRE_C_CAL",
+                "DIRE_C_NUM",
+                "DIRE_C_OBS",
+                "DIRE_C_LAT",
+                "DIRE_C_LON",
+                "CONT001",
+                "DIRE_P_REG",
+                "DIRE_P_COM",
+                "DIRE_P_CAL",
+                "DIRE_P_NUM",
+                "DIRE_P_OBS",
+                "DIRE_P_LAT",
+                "DIRE_P_LON",
+                "DATOS003",
+                "DATOS004",
+                "DATOS001",
+                "DOC031",
+                "DOC030",
+                "DOC002",
+                "DOC003",
+                "DOC009",
+                "DOC015",
+                "DOC005",
+                "DOC016",
+                "DOC010",
+                "DOC011",
+                "DOC021"
+            ],
+            "variaciones_adicionales": []
+        },
+        {
+            "tramite_base": "Solicitud de Término de Negocio",
+            "Campos": [
+                "DATOSXX003",
+                "DATOSXX004",
+                "DATOSXX001",
+                "PATEN001",
+                "DIRE_C_REG",
+                "DIRE_C_COM",
+                "DIRE_C_CAL",
+                "DIRE_C_NUM",
+                "DIRE_C_OBS",
+                "DIRE_C_LAT",
+                "DIRE_C_LON",
+                "CONT001",
+                "RUTXX001",
+                "DATOS003",
+                "DATOS004",
+                "GIRO001",
+                "PATEN006",
+                "PATEN007",
+                "PATEN008",
+                "DATOSXX002",
+                "DATOS001",
+                "DOC001",
+                "DOC023",
+                "DOC024",
+                "DOC025",
+                "DOC026"
+            ],
+            "variaciones_adicionales": []
+        },
+        {
+            "tramite_base": "Solicitud de Ampliación y/o Cambio de Giro",
+            "Campos": [
+                "DATOSXX003",
+                "DATOSXX004",
+                "PATEN001",
+                "CONT001",
+                "RUTXX001",
+                "GIRO002",
+                "GIRO003",
+                "DIRE_C_REG",
+                "DIRE_C_COM",
+                "DIRE_C_CAL",
+                "DIRE_C_NUM",
+                "DIRE_C_OBS",
+                "DIRE_C_LAT",
+                "DIRE_C_LON",
+                "CONT001",
+                "DIRE_P_REG",
+                "DIRE_P_COM",
+                "DIRE_P_CAL",
+                "DIRE_P_NUM",
+                "DIRE_P_OBS",
+                "DIRE_P_LAT",
+                "DIRE_P_LON",
+                "DATOS003",
+                "DATOS004",
+                "DATOS001",
+                "DOC001",
+                "DOC002",
+                "DOC003",
+                "DOC005",
+                "DOC006",
+                "DOC032",
+                "DOC008",
+                "DOC036",
+                "DOC035",
+                "DOC010",
+                "DOC011"
+            ],
+            "variaciones_adicionales": []
+        },
+        {
+            "tramite_base": "Declaración de Propaganda",
+            "Campos": [
+                "DATOSXX003",
+                "DATOSXX004",
+                "PATEN001",
+                "CONT001",
+                "RUTXX001",
+                "DIRE_C_REG",
+                "DIRE_C_COM",
+                "DIRE_C_CAL",
+                "DIRE_C_NUM",
+                "DIRE_C_OBS",
+                "DIRE_C_LAT",
+                "DIRE_C_LON",
+                "GIRO001",
+                "DATOS003",
+                "DATOS004",
+                "PROP005",
+                "PROP001",
+                "PROP002",
+                "PROP004",
+                "DATOS001",
+                "DOC001"
+            ],
+            "variaciones_adicionales": []
+        },
+        {
+            "tramite_base": "Solicitud de Revisión Cobro de Patente",
+            "Campos": [
+                "DATOSXX003",
+                "DATOSXX004",
+                "PATEN001",
+                "CONT001",
+                "DIRE_C_REG",
+                "DIRE_C_COM",
+                "DIRE_C_CAL",
+                "DIRE_C_NUM",
+                "DIRE_C_OBS",
+                "DIRE_C_LAT",
+                "DIRE_C_LON",
+                "RUTXX001",
+                "GIRO001",
+                "DATOS005",
+                "DATOS003",
+                "DATOS004",
+                "REVIS001",
+                "REVIS002",
+                "REVIS003",
+                "REVIS004",
+                "REVIS005",
+                "REVIS006",
+                "REVIS007",
+                "REVIS008",
+                "DEVOL001",
+                "DEVOL002",
+                "DEVOL003",
+                "DEVOL004",
+                "DEVOL005",
+                "DATOS001",
+                "DOC001"
+            ],
+            "variaciones_adicionales": []
+        },
+        {
+            "tramite_base": "Solicitud de Arrendamiento de Patente",
+            "Campos": [
+                "DATOSXX003",
+                "DATOSXX004",
+                "PATEN001",
+                "GIRO001",
+                "DATOS006",
+                "DATOS007",
+                "RUTXX001",
+                "DIRE_C_REG",
+                "DIRE_C_COM",
+                "DIRE_C_CAL",
+                "DIRE_C_NUM",
+                "DIRE_C_OBS",
+                "DIRE_C_LAT",
+                "DIRE_C_LON",
+                "CONT001",
+                "DIRE_P_REG",
+                "DIRE_P_COM",
+                "DIRE_P_CAL",
+                "DIRE_P_NUM",
+                "DIRE_P_OBS",
+                "DIRE_P_LAT",
+                "DIRE_P_LON",
+                "DATOS003",
+                "DATOS004",
+                "DATOS001",
+                "DOC001",
+                "DOC002",
+                "DOC003",
+                "DOC029",
+                "DOC009",
+                "DOC015",
+                "DOC005",
+                "DOC006",
+                "DOC016",
+                "DOC008",
+                "DOC036",
+                "DOC035",
+                "DOC010",
+                "DOC011",
+                "DOC021"
+            ],
+            "variaciones_adicionales": []
+        },
+        {
+            "tramite_base": "Solicitud de Certificado de Distribución Capital (Apertura Sucursal)",
+            "Campos": [
+                "DATOSXX003",
+                "DATOSXX004",
+                "PATEN001",
+                "CONT001",
+                "RUTXX001",
+                "DIRE_C_REG",
+                "DIRE_C_COM",
+                "DIRE_C_CAL",
+                "DIRE_C_NUM",
+                "DIRE_C_OBS",
+                "DIRE_C_LAT",
+                "DIRE_C_LON",
+                "GIRO001",
+                "DATOS003",
+                "DATOS004",
+                "CAPIT003",
+                "CAPIT004",
+                "CAPIT005",
+                "DATOS001",
+                "DOC001"
+            ],
+            "variaciones_adicionales": []
+        },
+        {
+            "tramite_base": "Solicitud de Certificado de No Deuda Patente",
+            "Campos": [
+                "DATOSXX003",
+                "DATOSXX004",
+                "PATEN001",
+                "CONT001",
+                "RUTXX001",
+                "DIRE_C_REG",
+                "DIRE_C_COM",
+                "DIRE_C_CAL",
+                "DIRE_C_NUM",
+                "DIRE_C_OBS",
+                "DIRE_C_LAT",
+                "DIRE_C_LON",
+                "GIRO001",
+                "DATOS003",
+                "DATOS004",
+                "DATOS012",
+                "PATEN009",
+                "DATOS001",
+                "DOC001"
+            ],
+            "variaciones_adicionales": []
+        },
+        {
+            "tramite_base": "Solicitud de Modificación de Razón Social y/o RUT",
+            "Campos": [
+                "DATOSXX003",
+                "DATOSXX004",
+                "PATEN001",
+                "GIRO001",
+                "DATOS010",
+                "DATOS011",
+                "RUTXX001",
+                "DIRE_C_REG",
+                "DIRE_C_COM",
+                "DIRE_C_CAL",
+                "DIRE_C_NUM",
+                "DIRE_C_OBS",
+                "DIRE_C_LAT",
+                "DIRE_C_LON",
+                "CONT001",
+                "DIRE_P_REG",
+                "DIRE_P_COM",
+                "DIRE_P_CAL",
+                "DIRE_P_NUM",
+                "DIRE_P_OBS",
+                "DIRE_P_LAT",
+                "DIRE_P_LON",
+                "DATOS003",
+                "DATOS004",
+                "DATOS001",
+                "DOC001",
+                "DOC003",
+                "DOC034",
+                "DOC005",
+                "DOC006",
+                "DOC033",
+                "DOC008"
+            ],
+            "variaciones_adicionales": []
+        },
+        {
+            "tramite_base": "Solicitud de Patente Sociedad de Inversiones",
+            "Campos": [
+                "PATEN001",
+                "CONT001",
+                "RUTXX002",
+                "CONT002",
+                "DIRE_C_REG",
+                "DIRE_C_COM",
+                "DIRE_C_CAL",
+                "DIRE_C_NUM",
+                "DIRE_C_OBS",
+                "DIRE_C_LAT",
+                "DIRE_C_LON",
+                "DATOS003",
+                "DATOS004",
+                "GIRO001",
+                "SIIXX001",
+                "DATOS001",
+                "DOC003",
+                "DOC009",
+                "DOC015",
+                "DOC008",
+                "DOC010",
+                "DOC011"
+            ],
+            "variaciones_adicionales": []
+        },
+        {
+            "tramite_base": "Solicitud de Traslado para Sociedad de Inversiones",
+            "Campos": [
+                "DATOSXX003",
+                "DATOSXX004",
+                "PATEN001",
+                "CONT001",
+                "RUTXX001",
+                "DIRE_A_REG",
+                "DIRE_A_COM",
+                "DIRE_A_CAL",
+                "DIRE_A_NUM",
+                "DIRE_A_OBS",
+                "DIRE_A_LAT",
+                "DIRE_A_LON",
+                "DIRE_M_REG",
+                "DIRE_M_COM",
+                "DIRE_M_CAL",
+                "DIRE_M_NUM",
+                "DIRE_M_OBS",
+                "DIRE_M_LAT",
+                "DIRE_M_LON",
+                "GIRO001",
+                "DATOS003",
+                "DATOS004",
+                "DATOS001",
+                "DOC003",
+                "DOC009",
+                "DOC007",
+                "DOC008",
+                "DOC015",
+                "DOC010",
+                "DOC011"
+            ],
+            "variaciones_adicionales": []
+        },
+        {
+            "tramite_base": "Solicitud de Certificado de Distribución de Capital Propio",
+            "Campos": [
+                "DATOSXX003",
+                "DATOSXX004",
+                "CONT001",
+                "DIRE_C_REG",
+                "DIRE_C_COM",
+                "DIRE_C_CAL",
+                "DIRE_C_NUM",
+                "DIRE_C_OBS",
+                "DIRE_C_LAT",
+                "DIRE_C_LON",
+                "RUTXX001",
+                "DATOS003",
+                "PATEN001",
+                "GIRO001",
+                "CAPIT003",
+                "DATOS013",
+                "USOEM001",
+                "USOEM002",
+                "CAPIT002",
+                "DATOS001"
+            ],
+            "variaciones_adicionales": []
+        }
+    ]
+}

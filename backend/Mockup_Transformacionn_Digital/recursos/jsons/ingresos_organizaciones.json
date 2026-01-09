@@ -1,0 +1,12 @@
+[
+    {
+        "ID_Organizacion": 1,
+        "Nombre_organizacion": "Junta de Vecinos #1",
+        "Tipo_organizacion": 1
+    },
+    {
+        "ID_Organizacion": 2,
+        "Nombre_organizacion": "Fundacion Ayuda",
+        "Tipo_organizacion": 1
+    }
+]

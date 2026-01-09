@@ -1,0 +1,290 @@
+/* CSS Reset & Basics match Bootstrap but adding custom tweaks */
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+    /* Prevent body scroll, handle in containers */
+}
+
+/* Sidebar Customization */
+#sidebar-container {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    z-index: 1050;
+}
+
+#sidebar {
+    background-color: #005cab !important;
+    /* Bootstrap Primary Blue */
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+#sidebar-container.collapsed {
+    min-width: 70px !important;
+    max-width: 70px !important;
+}
+
+#sidebar-container.collapsed .sidebar-text,
+#sidebar-container.collapsed .nav-link span span,
+#sidebar-container.collapsed .nav-link i[data-feather="chevron-down"],
+#sidebar-container.collapsed .sidebar-footer-text {
+    display: none !important;
+}
+
+#sidebar-container.collapsed .p-3 img {
+    width: 40px !important;
+}
+
+#sidebar-container.collapsed .nav-link {
+    justify-content: center;
+    padding: 0.8rem;
+}
+
+#sidebar-container.collapsed .nav-link i {
+    margin-right: 0 !important;
+}
+
+#sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 2px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+#sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+#sidebar .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-weight: 500;
+}
+
+/* Nested Menus */
+.submenu {
+    padding-left: 1.2rem;
+    display: none;
+    /* Hidden by default */
+    list-style: none;
+    padding-top: 2px;
+}
+
+.submenu.show {
+    display: block;
+}
+
+.submenu .nav-link {
+    font-size: 0.9em;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+}
+
+/* Login Styling */
+#login-screen {
+    background: #f0f2f5;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* --- DASHBOARD CUSTOM STYLES --- */
+
+/* Stats Cards */
+.card-stat {
+    border-radius: 4px;
+    /* Sharper corners as per design */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    height: 100%;
+}
+
+.card-stat-blue {
+    border: 2px solid #0072c6;
+    /* Blue border */
+}
+
+.card-stat-red {
+    border: 2px solid #dc3545;
+    /* Red border */
+}
+
+.card-stat-yellow {
+    border: 2px solid #ffc107;
+    /* Yellow border */
+}
+
+.card-stat .card-title {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.card-stat .stat-value {
+    font-size: 2rem;
+    font-weight: 400;
+    color: #212529;
+}
+
+/* Buttons */
+.btn-gold {
+    background-color: #c59123;
+    /* Gold/Ochre color from image */
+    border-color: #c59123;
+    color: white;
+    font-weight: 500;
+}
+
+.btn-gold:hover {
+    background-color: #a87b1e;
+    border-color: #a87b1e;
+    color: white;
+}
+
+/* Table Badges */
+.badge-role-creator {
+    background-color: #0dcaf0;
+    /* Cyan */
+    color: white;
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+}
+
+.badge-role-assigned {
+    background-color: #0072c6;
+    /* Blue */
+    color: white;
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+}
+
+.badge-status-pending {
+    background-color: #ffc107;
+    /* Warning Yellow */
+    color: white;
+    /* White text looks better */
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 0.35em 0.65em;
+    border-radius: 4px;
+}
+
+/* Table Styling */
+.table-header-custom {
+    color: #0072c6;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table thead th {
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: #212529;
+    border-bottom: 2px solid #dee2e6;
+    background-color: #fff;
+    vertical-align: middle;
+}
+
+.table tbody td {
+    vertical-align: middle;
+    font-size: 0.9rem;
+    color: #495057;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.project-text {
+    color: #0072c6;
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.sub-text {
+    display: block;
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 2px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    #sidebar-container {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        bottom: 0;
+        width: 250px;
+        max-width: 250px;
+        z-index: 1100;
+    }
+
+    #sidebar-container.show-mobile {
+        left: 0 !important;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    #sidebar-container.collapsed {
+        left: -70px !important;
+    }
+}
+
+#sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+    display: none;
+}
+
+#sidebar-overlay.show {
+    display: block;
+}
+
+.btn-sidebar-toggle {
+    background: none;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: #6c757d;
+}
+
+.btn-sidebar-toggle:hover {
+    color: #005cab;
+}

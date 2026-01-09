@@ -1,0 +1,50 @@
+[
+    {
+        "subvencion": "SUB-2024-001",
+        "rendicion": "REN-2024-001",
+        "fecha": "2024-09-20",
+        "estado": "APROBADA",
+        "informe_juridico": "INF-JUR-2024-045",
+        "numero_ingreso": "ING-2024-123",
+        "fecha_ingreso": "2024-09-12",
+        "rut": "76.123.456-7",
+        "fiscalizador": "María González Ruiz",
+        "monto_rendido": 3500000
+    },
+    {
+        "subvencion": "SUB-2024-002",
+        "rendicion": "REN-2024-002",
+        "fecha": "2024-09-18",
+        "estado": "OBSERVADA",
+        "informe_juridico": "INF-JUR-2024-049",
+        "numero_ingreso": "ING-2024-145",
+        "fecha_ingreso": "2024-09-10",
+        "rut": "76.234.567-8",
+        "fiscalizador": "Carlos Morales Díaz",
+        "monto_rendido": 1500000
+    },
+    {
+        "subvencion": "SUB-2024-008",
+        "rendicion": "REN-2024-008",
+        "fecha": "2024-08-20",
+        "estado": "CERRADA",
+        "informe_juridico": "INF-JUR-2024-032",
+        "numero_ingreso": "ING-2024-067",
+        "fecha_ingreso": "2024-08-20",
+        "rut": "76.056.789-0",
+        "fiscalizador": "Andrea Castro López",
+        "monto_rendido": 2200000
+    },
+    {
+        "subvencion": "SUB-2024-003",
+        "rendicion": "REN-2024-003",
+        "fecha": "2024-07-15",
+        "estado": "PENDIENTE",
+        "informe_juridico": "INF-JUR-2024-019",
+        "numero_ingreso": "ING-2024-199",
+        "fecha_ingreso": "2024-07-10",
+        "rut": "76.345.678-9",
+        "fiscalizador": "Roberto Fernández Silva",
+        "monto_rendido": 7000000
+    }
+]

@@ -1,0 +1,106 @@
+{
+  "solicitudes": [
+    {
+      "numero": "PC-2024-001",
+      "rut": "12.345.678-9",
+      "fechaIngreso": "0NO1/2024",
+      "tipoTramite": "Solicitud de Patente Comercial",
+      "grupo": "NO",
+      "estado": "En Proceso",
+      "estadoClass": "bg-info",
+      "tramitador": "JUAN",
+      "grupoId": null,
+      "grupoSolicitudes": []
+    },
+    {
+      "numero": "PC-2024-002",
+      "rut": "12.345.678-9",
+      "fechaIngreso": "05/11/2024",
+      "tipoTramite": "Cambio de Domicilio",
+      "grupo": "SI",
+      "estado": "En Proceso",
+      "estadoClass": "bg-info",
+      "tramitador": "MARIA",
+      "grupoId": "GRUPO-A",
+      "grupoSolicitudes": [
+        "PC-2024-002",
+        "PC-2024-003"
+      ]
+    },
+    {
+      "numero": "PC-2024-003",
+      "rut": "12.345.678-9",
+      "fechaIngreso": "12/11/2024",
+      "tipoTramite": "Modificación Razón Social",
+      "grupo": "SI",
+      "estado": "Pendiente",
+      "estadoClass": "bg-warning",
+      "tramitador": "MARIA",
+      "grupoId": "GRUPO-A",
+      "grupoSolicitudes": [
+        "PC-2024-002",
+        "PC-2024-003"
+      ]
+    },
+    {
+      "numero": "PC-2024-004",
+      "rut": "12.345.678-9",
+      "fechaIngreso": "07/12/2024",
+      "tipoTramite": "Declaración de Propaganda",
+      "grupo": "NO",
+      "estado": "Pendiente",
+      "estadoClass": "bg-warning",
+      "tramitador": "PEDRO",
+      "grupoId": null,
+      "grupoSolicitudes": []
+    },
+    {
+      "numero": "PC-2024-005",
+      "rut": "12.345.678-9",
+      "fechaIngreso": "09/12/2024",
+      "tipoTramite": "Ampliación de Giro",
+      "grupo": "NO",
+      "estado": "En Proceso",
+      "estadoClass": "bg-info",
+      "tramitador": "JUAN",
+      "grupoId": null,
+      "grupoSolicitudes": []
+    },
+    {
+      "numero": "PC-2024-006",
+      "rut": "98.765.432-1",
+      "fechaIngreso": "15/10/2024",
+      "tipoTramite": "Solicitud de Patente Comercial",
+      "grupo": "NO",
+      "estado": "Aprobado",
+      "estadoClass": "bg-success",
+      "tramitador": "JUAN",
+      "grupoId": null,
+      "grupoSolicitudes": []
+    },
+    {
+      "numero": "PC-2024-007",
+      "rut": "11.222.333-4",
+      "fechaIngreso": "20/09/2024",
+      "tipoTramite": "Solicitud Término Negocio",
+      "grupo": "NO",
+      "estado": "Rechazado",
+      "estadoClass": "bg-danger",
+      "tramitador": "MARIA",
+      "grupoId": null,
+      "grupoSolicitudes": []
+    },
+    {
+      "numero": "PC-2024-008",
+      "rut": "12.345.678-9",
+      "fechaIngreso": "03/12/2024",
+      "tipoTramite": "Certificado de No Deuda",
+      "grupo": "NO",
+      "estado": "En Proceso",
+      "estadoClass": "bg-info",
+      "tramitador": "PEDRO",
+      "grupoId": null,
+      "grupoSolicitudes": []
+    }
+  ]
+}

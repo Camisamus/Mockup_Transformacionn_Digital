@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud de Término de Negocio</title>
+    <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../recursos/css/style.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #0d6efd;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #343a40;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .croquis-box {
+            border: 2px dashed #ccc;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            background-color: #fcfcfc;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <h3 class="mb-4">Solicitud de Término de Negocio</h3>
+
+        <div id="form-container">
+            <div class="d-flex justify-content-end mb-3">
+                <button class="btn btn-sm btn-danger"
+                    onclick="exportElementToPDF('form-container', 'solicitud_termino_negocio')">
+                    <i data-feather="file-text" class="me-1"></i> Exportar Formulario (PDF)
+                </button>
+            </div>
+
+            <!-- 1. Identificación Solicitante -->
+            <div class="section-card">
+                <div class="section-title">1. Identificación del Contribuyente y Patente</div>
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Rol Patente</label>
+                        <input type="text" class="form-control" id="rolPatente">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">RUT</label>
+                        <input type="text" class="form-control" id="rutContribuyente">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre o Razón Social</label>
+                        <input type="text" class="form-control" id="nombreRazonSocial">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Dirección (Calle, N°, Población)</label>
+                        <input type="text" class="form-control" id="direccion">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Giro</label>
+                        <input type="text" class="form-control" id="giro">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Teléfono</label>
+                        <input type="tel" class="form-control" id="telefono">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">E-MAIL</label>
+                        <input type="email" class="form-control" id="email">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Estado de Deuda -->
+            <div class="section-card">
+                <div class="section-title">2. Estado de la Patente (Deuda)</div>
+                <div class="alert alert-warning small mb-3">
+                    <strong>Importante:</strong> Si existe deuda, debe pagar o suscribir convenio en el Depto. de
+                    Cobranzas.
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="estadoDeuda" id="deudaSinDeuda">
+                            <label class="form-check-label" for="deudaSinDeuda">Sin Deuda</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="estadoDeuda" id="deudaConDeuda">
+                            <label class="form-check-label" for="deudaConDeuda">Con Deuda (Adjuntar Cert.
+                                Cobranzas)</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="estadoDeuda" id="deudaConvenio">
+                            <label class="form-check-label" for="deudaConvenio">Con Convenio (Adjuntar Cert.
+                                Cobranzas)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Antecedentes -->
+            <div class="section-card">
+                <div class="section-title">3. Antecedentes Adjuntos (Marque lo que adjunta)</div>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="adjPatente">
+                            <label class="form-check-label" for="adjPatente">Fotocopia simple última Patente pagada (al
+                                día).</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="adjTerminoGiro">
+                            <label class="form-check-label" for="adjTerminoGiro">Término de Giro / Cierre Sucursal
+                                (S.I.I.).</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="adjF29">
+                            <label class="form-check-label" for="adjF29">Fotocopia F-29 sin movimientos (o fundantes
+                                actividad).</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="adjHonorarios">
+                            <label class="form-check-label" for="adjHonorarios">Resumen Boletas Honorarios (Patente
+                                Profesional).</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="adjCobranzas">
+                            <label class="form-check-label" for="adjCobranzas">Certificado Depto. Cobranzas (si hay
+                                deuda/convenio).</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Geolocalización (Google Maps) -->
+            <div class="section-card">
+                <div class="section-title">4. Geolocalización</div>
+                <div class="alert alert-info small" role="alert">
+                    <i data-feather="map-pin" class="me-1"></i> Ingrese la dirección exacta para ubicarla en el mapa.
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Calle</label>
+                        <input type="text" class="form-control" id="mapCalle" placeholder="Ej: Av. Providencia">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Número</label>
+                        <input type="text" class="form-control" id="mapNumero" placeholder="Ej: 1234">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Comuna</label>
+                        <input type="text" class="form-control" id="mapComuna" value="Santiago">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Región</label>
+                        <input type="text" class="form-control" id="mapRegion" value="Metropolitana" readonly>
+                    </div>
+                    <div class="col-12 text-end">
+                        <button class="btn btn-primary btn-sm" onclick="buscarDireccion()">
+                            <i data-feather="search" class="me-1"></i> Buscar en Mapa
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Map Container -->
+                <div id="map" style="height: 400px; width: 100%; border-radius: 8px; border: 1px solid #ddd;"
+                    class="mb-3"></div>
+
+                <!-- Coordinates -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Latitud</label>
+                        <input type="text" class="form-control form-control-sm bg-light" id="mapLat" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Longitud</label>
+                        <input type="text" class="form-control form-control-sm bg-light" id="mapLng" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Firma y Fiscalización -->
+            <div class="section-card">
+                <div class="mt-2">
+                    <label class="form-label fw-bold">Firma del Contribuyente</label>
+                    <div class="border border-2 border-secondary border-dashed p-5 text-center text-muted rounded bg-light"
+                        id="seccionFirma">
+                        [Firma Digital]
+                    </div>
+                </div>
+                <div class="mt-4 pt-3 border-top">
+                    <label class="form-label fw-bold text-muted small text-uppercase">Uso Exclusivo Dpto.
+                        Fiscalización</label>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label class="form-label small">Fecha Fiscalización</label>
+                            <input type="date" class="form-control form-control-sm" disabled>
+                        </div>
+                        <div class="col-md-9">
+                            <label class="form-label small">Informe (Verificación Dirección y Estado Patente)</label>
+                            <textarea class="form-control form-control-sm bg-light" rows="3" disabled></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Actions -->
+        <div class="d-flex justify-content-end mb-5 gap-2">
+            <button class="btn btn-secondary">Cancelar</button>
+            <button class="btn btn-primary" onclick="alert('Solicitud Enviada')">Enviar Solicitud</button>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="../recursos/js/export_utils.js"></script>
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom Maps Integration -->
+    <script src="../recursos/js/maps_integration.js"></script>
+
+    <!-- Google Maps API (Replace YOUR_API_KEY_HERE) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE&callback=initMap" async defer></script>
+
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
+<script src='../recursos/js/layout_manager.js'></script>
+</body>
+
+</html>

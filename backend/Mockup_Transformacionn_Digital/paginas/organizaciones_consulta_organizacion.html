@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta Organización</title>
+    <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../recursos/css/style.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .section-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #0d6efd;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #343a40;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .section-subtitle {
+            font-weight: 500;
+            color: #6c757d;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
+
+        .nav-tabs .nav-link {
+            color: #495057;
+            font-weight: 500;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #0d6efd;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div>
+                <h2 class="mb-1 fw-bold">Gestión de Organizaciones</h2>
+                <p class="text-muted mb-0">Consulta, crea y modifica organizaciones comunitarias</p>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
+                    <i data-feather="search"></i> Buscar
+                </button>
+                <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
+                    <i data-feather="plus"></i> Nueva
+                </button>
+                <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
+                    <i data-feather="edit"></i> Modificar
+                </button>
+                <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
+                    <i data-feather="file-text"></i> Certificado PDF
+                </button>
+                <button class="btn btn-dark btn-sm d-flex align-items-center gap-2">
+                    <i data-feather="save"></i> Guardar
+                </button>
+            </div>
+        </div>
+
+        <!-- Sección: Información General -->
+        <div class="section-card">
+            <div class="section-title">Información General</div>
+            <div class="section-subtitle">Datos principales de la organización</div>
+
+            <div class="row g-3">
+                <!-- Row 1 -->
+                <div class="col-md-4">
+                    <label class="form-label">Tipo de Organización</label>
+                    <select class="form-select" id="tipoOrganizacion">
+                        <option value="">Seleccione...</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Código</label>
+                    <input type="text" class="form-control" id="codigo" placeholder="Código de organización">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">RUT</label>
+                    <input type="text" class="form-control" id="rut" placeholder="XX.XXX.XXX-X">
+                </div>
+
+                <!-- Row 2 -->
+                <div class="col-md-4">
+                    <label class="form-label">RPJ</label>
+                    <input type="text" class="form-control" id="rpj" placeholder="RPJ">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Categoría</label>
+                    <select class="form-select" id="categoria">
+                        <option value="">Seleccione...</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Subcategoría</label>
+                    <input type="text" class="form-control" id="subcategoria" placeholder="Subcategoría">
+                </div>
+
+                <!-- Row 3 -->
+                <div class="col-md-4">
+                    <label class="form-label">Estado</label>
+                    <select class="form-select" id="estado">
+                        <option value="">Seleccione...</option>
+                    </select>
+                </div>
+                <div class="col-md-8">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="nombre" placeholder="Nombre de la organización">
+                </div>
+
+                <!-- Row 4 -->
+                <div class="col-12">
+                    <label class="form-label">Razón Social</label>
+                    <input type="text" class="form-control" id="razonSocial" placeholder="Razón social">
+                </div>
+
+                <!-- Row 5 -->
+                <div class="col-md-4">
+                    <label class="form-label">Unidad Vecinal</label>
+                    <input type="text" class="form-control" id="unidadVecinal" placeholder="Unidad vecinal">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Registro</label>
+                    <input type="text" class="form-control" id="registro" placeholder="Número de registro">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Folio</label>
+                    <input type="number" class="form-control" id="folio" placeholder="Número de folio">
+                </div>
+
+                <!-- Row 6 -->
+                <div class="col-md-6">
+                    <label class="form-label">Fecha del Registro</label>
+                    <input type="date" class="form-control" id="fechaRegistro">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Número de Socios</label>
+                    <input type="number" class="form-control" id="numeroSocios" placeholder="Cantidad de socios">
+                </div>
+
+                <!-- Row 7 -->
+                <div class="col-md-6">
+                    <label class="form-label">Adecuación de Estatuto Ley 19.418</label>
+                    <select class="form-select" id="adecuacionEstatuto">
+                        <option value="">Seleccione...</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Fecha de Adecuación de Estatuto</label>
+                    <input type="date" class="form-control" id="fechaAdecuacion">
+                </div>
+
+                <!-- Row 8 -->
+                <div class="col-md-6">
+                    <label class="form-label">Ley del Deporte</label>
+                    <select class="form-select" id="leyDeporte">
+                        <option value="">Seleccione...</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Fecha de la Ley del Deporte</label>
+                    <input type="date" class="form-control" id="fechaLeyDeporte">
+                </div>
+
+                <!-- Row 9 -->
+                <div class="col-md-6">
+                    <label class="form-label">Personalidad Jurídica</label>
+                    <select class="form-select" id="personalidadJuridica">
+                        <option value="">Seleccione...</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Otorgada por</label>
+                    <input type="text" class="form-control" id="otorgadaPor" placeholder="Institución otorgante">
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección: Objeto Social -->
+        <div class="section-card">
+            <div class="section-title">Objeto Social</div>
+            <div class="section-subtitle">Información sobre el propósito y áreas de la organización</div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Tipo de Organización</label>
+                    <select class="form-select" id="objetoTipoOrganizacion">
+                        <option value="">Seleccione...</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Área de Especialización</label>
+                    <input type="text" class="form-control" id="areaEspecializacion"
+                        placeholder="Área de especialización">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Fecha de Ingreso</label>
+                    <input type="date" class="form-control" id="fechaIngreso">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Fecha de Término de Vigencia</label>
+                    <input type="date" class="form-control" id="fechaTermino">
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Descripción del Objeto Social</label>
+                    <textarea class="form-control" id="descripcionObjeto" rows="4"
+                        placeholder="Describa detalladamente el objeto social de la organización..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección: Representante Legal -->
+        <div class="section-card">
+            <div class="section-title">Representante Legal</div>
+            <div class="section-subtitle">Información del representante legal de la organización</div>
+
+            <div class="row g-3">
+                <!-- Row 1 -->
+                <div class="col-md-4">
+                    <label class="form-label">RUT</label>
+                    <input type="text" class="form-control" id="repRut" placeholder="XX.XXX.XXX-X">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Apellido Paterno</label>
+                    <input type="text" class="form-control" id="repApellidoPaterno" placeholder="Apellido paterno">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Apellido Materno</label>
+                    <input type="text" class="form-control" id="repApellidoMaterno" placeholder="Apellido materno">
+                </div>
+
+                <!-- Row 2 -->
+                <div class="col-12">
+                    <label class="form-label">Nombres</label>
+                    <input type="text" class="form-control" id="repNombres" placeholder="Nombres">
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección: Domicilio -->
+        <div class="section-card">
+            <div class="section-title">Domicilio</div>
+            <div class="section-subtitle">Información de ubicación y contacto de la organización</div>
+
+            <div class="row g-3">
+                <!-- Row 1 -->
+                <div class="col-md-8">
+                    <label class="form-label">Calle, Avenida o Pasaje</label>
+                    <input type="text" class="form-control" id="domCalle"
+                        placeholder="Nombre de la calle, avenida o pasaje">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Número</label>
+                    <input type="text" class="form-control" id="domNumero" placeholder="Número">
+                </div>
+
+                <!-- Row 2 -->
+                <div class="col-md-4">
+                    <label class="form-label">Bloque</label>
+                    <input type="text" class="form-control" id="domBloque" placeholder="Bloque">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Departamento</label>
+                    <input type="text" class="form-control" id="domDepartamento" placeholder="Departamento">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Comuna (Número)</label>
+                    <input type="text" class="form-control" id="domComunaCodigo" placeholder="Código de comuna">
+                </div>
+
+                <!-- Row 3 -->
+                <div class="col-md-6">
+                    <label class="form-label">Comuna (Nombre)</label>
+                    <input type="text" class="form-control" id="domComunaNombre" placeholder="Nombre de la comuna">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Sector</label>
+                    <input type="text" class="form-control" id="domSector" placeholder="Sector">
+                </div>
+
+                <!-- Row 4 -->
+                <div class="col-md-4">
+                    <label class="form-label">Teléfono</label>
+                    <input type="text" class="form-control" id="domTelefono" placeholder="+56 2 XXXX XXXX">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Teléfono Secundario</label>
+                    <input type="text" class="form-control" id="domTelefonoSecundario" placeholder="+56 2 XXXX XXXX">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Celular</label>
+                    <input type="text" class="form-control" id="domCelular" placeholder="+56 9 XXXX XXXX">
+                </div>
+
+                <!-- Row 5 -->
+                <div class="col-12">
+                    <label class="form-label">Correo Electrónico</label>
+                    <input type="email" class="form-control" id="domCorreo" placeholder="correo@ejemplo.cl">
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección: Elecciones/SUBDERE -->
+        <div class="section-card">
+            <div class="section-title">Elecciones/SUBDERE</div>
+            <div class="section-subtitle">Información electoral y registro en SUBDERE</div>
+
+            <div class="row g-3">
+                <!-- Subsección: Elecciones -->
+                <div class="col-12">
+                    <h6 class="fw-bold mb-3">Elecciones</h6>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Fecha Última Elección</label>
+                    <input type="date" class="form-control" id="elecFechaUltima">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Fecha de Vencimiento</label>
+                    <input type="date" class="form-control" id="elecFechaVencimiento">
+                </div>
+
+                <!-- Subsección: SUBDERE -->
+                <div class="col-12 mt-4">
+                    <h6 class="fw-bold mb-3">SUBDERE</h6>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Fecha de Inscripción</label>
+                    <input type="date" class="form-control" id="subFechaInscripcion">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Inscripción SUBDERE Ley 19.862</label>
+                    <select class="form-select" id="subInscripcion">
+                        <option value="">Seleccione...</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Fecha de Actualización</label>
+                    <input type="date" class="form-control" id="subFechaActualizacion">
+                </div>
+            </div>
+        </div>
+
+        <!-- Atenciones Table -->
+        <div class="section-card mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <div class="section-title mb-0">Atenciones</div>
+                    <div class="section-subtitle mb-0">Historial de atenciones realizadas a la organización</div>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-outline-secondary">📊 Excel</button>
+                    <button class="btn btn-sm btn-outline-secondary">📄 PDF</button>
+                    <button class="btn btn-sm btn-primary">+ Nueva Atención</button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover" id="tablaAtenciones">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Número de Atención</th>
+                            <th>Fecha</th>
+                            <th>Atención</th>
+                            <th>Proyecto</th>
+                            <th>Estado</th>
+                            <th>Usuario</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data loaded dynamically from organizaciones_atenciones_mock.json -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Proyectos Table -->
+        <div class="section-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <div class="section-title mb-0">Proyectos</div>
+                    <div class="section-subtitle mb-0">Proyectos asociados a la organización</div>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-outline-secondary">📊 Excel</button>
+                    <button class="btn btn-sm btn-outline-secondary">📄 PDF</button>
+                    <button class="btn btn-sm btn-primary">+ Nuevo Proyecto</button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover" id="tablaProyectos">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Unidad</th>
+                            <th>Años</th>
+                            <th>Número de Ingreso</th>
+                            <th>Nombre del Proyecto</th>
+                            <th>Tipo de Fondo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data loaded dynamically from organizaciones_proyectos_mock.json -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Observaciones -->
+        <div class="section-card">
+            <div class="section-title">Observaciones</div>
+            <div class="section-subtitle">Notas adicionales sobre la organización</div>
+            <textarea class="form-control" id="observaciones" rows="3"
+                placeholder="Escriba observaciones adicionales sobre la organización..."></textarea>
+        </div>
+
+        <!-- Antecedentes Financieros -->
+        <div class="section-card">
+            <div class="section-title">Antecedentes Financieros</div>
+            <div class="section-subtitle">Información financiera de la organización</div>
+            <textarea class="form-control" id="antecedentesFinancieros" rows="3"
+                placeholder="Escriba antecedentes financieros de la organización..."></textarea>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-end gap-2 mb-5">
+            <button class="btn btn-outline-secondary" onclick="limpiarFormulario()">🗑️ Limpiar</button>
+            <button class="btn btn-outline-primary" onclick="editarFormulario()">✏️ Editar</button>
+            <button class="btn btn-primary" onclick="guardarCambios()">💾 Guardar Cambios</button>
+        </div>
+
+    </div>
+
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
+    <script src="../recursos/js/organizaciones_consulta_organizacion.js"></script>
+<script src='../recursos/js/layout_manager.js'></script>
+</body>
+
+</html>

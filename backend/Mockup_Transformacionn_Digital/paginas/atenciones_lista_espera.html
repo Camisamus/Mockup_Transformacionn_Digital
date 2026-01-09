@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Espera</title>
+    <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../recursos/css/style.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .metrics-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            height: 100%;
+            border: 1px solid #dee2e6;
+        }
+
+        .card-total {
+            border-left: 0;
+        }
+
+        .card-alta {
+            background-color: #ffeef0;
+            border: 1px solid #f5c2c7;
+        }
+
+        .card-alta .metric-label {
+            color: #dc3545;
+        }
+
+        .card-alta .metric-value {
+            color: #dc3545 !important;
+        }
+
+        .card-normal {
+            background-color: #effaff;
+            border: 1px solid #b6effb;
+        }
+
+        .card-normal .metric-label {
+            color: #0d6efd;
+        }
+
+        .card-normal .metric-value {
+            color: #0d6efd !important;
+        }
+
+        .card-promedio {
+            background-color: #fff9e6;
+            border: 1px solid #ffecb5;
+        }
+
+        .card-promedio .metric-label {
+            color: #856404;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 500;
+            margin-top: 15px;
+            margin-bottom: 0px;
+            color: #212529;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: #212529;
+            font-weight: 500;
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+            border: 1px solid #dee2e6;
+        }
+
+        .table {
+            font-size: 0.85rem;
+            vertical-align: middle;
+        }
+
+        .table thead th {
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.8rem;
+            border-bottom-width: 1px;
+            text-transform: none;
+            /* Removed uppercase transform if present in style.css, checking later, adding override just in case */
+        }
+
+        .badge-normal {
+            background-color: #cfe2ff;
+            color: #084298;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .badge-alta {
+            background-color: #f8d7da;
+            color: #842029;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .badge-baja {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            border: 1px solid #dee2e6;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .type-badge {
+            border: 1px solid #dee2e6;
+            background: white;
+            color: #212529;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: normal;
+        }
+
+        .tiempo-badge {
+            background-color: #fff3cd;
+            color: #664d03;
+            border: 1px solid #ffecb5;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .action-btn-tomar {
+            background-color: #000;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 4px 12px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .action-btn-tomar:hover {
+            background-color: #333;
+            color: white;
+        }
+
+        .action-icon {
+            color: #6c757d;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .info-alert {
+            background-color: #e7f1ff;
+            border: 1px solid #b6d4fe;
+            color: #084298;
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="mb-1 fw-bold fs-4">Lista de Espera</h2>
+                <p class="text-muted mb-0">Atenciones pendientes de ser atendidas</p>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
+                    <i data-feather="file-text"></i> Exportar Excel
+                </button>
+                <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
+                    <i data-feather="file-text"></i> Exportar PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- Métricas -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="metrics-card card-total">
+                    <div class="metric-label">Total en Espera</div>
+                    <div class="metric-value">4</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metrics-card card-alta">
+                    <div class="metric-label">Prioridad Alta</div>
+                    <div class="metric-value">1</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metrics-card card-normal">
+                    <div class="metric-label">Prioridad Normal</div>
+                    <div class="metric-value">2</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metrics-card card-promedio">
+                    <div class="metric-label">Tiempo Promedio</div>
+                    <div class="metric-value">25m</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de Atenciones en Espera -->
+        <div class="table-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h5 class="mb-1 fw-bold fs-6">Atenciones en Espera</h5>
+                    <p class="text-muted small mb-0">Listado ordenado por tiempo de espera</p>
+                </div>
+                <div class="text-muted small">
+                    <i data-feather="clock"></i> Actualizado hace 1 min
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table" id="tablaEspera">
+                    <thead>
+                        <tr>
+                            <th>Prioridad</th>
+                            <th>Código</th>
+                            <th>Tipo</th>
+                            <th>Organización</th>
+                            <th>RUT</th>
+                            <th>Área</th>
+                            <th>UV</th>
+                            <th>Ingreso</th>
+                            <th>Tiempo</th>
+                            <th>Usuario</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data loaded dynamically from atenciones_lista_espera_mock.json -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="info-alert">
+                <i data-feather="clock"></i>
+                <div>
+                    Nota: Las atenciones se ordenan automáticamente por prioridad y tiempo de espera. Las atenciones de
+                    alta prioridad se muestran primero.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Help Button -->
+    <button class="btn btn-dark rounded-circle position-fixed bottom-0 end-0 m-4" style="width: 50px; height: 50px;">
+        <i data-feather="help-circle"></i>
+    </button>
+
+    <!-- Modal Atender Atención -->
+    <div class="modal fade" id="modalAtender" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
+                <div class="modal-header border-0 pb-0" style="padding: 24px;">
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark" id="modalTitle">Atender: AT-001234</h5>
+                        <p class="text-muted small mb-0">Complete la información para procesar esta atención</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="padding: 24px;">
+
+                    <!-- Información de la Atención -->
+                    <div class="card bg-white border mb-4"
+                        style="border-radius: 10px; border-color: #dee2e6 !important;">
+                        <div class="card-body p-3">
+                            <h6 class="fw-bold mb-3" style="color: #495057; font-size: 0.95rem;">Información de la
+                                Atención</h6>
+
+                            <div class="row g-3" style="font-size: 0.85rem;">
+                                <div class="col-md-4">
+                                    <label class="d-block text-muted small">Tipo:</label>
+                                    <span class="badge bg-white text-dark border fw-normal">Consulta</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="d-block text-muted small">Código Atención:</label>
+                                    <span class="text-dark fw-medium">AT-001234</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="d-block text-muted small">Fecha Ingreso:</label>
+                                    <span class="text-dark">2024-12-03 09:15</span>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="d-block text-muted small">Organización:</label>
+                                    <span class="text-dark fw-medium d-block">Junta de Vecinos N°1 El Progreso</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="d-block text-muted small">RUT:</label>
+                                    <span class="text-dark">76.123.456-7</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="d-block text-muted small">Código Org:</label>
+                                    <span class="text-dark">ORG-001</span>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="d-block text-muted small">Área:</label>
+                                    <span class="text-dark">Desarrollo Social</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="d-block text-muted small">Unidad Vecinal:</label>
+                                    <span class="text-dark">UV-15</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="d-block text-muted small">Proyecto:</label>
+                                    <span class="text-dark">Proyecto Comunitario 2024</span>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="d-block text-muted small">Usuario Ingreso:</label>
+                                    <span class="text-dark">Juan Pérez</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formulario -->
+                    <div class="mb-3">
+                        <label class="form-label fw-medium text-dark small">Descripción Original</label>
+                        <div class="form-control bg-white text-muted small" style="border: 0; padding-left: 0;">Consulta
+                            sobre proceso de postulación a subvenciones municipales</div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium text-dark small">Estado de la Atención</label>
+                            <select class="form-select form-select-sm bg-light border-0">
+                                <option>En Atención</option>
+                                <option>Completada</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-medium text-dark small">Usuario Responsable</label>
+                            <input type="text" class="form-control form-control-sm bg-light border-0"
+                                value="Usuario Actual" readonly>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-medium text-dark small">Solución / Respuesta <span
+                                class="text-danger">*</span></label>
+                        <textarea class="form-control bg-light border-0" rows="3"
+                            placeholder="Describa la solución proporcionada o respuesta dada a la atención..."></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-medium text-dark small">Observaciones Adicionales</label>
+                        <textarea class="form-control bg-light border-0" rows="2"
+                            placeholder="Observaciones adicionales..."></textarea>
+                    </div>
+
+                </div>
+                <div class="modal-footer border-0 pt-0 pb-4 px-4 justify-content-center">
+                    <button type="button" class="btn btn-white border px-4" data-bs-dismiss="modal"
+                        style="color: #6c757d; font-weight: 500;">✕ Cancelar</button>
+                    <button type="button" class="btn btn-dark px-4" style="font-weight: 500;">
+                        <i data-feather="check-circle"></i> Completar Atención
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
+    <script src="../recursos/js/atenciones_lista_espera.js"></script>
+<script src='../recursos/js/layout_manager.js'></script>
+</body>
+
+</html>

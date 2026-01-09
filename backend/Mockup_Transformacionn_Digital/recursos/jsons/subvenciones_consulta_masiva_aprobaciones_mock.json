@@ -1,0 +1,32 @@
+[
+    {
+        "numero": "SUB-2024-001",
+        "fecha": "2024-03-14",
+        "estado_actual": "APROBADA",
+        "rut": "76.123.456-7",
+        "nombre": "Junta de Vecinos Los Aromos",
+        "monto": 3500000,
+        "anio_decreto": 2024,
+        "numero_decreto": "DEC-2024-123"
+    },
+    {
+        "numero": "SUB-2024-002",
+        "fecha": "2024-04-10",
+        "estado_actual": "PENDIENTE POR EL CONSEJO",
+        "rut": "76.234.567-8",
+        "nombre": "Centro de Deportes La Unión",
+        "monto": 4200000,
+        "anio_decreto": 2024,
+        "numero_decreto": "DEC-2024-145"
+    },
+    {
+        "numero": "SUB-2024-008",
+        "fecha": "2024-07-20",
+        "estado_actual": "RECHAZADA POR EL CONSEJO",
+        "rut": "76.678.901-2",
+        "nombre": "Asociación de Emprendedores",
+        "monto": 3000000,
+        "anio_decreto": null,
+        "numero_decreto": null
+    }
+]

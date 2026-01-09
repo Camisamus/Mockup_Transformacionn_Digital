@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sistema Municipal - Login</title>
+    <!-- Bootstrap CSS -->
+    <link href="recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="recursos/css/style.css" rel="stylesheet">
+    <link rel="icon" href="data:,">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<body class="bg-light">
+
+    <!-- Login Screen Only -->
+    <div id="login-screen" class="d-flex align-items-center justify-content-center vh-100">
+        <div class="card shadow-sm border-0" style="width: 350px;">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                        style="width: 64px; height: 64px;">
+                        <i data-feather="lock" style="width: 32px; height: 32px;"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark">Acceso Municipal</h3>
+                    <p class="text-muted small">Gestión Municipal de Solicitudes</p>
+                </div>
+
+                <div id="login-container">
+                    <div class="mb-3">
+                        <label for="emailInput" class="form-label small fw-bold">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="emailInput" placeholder="nombre@municipalidad.cl">
+                    </div>
+                    <div class="d-grid gap-3 mb-3">
+                        <button type="button" class="btn btn-primary btn-lg w-100 py-2 shadow-sm fw-bold"
+                            onclick="handleEmailLogin()">
+                            Ingresar
+                        </button>
+                    </div>
+
+                    <div class="text-center mb-3">
+                        <span class="text-muted small">o</span>
+                    </div>
+
+                    <div class="d-grid gap-3">
+                        <button type="button"
+                            class="btn btn-outline-danger btn-lg w-100 d-flex align-items-center justify-content-center gap-2 py-3 shadow-sm"
+                            id="googleLoginBtn">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                                    fill="#4285F4" />
+                                <path
+                                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                    fill="#34A853" />
+                                <path
+                                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
+                                    fill="#FBBC05" />
+                                <path
+                                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 12-4.53z"
+                                    fill="#EA4335" />
+                            </svg>
+                            <span class="fw-bold">Ingresar con Google</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="loading-spinner" class="text-center d-none mt-3">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                    <p class="text-muted small mt-2">Autenticando sesión...</p>
+                </div>
+
+                <div id="login-error" class="alert alert-danger mt-3 small d-none">
+                    Error
+                </div>
+            </div>
+            <div class="card-footer bg-white text-center py-3">
+                <small class="text-muted">Municipalidad 2024</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- No Iframe. No Sidebar. Just Login. -->
+
+    <script src="recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="recursos/js/layout_manager.js"></script>
+    <script>
+        feather.replace();
+
+        const CLIENT_ID = '664056732869-nqieqd6qdovnt9u3jfqnckrnckkhmn26.apps.googleusercontent.com';
+
+        // Global initialization function
+        window.initGoogleLogin = function () {
+            if (typeof google === 'undefined') {
+                console.error("Google script not loaded yet.");
+                return;
+            }
+
+            google.accounts.id.initialize({
+                client_id: CLIENT_ID,
+                callback: handleCredentialResponse,
+                ux_mode: 'popup',
+                use_fedcm_for_prompt: true,
+                auto_select: false // Ensure no auto-select loop issues
+            });
+            // En lugar de un event listener manual, deja que Google renderice el botón
+            google.accounts.id.renderButton(
+                document.getElementById("googleLoginBtn"),
+                {
+                    theme: "outline",
+                    size: "large",
+                    type: "standard",
+                    // Esto NO existe como propiedad directa aquí, 
+                    // pero el botón estándar suele disparar el selector si auto_select es false.
+                }
+            );
+            // Re-attach click listener
+            // const btn = document.getElementById('googleLoginBtn');
+            //if (btn) {
+            //  // Remove old listeners by cloning (simple trick) or just ensuring one listener
+            //const newBtn = btn.cloneNode(true);
+            //btn.parentNode.replaceChild(newBtn, btn);
+
+            //newBtn.addEventListener('click', () => {
+            //    google.accounts.id.prompt((notification) => {
+            //      if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            //        console.warn("Google prompt not displayed:", notification.getNotDisplayedReason());
+            //   }
+            // });
+            //});
+            //}
+        };
+
+        // Force check login on load
+        document.addEventListener('DOMContentLoaded', () => {
+            // If already logged in, redirect immediately
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                window.location.href = 'paginas/bandeja.html';
+                return; // Stop execution
+            }
+
+            // Initialize Google Sign-In
+            // Check if script is already loaded
+            if (typeof google !== 'undefined') {
+                window.initGoogleLogin();
+            } else {
+                // Wait for script onload (window level) or retry
+                window.addEventListener('load', window.initGoogleLogin);
+            }
+        });
+
+        window.handleEmailLogin = function () {
+            const email = document.getElementById('emailInput').value;
+            const loginError = document.getElementById('login-error');
+            const loginContainer = document.getElementById('login-container');
+            const loadingSpinner = document.getElementById('loading-spinner');
+
+            if (!email) {
+                loginError.classList.remove('d-none');
+                loginError.textContent = 'Por favor, ingrese su correo electrónico.';
+                return;
+            }
+
+            loginContainer.classList.add('d-none');
+            loadingSpinner.classList.remove('d-none');
+            loginError.classList.add('d-none');
+
+            fetch('../api/login.php', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: '', // Send empty password for passwordless flow
+                    ACCION: 'LOGIN'
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        localStorage.setItem('isLoggedIn', 'true');
+                        if (data.data && data.data.user) {
+                            localStorage.setItem('user_data', JSON.stringify({ user: data.data.user }));
+                        }
+                        window.location.href = 'paginas/bandeja.html';
+                    } else {
+                        loadingSpinner.classList.add('d-none');
+                        loginContainer.classList.remove('d-none');
+                        loginError.classList.remove('d-none');
+                        loginError.textContent = data.message || 'Error en la autenticación.';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    loadingSpinner.classList.add('d-none');
+                    loginContainer.classList.remove('d-none');
+                    loginError.classList.remove('d-none');
+                    loginError.textContent = 'Error de conexión con el servidor.';
+                });
+        }
+
+        function handleCredentialResponse(response) {
+            const loginError = document.getElementById('login-error');
+            const loginContainer = document.getElementById('login-container');
+            const loadingSpinner = document.getElementById('loading-spinner');
+
+            loginContainer.classList.add('d-none');
+            loadingSpinner.classList.remove('d-none');
+            loginError.classList.add('d-none');
+
+
+            fetch('../google/callback.php', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    token: response.credential,
+                    ACCION: 'login_google'
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        localStorage.setItem('isLoggedIn', 'true');
+                        if (data.user) {
+                            localStorage.setItem('user_data', JSON.stringify(data.user));
+                        }
+                        window.location.href = 'paginas/bandeja.html';
+                    } else {
+                        loadingSpinner.classList.add('d-none');
+                        loginContainer.classList.remove('d-none');
+                        loginError.classList.remove('d-none');
+                        loginError.textContent = data.error || 'Error en la autenticación con Google';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    loadingSpinner.classList.add('d-none');
+                    loginContainer.classList.remove('d-none');
+                    loginError.classList.remove('d-none');
+                    loginError.textContent = 'Error de conexión con el servidor.';
+                });
+        }
+    </script>
+</body>
+
+</html>
