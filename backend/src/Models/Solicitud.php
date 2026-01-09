@@ -136,16 +136,17 @@ class Solicitud
             $stmt->bindValue(":sol_registro_tramite", $rgt_id);
 
             if ($stmt->execute()) {
+                $data_id = $this->conn->lastInsertId();
                 // 3. Registrar en bitácora
                 $this->bitacora->registrar($rgt_id, "Ingresa solicitud: " . ($data['sol_nombre_expediente'] ?? 'Sin nombre'), $data['sol_responsable'] ?? null);
                 $this->conn->commit();
-                return true;
+                return [true, $data_id];
             }
 
             $this->conn->rollBack();
             // Log error if execute fails but no exception thrown
             error_log("SQL Error in Solicitud::create: " . implode(" - ", $stmt->errorInfo()));
-            return false;
+            return [false, null];
         } catch (PDOException $e) {
             if ($this->conn->inTransaction()) {
                 $this->conn->rollBack();
@@ -153,7 +154,7 @@ class Solicitud
             error_log("Database Exception in Solicitud::create: " . $e->getMessage());
             // Store error in the object to be fetched by controller
             $this->lastError = $e->getMessage();
-            return false;
+            return [false, null];
         }
     }
 

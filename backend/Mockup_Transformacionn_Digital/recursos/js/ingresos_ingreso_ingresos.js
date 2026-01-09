@@ -304,7 +304,10 @@ async function loadSolicitationDetails(id) {
             console.error("Solicitud not found or API error", result);
             return;
         }
-
+        ocultos = document.querySelectorAll('.solo_consulta');
+        ocultos.forEach(oculto => {
+            oculto.classList.remove('solo_consulta');
+        });
         document.getElementById('idIngreso').value = sol.sol_id || '';
         document.getElementById('IngresoDesve').value = sol.sol_ingreso_desve || '';
         document.getElementById('Reingresado').value = sol.sol_reingreso_id || '-';
@@ -542,6 +545,10 @@ function getCurrentDateTimeLocal() {
 }
 
 async function guardarAtencion() {
+    if (!validarFormularioAtencion()) {
+
+        return;
+    }
     const solicitationId = new URLSearchParams(window.location.search).get('id');
     const isUpdate = !!solicitationId;
 
@@ -589,8 +596,12 @@ async function guardarAtencion() {
 
         if (result.status === 'success') {
             await Swal.fire('Éxito', isUpdate ? "Actualizado con éxito" : "Creado con éxito", 'success');
-            if (!isUpdate && result.data && result.data.sol_id) {
-                window.location.href = `?id=${result.data.sol_id}`;
+
+            // Reload page to show the saved/updated record
+            if (isUpdate) {
+                window.location.href = `?id=${solicitationId}`;
+            } else if (result.id !== 'undefined') {
+                window.location.href = `?id=${result.id}`;
             }
         } else {
             Swal.fire('Error', "Error al guardar: " + (result.message || "Error desconocido"), 'error');
@@ -821,4 +832,47 @@ function generateRandomString(length) {
         result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return result;
+}
+
+function validarFormularioAtencion() {
+    // 1. Definir los campos y sus reglas
+    const campos = [
+        { id: 'IngresoDesve', nombre: 'Ingreso Desve', tipo: 'texto' },
+        { id: 'Reingresado', nombre: 'Reingresado', tipo: 'numero' },
+        { id: 'NombreExpediente', nombre: 'Nombre del expediente', tipo: 'texto' },
+        { id: 'OrigenSolicitud', nombre: 'Origen de solicitud', tipo: 'select' },
+        { id: 'Sector', nombre: 'Sector', tipo: 'select' },
+        { id: 'DetalleIngreso', nombre: 'Detalle de ingreso', tipo: 'texto' }
+        // 'Observaciones' no suele ser obligatorio, pero puedes añadirlo aquí si gustas
+    ];
+
+    // 2. Iterar y validar
+    for (const campo of campos) {
+        const elemento = document.getElementById(campo.id);
+        const valor = elemento.value.trim();
+
+        // Validar si está vacío
+        if (valor === "") {
+            Swal.fire('Error', "El campo " + campo.nombre + " es obligatorio", 'error');
+            elemento.focus();
+            return false;
+        }
+
+        // Validar si es numérico (para Reingresado)
+        if (campo.tipo === 'numero' && isNaN(valor)) {
+            Swal.fire('Error', "El campo " + campo.nombre + " debe ser un valor numérico", 'error');
+            elemento.focus();
+            return false;
+        }
+
+        // Validar select (suponiendo que la opción por defecto tiene valor "")
+        if (campo.tipo === 'select' && valor === "") {
+            Swal.fire('Error', "Por favor, seleccione una opción en " + campo.nombre + "", 'error');
+            elemento.focus();
+            return false;
+        }
+    }
+
+    // Si llega aquí, todo es válido
+    return true;
 }

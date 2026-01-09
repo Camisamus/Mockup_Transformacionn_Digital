@@ -32,8 +32,8 @@ class SolicitudController
 
     public function create($data)
     {
-        if ($this->solicitud->create($data)) {
-            return ["status" => "success", "message" => "Solicitud created successfully"];
+        if ($this->solicitud->create($data)[0]) {
+            return ["status" => "success", "message" => "Solicitud created successfully", "id" => $this->solicitud->create($data)[1]];
         }
         return [
             "status" => "error",

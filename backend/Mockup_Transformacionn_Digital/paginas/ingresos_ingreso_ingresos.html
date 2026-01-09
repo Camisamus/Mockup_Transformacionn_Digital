@@ -119,6 +119,10 @@
             border-color: #86b7fe;
             box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
         }
+
+        .solo_consulta {
+            display: none;
+        }
     </style>
 </head>
 
@@ -165,7 +169,7 @@
                 <!-- Row 1 -->
 
                 <div class="row g-4 mb-3">
-                    <div class="col-md-4">
+                    <div class="col-md-4 solo_consulta">
                         <label for="idIngreso" class="form-label">ID Ingreso</label>
                         <input type="text" class="form-control" id="idIngreso" placeholder="" disabled>
                     </div>
@@ -189,7 +193,7 @@
                             <option value="">Seleccione organización...</option>
                         </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 solo_consulta">
                         <label for="ID_Organizacion" class="form-label">ORGANIZACIÓN</label>
                         <input type="text" class="form-control" id="ID_Organizacion"
                             placeholder="Nombre de la organización" readonly disabled>
@@ -200,11 +204,11 @@
                         <label for="FechaUltimaRecepcion" class="form-label">Fecha recepción</label>
                         <input type="date" class="form-control" id="FechaUltimaRecepcion" placeholder="" disabled>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 solo_consulta">
                         <label for="FechaCreacion" class="form-label">Fecha de Creación</label>
                         <input type="date" class="form-control" id="FechaCreacion" readonly disabled>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 solo_consulta">
                         <label for="Prioridad" class="form-label">Prioridad</label>
                         <input type="text" class="form-control" id="Prioridad" placeholder="" readonly disabled>
                     </div>
@@ -228,11 +232,11 @@
                             <!-- Populated from sectores.json -->
                         </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 solo_consulta">
                         <label for="MailEnviadoFecha" class="form-label">Fecha del último Email enviado</label>
                         <input type="date" class="form-control" id="MailEnviadoFecha" placeholder="" disabled>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 solo_consulta">
                         <label for="NumeroMailEnviado" class="form-label">Número de Mails enviados</label>
                         <input type="number" class="form-control" id="NumeroMailEnviado" placeholder="" readonly
                             disabled>
@@ -245,16 +249,16 @@
                     </div>
                 </div>
                 <div class="row g-4 mb-3">
-                    <div class="col-md-4">
+                    <div class="col-md-4 solo_consulta">
                         <label for="EntregadoEnConformidad" class="form-label">Entregado en conformidad</label>
                         <input type="text" class="form-control" id="EntregadoEnConformidad" placeholder="" readonly
                             disabled>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 solo_consulta">
                         <label for="FechaRespuesta" class="form-label">Fecha respuesta</label>
                         <input type="date" class="form-control" id="FechaRespuesta" placeholder="" disabled>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 solo_consulta">
                         <label class="form-label d-block">Estado de entrega</label>
                         <div class="btn-group w-100" role="group" aria-label="Estado de entrega">
                             <input type="radio" class="btn-check" name="EstadoEntrega" id="estadoPendiente" value="0"
@@ -267,18 +271,18 @@
                     </div>
                 </div>
                 <div class="row g-4 mb-3">
-                    <div class="col-md-4">
+                    <div class="col-md-4 solo_consulta">
                         <label for="DiasIngreso" class="form-label">Días transcurridos (Ingreso)</label>
                         <input type="number" class="form-control" id="DiasIngreso" readonly>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-4 solo_consulta">
                         <label for="DiasVencimiento" class="form-label">Días restantes para vencimiento</label>
                         <input type="number" class="form-control" id="DiasVencimiento" readonly>
                     </div>
                 </div>
                 <!-- New Row for Meta Info -->
                 <div class="row g-4 mb-3">
-                    <div class="col-md-12">
+                    <div class="col-md-12 solo_consulta">
                         <label for="Responsable" class="form-label">Responsable (Creador)</label>
                         <input type="text" class="form-control" id="Responsable" placeholder="Nombre del responsable"
                             readonly disabled>
@@ -300,7 +304,7 @@
         </div>
 
         <!-- Bitácora de Respuestas -->
-        <div class="card-custom mt-4">
+        <div class="card-custom mt-4 solo_consulta">
             <div class="d-flex justify-content-between align-items-center">
                 <h3 class="section-title mb-0">Bitácora de Respuestas</h3>
                 <button class="btn btn-sm btn-link text-dark p-0" type="button" data-bs-toggle="collapse"
@@ -330,7 +334,7 @@
         </div>
 
         <!-- Reingresos Vinculados -->
-        <div class="card-custom mt-4">
+        <div class="card-custom mt-4 solo_consulta">
             <div class="d-flex justify-content-between align-items-center">
                 <h3 class="section-title mb-0">Reingresos Vinculados</h3>
                 <button class="btn btn-sm btn-link text-dark p-0" type="button" data-bs-toggle="collapse"
@@ -358,7 +362,7 @@
         </div>
 
         <!-- Bitácora de Auditoría -->
-        <div class="card-custom mt-4">
+        <div class="card-custom mt-4 solo_consulta">
             <div class="d-flex justify-content-between align-items-center">
                 <h3 class="section-title mb-0">Bitácora de Auditoría</h3>
                 <button class="btn btn-sm btn-link text-dark p-0" type="button" data-bs-toggle="collapse"
@@ -386,7 +390,7 @@
         </div>
 
         <!-- Comentarios / Observaciones -->
-        <div class="card-custom mt-4 mb-5">
+        <div class="card-custom mt-4 mb-5 solo_consulta">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <div class="d-flex align-items-center gap-2">
                     <h3 class="section-title mb-0">Comentarios / Observaciones</h3>

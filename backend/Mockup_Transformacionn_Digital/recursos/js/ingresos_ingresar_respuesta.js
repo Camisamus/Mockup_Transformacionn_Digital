@@ -25,29 +25,32 @@ document.addEventListener('DOMContentLoaded', async function () {
     const containerDiv = document.getElementById('step-2');
 
     if (!id) {
-        const { value: manualId } = await Swal.fire({
-            title: 'ID de Solicitud Requerido',
-            text: 'Por favor ingrese el ID de la solicitud para continuar:',
-            input: 'text',
-            inputPlaceholder: 'Ej: 123',
-            showCancelButton: true,
-            confirmButtonText: 'Continuar',
-            cancelButtonText: 'Ir a Bandeja',
-            allowOutsideClick: false,
-            inputValidator: (value) => {
-                if (!value) {
-                    return '¡Debe ingresar un ID!';
+        setTimeout(async () => {
+            const { value: manualId } = await Swal.fire({
+                title: 'ID de Solicitud Requerido',
+                text: 'Por favor ingrese el ID de la solicitud para continuar:',
+                input: 'text',
+                inputPlaceholder: 'Ej: 123',
+                showCancelButton: true,
+                confirmButtonText: 'Continuar',
+                cancelButtonText: 'Ir a Bandeja',
+                allowOutsideClick: false,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return '¡Debe ingresar un ID!';
+                    }
                 }
-            }
-        });
+            });
 
-        if (manualId) {
-            window.location.search = `?id=${manualId}`;
-            return;
-        } else {
-            window.location.href = 'bandeja.html';
-            return;
-        }
+            if (manualId) {
+                window.location.search = `?id=${manualId}`;
+                return;
+            } else {
+                window.location.href = 'bandeja.html';
+                return;
+            }
+        }, 120);
+        return;
     }
 
     try {

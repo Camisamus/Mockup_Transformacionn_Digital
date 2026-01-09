@@ -30,8 +30,8 @@ class Respuesta
         $stmt->bindParam(":res_texto", $data['res_texto']);
         $stmt->bindValue(":res_tipo", $data['res_tipo'] ?? 'Comentario');
 
-        // Get user ID from session if not provided
-        $funcionarioId = $data['res_funcionario'] ?? $_SESSION['user_id'] ?? null;
+        // Get user ID from session 
+        $funcionarioId = $_SESSION['user_id'];
         $stmt->bindValue(":res_funcionario", $funcionarioId);
 
         if ($stmt->execute()) {

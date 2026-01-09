@@ -13,30 +13,157 @@
     }
 })();
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
     // 1. Determine if we are in root or subdirectory
     const isRoot = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
     const pathPrefix = isRoot ? '' : '../';
 
-    // 2. Verify Session BEFORE rendering layout (except for login page)
+    // 2. Filter out login screens
     const isLogin = document.getElementById('login-screen');
     if (isLogin) {
-        // If on login screen, maybe check if already logged in and redirect?
-        // Already handled in page.html script
         document.body.classList.add('layout-ready');
         return;
     }
 
-    // Verify Session Endpoint
+    // 3. Inject Layout Structure IMMEDIATELY
+    injectLayout(pathPrefix);
+
+    // 4. Verify Session in the BACKGROUND
+    verifySessionBackground(pathPrefix);
+});
+
+/**
+ * Injects the core layout structure (wrapper, sidebar container, and header)
+ * without waiting for any API calls.
+ */
+function injectLayout(pathPrefix) {
+    if (document.getElementById('wrapper-layout')) return;
+
+    const sidebarCollapsed = localStorage.getItem('sidebar_collapsed') === 'true';
+
+    // Reset body styles to prevent double padding/margins
+    document.body.style.padding = '0';
+    document.body.style.margin = '0';
+    document.body.style.overflow = 'hidden'; // Let wrapper handle scroll
+
+    // Preserve existing scripts/nodes so we don't break references
+    const childrenToMove = Array.from(document.body.children);
+
+    // New Structure
+    const wrapper = document.createElement('div');
+    wrapper.id = 'wrapper-layout';
+    wrapper.className = 'd-flex h-100';
+    wrapper.style.minHeight = '100vh';
+
+    // Sidebar Container
+    const sidebar = document.createElement('div');
+    sidebar.id = 'sidebar-container';
+    sidebar.style.minWidth = '250px';
+    sidebar.style.maxWidth = '250px';
+    sidebar.className = `flex-shrink-0 sidebar-entrance ${sidebarCollapsed ? 'collapsed' : ''}`;
+
+    // Trigger fade-in animation with a slight delay for smoothness
+    document.getElementsByTagName('body')[0].style.visibility = 'visible';
+    setTimeout(() => {
+        sidebar.classList.add('sidebar-visible');
+
+        // After sidebar animation completes (0.8s), fade in main content
+        setTimeout(() => {
+            main.classList.add('content-visible');
+        }, 800);
+    }, 100);
+
+    // Instant Shell HTML (Static part of sidebar)
+    sidebar.innerHTML = `
+        <aside id="sidebar" class="bg-primary text-white d-flex flex-column w-100 h-100" style="overflow-y: auto;">
+            <div class="p-3 border-bottom border-primary-subtle">
+                <a href="${pathPrefix}dashboard.html" style="cursor: pointer; display: block;">
+                    <img src="${pathPrefix}recursos/img/logo_vina_del_mar_azul.png" alt="Viña del Mar"
+                        style="width: 100%; max-width: 200px; height: auto;">
+                </a>
+            </div>
+            <nav class="flex-grow-1 p-2">
+                <ul class="nav flex-column" id="menu-container">
+                    <li class="nav-item p-3 text-white-50 small">Cargando menú...</li>
+                </ul>
+            </nav>
+            <div class="p-3 border-top border-primary-subtle small opacity-50">
+                <div class="sidebar-footer-text">Usuario: Cargando...</div>
+            </div>
+        </aside>
+    `;
+
+    // Main Content Area
+    const main = document.createElement('main');
+    main.className = 'flex-grow-1 p-0 bg-light d-flex flex-column content-entrance';
+    main.style.height = '100vh';
+    main.style.overflowY = 'auto';
+
+    // Header (Static template, will be updated if needed)
+    const header = document.createElement('header');
+    header.className = 'bg-white shadow-sm p-3 mb-4 d-flex justify-content-between align-items-center sticky-top';
+    header.style.zIndex = '1000';
+
+    // Get user info from cache for initial display
+    const cachedData = JSON.parse(localStorage.getItem('user_data') || '{}');
+    const userName = cachedData.user ? `${cachedData.user.nombre} ${cachedData.user.apellido}` : 'Cargando...';
+
+    header.innerHTML = `
+        <div class="d-flex align-items-center gap-3">
+            <button class="btn-sidebar-toggle" id="sidebar-toggle">
+                <i data-feather="menu"></i>
+            </button>
+            <h4 class="m-0 text-primary fw-bold" id="page-title">${document.title}</h4>
+        </div>
+        <div class="d-flex gap-2 align-items-center">
+            <span class="text-muted small me-2 d-none d-md-inline" id="header-user-name">Usuario: ${userName}</span>
+            <button class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1" onclick="logout()">
+                <i data-feather="log-out" style="width:14px;"></i> <span class="d-none d-sm-inline">Salir</span>
+            </button>
+        </div>
+    `;
+
+    // Content Wrapper
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'container-fluid pb-5 px-4';
+
+    // Move original children into contentDiv
+    childrenToMove.forEach(child => contentDiv.appendChild(child));
+
+    // Assembly
+    main.appendChild(header);
+    main.appendChild(contentDiv);
+    wrapper.appendChild(sidebar);
+    wrapper.appendChild(main);
+
+    // Sidebar Overlay for Mobile
+    const overlay = document.createElement('div');
+    overlay.id = 'sidebar-overlay';
+    document.body.appendChild(overlay);
+
+    // Clear body and append wrapper
+    document.body.appendChild(wrapper);
+
+    // Add layout-ready class to show content quickly
+    setTimeout(() => document.body.classList.add('layout-ready'), 50);
+
+    // Load Sidebar content (Async)
+    loadSidebar(pathPrefix);
+
+    // Load common dependencies (Async)
+    loadDependencies(pathPrefix, () => {
+        if (window.feather) window.feather.replace();
+        attachLayoutEvents();
+    });
+}
+
+/**
+ * Checks session validity in the background after layout is visible.
+ * Updates menu and user info once data arrives.
+ */
+async function verifySessionBackground(pathPrefix) {
     try {
-        // Check for Google Token
-        let googleToken = null;
-        if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-            // We can't easily get the ID token from google.accounts.id state directly without re-prompting or having stored it.
-            // Usually, on login, we should store the credential.
-        }
-        // Check local storage for stored token from login
-        googleToken = localStorage.getItem('google_token');
+        const googleToken = localStorage.getItem('google_token');
 
         const response = await fetch(`${window.API_BASE_URL}/verify_session.php`, {
             method: 'POST',
@@ -48,126 +175,34 @@ document.addEventListener('DOMContentLoaded', async () => {
             })
         });
 
-        // if (!response.ok) throw new Error('Session check failed'); // API might return 200 with isAuthenticated: false
         const data = await response.json();
 
         if (data.isAuthenticated === true) {
             // Update Local Storage with latest data
-            // Structure: user: {}, permissions: []
-            // Create a standardized user_data object
             const sessionData = {
                 user: data.user,
-                // Map permissions to 'menu' and 'rol' as needed
                 menu: data.permissions || [],
-                rol: data.user.rol || 'admin' // Fallback
+                rol: data.user.rol || 'admin'
             };
-
             localStorage.setItem('user_data', JSON.stringify(sessionData));
+
+            // Refresh UI components that depend on session data
+            const headerNameEl = document.getElementById('header-user-name');
+            if (headerNameEl) {
+                headerNameEl.innerText = `Usuario: ${data.user.nombre} ${data.user.apellido}`;
+            }
+
+            // Refresh Menu with real permissions
+            loadMenuData(pathPrefix);
         } else {
-            // Session Invalid
-            console.warn('Session verification returned false');
-            //window.logout();
-            return;
+            console.warn('Session verification failed, logging out...');
+            window.logout();
         }
     } catch (e) {
-        console.error('Error verifying session:', e);
-        // If network error, might be offline dev? 
-        // For now, allow proceeding to render layout even on error to avoid blank screens
-        document.body.classList.add('layout-ready');
-        // window.logout();
-        // return;
+        console.error('Error verifying session background:', e);
+        // On network error, we don't force logout to allow offline dev or intermittent connection
     }
-
-    // 3. Inject Layout Structure if not present
-    const sidebarCollapsed = localStorage.getItem('sidebar_collapsed') === 'true';
-
-    // If we are in a subpage, wrap the body content
-    if (!document.getElementById('wrapper-layout')) {
-        // Reset body styles to prevent double padding/margins
-        document.body.style.padding = '0';
-        document.body.style.margin = '0';
-        document.body.style.overflow = 'hidden'; // Let wrapper handle scroll
-
-        // preserve existing scripts/nodes so we don't break references
-        const childrenToMove = Array.from(document.body.children);
-
-        // New Structure
-        const wrapper = document.createElement('div');
-        wrapper.id = 'wrapper-layout';
-        wrapper.className = 'd-flex h-100';
-        wrapper.style.minHeight = '100vh';
-
-        // Sidebar Container
-        const sidebar = document.createElement('div');
-        sidebar.id = 'sidebar-container';
-        sidebar.style.minWidth = '250px';
-        sidebar.style.maxWidth = '250px';
-        sidebar.className = `flex-shrink-0 ${sidebarCollapsed ? 'collapsed' : ''}`; // Prevent shrinking
-
-        // Main Content Area
-        const main = document.createElement('main');
-        main.className = 'flex-grow-1 p-0 bg-light d-flex flex-column';
-        main.style.height = '100vh';
-        main.style.overflowY = 'auto';
-
-        // Header
-        const header = document.createElement('header');
-        header.className = 'bg-white shadow-sm p-3 mb-4 d-flex justify-content-between align-items-center sticky-top';
-        header.style.zIndex = '1000';
-        header.innerHTML = `
-            <div class="d-flex align-items-center gap-3">
-                <button class="btn-sidebar-toggle" id="sidebar-toggle">
-                    <i data-feather="menu"></i>
-                </button>
-                <h4 class="m-0 text-primary fw-bold" id="page-title">${document.title}</h4>
-            </div>
-            <div class="d-flex gap-2 align-items-center">
-                <span class="text-muted small me-2 d-none d-md-inline">Usuario: Admin</span>
-                <button class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1" onclick="logout()">
-                    <i data-feather="log-out" style="width:14px;"></i> <span class="d-none d-sm-inline">Salir</span>
-                </button>
-            </div>
-        `;
-
-        // Content Wrapper
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'container-fluid pb-5 px-4';
-
-        // Move original children into contentDiv
-        childrenToMove.forEach(child => contentDiv.appendChild(child));
-
-        // Assembly
-        main.appendChild(header);
-        main.appendChild(contentDiv);
-        wrapper.appendChild(sidebar);
-        wrapper.appendChild(main);
-
-        // Sidebar Overlay for Mobile
-        const overlay = document.createElement('div');
-        overlay.id = 'sidebar-overlay';
-        document.body.appendChild(overlay);
-
-        // Clear body and append wrapper (effectively moving everything)
-        // Note: We used appendChild above which moves them, so body is empty-ish now (except maybe text nodes)
-        document.body.appendChild(wrapper);
-
-        // Add layout-ready class to show content
-        setTimeout(() => document.body.classList.add('layout-ready'), 100);
-
-        // Load Sidebar Logic (Async is fine here)
-        loadSidebar(pathPrefix);
-
-        // Dependency Injection (Async is fine here, DOM is already safe)
-        loadDependencies(pathPrefix, () => {
-            if (window.feather) window.feather.replace();
-            attachLayoutEvents();
-        });
-    }
-
-    // Identify Logout Button and attach Global Logout (if dynamic header)
-    // Note: Header is injected dynamically, so we can't select it immediately easily unless we do it after injection.
-    // However, the button has `onclick="logout()"`, so defining window.logout is sufficient.
-});
+}
 
 // Global Logout Function
 // Global Logout Function
