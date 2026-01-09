@@ -1,0 +1,18 @@
+RewriteEngine On
+
+# Ensure CORS headers
+#Header set Access-Control-Allow-Origin "null"
+#Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+#Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+
+# Handle OPTIONS requests for CORS preflight
+#RewriteCond %{REQUEST_METHOD} OPTIONS
+#RewriteRule ^(.*)$ $1 [R=200,L]
+
+# Clean URLs (Routing)
+# If the file or directory exists, serve it
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Redirect everything else to a router or specific API files if needed
+# For now, let's keep it simple as the user requested specific files in /api/

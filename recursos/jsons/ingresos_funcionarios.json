@@ -1,9 +1,0 @@
-[
-    {
-        "ID_Funcionarios": 101,
-        "RUT": "11.222.333-4",
-        "Nombre": "Juan Perez",
-        "Correo": "jperez@municipalidad.cl",
-        "Cargo": "Coordinador"
-    }
-]

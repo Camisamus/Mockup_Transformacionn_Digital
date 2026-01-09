@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Config;
+
+use PDO;
+use PDOException;
+use Dotenv\Dotenv;
+
+class Database
+{
+    private $host;
+    private $db_name;
+    private $username;
+    private $password;
+    public $conn;
+
+    public function __construct()
+    {
+        // Headers CORS removed from here to avoid duplication
+
+        try {
+            if (file_exists(__DIR__ . '/../../.env')) {
+                $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+                $dotenv->load();
+            }
+        } catch (\Exception $e) {
+            // Silently fail if .env is missing and variables are set otherwise
+        }
+
+        $this->host = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?: 'localhost';
+        $this->db_name = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?: 'transformacion_digital';
+        $this->username = $_ENV['DB_USER'] ?? getenv('DB_USER') ?: 'root';
+        $this->password = $_ENV['DB_PASS'] ?? getenv('DB_PASS') ?: 'root';
+    }
+
+    public function getConnection()
+    {
+        $this->conn = null;
+
+        try {
+            $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
+            $this->conn->exec("set names utf8");
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        } catch (PDOException $exception) {
+            // Do not echo here as it breaks JSON responses
+            error_log("Connection error: " . $exception->getMessage());
+        }
+
+        return $this->conn;
+    }
+}
