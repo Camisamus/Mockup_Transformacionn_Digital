@@ -382,6 +382,7 @@ async function saveResponse(e) {
     const payload = {
         ACCION: "CREAR",
         res_solicitud_id: currentSol.sol_id,
+        sol_reingreso_id: currentSol.sol_reingreso_id,
         res_texto: responseText,
         res_tipo: isDefinitiva ? 'Respuesta Final' : 'Comentario',
         res_funcionario: currentUser.id

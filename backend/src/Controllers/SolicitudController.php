@@ -21,9 +21,9 @@ class SolicitudController
         return ["status" => "success", "data" => $result];
     }
 
-    public function getById($id, $ver_clave = false)
+    public function getById($id)
     {
-        $result = $this->solicitud->getById($id, $ver_clave);
+        $result = $this->solicitud->getById($id);
         if ($result) {
             return ["status" => "success", "data" => $result];
         }

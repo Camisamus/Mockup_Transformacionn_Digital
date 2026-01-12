@@ -27,7 +27,7 @@ class Solicitud
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getById(int $id, bool $ver_clave = false): array|null
+    public function getById(int $id): array|null
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE sol_id = :id AND sol_borrado = 0 LIMIT 1";
         $stmt = $this->conn->prepare($query);
@@ -40,7 +40,7 @@ class Solicitud
             $id_para_respuestas = $solicitud['sol_reingreso_id'] ?: $id;
 
             // Obtener respuestas relacionadas
-            $query_respuestas = "SELECT * FROM trd_ingresos_respuestas WHERE res_solicitud_id = ? AND res_borrado = 0 ORDER BY res_fecha DESC";
+            $query_respuestas = "SELECT * FROM trd_ingresos_respuestas WHERE res_solicitud_id = ? AND res_borrado = 0 ORDER BY res_fecha ASC";
             $stmt_respuestas = $this->conn->prepare($query_respuestas);
             $stmt_respuestas->bindParam(1, $id_para_respuestas);
             $stmt_respuestas->execute();

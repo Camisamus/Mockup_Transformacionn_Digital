@@ -18,6 +18,12 @@ class Respuesta
 
     public function create($data)
     {
+        // ID para buscar respuestas: puede ser el actual o el original si es un re-ingreso
+        if (isset($data['sol_reingreso_id'])) {
+            $id_para_respuestas = $data['sol_reingreso_id'];
+        } else {
+            $id_para_respuestas = $data['res_solicitud_id'];
+        }
         $query = "INSERT INTO " . $this->table_name . " SET
             res_solicitud_id=:res_solicitud_id,
             res_texto=:res_texto,
@@ -26,7 +32,7 @@ class Respuesta
 
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bindParam(":res_solicitud_id", $data['res_solicitud_id']);
+        $stmt->bindParam(":res_solicitud_id", $id_para_respuestas);
         $stmt->bindParam(":res_texto", $data['res_texto']);
         $stmt->bindValue(":res_tipo", $data['res_tipo'] ?? 'Comentario');
 

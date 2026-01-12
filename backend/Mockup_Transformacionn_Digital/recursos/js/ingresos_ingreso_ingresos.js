@@ -78,6 +78,7 @@ let tiposOrganizacion = [];
 let prioridades = [];
 let funcionarios = [];
 let sectores = [];
+let Solicitudes = [];
 
 async function loadInitialData() {
     try {
@@ -87,12 +88,13 @@ async function loadInitialData() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: "CONSULTAM" })
         };
-        const [orgRes, tipoRes, prioRes, funcRes, secRes] = await Promise.all([
+        const [orgRes, tipoRes, prioRes, funcRes, secRes, solRes] = await Promise.all([
             fetch(`${window.API_BASE_URL}/organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/funcionarios.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/sectores.php`, fetchOptions).then(r => r.json())
+            fetch(`${window.API_BASE_URL}/sectores.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/solicitudes.php`, fetchOptions).then(r => r.json())
         ]);
 
         organizaciones = extractData(orgRes);
@@ -100,6 +102,7 @@ async function loadInitialData() {
         prioridades = extractData(prioRes);
         funcionarios = extractData(funcRes);
         sectores = extractData(secRes);
+        Solicitudes = extractData(solRes);
 
     } catch (e) {
         console.error("Error loading initial data:", e);
@@ -311,6 +314,17 @@ async function loadSolicitationDetails(id) {
         document.getElementById('idIngreso').value = sol.sol_id || '';
         document.getElementById('IngresoDesve').value = sol.sol_ingreso_desve || '';
         document.getElementById('Reingresado').value = sol.sol_reingreso_id || '-';
+        if (sol.sol_reingreso_id) {
+            const func = Solicitudes.find(f => f.sol_id == sol.sol_reingreso_id);
+            if (func) {
+                const nombreCompleto = `${func.sol_nombre_expediente || ''}`.trim();
+                document.getElementById('ReingresadoNombre').value = nombreCompleto || 'Sin Nombre';
+            } else {
+                document.getElementById('ReingresadoNombre').value = 'ID: ' + sol.sol_reingreso_id;
+            }
+        } else {
+            document.getElementById('ReingresadoNombre').value = '';
+        }
         document.getElementById('NombreExpediente').value = sol.sol_nombre_expediente || '';
 
         // OrigenSolicitud is now a select mapping to sol_origen_id
@@ -541,7 +555,7 @@ function getCurrentDateTimeLocal() {
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+    return `${day}-${month}-${year}`;
 }
 
 async function guardarAtencion() {
@@ -677,9 +691,52 @@ function abrirModalFuncionarios() {
     modal.show();
 }
 
+
+function abrirModalReingresado() {
+    const tbody = document.querySelector('#tablaReingresados tbody');
+    tbody.innerHTML = '';
+    Solicitudes.forEach(f => {
+        tbody.insertAdjacentHTML('beforeend', `
+            <tr>
+                <td>${f.sol_id || '-'}</td>
+                <td>${f.sol_nombre_expediente || '-'}</td>
+                <td><button class="btn btn-sm btn-success" onclick="seleccionarReingresado('${f.sol_id}')">Seleccionar</button></td>
+            </tr>
+        `);
+    });
+
+    // Add search filter listener
+    const filtroInput = document.getElementById('filtroReingresados');
+    if (filtroInput) {
+        filtroInput.addEventListener('keyup', filtrarReingresados);
+    }
+
+    const modal = new bootstrap.Modal(document.getElementById('modalReingresados'));
+    modal.show();
+}
+
 function filtrarFuncionarios() {
     const filtro = document.getElementById('filtroFuncionario').value.toLowerCase();
     const tbody = document.querySelector('#tablaFuncionarios tbody');
+    const rows = tbody.querySelectorAll('tr');
+
+    rows.forEach(row => {
+        const rut = row.cells[0].textContent.toLowerCase();
+        const nombre = row.cells[1].textContent.toLowerCase();
+        const cargo = row.cells[2].textContent.toLowerCase();
+
+        if (rut.includes(filtro) || nombre.includes(filtro) || cargo.includes(filtro)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+
+function filtrarReingresados() {
+    const filtro = document.getElementById('filtroReingresados').value.toLowerCase();
+    const tbody = document.querySelector('#tablaReingresados tbody');
     const rows = tbody.querySelectorAll('tr');
 
     rows.forEach(row => {
@@ -703,6 +760,17 @@ function seleccionarFuncionario(id) {
         document.getElementById('FuncionarioInternoNombre').value = nombreCompleto || 'Sin Nombre';
     }
     const modal = bootstrap.Modal.getInstance(document.getElementById('modalFuncionarios'));
+    modal.hide();
+}
+
+function seleccionarReingresado(id) {
+    const func = Solicitudes.find(f => f.sol_id == id);
+    if (func) {
+        document.getElementById('Reingresado').value = id;
+        const nombreCompleto = `${func.sol_nombre_expediente || ''}`.trim();
+        document.getElementById('ReingresadoNombre').value = nombreCompleto || 'Sin Nombre';
+    }
+    const modal = bootstrap.Modal.getInstance(document.getElementById('modalReingresados'));
     modal.hide();
 }
 
@@ -875,4 +943,7 @@ function validarFormularioAtencion() {
 
     // Si llega aquí, todo es válido
     return true;
+}
+function cargarBitacora() {
+
 }

@@ -179,7 +179,15 @@
                     </div>
                     <div class="col-md-4">
                         <label for="Reingresado" class="form-label">Reingresado</label>
-                        <input type="text" class="form-control" id="Reingresado" placeholder="" disabled>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="Reingresado" placeholder="" disabled hidden>
+                            <input type="text" class="form-control" id="ReingresadoNombre"
+                                placeholder="Seleccione funcionario..." readonly disabled>
+                            <button class="btn btn-outline-secondary" type="button" id="btn_buscar_reingresado"
+                                onclick="abrirModalReingresado()">
+                                <i data-feather="search" style="width: 16px;"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="row g-4 mb-3">
@@ -301,6 +309,10 @@
                     </div>
                 </div>
             </form>
+
+            <button class="btn btn-toolbar btn-dark-custom" onclick="guardarAtencion()">
+                <i data-feather="save"></i> Guardar
+            </button>
         </div>
 
         <!-- Bitácora de Respuestas -->
@@ -365,6 +377,9 @@
         <div class="card-custom mt-4 solo_consulta">
             <div class="d-flex justify-content-between align-items-center">
                 <h3 class="section-title mb-0">Bitácora de Auditoría</h3>
+                <!--<button class="btn btn-toolbar" onclick="cargarBitacora()">
+                    <i data-feather="search"></i> Cargar Bitacora
+                </button>-->
                 <button class="btn btn-sm btn-link text-dark p-0" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapseAuditoria">
                     <i data-feather="chevron-down"></i>
@@ -408,6 +423,38 @@
                     <div class="alert alert-info py-2 small mt-3">
                         <i data-feather="info" class="me-2" style="width: 14px;"></i>
                         Cargando comentarios...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Reingresados -->
+    <div class="modal fade" id="modalReingresados" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Mantenedor de Reingresados</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3 d-flex gap-2">
+                        <input type="text" class="form-control" id="filtroReingresados"
+                            placeholder="Filtrar por nombre o RUT...">
+                    </div>
+                    <div class="table-responsive" style="max-height: 400px;">
+                        <table class="table table-hover" id="tablaReingresados">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID Solicitud</th>
+                                    <th>Nombre Expediente</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

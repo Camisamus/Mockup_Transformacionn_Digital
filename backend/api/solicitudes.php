@@ -18,8 +18,7 @@ $id = $data['sol_id'] ?? null;
 switch ($data['ACCION']) {
     case 'CONSULTAM':
         if ($id) {
-            $ver_clave = isset($data['ver_clave']) && $data['ver_clave'] === true;
-            $response = $controller->getById($id, $ver_clave);
+            $response = $controller->getById($id);
         } else {
             $response = $controller->getAll();
         }
