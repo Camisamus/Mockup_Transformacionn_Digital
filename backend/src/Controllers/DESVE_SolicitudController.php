@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Models\Solicitud;
+use App\Models\DESVE_Solicitud;
 
-class SolicitudController
+class DESVE_SolicitudController
 {
     private $db;
     private $solicitud;
@@ -12,7 +12,7 @@ class SolicitudController
     public function __construct($db)
     {
         $this->db = $db;
-        $this->solicitud = new Solicitud($this->db);
+        $this->solicitud = new DESVE_Solicitud($this->db);
     }
 
     public function getAll()

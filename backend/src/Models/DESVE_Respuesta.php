@@ -4,10 +4,10 @@ namespace App\Models;
 use PDO;
 use Exception;
 
-class Respuesta
+class DESVE_Respuesta
 {
     private $conn;
-    private $table_name = "trd_ingresos_respuestas";
+    private $table_name = "trd_desve_respuestas";
     private $bitacora;
 
     public function __construct($db)
@@ -45,7 +45,7 @@ class Respuesta
             $this->conn->beginTransaction();
             try {
                 // Get the registro_tramite ID from the solicitud
-                $query_sol = "SELECT sol_registro_tramite FROM trd_ingresos_solicitudes WHERE sol_id = :id LIMIT 1";
+                $query_sol = "SELECT sol_registro_tramite FROM trd_desve_solicitudes WHERE sol_id = :id LIMIT 1";
                 $stmt_sol = $this->conn->prepare($query_sol);
                 $stmt_sol->bindParam(":id", $data['res_solicitud_id']);
                 $stmt_sol->execute();

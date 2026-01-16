@@ -345,7 +345,7 @@
         <!-- Metrics Section -->
         <div class="metrics-section">
             <!-- Metric 1: % de Cumplimiento -->
-            <div class="metric-card">
+            <!-- <div class="metric-card">
                 <div class="metric-header">% de Cumplimiento</div>
                 <div class="metric-value-container">
                     <div>
@@ -360,9 +360,9 @@
                 </div>
                 <div class="metric-subtitle">Objetivo mensual: 80%</div>
             </div>
-
+-->
             <!-- Metric 2: Tareas Atrasadas -->
-            <div class="metric-card">
+            <!-- <div class="metric-card">
                 <div class="metric-header">Tareas Atrasadas</div>
                 <div class="metric-value-container">
                     <div>
@@ -374,9 +374,9 @@
                 </div>
                 <div class="metric-subtitle">Requieren atención inmediata</div>
             </div>
-
+-->
             <!-- Metric 3: Total de Tareas -->
-            <div class="metric-card">
+            <!-- <div class="metric-card">
                 <div class="metric-header">Total de Tareas</div>
                 <div class="metric-value-container">
                     <div>
@@ -389,60 +389,60 @@
                 <div class="metric-subtitle">Activas en el sistema</div>
             </div>
         </div>
+-->
+            <!-- Tasks Section -->
+            <div class="tasks-section">
+                <div class="section-header">
+                    <h2 class="section-title">Listado de Tareas</h2>
+                    <div class="section-actions">
+                        <button class="btn-filter" onclick="Swal.fire('Función', 'Filtrar tareas', 'info')">
+                            <i data-feather="filter" style="width: 16px; height: 16px;"></i>
+                            Filtrar
+                        </button>
+                        <button class="btn-export" onclick="Swal.fire('Función', 'Exportar tareas', 'info')">
+                            <i data-feather="download" style="width: 16px; height: 16px;"></i>
+                            Exportar
+                        </button>
+                    </div>
+                </div>
 
-        <!-- Tasks Section -->
-        <div class="tasks-section">
-            <div class="section-header">
-                <h2 class="section-title">Listado de Tareas</h2>
-                <div class="section-actions">
-                    <button class="btn-filter" onclick="Swal.fire('Función', 'Filtrar tareas', 'info')">
-                        <i data-feather="filter" style="width: 16px; height: 16px;"></i>
-                        Filtrar
-                    </button>
-                    <button class="btn-export" onclick="Swal.fire('Función', 'Exportar tareas', 'info')">
-                        <i data-feather="download" style="width: 16px; height: 16px;"></i>
-                        Exportar
-                    </button>
+                <!-- Tasks Table -->
+                <table class="tasks-table">
+                    <thead>
+                        <tr>
+                            <th>TÍTULO</th>
+                            <th class="d-none d-md-table-cell">ROL EN TAREA</th>
+                            <th class="d-none d-md-table-cell">RESPONSABLE</th>
+                            <th class="d-none d-md-table-cell">PROYECTO/SECTOR</th>
+                            <th class="d-none d-md-table-cell">ENTREGA</th>
+                            <th>ESTADO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Content loaded dynamically by bandeja.js -->
+                    </tbody>
+                </table>
+
+                <!-- Pagination -->
+                <div class="pagination-container">
+                    <div class="pagination-info">Mostrando 1-5 de 145 tareas</div>
+                    <div class="pagination-controls">
+                        <button class="pagination-btn" disabled>Anterior</button>
+                        <button class="pagination-btn">Siguiente</button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Tasks Table -->
-            <table class="tasks-table">
-                <thead>
-                    <tr>
-                        <th>TÍTULO</th>
-                        <th>ROL EN TAREA</th>
-                        <th>RESPONSABLE</th>
-                        <th>PROYECTO/SECTOR</th>
-                        <th>ENTREGA</th>
-                        <th>ESTADO</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Content loaded dynamically by bandeja.js -->
-                </tbody>
-            </table>
-
-            <!-- Pagination -->
-            <div class="pagination-container">
-                <div class="pagination-info">Mostrando 1-5 de 145 tareas</div>
-                <div class="pagination-controls">
-                    <button class="pagination-btn" disabled>Anterior</button>
-                    <button class="pagination-btn">Siguiente</button>
-                </div>
-            </div>
         </div>
 
-    </div>
-
-    <!-- Scripts -->
-    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/feather-icons"></script>
-    <script>
-        feather.replace();
-    </script>
-    <script src='../recursos/js/layout_manager.js'></script>
-    <script src="../recursos/js/bandeja.js"></script>
+        <!-- Scripts -->
+        <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+        <script src="https://unpkg.com/feather-icons"></script>
+        <script>
+            feather.replace();
+        </script>
+        <script src='../recursos/js/layout_manager.js'></script>
+        <script src="../recursos/js/bandeja.js"></script>
 </body>
 
 </html>

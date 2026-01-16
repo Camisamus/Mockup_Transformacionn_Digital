@@ -97,12 +97,18 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 // Recolectar datos JSON globalmente
 $input = file_get_contents("php://input");
-$data = json_decode($input, true) ?? [];
+$data = json_decode($input, true);
+
+if (json_last_error() !== JSON_ERROR_NONE || !$data) {
+    // Si no es JSON valido o esta vacio, intentamos usar $_POST
+    // Esto es crucial para FormData (multipart/form-data)
+    $data = $_POST;
+}
 
 // Validar que exista la ACCION para todos los POST
 if (!isset($data['ACCION'])) {
     http_response_code(400);
-    echo json_encode(["status" => "error", "message" => "ACCION is required"]);
+    echo json_encode(["status" => "error", "message" => "ACCION is required", "payload" => $data]);
     exit;
 }
 //exit;

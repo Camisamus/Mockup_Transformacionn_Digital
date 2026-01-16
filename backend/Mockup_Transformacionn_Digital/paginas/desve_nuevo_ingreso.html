@@ -175,16 +175,16 @@
                     </div>
                     <div class="col-md-4">
                         <label for="IngresoDesve" class="form-label">Ingreso Desve</label>
-                        <input type="text" class="form-control" id="IngresoDesve" placeholder="" disabled>
+                        <input type="text" class="form-control" id="IngresoDesve" placeholder="ABC-123456" disabled>
                     </div>
                     <div class="col-md-4">
                         <label for="Reingresado" class="form-label">Reingresado</label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="Reingresado" placeholder="" disabled hidden>
                             <input type="text" class="form-control" id="ReingresadoNombre"
-                                placeholder="Seleccione funcionario..." readonly disabled>
+                                placeholder="Seleccione ingreso previo ..." readonly disabled>
                             <button class="btn btn-outline-secondary" type="button" id="btn_buscar_reingresado"
-                                onclick="abrirModalReingresado()">
+                                onclick="abrirModalReingresado()" disabled>
                                 <i data-feather="search" style="width: 16px;"></i>
                             </button>
                         </div>
@@ -193,121 +193,140 @@
                 <div class="row g-4 mb-3">
                     <div class="col-md-4">
                         <label for="NombreExpediente" class="form-label">Nombre del expediente</label>
-                        <input type="text" class="form-control" id="NombreExpediente" placeholder="" disabled>
+                        <input type="text" class="form-control" id="NombreExpediente"
+                            placeholder="Consula por Luminaria" disabled>
+                    </div>
+                    <div class="col-md-4 ">
+                        <label for="ID_Organizacion" class="form-label">Tipo de organización</label>
+                        <select class="form-select" id="ID_Organizacion" disabled>
+                            <option value="">Seleccione tipo de organización...</option>
+                        </select>
                     </div>
                     <div class="col-md-4">
                         <label for="OrigenSolicitud" class="form-label">Origen de solicitud</label>
-                        <select class="form-select" id="OrigenSolicitud" disabled>
-                            <option value="">Seleccione organización...</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4 solo_consulta">
-                        <label for="ID_Organizacion" class="form-label">ORGANIZACIÓN</label>
-                        <input type="text" class="form-control" id="ID_Organizacion"
-                            placeholder="Nombre de la organización" readonly disabled>
-                    </div>
-                </div>
-                <div class="row g-4 mb-3">
-                    <div class="col-md-4">
-                        <label for="FechaUltimaRecepcion" class="form-label">Fecha recepción</label>
-                        <input type="date" class="form-control" id="FechaUltimaRecepcion" placeholder="" disabled>
-                    </div>
-                    <div class="col-md-4 solo_consulta">
-                        <label for="FechaCreacion" class="form-label">Fecha de Creación</label>
-                        <input type="date" class="form-control" id="FechaCreacion" readonly disabled>
-                    </div>
-                    <div class="col-md-4 solo_consulta">
-                        <label for="Prioridad" class="form-label">Prioridad</label>
-                        <input type="text" class="form-control" id="Prioridad" placeholder="" readonly disabled>
-                    </div>
-                </div>
-                <div class="row g-4 mb-3">
-                    <div class="col-md-4">
-                        <label for="FuncionarioInternoNombre" class="form-label">Funcionario Interno</label>
                         <div class="input-group">
-                            <input type="hidden" id="FuncionarioInternoId">
-                            <input type="text" class="form-control" id="FuncionarioInternoNombre"
-                                placeholder="Seleccione funcionario..." readonly disabled>
-                            <button class="btn btn-outline-secondary" type="button" id="btn_buscar_funcionario"
-                                onclick="abrirModalFuncionarios()" disabled>
-                                <i data-feather="search" style="width: 16px;"></i>
+                            <select class="form-select" id="OrigenSolicitud" disabled>
+                                <option value="">Seleccione organización...</option>
+                            </select>
+                            <button class="btn btn-outline-secondary" type="button" id="btn_nuevo_origen"
+                                onclick="abrirModalOrigenEspecial()" disabled>
+                                <i data-feather="plus" style="width: 16px;"></i>
                             </button>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <label for="Sector" class="form-label">Sector</label>
-                        <select class="form-select" id="Sector" disabled>
-                            <!-- Populated from sectores.json -->
-                        </select>
-                    </div>
-                    <div class="col-md-4 solo_consulta">
-                        <label for="MailEnviadoFecha" class="form-label">Fecha del último Email enviado</label>
-                        <input type="date" class="form-control" id="MailEnviadoFecha" placeholder="" disabled>
-                    </div>
-                    <div class="col-md-4 solo_consulta">
-                        <label for="NumeroMailEnviado" class="form-label">Número de Mails enviados</label>
-                        <input type="number" class="form-control" id="NumeroMailEnviado" placeholder="" readonly
-                            disabled>
-                    </div>
-                </div>
-                <div class="row g-4 mb-3">
-                    <div class="col-md-4">
-                        <label for="FechaVecimiento" class="form-label">Fecha Vencimiento</label>
-                        <input type="date" class="form-control" id="FechaVecimiento" placeholder="" disabled>
-                    </div>
-                </div>
-                <div class="row g-4 mb-3">
-                    <div class="col-md-4 solo_consulta">
-                        <label for="EntregadoEnConformidad" class="form-label">Entregado en conformidad</label>
-                        <input type="text" class="form-control" id="EntregadoEnConformidad" placeholder="" readonly
-                            disabled>
-                    </div>
-                    <div class="col-md-4 solo_consulta">
-                        <label for="FechaRespuesta" class="form-label">Fecha respuesta</label>
-                        <input type="date" class="form-control" id="FechaRespuesta" placeholder="" disabled>
-                    </div>
-                    <div class="col-md-4 solo_consulta">
-                        <label class="form-label d-block">Estado de entrega</label>
-                        <div class="btn-group w-100" role="group" aria-label="Estado de entrega">
-                            <input type="radio" class="btn-check" name="EstadoEntrega" id="estadoPendiente" value="0"
-                                checked>
-                            <label class="btn btn-outline-warning" for="estadoPendiente">Pendiente</label>
-
-                            <input type="radio" class="btn-check" name="EstadoEntrega" id="estadoRespondido" value="1">
-                            <label class="btn btn-outline-success" for="estadoRespondido">Respondido</label>
+                    <div class="row g-4 mb-3">
+                        <div class="col-md-4">
+                            <label for="FechaUltimaRecepcion" class="form-label">Fecha recepción</label>
+                            <input type="date" class="form-control" id="FechaUltimaRecepcion" placeholder="" disabled>
+                        </div>
+                        <div class="col-md-4 solo_consulta">
+                            <label for="FechaCreacion" class="form-label">Fecha de Creación</label>
+                            <input type="date" class="form-control" id="FechaCreacion" readonly disabled>
+                        </div>
+                        <div class="col-md-4 solo_consulta">
+                            <label for="Prioridad" class="form-label">Prioridad</label>
+                            <input type="text" class="form-control" id="Prioridad" placeholder="" readonly disabled>
                         </div>
                     </div>
-                </div>
-                <div class="row g-4 mb-3">
-                    <div class="col-md-4 solo_consulta">
-                        <label for="DiasIngreso" class="form-label">Días transcurridos (Ingreso)</label>
-                        <input type="number" class="form-control" id="DiasIngreso" readonly>
+                    <div class="row g-4 mb-3">
+                        <div class="col-md-4">
+                            <label for="FuncionarioInternoNombre" class="form-label">Funcionario Interno</label>
+                            <div class="input-group">
+                                <input type="hidden" id="FuncionarioInternoId">
+                                <input type="text" class="form-control" id="FuncionarioInternoNombre"
+                                    placeholder="Seleccione funcionario..." readonly disabled>
+                                <button class="btn btn-outline-secondary" type="button" id="btn_buscar_funcionario"
+                                    onclick="abrirModalFuncionarios()" disabled>
+                                    <i data-feather="search" style="width: 16px;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="Sector" class="form-label">Sector</label>
+                            <select class="form-select" id="Sector" disabled>
+                                <!-- Populated from sectores.json -->
+                            </select>
+                        </div>
+                        <div class="col-md-4 solo_consulta">
+                            <label for="MailEnviadoFecha" class="form-label">Fecha del último Email enviado</label>
+                            <input type="date" class="form-control" id="MailEnviadoFecha" placeholder="" disabled>
+                        </div>
+                        <div class="col-md-4 solo_consulta">
+                            <label for="NumeroMailEnviado" class="form-label">Número de Mails enviados</label>
+                            <input type="number" class="form-control" id="NumeroMailEnviado" placeholder="" readonly
+                                disabled>
+                        </div>
                     </div>
-                    <div class="col-md-4 solo_consulta">
-                        <label for="DiasVencimiento" class="form-label">Días restantes para vencimiento</label>
-                        <input type="number" class="form-control" id="DiasVencimiento" readonly>
+                    <div class="row g-4 mb-3">
+                        <div class="col-md-4">
+                            <label for="FechaVecimiento" class="form-label">Fecha Vencimiento</label>
+                            <input type="date" class="form-control" id="FechaVecimiento" placeholder="" disabled>
+                        </div>
                     </div>
-                </div>
-                <!-- New Row for Meta Info -->
-                <div class="row g-4 mb-3">
-                    <div class="col-md-12 solo_consulta">
-                        <label for="Responsable" class="form-label">Responsable (Creador)</label>
-                        <input type="text" class="form-control" id="Responsable" placeholder="Nombre del responsable"
-                            readonly disabled>
+                    <div class="row g-4 mb-3">
+                        <div class="col-md-4 solo_consulta">
+                            <label for="EntregadoEnConformidad" class="form-label">Entregado en conformidad</label>
+                            <input type="text" class="form-control" id="EntregadoEnConformidad" placeholder="" readonly
+                                disabled>
+                        </div>
+                        <div class="col-md-4 solo_consulta">
+                            <label for="FechaRespuesta" class="form-label">Fecha respuesta</label>
+                            <input type="date" class="form-control" id="FechaRespuesta" placeholder="" disabled>
+                        </div>
+                        <div class="col-md-4 solo_consulta">
+                            <label class="form-label d-block">Estado de entrega</label>
+                            <div class="btn-group w-100" role="group" aria-label="Estado de entrega">
+                                <input type="radio" class="btn-check" name="EstadoEntrega" id="estadoPendiente"
+                                    value="0" checked>
+                                <label class="btn btn-outline-warning" for="estadoPendiente">Pendiente</label>
+
+                                <input type="radio" class="btn-check" name="EstadoEntrega" id="estadoRespondido"
+                                    value="1">
+                                <label class="btn btn-outline-success" for="estadoRespondido">Respondido</label>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="row g-4 mb-3">
-                    <div class="col-md-12">
-                        <label for="DetalleIngreso" class="form-label">Detalle de ingreso</label>
-                        <textarea class="form-control" id="DetalleIngreso" rows="4" disabled></textarea>
+                    <div class="row g-4 mb-3">
+                        <div class="col-md-4 solo_consulta">
+                            <label for="DiasIngreso" class="form-label">Días transcurridos (Ingreso)</label>
+                            <input type="number" class="form-control" id="DiasIngreso" readonly>
+                        </div>
+                        <div class="col-md-4 solo_consulta">
+                            <label for="DiasVencimiento" class="form-label">Días restantes para vencimiento</label>
+                            <input type="number" class="form-control" id="DiasVencimiento" readonly>
+                        </div>
                     </div>
-                </div>
-                <div class="row g-4 mb-3">
-                    <div class="col-md-12">
-                        <label for="Observaciones" class="form-label">Observaciones</label>
-                        <textarea class="form-control" id="Observaciones" rows="3" disabled></textarea>
+                    <!-- New Row for Meta Info -->
+                    <div class="row g-4 mb-3">
+                        <div class="col-md-12 solo_consulta">
+                            <label for="Responsable" class="form-label">Responsable (Creador)</label>
+                            <input type="text" class="form-control" id="Responsable"
+                                placeholder="Nombre del responsable" readonly disabled>
+                        </div>
                     </div>
-                </div>
+                    <div class="row g-4 mb-3">
+                        <div class="col-md-12">
+                            <label for="DetalleIngreso" class="form-label">Detalle de ingreso</label>
+                            <textarea class="form-control" id="DetalleIngreso" rows="4" disabled></textarea>
+                        </div>
+                    </div>
+                    <div class="row g-4 mb-3">
+                        <div class="col-md-12">
+                            <label for="Observaciones" class="form-label">Observaciones</label>
+                            <textarea class="form-control" id="Observaciones" rows="3" disabled></textarea>
+                        </div>
+                    </div>
+                    <!-- Documentos Adjuntos -->
+                    <div class="row g-4 mb-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Documentos Adjuntos</label>
+                            <input type="file" class="form-control mb-2" id="inputArchivosSolicitud" multiple
+                                onchange="handleFileSelect('solicitud')">
+                            <div id="listaArchivosSolicitud" class="list-group">
+                                <!-- File list populated by JS -->
+                            </div>
+                        </div>
+                    </div>
             </form>
 
             <button class="btn btn-toolbar btn-dark-custom" onclick="guardarAtencion()">
@@ -385,7 +404,7 @@
                     <i data-feather="chevron-down"></i>
                 </button>
             </div>
-            <div class="collapse show" id="collapseAuditoria">
+            <div class="collapse" id="collapseAuditoria">
                 <p class="section-subtitle mt-2">Historial de acciones y eventos del trámite</p>
                 <div class="table-responsive">
                     <table class="table table-hover table-sm">
@@ -440,7 +459,7 @@
                 <div class="modal-body">
                     <div class="mb-3 d-flex gap-2">
                         <input type="text" class="form-control" id="filtroReingresados"
-                            placeholder="Filtrar por nombre o RUT...">
+                            placeholder="Filtrar por nombre de expediente o ID ...">
                     </div>
                     <div class="table-responsive" style="max-height: 400px;">
                         <table class="table table-hover" id="tablaReingresados">
@@ -516,6 +535,14 @@
                             <textarea class="form-control" id="textoRespuesta" rows="4"
                                 placeholder="Escriba la respuesta aquí..."></textarea>
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label">Adjuntar Archivos</label>
+                            <input type="file" class="form-control mb-2" id="inputArchivosRespuesta" multiple
+                                onchange="handleFileSelect('respuesta')">
+                            <div id="listaArchivosRespuesta" class="list-group">
+                                <!-- File list populated by JS -->
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -550,6 +577,30 @@
         </div>
     </div>
 
+    <!-- Modal Nuevo Origen Especial -->
+    <div class="modal fade" id="modalNuevoOrigenEspecial" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Agregar Origen Especial</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="textoNuevoOrigenEspecial" class="form-label small fw-bold">Nuevo Origen
+                            Especial</label>
+                        <input type="text" class="form-control" id="textoNuevoOrigenEspecial"
+                            placeholder="Escriba aquí el origen especial...">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-dark-custom" onclick="guardarOrigenEspecial()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Help Button -->
     <button class="btn btn-dark rounded-circle position-fixed bottom-0 end-0 m-4" style="width: 50px; height: 50px;">
         <i data-feather="help-circle"></i>
@@ -561,7 +612,7 @@
         feather.replace();
     </script>
     <script src='../recursos/js/layout_manager.js'></script>
-    <script src="../recursos/js/ingresos_ingreso_ingresos.js"></script>
+    <script src="../recursos/js/desve_nuevo_ingreso.js"></script>
 </body>
 
 </html>

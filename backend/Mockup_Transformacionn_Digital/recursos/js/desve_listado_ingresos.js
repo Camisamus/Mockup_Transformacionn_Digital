@@ -26,8 +26,8 @@ async function loadInitialData() {
             body: JSON.stringify({ ACCION: "CONSULTAM" })
         };
         const [solRes, orgRes, prioRes, funcRes, secRes] = await Promise.all([
-            fetch(`${window.API_BASE_URL}/solicitudes.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/solicitudes_DESVE.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/organizaciones_DESVE.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/funcionarios.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sectores.php`, fetchOptions).then(r => r.json())
@@ -171,5 +171,5 @@ function limpiarFiltros() {
 }
 
 function verMantenedor(id) {
-    window.location.href = `ingresos_ingreso_ingresos.html?id=${id}`;
+    window.location.href = `desve_nuevo_ingreso.html?id=${id}`;
 }

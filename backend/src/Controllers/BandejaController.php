@@ -26,10 +26,10 @@ class BandejaController
                             sol_id as id, 
                             sol_nombre_expediente as asunto, 
                             sol_fecha_recepcion as fecha,
-                            'Ingresos' as origen,
-                            'Pendiente' as estado -- Placeholder, derived from logic if needed
-                        FROM trd_ingresos_solicitudes 
-                        WHERE sol_funcionario_id = :fid AND sol_borrado = 0";
+                            'DESVE' as origen,
+                            sol_estado_entrega as estado -- Placeholder, derived from logic if needed
+                        FROM trd_desve_solicitudes 
+                        WHERE sol_funcionario_id = :fid AND sol_borrado = 0 AND sol_estado_entrega = 0";
 
         $stmt = $this->db->prepare($ingresosSql);
         $stmt->bindParam(':fid', $funcionarioId);
@@ -42,7 +42,7 @@ class BandejaController
         // 4. Query 2: Patentes (Placeholder / Future Implementation)
         // logic similar to above, querying patentes table
         /*
-        $patentesSql = "SELECT ... FROM trd_patentes_solicitudes ...";
+        $patentesSql = "SELECT ... FROM trd_desve_solicitudes ...";
         ...
         $results = array_merge($results, $patentes);
         */

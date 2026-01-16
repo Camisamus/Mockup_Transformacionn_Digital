@@ -6,6 +6,147 @@ let tiposOrganizacion = [];
 let prioridades = [];
 let funcionarios = [];
 let sectores = [];
+let responseFiles = [];
+let existingFiles = [];
+
+function handleFileSelect(type) {
+    const inputId = 'inputArchivosRespuesta';
+    const input = document.getElementById(inputId);
+    const newFiles = Array.from(input.files);
+
+    responseFiles = [...responseFiles, ...newFiles];
+    renderFileList();
+    input.value = ''; // Reset input
+}
+
+function removeFile(index) {
+    responseFiles.splice(index, 1);
+    renderFileList();
+}
+
+function renderFileList() {
+    const listId = 'listaArchivosRespuesta';
+    const listContainer = document.getElementById(listId);
+    listContainer.innerHTML = '';
+
+    // Render Existing Files (Saved)
+    if (existingFiles.length > 0) {
+        existingFiles.forEach(file => {
+            const item = document.createElement('div');
+            item.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center bg-light';
+            item.innerHTML = `
+                <div>
+                <i data-feather="file" style="width:16px;"></i>
+                <span class="ms-2 small">${file.doc_nombre_documento || 'Sin Nombre'}</span>
+                <span class="badge bg-secondary ms-2" style="font-size: 0.7rem;">Guardado</span>
+                </div>
+                <div>
+                     <button class="btn btn-sm btn-link text-primary p-0 me-2" onclick="descargarDocumento('${file.doc_id}', '${file.doc_nombre_documento}')" title="Descargar">
+                        <i data-feather="download" style="width:16px;"></i>
+                    </button>
+                </div>
+            `;
+            listContainer.appendChild(item);
+        });
+    }
+
+    // Render New Response Files
+    responseFiles.forEach((file, index) => {
+        const item = document.createElement('div');
+        item.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center';
+
+        item.innerHTML = `
+            <div>
+               <i data-feather="file-plus" style="width:16px;" class="text-success"></i>
+               <span class="ms-2">${file.name}</span>
+               <span class="badge bg-info text-dark ms-2" style="font-size: 0.7rem;">Nuevo</span>
+            </div>
+            <button class="btn btn-sm btn-outline-danger border-0" onclick="removeFile(${index})">
+                <i data-feather="x" style="width:16px;"></i>
+            </button>
+        `;
+        listContainer.appendChild(item);
+    });
+
+    if (window.feather) feather.replace();
+}
+
+async function uploadFiles(solicitationId, fileList, isDocDigital = 0) {
+    if (fileList.length === 0) return true;
+
+    let errors = 0;
+
+    for (const file of fileList) {
+        const formData = new FormData();
+        formData.append('ACCION', 'Subir');
+        formData.append('tramite_id', solicitationId);
+        formData.append('responsable_id', currentUser.id);
+        formData.append('es_docdigital', isDocDigital);
+        formData.append('doc_nombre_documento', file.name);
+        formData.append('archivo', file);
+
+        try {
+            const response = await fetch(`${window.API_BASE_URL}/documentos.php`, {
+                method: 'POST',
+                body: formData,
+                credentials: 'include',
+            });
+            const result = await response.json();
+            if (result.status !== 'success') {
+                console.error("Error uploading file:", file.name, result);
+                errors++;
+            }
+        } catch (e) {
+            console.error("Network error uploading file:", file.name, e);
+            errors++;
+        }
+    }
+
+    return errors === 0;
+}
+
+async function descargarDocumento(Id, nombre) {
+    try {
+        const response = await fetch(`${window.API_BASE_URL}/documentos.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ACCION: 'Bajar', ID: Id }),
+            credentials: 'include'
+        });
+
+        // Verificamos si la respuesta es exitosa
+        if (!response.ok) throw new Error('Error en la respuesta del servidor');
+
+        // REVISAMOS EL TIPO DE CONTENIDO
+        const contentType = response.headers.get("content-type");
+
+        if (contentType && contentType.includes("application/json")) {
+            // Si es JSON, es porque el PHP mandó un error (ej. Archivo no encontrado)
+            const result = await response.json();
+            Swal.fire('Error', result.message || 'No se pudo descargar.', 'error');
+        } else {
+            // SI NO ES JSON, ES EL ARCHIVO BINARIO (PDF)
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+
+            // Creamos el enlace de descarga temporal
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = nombre;// El nombre se puede mejorar capturando headers
+            document.body.appendChild(a);
+            a.click();
+
+            // Limpieza
+            window.URL.revokeObjectURL(url);
+            a.remove();
+        }
+    } catch (e) {
+        console.error(e);
+        Swal.fire('Error', 'Error de red o de procesamiento.', 'error');
+    }
+}
+
 
 document.addEventListener('DOMContentLoaded', async function () {
     // Detect API_BASE_URL (logic from layout_manager or fallback)
@@ -79,7 +220,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         await loadLookups();
 
         // 2. Load Solicitud Data
-        const response = await fetch(`${window.API_BASE_URL}/solicitudes.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/solicitudes_DESVE.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -116,6 +257,23 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             if (window.feather) feather.replace();
 
+            // Fetch Existing Documents
+            try {
+                const docResponse = await fetch(`${window.API_BASE_URL}/documentos.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ACCION: "BuscarporTramite", tramite_id: currentSol.sol_id }),
+                    credentials: 'include'
+                });
+                const docResult = await docResponse.json();
+                if (docResult.status === 'success') {
+                    existingFiles = docResult.data || [];
+                    renderFileList();
+                }
+            } catch (e) {
+                console.error("Error fetching documents:", e);
+            }
+
             // Attach Save Response listener
             const btnSave = document.getElementById('btn-save-response');
             if (btnSave) {
@@ -131,7 +289,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 icon: 'error',
                 confirmButtonText: 'Volver'
             });
-            window.history.back();
         }
 
     } catch (e) {
@@ -139,6 +296,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         Swal.fire('Error', 'Error de conexión', 'error');
     }
 });
+
 
 async function loadLookups() {
     const fetchOptions = {
@@ -400,8 +558,8 @@ async function saveResponse(e) {
             }
         });
 
-        console.log("Calling endpoint:", `${window.API_BASE_URL}/respuestas.php`);
-        const response = await fetch(`${window.API_BASE_URL}/respuestas.php`, {
+        console.log("Calling endpoint:", `${window.API_BASE_URL}/respuestas_DESVE.php`);
+        const response = await fetch(`${window.API_BASE_URL}/respuestas_DESVE.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -412,6 +570,15 @@ async function saveResponse(e) {
         console.log("API Result:", result);
 
         if (result.status === 'success' || result.success) {
+
+            // Upload Files
+            if (responseFiles.length > 0) {
+                const uploadSuccess = await uploadFiles(currentSol.sol_id, responseFiles);
+                if (!uploadSuccess) {
+                    await Swal.fire('Atención', 'Respuesta guardada pero hubo errores al subir archivos adjuntos.', 'warning');
+                }
+            }
+
             await Swal.fire("Guardado", "Respuesta guardada correctamente.", "success");
             window.location.href = 'bandeja.html';
         } else {

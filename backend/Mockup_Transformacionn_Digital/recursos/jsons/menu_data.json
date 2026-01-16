@@ -233,20 +233,20 @@
     {
         "id": "7",
         "tipo": "categoria",
-        "nombre": "Ingresos",
+        "nombre": "DESVE",
         "icon": "activity",
         "contenido": [
             {
                 "id": "7.1",
                 "tipo": "Pagina",
-                "nombre": "Ingreso de Ingresos",
-                "Enlace": "paginas/ingresos_ingreso_ingresos.html"
+                "nombre": "Nuevo Ingreso",
+                "Enlace": "paginas/desve_nuevo_ingreso.html"
             },
             {
                 "id": "7.2",
                 "tipo": "Pagina",
                 "nombre": "Listado de Ingresos",
-                "Enlace": "paginas/ingresos_listado_ingresos.html"
+                "Enlace": "paginas/desve_listado_ingresos.html"
             }
         ]
     }

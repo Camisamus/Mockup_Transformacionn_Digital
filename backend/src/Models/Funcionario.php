@@ -15,7 +15,7 @@ class Funcionario
 
     public function getAll()
     {
-        // Map fields from trd_acceso_usuarios to expected trd_ingresos_funcionarios fields
+        // Map fields from trd_acceso_usuarios to expected trd_desve_funcionarios fields
         $query = "SELECT 
                     usr_id as fnc_id, 
                     usr_rut as fnc_rut, 

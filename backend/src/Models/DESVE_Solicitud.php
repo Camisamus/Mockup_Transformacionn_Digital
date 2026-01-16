@@ -5,10 +5,10 @@ namespace App\Models;
 use PDO;
 use PDOException;
 
-class Solicitud
+class DESVE_Solicitud
 {
     private $conn;
-    private $table_name = "trd_ingresos_solicitudes";
+    private $table_name = "trd_desve_solicitudes";
     private $bitacora;
     private $comentario;
 
@@ -40,7 +40,7 @@ class Solicitud
             $id_para_respuestas = $solicitud['sol_reingreso_id'] ?: $id;
 
             // Obtener respuestas relacionadas
-            $query_respuestas = "SELECT * FROM trd_ingresos_respuestas WHERE res_solicitud_id = ? AND res_borrado = 0 ORDER BY res_fecha ASC";
+            $query_respuestas = "SELECT * FROM trd_desve_respuestas WHERE res_solicitud_id = ? AND res_borrado = 0 ORDER BY res_fecha ASC";
             $stmt_respuestas = $this->conn->prepare($query_respuestas);
             $stmt_respuestas->bindParam(1, $id_para_respuestas);
             $stmt_respuestas->execute();
@@ -73,7 +73,7 @@ class Solicitud
 
             $query_rgt = "INSERT INTO trd_general_registro_general_tramites 
                           (rgt_id_publica, rgt_tramite, rgt_creador) 
-                          VALUES (:id_publica, 'ingresos_solicitud', :creador)";
+                          VALUES (:id_publica, 'desve_solicitud', :creador)";
             $stmt_rgt = $this->conn->prepare($query_rgt);
             $stmt_rgt->bindValue(":id_publica", $id_publica);
             $stmt_rgt->bindValue(":creador", $data['sol_responsable'] ?? null);
@@ -103,7 +103,8 @@ class Solicitud
                 sol_latitud=:sol_latitud,
                 sol_longitud=:sol_longitud,
                 sol_responsable=:sol_responsable,
-                sol_registro_tramite=:sol_registro_tramite";
+                sol_registro_tramite=:sol_registro_tramite,
+                sol_origen_esp=:sol_origen_esp";
 
             $stmt = $this->conn->prepare($query);
 
@@ -134,6 +135,7 @@ class Solicitud
             $stmt->bindValue(":sol_longitud", $data['sol_longitud'] ?? null);
             $stmt->bindValue(":sol_responsable", $data['sol_responsable'] ?? null);
             $stmt->bindValue(":sol_registro_tramite", $rgt_id);
+            $stmt->bindValue(":sol_origen_esp", $data['sol_origen_esp'] ?? null);
 
             if ($stmt->execute()) {
                 $data_id = $this->conn->lastInsertId();

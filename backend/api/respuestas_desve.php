@@ -6,12 +6,12 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\RespuestaController;
+use App\Controllers\DESVE_RespuestaController;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new RespuestaController($db);
+$controller = new DESVE_RespuestaController($db);
 
 switch ($data['ACCION']) {
     case 'CREAR':

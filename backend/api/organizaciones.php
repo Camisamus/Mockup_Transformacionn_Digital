@@ -19,15 +19,6 @@ switch ($data['ACCION']) {
         echo json_encode($response);
         break;
 
-    case 'CREAR':
-        if ($data) {
-            $response = $controller->create($data);
-        } else {
-            $response = ["status" => "error", "message" => "Entrada inválida"];
-        }
-        echo json_encode($response);
-        break;
-
     default:
         http_response_code(400);
         echo json_encode(["status" => "error", "message" => "Método no permitido"]);

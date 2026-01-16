@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Municipal - Mantenedor Orígenes Especiales</title>
+    <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../recursos/css/style.css" rel="stylesheet">
+    <link rel="icon" href="data:,">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #212529;
+            margin: 0;
+        }
+
+        .filter-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 20px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .data-table thead th {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 16px;
+            border-bottom: 2px solid #dee2e6;
+            text-align: left;
+        }
+
+        .data-table tbody td {
+            padding: 16px;
+            border-bottom: 1px solid #f1f3f5;
+            color: #495057;
+            font-size: 0.875rem;
+        }
+
+        .data-table tbody tr {
+            transition: background-color 0.2s;
+        }
+
+        .data-table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .action-btn {
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: 4px;
+        }
+
+        .btn-edit {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #0b5ed7;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #bb2d3b;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Mantenedor de Orígenes Especiales</h1>
+            <button class="btn btn-primary" id="btn-new-origin">
+                <i data-feather="plus" style="width: 16px; height: 16px;"></i>
+                Nuevo Origen
+            </button>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <h2 class="section-title">Filtros</h2>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="filter-name" class="form-label">Nombre</label>
+                    <input type="text" class="form-control" id="filter-name" placeholder="Buscar por nombre...">
+                </div>
+                <div class="col-md-6">
+                    <label for="filter-type" class="form-label">Tipo de Organización</label>
+                    <select class="form-select" id="filter-type">
+                        <option value="">Todos</option>
+                        <!-- Options loaded dynamically -->
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="table-section">
+            <h2 class="section-title">Listado de Orígenes Especiales</h2>
+
+            <!-- Data Table -->
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Tipo de Organización</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Content loaded dynamically -->
+                    <tr>
+                        <td colspan="4" class="empty-state">
+                            <div>
+                                <i data-feather="inbox"></i>
+                                <p>Cargando datos...</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal for Create/Edit -->
+    <div class="modal fade" id="modal-origin" tabindex="-1" aria-labelledby="modalOriginLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalOriginLabel">Nuevo Origen</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-origin">
+                        <input type="hidden" id="origin-id">
+                        <div class="mb-3">
+                            <label for="origin-name" class="form-label">Nombre <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="origin-name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="origin-type" class="form-label">Tipo de Organización <span
+                                    class="text-danger">*</span></label>
+                            <select class="form-select" id="origin-type" required>
+                                <option value="">Seleccione un tipo</option>
+                                <!-- Options loaded dynamically -->
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btn-save-origin">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
+    <script src='../recursos/js/layout_manager.js'></script>
+    <script src="../recursos/js/sisadmin_mantenedo_desve_oigenesespeciales.js"></script>
+</body>
+
+</html>

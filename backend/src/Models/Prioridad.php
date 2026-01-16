@@ -6,7 +6,7 @@ use PDO;
 class Prioridad
 {
     private $conn;
-    private $table_name = "trd_ingresos_prioridades";
+    private $table_name = "trd_desve_prioridades";
 
     public function __construct($db)
     {
