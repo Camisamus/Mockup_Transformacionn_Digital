@@ -5,6 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch Package",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${file}",
+            "cwd": "${fileDirname}"
+        },
+        {
             "name": "Listen for Xdebug",
             "type": "php",
             "request": "launch",
