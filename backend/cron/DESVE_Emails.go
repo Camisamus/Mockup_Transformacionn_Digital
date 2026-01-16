@@ -89,6 +89,7 @@ func procesarSolicitudes(db *sql.DB) {
 	// trd_acceso_usuarios: usr_id, usr_nombre, usr_email
 
 	query := `SELECT 
+				s.sol_id,
 				u.usr_nombre, 
 				u.usr_email, 
 				s.sol_fecha_vencimiento 
@@ -107,10 +108,11 @@ func procesarSolicitudes(db *sql.DB) {
 
 	count := 0
 	for rows.Next() {
+		var sol_id int
 		var nombre, email string
 		var fechaLimite time.Time
 
-		if err := rows.Scan(&nombre, &email, &fechaLimite); err != nil {
+		if err := rows.Scan(&sol_id, &nombre, &email, &fechaLimite); err != nil {
 			log.Println("Error leyendo fila:", err)
 			continue
 		}
@@ -124,13 +126,13 @@ func procesarSolicitudes(db *sql.DB) {
 		diferencia := time.Until(fechaLimite)
 		dias := int(diferencia.Hours() / 24)
 
-		enviarEmail(nombre, email, dias)
+		enviarEmail(sol_id, nombre, email, dias)
 		count++
 	}
 	log.Printf("Procesadas %d solicitudes.\n", count)
 }
 
-func enviarEmail(nombre, destino string, dias int) {
+func enviarEmail(sol_id int, nombre, destino string, dias int) {
 	from := config["REMITENTE_EMAIL"]
 	user := config["USUARIO_EMAIL"]
 	pass := config["PASSWORD_EMAIL"]
@@ -144,10 +146,10 @@ func enviarEmail(nombre, destino string, dias int) {
 	var subject, body string
 	if dias >= 0 {
 		subject = "Recordatorio Fecha Limite"
-		body = fmt.Sprintf("Hola %s,\n\nTe quedan %d dias para la fecha limite de tu solicitud pendiente.\n\nAtte,\nSistema", nombre, dias)
+		body = fmt.Sprintf("Hola %s,\n\nTe quedan %d dias para la fecha limite de tu solicitud pendiente.\n\nResponda Aqui:,\n\nhttp://"+config["SERVIDORPAGINA"]+"/Mockup_Transformacionn_Digital/paginas/desve_responder.html?id=%d,\n\nAtte,\nSistema", nombre, dias, sol_id)
 	} else {
 		subject = "Alerta de Expiracion"
-		body = fmt.Sprintf("Hola %s,\n\nTu solicitud expiro hace %d dias.\n\nAtte,\nSistema", nombre, -dias)
+		body = fmt.Sprintf("Hola %s,\n\nTu solicitud expiro hace %d dias.\n\nResponda Aqui:,\n\nhttp://"+config["SERVIDORPAGINA"]+"/Mockup_Transformacionn_Digital/paginas/desve_responder.html?id=%d,\n\nAtte,\nSistema", nombre, -dias, sol_id)
 	}
 
 	msg := fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%s", from, destino, subject, body)
