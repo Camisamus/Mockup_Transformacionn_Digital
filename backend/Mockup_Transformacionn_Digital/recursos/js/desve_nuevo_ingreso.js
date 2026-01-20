@@ -127,6 +127,20 @@ function renderFileList(type) {
                     </a>
                 </div>
             `;
+            if (file.doc_docdigital == 1) {
+                item.innerHTML = `
+                <div>
+                <i data-feather="file" style="width:16px;"></i>
+                <span class="ms-2 small">${file.doc_nombre_documento || 'Sin Nombre'}</span>
+                <span class="badge bg-secondary ms-2" style="font-size: 0.7rem;">Guardado</span>
+                </div>
+                <div>
+                     <a href="${file.doc_enlace_documento}" target="_blank" title="Ver">
+                        <i data-feather="download" style="width:16px;"></i>
+                    </a>
+                </div>
+            `;
+            }
             // No remove button for existing files
             listContainer.appendChild(item);
         });

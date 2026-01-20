@@ -309,3 +309,32 @@ main.content-visible {
 .btn-sidebar-toggle:hover {
     color: #005cab;
 }
+
+/* --- CONSULTATION VIEW CUSTOM STYLES --- */
+.timeline-small {
+    position: relative;
+    padding-left: 15px;
+    border-left: 2px solid #e9ecef;
+}
+
+.timeline-small .mb-3:last-child {
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
+}
+
+.list-group-item-action:hover {
+    background-color: #f8f9fa;
+    color: #005cab !important;
+}
+
+#info_contenido {
+    white-space: pre-wrap;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #334155;
+    border: 1px solid #e2e8f0;
+}
+
+#lista_multiancestro .list-group-item i {
+    color: #005cab;
+}

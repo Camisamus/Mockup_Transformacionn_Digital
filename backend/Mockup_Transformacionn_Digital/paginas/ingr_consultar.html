@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultar Ingreso</title>
+    <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../recursos/css/style.css" rel="stylesheet">
+    <link rel="icon" href="data:,">
+    <!-- Vis.js for Network Graph -->
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        #network-container {
+            width: 100%;
+            height: 600px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="main-header mb-3">
+            <div class="header-title">
+                <h2>Consulta de Ingreso</h2>
+                <p id="subtitulo_ingreso">Visualizando detalles de la solicitud</p>
+            </div>
+            <div class="toolbar">
+                <button class="btn btn-outline-secondary btn-sm" onclick="location.href='ingr_bandeja.html'">
+                    <i data-feather="grid"></i> Bandeja
+                </button>
+            </div>
+        </div>
+
+        <!-- Search Filters in Consultation -->
+        <div class="card shadow-sm border-0 mb-4 bg-light">
+            <div class="card-body py-2">
+                <form id="form_filtros_consulta" class="row g-2 align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label mb-0 small text-muted">Título</label>
+                        <input type="text" class="form-control form-control-sm" id="filtro_titulo"
+                            placeholder="Buscar por título...">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label mb-0 small text-muted">ID Público (RGT)</label>
+                        <input type="text" class="form-control form-control-sm" id="filtro_rgt"
+                            placeholder="Cód. RGT...">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label mb-0 small text-muted">ID Interno</label>
+                        <input type="number" class="form-control form-control-sm" id="filtro_id" placeholder="ID...">
+                    </div>
+                    <div class="col-md-3 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary btn-sm flex-grow-1">
+                            <i data-feather="search" style="width:14px"></i> Consultar
+                        </button>
+                        <button type="reset" class="btn btn-outline-secondary btn-sm" id="btn_limpiar">
+                            <i data-feather="refresh-cw" style="width:14px"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Left Column: Main Info -->
+            <div class="col-lg-8">
+                <!-- Info Card -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title mb-0">Detalles del Ingreso</h5>
+                            <span class="badge bg-primary" id="badge_estado">Cargando...</span>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="text-muted small d-block">Título</label>
+                                <span class="fw-bold" id="info_titulo">-</span>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="text-muted small d-block">ID Trámite (RGT)</label>
+                                <span class="fw-bold" id="info_rgt_id">-</span>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="text-muted small d-block">ID Público</label>
+                                <code id="info_id_publica">-</code>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-muted small d-block">Fecha de Ingreso</label>
+                                <span id="info_fecha">-</span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="text-muted small d-block">Responsable</label>
+                                <span id="info_responsable">-</span>
+                            </div>
+                            <div class="col-12">
+                                <hr>
+                                <label class="text-muted small d-block mb-1">Contenido / Cuerpo</label>
+                                <div class="bg-light p-3 rounded" id="info_contenido">
+                                    -
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Destinos -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Destinatarios y Permisos</h5>
+                        <div class="table-responsive">
+                            <table class="table table-sm hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Funcionario</th>
+                                        <th>Tipo</th>
+                                        <th>Facultad</th>
+                                        <th class="text-center">Requerido</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla_destinos">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bitácora -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title mb-0">Bitácora de Auditoría</h5>
+                            <button class="btn btn-sm btn-link text-decoration-none" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapseBitacora">
+                                <i data-feather="chevron-down"></i>
+                            </button>
+                        </div>
+                        <div class="collapse show" id="collapseBitacora">
+                            <div class="timeline-small" id="lista_bitacora">
+                                <!-- Dynamic -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Sidebar of content -->
+            <div class="col-lg-4">
+                <!-- Enlaces -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Enlaces Adjuntos</h5>
+                        <div id="lista_enlaces" class="list-group list-group-flush">
+                            <!-- Dynamic -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documentos -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Documentos Adjuntos</h5>
+                        <div id="lista_documentos" class="list-group list-group-flush">
+                            <!-- Dynamic -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comentarios -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Comentarios</h5>
+                        <div id="lista_comentarios" class="list-group list-group-flush"
+                            style="max-height: 400px; overflow-y: auto;">
+                            <!-- Dynamic -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ancestry (Visual List) -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title mb-0">Relaciones (Árbol RGT)</h5>
+                            <button class="btn btn-sm btn-primary" id="btn_ver_mapa">
+                                <i data-feather="share-2"></i> Mapa
+                            </button>
+                        </div>
+                        <p class="small text-muted mb-2">Trámites relacionados</p>
+                        <ul id="lista_multiancestro" class="list-group list-group-flush small">
+                            <!-- Dynamic -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Graph -->
+    <div class="modal fade" id="modalMapa" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Mapa de Relaciones (Multi-Ancestro)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div id="network-container"></div>
+                </div>
+                <div class="modal-footer">
+                    <p class="small text-muted me-auto">
+                        <i data-feather="info" style="width: 14px;"></i>
+                        Usa el scroll para zoom y arrastra para mover el mapa.
+                    </p>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
+    <script src="../recursos/js/layout_manager.js"></script>
+    <script src="../recursos/js/ingr_consultar.js"></script>
+</body>
+
+</html>

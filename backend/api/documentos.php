@@ -16,13 +16,12 @@ $accion = $data['ACCION'] ?? $_POST['ACCION'] ?? '';
 
 switch ($accion) {
     case 'Subir':
-        // Verificamos que venga el archivo
+        // Verificamos si viene por $_FILES o por JSON (Base64)
         if (isset($_FILES['archivo'])) {
-            // Unimos los datos de $_POST y el archivo
             $resultado = $documentoController->create($_POST, $_FILES['archivo']);
             echo json_encode($resultado);
         } else {
-            echo json_encode(["status" => "error", "message" => "No se recibió ningún archivo"]);
+            echo json_encode(["status" => "error", "message" => "No se recibió ningún archivo o contenido"]);
         }
         break;
     case 'Bajar':
@@ -39,11 +38,6 @@ switch ($accion) {
         echo json_encode($resultado);
         break;
 
-    case 'BuscarporID':
-        $id = $data['id'] ?? '';
-        $resultado = $documentoController->getByIDAndDownload($id);
-        echo json_encode($resultado);
-        break;
     case 'Borrar':
         $id = $data['id'] ?? '';
         $resultado = $documentoController->delete($id);
