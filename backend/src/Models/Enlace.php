@@ -35,7 +35,7 @@ class Enlace
         }
 
         $query = "INSERT INTO " . $this->table_name . " 
-                  (`tge_tramite_registrado`, `tge_enlace`, `tge-responsable`, `tge_fecha`) 
+                  (`tge_tramite`, `tge_enlace`, `tge_responsable`, `tge_fecha`) 
                   VALUES (:tramite_id, :tge_enlace, :tge_responsable, NOW())";
 
         $stmt = $this->conn->prepare($query);
@@ -86,5 +86,13 @@ class Enlace
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function borrarPorTramiteId($tramite_id)
+    {
+        $query = "DELETE FROM " . $this->table_name . " WHERE tge_tramite = :tramite_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':tramite_id', $tramite_id);
+        return $stmt->execute();
     }
 }

@@ -43,14 +43,22 @@ ins.tid_ingreso_solicitud = :id;";
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function create($data)
+    public function crear($data)
     {
         $query = "INSERT INTO " . $this->table_name . " SET
-            titi_nombre=:titi_nombre";
+            tid_ingreso_solicitud = :tid_ingreso_solicitud,
+            tid_destino = :tid_destino,
+            tid_tipo = :tid_tipo,
+            tid_facultad = :tid_facultad,
+            tid_requeido = :tid_requeido";
 
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bindParam(":titi_nombre", $data['titi_nombre']);
+        $stmt->bindParam(":tid_ingreso_solicitud", $data['tid_tramite']);
+        $stmt->bindParam(":tid_destino", $data['tid_funcionario']);
+        $stmt->bindParam(":tid_tipo", $data['tid_tipo']);
+        $stmt->bindParam(":tid_facultad", $data['tid_facultad']);
+        $stmt->bindParam(":tid_requeido", $data['tid_requeido']);
 
         if ($stmt->execute()) {
             return true;
@@ -72,5 +80,12 @@ ins.tid_ingreso_solicitud = :id;";
             return $stmt->rowCount() > 0;
         }
         return false;
+    }
+    public function borrarPorIngresoId($id)
+    {
+        $query = "DELETE FROM " . $this->table_name . " WHERE tid_ingreso_solicitud = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
     }
 }

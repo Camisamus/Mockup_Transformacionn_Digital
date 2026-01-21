@@ -107,7 +107,7 @@ function renderFileList(type) {
     const listContainer = document.getElementById(listId);
     listContainer.innerHTML = '';
 
-    // 1. Render Existing Files (Server-side) - Only for Solicitud logic usually
+    // 1. Render Existing Files (Server-side)
     if (type === 'solicitud') {
         existingFiles.forEach(file => {
             const item = document.createElement('div');
@@ -116,15 +116,13 @@ function renderFileList(type) {
             item.innerHTML = `
                 <div>
                    <i data-feather="file" style="width:16px;"></i>
-                   <a href="http://localhost/api/miDocumento.php?archivo=${file.doc_id}" class="text-decoration-none text-dark ms-2 small">
-                       ${file.doc_nombre_documento || 'Sin Nombre'}
-                   </a>
+                   <span class="ms-2 small">${file.doc_nombre_documento || 'Sin Nombre'}</span>
                    <span class="badge bg-secondary ms-2" style="font-size: 0.7rem;">Guardado</span>
                 </div>
                  <div>
-                    <a class="btn btn-sm btn-link text-primary p-0 me-2" href="http://localhost/api/miDocumento.php?archivo=${file.doc_id}" title="Descargar">
+                    <button class="btn btn-sm btn-link text-primary p-0 me-2" onclick="descargarDocumento('${file.doc_id}', '${file.doc_nombre_documento}')" title="Descargar">
                         <i data-feather="download" style="width:16px;"></i>
-                    </a>
+                    </button>
                 </div>
             `;
             if (file.doc_docdigital == 1) {
@@ -141,7 +139,6 @@ function renderFileList(type) {
                 </div>
             `;
             }
-            // No remove button for existing files
             listContainer.appendChild(item);
         });
     }
@@ -214,32 +211,38 @@ async function uploadFiles(solicitationId, fileList, isDocDigital = 0) {
     return errors === 0;
 }
 
-async function descargarDocumento(Id) {
-    // 1. Verificamos si la respuesta es correcta
-    const res = await fetch(`${window.API_BASE_URL}/documentos.php`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ACCION: 'Bajar', ID: Id })
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error en la descarga');
-            }
-            return response.blob(); // Convierte la respuesta a un Blob
-        })
-        .then(blob => {
-            // Crea un URL temporal para el blob
+async function descargarDocumento(Id, nombre) {
+    try {
+        const response = await fetch(`${window.API_BASE_URL}/documentos.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ACCION: 'Bajar', ID: Id }),
+            credentials: 'include'
+        });
+
+        if (!response.ok) throw new Error('Error en la respuesta del servidor');
+
+        const contentType = response.headers.get("content-type");
+
+        if (contentType && contentType.includes("application/json")) {
+            const result = await response.json();
+            Swal.fire('Error', result.message || 'No se pudo descargar.', 'error');
+        } else {
+            const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.style.display = 'none';
             a.href = url;
-            a.download = nombreArchivo; // Nombre del archivo a descargar
+            a.download = nombre;
             document.body.appendChild(a);
-            a.click(); // Simula un clic para iniciar la descarga
-            window.URL.revokeObjectURL(url); // Libera el URL
-        })
-        .catch(error => console.error('Hubo un problema:', error));
-
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+        }
+    } catch (e) {
+        console.error(e);
+        Swal.fire('Error', 'Error de red o de procesamiento.', 'error');
+    }
 }
 
 async function loadInitialData() {

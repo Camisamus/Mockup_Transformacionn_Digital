@@ -3,7 +3,7 @@ namespace App\Models;
 
 use PDO;
 
-class OrganizacionDESVE
+class Ingresos_TiposDeIngresos
 {
     private $conn;
     private $table_name = "trd_ingresos_tipos_ingreso";

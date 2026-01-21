@@ -73,6 +73,8 @@ async function buscarYConsultar(filters) {
     }
 }
 
+let currentRgtId = null;
+
 async function cargarDatosIngreso(params) {
     try {
         const body = { ACCION: 'CONSULTAM', ...params };
@@ -86,7 +88,36 @@ async function cargarDatosIngreso(params) {
         const result = await response.json();
 
         if (result.status === 'success' || (result.data && !result.status)) {
-            renderizarIngreso(result.data);
+            const data = result.data;
+            currentRgtId = data.tis_registro_tramite;
+            renderizarIngreso(data);
+
+            // Modal handler initialization
+            const btnComent = document.getElementById('btn_abrir_comentario');
+            if (btnComent) {
+                btnComent.onclick = () => {
+                    const modal = new bootstrap.Modal(document.getElementById('modalNuevoComentario'));
+                    modal.show();
+                };
+            }
+
+            // Modificar Button logic
+            const id = data.tis_id;
+            const btnModificar = document.getElementById('btn_ir_modificar');
+            if (btnModificar && id) {
+                btnModificar.style.display = 'block';
+                btnModificar.onclick = () => {
+                    window.location.href = `ingr_modificar.html?id=${id}`;
+                };
+            }
+
+            const btnPreparar = document.getElementById('btn_ir_preparar');
+            if (btnPreparar && id) {
+                btnPreparar.style.display = 'block';
+                btnPreparar.onclick = () => {
+                    window.location.href = `ingr_preparar.html?id=${id}`;
+                };
+            }
         } else {
             Swal.fire('Error', result.message || 'No se pudo cargar la información.', 'error');
         }
@@ -115,8 +146,31 @@ function renderizarIngreso(data) {
     // Destinos
     const tablaDestinos = document.getElementById('tabla_destinos');
     tablaDestinos.innerHTML = '';
+
+    // HEADER UPDATE: Add 'Estado' column if not exists
+    // Use closest table or previous element sibling if we are in tbody
+    const table = tablaDestinos.closest('table');
+    const thead = table ? table.querySelector('thead') : null;
+    const theadRow = thead ? thead.firstElementChild : null;
+
+    if (theadRow && theadRow.children.length === 4) { // Assuming initial cols: Funcionario, Rol, Fac., Req.
+        const th = document.createElement('th');
+        th.className = 'text-end';
+        th.innerText = 'Estado';
+        theadRow.appendChild(th);
+    }
+
     if (data.destinos && data.destinos.length > 0) {
         data.destinos.forEach(dest => {
+            let estadoBadge = '<span class="badge bg-secondary">Pendiente</span>';
+            if (dest.tid_responde == 1) {
+                estadoBadge = '<span class="badge bg-success">Aprobado</span>';
+            } else if (dest.tid_responde == 0 && dest.tid_fecha_respuesta) {
+                estadoBadge = '<span class="badge bg-danger">Rechazado</span>';
+            } else if (dest.tid_responde === '0') {
+                estadoBadge = '<span class="badge bg-danger">Rechazado</span>';
+            }
+
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>
@@ -128,11 +182,12 @@ function renderizarIngreso(data) {
                 <td class="text-center">
                     ${dest.tid_requeido === '1' ? '<i data-feather="check-circle" class="text-success" style="width:16px"></i>' : '<i data-feather="circle" class="text-muted" style="width:16px"></i>'}
                 </td>
+                <td class="text-end">${estadoBadge}</td>
             `;
             tablaDestinos.appendChild(row);
         });
     } else {
-        tablaDestinos.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No hay destinatarios asignados.</td></tr>';
+        tablaDestinos.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No hay destinatarios asignados.</td></tr>';
     }
 
     // Bitácora
@@ -318,35 +373,90 @@ function renderizarMapaRelaciones(multiancestro, currentId) {
     if (window.feather) window.feather.replace();
 }
 
-async function descargarDocumento(id, nombre) {
+async function descargarDocumento(Id, nombre) {
     try {
         const response = await fetch(`${window.API_BASE_URL}/documentos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ACCION: 'Bajar', ID: Id }),
+            credentials: 'include'
+        });
+
+        // Verificamos si la respuesta es exitosa
+        if (!response.ok) throw new Error('Error en la respuesta del servidor');
+
+        // REVISAMOS EL TIPO DE CONTENIDO
+        const contentType = response.headers.get("content-type");
+
+        if (contentType && contentType.includes("application/json")) {
+            // Si es JSON, es porque el PHP mandó un error (ej. Archivo no encontrado)
+            const result = await response.json();
+            Swal.fire('Error', result.message || 'No se pudo descargar.', 'error');
+        } else {
+            // SI NO ES JSON, ES EL ARCHIVO BINARIO (PDF, IMAGE, ETC)
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+
+            // Creamos el enlace de descarga temporal
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = nombre;
+            document.body.appendChild(a);
+            a.click();
+
+            // Limpieza
+            window.URL.revokeObjectURL(url);
+            a.remove();
+        }
+    } catch (e) {
+        console.error(e);
+        Swal.fire('Error', 'Error de red o de procesamiento.', 'error');
+    }
+}
+
+async function guardarComentario() {
+    const texto = document.getElementById('textoNuevoComentario').value.trim();
+    if (!texto) {
+        Swal.fire('Atención', 'Por favor escriba un comentario.', 'warning');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${window.API_BASE_URL}/comentarios.php`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                ACCION: 'OBTENER_ID',
-                doc_id: id
+                ACCION: "CREAR",
+                rgt_id: currentRgtId,
+                gco_texto: texto
             })
         });
 
         const result = await response.json();
-        if (result.status === 'success' && result.data && result.data[0]) {
-            const doc = result.data[0];
-            const content = doc.doc_enlace_documento;
+        if (result.status === 'success') {
+            document.getElementById('textoNuevoComentario').value = '';
+            const modalEl = document.getElementById('modalNuevoComentario');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            if (modal) modal.hide();
 
-            if (content.startsWith('data:')) {
-                const link = document.createElement('a');
-                link.href = content;
-                link.download = nombre;
-                link.click();
-            } else {
-                window.open(content, '_blank');
-            }
+            Swal.fire({
+                icon: 'success',
+                title: '¡Guardado!',
+                text: 'El comentario ha sido guardado correctamente.',
+                timer: 1500,
+                showConfirmButton: false
+            }).then(() => {
+                // Relanzar carga de datos
+                location.reload();
+            });
         } else {
-            Swal.fire('Error', 'No se pudo obtener el contenido del documento.', 'error');
+            Swal.fire('Error', result.message || 'No se pudo guardar el comentario.', 'error');
         }
-    } catch (error) {
-        console.error('Error:', error);
-        Swal.fire('Error', 'Error al descargar el documento.', 'error');
+    } catch (e) {
+        console.error("Error saving comment:", e);
+        Swal.fire('Error', 'Error de conexión al guardar.', 'error');
     }
 }
+window.guardarComentario = guardarComentario;

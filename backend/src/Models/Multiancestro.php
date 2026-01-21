@@ -132,8 +132,76 @@ class Multiancestro
                   WHERE gma_id = :id ";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
-        $stmt->execute();
+        return $stmt->execute();
+    }
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    public function borrarVinculo($padre, $hijo)
+    {
+        $query = "DELETE FROM " . $this->table_name . " 
+                  WHERE gma_padre = :padre AND gma_hijo = :hijo";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':padre', $padre);
+        $stmt->bindParam(':hijo', $hijo);
+        return $stmt->execute();
+    }
+
+    /**
+     * Verifica si $posibleHijo es descendiente de $rgtId (recursivo)
+     */
+    public function esDescendiente($posibleHijo, $rgtId)
+    {
+        if ($posibleHijo == $rgtId)
+            return true;
+
+        $hijos = $this->obtenerPorPadre($rgtId);
+        foreach ($hijos as $h) {
+            if ($this->esDescendiente($posibleHijo, $h['gma_hijo'])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Verifica si $posiblePadre es antecesor de $rgtId (recursivo)
+     */
+    public function esAntecesor($posiblePadre, $rgtId)
+    {
+        if ($posiblePadre == $rgtId)
+            return true;
+
+        $padres = $this->obtenerPorHijo($rgtId);
+        foreach ($padres as $p) {
+            if ($this->esAntecesor($posiblePadre, $p['gma_padre'])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Valida si se puede crear un vínculo entre $padre y $hijo
+     * @return array [bool status, string message]
+     */
+    public function validarVinculo($padre, $hijo)
+    {
+        if ($padre == $hijo) {
+            return [false, "No se puede vincular una solicitud consigo misma."];
+        }
+
+        // Regla: No puede depender de sus ancestros (eso sería redundante o cíclico si se intenta al revés)
+        // Pero técnicamente la regla de usuario es: "No puede depender de sus ancestros"
+        // Si ya es un antecesor, el vínculo ya existe indirectamente (Redundancia)
+        if ($this->esAntecesor($padre, $hijo)) {
+            return [false, "La solicitud ya depende indirectamente de este antecesor (Redundancia)."];
+        }
+
+        // Regla: No puede asignarle un ancestro que es también su descendiente (Circulariadad)
+        // Es decir, si el 'padre' que quiero asignar es en realidad un descendiente del 'hijo'
+        if ($this->esDescendiente($padre, $hijo)) {
+            return [false, "No se puede crear una dependencia circular (el padre seleccionado es un descendiente)."];
+        }
+
+        return [true, "OK"];
     }
 }

@@ -8,6 +8,7 @@ class DocumentoController
     private $db;
     private $documento;
 
+    private $folder = "/uploads/documentos/"; // Asegúrate de que esta carpeta tenga permisos de escritura
     public function __construct($db)
     {
         $this->db = $db;
@@ -72,15 +73,12 @@ class DocumentoController
         $es_docdigital = $data['es_docdigital'];
         $doc_nombre_original = $data['doc_nombre_documento'];
 
-        // 1. Configuración de la ruta y nombre aleatorio
-        $folder = "C:/Uploads/documentos/"; // Asegúrate de que esta carpeta tenga permisos de escritura
-
         // Obtenemos la extensión original del archivo
         $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
 
         // Generamos un nombre único usando bin2hex o uniqid
         $nuevo_nombre = bin2hex(random_bytes(20)) . "." . $extension;
-        $ruta_destino = $folder . $nuevo_nombre;
+        $ruta_destino = $this->folder . $nuevo_nombre;
 
         // 2. Intentar mover el archivo al servidor
         if (move_uploaded_file($file['tmp_name'], $ruta_destino)) {
@@ -97,19 +95,72 @@ class DocumentoController
 
         return ["status" => "error", "message" => "Error al subir el archivo físico al servidor"];
     }
+
+    public function createFromBase64($data)
+    {
+        error_log("DocumentoController: Iniciando createFromBase64 para " . ($data['nombre'] ?? 'sin nombre'));
+
+        $tramite_id = $data['tramite_id'];
+        $responsable_id = $data['responsable_id'] ?? ($_SESSION['user_id'] ?? 1);
+        $es_docdigital = $data['es_docdigital'] ?? 0;
+        $doc_nombre_original = $data['nombre'];
+        $base64_content = $data['base64'];
+
+        // 1. Configuración de la ruta
+        if (!file_exists($this->folder)) {
+            if (!mkdir($this->folder, 0777, true)) {
+                error_log("DocumentoController: Error FATAL al crear directorio " . $this->folder);
+                return ["status" => "error", "message" => "No se pudo crear la carpeta de destino"];
+            }
+        }
+
+        // 2. Extraer datos del base64 - Regex mucho más flexible
+        if (strpos($base64_content, ';base64,') !== false) {
+            $base64_content = explode(';base64,', $base64_content)[1];
+        }
+
+        $file_data = base64_decode($base64_content);
+        if ($file_data === false || empty($file_data)) {
+            error_log("DocumentoController: Base64 decodificado está vacío o es inválido para $doc_nombre_original");
+            return ["status" => "error", "message" => "Contenido del archivo vacío o inválido"];
+        }
+
+        // 3. Generar nombre único
+        $extension = pathinfo($doc_nombre_original, PATHINFO_EXTENSION) ?: 'bin';
+        $nuevo_nombre = bin2hex(random_bytes(20)) . "." . $extension;
+        $ruta_destino = $this->folder . $nuevo_nombre;
+
+        // 4. Guardar archivo en disco
+        if (file_put_contents($ruta_destino, $file_data) !== false) {
+            error_log("DocumentoController: Archivo guardado físicamente en $ruta_destino (" . strlen($file_data) . " bytes)");
+
+            // 5. Registrar en BD con la RUTA como enlace
+            if ($this->documento->subir($tramite_id, $ruta_destino, $doc_nombre_original, $responsable_id, $es_docdigital)) {
+                error_log("DocumentoController: Registro en BD exitoso para $ruta_destino");
+                return ["status" => "success", "message" => "Documento guardado y registrado", "file_path" => $ruta_destino];
+            } else {
+                error_log("DocumentoController: Falló el INSERT en BD para $ruta_destino");
+                unlink($ruta_destino);
+                return ["status" => "error", "message" => "Registro en BD falló"];
+            }
+        }
+
+        error_log("DocumentoController: Falló file_put_contents en $ruta_destino");
+        return ["status" => "error", "message" => "No se pudo escribir el archivo en el servidor"];
+    }
+
     public function delete($id)
     {
 
         // 1. Configuración de la ruta y nombre aleatorio
         $result = $this->documento->obtenerId($id);
-        if ($result['es_docdigital'] == 1) {
+        if (isset($result[0]['es_docdigital']) && $result[0]['es_docdigital'] == 1) {
             $result = $this->documento->borrar($id);
             if ($result) {
                 return ["status" => "success", "data" => $result];
             }
         } else {
-            $folder = "uploads/documentos/"; // Asegúrate de que esta carpeta tenga permisos de escritura
-            $ruta_destino = $folder . $result['doc_nombre_documento'];
+            $ruta_destino = $result[0]['doc_enlace_documento'] ?? '';
             if (file_exists($ruta_destino)) {
                 unlink($ruta_destino);
             }

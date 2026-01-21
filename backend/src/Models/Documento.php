@@ -45,7 +45,11 @@ class Documento
         $stmt->bindParam(':responsable', $responsable_id);
         $stmt->bindParam(':doc_docdigital', $es_docdigital);
 
-        return $stmt->execute();
+        if (!$stmt->execute()) {
+            error_log("Documento::subir Error: " . implode(" - ", $stmt->errorInfo()));
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -58,7 +62,7 @@ class Documento
     {
         $query = "SELECT b.*, u.usr_nombre, u.usr_apellido 
                   FROM " . $this->table_name . " b
-                  JOIN trd_acceso_usuarios u ON b.`doc-responsable` = u.usr_id
+                  LEFT JOIN trd_acceso_usuarios u ON b.`doc-responsable` = u.usr_id
                   WHERE b.doc_tramite_registrado = :tramite_id 
                   ORDER BY b.doc_fecha ASC";
         $stmt = $this->conn->prepare($query);

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preparar Ingreso (Relaciones)</title>
+    <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../recursos/css/style.css" rel="stylesheet">
+    <link rel="icon" href="data:,">
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        #network-container {
+            width: 100%;
+            height: 600px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="main-header mb-4">
+            <div class="header-title">
+                <h2>Preparar Relaciones</h2>
+                <p id="subtitulo_preparar">Gestionando árbol multiancestro para la solicitud</p>
+            </div>
+            <div class="toolbar d-flex gap-2">
+                <button class="btn btn-primary" id="btn_nueva_hija">
+                    <i data-feather="plus-circle"></i> Nueva Solicitud Hija
+                </button>
+                <button class="btn btn-info text-white" id="btn_establecer_dependencia">
+                    <i data-feather="link"></i> Establecer Dependencia
+                </button>
+                <button class="btn btn-outline-secondary" onclick="location.href='ingr_bandeja.html'">
+                    <i data-feather="grid"></i> Bandeja
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title mb-0">Mapa de Relaciones Actual</h5>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="form-check form-switch small mb-0">
+                                    <input class="form-check-input" type="checkbox" id="toggle_no_favorables" checked>
+                                    <label class="form-check-label" for="toggle_no_favorables">Ver No Favorables
+                                        (Negro)</label>
+                                </div>
+                                <div class="small text-muted">Solicitud actual en <span
+                                        class="badge bg-warning text-dark">Amarillo</span></div>
+                            </div>
+                        </div>
+                        <div id="network-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Crear Solicitud Hija -->
+    <div class="modal fade" id="modalCrearHija" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Crear Nueva Solicitud Hija</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form_crear_hija">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Título</label>
+                            <input type="text" class="form-control" id="h_titulo" required
+                                placeholder="Título de la sub-solicitud">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Tipo de Ingreso</label>
+                            <select class="form-select" id="h_tipo" required>
+                                <option value="" selected disabled>Cargando tipos...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Contenido / Descripción</label>
+                            <textarea class="form-control" id="h_contenido" rows="5"
+                                placeholder="Detalles de la sub-solicitud..."></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Crear y Vincular</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Establecer Dependencia -->
+    <div class="modal fade" id="modalEstablecerDependencia" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Establecer Dependencia (Vincular Padre)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small text-muted mb-3">Seleccione una de sus solicitudes activas para que sea la
+                        **antecesora** de la solicitud actual.</p>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="buscar_padre"
+                            placeholder="Filtrar por título o ID...">
+                    </div>
+                    <div class="table-responsive" style="max-height: 400px;">
+                        <table class="table table-hover table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Título</th>
+                                    <th>Estado</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista_solicitudes_padre">
+                                <tr>
+                                    <td colspan="4" class="text-center p-3">Cargando solicitudes...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        feather.replace();
+    </script>
+    <script src="../recursos/js/layout_manager.js"></script>
+    <script src="../recursos/js/ingr_preparar.js"></script>
+</body>
+
+</html>

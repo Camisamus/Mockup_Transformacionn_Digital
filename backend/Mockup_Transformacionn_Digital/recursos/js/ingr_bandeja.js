@@ -69,14 +69,20 @@ function renderizarTabla(data) {
     data.forEach(item => {
         const tr = document.createElement('tr');
         tr.className = 'cursor-pointer';
-        tr.onclick = (e) => {
-            // Don't trigger if clicking an action button directly if we add them later
+        tr.onclick = () => {
             window.location.href = `ingr_consultar.html?id=${item.tis_id}`;
         };
 
+        const rgtCode = item.rgt_id_publica || '-';
+
         tr.innerHTML = `
             <td class="ps-4 text-muted small">${item.tis_id}</td>
-            <td><code>${item.rgt_id_publica || '-'}</code></td>
+            <td class="rgt-container">
+                <button class="btn btn-xs btn-outline-secondary py-0 px-2 btn-show-code" style="font-size: 0.75rem;">
+                    <i data-feather="eye" style="width: 12px; height: 12px;"></i> Ver
+                </button>
+                <code class="d-none">${rgtCode}</code>
+            </td>
             <td>
                 <div class="fw-bold">${item.tis_titulo || 'Sin título'}</div>
                 <div class="small text-muted text-truncate" style="max-width: 300px;">${item.tis_contenido || ''}</div>
@@ -89,6 +95,23 @@ function renderizarTabla(data) {
                 </button>
             </td>
         `;
+
+        // Attach click to the show button
+        const btnShow = tr.querySelector('.btn-show-code');
+        btnShow.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent tr.onclick
+            Swal.fire({
+                title: 'Código Público (RGT)',
+                html: `<div class="p-3 bg-light rounded shadow-sm">
+                        <code style="font-size: 2rem; letter-spacing: 2px;">${rgtCode}</code>
+                       </div>`,
+                confirmButtonText: 'Cerrar',
+                customClass: {
+                    confirmButton: 'btn btn-primary'
+                }
+            });
+        });
+
         tabla.appendChild(tr);
     });
 

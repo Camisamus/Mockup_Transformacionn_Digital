@@ -77,6 +77,76 @@ switch ($data['ACCION']) {
         echo json_encode($response);
         break;
 
+    case 'VINCULAR_HIJO':
+        $padre = $data['padre_id'] ?? null;
+        $hijo = $data['hijo_id'] ?? null;
+        if ($padre && $hijo) {
+            $multiancestro = new \App\Models\Multiancestro($db);
+
+            // Validar reglas de dependencia
+            [$valido, $mensaje] = $multiancestro->validarVinculo($padre, $hijo);
+            if (!$valido) {
+                $response = ["status" => "error", "message" => $mensaje];
+                echo json_encode($response);
+                break;
+            }
+
+            if ($multiancestro->crear($padre, $hijo)) {
+                $response = ["status" => "success", "message" => "Vínculo creado correctamente"];
+            } else {
+                $response = ["status" => "error", "message" => "No se pudo crear el vínculo"];
+            }
+        } else {
+            $response = ["status" => "error", "message" => "Padre e Hijo IDs requeridos"];
+        }
+        echo json_encode($response);
+        break;
+
+    case 'DETALLES_ARBOL':
+        $rgt_ids = $data['rgt_ids'] ?? [];
+        if (!empty($rgt_ids)) {
+            $detalles = $controller->getDetallesVarios($rgt_ids);
+            $response = ["status" => "success", "data" => $detalles];
+        } else {
+            $response = ["status" => "error", "message" => "Array de rgt_ids requerido"];
+        }
+        echo json_encode($response);
+        break;
+
+    case 'ELIMINAR_VINCULO':
+        $padre = $data['padre_id'] ?? null;
+        $hijo = $data['hijo_id'] ?? null;
+        if ($padre && $hijo) {
+            $solicitudModel = new \App\Models\Ingresos_ingreso($db);
+            if ($solicitudModel->eliminarVinculo($padre, $hijo)) {
+                $response = ["status" => "success", "message" => "Vínculo eliminado"];
+            } else {
+                $response = ["status" => "error", "message" => "Error al eliminar vínculo"];
+            }
+        } else {
+            $response = ["status" => "error", "message" => "Padre e Hijo IDs requeridos"];
+        }
+        echo json_encode($response);
+        break;
+
+    case 'RESPONDER':
+        if ($id) {
+            $response = $controller->responder($id, $data);
+        } else {
+            $response = ["status" => "error", "message" => "Ingreso ID required"];
+        }
+        echo json_encode($response);
+        break;
+
+    case 'INIT_FIRMA':
+        if ($id) {
+            $response = $controller->iniciarFirma($id, $data);
+        } else {
+            $response = ["status" => "error", "message" => "Ingreso ID required for INIT_FIRMA"];
+        }
+        echo json_encode($response);
+        break;
+
     default:
         http_response_code(400);
         echo json_encode(["status" => "error", "message" => "Action not allowed"]);
