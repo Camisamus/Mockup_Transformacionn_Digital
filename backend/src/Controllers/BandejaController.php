@@ -20,34 +20,44 @@ class BandejaController
 
         $results = [];
 
-        // 3. Query 1: Ingresos Assiged to this Official
-        // We select key fields and add 'origen'
-        $ingresosSql = "SELECT 
+        // 3. Query 1: DESVE Solicitudes
+        $desveSql = "SELECT 
                             sol_id as id, 
                             sol_nombre_expediente as asunto, 
                             sol_fecha_recepcion as fecha,
                             'DESVE' as origen,
-                            sol_estado_entrega as estado -- Placeholder, derived from logic if needed
+                            CASE WHEN sol_estado_entrega = 0 THEN 'Pendiente' ELSE 'Respondido' END as estado
                         FROM trd_desve_solicitudes 
                         WHERE sol_funcionario_id = :fid AND sol_borrado = 0 AND sol_estado_entrega = 0";
 
-        $stmt = $this->db->prepare($ingresosSql);
-        $stmt->bindParam(':fid', $funcionarioId);
-        $stmt->execute();
-        $ingresos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt1 = $this->db->prepare($desveSql);
+        $stmt1->bindParam(':fid', $funcionarioId);
+        $stmt1->execute();
+        $desve = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
-        // Merge Ingresos
-        $results = array_merge($results, $ingresos);
+        // 4. Query 2: Ingresos Solicitudes (where user is a destination)
+        $ingresosSql = "SELECT 
+                            sol.tis_id as id, 
+                            sol.tis_titulo as asunto, 
+                            sol.tis_fecha as fecha,
+                            'Ingresos' as origen,
+                            sol.tis_estado as estado
+                        FROM trd_ingresos_solicitudes sol
+                        JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud
+                        WHERE dest.tid_destino = :fid AND sol.tis_estado NOT IN ('Resuelto_Favorable', 'Resuelto_NO_Favorable')";
 
-        // 4. Query 2: Patentes (Placeholder / Future Implementation)
-        // logic similar to above, querying patentes table
-        /*
-        $patentesSql = "SELECT ... FROM trd_desve_solicitudes ...";
-        ...
-        $results = array_merge($results, $patentes);
-        */
+        $stmt2 = $this->db->prepare($ingresosSql);
+        $stmt2->bindParam(':fid', $funcionarioId);
+        $stmt2->execute();
+        $ingresos = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
-        // 5. Query X: Future modules...
+        // Merge results
+        $results = array_merge($desve, $ingresos);
+
+        // Sort by date descending
+        usort($results, function ($a, $b) {
+            return strcmp($b['fecha'], $a['fecha']);
+        });
 
         return $results;
     }

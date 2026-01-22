@@ -119,6 +119,8 @@ function renderTable(items, tbody) {
 
             if (item.origen === 'DESVE') {
                 window.location.href = `desve_responder.html?id=${item.id}`;
+            } else if (item.origen === 'Ingresos') {
+                window.location.href = `ingr_responder.html?id=${item.id}`;
             } else if (item.origen === 'Patentes') {
                 Swal.fire('Info', 'Módulo de Patentes en construcción', 'info');
             } else {
@@ -144,6 +146,7 @@ function renderTable(items, tbody) {
                     <p><strong>Entrega:</strong> ${new Date(item.fecha).toLocaleDateString()}</p>
                     <button class="btn btn-sm btn-primary mt-2" onclick="
                         if('${item.origen}' === 'DESVE') window.location.href = 'desve_responder.html?id=${item.id}';
+                        else if ('${item.origen}' === 'Ingresos') window.location.href = 'ingr_responder.html?id=${item.id}';
                         else Swal.fire('Info', 'Módulo en construcción', 'info');
                     ">Ver Detalle</button>
                 </div>

@@ -205,12 +205,18 @@ class Ingresos_ingreso
                 // 4. Registrar destinos
                 if (isset($data['destinos']) && is_array($data['destinos'])) {
                     foreach ($data['destinos'] as $dest) {
+                        // REGLA: Consultores nunca son requeridos
+                        $requerido = $dest['tid_requeido'];
+                        if ($dest['tid_facultad'] === 'Consultor') {
+                            $requerido = '0';
+                        }
+
                         $this->Destinos->crear([
                             'tid_tramite' => $data_id,
                             'tid_funcionario' => $dest['usr_id'],
                             'tid_tipo' => $dest['tid_tipo'],
                             'tid_facultad' => $dest['tid_facultad'],
-                            'tid_requeido' => $dest['tid_requeido']
+                            'tid_requeido' => $requerido
                         ]);
                     }
                 }
@@ -301,12 +307,18 @@ class Ingresos_ingreso
             if (isset($data['destinos']) && is_array($data['destinos'])) {
                 $this->Destinos->borrarPorIngresoId($id);
                 foreach ($data['destinos'] as $dest) {
+                    // REGLA: Consultores nunca son requeridos
+                    $requerido = $dest['tid_requeido'];
+                    if ($dest['tid_facultad'] === 'Consultor') {
+                        $requerido = '0';
+                    }
+
                     $this->Destinos->crear([
                         'tid_tramite' => $id,
                         'tid_funcionario' => $dest['usr_id'],
                         'tid_tipo' => $dest['tid_tipo'],
                         'tid_facultad' => $dest['tid_facultad'],
-                        'tid_requeido' => $dest['tid_requeido']
+                        'tid_requeido' => $requerido
                     ]);
                 }
             }

@@ -59,6 +59,17 @@ function setupEventListeners() {
         renderizarBusquedaFuncionarios(e.target.value);
     });
 
+    // Control de requerido según facultad
+    document.getElementById('m_destino_facultad').addEventListener('change', (e) => {
+        const checkReq = document.getElementById('m_destino_requerido');
+        if (e.target.value === 'Consultor') {
+            checkReq.checked = false;
+            checkReq.disabled = true;
+        } else {
+            checkReq.disabled = false;
+        }
+    });
+
     // Confirmar destino
     document.getElementById('btn_confirmar_destino').onclick = () => {
         const id = document.getElementById('fnc_id_config').value;
@@ -148,7 +159,9 @@ function seleccionarFuncionario(id, nombre) {
     // Reset fields
     document.getElementById('m_destino_tipo').value = 'Para';
     document.getElementById('m_destino_facultad').value = 'Firmante';
-    document.getElementById('m_destino_requerido').checked = true;
+    const checkReq = document.getElementById('m_destino_requerido');
+    checkReq.checked = true;
+    checkReq.disabled = false;
 
     modalBusqueda.hide();
     modalConfig.show();
