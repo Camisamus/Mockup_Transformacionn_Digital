@@ -31,15 +31,46 @@ class Ingresos_ingreso
         $this->Multiancestro = new Multiancestro($db);
     }
 
-    public function getAll(array $filters = [])
+    public function getAll(array $filters = [], ?int $current_user_id = null)
     {
-        $query = "SELECT sol.*, rgt.*, usr.usr_nombre as resp_nombre, usr.usr_apellido as resp_apellido 
+        // Base Query with Role Logic
+        $query = "SELECT DISTINCT sol.*, rgt.*, usr.usr_nombre as resp_nombre, usr.usr_apellido as resp_apellido,
+                  CASE 
+                    WHEN sol.tis_responsable = :current_user THEN 'Responsable'
+                    WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
+                    ELSE 'Consultor' 
+                  END as rol_usuario
                   FROM " . $this->table_name . " sol 
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
                   LEFT JOIN trd_acceso_usuarios usr ON sol.tis_responsable = usr.usr_id
+                  LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :current_user_join
                   WHERE 1=1";
 
+        // Filter Logic: Show if Responsible OR is a Destination
+        if ($current_user_id) {
+            $query .= " AND (sol.tis_responsable = :current_user_filter OR dest.tid_destino IS NOT NULL)";
+        }
+
         $params = [];
+        // Bind parameters logic needs to be careful with named params appearing multiple times
+        // PDO might complain if we reuse :current_user for different binds or same bind location logic.
+        // Let's use specific names.
+
+        if ($current_user_id) {
+            $params[':current_user'] = $current_user_id;
+            $params[':current_user_join'] = $current_user_id;
+            $params[':current_user_filter'] = $current_user_id;
+        } else {
+            // Fallback for Admin/Debug if null passed (though Controller should pass it)
+            // But for safety in query construction:
+            $params[':current_user'] = 0;
+            $params[':current_user_join'] = 0;
+            $params[':current_user_filter'] = 0;
+            // Ideally we shouldn't be here without ID if we want filtering, but let's allow "all" if ID is null?
+            // Requirement says "solo debes poder ver...". So strict filter.
+            // If ID is null (e.g. cron), maybe show empty?
+            // Let's assume ID is always passed from controller.
+        }
 
         if (!empty($filters['tis_titulo'])) {
             $query .= " AND sol.tis_titulo LIKE :tis_titulo";

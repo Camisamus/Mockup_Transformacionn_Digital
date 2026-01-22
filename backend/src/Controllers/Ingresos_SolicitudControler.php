@@ -21,9 +21,9 @@ class Ingresos_SolicitudControler
         $this->solicitud = new Ingresos_ingreso($this->db);
     }
 
-    public function getAll($filters = [])
+    public function getAll($filters = [], $current_user_id = null)
     {
-        $result = $this->solicitud->getAll($filters);
+        $result = $this->solicitud->getAll($filters, $current_user_id);
         return ["status" => "success", "data" => $result];
     }
 

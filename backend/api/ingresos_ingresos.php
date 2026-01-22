@@ -29,7 +29,12 @@ switch ($data['ACCION']) {
                 'rgt_id_publica' => $data['rgt_id_publica'] ?? null,
                 'tis_id' => $data['tis_id'] ?? null
             ];
-            $response = $controller->getAll($filters);
+
+            if (session_status() === PHP_SESSION_NONE)
+                session_start();
+            $current_user_id = $_SESSION['user_id'] ?? null;
+
+            $response = $controller->getAll($filters, $current_user_id);
         }
         echo json_encode($response);
         break;

@@ -355,6 +355,40 @@ async function procesarRespuesta(estado, accionLabel, respuesta, otp) {
     try {
         Swal.fire({ title: 'Procesando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
+        // 1. Handle File Upload if present
+        const fileInput = document.getElementById('inp_archivo_decreto');
+        if (fileInput && fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('ACCION', 'Subir');
+            formData.append('tramite_id', currentId);
+            formData.append('responsable_id', currentUserId); // Assuming currentUserId is set
+            formData.append('es_docdigital', 0);
+
+            // Rename file with prefix
+            const renamedFile = new File([file], `Decreto - ${file.name}`, { type: file.type });
+            formData.append('archivo', renamedFile);
+            formData.append('doc_nombre_documento', renamedFile.name);
+
+            try {
+                const uploadResp = await fetch(`${window.API_BASE_URL}/documentos.php`, {
+                    method: 'POST',
+                    body: formData
+                });
+                const uploadResult = await uploadResp.json();
+
+                if (uploadResult.status !== 'success') {
+                    Swal.fire('Error', `Error al subir el decreto: ${uploadResult.message}`, 'error');
+                    return; // Stop process
+                }
+            } catch (uploadErr) {
+                console.error("Upload error:", uploadErr);
+                Swal.fire('Error', 'Error de red al subir el documento.', 'error');
+                return;
+            }
+        }
+
+        // 2. Proceed with Response Logic
         const payload = {
             ACCION: 'RESPONDER',
             ing_id: currentId,
