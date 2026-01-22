@@ -136,25 +136,29 @@
                 <p>Consulta y gestiona información de atenciones individuales</p>
             </div>
             <div class="toolbar">
-                <button class="btn btn-toolbar d-none" id="btn_ingreso_original">
+                <button type="button" class="btn btn-toolbar d-none" id="btn_ingreso_original">
                     <i data-feather="arrow-left-circle"></i> Ingreso Original
                 </button>
-                <button class="btn btn-toolbar" onclick="buscarAtencion()">
+                <button type="button" class="btn btn-toolbar"
+                    onclick="window.location.href='desve_listado_ingresos.html'">
+                    <i data-feather="inbox"></i> Volver a Bandeja
+                </button>
+                <button type="button" class="btn btn-toolbar" onclick="buscarAtencion()">
                     <i data-feather="search"></i> Buscar
                 </button>
-                <button class="btn btn-toolbar" onclick="nuevaAtencion()">
+                <button type="button" class="btn btn-toolbar" onclick="nuevaAtencion()">
                     <i data-feather="plus"></i> Nueva
                 </button>
-                <button class="btn btn-toolbar" onclick="modificarAtencion()">
+                <button type="button" class="btn btn-toolbar" onclick="modificarAtencion()">
                     <i data-feather="edit"></i> Modificar
                 </button>
-                <button class="btn btn-toolbar" id="btn_ingresar_respuesta">
+                <button type="button" class="btn btn-toolbar" id="btn_ingresar_respuesta">
                     <i data-feather="message-circle"></i> Ingresar Respuesta
                 </button>
                 <!-- <button class="btn btn-toolbar text-danger" onclick="eliminarAtencion()">
                     <i data-feather="trash-2"></i> Eliminar
                 </button> -->
-                <button class="btn btn-toolbar btn-dark-custom" onclick="guardarAtencion()">
+                <button type="button" class="btn btn-toolbar btn-dark-custom" onclick="guardarAtencion()">
                     <i data-feather="save"></i> Guardar
                 </button>
             </div>
@@ -165,7 +169,7 @@
             <h3 class="section-title">Información del Ingreso</h3>
             <p class="section-subtitle">Datos generales del ingreso realizado</p>
 
-            <form id="formConsultaAtencion">
+            <form id="formConsultaAtencion" onsubmit="event.preventDefault();">
                 <!-- Row 1 -->
 
                 <div class="row g-4 mb-3">
@@ -329,7 +333,7 @@
                     </div>
             </form>
 
-            <button class="btn btn-toolbar btn-dark-custom" onclick="guardarAtencion()">
+            <button type="button" class="btn btn-toolbar btn-dark-custom" onclick="guardarAtencion()">
                 <i data-feather="save"></i> Guardar
             </button>
         </div>
@@ -433,7 +437,7 @@
                         <i data-feather="chevron-down"></i>
                     </button>
                 </div>
-                <button class="btn btn-sm btn-dark-custom" id="btn_abrir_comentario">
+                <button type="button" class="btn btn-sm btn-dark-custom" id="btn_abrir_comentario">
                     <i data-feather="message-square" style="width: 14px;"></i> Agregar Comentario
                 </button>
             </div>
@@ -522,7 +526,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="formNuevaRespuesta">
+                    <form id="formNuevaRespuesta" onsubmit="event.preventDefault();">
                         <div class="mb-3">
                             <label for="inputTipoRespuesta" class="form-label">Tipo de Acción</label>
                             <select class="form-select" id="inputTipoRespuesta">

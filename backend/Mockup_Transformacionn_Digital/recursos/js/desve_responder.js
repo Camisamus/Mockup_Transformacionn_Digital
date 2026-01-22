@@ -12,10 +12,20 @@ let existingFiles = [];
 function handleFileSelect(type) {
     const inputId = 'inputArchivosRespuesta';
     const input = document.getElementById(inputId);
-    const newFiles = Array.from(input.files);
+    const files = Array.from(input.files);
 
-    responseFiles = [...responseFiles, ...newFiles];
-    renderFileList();
+    files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const fileData = {
+                nombre: file.name,
+                base64: e.target.result
+            };
+            responseFiles.push(fileData);
+            renderFileList();
+        };
+        reader.readAsDataURL(file);
+    });
     input.value = ''; // Reset input
 }
 
@@ -73,10 +83,10 @@ function renderFileList() {
         item.innerHTML = `
             <div>
                <i data-feather="file-plus" style="width:16px;" class="text-success"></i>
-               <span class="ms-2">${file.name}</span>
+               <span class="ms-2">${file.nombre || file.name}</span>
                <span class="badge bg-info text-dark ms-2" style="font-size: 0.7rem;">Nuevo</span>
             </div>
-            <button class="btn btn-sm btn-outline-danger border-0" onclick="removeFile(${index})">
+            <button type="button" class="btn btn-sm btn-outline-danger border-0" onclick="removeFile(${index})">
                 <i data-feather="x" style="width:16px;"></i>
             </button>
         `;
@@ -202,7 +212,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 window.location.search = `?id=${manualId}`;
                 return;
             } else {
-                window.location.href = 'bandeja.html';
+                window.location.href = 'desve_listado_ingresos.html';
                 return;
             }
         }, 120);
@@ -226,7 +236,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 icon: "warning",
                 confirmButtonText: "Ir al Login"
             });
-            window.location.href = 'bandeja.html';
+            window.location.href = 'desve_listado_ingresos.html';
             return;
         }
         currentUser = sessionData.user;
@@ -254,7 +264,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     icon: 'error',
                     confirmButtonText: 'Volver a Bandeja'
                 });
-                window.location.href = 'bandeja.html';
+                window.location.href = 'desve_listado_ingresos.html';
                 return;
             }
 
@@ -277,7 +287,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const docResponse = await fetch(`${window.API_BASE_URL}/documentos.php`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ACCION: "BuscarporTramite", tramite_id: currentSol.sol_id }),
+                    body: JSON.stringify({ ACCION: "BuscarporTramite", tramite_id: currentSol.sol_registro_tramite }),
                     credentials: 'include'
                 });
                 const docResult = await docResponse.json();
@@ -552,17 +562,6 @@ async function saveResponse(e) {
 
     console.log("Proceeding to save with SweetAlert2...");
 
-    const payload = {
-        ACCION: "CREAR",
-        res_solicitud_id: currentSol.sol_id,
-        sol_reingreso_id: currentSol.sol_reingreso_id,
-        res_texto: responseText,
-        res_tipo: isDefinitiva ? 'Respuesta Final' : 'Comentario',
-        res_funcionario: currentUser.id
-    };
-
-    console.log("Sending payload:", payload);
-
     try {
         // Show loading
         Swal.fire({
@@ -573,7 +572,18 @@ async function saveResponse(e) {
             }
         });
 
-        console.log("Calling endpoint:", `${window.API_BASE_URL}/respuestas_DESVE.php`);
+        const payload = {
+            ACCION: "CREAR",
+            res_solicitud_id: currentSol.sol_id,
+            sol_reingreso_id: currentSol.sol_reingreso_id,
+            res_texto: responseText,
+            res_tipo: isDefinitiva ? 'Respuesta Final' : 'Comentario',
+            res_funcionario: currentUser.id,
+            documentos: responseFiles
+        };
+
+        console.log("Sending payload:", payload);
+
         const response = await fetch(`${window.API_BASE_URL}/respuestas_DESVE.php`, {
             method: 'POST',
             credentials: 'include',
@@ -585,17 +595,10 @@ async function saveResponse(e) {
         console.log("API Result:", result);
 
         if (result.status === 'success' || result.success) {
-
-            // Upload Files
-            if (responseFiles.length > 0) {
-                const uploadSuccess = await uploadFiles(currentSol.sol_id, responseFiles);
-                if (!uploadSuccess) {
-                    await Swal.fire('Atención', 'Respuesta guardada pero hubo errores al subir archivos adjuntos.', 'warning');
-                }
-            }
+            responseFiles = []; // Clear on success
 
             await Swal.fire("Guardado", "Respuesta guardada correctamente.", "success");
-            window.location.href = 'bandeja.html';
+            window.location.href = 'desve_listado_ingresos.html';
         } else {
             Swal.fire("Error", `No se pudo guardar: ${result.message}`, "error");
         }

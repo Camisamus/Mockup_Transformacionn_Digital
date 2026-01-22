@@ -141,8 +141,24 @@ class DESVE_Solicitud
                 $data_id = $this->conn->lastInsertId();
                 // 3. Registrar en bitácora
                 $this->bitacora->registrar($rgt_id, "Ingresa solicitud: " . ($data['sol_nombre_expediente'] ?? 'Sin nombre'), $data['sol_responsable'] ?? null);
+
+                // 4. Registrar documentos adjuntos (Base64)
+                if (isset($data['documentos']) && is_array($data['documentos'])) {
+                    $docController = new \App\Controllers\DocumentoController($this->conn);
+                    foreach ($data['documentos'] as $doc) {
+                        $docData = [
+                            'tramite_id' => $rgt_id,
+                            'responsable_id' => $data['sol_responsable'] ?? ($_SESSION['user_id'] ?? 1),
+                            'es_docdigital' => 0,
+                            'nombre' => $doc['nombre'],
+                            'base64' => $doc['base64']
+                        ];
+                        $docController->createFromBase64($docData);
+                    }
+                }
+
                 $this->conn->commit();
-                return [true, $data_id];
+                return [true, $data_id, $rgt_id];
             }
 
             $this->conn->rollBack();
@@ -188,7 +204,11 @@ class DESVE_Solicitud
             sol_observaciones=:sol_observaciones,
             sol_dias_transcurridos=:sol_dias_transcurridos,
             sol_reingreso_id=:sol_reingreso_id,
-            sol_responsable=:sol_responsable
+            sol_direccion=:sol_direccion,
+            sol_latitud=:sol_latitud,
+            sol_longitud=:sol_longitud,
+            sol_responsable=:sol_responsable,
+            sol_origen_esp=:sol_origen_esp
             WHERE sol_id = :id";
 
         $stmt = $this->conn->prepare($query);
@@ -210,30 +230,57 @@ class DESVE_Solicitud
         $stmt->bindParam(":sol_observaciones", $data['sol_observaciones']);
         $stmt->bindParam(":sol_dias_transcurridos", $data['sol_dias_transcurridos']);
         $stmt->bindParam(":sol_reingreso_id", $data['sol_reingreso_id']);
+        $stmt->bindParam(":sol_direccion", $data['sol_direccion']);
+        $stmt->bindParam(":sol_latitud", $data['sol_latitud']);
+        $stmt->bindParam(":sol_longitud", $data['sol_longitud']);
         $stmt->bindParam(":sol_responsable", $data['sol_responsable']);
+        $stmt->bindValue(":sol_origen_esp", (bool) ($data['sol_origen_esp'] ?? false), PDO::PARAM_BOOL);
         $stmt->bindParam(":id", $id);
 
-        if ($stmt->execute()) {
-            // 2. Detectar cambios y registrar en bitácora
-            $cambios = [];
-            $campos_seguimiento = [
-                'sol_funcionario_id' => 'funcionario asignado',
-                'sol_sector_id' => 'sector',
-                'sol_prioridad_id' => 'prioridad'
-            ];
+        try {
+            if ($stmt->execute()) {
+                // ... same detected changes logic ...
+                // 2. Detectar cambios y registrar en bitácora
+                $cambios = [];
+                $campos_seguimiento = [
+                    'sol_funcionario_id' => 'funcionario asignado',
+                    'sol_sector_id' => 'sector',
+                    'sol_prioridad_id' => 'prioridad'
+                ];
 
-            foreach ($campos_seguimiento as $campo => $label) {
-                if (isset($data[$campo]) && $data[$campo] != $current[$campo]) {
-                    $cambios[] = "$label de \"{$current[$campo]}\" a \"{$data[$campo]}\"";
+                foreach ($campos_seguimiento as $campo => $label) {
+                    if (isset($data[$campo]) && $data[$campo] != $current[$campo]) {
+                        $cambios[] = "$label de \"{$current[$campo]}\" a \"{$data[$campo]}\"";
+                    }
                 }
-            }
 
-            if (!empty($cambios)) {
-                $mensaje = "Edita: " . implode(", ", $cambios);
-                $this->bitacora->registrar($current['sol_registro_tramite'], $mensaje);
-            }
+                if (!empty($cambios)) {
+                    $mensaje = "Edita: " . implode(", ", $cambios);
+                    $this->bitacora->registrar($current['sol_registro_tramite'], $mensaje);
+                }
 
-            return true;
+                // Manejar nuevos documentos adjuntos (Base64)
+                if (isset($data['documentos']) && is_array($data['documentos'])) {
+                    $docController = new \App\Controllers\DocumentoController($this->conn);
+                    foreach ($data['documentos'] as $doc) {
+                        $docData = [
+                            'tramite_id' => $current['sol_registro_tramite'],
+                            'responsable_id' => $data['sol_responsable'] ?? ($_SESSION['user_id'] ?? 1),
+                            'es_docdigital' => 0,
+                            'nombre' => $doc['nombre'],
+                            'base64' => $doc['base64']
+                        ];
+                        $docController->createFromBase64($docData);
+                    }
+                }
+
+                $this->conn->commit();
+                return true;
+            }
+        } catch (PDOException $e) {
+            error_log("Database Exception in Solicitud::update: " . $e->getMessage());
+            $this->lastError = $e->getMessage();
+            return false;
         }
         return false;
     }

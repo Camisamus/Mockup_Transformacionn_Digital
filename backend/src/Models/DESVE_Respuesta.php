@@ -52,7 +52,23 @@ class DESVE_Respuesta
                 $solicitud = $stmt_sol->fetch(PDO::FETCH_ASSOC);
 
                 if ($solicitud && $solicitud['sol_registro_tramite']) {
-                    $this->bitacora->registrar($solicitud['sol_registro_tramite'], "Responde solicitud", $funcionarioId);
+                    $rgt_id = $solicitud['sol_registro_tramite'];
+                    $this->bitacora->registrar($rgt_id, "Responde solicitud", $funcionarioId);
+
+                    // Registrar documentos adjuntos (Base64)
+                    if (isset($data['documentos']) && is_array($data['documentos'])) {
+                        $docController = new \App\Controllers\DocumentoController($this->conn);
+                        foreach ($data['documentos'] as $doc) {
+                            $docData = [
+                                'tramite_id' => $rgt_id,
+                                'responsable_id' => $funcionarioId,
+                                'es_docdigital' => 0,
+                                'nombre' => $doc['nombre'],
+                                'base64' => $doc['base64']
+                            ];
+                            $docController->createFromBase64($docData);
+                        }
+                    }
                 }
                 $this->conn->commit();
             } catch (Exception $e) {

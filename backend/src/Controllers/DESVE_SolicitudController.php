@@ -32,8 +32,14 @@ class DESVE_SolicitudController
 
     public function create($data)
     {
-        if ($this->solicitud->create($data)[0]) {
-            return ["status" => "success", "message" => "Solicitud created successfully", "id" => $this->solicitud->create($data)[1]];
+        $result = $this->solicitud->create($data);
+        if ($result[0]) {
+            return [
+                "status" => "success",
+                "message" => "Solicitud created successfully",
+                "id" => $result[1],
+                "rgt_id" => $result[2]
+            ];
         }
         return [
             "status" => "error",
@@ -47,7 +53,11 @@ class DESVE_SolicitudController
         if ($this->solicitud->update($id, $data)) {
             return ["status" => "success", "message" => "Solicitud updated successfully"];
         }
-        return ["status" => "error", "message" => "Unable to update solicitud"];
+        return [
+            "status" => "error",
+            "message" => "Unable to update solicitud",
+            "error" => $this->solicitud->lastError
+        ];
     }
 
     public function delete($id)
@@ -55,6 +65,10 @@ class DESVE_SolicitudController
         if ($this->solicitud->delete($id)) {
             return ["status" => "success", "message" => "Solicitud deleted successfully"];
         }
-        return ["status" => "error", "message" => "Unable to delete solicitud"];
+        return [
+            "status" => "error",
+            "message" => "Unable to delete solicitud",
+            "error" => $this->solicitud->lastError
+        ];
     }
 }

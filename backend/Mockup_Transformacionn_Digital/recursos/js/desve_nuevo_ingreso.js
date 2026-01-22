@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Listen for organization change to update priority/vencimiento
     //document.getElementById('OrigenSolicitud').addEventListener('change', handleOrgChange);
     document.getElementById('ID_Organizacion').addEventListener('change', handleTipoOrgChange);
-    document.getElementById('FechaUltimaRecepcion').addEventListener('change', handleTipoOrgChange);
+    //document.getElementById('FechaUltimaRecepcion').addEventListener('change', handleTipoOrgChange);
 
     // Status change listener - Using 'change' is more reliable for radio buttons
     document.getElementById('estadoPendiente').addEventListener('change', () => handleStatusChange(0));
@@ -82,6 +82,7 @@ let funcionarios = [];
 let sectores = [];
 let Solicitudes = [];
 let Sol = [];
+let currentSolRegistroId = null;
 let OrigenEspecial = false;
 let selectedFiles = []; // For main solicitation
 let responseFiles = []; // For response modal
@@ -90,15 +91,26 @@ let existingFiles = []; // Loaded from server
 function handleFileSelect(type) {
     const inputId = type === 'solicitud' ? 'inputArchivosSolicitud' : 'inputArchivosRespuesta';
     const input = document.getElementById(inputId);
-    const newFiles = Array.from(input.files);
+    const files = Array.from(input.files);
 
-    if (type === 'solicitud') {
-        selectedFiles = [...selectedFiles, ...newFiles];
-        renderFileList('solicitud');
-    } else {
-        responseFiles = [...responseFiles, ...newFiles];
-        renderFileList('respuesta');
-    }
+    files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const fileData = {
+                nombre: file.name,
+                base64: e.target.result
+            };
+
+            if (type === 'solicitud') {
+                selectedFiles.push(fileData);
+                renderFileList('solicitud');
+            } else {
+                responseFiles.push(fileData);
+                renderFileList('respuesta');
+            }
+        };
+        reader.readAsDataURL(file);
+    });
     input.value = ''; // Reset input
 }
 
@@ -153,7 +165,7 @@ function renderFileList(type) {
         item.innerHTML = `
             <div>
                <i data-feather="file-plus" style="width:16px;" class="text-success"></i>
-               <span class="ms-2">${file.name}</span>
+               <span class="ms-2">${file.nombre || file.name}</span>
                <span class="badge bg-info text-dark ms-2" style="font-size: 0.7rem;">Nuevo</span>
             </div>
             <button class="btn btn-sm btn-outline-danger border-0" onclick="removeFile('${type}', ${index})">
@@ -310,6 +322,12 @@ function handleTipoOrgChange() {
     //const org = organizaciones.find(o => o.org_id == orgId);
     let idEsp = ["3", "4", "5", "6", "7"]
     // Organizations Select
+    let ORG = ""
+    for (let i = 0; i < tiposOrganizacion.length; i++) {
+        if (tiposOrganizacion[i].tor_id == idOrgId) {
+            ORG = tiposOrganizacion[i].tor_prioridad_id;
+        }
+    }
     const orgSelect = document.getElementById('OrigenSolicitud');
     orgSelect.innerHTML = '<option value="">Seleccione organización...</option>';
     if (!idEsp.includes(idOrgId)) {//debo validar si idesp incluye idorigin
@@ -335,7 +353,7 @@ function handleTipoOrgChange() {
             }
         });
     }
-    const prio = prioridades.find(p => p.pri_id == idOrgId);
+    const prio = prioridades.find(p => p.pri_id == ORG);
     if (prio) {
         document.getElementById('Prioridad').value = prio.pri_nombre;
         calculateVencimiento(parseInt(prio.pri_tiempo_establecido) || 0);
@@ -529,14 +547,28 @@ async function loadSolicitationDetails(id) {
 
         // OrigenSolicitud is now a select mapping to sol_origen_id
         //handleOrgChange(); // Populate ID_Organizacion and Prioridad automatically
-        for (let i = 0; i < organizaciones.length; i++) {
-            if (organizaciones[i].org_id == Sol.sol_origen_id) {
-                document.getElementById('ID_Organizacion').value = organizaciones[i].org_tipo_id || '';
-                handleTipoOrgChange();
-                break;
+        if (Sol.sol_origen_esp == 1) {
+            for (let i = 0; i < organizacionesDESVE.length; i++) {
+                if (organizacionesDESVE[i].org_id == Sol.sol_origen_id) {
+                    document.getElementById('ID_Organizacion').value = organizacionesDESVE[i].org_tipo_id || '';
+                    handleTipoOrgChange();
+                    break;
+                }
             }
+            document.getElementById('OrigenSolicitud').value = Sol.sol_origen_id || '';
         }
-        document.getElementById('OrigenSolicitud').value = Sol.sol_origen_id || '';
+        else {
+            for (let i = 0; i < organizaciones.length; i++) {
+                if (organizaciones[i].org_id == Sol.sol_origen_id) {
+                    document.getElementById('ID_Organizacion').value = organizaciones[i].org_tipo_id || '';
+                    handleTipoOrgChange();
+                    break;
+                }
+            }
+            document.getElementById('OrigenSolicitud').value = Sol.sol_origen_id || '';
+
+        }
+
 
         document.getElementById('FechaUltimaRecepcion').value = formatDateTimeForInput(Sol.sol_fecha_recepcion);
         document.getElementById('FechaCreacion').value = formatDateTimeForInput(Sol.sol_creacion);
@@ -611,7 +643,7 @@ async function loadSolicitationDetails(id) {
             const docResponse = await fetch(`${window.API_BASE_URL}/documentos.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ACCION: "BuscarporTramite", tramite_id: id }),
+                body: JSON.stringify({ ACCION: "BuscarporTramite", tramite_id: currentSolRegistroId }),
                 credentials: 'include'
             });
             const docResult = await docResponse.json();
@@ -868,7 +900,8 @@ async function guardarAtencion() {
         sol_dias_vencimiento: parseInt(document.getElementById('DiasVencimiento').value) || 0,
         sol_reingreso_id: toNull(document.getElementById('Reingresado').value),
         sol_responsable: document.getElementById('Responsable').getAttribute('data-user-id') || null,
-        sol_oigen_esp: OrigenEspecial,
+        sol_origen_esp: OrigenEspecial,
+        documentos: selectedFiles,
         ACCION: isUpdate ? "ACTUALIZAR" : "CREAR"
     };
 
@@ -886,29 +919,22 @@ async function guardarAtencion() {
         const result = await response.json();
 
         if (result.status === 'success') {
-
-            // Upload Files
-            const targetId = isUpdate ? solicitationId : result.id;
-            if (selectedFiles.length > 0) {
-                // Swal.fire({ title: 'Subiendo archivos...', didOpen: () => Swal.showLoading() });
-                const uploadSuccess = await uploadFiles(targetId, selectedFiles);
-                if (!uploadSuccess) {
-                    await Swal.fire('Atención', 'Se guardó la solicitud pero hubo errores al subir algunos archivos.', 'warning');
-                } else {
-                    selectedFiles = []; // Clear on success
-                }
-            }
+            selectedFiles = []; // Clear on success
 
             await Swal.fire('Éxito', isUpdate ? "Actualizado con éxito" : "Creado con éxito", 'success');
 
-            // Reload page to show the saved/updated record
+            // Reload page or go to tray
             if (isUpdate) {
+                // Keep showing the same record after update
                 window.location.href = `?id=${solicitationId}`;
             } else if (result.id !== 'undefined') {
-                window.location.href = `?id=${result.id}`;
+                // For new records, we might want to return to tray or view the new one.
+                // Redirecting to tray as it's common practice for "creation"
+                window.location.href = 'desve_listado_ingresos.html';
             }
         } else {
-            Swal.fire('Error', "Error al guardar: " + (result.message || "Error desconocido"), 'error');
+            const errorDetail = result.error ? `\nDetalle: ${result.error}` : "";
+            Swal.fire('Error', `Error al guardar: ${result.message || "Error desconocido"}${errorDetail}`, 'error');
         }
     } catch (e) {
         console.error("Save Error:", e);

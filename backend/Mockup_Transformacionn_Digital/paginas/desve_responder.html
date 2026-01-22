@@ -53,93 +53,96 @@
 
         <!-- Step 2: Form -->
         <div id="step-2" class="card-response d-none">
-            <h3 class="section-title">Detalles de la Solicitud</h3>
+            <form onsubmit="event.preventDefault();">
+                <h3 class="section-title">Detalles de la Solicitud</h3>
 
-            <div class="row g-3 mb-4">
-                <div class="col-md-3">
-                    <label class="form-label text-muted small">ID Ingreso</label>
-                    <div id="display-id" class="fw-bold fs-5">-</div>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label text-muted small">Ingreso Desve</label>
-                    <div id="display-desve" class="fw-bold">-</div>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label text-muted small">Nombre Expediente</label>
-                    <div id="display-expediente" class="fw-bold">-</div>
+                <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">ID Ingreso</label>
+                        <div id="display-id" class="fw-bold fs-5">-</div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Ingreso Desve</label>
+                        <div id="display-desve" class="fw-bold">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Nombre Expediente</label>
+                        <div id="display-expediente" class="fw-bold">-</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">ORGANIZACIÓN (Tipo)</label>
+                        <div id="display-org-tipo" class="fw-bold">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Origen de solicitud (Organización)</label>
+                        <div id="display-org-nombre" class="fw-bold">-</div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Fecha recepción</label>
+                        <div id="display-recepcion" class="fw-bold">-</div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Prioridad</label>
+                        <div id="display-prioridad" class="fw-bold">-</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Sector</label>
+                        <div id="display-sector" class="fw-bold">-</div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Días Transcurridos</label>
+                        <div id="display-dias-ingreso" class="fw-bold">-</div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-muted small">Días p/Vencimiento</label>
+                        <div id="display-dias-vencimiento" class="fw-bold text-danger">-</div>
+                    </div>
                 </div>
 
-                <div class="col-md-6">
-                    <label class="form-label text-muted small">ORGANIZACIÓN (Tipo)</label>
-                    <div id="display-org-tipo" class="fw-bold">-</div>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label text-muted small">Origen de solicitud (Organización)</label>
-                    <div id="display-org-nombre" class="fw-bold">-</div>
+                <div class="mb-4">
+                    <label class="form-label text-muted small fw-bold">Detalle de Ingreso</label>
+                    <div id="display-detalle" class="p-3 bg-light border rounded"
+                        style="min-height: 80px; font-size: 0.9rem; white-space: pre-wrap;">-</div>
                 </div>
 
-                <div class="col-md-3">
-                    <label class="form-label text-muted small">Fecha recepción</label>
-                    <div id="display-recepcion" class="fw-bold">-</div>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label text-muted small">Prioridad</label>
-                    <div id="display-prioridad" class="fw-bold">-</div>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label text-muted small">Sector</label>
-                    <div id="display-sector" class="fw-bold">-</div>
+                <hr class="my-4">
+
+                <h4 class="section-title h5">Ingresar Respuesta</h4>
+                <div class="mb-4">
+                    <label for="input-respuesta" class="form-label fw-bold small">Su Respuesta / Comentario</label>
+                    <textarea id="input-respuesta" class="form-control" rows="6"
+                        placeholder="Escriba aquí los detalles de su respuesta..."></textarea>
                 </div>
 
-                <div class="col-md-3">
-                    <label class="form-label text-muted small">Días Transcurridos</label>
-                    <div id="display-dias-ingreso" class="fw-bold">-</div>
+                <div class="mb-4">
+                    <label class="form-label fw-bold small">Adjuntar Archivos</label>
+                    <input type="file" class="form-control mb-2" id="inputArchivosRespuesta" multiple
+                        onchange="handleFileSelect('respuesta')">
+                    <div id="listaArchivosRespuesta" class="list-group">
+                        <!-- File list populated by JS -->
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <label class="form-label text-muted small">Días p/Vencimiento</label>
-                    <div id="display-dias-vencimiento" class="fw-bold text-danger">-</div>
+
+                <div class="mb-4">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="check-respuesta-definitiva">
+                        <label class="form-check-label fw-bold" for="check-respuesta-definitiva">Es Respuesta
+                            Definitiva</label>
+                        <div class="form-text">Marque esta opción si esta respuesta finaliza el trámite.</div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="mb-4">
-                <label class="form-label text-muted small fw-bold">Detalle de Ingreso</label>
-                <div id="display-detalle" class="p-3 bg-light border rounded"
-                    style="min-height: 80px; font-size: 0.9rem; white-space: pre-wrap;">-</div>
-            </div>
-
-            <hr class="my-4">
-
-            <h4 class="section-title h5">Ingresar Respuesta</h4>
-            <div class="mb-4">
-                <label for="input-respuesta" class="form-label fw-bold small">Su Respuesta / Comentario</label>
-                <textarea id="input-respuesta" class="form-control" rows="6"
-                    placeholder="Escriba aquí los detalles de su respuesta..."></textarea>
-            </div>
-
-            <div class="mb-4">
-                <label class="form-label fw-bold small">Adjuntar Archivos</label>
-                <input type="file" class="form-control mb-2" id="inputArchivosRespuesta" multiple
-                    onchange="handleFileSelect('respuesta')">
-                <div id="listaArchivosRespuesta" class="list-group">
-                    <!-- File list populated by JS -->
+                <div class="d-flex justify-content-end gap-2 mb-5">
+                    <button type="button" class="btn btn-outline-secondary"
+                        onclick="window.history.back()">Cancelar</button>
+                    <button type="button" id="btn-save-response" class="btn btn-success px-4">Guardar Respuesta</button>
                 </div>
-            </div>
 
-            <div class="mb-4">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="check-respuesta-definitiva">
-                    <label class="form-check-label fw-bold" for="check-respuesta-definitiva">Es Respuesta
-                        Definitiva</label>
-                    <div class="form-text">Marque esta opción si esta respuesta finaliza el trámite.</div>
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-end gap-2 mb-5">
-                <button class="btn btn-outline-secondary" onclick="window.history.back()">Cancelar</button>
-                <button id="btn-save-response" class="btn btn-success px-4">Guardar Respuesta</button>
-            </div>
-
-            <hr class="my-4">
+                <hr class="my-4">
+            </form>
 
             <div class="d-flex justify-content-between align-items-center mb-0">
                 <h4 class="section-title h5 mb-0">Historial de Respuestas</h4>
@@ -162,7 +165,8 @@
                         <tbody id="bitacora-respuestas-body">
                             <!-- Populated dynamically -->
                             <tr>
-                                <td colspan="4" class="text-center py-3 text-muted">No hay respuestas registradas</td>
+                                <td colspan="4" class="text-center py-3 text-muted">No hay respuestas registradas
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -177,7 +181,7 @@
                         <i data-feather="chevron-down"></i>
                     </button>
                 </div>
-                <button class="btn btn-sm btn-dark" id="btn_abrir_comentario">
+                <button type="button" class="btn btn-sm btn-dark" id="btn_abrir_comentario">
                     <i data-feather="message-square" style="width: 14px;"></i> Agregar Comentario
                 </button>
             </div>

@@ -31,8 +31,8 @@ class DocumentoController
         }
 
         // Si es un documento docdigital 
-        if (isset($result[0]['es_docdigital']) && $result[0]['es_docdigital'] == 1) {
-
+        if (isset($result[0]['doc_docdigital']) && $result[0]['doc_docdigital'] == 1) {
+            // Aquí iría la lógica para docdigital si existiera
         } else {
             // Si es un archivo físico en disco
             $this->download($result[0]);
@@ -44,7 +44,18 @@ class DocumentoController
         $ruta = $data['doc_enlace_documento'];
         $nombre = $data['doc_nombre_documento'] ?: basename($ruta);
 
-        if (file_exists($ruta)) {
+        // En Windows, a veces / al inicio no se resuelve bien a la raíz del disco si no especificamos
+        $realPath = $ruta;
+        if (strpos($ruta, '/') === 0 && !file_exists($ruta)) {
+            // Intentamos prefijar con la unidad actual si estamos en Windows
+            $drive = substr(__DIR__, 0, 2);
+            if (ctype_alpha($drive[0]) && $drive[1] === ':') {
+                $realPath = $drive . $ruta;
+            }
+        }
+
+        if (file_exists($realPath)) {
+            $ruta = $realPath;
             // Limpiar cualquier búfer de salida para evitar archivos corruptos
             if (ob_get_level())
                 ob_end_clean();

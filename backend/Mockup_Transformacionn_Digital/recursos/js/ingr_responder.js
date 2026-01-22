@@ -3,9 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const id = urlParams.get('id');
 
     if (!id) {
-        Swal.fire('Error', 'No se proporcionó un ID de ingreso.', 'error').then(() => {
-            window.location.href = 'ingr_bandeja.html';
-        });
+        await checkAndRequestID();
         return;
     }
 
@@ -462,3 +460,86 @@ window.guardarComentario = guardarComentario;
 window.enviarRespuesta = enviarRespuesta;
 window.confirmarFirmaOTP = confirmarFirmaOTP;
 window.cerrarOTP = cerrarOTP;
+
+async function checkAndRequestID() {
+    const { value: formValues } = await Swal.fire({
+        title: 'Trámite no especificado',
+        html: `
+            <div class="mb-3 text-start">
+                <label class="form-label small fw-bold">Tipo de Identificador:</label>
+                <select id="swal-id-type" class="form-select">
+                    <option value="tis_id">ID Interno (Solicitud)</option>
+                    <option value="rgt_id_publica" selected>Cód. Público (Ej: H3k9L2p1)</option>
+                    <option value="rgt_id">ID Trámite (RGT)</option>
+                </select>
+            </div>
+            <div class="mb-2 text-start">
+                <label class="form-label small fw-bold">Valor:</label>
+                <input id="swal-id-value" class="form-control" placeholder="Ingrese el valor...">
+            </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Buscar',
+        cancelButtonText: 'Volver a Bandeja',
+        allowOutsideClick: false,
+        preConfirm: () => {
+            const type = document.getElementById('swal-id-type').value;
+            const value = document.getElementById('swal-id-value').value.trim();
+            if (!value) {
+                Swal.showValidationMessage('¡Debe ingresar un valor!');
+                return false;
+            }
+            return { type, value };
+        }
+    });
+
+    if (!formValues) {
+        window.location.href = 'ingr_bandeja.html';
+        return;
+    }
+
+    const { type, value } = formValues;
+
+    try {
+        Swal.fire({ title: 'Buscando...', didOpen: () => Swal.showLoading() });
+
+        let foundId = null;
+        const payload = { ACCION: 'CONSULTAM' };
+
+        // Match payload field to selected type
+        if (type === 'tis_id') payload.tis_id = value;
+        else if (type === 'rgt_id_publica') payload.rgt_id_publica = value;
+        else if (type === 'rgt_id') payload.rgt_id = value;
+
+        const response = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }).then(r => r.json());
+
+        if (response.status === 'success' && response.data) {
+            const results = Array.isArray(response.data) ? response.data : [response.data];
+
+            if (results.length > 0 && results[0].tis_id) {
+                foundId = results[0].tis_id;
+            }
+        }
+
+        if (foundId) {
+            Swal.close();
+            // Reload with correct ID
+            const newUrl = new URL(window.location.href);
+            newUrl.searchParams.set('id', foundId);
+            window.location.href = newUrl.toString();
+        } else {
+            Swal.fire('No encontrado', 'No se encontró ninguna solicitud con ese criterio.', 'error').then(() => {
+                checkAndRequestID(); // Retry
+            });
+        }
+
+    } catch (e) {
+        console.error(e);
+        Swal.fire('Error', 'Error de conexión', 'error');
+    }
+}

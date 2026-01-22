@@ -487,7 +487,7 @@ CREATE TABLE `trd_desve_solicitudes` (
   `sol_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `sol_responsable` int(11) NOT NULL,
   `sol_registro_tramite` int(11) NOT NULL,
-  `sol_oigen_esp` tinyint(1) NOT NULL DEFAULT 0,
+  `sol_origen_esp` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`sol_id`),
   KEY `sol_origen_id` (`sol_origen_id`),
   KEY `sol_prioridad_id` (`sol_prioridad_id`),
