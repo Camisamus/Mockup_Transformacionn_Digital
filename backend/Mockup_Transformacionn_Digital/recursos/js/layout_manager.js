@@ -110,15 +110,15 @@ function injectLayout(pathPrefix) {
 
     header.innerHTML = `
         <div class="d-flex align-items-center gap-3">
-            <button class="btn-sidebar-toggle" id="sidebar-toggle">
-                <i data-feather="menu"></i>
+            <button type="button" class="btn btn-toolbar" id="sidebar-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
             </button>
             <h4 class="m-0 text-primary fw-bold" id="page-title">${document.title}</h4>
         </div>
         <div class="d-flex gap-2 align-items-center">
             <span class="text-muted small me-2 d-none d-md-inline" id="header-user-name">Usuario: ${userName}</span>
-            <button class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1" onclick="logout()">
-                <i data-feather="log-out" style="width:14px;"></i> <span class="d-none d-sm-inline">Salir</span>
+            <button type="button" class="btn btn-toolbar" style="background-color: #dc3545; color: white; border-color: #dc3545;" onclick="logout()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> <span class="d-none d-sm-inline">Salir</span>
             </button>
         </div>
     `;

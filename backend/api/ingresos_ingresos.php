@@ -18,10 +18,14 @@ $rgt_id = $data['rgt_id'] ?? null;
 
 switch ($data['ACCION']) {
     case 'CONSULTAM':
+        if (session_status() === PHP_SESSION_NONE)
+            session_start();
+        $current_user_id = $_SESSION['user_id'] ?? null;
+
         if ($id) {
-            $response = $controller->getById($id);
+            $response = $controller->getById($id, $current_user_id);
         } elseif ($rgt_id) {
-            $response = $controller->getByRgtId($rgt_id);
+            $response = $controller->getByRgtId($rgt_id, $current_user_id);
         } else {
             // Support for Bandeja Search Filters
             $filters = [
@@ -29,11 +33,6 @@ switch ($data['ACCION']) {
                 'rgt_id_publica' => $data['rgt_id_publica'] ?? null,
                 'tis_id' => $data['tis_id'] ?? null
             ];
-
-            if (session_status() === PHP_SESSION_NONE)
-                session_start();
-            $current_user_id = $_SESSION['user_id'] ?? null;
-
             $response = $controller->getAll($filters, $current_user_id);
         }
         echo json_encode($response);

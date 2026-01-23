@@ -41,8 +41,8 @@ main.content-visible {
 }
 
 #sidebar-container.collapsed {
-    min-width: 70px !important;
-    max-width: 70px !important;
+    min-width: 0px !important;
+    max-width: 0px !important;
 }
 
 #sidebar-container.collapsed .sidebar-text,
@@ -337,4 +337,32 @@ main.content-visible {
 
 #lista_multiancestro .list-group-item i {
     color: #005cab;
+}
+
+/* Toolbar Buttons Standard */
+.btn-toolbar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    color: #495057;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-toolbar:hover {
+    background-color: #e9ecef !important;
+    border-color: #adb5bd !important;
+    color: #212529 !important;
+}
+
+.btn-toolbar svg {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2px;
 }

@@ -9,6 +9,7 @@ class DESVE_Solicitud
 {
     private $conn;
     private $table_name = "trd_desve_solicitudes";
+    private $sysname = "desve_solicitud";
     private $bitacora;
     private $comentario;
 
@@ -67,13 +68,13 @@ class DESVE_Solicitud
             $this->conn->beginTransaction();
 
             // 1. Crear registro general de trámite
-            $random_str = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 8);
-            $fecha_yymmdd = date('ymd');
-            $id_publica = hash('sha256', $random_str . $fecha_yymmdd);
+            $random_str = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2);
+            $fecha_yymmdd = date('ymd-Hi');
+            $id_publica = $fecha_yymmdd . "-" . $this->sysname . "-" . $random_str;
 
             $query_rgt = "INSERT INTO trd_general_registro_general_tramites 
                           (rgt_id_publica, rgt_tramite, rgt_creador) 
-                          VALUES (:id_publica, 'desve_solicitud', :creador)";
+                          VALUES (:id_publica, '{$this->sysname}', :creador)";
             $stmt_rgt = $this->conn->prepare($query_rgt);
             $stmt_rgt->bindValue(":id_publica", $id_publica);
             $stmt_rgt->bindValue(":creador", $data['sol_responsable'] ?? null);

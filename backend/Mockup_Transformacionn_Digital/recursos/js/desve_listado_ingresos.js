@@ -171,5 +171,5 @@ function limpiarFiltros() {
 }
 
 function verMantenedor(id) {
-    window.location.href = `desve_nuevo_ingreso.html?id=${id}`;
+    window.location.href = `desve_consultar.html?id=${id}`;
 }

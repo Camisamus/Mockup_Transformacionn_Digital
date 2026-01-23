@@ -101,11 +101,21 @@ async function cargarDatosIngreso(params) {
                 };
             }
 
-            // Modificar Button logic
+            // RBAC Enforcement
+            const perms = IngrPermissions.applyToUI(data.rol_usuario);
+
+            // Button Event Handlers
             const id = data.tis_id;
+
+            const btnResponder = document.getElementById('btn_ir_responder');
+            if (btnResponder && id) {
+                btnResponder.onclick = () => {
+                    window.location.href = `ingr_responder.html?id=${id}`;
+                };
+            }
+
             const btnModificar = document.getElementById('btn_ir_modificar');
             if (btnModificar && id) {
-                btnModificar.style.display = 'block';
                 btnModificar.onclick = () => {
                     window.location.href = `ingr_modificar.html?id=${id}`;
                 };
@@ -113,7 +123,6 @@ async function cargarDatosIngreso(params) {
 
             const btnPreparar = document.getElementById('btn_ir_preparar');
             if (btnPreparar && id) {
-                btnPreparar.style.display = 'block';
                 btnPreparar.onclick = () => {
                     window.location.href = `ingr_preparar.html?id=${id}`;
                 };

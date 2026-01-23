@@ -27,18 +27,18 @@ class Ingresos_SolicitudControler
         return ["status" => "success", "data" => $result];
     }
 
-    public function getById($id)
+    public function getById($id, $current_user_id = null)
     {
-        $result = $this->solicitud->getById($id);
+        $result = $this->solicitud->getById($id, $current_user_id);
         if ($result) {
             return ["status" => "success", "data" => $result];
         }
         return ["status" => "error", "message" => "Solicitud not found"];
     }
 
-    public function getByRgtId($rgtId)
+    public function getByRgtId($rgtId, $current_user_id = null)
     {
-        $result = $this->solicitud->getByRgtId($rgtId);
+        $result = $this->solicitud->getByRgtId($rgtId, $current_user_id);
         if ($result) {
             return ["status" => "success", "data" => $result];
         }

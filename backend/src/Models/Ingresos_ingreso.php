@@ -11,6 +11,7 @@ use App\Models\Ingresos_Destinos;
 use App\Models\Documento;
 class Ingresos_ingreso
 {
+    private $sysname = "Ingreso_ingresos";
     private $conn;
     private $table_name_parent = "trd_general_registro_general_tramites";
     private $table_name = "trd_ingresos_solicitudes";
@@ -98,15 +99,23 @@ class Ingresos_ingreso
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getById(int $id): array|null
+    public function getById(int $id, ?int $current_user_id = null): array|null
     {
-        $query = "SELECT sol.*, rgt.*, usr.usr_nombre as resp_nombre, usr.usr_apellido as resp_apellido 
+        $query = "SELECT sol.*, rgt.*, usr.usr_nombre as resp_nombre, usr.usr_apellido as resp_apellido,
+                  CASE 
+                    WHEN sol.tis_responsable = :current_user THEN 'Responsable'
+                    WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
+                    ELSE 'Consultor' 
+                  END as rol_usuario
                   FROM " . $this->table_name . " sol 
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
                   LEFT JOIN trd_acceso_usuarios usr ON sol.tis_responsable = usr.usr_id
+                  LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :current_user_join
                   WHERE sol.tis_id = :id LIMIT 1";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $id);
+        $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':current_user', $current_user_id ?? 0);
+        $stmt->bindValue(':current_user_join', $current_user_id ?? 0);
         $stmt->execute();
         $solicitud = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$solicitud)
@@ -116,20 +125,36 @@ class Ingresos_ingreso
         $solicitud['documentos'] = $this->Documentos->obtenerPorTramite($solicitud['tis_registro_tramite']);
         $solicitud['comentarios'] = $this->comentario->getByRegistroId($solicitud['tis_registro_tramite']);
         $solicitud['enlaces'] = $this->Enlace->obtenerPorRegistroId($solicitud['tis_registro_tramite']);
-        $solicitud['bitacora'] = $this->bitacora->obtenerPorTramite($solicitud['tis_registro_tramite']);
+
+        // REGLA: Solo Responsables y Consultores ven bitácora
+        $rol = $solicitud['rol_usuario'] ?? 'Consultor';
+        if ($rol === 'Responsable' || $rol === 'Consultor') {
+            $solicitud['bitacora'] = $this->bitacora->obtenerPorTramite($solicitud['tis_registro_tramite']);
+        } else {
+            $solicitud['bitacora'] = []; // No enviar info sensible
+        }
+
         $solicitud['multiancestro'] = $this->Multiancestro->obtenerAbolFamiliar($solicitud['tis_registro_tramite']);
         return $solicitud;
     }
 
-    public function getByRgtId(int $rgtId): array|null
+    public function getByRgtId(int $rgtId, ?int $current_user_id = null): array|null
     {
-        $query = "SELECT sol.*, rgt.*, usr.usr_nombre as resp_nombre, usr.usr_apellido as resp_apellido 
+        $query = "SELECT sol.*, rgt.*, usr.usr_nombre as resp_nombre, usr.usr_apellido as resp_apellido,
+                  CASE 
+                    WHEN sol.tis_responsable = :current_user THEN 'Responsable'
+                    WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
+                    ELSE 'Consultor' 
+                  END as rol_usuario
                   FROM " . $this->table_name . " sol 
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
                   LEFT JOIN trd_acceso_usuarios usr ON sol.tis_responsable = usr.usr_id
+                  LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :current_user_join
                   WHERE rgt.rgt_id = :rgtId LIMIT 1";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':rgtId', $rgtId);
+        $stmt->bindValue(':rgtId', $rgtId);
+        $stmt->bindValue(':current_user', $current_user_id ?? 0);
+        $stmt->bindValue(':current_user_join', $current_user_id ?? 0);
         $stmt->execute();
         $solicitud = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$solicitud)
@@ -139,7 +164,15 @@ class Ingresos_ingreso
         $solicitud['documentos'] = $this->Documentos->obtenerPorTramite($solicitud['tis_registro_tramite']);
         $solicitud['comentarios'] = $this->comentario->getByRegistroId($solicitud['tis_registro_tramite']);
         $solicitud['enlaces'] = $this->Enlace->obtenerPorRegistroId($solicitud['tis_registro_tramite']);
-        $solicitud['bitacora'] = $this->bitacora->obtenerPorTramite($solicitud['tis_registro_tramite']);
+
+        // REGLA: Solo Responsables y Consultores ven bitácora
+        $rol = $solicitud['rol_usuario'] ?? 'Consultor';
+        if ($rol === 'Responsable' || $rol === 'Consultor') {
+            $solicitud['bitacora'] = $this->bitacora->obtenerPorTramite($solicitud['tis_registro_tramite']);
+        } else {
+            $solicitud['bitacora'] = []; // No enviar info sensible
+        }
+
         $solicitud['multiancestro'] = $this->Multiancestro->obtenerAbolFamiliar($solicitud['tis_registro_tramite']);
         return $solicitud;
     }
@@ -150,9 +183,9 @@ class Ingresos_ingreso
             $this->conn->beginTransaction();
 
             // 1. Crear registro general de trámite
-            $random_str = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 8);
-            $fecha_yymmdd = date('ymd');
-            $id_publica = hash('sha256', $random_str . $fecha_yymmdd);
+            $random_str = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2);
+            $fecha_yymmdd = date('ymd-Hi');
+            $id_publica = $fecha_yymmdd . "-" . $this->sysname . "-" . $random_str;
 
             // Use session user for creator/responsible if not provided
             if (session_status() === PHP_SESSION_NONE) {
@@ -168,7 +201,7 @@ class Ingresos_ingreso
 
             $query_rgt = "INSERT INTO " . $this->table_name_parent . " 
                           (rgt_id_publica, rgt_tramite, rgt_creador) 
-                          VALUES (:id_publica, 'Ingreso_ingresos', :creador)";
+                          VALUES (:id_publica, " . $this->sysname . ", :creador)";
             $stmt_rgt = $this->conn->prepare($query_rgt);
             $stmt_rgt->bindValue(":id_publica", $id_publica);
             $stmt_rgt->bindValue(":creador", $creador_id);

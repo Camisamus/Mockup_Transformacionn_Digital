@@ -55,6 +55,28 @@ async function cargarDatosPreparar(id) {
 
         if (result.status === 'success') {
             const data = result.data;
+
+            // RBAC Enforcement
+            const perms = IngrPermissions.getPermissions(data.rol_usuario);
+            if (!perms.preparar) {
+                Swal.fire({
+                    title: 'Acceso Denegado',
+                    text: 'Usted no tiene permisos para ver las relaciones de esta solicitud.',
+                    icon: 'error',
+                    confirmButtonText: 'Ver Detalle',
+                    allowOutsideClick: false
+                }).then(() => {
+                    window.location.href = `ingr_consultar.html?id=${id}`;
+                });
+                return;
+            }
+
+            // Show modification buttons for authorized roles (Responsable, Visador, Firmante)
+            const btnHija = document.getElementById('btn_nueva_hija');
+            const btnDep = document.getElementById('btn_establecer_dependencia');
+            if (btnHija) btnHija.style.display = perms.preparar ? 'block' : 'none';
+            if (btnDep) btnDep.style.display = perms.preparar ? 'block' : 'none';
+
             currentRequestId = data.tis_id;
             currentRgtId = parseInt(data.tis_registro_tramite);
             document.getElementById('subtitulo_preparar').innerText = `Gestionando: ${data.tis_titulo} (ID: ${data.tis_id})`;

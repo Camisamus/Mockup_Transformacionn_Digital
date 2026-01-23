@@ -73,6 +73,21 @@ async function cargarDatosExistentes(id) {
             const data = result.data;
             currentRgtId = data.tis_registro_tramite;
 
+            // Check RBAC Permissions
+            const perms = IngrPermissions.getPermissions(data.rol_usuario);
+            if (!perms.editar) {
+                Swal.fire({
+                    title: 'Acceso Denegado',
+                    text: 'Usted no tiene permisos para modificar esta solicitud.',
+                    icon: 'error',
+                    confirmButtonText: 'Ver Detalle',
+                    allowOutsideClick: false
+                }).then(() => {
+                    window.location.href = `ingr_consultar.html?id=${id}`;
+                });
+                return;
+            }
+
             // Check Lock Status
             if (data.tis_estado && data.tis_estado !== 'Pendiente' && data.tis_estado !== 'Ingresado') {
                 Swal.fire({

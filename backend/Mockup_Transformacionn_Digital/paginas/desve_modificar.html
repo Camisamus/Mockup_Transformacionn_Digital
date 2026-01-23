@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificar Solicitud DESVE</title>
+    <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../recursos/css/style.css" rel="stylesheet">
+    <link rel="icon" href="data:,">
+    <style>
+        .drop-zone {
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .drop-zone:hover,
+        .drop-zone.active {
+            border-color: #005cab;
+            background: #eef6ff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="main-header mb-4">
+            <div class="header-title">
+                <h2 id="header_public_id">Modificar DESVE</h2>
+                <p id="header_expediente">Actualice los campos de la solicitud</p>
+            </div>
+            <div class="toolbar">
+                <button type="button" class="btn btn-toolbar" onclick="location.href='desve_listado_ingresos.html'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-grid">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg> Bandeja DESVE
+                </button>
+            </div>
+        </div>
+
+        <form id="form_modificar_desve">
+            <div class="row">
+                <!-- Left Column: Main Form -->
+                <div class="col-lg-8">
+                    <!-- General Info -->
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Información de la Solicitud</h5>
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label for="NombreExpediente" class="form-label small fw-bold">Nombre del
+                                        Expediente</label>
+                                    <input type="text" class="form-control" id="NombreExpediente" required>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="ID_Organizacion" class="form-label small fw-bold">Tipo de
+                                        Organización</label>
+                                    <select class="form-select" id="ID_Organizacion" required>
+                                        <option value="" selected disabled>Seleccione tipo...</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="OrigenSolicitud" class="form-label small fw-bold">Origen de
+                                        Solicitud</label>
+                                    <div class="input-group">
+                                        <select class="form-select" id="OrigenSolicitud" required>
+                                            <option value="" selected disabled>Seleccione organización...</option>
+                                        </select>
+                                        <button class="btn btn-outline-secondary" type="button" id="btn_nuevo_origen">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="feather feather-plus">
+                                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="FechaUltimaRecepcion" class="form-label small fw-bold">Fecha de
+                                        Recepción</label>
+                                    <input type="date" class="form-control" id="FechaUltimaRecepcion" required>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="Sector" class="form-label small fw-bold">Sector</label>
+                                    <select class="form-select" id="Sector" required>
+                                        <!-- Populated via JS -->
+                                    </select>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-muted">Funcionario Interno (No
+                                        editable)</label>
+                                    <input type="text" class="form-control bg-light" id="FuncionarioInternoNombre"
+                                        readonly>
+                                    <input type="hidden" id="FuncionarioInternoId">
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="DetalleIngreso" class="form-label small fw-bold">Detalle de
+                                        Ingreso</label>
+                                    <textarea class="form-control" id="DetalleIngreso" rows="4"></textarea>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="Observaciones" class="form-label small fw-bold">Observaciones</label>
+                                    <textarea class="form-control" id="Observaciones" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bitácora de Respuestas (Read-only reference) -->
+                    <div class="card shadow-sm border-0 mb-4 bg-light">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Respuestas del Trámite</h5>
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover small" id="tabla_respuestas">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Funcionario</th>
+                                            <th>Acción</th>
+                                            <th>Contenido</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody_respuestas">
+                                        <!-- Dynamic -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Sidebar -->
+                <div class="col-lg-4">
+                    <!-- Status Card -->
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Estado y Tiempos</h5>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold d-block">Estado de Entrega</label>
+                                <div class="btn-group w-100" role="group">
+                                    <input type="radio" class="btn-check" name="EstadoEntrega" id="estadoPendiente"
+                                        value="0">
+                                    <label class="btn btn-outline-warning" for="estadoPendiente">Pendiente</label>
+
+                                    <input type="radio" class="btn-check" name="EstadoEntrega" id="estadoRespondido"
+                                        value="1">
+                                    <label class="btn btn-outline-success" for="estadoRespondido">Respondido</label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Días Transcurridos</label>
+                                <input type="text" class="form-control form-control-sm bg-light" id="info_dias_ingreso"
+                                    readonly>
+                            </div>
+                            <div class="mb-0">
+                                <label class="form-label small fw-bold">Días para Vencimiento</label>
+                                <input type="text" class="form-control form-control-sm bg-light"
+                                    id="info_dias_vencimiento" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Documentos -->
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Documentos Adjuntos</h5>
+                            <div id="lista_documentos_guardados" class="list-group list-group-flush small mb-3">
+                                <!-- Existing from server -->
+                            </div>
+
+                            <label class="form-label small fw-bold">Añadir Nuevos Archivos</label>
+                            <div class="drop-zone mb-3" id="drop_zone">
+                                <input type="file" id="inputArchivosSolicitud" hidden multiple>
+                                <div class="small text-muted">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-upload-cloud mb-1">
+                                        <path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 4.16"></path>
+                                        <polyline points="16 10 12 6 8 10"></polyline>
+                                        <line x1="12" y1="6" x2="12" y2="18"></line>
+                                    </svg><br>
+                                    Haga clic para adjuntar
+                                </div>
+                            </div>
+                            <div id="listaArchivosSolicitud" class="list-group list-group-flush small">
+                                <!-- Selected new files -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-toolbar justify-content-center"
+                            style="background-color: #198754; color: white; border-color: #198754;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-save">
+                                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                                <polyline points="7 3 7 8 15 8"></polyline>
+                            </svg> Guardar Cambios
+                        </button>
+                        <button type="button" class="btn btn-toolbar justify-content-center" id="btn_cancelar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-x-circle">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="15" y1="9" x2="9" y2="15"></line>
+                                <line x1="9" y1="9" x2="15" y2="15"></line>
+                            </svg> Cancelar
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="idIngreso">
+            <input type="hidden" id="IngresoDesve">
+            <input type="hidden" id="Prioridad">
+            <input type="hidden" id="FechaVecimiento">
+            <input type="hidden" id="Reingresado">
+            <input type="hidden" id="Responsable">
+        </form>
+    </div>
+
+    <!-- Modal Nuevo Origen Especial -->
+    <div class="modal fade" id="modalNuevoOrigenEspecial" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Agregar Origen Especial</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="textoNuevoOrigenEspecial" class="form-label small fw-bold">Nuevo Origen
+                            Especial</label>
+                        <input type="text" class="form-control" id="textoNuevoOrigenEspecial"
+                            placeholder="Escriba aquí el origen especial...">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarOrigenEspecial()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        feather.replace();
+    </script>
+    <script src="../recursos/js/layout_manager.js"></script>
+    <script src="../recursos/js/desve_modificar.js"></script>
+</body>
+
+</html>

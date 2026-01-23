@@ -56,6 +56,9 @@ async function cargarDatos(id, userId) {
             currentId = data.tis_id;
             currentRgtId = data.tis_registro_tramite;
 
+            // RBAC Enforcement
+            IngrPermissions.applyToUI(data.rol_usuario);
+
             // VALIDAR ACCESO Y ROL
             validarAccesoYRenderizarAcciones(data, userId);
 
@@ -175,20 +178,20 @@ function renderizarAcciones(facultad) {
 
     if (facultad === 'Firmante') {
         contenedor.innerHTML = `
-            <button type="button" class="btn btn-danger btn-lg px-4 me-2" onclick="enviarRespuesta('Resuelto_NO_Favorable', 'rechazar')">
-                <i data-feather="x-circle"></i> Rechazar
+            <button type="button" class="btn btn-toolbar me-2" onclick="enviarRespuesta('Resuelto_NO_Favorable', 'rechazar')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg> Rechazar
             </button>
-            <button type="button" class="btn btn-success btn-lg px-4" onclick="enviarRespuesta('Resuelto_Favorable', 'firmar')">
-                <i data-feather="check-circle"></i> Firmar
+            <button type="button" class="btn btn-toolbar" style="background-color: #198754; color: white; border-color: #198754;" onclick="enviarRespuesta('Resuelto_Favorable', 'firmar')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Firmar
             </button>
         `;
     } else if (facultad === 'Visador') {
         contenedor.innerHTML = `
-            <button type="button" class="btn btn-danger btn-lg px-4 me-2" onclick="enviarRespuesta('Resuelto_NO_Favorable', 'rechazar')">
-                <i data-feather="x-circle"></i> Rechazar
+            <button type="button" class="btn btn-toolbar me-2" onclick="enviarRespuesta('Resuelto_NO_Favorable', 'rechazar')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg> Rechazar
             </button>
-            <button type="button" class="btn btn-primary btn-lg px-4" onclick="enviarRespuesta('Resuelto_Favorable', 'visar')">
-                <i data-feather="eye"></i> Visar
+            <button type="button" class="btn btn-toolbar" style="background-color: #0d6efd; color: white; border-color: #0d6efd;" onclick="enviarRespuesta('Resuelto_Favorable', 'visar')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Visar
             </button>
         `;
     }
@@ -245,6 +248,13 @@ function setupEventListeners() {
 
     document.getElementById('btn_abrir_comentario').onclick = () => modalComentario.show();
     document.getElementById('form_responder_ingreso').onsubmit = (e) => e.preventDefault();
+
+    const btnIrPreparar = document.getElementById('btn_ir_preparar');
+    if (btnIrPreparar) {
+        btnIrPreparar.onclick = () => {
+            window.location.href = `ingr_preparar.html?id=${currentId}`;
+        };
+    }
 }
 
 async function enviarRespuesta(estado, accionLabel) {

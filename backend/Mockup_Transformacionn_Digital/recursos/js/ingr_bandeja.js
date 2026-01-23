@@ -78,9 +78,8 @@ function renderizarTabla(data) {
         tr.innerHTML = `
             <td class="ps-4 text-muted small">${item.tis_id}</td>
             <td class="text-end pe-4">
-                <button class="btn btn-sm btn-outline-primary py-0" title="Consultar">
-                    <i>Ver</i>
-                    <i data-feather="eye" style="width: 14px; height: 14px;"></i>
+                <button type="button" class="btn btn-toolbar p-1" title="Consultar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                 </button>
             </td>
             <td>
@@ -91,8 +90,8 @@ function renderizarTabla(data) {
             <td><span class="badge ${item.tis_estado === 'Ingresado' ? 'bg-success' : 'bg-primary'}">${item.tis_estado || '-'}</span></td>
             <td>${getRolBadge(item.rol_usuario)}</td>
             <td class="rgt-container">
-                <button class="btn btn-xs btn-outline-secondary py-0 px-2 btn-show-code" style="font-size: 0.75rem;">
-                    <i data-feather="eye" style="width: 12px; height: 12px;"></i>
+                <button type="button" class="btn btn-toolbar p-1 btn-show-code" title="Ver Código">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                 </button>
                 <code class="d-none">${rgtCode}</code>
             </td>

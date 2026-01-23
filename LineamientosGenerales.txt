@@ -1,0 +1,81 @@
+LINEAMIENTOS GENERALES DEL SISTEMA DE PATENTES
+
+1. ESTRUCTURA DE CARPETAS
+   - Todas las páginas HTML (excepto page.html) deben ir en la carpeta "paginas".
+   - Todos los recursos CSS, JS e imágenes deben ir en la carpeta "recursos" (subcarpetas css, js, img).
+   - Todos los archivos de datos JSON deben ir en la carpeta "recursos/jsons".
+   - El archivo principal de entrada es "page.html" en la raíz.
+
+2. NOMENCLATURA DE ARCHIVOS
+   - Usar minúsculas para nombrar carpetas y archivos.
+   - Usar guiones bajos (_) para separar palabras.
+   - Los archivos de página deben seguir la estructura {Categoria}_{NombrePagina} (ej: patentes_solicitar_patente_comercial.html).
+
+3. ESTILO Y DISEÑO
+   - Utilizar Bootstrap 5 para el diseño responsivo y componentes UI.
+   - Mantener estilos personalizados en "recursos/css/style.css".
+   - Usar iconos de Feather Icons (feather.replace).
+
+4. COMPONENTES
+   - El Sidebar (menú lateral) es un componente modular.
+   - El Sidebar se carga dinámicamente desde "paginas/sidebar.html" mediante "recursos/js/sidebar.js".
+   - El contenido principal se carga en el iframe "content-frame".
+
+5. DATOS
+   - La configuración del menú y datos estáticos deben residir en archivos JSON independientes.
+   - Las páginas deben consumir estos JSONs para renderizar opciones dinámicas (ej: checkboxes, selects).
+
+6. ACCESIBILIDAD Y CODIFICACIÓN
+   - Usar UTF-8 para todos los archivos.
+   - Asegurar que todas las rutas sean relativas para permitir la portabilidad del proyecto.
+
+7. EXPORTACIÓN DE DATOS
+   - Siempre que el sistema tenga una tabla, esta debe tener un botón que permita exportar a Excel.
+   - Siempre que el sistema tenga una tabla, debe tener un botón que permita exportar a PDF.
+   - Siempre que el sistema tenga un formulario, debe tener la opción de exportar a PDF.
+
+8. DATOS MOCK PARA TABLAS
+   - Todas las vistas que contengan tablas deben alimentarse desde archivos JSON que repliquen la respuesta de la base de datos.
+   - Los archivos JSON mock deben ubicarse en "recursos/jsons/" con el sufijo "_mock.json".
+   - Nomenclatura: {modulo}_{entidad}_mock.json (ej: patentes_solicitudes_mock.json).
+   - Las tablas NO deben tener datos hardcodeados en el HTML.
+   - El JavaScript correspondiente debe cargar y renderizar los datos dinámicamente.
+
+9. GEOLOCALIZACIÓN ESTANDARIZADA
+   - En todos los formularios que requerían un "Croquis" o mapa de ubicación, se debe reemplazar por el componente de integración con Google Maps. Debe incluir inputs para Calle, Número, Comuna y Región, botón de búsqueda, contenedor de mapa y campos readonly para Latitud/Longitud. Usar `maps_integration.js`.
+
+10. ESTÁNDARES DE DESARROLLO HTML
+   - Todos los elementos de entrada (inputs, selects, textareas) deben tener un atributo 'id' único y descriptivo.
+
+11. ESTÉTICA Y UI HOMOGÉNEA
+    - Estructura basada en tarjetas: Todas las páginas deben usar contenedores de tarjetas con la clase `card shadow-sm border-0 mb-4`.
+    - Cabecera estándar: Utilizar el bloque `main-header` que contiene `header-title` (h2 + p) y `toolbar` (botones alineados a la derecha).
+    - Botones del Sistema: Usar exclusivamente la clase `.btn-toolbar`. Los iconos deben ser SVGs explícitos embebidos en el HTML para asegurar consistencia y rendimiento. No usar el reemplazo dinámico de Feather Icons en botones del toolbar.
+    - Tipografía y Controles: Las etiquetas de formulario (`label`) deben ser pequeñas (`small`) y en negrita (`fw-bold`). Utilizar controles de tamaño estándar para mayor legibilidad.
+    - Sidebar responsivo: El sidebar al colapsar debe desaparecer por completo (`min-width: 0px !important; max-width: 0px !important;`), maximizando el área de trabajo.
+    - Grupos de botones: Los grupos de botones deberán siempre estar adecuados para ordenarse de forma responsiva.
+
+12. MANEJO DE DOCUMENTOS Y ARCHIVOS
+    - Carga mediante Base64: Las cargas de archivos deben realizarse convirtiendo el archivo a una cadena Base64 y embebiéndola dentro del objeto JSON de la solicitud principal.
+    - Transacción Única: Se debe evitar la creación de registros y carga de archivos en peticiones separadas. Preferir el guardado atómico de datos y documentos en una sola trama JSON.
+
+13. IDENTIFICACIÓN DE TRÁMITES (RGT)
+    - Estándar de ID Público: El campo `rgt_id_publica` debe seguir el formato: `YYMMDD-HHII-{sysname}-{random2}` (ej: 260123-1349-desve_solicitud-Az).
+    - Identificador de Sistema: Cada modelo debe poseer una propiedad privada `$sysname` descriptiva del módulo que se usará para la generación del ID y el filtrado de trámites.
+
+14. SEGURIDAD Y CONTROL DE ACCESO (RBAC)
+    - Resolución de Roles en Backend: El backend debe calcular el rol del usuario dinámicamente según su relación con el trámite (Responsable, Visador, Firmante, Consultor).
+    - Filtrado de Datos Sensibles: La información sensible (como bitácoras o documentos restringidos) debe ser filtrada en el servidor según el rol del usuario antes de ser enviada.
+    - Control en Frontend: Utilizar el archivo `ingr_permissions.js` (o equivalente por módulo) para controlar permisos y visibilidad de acciones en la UI.
+    - Prevención de Recargas: Desactivar siempre el comportamiento `submit` por defecto de los formularios para evitar recargas accidentales.
+
+15. VALIDACIÓN DE FORMULARIOS
+    - Las validaciones de los formularios deben realizarse por duplicado: en el front js y en el controlador php que lo recibe.
+
+16. FORMATO DE FECHAS
+    - Todas las fechas deben desplegarse siempre en formato DD-MM-AAAA.
+
+17. POLÍTICA DE DATOS FALTANTES (GET)
+    - Si una página requiere un parámetro por GET (ej: `id=123`) para cargar un registro y este no está presente en la URL, la página NO debe mostrar un error seco ni redirigir.
+    - Se debe presentar un modal de búsqueda explícita que solicite al usuario el identificador necesario para continuar.
+    - Una vez proporcionado y validado, la página debe recargarse con el parámetro GET correspondiente.

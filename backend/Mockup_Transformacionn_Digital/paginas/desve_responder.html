@@ -4,223 +4,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ingresar Respuesta</title>
+    <title>Ingresar Respuesta DESVE</title>
     <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
     <link href="../recursos/css/style.css" rel="stylesheet">
     <link rel="icon" href="data:,">
     <style>
-        body {
-            background-color: #f8f9fa;
-            padding: 40px;
+        .drop-zone {
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .card-auth {
-            max-width: 400px;
-            margin: 100px auto;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            background: white;
-        }
-
-        .card-response {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-weight: 600;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+        .drop-zone:hover,
+        .drop-zone.active {
+            border-color: #005cab;
+            background: #eef6ff;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <!-- Loading State -->
+    <div class="container-fluid">
+        <!-- Main Header -->
+        <div class="main-header mb-4">
+            <div class="header-title">
+                <h2 id="header_public_id">Ingresar Respuesta</h2>
+                <p id="header_expediente">Detalles de la solicitud y formulario de respuesta</p>
+            </div>
+            <div class="toolbar">
+                <button type="button" class="btn btn-toolbar" onclick="location.href='desve_listado_ingresos.html'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-grid">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg> Bandeja DESVE
+                </button>
+            </div>
+        </div>
+
+        <!-- Verification / Loading State -->
         <div id="loading-check" class="text-center mt-5">
             <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Verificando acceso...</span>
+                <span class="visually-hidden">Procesando...</span>
             </div>
-            <p class="mt-2 text-muted">Verificando permisos...</p>
+            <p class="mt-2 text-muted">Verificando acceso y cargando datos...</p>
         </div>
 
-        <!-- Step 2: Form -->
-        <div id="step-2" class="card-response d-none">
-            <form onsubmit="event.preventDefault();">
-                <h3 class="section-title">Detalles de la Solicitud</h3>
+        <div id="step-2" class="d-none">
+            <div class="row">
+                <!-- Left: Info and History -->
+                <div class="col-lg-8">
+                    <!-- Request Details Card -->
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Detalles de la Solicitud</h5>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold text-muted">ID Ingreso</label>
+                                    <div id="display-id" class="fw-bold">-</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold text-muted">Ingreso Desve</label>
+                                    <div id="display-desve" class="fw-bold">-</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted">Expediente</label>
+                                    <div id="display-expediente" class="fw-bold">-</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted">Tipo de Organización</label>
+                                    <div id="display-org-tipo" class="fw-bold">-</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted">Organización (Origen)</label>
+                                    <div id="display-org-nombre" class="fw-bold">-</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold text-muted">Fecha Recepción</label>
+                                    <div id="display-recepcion" class="fw-bold">-</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold text-muted">Prioridad</label>
+                                    <div id="display-prioridad" class="fw-bold">-</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-muted">Sector</label>
+                                    <div id="display-sector" class="fw-bold">-</div>
+                                </div>
+                            </div>
 
-                <div class="row g-3 mb-4">
-                    <div class="col-md-3">
-                        <label class="form-label text-muted small">ID Ingreso</label>
-                        <div id="display-id" class="fw-bold fs-5">-</div>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label text-muted small">Ingreso Desve</label>
-                        <div id="display-desve" class="fw-bold">-</div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label text-muted small">Nombre Expediente</label>
-                        <div id="display-expediente" class="fw-bold">-</div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label text-muted small">ORGANIZACIÓN (Tipo)</label>
-                        <div id="display-org-tipo" class="fw-bold">-</div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label text-muted small">Origen de solicitud (Organización)</label>
-                        <div id="display-org-nombre" class="fw-bold">-</div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label class="form-label text-muted small">Fecha recepción</label>
-                        <div id="display-recepcion" class="fw-bold">-</div>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label text-muted small">Prioridad</label>
-                        <div id="display-prioridad" class="fw-bold">-</div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label text-muted small">Sector</label>
-                        <div id="display-sector" class="fw-bold">-</div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label class="form-label text-muted small">Días Transcurridos</label>
-                        <div id="display-dias-ingreso" class="fw-bold">-</div>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label text-muted small">Días p/Vencimiento</label>
-                        <div id="display-dias-vencimiento" class="fw-bold text-danger">-</div>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <label class="form-label text-muted small fw-bold">Detalle de Ingreso</label>
-                    <div id="display-detalle" class="p-3 bg-light border rounded"
-                        style="min-height: 80px; font-size: 0.9rem; white-space: pre-wrap;">-</div>
-                </div>
-
-                <hr class="my-4">
-
-                <h4 class="section-title h5">Ingresar Respuesta</h4>
-                <div class="mb-4">
-                    <label for="input-respuesta" class="form-label fw-bold small">Su Respuesta / Comentario</label>
-                    <textarea id="input-respuesta" class="form-control" rows="6"
-                        placeholder="Escriba aquí los detalles de su respuesta..."></textarea>
-                </div>
-
-                <div class="mb-4">
-                    <label class="form-label fw-bold small">Adjuntar Archivos</label>
-                    <input type="file" class="form-control mb-2" id="inputArchivosRespuesta" multiple
-                        onchange="handleFileSelect('respuesta')">
-                    <div id="listaArchivosRespuesta" class="list-group">
-                        <!-- File list populated by JS -->
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" role="switch" id="check-respuesta-definitiva">
-                        <label class="form-check-label fw-bold" for="check-respuesta-definitiva">Es Respuesta
-                            Definitiva</label>
-                        <div class="form-text">Marque esta opción si esta respuesta finaliza el trámite.</div>
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-end gap-2 mb-5">
-                    <button type="button" class="btn btn-outline-secondary"
-                        onclick="window.history.back()">Cancelar</button>
-                    <button type="button" id="btn-save-response" class="btn btn-success px-4">Guardar Respuesta</button>
-                </div>
-
-                <hr class="my-4">
-            </form>
-
-            <div class="d-flex justify-content-between align-items-center mb-0">
-                <h4 class="section-title h5 mb-0">Historial de Respuestas</h4>
-                <button class="btn btn-sm btn-link text-dark p-0" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapseHistorialRespuestas">
-                    <i data-feather="chevron-down"></i>
-                </button>
-            </div>
-            <div class="collapse show" id="collapseHistorialRespuestas">
-                <div class="table-responsive mt-3 mb-4">
-                    <table class="table table-sm table-hover border" id="tablaBitacora">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Funcionario</th>
-                                <th>Tipo</th>
-                                <th>Respuesta</th>
-                            </tr>
-                        </thead>
-                        <tbody id="bitacora-respuestas-body">
-                            <!-- Populated dynamically -->
-                            <tr>
-                                <td colspan="4" class="text-center py-3 text-muted">No hay respuestas registradas
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="d-flex align-items-center gap-2">
-                    <h4 class="section-title h5 mb-0">Comentarios / Observaciones</h4>
-                    <button class="btn btn-sm btn-link text-dark p-0" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapseComentarios">
-                        <i data-feather="chevron-down"></i>
-                    </button>
-                </div>
-                <button type="button" class="btn btn-sm btn-dark" id="btn_abrir_comentario">
-                    <i data-feather="message-square" style="width: 14px;"></i> Agregar Comentario
-                </button>
-            </div>
-            <div class="collapse show" id="collapseComentarios">
-                <div id="comentarios-container">
-                    <div class="alert alert-info py-2 small">
-                        <i data-feather="info" class="me-2" style="width: 14px;"></i>
-                        Cargando comentarios...
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal Nuevo Comentario -->
-        <div class="modal fade" id="modalNuevoComentario" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Agregar Comentario</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="textoNuevoComentario" class="form-label small fw-bold">Su Comentario</label>
-                            <textarea class="form-control" id="textoNuevoComentario" rows="4"
-                                placeholder="Escriba aquí su comentario u observación..."></textarea>
+                            <div class="mb-0">
+                                <label class="form-label small fw-bold text-muted">Detalle de Ingreso</label>
+                                <div id="display-detalle" class="p-3 bg-light border rounded small"
+                                    style="min-height: 80px; white-space: pre-wrap;">-</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-success" onclick="guardarComentario()">Guardar</button>
+
+                    <!-- History Card -->
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="card-title mb-0">Historial de Respuestas</h5>
+                                <button class="btn btn-sm btn-link text-dark p-0" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#collapseHistorial">
+                                    <i data-feather="chevron-down"></i>
+                                </button>
+                            </div>
+                            <div class="collapse show" id="collapseHistorial">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover small">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Fecha</th>
+                                                <th>Funcionario</th>
+                                                <th>Tipo</th>
+                                                <th>Contenido</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="bitacora-respuestas-body">
+                                            <!-- Dynamic -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Form and Sidebars -->
+                <div class="col-lg-4">
+                    <!-- Response Form Card -->
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Redactar Respuesta</h5>
+
+                            <div class="mb-3">
+                                <label for="input-respuesta" class="form-label small fw-bold">Contenido</label>
+                                <textarea id="input-respuesta" class="form-control" rows="8"
+                                    placeholder="Escriba su respuesta aquí..."></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Adjuntar Archivos</label>
+                                <div class="drop-zone" id="drop_zone">
+                                    <input type="file" id="inputArchivosRespuesta" hidden multiple>
+                                    <div class="small text-muted">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="feather feather-upload-cloud mb-1">
+                                            <path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 4.16"></path>
+                                            <polyline points="16 10 12 6 8 10"></polyline>
+                                            <line x1="12" y1="6" x2="12" y2="18"></line>
+                                        </svg><br>
+                                        Haga clic para adjuntar
+                                    </div>
+                                </div>
+                                <div id="listaArchivosRespuesta" class="list-group list-group-flush mt-2 small">
+                                    <!-- Dynamic -->
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                        id="check-respuesta-definitiva">
+                                    <label class="form-check-label small fw-bold"
+                                        for="check-respuesta-definitiva">Respuesta Definitiva</label>
+                                </div>
+                                <div class="form-text x-small">Finaliza el trámite al guardar.</div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="button" id="btn-save-response"
+                                    class="btn btn-toolbar justify-content-center"
+                                    style="background-color: #198754; color: white; border-color: #198754;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-check-circle">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                    </svg> Guardar Respuesta
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metrics / Comments Sidebar Card -->
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Métricas y Comentarios</h5>
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="form x-small text-muted d-block fw-bold">Días Transcurridos</label>
+                                    <span id="display-dias-ingreso"
+                                        class="badge bg-light text-dark border w-100">-</span>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form x-small text-muted d-block fw-bold">P/Vencimiento</label>
+                                    <span id="display-dias-vencimiento"
+                                        class="badge bg-light text-dark border w-100">-</span>
+                                </div>
+                            </div>
+
+                            <hr class="my-3">
+
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="form-label small fw-bold mb-0">Observaciones Internas</label>
+                                <button class="btn btn-sm btn-dark" id="btn_abrir_comentario"
+                                    style="font-size: 0.7rem;">
+                                    + Comentario
+                                </button>
+                            </div>
+                            <div id="comentarios-container" class="small overflow-auto" style="max-height: 200px;">
+                                <!-- Dynamic -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <script src="../recursos/js/bootstrap.bundle.min.js"></script>
-        <script src="../recursos/js/layout_manager.js"></script>
-        <script src="../recursos/js/desve_responder.js"></script>
+    <!-- Modal Nuevo Comentario -->
+    <div class="modal fade" id="modalNuevoComentario" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Agregar Comentario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="textoNuevoComentario" class="form-label small fw-bold">Su Comentario</label>
+                        <textarea class="form-control" id="textoNuevoComentario" rows="4"
+                            placeholder="Escriba aquí su comentario interno..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="guardarComentario()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="../recursos/js/layout_manager.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        feather.replace();
+    </script>
+    <script src="../recursos/js/desve_responder.js"></script>
 </body>
 
 </html>
