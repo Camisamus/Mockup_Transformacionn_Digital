@@ -1,12 +1,9 @@
 // Mantenedor de Orígenes Especiales
-// Handles CRUD operations for trd_desve_organizaciones
-
 let allOrganizations = [];
 let allTypes = [];
 let currentModal = null;
-let currentMode = 'create'; // 'create' or 'edit'
+let currentMode = 'create';
 
-// Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
     initializeModal();
     loadTypes();
@@ -14,34 +11,37 @@ document.addEventListener('DOMContentLoaded', () => {
     attachEventListeners();
 });
 
-/**
- * Initialize Bootstrap modal
- */
 function initializeModal() {
     const modalElement = document.getElementById('modal-origin');
-    currentModal = new bootstrap.Modal(modalElement);
+    if (modalElement) {
+        currentModal = new bootstrap.Modal(modalElement);
+    }
 }
 
-/**
- * Attach event listeners to buttons and filters
- */
 function attachEventListeners() {
-    // New Origin button
-    document.getElementById('btn-new-origin').addEventListener('click', () => {
-        openModal('create');
-    });
+    const btnNew = document.getElementById('btn-new-origin');
+    if (btnNew) {
+        btnNew.addEventListener('click', () => {
+            openModal('create');
+        });
+    }
 
-    // Save button
-    document.getElementById('btn-save-origin').addEventListener('click', saveData);
+    const btnSave = document.getElementById('btn-save-origin');
+    if (btnSave) {
+        btnSave.addEventListener('click', saveData);
+    }
 
-    // Filter inputs
-    document.getElementById('filter-name').addEventListener('input', filterData);
-    document.getElementById('filter-type').addEventListener('change', filterData);
+    const filterName = document.getElementById('filter-name');
+    if (filterName) {
+        filterName.addEventListener('input', filterData);
+    }
+
+    const filterType = document.getElementById('filter-type');
+    if (filterType) {
+        filterType.addEventListener('change', filterData);
+    }
 }
 
-/**
- * Load organization types from API
- */
 async function loadTypes() {
     try {
         const response = await fetch(`${window.API_BASE_URL}/tipo_organizaciones.php`, {
@@ -52,50 +52,46 @@ async function loadTypes() {
         });
 
         const data = await response.json();
-
         if (data.status === 'success' && data.data) {
-            // Filter out types 1 and 2
             allTypes = data.data.filter(type => type.tor_id != 1 && type.tor_id != 2);
             populateTypeDropdowns();
-        } else {
-            console.error('Error loading types:', data.message);
-            Swal.fire('Error', 'No se pudieron cargar los tipos de organización', 'error');
         }
     } catch (error) {
         console.error('Error loading types:', error);
-        Swal.fire('Error', 'Error de conexión al cargar tipos', 'error');
     }
 }
 
-/**
- * Populate type dropdowns (filter and modal)
- */
 function populateTypeDropdowns() {
     const filterSelect = document.getElementById('filter-type');
     const modalSelect = document.getElementById('origin-type');
 
-    // Clear existing options (except the first one)
-    filterSelect.innerHTML = '<option value="">Todos</option>';
-    modalSelect.innerHTML = '<option value="">Seleccione un tipo</option>';
+    if (filterSelect) {
+        filterSelect.innerHTML = '<option value="">Todos</option>';
+        allTypes.forEach(type => {
+            const opt = document.createElement('option');
+            opt.value = type.tor_id;
+            opt.textContent = type.tor_nombre;
+            filterSelect.appendChild(opt);
+        });
+    }
 
-    // Add type options
-    allTypes.forEach(type => {
-        const filterOption = document.createElement('option');
-        filterOption.value = type.tor_id;
-        filterOption.textContent = type.tor_nombre;
-        filterSelect.appendChild(filterOption);
-
-        const modalOption = document.createElement('option');
-        modalOption.value = type.tor_id;
-        modalOption.textContent = type.tor_nombre;
-        modalSelect.appendChild(modalOption);
-    });
+    if (modalSelect) {
+        modalSelect.innerHTML = '<option value="">Seleccione un tipo</option>';
+        allTypes.forEach(type => {
+            const opt = document.createElement('option');
+            opt.value = type.tor_id;
+            opt.textContent = type.tor_nombre;
+            modalSelect.appendChild(opt);
+        });
+    }
 }
 
-/**
- * Load organizations from API
- */
-async function loadData() {
+window.loadData = async function () {
+    const tbody = document.getElementById('table-body');
+    if (tbody) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-5"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Cargando datos...</td></tr>';
+    }
+
     try {
         const response = await fetch(`${window.API_BASE_URL}/organizaciones_desve.php`, {
             method: 'POST',
@@ -105,194 +101,133 @@ async function loadData() {
         });
 
         const data = await response.json();
-
         if (data.status === 'success' && data.data) {
             allOrganizations = data.data;
             renderTable(allOrganizations);
         } else {
-            console.error('Error loading data:', data.message);
-            renderEmptyState('Error al cargar los datos');
+            renderEmptyState('No se pudieron cargar los datos.');
         }
     } catch (error) {
         console.error('Error loading data:', error);
-        renderEmptyState('Error de conexión');
+        renderEmptyState('Error de conexión.');
     }
 }
 
-/**
- * Render the organizations table
- */
 function renderTable(organizations) {
     const tbody = document.getElementById('table-body');
+    if (!tbody) return;
 
     if (!organizations || organizations.length === 0) {
-        renderEmptyState('No se encontraron orígenes especiales');
+        renderEmptyState('No se encontraron registros.');
         return;
     }
 
     tbody.innerHTML = '';
-
     organizations.forEach(org => {
         const row = document.createElement('tr');
-
-        // Find type name
         const type = allTypes.find(t => t.tor_id == org.org_tipo_id);
         const typeName = type ? type.tor_nombre : 'N/A';
 
         row.innerHTML = `
-            <td>${org.org_id}</td>
+            <td class="fw-bold">${org.org_id}</td>
             <td>${org.org_nombre}</td>
-            <td>${typeName}</td>
-            <td>
-                <button class="action-btn btn-edit" onclick="editOrganization(${org.org_id})">
-                    <i data-feather="edit-2" style="width: 14px; height: 14px;"></i>
-                    Editar
+            <td><span class="badge bg-light text-dark border fw-normal">${typeName}</span></td>
+            <td class="text-end">
+                <button class="btn btn-sm btn-outline-secondary me-1" onclick="editOrganization(${org.org_id})">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                 </button>
-                <button class="action-btn btn-delete" onclick="deleteOrganization(${org.org_id})">
-                    <i data-feather="trash-2" style="width: 14px; height: 14px;"></i>
-                    Eliminar
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteOrganization(${org.org_id})">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                 </button>
             </td>
         `;
-
         tbody.appendChild(row);
     });
 
-    // Replace feather icons
-    if (window.feather) {
-        feather.replace();
-    }
+    if (window.feather) feather.replace();
 }
 
-/**
- * Render empty state
- */
 function renderEmptyState(message) {
     const tbody = document.getElementById('table-body');
-    tbody.innerHTML = `
-        <tr>
-            <td colspan="4" class="empty-state">
-                <div>
-                    <i data-feather="inbox"></i>
-                    <p>${message}</p>
-                </div>
-            </td>
-        </tr>
-    `;
-    if (window.feather) {
-        feather.replace();
+    if (tbody) {
+        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-5 text-muted small">${message}</td></tr>`;
     }
 }
 
-/**
- * Filter data based on inputs
- */
 function filterData() {
     const nameFilter = document.getElementById('filter-name').value.toLowerCase();
     const typeFilter = document.getElementById('filter-type').value;
 
-    let filtered = allOrganizations;
-
-    // Filter by name
-    if (nameFilter) {
-        filtered = filtered.filter(org =>
-            org.org_nombre.toLowerCase().includes(nameFilter)
-        );
-    }
-
-    // Filter by type
-    if (typeFilter) {
-        filtered = filtered.filter(org => org.org_tipo_id == typeFilter);
-    }
+    const filtered = allOrganizations.filter(org => {
+        let cumpleNombre = !nameFilter || org.org_nombre.toLowerCase().includes(nameFilter);
+        let cumpleTipo = !typeFilter || org.org_tipo_id == typeFilter;
+        return cumpleNombre && cumpleTipo;
+    });
 
     renderTable(filtered);
 }
 
-/**
- * Open modal for create or edit
- */
-function openModal(mode, data = null) {
+window.openModal = function (mode, data = null) {
     currentMode = mode;
     const modalTitle = document.getElementById('modalOriginLabel');
     const form = document.getElementById('form-origin');
 
-    // Reset form
-    form.reset();
-    document.getElementById('origin-id').value = '';
+    if (form) form.reset();
+    const idInput = document.getElementById('origin-id');
+    if (idInput) idInput.value = '';
 
     if (mode === 'create') {
-        modalTitle.textContent = 'Nuevo Origen';
+        if (modalTitle) modalTitle.textContent = 'Nuevo Origen Especial';
     } else if (mode === 'edit' && data) {
-        modalTitle.textContent = 'Editar Origen';
-        document.getElementById('origin-id').value = data.org_id;
+        if (modalTitle) modalTitle.textContent = 'Editar Origen Especial';
+        if (idInput) idInput.value = data.org_id;
         document.getElementById('origin-name').value = data.org_nombre;
         document.getElementById('origin-type').value = data.org_tipo_id;
     }
 
-    currentModal.show();
+    if (currentModal) currentModal.show();
 }
 
-/**
- * Edit organization
- */
 window.editOrganization = function (id) {
     const org = allOrganizations.find(o => o.org_id == id);
-    if (org) {
-        openModal('edit', org);
-    }
+    if (org) openModal('edit', org);
 }
 
-/**
- * Delete organization
- */
 window.deleteOrganization = async function (id) {
     const result = await Swal.fire({
-        title: '¿Está seguro?',
-        text: 'Esta acción eliminará el origen especial',
+        title: '¿Eliminar registro?',
+        text: 'Esta acción no se puede deshacer.',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#dc3545',
-        cancelButtonColor: '#6c757d',
         confirmButtonText: 'Sí, eliminar',
         cancelButtonText: 'Cancelar'
     });
 
-    if (!result.isConfirmed) {
-        return;
-    }
+    if (result.isConfirmed) {
+        try {
+            const response = await fetch(`${window.API_BASE_URL}/organizaciones_desve.php`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ACCION: 'BORRAR', org_id: id })
+            });
 
-    try {
-        const response = await fetch(`${window.API_BASE_URL}/organizaciones_desve.php`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                ACCION: 'BORRAR',
-                org_id: id
-            })
-        });
-
-        const data = await response.json();
-
-        if (data.status === 'success') {
-            Swal.fire('Eliminado', data.message, 'success');
-            loadData(); // Reload data
-        } else {
-            Swal.fire('Error', data.message, 'error');
+            const data = await response.json();
+            if (data.status === 'success') {
+                Swal.fire('Éxito', 'Registro eliminado correctamente.', 'success');
+                loadData();
+            } else {
+                Swal.fire('Error', data.message, 'error');
+            }
+        } catch (error) {
+            Swal.fire('Error', 'Error de conexión.', 'error');
         }
-    } catch (error) {
-        console.error('Error deleting organization:', error);
-        Swal.fire('Error', 'Error de conexión al eliminar', 'error');
     }
 }
 
-/**
- * Save data (create or update)
- */
 async function saveData() {
     const form = document.getElementById('form-origin');
-
-    // Validate form
     if (!form.checkValidity()) {
         form.reportValidity();
         return;
@@ -308,9 +243,7 @@ async function saveData() {
         org_tipo_id: parseInt(typeId)
     };
 
-    if (currentMode === 'edit') {
-        payload.org_id = parseInt(id);
-    }
+    if (currentMode === 'edit') payload.org_id = parseInt(id);
 
     try {
         const response = await fetch(`${window.API_BASE_URL}/organizaciones_desve.php`, {
@@ -321,16 +254,14 @@ async function saveData() {
         });
 
         const data = await response.json();
-
         if (data.status === 'success') {
-            Swal.fire('Éxito', data.message, 'success');
-            currentModal.hide();
-            loadData(); // Reload data
+            Swal.fire('Éxito', 'Datos guardados correctamente.', 'success');
+            if (currentModal) currentModal.hide();
+            loadData();
         } else {
             Swal.fire('Error', data.message, 'error');
         }
     } catch (error) {
-        console.error('Error saving data:', error);
-        Swal.fire('Error', 'Error de conexión al guardar', 'error');
+        Swal.fire('Error', 'Error de conexión.', 'error');
     }
 }

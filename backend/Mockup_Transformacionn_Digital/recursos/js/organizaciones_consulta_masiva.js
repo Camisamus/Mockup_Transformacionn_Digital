@@ -1,226 +1,77 @@
 // organizaciones_consulta_masiva.js
-// Handles search functionality and data loading for mass organization queries
-
 let organizacionesData = [];
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Initialize the page
-    cargarDatosIniciales();
+    cargarDatosOrganizaciones();
 });
 
-/**
- * Load initial data into the results table from JSON mock file
- */
-function cargarDatosIniciales() {
-    fetch('../recursos/jsons/organizaciones_consulta_masiva_mock.json')
-        .then(response => response.json())
-        .then(data => {
-            organizacionesData = data;
-            renderizarTabla(organizacionesData);
-            actualizarContadorResultados();
-        })
-        .catch(error => {
-            console.error('Error al cargar datos:', error);
-            const tbody = document.querySelector('#tablaResultados tbody');
-            tbody.innerHTML = '<tr><td colspan="10" class="text-center text-danger">Error al cargar los datos</td></tr>';
-        });
+async function cargarDatosOrganizaciones() {
+    try {
+        const response = await fetch('../recursos/jsons/organizaciones_consulta_masiva_mock.json');
+        organizacionesData = await response.json();
+        renderizarTablaOrganizaciones(organizacionesData);
+    } catch (error) {
+        console.error('Error cargando datos de organizaciones:', error);
+    }
 }
 
-/**
- * Render the table with organization data
- */
-function renderizarTabla(datos) {
-    const tbody = document.querySelector('#tablaResultados tbody');
+function renderizarTablaOrganizaciones(datos) {
+    const tbody = document.querySelector('#tablaOrganizaciones tbody');
     tbody.innerHTML = '';
 
-    if (datos.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="10" class="text-center">No se encontraron resultados</td></tr>';
-        return;
-    }
-
     datos.forEach(org => {
-        const row = document.createElement('tr');
+        const tr = document.createElement('tr');
 
-        // Format directiva actual
-        const directivaActualHTML = org.directivaActual.map(d =>
-            `${d.nombre} (${d.cargo})`
-        ).join('<br>');
-
-        // Format directivas anteriores
-        let directivasAnterioresHTML = 'Sin registros';
-        if (org.directivasAnteriores.length > 0) {
-            directivasAnterioresHTML = org.directivasAnteriores.map(da => {
-                const miembros = da.miembros.map(m => `${m.nombre} (${m.cargo})`).join('<br>');
-                return `${da.periodo}: ${miembros}`;
-            }).join('<br>');
-        }
-
-        row.innerHTML = `
-            <td>${org.rut}</td>
-            <td>${org.nombre}</td>
+        tr.innerHTML = `
+            <td class="fw-bold">${org.rut}</td>
+            <td class="text-primary fw-medium">${org.nombre}</td>
             <td>${org.codigo}</td>
             <td>${org.rpj}</td>
             <td>${org.fechaInscripcion}</td>
             <td>${org.fechaTerminoVigencia}</td>
-            <td>${directivaActualHTML}</td>
-            <td>${directivasAnterioresHTML}</td>
             <td>${org.representanteLegal}</td>
             <td>${org.unidadVecinal}</td>
+            <td class="text-end">
+                <button class="btn btn-sm btn-outline-secondary" onclick="verDetalle('${org.codigo}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+            </td>
         `;
 
-        tbody.appendChild(row);
+        tbody.appendChild(tr);
     });
+
+    const countEl = document.getElementById('resultados_count');
+    if (countEl) countEl.textContent = datos.length;
 }
 
-/**
- * Search organizations based on filter criteria
- */
-function buscarOrganizaciones() {
-    // Get filter values
+window.buscarOrganizaciones = function () {
     const filtros = {
-        rut: document.getElementById('filtro_rut').value.trim(),
-        nombre: document.getElementById('filtro_nombre').value.trim(),
-        codigo: document.getElementById('filtro_codigo').value.trim(),
-        rpj: document.getElementById('filtro_rpj').value.trim(),
-        fechaInscripcionInicio: document.getElementById('filtro_fecha_inscripcion_inicio').value,
-        fechaInscripcionFin: document.getElementById('filtro_fecha_inscripcion_fin').value,
-        fechaTerminoInicio: document.getElementById('filtro_fecha_termino_inicio').value,
-        fechaTerminoFin: document.getElementById('filtro_fecha_termino_fin').value,
-        representanteLegal: document.getElementById('filtro_representante_legal').value.trim(),
-        unidadVecinal: document.getElementById('filtro_unidad_vecinal').value.trim(),
-        direccion: document.getElementById('filtro_direccion').value.trim(),
-        telefono: document.getElementById('filtro_telefono').value.trim(),
-        ley19418: document.getElementById('filtro_ley_19418').value,
-        rendicionesPendientes: document.getElementById('filtro_rendiciones_pendientes').value
+        rut: document.getElementById('filtro_rut').value.toLowerCase(),
+        nombre: document.getElementById('filtro_nombre').value.toLowerCase(),
+        codigo: document.getElementById('filtro_codigo').value.toLowerCase()
     };
 
-    console.log('Buscando con filtros:', filtros);
-
-    // Filter the data based on criteria
-    let resultadosFiltrados = organizacionesData.filter(org => {
-        // RUT filter
-        if (filtros.rut && !org.rut.toLowerCase().includes(filtros.rut.toLowerCase())) {
-            return false;
-        }
-
-        // Nombre filter
-        if (filtros.nombre && !org.nombre.toLowerCase().includes(filtros.nombre.toLowerCase())) {
-            return false;
-        }
-
-        // Código filter
-        if (filtros.codigo && !org.codigo.toLowerCase().includes(filtros.codigo.toLowerCase())) {
-            return false;
-        }
-
-        // RPJ filter
-        if (filtros.rpj && !org.rpj.toLowerCase().includes(filtros.rpj.toLowerCase())) {
-            return false;
-        }
-
-        // Fecha inscripción range filter
-        if (filtros.fechaInscripcionInicio && org.fechaInscripcion < filtros.fechaInscripcionInicio) {
-            return false;
-        }
-        if (filtros.fechaInscripcionFin && org.fechaInscripcion > filtros.fechaInscripcionFin) {
-            return false;
-        }
-
-        // Fecha término vigencia range filter
-        if (filtros.fechaTerminoInicio && org.fechaTerminoVigencia < filtros.fechaTerminoInicio) {
-            return false;
-        }
-        if (filtros.fechaTerminoFin && org.fechaTerminoVigencia > filtros.fechaTerminoFin) {
-            return false;
-        }
-
-        // Representante legal filter
-        if (filtros.representanteLegal && !org.representanteLegal.toLowerCase().includes(filtros.representanteLegal.toLowerCase())) {
-            return false;
-        }
-
-        // Unidad vecinal filter
-        if (filtros.unidadVecinal && !org.unidadVecinal.toLowerCase().includes(filtros.unidadVecinal.toLowerCase())) {
-            return false;
-        }
-
-        return true;
+    const datosFiltrados = organizacionesData.filter(org => {
+        let cumple = true;
+        if (filtros.rut && !org.rut.toLowerCase().includes(filtros.rut)) cumple = false;
+        if (filtros.nombre && !org.nombre.toLowerCase().includes(filtros.nombre)) cumple = false;
+        if (filtros.codigo && !org.codigo.toLowerCase().includes(filtros.codigo)) cumple = false;
+        return cumple;
     });
 
-    // Render filtered results
-    renderizarTabla(resultadosFiltrados);
-    actualizarContadorResultados();
+    renderizarTablaOrganizaciones(datosFiltrados);
 }
 
-/**
- * Clear all filter inputs
- */
-function limpiarFiltros() {
-    document.getElementById('filtro_rut').value = '';
-    document.getElementById('filtro_nombre').value = '';
-    document.getElementById('filtro_codigo').value = '';
-    document.getElementById('filtro_rpj').value = '';
-    document.getElementById('filtro_fecha_inscripcion_inicio').value = '';
-    document.getElementById('filtro_fecha_inscripcion_fin').value = '';
-    document.getElementById('filtro_fecha_termino_inicio').value = '';
-    document.getElementById('filtro_fecha_termino_fin').value = '';
-    document.getElementById('filtro_representante_legal').value = '';
-    document.getElementById('filtro_unidad_vecinal').value = '';
-    document.getElementById('filtro_direccion').value = '';
-    document.getElementById('filtro_telefono').value = '';
-    document.getElementById('filtro_ley_19418').value = '';
-    document.getElementById('filtro_rendiciones_pendientes').value = '';
-
-    console.log('Filtros limpiados');
+window.limpiarFiltros = function () {
+    document.getElementById('formFiltros').reset();
+    renderizarTablaOrganizaciones(organizacionesData);
 }
 
-/**
- * Update the results counter
- */
-function actualizarContadorResultados() {
-    const tbody = document.querySelector('#tablaResultados tbody');
-    const rowCount = tbody.querySelectorAll('tr').length;
-    document.getElementById('resultados_count').textContent = rowCount;
+window.verDetalle = function (codigo) {
+    window.location.href = `organizaciones_consulta_organizacion.html?id=${codigo}`;
 }
 
-/**
- * Export results to Excel
- */
-function exportarExcel() {
-    // In production, this would generate an actual Excel file
-    alert('Exportando resultados a Excel...\n\nEsta funcionalidad generará un archivo .xlsx con todos los resultados de la búsqueda.');
-    console.log('Exportar a Excel');
+window.nuevaOrganizacion = function () {
+    window.location.href = 'organizaciones_consulta_organizacion.html';
 }
-
-/**
- * Export results to PDF
- */
-function exportarPDF() {
-    // In production, this would generate an actual PDF file
-    alert('Exportando resultados a PDF...\n\nEsta funcionalidad generará un archivo PDF con todos los resultados de la búsqueda.');
-    console.log('Exportar a PDF');
-}
-
-/**
- * Format RUT with dots and dash
- */
-function formatearRUT(input) {
-    let value = input.value.replace(/[^0-9kK]/g, '');
-
-    if (value.length > 1) {
-        const dv = value.slice(-1);
-        const number = value.slice(0, -1);
-        const formattedNumber = number.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        input.value = formattedNumber + '-' + dv;
-    }
-}
-
-// Add RUT formatting on blur
-document.addEventListener('DOMContentLoaded', function () {
-    const rutInput = document.getElementById('filtro_rut');
-    if (rutInput) {
-        rutInput.addEventListener('blur', function () {
-            formatearRUT(this);
-        });
-    }
-});

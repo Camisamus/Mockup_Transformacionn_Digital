@@ -1,283 +1,156 @@
 // Logic for Consulta Organizacion Page
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('Consulta Organización loaded');
+    if (!window.API_BASE_URL) window.API_BASE_URL = 'http://127.0.0.1:8081/api';
 
-document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements - Form Fields
-    const formFields = {
-        // Información General
-        tipoOrganizacion: document.getElementById('tipoOrganizacion'),
-        codigo: document.getElementById('codigo'),
-        rut: document.getElementById('rut'),
-        rpj: document.getElementById('rpj'),
-        categoria: document.getElementById('categoria'),
-        subcategoria: document.getElementById('subcategoria'),
-        estado: document.getElementById('estado'),
-        nombre: document.getElementById('nombre'),
-        razonSocial: document.getElementById('razonSocial'),
-        unidadVecinal: document.getElementById('unidadVecinal'),
-        registro: document.getElementById('registro'),
-        folio: document.getElementById('folio'),
-        fechaRegistro: document.getElementById('fechaRegistro'),
-        numeroSocios: document.getElementById('numeroSocios'),
-        adecuacionEstatuto: document.getElementById('adecuacionEstatuto'),
-        fechaAdecuacion: document.getElementById('fechaAdecuacion'),
-        leyDeporte: document.getElementById('leyDeporte'),
-        fechaLeyDeporte: document.getElementById('fechaLeyDeporte'),
-        personalidadJuridica: document.getElementById('personalidadJuridica'),
-        otorgadaPor: document.getElementById('otorgadaPor'),
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
 
-        // Objeto Social
-        objetoTipoOrganizacion: document.getElementById('objetoTipoOrganizacion'),
-        areaEspecializacion: document.getElementById('areaEspecializacion'),
-        fechaIngreso: document.getElementById('fechaIngreso'),
-        fechaTermino: document.getElementById('fechaTermino'),
-        descripcionObjeto: document.getElementById('descripcionObjeto'),
-
-        // Representante Legal
-        repRut: document.getElementById('repRut'),
-        repApellidoPaterno: document.getElementById('repApellidoPaterno'),
-        repApellidoMaterno: document.getElementById('repApellidoMaterno'),
-        repNombres: document.getElementById('repNombres'),
-
-        // Domicilio
-        domCalle: document.getElementById('domCalle'),
-        domNumero: document.getElementById('domNumero'),
-        domBloque: document.getElementById('domBloque'),
-        domDepartamento: document.getElementById('domDepartamento'),
-        domComunaCodigo: document.getElementById('domComunaCodigo'),
-        domComunaNombre: document.getElementById('domComunaNombre'),
-        domSector: document.getElementById('domSector'),
-        domTelefono: document.getElementById('domTelefono'),
-        domTelefonoSecundario: document.getElementById('domTelefonoSecundario'),
-        domCelular: document.getElementById('domCelular'),
-        domCorreo: document.getElementById('domCorreo'),
-
-        // Elecciones
-        elecFechaUltima: document.getElementById('elecFechaUltima'),
-        elecFechaVencimiento: document.getElementById('elecFechaVencimiento'),
-
-        // SUBDERE
-        subFechaInscripcion: document.getElementById('subFechaInscripcion'),
-        subInscripcion: document.getElementById('subInscripcion'),
-        subFechaActualizacion: document.getElementById('subFechaActualizacion'),
-
-        // Observaciones y Antecedentes
-        observaciones: document.getElementById('observaciones'),
-        antecedentesFinancieros: document.getElementById('antecedentesFinancieros')
-    };
-
-    // Tables
-    const tablaAtenciones = document.getElementById('tablaAtenciones');
-    const tablaProyectos = document.getElementById('tablaProyectos');
-
-    let organizacionData = null;
-    let atencionesData = [];
-    let proyectosData = [];
-
-    // Initialize
-    loadOrganizacion();
-    loadAtenciones();
-    loadProyectos();
-
-    // Load organization data from JSON
-    function loadOrganizacion() {
-        fetch('../recursos/jsons/organizaciones_organizacion_mock.json')
-            .then(response => response.json())
-            .then(data => {
-                organizacionData = data.organizacion;
-                populateForm();
-            })
-            .catch(error => console.error('Error loading organization data:', error));
+    if (!id) {
+        solicitarID();
+    } else {
+        // Mock load data
+        console.log('Loading organization:', id);
+        loadOrganizacion(id);
     }
 
-    // Load atenciones data from JSON
-    function loadAtenciones() {
-        fetch('../recursos/jsons/organizaciones_atenciones_mock.json')
-            .then(response => response.json())
-            .then(data => {
-                atencionesData = data.atenciones;
-                renderAtenciones();
-            })
-            .catch(error => console.error('Error loading atenciones:', error));
-    }
-
-    // Load proyectos data from JSON
-    function loadProyectos() {
-        fetch('../recursos/jsons/organizaciones_proyectos_mock.json')
-            .then(response => response.json())
-            .then(data => {
-                proyectosData = data.proyectos;
-                renderProyectos();
-            })
-            .catch(error => console.error('Error loading proyectos:', error));
-    }
-
-    // Populate form with organization data
-    function populateForm() {
-        if (!organizacionData) return;
-
-        // Información General
-        setFieldValue(formFields.tipoOrganizacion, organizacionData.tipoOrganizacion);
-        setFieldValue(formFields.codigo, organizacionData.codigo);
-        setFieldValue(formFields.rut, organizacionData.rut);
-        setFieldValue(formFields.rpj, organizacionData.rpj);
-        setFieldValue(formFields.categoria, organizacionData.categoria);
-        setFieldValue(formFields.subcategoria, organizacionData.subcategoria);
-        setFieldValue(formFields.estado, organizacionData.estado);
-        setFieldValue(formFields.nombre, organizacionData.nombre);
-        setFieldValue(formFields.razonSocial, organizacionData.razonSocial);
-        setFieldValue(formFields.unidadVecinal, organizacionData.unidadVecinal);
-        setFieldValue(formFields.registro, organizacionData.registro);
-        setFieldValue(formFields.folio, organizacionData.folio);
-        setFieldValue(formFields.fechaRegistro, organizacionData.fechaRegistro);
-        setFieldValue(formFields.numeroSocios, organizacionData.numeroSocios);
-        setFieldValue(formFields.adecuacionEstatuto, organizacionData.adecuacionEstatuto);
-        setFieldValue(formFields.fechaAdecuacion, organizacionData.fechaAdecuacion);
-        setFieldValue(formFields.leyDeporte, organizacionData.leyDeporte);
-        setFieldValue(formFields.fechaLeyDeporte, organizacionData.fechaLeyDeporte);
-        setFieldValue(formFields.personalidadJuridica, organizacionData.personalidadJuridica);
-        setFieldValue(formFields.otorgadaPor, organizacionData.otorgadaPor);
-
-        // Objeto Social
-        if (organizacionData.objetoSocial) {
-            setFieldValue(formFields.objetoTipoOrganizacion, organizacionData.objetoSocial.tipoOrganizacion);
-            setFieldValue(formFields.areaEspecializacion, organizacionData.objetoSocial.areaEspecializacion);
-            setFieldValue(formFields.fechaIngreso, organizacionData.objetoSocial.fechaIngreso);
-            setFieldValue(formFields.fechaTermino, organizacionData.objetoSocial.fechaTermino);
-            setFieldValue(formFields.descripcionObjeto, organizacionData.objetoSocial.descripcion);
-        }
-
-        // Representante Legal
-        if (organizacionData.representanteLegal) {
-            const rep = organizacionData.representanteLegal;
-            setFieldValue(formFields.repRut, rep.rut);
-            setFieldValue(formFields.repApellidoPaterno, rep.apellidoPaterno);
-            setFieldValue(formFields.repApellidoMaterno, rep.apellidoMaterno);
-            setFieldValue(formFields.repNombres, rep.nombres);
-        }
-
-        // Domicilio
-        if (organizacionData.domicilio) {
-            const dom = organizacionData.domicilio;
-            setFieldValue(formFields.domCalle, dom.calle);
-            setFieldValue(formFields.domNumero, dom.numero);
-            setFieldValue(formFields.domBloque, dom.bloque);
-            setFieldValue(formFields.domDepartamento, dom.departamento);
-            setFieldValue(formFields.domComunaCodigo, dom.comunaCodigo);
-            setFieldValue(formFields.domComunaNombre, dom.comunaNombre);
-            setFieldValue(formFields.domSector, dom.sector);
-            setFieldValue(formFields.domTelefono, dom.telefono);
-            setFieldValue(formFields.domTelefonoSecundario, dom.telefonoSecundario);
-            setFieldValue(formFields.domCelular, dom.celular);
-            setFieldValue(formFields.domCorreo, dom.correo);
-        }
-
-        // Elecciones
-        if (organizacionData.elecciones) {
-            setFieldValue(formFields.elecFechaUltima, organizacionData.elecciones.fechaUltima);
-            setFieldValue(formFields.elecFechaVencimiento, organizacionData.elecciones.fechaVencimiento);
-        }
-
-        // SUBDERE
-        if (organizacionData.subdere) {
-            setFieldValue(formFields.subFechaInscripcion, organizacionData.subdere.fechaInscripcion);
-            setFieldValue(formFields.subInscripcion, organizacionData.subdere.inscripcion);
-            setFieldValue(formFields.subFechaActualizacion, organizacionData.subdere.fechaActualizacion);
-        }
-
-        // Observaciones y Antecedentes
-        setFieldValue(formFields.observaciones, organizacionData.observaciones);
-        setFieldValue(formFields.antecedentesFinancieros, organizacionData.antecedentesFinancieros);
-    }
-
-    // Helper function to set field value
-    function setFieldValue(field, value) {
-        if (field && value !== null && value !== undefined) {
-            field.value = value;
-        }
-    }
-
-    // Render atenciones table
-    function renderAtenciones() {
-        const tbody = tablaAtenciones.querySelector('tbody');
-        tbody.innerHTML = '';
-
-        if (atencionesData.length === 0) {
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="7" class="text-center text-muted">No hay atenciones registradas</td>
-                </tr>
-            `;
-            return;
-        }
-
-        atencionesData.forEach(atencion => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${atencion.numeroAtencion}</td>
-                <td>${atencion.fecha}</td>
-                <td>${atencion.atencion}</td>
-                <td>${atencion.proyecto}</td>
-                <td><span class="badge ${atencion.estadoClass}">${atencion.estado}</span></td>
-                <td>${atencion.usuario}</td>
-                <td><button class="btn btn-sm btn-outline-secondary">✏️</button></td>
-            `;
-            tbody.appendChild(row);
-        });
-    }
-
-    // Render proyectos table
-    function renderProyectos() {
-        const tbody = tablaProyectos.querySelector('tbody');
-        tbody.innerHTML = '';
-
-        if (proyectosData.length === 0) {
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="6" class="text-center text-muted">No hay proyectos registrados</td>
-                </tr>
-            `;
-            return;
-        }
-
-        proyectosData.forEach(proyecto => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${proyecto.unidad}</td>
-                <td>${proyecto.anio}</td>
-                <td>${proyecto.numeroIngreso}</td>
-                <td>${proyecto.nombreProyecto}</td>
-                <td>${proyecto.tipoFondo}</td>
-                <td><button class="btn btn-sm btn-outline-secondary">✏️</button></td>
-            `;
-            tbody.appendChild(row);
+    // Initialize RUT formatting
+    const rutInput = document.getElementById('rut');
+    if (rutInput) {
+        rutInput.addEventListener('blur', function () {
+            formatearRUT(this);
         });
     }
 });
 
-// Global functions for action buttons
-async function limpiarFormulario() {
-    const result = await Swal.fire({
-        title: '¿Está seguro?',
-        text: '¿Está seguro que desea limpiar el formulario?',
-        icon: 'warning',
+async function solicitarID() {
+    const { value: formValues } = await Swal.fire({
+        title: 'Organización no especificada',
+        html: `
+            <div class="mb-3 text-start">
+                <label class="form-label small fw-bold">Tipo de Identificador:</label>
+                <select id="swal-id-type" class="form-select">
+                    <option value="org_id">Cód. Interno (Interno)</option>
+                    <option value="org_rut" selected>RUT (Ej: 99.999.999-9)</option>
+                </select>
+            </div>
+            <div class="mb-2 text-start">
+                <label class="form-label small fw-bold">Valor:</label>
+                <input id="swal-id-value" class="form-control" placeholder="Ingrese el valor...">
+            </div>
+        `,
+        focusConfirm: false,
         showCancelButton: true,
-        confirmButtonText: 'Sí, limpiar',
-        cancelButtonText: 'Cancelar'
+        confirmButtonText: 'Buscar',
+        cancelButtonText: 'Ir a Listado Masivo',
+        allowOutsideClick: false,
+        preConfirm: () => {
+            const type = document.getElementById('swal-id-type').value;
+            const value = document.getElementById('swal-id-value').value.trim();
+            if (!value) {
+                Swal.showValidationMessage('¡Debe ingresar un valor!');
+                return false;
+            }
+            return { type, value };
+        }
     });
-    if (result.isConfirmed) {
-        location.reload();
+
+    if (!formValues) {
+        window.location.href = 'organizaciones_consulta_masiva.html';
+        return;
+    }
+
+    const { type, value } = formValues;
+    window.location.href = `organizaciones_consulta_organizacion.html?id=${value}`;
+}
+
+async function loadOrganizacion(id) {
+    try {
+        const response = await fetch('../recursos/jsons/organizaciones_organizacion_mock.json');
+        const data = await response.json();
+        const org = data.organizacion;
+
+        // Populate fields
+        document.getElementById('nombre').value = org.nombre;
+        document.getElementById('rut').value = org.rut;
+        document.getElementById('codigo').value = org.codigo;
+        // ... populate more if needed as per UI
+
+        renderAtenciones();
+        renderProyectos();
+    } catch (e) {
+        console.error('Error loading org data', e);
     }
 }
 
-function editarFormulario() {
-    Swal.fire('Modo Edición', 'Modo de edición activado\n(Funcionalidad de mockup)', 'info');
-    // Enable all form fields
-    document.querySelectorAll('input, select, textarea').forEach(field => {
-        field.removeAttribute('readonly');
-        field.removeAttribute('disabled');
-    });
+function renderAtenciones() {
+    fetch('../recursos/jsons/organizaciones_atenciones_mock.json')
+        .then(r => r.json())
+        .then(data => {
+            const tbody = document.querySelector('#tablaAtenciones tbody');
+            tbody.innerHTML = '';
+            data.atenciones.forEach(at => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="fw-bold">${at.numeroAtencion}</td>
+                    <td>${at.fecha}</td>
+                    <td>${at.atencion}</td>
+                    <td>${at.proyecto}</td>
+                    <td><span class="badge ${at.estadoClass} fw-normal">${at.estado}</span></td>
+                    <td>${at.usuario}</td>
+                    <td class="text-end">
+                        <button class="btn btn-sm btn-outline-secondary"><i data-feather="eye"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            feather.replace();
+        });
 }
 
+function renderProyectos() {
+    fetch('../recursos/jsons/organizaciones_proyectos_mock.json')
+        .then(r => r.json())
+        .then(data => {
+            const tbody = document.querySelector('#tablaProyectos tbody');
+            tbody.innerHTML = '';
+            data.proyectos.forEach(pr => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${pr.unidad}</td>
+                    <td>${pr.anio}</td>
+                    <td class="fw-bold">${pr.numeroIngreso}</td>
+                    <td>${pr.nombreProyecto}</td>
+                    <td>${pr.tipoFondo}</td>
+                    <td class="text-end">
+                        <button class="btn btn-sm btn-outline-secondary"><i data-feather="eye"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            feather.replace();
+        });
+}
+
+function buscarOrganizacion() { solicitarID(); }
+function nuevaOrganizacion() { window.location.href = 'organizaciones_consulta_organizacion.html'; }
+function editarFormulario() { Swal.fire('Edición', 'Habilitando campos...', 'info'); }
+function generarCertificado() { Swal.fire('PDF', 'Generando certificado...', 'info'); }
+
 function guardarCambios() {
-    Swal.fire('Éxito', 'Cambios guardados exitosamente\n(Funcionalidad de mockup)', 'success');
+    Swal.fire('Éxito', 'Organización guardada correctamente.', 'success');
+}
+
+function limpiarFormulario() {
+    document.getElementById('formOrganizacion').reset();
+}
+
+function formatearRUT(input) {
+    let value = input.value.replace(/[^0-9kK]/g, '');
+    if (value.length > 1) {
+        const dv = value.slice(-1);
+        const number = value.slice(0, -1);
+        const formattedNumber = number.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        input.value = formattedNumber + '-' + dv;
+    }
 }

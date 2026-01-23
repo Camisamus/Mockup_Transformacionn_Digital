@@ -1,125 +1,82 @@
 // postulaciones_consulta_masiva.js
-// Handles mass applications query functionality
-
 let postulacionesData = [];
 
-// Load data on page load
 document.addEventListener('DOMContentLoaded', function () {
-    cargarDatos();
+    cargarDatosPostulaciones();
 });
 
-/**
- * Load applications data from JSON file
- */
-async function cargarDatos() {
+async function cargarDatosPostulaciones() {
     try {
         const response = await fetch('../recursos/jsons/postulaciones_consulta_masiva_mock.json');
         postulacionesData = await response.json();
-        renderizarTabla(postulacionesData);
+        renderizarTablaPostulaciones(postulacionesData);
     } catch (error) {
         console.error('Error cargando datos de postulaciones:', error);
     }
 }
 
-/**
- * Render table with applications data
- */
-function renderizarTabla(datos) {
+function renderizarTablaPostulaciones(datos) {
     const tbody = document.querySelector('#tablaPostulaciones tbody');
     tbody.innerHTML = '';
 
-    datos.forEach(postulacion => {
+    datos.forEach(post => {
         const tr = document.createElement('tr');
 
-        // Estado badge
-        let badgeClass = 'badge-aprobado';
-        if (postulacion.estado === 'En Evaluación') badgeClass = 'badge-evaluacion';
-        if (postulacion.estado === 'Pendiente') badgeClass = 'badge-pendiente';
-        if (postulacion.estado === 'Finalizado') badgeClass = 'badge-finalizado';
-
-        // Format currency
-        const montoFormateado = new Intl.NumberFormat('es-CL', {
-            style: 'currency',
-            currency: 'CLP'
-        }).format(postulacion.monto);
+        // Estado badge logic
+        let badgeClass = 'bg-success';
+        if (post.estado === 'En Evaluación') badgeClass = 'bg-warning text-dark';
+        if (post.estado === 'Pendiente') badgeClass = 'bg-secondary';
 
         tr.innerHTML = `
-            <td>${postulacion.rpj}</td>
-            <td>${postulacion.rut}</td>
-            <td>${postulacion.nombre_organizacion}</td>
-            <td>${postulacion.tipo_organizacion}</td>
-            <td>${postulacion.codigo_organizacion}</td>
-            <td>${postulacion.numero_proyecto}</td>
-            <td>${postulacion.numero_subvencion}</td>
-            <td>${postulacion.nombre_proyecto}</td>
-            <td>${postulacion.finalidad_proyecto}</td>
-            <td>${postulacion.tipo_fondo}</td>
-            <td>${postulacion.unidad}</td>
-            <td>${postulacion.fecha_ingreso}</td>
-            <td>${montoFormateado}</td>
-            <td><span class="badge ${badgeClass}">${postulacion.estado}</span></td>
-            <td>${postulacion.anio_ingreso}</td>
-            <td>${postulacion.numero_ingreso}</td>
+            <td class="fw-bold">${post.rut}</td>
+            <td class="text-primary fw-medium">${post.nombre_organizacion}</td>
+            <td class="fw-bold">${post.numero_ingreso}</td>
+            <td>${post.nombre_proyecto}</td>
+            <td>${post.tipo_fondo}</td>
+            <td>${post.fecha_ingreso}</td>
+            <td>$${new Intl.NumberFormat('es-CL').format(post.monto)}</td>
+            <td><span class="badge ${badgeClass} fw-normal">${post.estado}</span></td>
+            <td class="text-end">
+                <button class="btn btn-sm btn-outline-secondary" onclick="verDetalle('${post.numero_ingreso}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+            </td>
         `;
 
         tbody.appendChild(tr);
     });
 
-    // Update count
-    document.getElementById('resultados_count').textContent = datos.length;
+    const countEl = document.getElementById('resultados_count');
+    if (countEl) countEl.textContent = datos.length;
 }
 
-/**
- * Search applications with filters
- */
-function buscarPostulaciones() {
+window.buscarPostulaciones = function () {
     const filtros = {
         rut: document.getElementById('filtro_rut').value.toLowerCase(),
         nombre_org: document.getElementById('filtro_nombre_org').value.toLowerCase(),
-        estado: document.getElementById('filtro_estado').value.toLowerCase(),
-        unidad: document.getElementById('filtro_unidad').value.toLowerCase()
+        estado: document.getElementById('filtro_estado').value.toLowerCase()
     };
 
-    const datosFiltrados = postulacionesData.filter(postulacion => {
+    const datosFiltrados = postulacionesData.filter(post => {
         let cumple = true;
-
-        if (filtros.rut && !postulacion.rut.toLowerCase().includes(filtros.rut)) {
-            cumple = false;
-        }
-        if (filtros.nombre_org && !postulacion.nombre_organizacion.toLowerCase().includes(filtros.nombre_org)) {
-            cumple = false;
-        }
-        if (filtros.estado && !postulacion.estado.toLowerCase().includes(filtros.estado)) {
-            cumple = false;
-        }
-        if (filtros.unidad && !postulacion.unidad.toLowerCase().includes(filtros.unidad)) {
-            cumple = false;
-        }
-
+        if (filtros.rut && !post.rut.toLowerCase().includes(filtros.rut)) cumple = false;
+        if (filtros.nombre_org && !post.nombre_organizacion.toLowerCase().includes(filtros.nombre_org)) cumple = false;
+        if (filtros.estado && !post.estado.toLowerCase().includes(filtros.estado)) cumple = false;
         return cumple;
     });
 
-    renderizarTabla(datosFiltrados);
-    console.log('Búsqueda realizada. Resultados:', datosFiltrados.length);
+    renderizarTablaPostulaciones(datosFiltrados);
 }
 
-/**
- * Clear all filters
- */
-function limpiarFiltros() {
-    document.getElementById('filtro_id').value = '';
-    document.getElementById('filtro_rut').value = '';
-    document.getElementById('filtro_nombre_org').value = '';
-    document.getElementById('filtro_tipo_postulacion').value = '';
-    document.getElementById('filtro_tipo_proyecto').value = '';
-    document.getElementById('filtro_etapa').value = '';
-    document.getElementById('filtro_tipo_fondo').value = '';
-    document.getElementById('filtro_unidad').value = '';
-    document.getElementById('filtro_monto_maximo').value = '';
-    document.getElementById('filtro_fecha_inicio').value = '';
-    document.getElementById('filtro_fecha_fin').value = '';
-    document.getElementById('filtro_estado').value = '';
+window.limpiarFiltros = function () {
+    document.getElementById('formFiltros').reset();
+    renderizarTablaPostulaciones(postulacionesData);
+}
 
-    renderizarTabla(postulacionesData);
-    console.log('Filtros limpiados');
+window.verDetalle = function (id) {
+    window.location.href = `postulaciones_consulta_postulacion.html?id=${id}`;
+}
+
+window.crearNueva = function () {
+    window.location.href = 'postulaciones_consulta_postulacion.html';
 }

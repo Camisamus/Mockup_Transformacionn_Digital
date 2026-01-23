@@ -1,9 +1,9 @@
-// Load payment data on page load
+// subvenciones_consulta_masiva_pagos.js
+let pagosData = [];
+
 document.addEventListener('DOMContentLoaded', function () {
     cargarDatosPagos();
 });
-
-let pagosData = [];
 
 async function cargarDatosPagos() {
     try {
@@ -22,38 +22,53 @@ function renderizarTablaPagos(datos) {
     datos.forEach(pago => {
         const tr = document.createElement('tr');
 
-        let badgeClass = pago.estado_evento === 'TERMINADA' ? 'badge-terminada' : 'badge-pendiente';
-        let fechaDigit = pago.fecha_digitalizacion || '-';
+        let badgeClass = 'bg-success';
+        if (pago.estado_evento.includes('PENDIENTE')) badgeClass = 'bg-warning text-dark';
 
         tr.innerHTML = `
-            <td>${pago.numero_subvencion}</td>
+            <td class="fw-bold">${pago.numero_subvencion}</td>
             <td>${pago.fecha_evento}</td>
-            <td><span class="badge ${badgeClass}">${pago.estado_evento}</span></td>
-            <td>${fechaDigit}</td>
+            <td><span class="badge ${badgeClass} fw-normal">${pago.estado_evento}</span></td>
+            <td>${pago.fecha_digitalizacion || '-'}</td>
             <td>${pago.responsable_evento}</td>
-            <td>${pago.glosa_evento}</td>
-            <td>${pago.observaciones}</td>
+            <td class="small text-muted">${pago.glosa_evento}</td>
+            <td class="text-end">
+                <button class="btn btn-sm btn-outline-secondary" onclick="verDetalle('${pago.numero_subvencion}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+            </td>
         `;
 
         tbody.appendChild(tr);
     });
+
+    const countEl = document.getElementById('resultados_count');
+    if (countEl) countEl.textContent = datos.length;
 }
 
-function buscarPagos() {
-    console.log('Buscando pagos');
-    // Implement filtering logic here
+window.buscarPagos = function () {
+    const filtros = {
+        subvencion: document.getElementById('filtro_numero_subvencion').value.toLowerCase(),
+        responsable: document.getElementById('filtro_responsable').value.toLowerCase(),
+        glosa: document.getElementById('filtro_glosa').value.toLowerCase()
+    };
+
+    const datosFiltrados = pagosData.filter(p => {
+        let cumple = true;
+        if (filtros.subvencion && !p.numero_subvencion.toLowerCase().includes(filtros.subvencion)) cumple = false;
+        if (filtros.responsable && !p.responsable_evento.toLowerCase().includes(filtros.responsable)) cumple = false;
+        if (filtros.glosa && !p.glosa_evento.toLowerCase().includes(filtros.glosa) && !p.observaciones.toLowerCase().includes(filtros.glosa)) cumple = false;
+        return cumple;
+    });
+
+    renderizarTablaPagos(datosFiltrados);
 }
 
-function limpiarFiltros() {
-    document.getElementById('filtro_numero_subvencion').value = '';
-    document.getElementById('filtro_fecha_evento_inicio').value = '';
-    document.getElementById('filtro_fecha_evento_fin').value = '';
-    document.getElementById('filtro_estado_evento').value = '';
-    document.getElementById('filtro_fecha_digitalizacion_inicio').value = '';
-    document.getElementById('filtro_fecha_digitalizacion_fin').value = '';
-    document.getElementById('filtro_responsable').value = '';
-    document.getElementById('filtro_glosa').value = '';
-    document.getElementById('filtro_observaciones').value = '';
-
+window.limpiarFiltros = function () {
+    document.getElementById('formFiltros').reset();
     renderizarTablaPagos(pagosData);
+}
+
+window.verDetalle = function (numero) {
+    window.location.href = 'subvenciones_consulta_subvencion.html?id=' + numero;
 }

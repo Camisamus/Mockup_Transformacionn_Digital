@@ -8,35 +8,33 @@ function cargarListaEspera() {
         .then(response => response.json())
         .then(data => {
             const tbody = document.querySelector('#tablaEspera tbody');
-            tbody.innerHTML = ''; // Clear existing content
+            tbody.innerHTML = '';
 
             data.forEach(atencion => {
                 const row = document.createElement('tr');
 
-                // Determine badge class based on priority
                 let badgeClass = 'badge-normal';
-                if (atencion.prioridad === 'ALTA') {
-                    badgeClass = 'badge-alta';
-                } else if (atencion.prioridad === 'BAJA') {
-                    badgeClass = 'badge-baja';
-                }
+                if (atencion.prioridad === 'ALTA') badgeClass = 'badge-alta';
+                else if (atencion.prioridad === 'BAJA') badgeClass = 'badge-baja';
 
                 row.innerHTML = `
                     <td><span class="${badgeClass}">${atencion.prioridad}</span></td>
-                    <td>${atencion.codigo}</td>
-                    <td><span class="type-badge">${atencion.tipo}</span></td>
+                    <td class="fw-bold">${atencion.codigo}</td>
+                    <td><span class="badge bg-white text-dark border fw-normal px-2">${atencion.tipo}</span></td>
                     <td>${atencion.organizacion}</td>
                     <td>${atencion.rut}</td>
                     <td>${atencion.area}</td>
                     <td>${atencion.uv}</td>
                     <td>${atencion.ingreso}</td>
-                    <td><span class="tiempo-badge"><i data-feather="clock"></i> ${atencion.tiempo}</span></td>
+                    <td><span class="badge bg-light text-dark fw-normal border"><i data-feather="clock" style="width:12px"></i> ${atencion.tiempo}</span></td>
                     <td>${atencion.usuario}</td>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <i data-feather="eye" class="action-icon"></i>
-                            <button class="action-btn-tomar" onclick="abrirModalAtencion('${atencion.codigo}')">
-                                <i data-feather="user"></i> Tomar
+                    <td class="text-end">
+                        <div class="d-flex justify-content-end gap-2">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="verDetalle('${atencion.codigo}')">
+                                <i data-feather="eye" style="width:14px"></i>
+                            </button>
+                            <button class="btn btn-sm btn-dark px-3" onclick="abrirModalAtencion('${atencion.codigo}')">
+                                Tomar
                             </button>
                         </div>
                     </td>
@@ -44,26 +42,44 @@ function cargarListaEspera() {
                 tbody.appendChild(row);
             });
 
-            // Re-initialize feather icons after adding new content
-            if (typeof feather !== 'undefined') {
-                feather.replace();
-            }
+            if (typeof feather !== 'undefined') feather.replace();
         })
         .catch(error => {
             console.error('Error cargando lista de espera:', error);
         });
 }
 
+function verDetalle(id) {
+    window.location.href = `atenciones_consulta_atencion.html?id=${id}`;
+}
+
 function abrirModalAtencion(id) {
     var myModal = new bootstrap.Modal(document.getElementById('modalAtender'));
-    // In a real application, you would fetch the details for 'id' here
-    // and populate the modal fields before showing it.
-
-    // Update title for demo purposes
     var modalTitle = document.getElementById('modalTitle');
-    if (modalTitle) {
-        modalTitle.innerText = 'Atender: ' + id;
-    }
-
+    if (modalTitle) modalTitle.innerText = 'Atender: ' + id;
     myModal.show();
 }
+
+window.completarAtencion = async function () {
+    const { isConfirmed } = await Swal.fire({
+        title: '¿Finalizar atención?',
+        text: "Se registrará la solución y se cerrará la atención.",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, finalizar',
+        cancelButtonText: 'Cancelar'
+    });
+
+    if (isConfirmed) {
+        Swal.fire({
+            title: 'Procesando...',
+            didOpen: () => Swal.showLoading()
+        });
+
+        setTimeout(() => {
+            Swal.fire('Éxito', 'Atención finalizada correctamente.', 'success').then(() => {
+                location.reload();
+            });
+        }, 1000);
+    }
+};

@@ -1,30 +1,37 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
     console.log('Consulta de Atención loaded');
-    // Here we can initialize data or load details if an ID is provided in the URL
+    if (!window.API_BASE_URL) window.API_BASE_URL = 'http://127.0.0.1/api';
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+
+    if (!id) {
+        solicitarID();
+        return;
+    }
+
+    // Logic to load attention details by id...
+    console.log('Loading attention ID:', id);
 });
 
 function buscarAtencion() {
-    alert('Funcionalidad de búsqueda en desarrollo');
+    solicitarID();
 }
 
 function nuevaAtencion() {
-    // Reset form
-    document.getElementById('formConsultaAtencion').reset();
-
-    // Set default keys if needed
-    // document.getElementById('codigoAtencion').value = 'AT-NEW';
+    window.location.href = 'atenciones_nueva_atencion.html';
 }
 
 function modificarAtencion() {
-    alert('Habilitar edición de campos');
-    // Logic to enable disabled fields would go here
+    Swal.fire('Información', 'Habilitando edición de campos...', 'info');
+    // Logic to enable fields
 }
 
 function exportarPDF() {
-    alert('Generando PDF...');
+    Swal.fire('Exportar', 'Generando PDF de la atención...', 'info');
 }
 
-function guardarAtencion() {
+async function guardarAtencion() {
     // Collect data
     const data = {
         tipo: document.getElementById('tipoAtencion').value,
@@ -43,6 +50,79 @@ function guardarAtencion() {
         observaciones: document.getElementById('observaciones').value,
     };
 
-    console.log('Guardando atención:', data);
-    alert('Atención guardada correctamente (Simulado)');
+    const { isConfirmed } = await Swal.fire({
+        title: '¿Guardar cambios?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, guardar'
+    });
+
+    if (isConfirmed) {
+        Swal.fire('Éxito', 'Atención guardada correctamente (Simulado)', 'success');
+        console.log('Guardando atención:', data);
+    }
+}
+
+async function solicitarID() {
+    const { value: formValues } = await Swal.fire({
+        title: 'Atención no especificada',
+        html: `
+            <div class="mb-3 text-start">
+                <label class="form-label small fw-bold">Tipo de Identificador:</label>
+                <select id="swal-id-type" class="form-select">
+                    <option value="atn_id">ID Interno</option>
+                    <option value="atn_codigo" selected>Código Atención (Ej: AT-001)</option>
+                </select>
+            </div>
+            <div class="mb-2 text-start">
+                <label class="form-label small fw-bold">Valor:</label>
+                <input id="swal-id-value" class="form-control" placeholder="Ingrese el valor...">
+            </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Buscar',
+        cancelButtonText: 'Ir a Listado',
+        allowOutsideClick: false,
+        preConfirm: () => {
+            const type = document.getElementById('swal-id-type').value;
+            const value = document.getElementById('swal-id-value').value.trim();
+            if (!value) {
+                Swal.showValidationMessage('¡Debe ingresar un valor!');
+                return false;
+            }
+            return { type, value };
+        }
+    });
+
+    if (!formValues) {
+        window.location.href = 'atenciones_listado_atenciones.html';
+        return;
+    }
+
+    const { type, value } = formValues;
+
+    try {
+        Swal.fire({ title: 'Buscando...', didOpen: () => Swal.showLoading() });
+
+        // Mocking search logic for Atenciones
+        // In a real scenario, this would call an API like solicitudes_desve.php but for atenciones
+
+        setTimeout(() => {
+            // Simulated success for demonstration
+            if (value === '999' || value === 'AT-999') {
+                const newUrl = new URL(window.location.href);
+                newUrl.searchParams.set('id', '999');
+                window.location.href = newUrl.toString();
+            } else {
+                Swal.fire('No encontrado', 'No se encontró ninguna atención con ese criterio.', 'error').then(() => {
+                    solicitarID();
+                });
+            }
+        }, 800);
+
+    } catch (e) {
+        console.error(e);
+        Swal.fire('Error', 'Error de conexión', 'error');
+    }
 }

@@ -3,9 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const tableBody = document.getElementById('lista-empresas');
     const emptyState = document.getElementById('empty-state');
 
-    // Load initial data logic moved to bottom
-
-
     // Form Submit Handler
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -18,12 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (rut && nombre) {
             addCompany({ rut, nombre, doc: fileName });
             form.reset();
-
-            // Trigger Sidebar update if available logic exists globally
-            // For now, reload or custom event could be used, but since sidebar is persistent/reloaded, 
-            // we might need to force a reload of the selector if we want immediate feedback in the sidebar without refresh.
-            // Let's dispatch a custom event on window
             window.dispatchEvent(new Event('companiesUpdated'));
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Empresa Registrada',
+                text: 'La empresa ha sido agregada exitosamente.',
+                timer: 2000,
+                showConfirmButton: false
+            });
         }
     });
 
@@ -36,33 +36,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderTable() {
+        if (!tableBody) return;
         const companies = getCompanies();
         tableBody.innerHTML = '';
 
         if (companies.length === 0) {
-            emptyState.style.display = 'block';
+            if (emptyState) emptyState.style.display = 'block';
         } else {
-            emptyState.style.display = 'none';
+            if (emptyState) emptyState.style.display = 'none';
             companies.forEach((company, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${company.rut}</td>
-                    <td class="fw-bold">${company.nombre}</td>
-                    <td><span class="badge bg-light text-dark border"><i data-feather="file-text" style="width:12px"></i> ${company.doc}</span></td>
+                    <td class="fw-bold">${company.rut}</td>
+                    <td>${company.nombre}</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-danger btn-delete" data-index="${index}">
-                            <i data-feather="trash-2"></i>
+                        <span class="badge bg-light text-dark border fw-normal shadow-xs">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                             ${company.doc}
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <button class="btn btn-sm btn-outline-danger" onclick="window.deleteCompany(${index})">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                         </button>
                     </td>
                 `;
                 tableBody.appendChild(row);
-            });
-
-            // Re-attach listeners involved in innerHTML
-            document.querySelectorAll('.btn-delete').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    deleteCompany(btn.getAttribute('data-index'));
-                });
             });
 
             if (window.feather) window.feather.replace();
@@ -76,14 +75,14 @@ document.addEventListener('DOMContentLoaded', () => {
         renderTable();
     }
 
-    async function deleteCompany(index) {
+    window.deleteCompany = async function (index) {
         const result = await Swal.fire({
-            title: '¿Está seguro?',
-            text: '¿Está seguro de eliminar esta empresa?',
+            title: '¿Eliminar empresa?',
+            text: 'Esta acción desvinculará la representación de la empresa.',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar'
         });
@@ -103,9 +102,12 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 localStorage.setItem('local_companies', JSON.stringify(data));
-                renderTable(); // Use renderTable directly which acts as loadCompanies
+                renderTable();
             })
-            .catch(error => console.error('Error loading mock companies:', error));
+            .catch(error => {
+                console.error('Error loading mock companies:', error);
+                renderTable();
+            });
     } else {
         renderTable();
     }

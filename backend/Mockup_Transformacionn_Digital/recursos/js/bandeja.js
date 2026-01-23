@@ -4,8 +4,8 @@ let currentPage = 1;
 const itemsPerPage = 5; // Mostrar 5 items por página
 
 document.addEventListener('DOMContentLoaded', async function () {
-    const API_BASE_URL = window.API_BASE_URL || (window.location.origin + '/api'); // Use global or fallback
-    const tbody = document.querySelector('.tasks-table tbody');
+    const API_BASE_URL = window.API_BASE_URL || (window.location.origin + '/api');
+    const tbody = document.querySelector('#tablaBandeja tbody');
 
     // Clear loading/static
     tbody.innerHTML = '<tr><td colspan="6" class="text-center">Cargando bandeja...</td></tr>';
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 function renderPage(page) {
     currentPage = page;
-    const tbody = document.querySelector('.tasks-table tbody');
+    const tbody = document.querySelector('#tablaBandeja tbody');
 
     // Calculate slice
     const start = (page - 1) * itemsPerPage;
@@ -98,19 +98,24 @@ function renderTable(items, tbody) {
         // Main Row Content
         // We ensure "d-none d-md-table-cell" for columns we want to hide on mobile
         row.innerHTML = `
-            <td class="task-title font-weight-bold">
-                <div class="d-flex align-items-center">
-                    <button class="btn btn-sm btn-link p-0 me-2 d-md-none" onclick="toggleRow('${rowId}', event)">
-                        <i data-feather="plus-circle"></i>
-                    </button>
-                    ${item.asunto || 'Sin Asunto'}
+            <td class="task-title fw-bold text-primary">
+                ${item.asunto || 'Sin Asunto'}
+            </td>
+            <td>${item.origen}</td> 
+            <td>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; font-size: 10px;">YO</div>
+                    <span>Mí mismo</span>
                 </div>
             </td>
-            <td class="task-role d-none d-md-table-cell">${item.origen}</td> 
-            <td class="d-none d-md-table-cell">${respHTML}</td>
-            <td class="d-none d-md-table-cell">${item.origen}</td> 
-            <td class="d-none d-md-table-cell">${new Date(item.fecha).toLocaleDateString()}</td>
-            <td><span class="status-badge ${statusClass}">${item.estado}</span></td>
+            <td>${item.origen}</td> 
+            <td>${new Date(item.fecha).toLocaleDateString()}</td>
+            <td><span class="badge ${item.estado === 'Atrasada' ? 'bg-danger' : (item.estado === 'Completada' ? 'bg-success' : 'bg-warning text-dark')} fw-normal">${item.estado}</span></td>
+            <td class="text-end">
+                <button class="btn btn-sm btn-outline-secondary">
+                    <i data-feather="arrow-right"></i>
+                </button>
+            </td>
         `;
 
         // Navigation on row click (excluding the toggle button)
@@ -176,19 +181,18 @@ window.toggleRow = toggleRow;
 
 function renderPagination(totalItems, currentPage) {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
-    const container = document.querySelector('.pagination-controls');
+    // Simplified pagination for the new UI buttons
+    const btnAnt = document.getElementById('btnAnterior');
+    const btnSig = document.getElementById('btnSiguiente');
 
-    if (!container) return; // Should allow this gracefully
-
-    container.innerHTML = '';
-
-    // Previous Button
-    const prevBtn = document.createElement('button');
-    prevBtn.className = 'pagination-btn';
-    prevBtn.innerText = 'Anterior';
-    prevBtn.disabled = currentPage === 1;
-    prevBtn.onclick = () => renderPage(currentPage - 1);
-    container.appendChild(prevBtn);
+    if (btnAnt) {
+        btnAnt.disabled = currentPage === 1;
+        btnAnt.onclick = () => renderPage(currentPage - 1);
+    }
+    if (btnSig) {
+        btnSig.disabled = currentPage === totalPages;
+        btnSig.onclick = () => renderPage(currentPage + 1);
+    }
 
     // Page Numbers (simplified: just current of total)
     /* 

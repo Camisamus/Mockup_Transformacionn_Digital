@@ -8,31 +8,28 @@ function cargarAtenciones() {
         .then(response => response.json())
         .then(data => {
             const tbody = document.querySelector('#tablaTomarAtencion tbody');
-            tbody.innerHTML = ''; // Clear existing content
+            tbody.innerHTML = '';
 
             data.forEach(atencion => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td class="col-id">${atencion.codigo}</td>
-                    <td><span class="type-badge">${atencion.tipo}</span></td>
+                    <td class="fw-bold">${atencion.codigo}</td>
+                    <td><span class="badge bg-white text-dark border fw-normal px-2">${atencion.tipo}</span></td>
                     <td>${atencion.organizacion}</td>
                     <td>${atencion.rut}</td>
                     <td>${atencion.area}</td>
-                    <td><span class="tiempo-badge"><i data-feather="clock"></i> ${atencion.tiempo_espera}</span></td>
-                    <td class="col-desc">${atencion.descripcion}</td>
+                    <td><span class="badge bg-light text-dark fw-normal border"><i data-feather="clock" style="width:12px"></i> ${atencion.tiempo_espera}</span></td>
+                    <td class="text-muted">${atencion.descripcion}</td>
                     <td class="text-end">
-                        <button class="action-btn-tomar float-end" onclick="abrirModalAtencion('${atencion.codigo}')">
-                            <i data-feather="user"></i> Tomar
+                        <button class="btn btn-sm btn-dark px-3" onclick="abrirModalAtencion('${atencion.codigo}')">
+                            Tomar
                         </button>
                     </td>
                 `;
                 tbody.appendChild(row);
             });
 
-            // Re-initialize feather icons after adding new content
-            if (typeof feather !== 'undefined') {
-                feather.replace();
-            }
+            if (typeof feather !== 'undefined') feather.replace();
         })
         .catch(error => {
             console.error('Error cargando atenciones:', error);
@@ -41,14 +38,31 @@ function cargarAtenciones() {
 
 function abrirModalAtencion(id) {
     var myModal = new bootstrap.Modal(document.getElementById('modalAtender'));
-    // In a real application, you would fetch the details for 'id' here
-    // and populate the modal fields before showing it.
-
-    // Update title for demo purposes
     var modalTitle = document.getElementById('modalTitle');
-    if (modalTitle) {
-        modalTitle.innerText = 'Atender: ' + id;
-    }
-
+    if (modalTitle) modalTitle.innerText = 'Atender: ' + id;
     myModal.show();
 }
+
+window.completarAtencion = async function () {
+    const { isConfirmed } = await Swal.fire({
+        title: '¿Finalizar atención?',
+        text: "Se registrará la solución y se cerrará la atención.",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, finalizar',
+        cancelButtonText: 'Cancelar'
+    });
+
+    if (isConfirmed) {
+        Swal.fire({
+            title: 'Procesando...',
+            didOpen: () => Swal.showLoading()
+        });
+
+        setTimeout(() => {
+            Swal.fire('Éxito', 'Atención finalizada correctamente.', 'success').then(() => {
+                location.reload();
+            });
+        }, 1000);
+    }
+};

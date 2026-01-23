@@ -27,47 +27,47 @@
     </style>
 </head>
 
-<body>
-    <div class="container-fluid">
+<body class="bg-light">
+    <div class="container-fluid py-4">
         <div class="main-header mb-4">
             <div class="header-title">
-                <h2>Nuevo Ingreso DESVE</h2>
-                <p>Complete el formulario para registrar una nueva solicitud DESVE</p>
+                <h2 class="fw-bold fs-4">Nuevo Ingreso DESVE</h2>
+                <p class="text-muted mb-0">Registre una nueva solicitud de Ventanilla Digital</p>
             </div>
             <div class="toolbar">
                 <button type="button" class="btn btn-toolbar" onclick="location.href='desve_listado_ingresos.html'">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="feather feather-grid">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="3" width="7" height="7"></rect>
                         <rect x="14" y="3" width="7" height="7"></rect>
                         <rect x="14" y="14" width="7" height="7"></rect>
                         <rect x="3" y="14" width="7" height="7"></rect>
-                    </svg> Bandeja DESVE
+                    </svg>
+                    Bandeja DESVE
                 </button>
             </div>
         </div>
 
         <form id="form_nuevo_desve">
-            <div class="row">
+            <div class="row g-4">
                 <!-- Left Column: Main Form -->
                 <div class="col-lg-8">
                     <!-- General Info -->
-                    <div class="card shadow-sm border-0 mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title mb-4">Información de la Solicitud</h5>
+                    <div class="card shadow-sm border-0 border-start border-4 border-primary mb-4">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold fs-6 mb-4">Información de la Solicitud</h5>
                             <div class="row g-3">
                                 <div class="col-12">
                                     <label for="NombreExpediente" class="form-label small fw-bold">Nombre del
                                         Expediente</label>
-                                    <input type="text" class="form-control" id="NombreExpediente" required
-                                        placeholder="Ej: Consulta por Luminaria">
+                                    <input type="text" class="form-control form-control-sm" id="NombreExpediente"
+                                        required placeholder="Ej: Consulta por Luminaria">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="ID_Organizacion" class="form-label small fw-bold">Tipo de
                                         Organización</label>
-                                    <select class="form-select" id="ID_Organizacion" required>
+                                    <select class="form-select form-select-sm" id="ID_Organizacion" required>
                                         <option value="" selected disabled>Seleccione tipo...</option>
                                     </select>
                                 </div>
@@ -75,16 +75,15 @@
                                 <div class="col-md-6">
                                     <label for="OrigenSolicitud" class="form-label small fw-bold">Origen de
                                         Solicitud</label>
-                                    <div class="input-group">
+                                    <div class="input-group input-group-sm">
                                         <select class="form-select" id="OrigenSolicitud" required>
                                             <option value="" selected disabled>Seleccione organización...</option>
                                         </select>
                                         <button class="btn btn-outline-secondary" type="button" id="btn_nuevo_origen"
                                             disabled>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round"
-                                                class="feather feather-plus">
+                                                stroke-linecap="round" stroke-linejoin="round">
                                                 <line x1="12" y1="5" x2="12" y2="19"></line>
                                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                                             </svg>
@@ -95,12 +94,13 @@
                                 <div class="col-md-6">
                                     <label for="FechaUltimaRecepcion" class="form-label small fw-bold">Fecha de
                                         Recepción</label>
-                                    <input type="date" class="form-control" id="FechaUltimaRecepcion" required>
+                                    <input type="date" class="form-control form-control-sm" id="FechaUltimaRecepcion"
+                                        required>
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="Sector" class="form-label small fw-bold">Sector</label>
-                                    <select class="form-select" id="Sector" required>
+                                    <select class="form-select form-select-sm" id="Sector" required>
                                         <!-- Populated via JS -->
                                     </select>
                                 </div>
@@ -108,16 +108,15 @@
                                 <div class="col-12">
                                     <label for="FuncionarioInternoNombre" class="form-label small fw-bold">Funcionario
                                         Interno</label>
-                                    <div class="input-group">
+                                    <div class="input-group input-group-sm">
                                         <input type="hidden" id="FuncionarioInternoId" required>
                                         <input type="text" class="form-control" id="FuncionarioInternoNombre"
                                             placeholder="Haga clic en la lupa para buscar..." readonly required>
                                         <button class="btn btn-outline-secondary" type="button"
                                             onclick="abrirModalFuncionarios()">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round"
-                                                class="feather feather-search">
+                                                stroke-linecap="round" stroke-linejoin="round">
                                                 <circle cx="11" cy="11" r="8"></circle>
                                                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                                             </svg>
@@ -128,13 +127,13 @@
                                 <div class="col-12">
                                     <label for="DetalleIngreso" class="form-label small fw-bold">Detalle de
                                         Ingreso</label>
-                                    <textarea class="form-control" id="DetalleIngreso" rows="4"
+                                    <textarea class="form-control form-control-sm" id="DetalleIngreso" rows="4"
                                         placeholder="Escriba el detalle aquí..."></textarea>
                                 </div>
 
                                 <div class="col-12">
                                     <label for="Observaciones" class="form-label small fw-bold">Observaciones</label>
-                                    <textarea class="form-control" id="Observaciones" rows="3"
+                                    <textarea class="form-control form-control-sm" id="Observaciones" rows="3"
                                         placeholder="Comentarios adicionales..."></textarea>
                                 </div>
                             </div>
@@ -144,38 +143,38 @@
 
                 <!-- Right Column: Sidebar -->
                 <div class="col-lg-4">
-                    <!-- Calculated Data Card (Read only, informative) -->
+                    <!-- Calculated Data Card -->
                     <div class="card shadow-sm border-0 mb-4 bg-light">
-                        <div class="card-body">
-                            <h5 class="card-title mb-3">Información Automática</h5>
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold fs-6 mb-3">Información Automática</h5>
                             <div class="mb-3">
                                 <label class="form-label small fw-bold">Prioridad Estimada</label>
-                                <input type="text" class="form-control form-control-sm" id="Prioridad" readonly
+                                <input type="text" class="form-control form-control-sm bg-white" id="Prioridad" readonly
                                     value="Calculando...">
                             </div>
                             <div class="mb-0">
                                 <label class="form-label small fw-bold">Vencimiento Proyectado</label>
-                                <input type="text" class="form-control form-control-sm" id="FechaVecimiento" readonly
-                                    value="Pendiente">
+                                <input type="text" class="form-control form-control-sm bg-white" id="FechaVecimiento"
+                                    readonly value="Pendiente">
                             </div>
                         </div>
                     </div>
 
                     <!-- Attachments Card -->
                     <div class="card shadow-sm border-0 mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title mb-3">Documentos Adjuntos</h5>
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold fs-6 mb-3">Documentos Adjuntos</h5>
                             <div class="drop-zone mb-3" id="drop_zone">
                                 <input type="file" id="inputArchivosSolicitud" hidden multiple>
                                 <div class="small text-muted">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                        stroke-linejoin="round" class="feather feather-upload-cloud mb-2">
+                                        stroke-linejoin="round" class="mb-2">
                                         <path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 4.16"></path>
                                         <polyline points="16 10 12 6 8 10"></polyline>
                                         <line x1="12" y1="6" x2="12" y2="18"></line>
-                                    </svg><br>
-                                    Arrastre archivos o haga clic aquí
+                                    </svg>
+                                    <br>Arrastre archivos o haga clic aquí
                                 </div>
                             </div>
                             <div id="listaArchivosSolicitud" class="list-group list-group-flush small">
@@ -186,25 +185,28 @@
 
                     <!-- Action Buttons -->
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-toolbar justify-content-center"
-                            style="background-color: #0d6efd; color: white; border-color: #0d6efd;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        <button type="submit"
+                            class="btn btn-dark shadow-sm d-flex align-items-center justify-content-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="feather feather-save">
+                                stroke-linejoin="round">
                                 <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
                                 <polyline points="17 21 17 13 7 13 7 21"></polyline>
                                 <polyline points="7 3 7 8 15 8"></polyline>
-                            </svg> Guardar Solicitud
+                            </svg>
+                            Guardar Solicitud
                         </button>
-                        <button type="button" class="btn btn-toolbar justify-content-center"
+                        <button type="button"
+                            class="btn btn-outline-secondary d-flex align-items-center justify-content-center gap-2"
                             onclick="location.href='desve_listado_ingresos.html'">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="feather feather-x-circle">
+                                stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <line x1="15" y1="9" x2="9" y2="15"></line>
                                 <line x1="9" y1="9" x2="15" y2="15"></line>
-                            </svg> Cancelar
+                            </svg>
+                            Cancelar
                         </button>
                     </div>
                 </div>
@@ -214,20 +216,20 @@
 
     <!-- Modal Funcionarios -->
     <div class="modal fade" id="modalFuncionarios" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Buscar Funcionario Interno</h5>
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold fs-6">Buscar Funcionario Interno</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="mb-3 d-flex gap-2">
-                        <input type="text" class="form-control" id="filtroFuncionario"
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <input type="text" class="form-control form-control-sm" id="filtroFuncionario"
                             placeholder="Filtrar por nombre o RUT...">
                     </div>
                     <div class="table-responsive" style="max-height: 400px;">
-                        <table class="table table-hover" id="tablaFuncionarios">
-                            <thead class="table-light">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light text-uppercase small">
                                 <tr>
                                     <th>RUT</th>
                                     <th>Nombre</th>
@@ -235,7 +237,7 @@
                                     <th class="text-end">Acción</th>
                                 </tr>
                             </thead>
-                            <tbody id="lista_busqueda_fnc">
+                            <tbody id="lista_busqueda_fnc" class="small">
                                 <!-- Populated dynamically -->
                             </tbody>
                         </table>
@@ -247,23 +249,25 @@
 
     <!-- Modal Nuevo Origen Especial -->
     <div class="modal fade" id="modalNuevoOrigenEspecial" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Agregar Origen Especial</h5>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold fs-6">Agregar Origen Especial</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="mb-3">
+                <div class="modal-body p-4">
+                    <div class="mb-0">
                         <label for="textoNuevoOrigenEspecial" class="form-label small fw-bold">Nuevo Origen
                             Especial</label>
-                        <input type="text" class="form-control" id="textoNuevoOrigenEspecial"
+                        <input type="text" class="form-control form-control-sm" id="textoNuevoOrigenEspecial"
                             placeholder="Escriba aquí el origen especial...">
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-primary" onclick="guardarOrigenEspecial()">Guardar</button>
+                <div class="modal-footer border-0 bg-light">
+                    <button type="button" class="btn btn-link text-muted text-decoration-none small"
+                        data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-dark btn-sm px-4"
+                        onclick="guardarOrigenEspecial()">Guardar</button>
                 </div>
             </div>
         </div>

@@ -1,16 +1,10 @@
 // subvenciones_consulta_masiva.js
-// Handles mass subsidy query functionality
-
 let subvencionesData = [];
 
-// Load data on page load
 document.addEventListener('DOMContentLoaded', function () {
     cargarDatos();
 });
 
-/**
- * Load subsidy data from JSON file
- */
 async function cargarDatos() {
     try {
         const response = await fetch('../recursos/jsons/subvenciones_consulta_masiva_mock.json');
@@ -21,9 +15,6 @@ async function cargarDatos() {
     }
 }
 
-/**
- * Render table with subsidy data
- */
 function renderizarTabla(datos) {
     const tbody = document.querySelector('#tablaResultados tbody');
     tbody.innerHTML = '';
@@ -31,39 +22,38 @@ function renderizarTabla(datos) {
     datos.forEach(subvencion => {
         const tr = document.createElement('tr');
 
-        // Estado badge
-        let badgeClass = 'badge-vigente';
-        if (subvencion.estado_actual === 'PENDIENTE') badgeClass = 'badge-pendiente';
-        if (subvencion.estado_actual === 'CERRADA') badgeClass = 'badge-cerrada';
+        let badgeClass = 'bg-success';
+        if (subvencion.estado_actual === 'PENDIENTE') badgeClass = 'bg-warning text-dark';
+        if (subvencion.estado_actual === 'CERRADA') badgeClass = 'bg-secondary';
 
-        // Format currency
         const montoFormateado = new Intl.NumberFormat('es-CL', {
             style: 'currency',
             currency: 'CLP'
         }).format(subvencion.monto);
 
         tr.innerHTML = `
-            <td>${subvencion.numero}</td>
+            <td class="fw-bold">${subvencion.numero}</td>
             <td>${subvencion.fecha}</td>
-            <td><span class="badge ${badgeClass}">${subvencion.estado_actual}</span></td>
+            <td><span class="badge ${badgeClass} fw-normal">${subvencion.estado_actual}</span></td>
             <td>${subvencion.rut}</td>
             <td>${subvencion.nombre}</td>
-            <td>${montoFormateado}</td>
-            <td>${subvencion.anio_decreto}</td>
-            <td>${subvencion.numero_decreto}</td>
+            <td class="fw-bold">${montoFormateado}</td>
+            <td>${subvencion.anio_decreto || '-'}</td>
+            <td>${subvencion.numero_decreto || '-'}</td>
+            <td class="text-end">
+                <button class="btn btn-sm btn-outline-secondary" onclick="verDetalle('${subvencion.numero}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+            </td>
         `;
 
         tbody.appendChild(tr);
     });
 
-    // Update count
     document.getElementById('resultados_count').textContent = datos.length;
 }
 
-/**
- * Search subsidies with filters
- */
-function buscarSubvenciones() {
+window.buscarSubvenciones = function () {
     const filtros = {
         numero: document.getElementById('filtro_numero').value.toLowerCase(),
         rut: document.getElementById('filtro_rut').value.toLowerCase(),
@@ -73,36 +63,21 @@ function buscarSubvenciones() {
     const datosFiltrados = subvencionesData.filter(subvencion => {
         let cumple = true;
 
-        if (filtros.numero && !subvencion.numero.toLowerCase().includes(filtros.numero)) {
-            cumple = false;
-        }
-        if (filtros.rut && !subvencion.rut.toLowerCase().includes(filtros.rut)) {
-            cumple = false;
-        }
-        if (filtros.estado && subvencion.estado_actual.toLowerCase() !== filtros.estado) {
-            cumple = false;
-        }
+        if (filtros.numero && !subvencion.numero.toLowerCase().includes(filtros.numero)) cumple = false;
+        if (filtros.rut && !subvencion.rut.toLowerCase().includes(filtros.rut)) cumple = false;
+        if (filtros.estado && subvencion.estado_actual.toLowerCase() !== filtros.estado) cumple = false;
 
         return cumple;
     });
 
     renderizarTabla(datosFiltrados);
-    console.log('Búsqueda realizada. Resultados:', datosFiltrados.length);
 }
 
-/**
- * Clear all filters
- */
-function limpiarFiltros() {
-    document.getElementById('filtro_numero').value = '';
-    document.getElementById('filtro_fecha_inicio').value = '';
-    document.getElementById('filtro_fecha_fin').value = '';
-    document.getElementById('filtro_estado').value = '';
-    document.getElementById('filtro_rut').value = '';
-    document.getElementById('filtro_numero2').value = '';
-    document.getElementById('filtro_monto_maximo').value = '';
-    document.getElementById('filtro_numero_decreto').value = '';
-
+window.limpiarFiltros = function () {
+    document.getElementById('formFiltros').reset();
     renderizarTabla(subvencionesData);
-    console.log('Filtros limpiados');
+}
+
+window.verDetalle = function (numero) {
+    window.location.href = 'subvenciones_consulta_subvencion.html?id=' + numero;
 }

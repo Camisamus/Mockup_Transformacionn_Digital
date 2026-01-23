@@ -4,258 +4,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulta Masiva Organizaciones</title>
+    <title>Consulta Masiva de Organizaciones</title>
     <link href="../recursos/css/bootstrap.min.css" rel="stylesheet">
     <link href="../recursos/css/style.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .search-card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .search-header {
-            font-weight: 600;
-            color: #343a40;
-            margin-bottom: 20px;
-            font-size: 1rem;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e9ecef;
-        }
-
-        .results-card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            padding: 20px;
-        }
-
-        .results-header {
-            font-weight: 600;
-            color: #343a40;
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-        }
-
-        .btn-search {
-            background-color: #212529;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 4px;
-        }
-
-        .btn-search:hover {
-            background-color: #424649;
-            color: white;
-        }
-
-        .btn-clear {
-            background-color: transparent;
-            color: #0d6efd;
-            border: none;
-            padding: 8px 20px;
-            text-decoration: underline;
-        }
-
-        .btn-clear:hover {
-            color: #0a58ca;
-        }
-
-        .btn-export {
-            background-color: white;
-            color: #6c757d;
-            border: 1px solid #dee2e6;
-            padding: 6px 15px;
-            border-radius: 4px;
-            font-size: 0.875rem;
-        }
-
-        .btn-export:hover {
-            background-color: #f8f9fa;
-        }
-
-        .table {
-            font-size: 0.875rem;
-        }
-
-        .table thead {
-            background-color: #f8f9fa;
-            font-weight: 600;
-        }
-
-        .table tbody tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .form-label {
-            font-weight: 500;
-            font-size: 0.875rem;
-            color: #495057;
-            margin-bottom: 5px;
-        }
-
-        .form-control,
-        .form-select {
-            font-size: 0.875rem;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-        }
-
-        .form-control::placeholder {
-            color: #adb5bd;
-            font-style: italic;
-        }
-    </style>
 </head>
 
-<body>
+<body class="bg-light">
 
-    <div class="container-fluid">
-        <h2 class="mb-4">Consulta Masiva Organizaciones</h2>
+    <div class="container-fluid py-4">
+        <!-- Header & Toolbar -->
+        <div class="main-header mb-4">
+            <div class="header-title">
+                <h2 class="fw-bold fs-4">Consulta Masiva de Organizaciones</h2>
+                <p class="text-muted mb-0">Búsqueda y generación de reportes de organizaciones comunitarias</p>
+            </div>
+            <div class="toolbar">
+                <button class="btn btn-toolbar" onclick="buscarOrganizaciones()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    Buscar
+                </button>
+                <button class="btn btn-toolbar" onclick="nuevaOrganizacion()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Nueva
+                </button>
+                <button class="btn btn-toolbar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    Exportar Excel
+                </button>
+            </div>
+        </div>
 
         <!-- Filtros de Búsqueda -->
-        <div class="search-card">
-            <div class="search-header">Filtros de Búsqueda</div>
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body p-4">
+                <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
+                <p class="text-muted small mb-4">Aplique filtros para refinar el listado de organizaciones</p>
 
-            <div class="row g-3">
-                <!-- Row 1 -->
-                <div class="col-md-4">
-                    <label class="form-label">RUT</label>
-                    <input type="text" class="form-control" id="filtro_rut" placeholder="Ej: 76.123.456-7">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Nombre</label>
-                    <input type="text" class="form-control" id="filtro_nombre" placeholder="Buscar por nombre">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Código</label>
-                    <input type="text" class="form-control" id="filtro_codigo" placeholder="Ej: ORG-001">
-                </div>
+                <form id="formFiltros" onsubmit="event.preventDefault(); buscarOrganizaciones();">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="filtro_rut" class="form-label small fw-bold">RUT (Organización)</label>
+                            <input type="text" class="form-control form-control-sm" id="filtro_rut"
+                                placeholder="XX.XXX.XXX-X">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="filtro_nombre" class="form-label small fw-bold">Nombre</label>
+                            <input type="text" class="form-control form-control-sm" id="filtro_nombre"
+                                placeholder="Nombre de la organización">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filtro_codigo" class="form-label small fw-bold">Código</label>
+                            <input type="text" class="form-control form-control-sm" id="filtro_codigo"
+                                placeholder="Ej: ORG-001">
+                        </div>
 
-                <!-- Row 2 -->
-                <div class="col-md-4">
-                    <label class="form-label">RPJ</label>
-                    <input type="text" class="form-control" id="filtro_rpj" placeholder="Ej: RPJ-2020-001">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Fecha Inscripción (Inicio)</label>
-                    <input type="date" class="form-control" id="filtro_fecha_inscripcion_inicio">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Fecha Inscripción (Fin)</label>
-                    <input type="date" class="form-control" id="filtro_fecha_inscripcion_fin">
-                </div>
+                        <div class="col-md-3">
+                            <label for="filtro_rpj" class="form-label small fw-bold">RPJ</label>
+                            <input type="text" class="form-control form-control-sm" id="filtro_rpj"
+                                placeholder="Ej: RPJ-2024-001">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filtro_unidad_vecinal" class="form-label small fw-bold">Unidad Vecinal</label>
+                            <input type="text" class="form-control form-control-sm" id="filtro_unidad_vecinal"
+                                placeholder="Ej: UV-12">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filtro_fecha_inicio" class="form-label small fw-bold">Inscripción
+                                (Desde)</label>
+                            <input type="date" class="form-control form-control-sm" id="filtro_fecha_inicio">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filtro_fecha_fin" class="form-label small fw-bold">Inscripción (Hasta)</label>
+                            <input type="date" class="form-control form-control-sm" id="filtro_fecha_fin">
+                        </div>
 
-                <!-- Row 3 -->
-                <div class="col-md-4">
-                    <label class="form-label">Fecha Término Vigencia (Inicio)</label>
-                    <input type="date" class="form-control" id="filtro_fecha_termino_inicio">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Fecha Término Vigencia (Fin)</label>
-                    <input type="date" class="form-control" id="filtro_fecha_termino_fin">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Representante Legal</label>
-                    <input type="text" class="form-control" id="filtro_representante_legal"
-                        placeholder="Buscar por representante">
-                </div>
-
-                <!-- Row 4 -->
-                <div class="col-md-4">
-                    <label class="form-label">Unidad Vecinal</label>
-                    <input type="text" class="form-control" id="filtro_unidad_vecinal" placeholder="Ej: UV-12">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Dirección</label>
-                    <input type="text" class="form-control" id="filtro_direccion" placeholder="Buscar por dirección">
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Teléfono de Contacto</label>
-                    <input type="text" class="form-control" id="filtro_telefono" placeholder="Buscar por teléfono">
-                </div>
-
-                <!-- Row 5 -->
-                <div class="col-md-6">
-                    <label class="form-label">Suscrito a Ley 19-418</label>
-                    <select class="form-select" id="filtro_ley_19418">
-                        <option value="">Todos</option>
-                        <option value="si">Sí</option>
-                        <option value="no">No</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Posee Rendiciones Pendientes</label>
-                    <select class="form-select" id="filtro_rendiciones_pendientes">
-                        <option value="">Todos</option>
-                        <option value="si">Sí</option>
-                        <option value="no">No</option>
-                    </select>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="col-12 d-flex gap-2 mt-3">
-                    <button class="btn btn-search" onclick="buscarOrganizaciones()">
-                        🔍 Buscar
-                    </button>
-                    <button class="btn btn-clear" onclick="limpiarFiltros()">
-                        Limpiar Filtros
-                    </button>
-                </div>
+                        <div class="col-12 d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-dark d-flex align-items-center gap-2 px-4 shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                Buscar
+                            </button>
+                            <button type="button" class="btn btn-link text-decoration-none text-muted small"
+                                onclick="limpiarFiltros()">
+                                Limpiar Filtros
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
 
         <!-- Resultados -->
-        <div class="results-card">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="results-header">Resultados (<span id="resultados_count">3</span>)</div>
-                <div class="d-flex gap-2">
-                    <button class="btn btn-export" onclick="exportarExcel()">
-                        📊 Exportar a Excel
-                    </button>
-                    <button class="btn btn-export" onclick="exportarPDF()">
-                        📄 Exportar a PDF
-                    </button>
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="fw-bold fs-6">Resultados (<span id="resultados_count">0</span>)</div>
                 </div>
-            </div>
 
-            <div class="table-responsive">
-                <table class="table table-hover" id="tablaResultados">
-                    <thead>
-                        <tr>
-                            <th>RUT</th>
-                            <th>NOMBRE</th>
-                            <th>CODIGO</th>
-                            <th>RPJ</th>
-                            <th>FECHA INSCRIPCIÓN</th>
-                            <th>FECHA TÉRMINO VIGENCIA</th>
-                            <th>DIRECTIVA ACTUAL</th>
-                            <th>DIRECTIVAS ANTERIORES</th>
-                            <th>REPRESENTANTE LEGAL</th>
-                            <th>UNIDAD VECINAL</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Data loaded dynamically from organizaciones_consulta_masiva_mock.json -->
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle" id="tablaOrganizaciones">
+                        <thead class="table-light text-uppercase small">
+                            <tr>
+                                <th>RUT</th>
+                                <th>Nombre</th>
+                                <th>Código</th>
+                                <th>RPJ</th>
+                                <th>Inscripción</th>
+                                <th>Vigencia</th>
+                                <th>Rep. Legal</th>
+                                <th>U. Vecinal</th>
+                                <th class="text-end">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            <!-- Data loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
     </div>
 
     <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        feather.replace();
+    </script>
     <script src="../recursos/js/organizaciones_consulta_masiva.js"></script>
-<script src='../recursos/js/layout_manager.js'></script>
+    <script src='../recursos/js/layout_manager.js'></script>
 </body>
 
 </html>

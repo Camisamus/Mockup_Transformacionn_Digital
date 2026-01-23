@@ -1,89 +1,98 @@
 // postulaciones_consulta_postulacion.js
-// Handles application consultation functionality
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('Postulaciones loaded');
+    if (!window.API_BASE_URL) window.API_BASE_URL = 'http://127.0.0.1:8081/api';
 
-function buscarPostulacion() {
-    console.log('Buscando postulación');
-    Swal.fire('Búsqueda', 'Funcionalidad de búsqueda en desarrollo.', 'info');
-}
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
 
-function crearNueva() {
-    console.log('Creando nueva postulación');
-    // Clear all form fields
-    document.querySelectorAll('input, select, textarea').forEach(el => {
-        if (el.type === 'checkbox' || el.type === 'radio') {
-            el.checked = false;
-        } else {
-            el.value = '';
-        }
-        el.removeAttribute('readonly');
-    });
-}
-
-function modificar() {
-    console.log('Modificando postulación');
-    // Enable all fields except evaluation section
-    document.querySelectorAll('input:not([id^="eval_"]), select, textarea:not([id^="eval_"])').forEach(el => {
-        el.removeAttribute('readonly');
-        el.removeAttribute('disabled');
-    });
-}
-
-function guardar() {
-    console.log('Guardando postulación');
-
-    // Validate required fields
-    const requiredFields = ['organizacion', 'rut', 'ant_nombre'];
-    let isValid = true;
-
-    requiredFields.forEach(fieldId => {
-        const field = document.getElementById(fieldId);
-        if (!field.value.trim()) {
-            field.classList.add('is-invalid');
-            isValid = false;
-        } else {
-            field.classList.remove('is-invalid');
-        }
-    });
-
-    if (isValid) {
-        Swal.fire('Éxito', 'Postulación guardada exitosamente.', 'success');
+    if (!id) {
+        solicitarID();
     } else {
-        Swal.fire('Atención', 'Por favor complete todos los campos requeridos (*).', 'warning');
+        console.log('Loading postulación:', id);
+        cargarDatosPostulacion(id);
     }
-}
 
-async function cancelar() {
-    console.log('Cancelando cambios');
-    const result = await Swal.fire({
-        title: '¿Está seguro?',
-        text: '¿Está seguro que desea cancelar los cambios?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, cancelar',
-        cancelButtonText: 'No, continuar editando'
-    });
-    if (result.isConfirmed) {
-        location.reload();
-    }
-}
-
-function imprimirPDF() {
-    console.log('Imprimiendo PDF de la postulación');
-    Swal.fire('PDF', 'Generando PDF de la postulación...', 'info');
-}
-
-// Format RUT on blur
-document.addEventListener('DOMContentLoaded', function () {
     const rutInput = document.getElementById('rut');
     if (rutInput) {
         rutInput.addEventListener('blur', function () {
-            // Simple RUT formatting (add dashes and dots)
-            let rut = this.value.replace(/\./g, '').replace(/-/g, '');
-            if (rut.length > 1) {
-                const dv = rut.slice(-1);
-                const number = rut.slice(0, -1);
-                this.value = number.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + '-' + dv;
-            }
+            formatearRUT(this);
         });
     }
 });
+
+async function solicitarID() {
+    const { value: formValues } = await Swal.fire({
+        title: 'Postulación no especificada',
+        html: `
+            <div class="mb-3 text-start">
+                <label class="form-label small fw-bold">Tipo de Identificador:</label>
+                <select id="swal-id-type" class="form-select">
+                    <option value="post_id">Cód. Interno (Interno)</option>
+                    <option value="post_num">N° Ingreso (Ej: POST-2024-001)</option>
+                    <option value="post_rut">RUT Organización</option>
+                </select>
+            </div>
+            <div class="mb-2 text-start">
+                <label class="form-label small fw-bold">Valor:</label>
+                <input id="swal-id-value" class="form-control" placeholder="Ingrese el valor...">
+            </div>
+        `,
+        focusConfirm: false,
+        showCancelButton: true,
+        confirmButtonText: 'Buscar',
+        cancelButtonText: 'Ir a Listado Masivo',
+        allowOutsideClick: false,
+        preConfirm: () => {
+            const type = document.getElementById('swal-id-type').value;
+            const value = document.getElementById('swal-id-value').value.trim();
+            if (!value) {
+                Swal.showValidationMessage('¡Debe ingresar un valor!');
+                return false;
+            }
+            return { type, value };
+        }
+    });
+
+    if (!formValues) {
+        window.location.href = 'postulaciones_consulta_masiva.html';
+        return;
+    }
+
+    window.location.href = `postulaciones_consulta_postulacion.html?id=${formValues.value}`;
+}
+
+function cargarDatosPostulacion(id) {
+    // Mock population
+    document.getElementById('numero_ingreso').value = id;
+    document.getElementById('ant_nombre').value = 'MOCK PROJECT NAME';
+}
+
+function buscarPostulacion() { solicitarID(); }
+function crearNueva() { window.location.href = 'postulaciones_consulta_postulacion.html'; }
+function modificar() { Swal.fire('Edición', 'Habilitando campos para modificación...', 'info'); }
+function imprimirPDF() { Swal.fire('PDF', 'Generando comprobante de postulación...', 'info'); }
+
+function guardar() {
+    Swal.fire('Éxito', 'Postulación guardada correctamente.', 'success');
+}
+
+async function cancelar() {
+    const res = await Swal.fire({
+        title: '¿Confirmar?',
+        text: 'Se perderán los cambios no guardados.',
+        icon: 'warning',
+        showCancelButton: true
+    });
+    if (res.isConfirmed) location.reload();
+}
+
+function formatearRUT(input) {
+    let value = input.value.replace(/[^0-9kK]/g, '');
+    if (value.length > 1) {
+        const dv = value.slice(-1);
+        const number = value.slice(0, -1);
+        const formattedNumber = number.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        input.value = formattedNumber + '-' + dv;
+    }
+}

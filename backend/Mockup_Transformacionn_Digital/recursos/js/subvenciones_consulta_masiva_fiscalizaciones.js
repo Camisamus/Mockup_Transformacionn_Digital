@@ -1,9 +1,9 @@
-// Load fiscalizaciones data on page load
+// subvenciones_consulta_masiva_fiscalizaciones.js
+let fiscalizacionesData = [];
+
 document.addEventListener('DOMContentLoaded', function () {
     cargarDatosFiscalizaciones();
 });
-
-let fiscalizacionesData = [];
 
 async function cargarDatosFiscalizaciones() {
     try {
@@ -22,43 +22,57 @@ function renderizarTablaFiscalizaciones(datos) {
     datos.forEach(fisc => {
         const tr = document.createElement('tr');
 
-        let badgeClass = 'badge-cerrada';
-        if (fisc.estado === 'PENDIENTE') badgeClass = 'badge-pendiente';
-        if (fisc.estado === 'OBSERVADA') badgeClass = 'badge-observada';
-        if (fisc.estado === 'APROBADA') badgeClass = 'badge-aprobada';
+        let badgeClass = 'bg-success';
+        if (fisc.estado.includes('PENDIENTE')) badgeClass = 'bg-warning text-dark';
+        if (fisc.estado.includes('OBSERVADA')) badgeClass = 'bg-danger';
+        if (fisc.estado.includes('CERRADA')) badgeClass = 'bg-secondary';
 
         tr.innerHTML = `
-            <td>${fisc.subvencion}</td>
-            <td>${fisc.fiscalizacion}</td>
+            <td class="fw-bold">${fisc.subvencion}</td>
+            <td class="text-primary fw-medium">${fisc.fiscalizacion}</td>
             <td>${fisc.fecha}</td>
-            <td><span class="badge ${badgeClass}">${fisc.estado}</span></td>
-            <td>${fisc.fecha_estado}</td>
-            <td>${fisc.numero_ingreso}</td>
-            <td>${fisc.fecha_ingreso}</td>
+            <td><span class="badge ${badgeClass} fw-normal">${fisc.estado}</span></td>
+            <td>${fisc.fecha_de_estado}</td>
+            <td>${fisc.numero_de_ingreso || '-'}</td>
             <td>${fisc.rut_fiscalizador}</td>
-            <td>${fisc.fiscalizador}</td>
-            <td>${fisc.resultado}</td>
+            <td>${fisc.resultado || '-'}</td>
+            <td class="text-end">
+                <button class="btn btn-sm btn-outline-secondary" onclick="verDetalle('${fisc.subvencion}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+            </td>
         `;
 
         tbody.appendChild(tr);
     });
+
+    const countEl = document.getElementById('resultados_count');
+    if (countEl) countEl.textContent = datos.length;
 }
 
-function buscarFiscalizaciones() {
-    console.log('Buscando fiscalizaciones');
+window.buscarFiscalizaciones = function () {
+    const filtros = {
+        subvencion: document.getElementById('filtro_subvencion').value.toLowerCase(),
+        fiscalizacion: document.getElementById('filtro_fiscalizacion').value.toLowerCase(),
+        rut: document.getElementById('filtro_rut_fiscalizador').value.toLowerCase()
+    };
+
+    const datosFiltrados = fiscalizacionesData.filter(f => {
+        let cumple = true;
+        if (filtros.subvencion && !f.subvencion.toLowerCase().includes(filtros.subvencion)) cumple = false;
+        if (filtros.fiscalizacion && !f.fiscalizacion.toLowerCase().includes(filtros.fiscalizacion)) cumple = false;
+        if (filtros.rut && !f.rut_fiscalizador.toLowerCase().includes(filtros.rut)) cumple = false;
+        return cumple;
+    });
+
+    renderizarTablaFiscalizaciones(datosFiltrados);
 }
 
-function limpiarFiltros() {
-    document.getElementById('filtro_subvencion').value = '';
-    document.getElementById('filtro_fiscalizacion').value = '';
-    document.getElementById('filtro_fecha_inicio').value = '';
-    document.getElementById('filtro_fecha_fin_inicio').value = '';
-    document.getElementById('filtro_fecha_ingreso').value = '';
-    document.getElementById('filtro_fecha_ingreso_inicio').value = '';
-    document.getElementById('filtro_fecha_ingreso_fin').value = '';
-    document.getElementById('filtro_rut_fiscalizador').value = '';
-    document.getElementById('filtro_fiscalizacion2').value = '';
-    document.getElementById('filtro_resultado').value = '';
-
+window.limpiarFiltros = function () {
+    document.getElementById('formFiltros').reset();
     renderizarTablaFiscalizaciones(fiscalizacionesData);
+}
+
+window.verDetalle = function (numero) {
+    window.location.href = 'subvenciones_consulta_subvencion.html?id=' + numero;
 }

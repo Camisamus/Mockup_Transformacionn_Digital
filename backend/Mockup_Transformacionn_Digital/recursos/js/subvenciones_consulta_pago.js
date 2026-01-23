@@ -1,6 +1,6 @@
-// subvenciones_consulta_subvencion.js
+// subvenciones_consulta_pago.js
 document.addEventListener('DOMContentLoaded', async function () {
-    console.log('Consulta de Subvención loaded');
+    console.log('Consulta de Pago loaded');
     if (!window.API_BASE_URL) window.API_BASE_URL = 'http://127.0.0.1:8081/api';
 
     const params = new URLSearchParams(window.location.search);
@@ -10,26 +10,19 @@ document.addEventListener('DOMContentLoaded', async function () {
         solicitarID();
     } else {
         // Mock load data
-        console.log('Loading subsidy:', id);
-    }
-
-    // Initialize RUT formatting
-    const rutInput = document.getElementById('rut_organizacion');
-    if (rutInput) {
-        rutInput.addEventListener('blur', function () {
-            formatearRUT(this);
-        });
+        console.log('Loading payment for subsidy:', id);
+        mostrarDatosPago(id);
     }
 });
 
-function buscarSubvencion() {
+function buscarPago() {
     solicitarID();
 }
 
-async function crearNuevo() {
+async function nuevoPago() {
     const { isConfirmed } = await Swal.fire({
-        title: '¿Desea crear una nueva subvención?',
-        text: 'Los datos actuales se perderán si no han sido guardados.',
+        title: '¿Registrar nuevo pago?',
+        text: 'Se habilitarán los campos para ingresar un nuevo registro.',
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Sí, nuevo',
@@ -37,58 +30,57 @@ async function crearNuevo() {
     });
 
     if (isConfirmed) {
-        window.location.href = 'subvenciones_consulta_subvencion.html';
+        document.getElementById('datos_pago_card').style.display = 'block';
+        document.getElementById('formPago').reset();
+        document.querySelectorAll('#formPago input, #formPago textarea').forEach(el => {
+            el.removeAttribute('readonly');
+        });
     }
 }
 
-function modificar() {
-    Swal.fire('Información', 'Habilitando edición de campos...', 'info');
-}
-
-function cambiarEstado() {
-    Swal.fire('Estado', 'Funcionalidad de cambio de estado en desarrollo.', 'info');
-}
-
-function imprimirPDF() {
-    Swal.fire('PDF', 'Generando PDF de la subvención...', 'info');
-}
-
-function limpiarFormulario() {
-    document.getElementById('formSubvencion').reset();
-}
-
-function guardarBorrador() {
-    Swal.fire('Éxito', 'Borrador guardado correctamente.', 'success');
-}
-
-async function guardarSubvencion() {
-    const form = document.getElementById('formSubvencion');
-    if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
+function mostrarDatosPago(id) {
+    document.getElementById('datos_pago_card').style.display = 'block';
+    // In production, fetch data. For mock:
+    if (id === '1' || id === '999') {
+        document.getElementById('pago_numero').value = id;
+        document.getElementById('pago_fecha_evento').value = '2024-09-15';
+        document.getElementById('pago_estado').value = 'TERMINADA';
+        document.getElementById('pago_fecha_digitalizacion').value = '2024-09-20';
+        document.getElementById('pago_responsable').value = 'María González López';
+        document.getElementById('pago_glosa').value = 'Pago primera cuota subvención municipal';
+        document.getElementById('pago_observaciones').value = 'Pago procesado correctamente según resolución N° 123/2024';
     }
+}
 
+async function guardarCambios() {
     const { isConfirmed } = await Swal.fire({
-        title: '¿Guardar subvención?',
+        title: '¿Guardar cambios?',
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Sí, guardar'
     });
 
     if (isConfirmed) {
-        Swal.fire('Éxito', 'Subvención guardada correctamente.', 'success');
+        Swal.fire('Éxito', 'Pago guardado correctamente.', 'success');
     }
+}
+
+function imprimirPDF() {
+    Swal.fire('PDF', 'Generando PDF del pago...', 'info');
+}
+
+function cancelar() {
+    document.getElementById('datos_pago_card').style.display = 'none';
 }
 
 async function solicitarID() {
     const { value: formValues } = await Swal.fire({
-        title: 'Subvención no especificada',
+        title: 'Pago no especificado',
         html: `
             <div class="mb-3 text-start">
                 <label class="form-label small fw-bold">Tipo de Identificador:</label>
                 <select id="swal-id-type" class="form-select">
-                    <option value="sub_id">ID Interno</option>
-                    <option value="sub_numero" selected>Número Subvención (Ej: SUB-001)</option>
+                    <option value="sub_numero" selected>Número Subvención (Ej: 1)</option>
                 </select>
             </div>
             <div class="mb-2 text-start">
@@ -113,7 +105,7 @@ async function solicitarID() {
     });
 
     if (!formValues) {
-        window.location.href = 'subvenciones_consulta_masiva.html';
+        window.location.href = 'subvenciones_consulta_masiva_pagos.html';
         return;
     }
 
@@ -122,14 +114,13 @@ async function solicitarID() {
     try {
         Swal.fire({ title: 'Buscando...', didOpen: () => Swal.showLoading() });
 
-        // Mock search logic
         setTimeout(() => {
-            if (value === '999' || value.toUpperCase() === 'SUB-999') {
+            if (value === '1' || value === '999') {
                 const newUrl = new URL(window.location.href);
-                newUrl.searchParams.set('id', '999');
+                newUrl.searchParams.set('id', value);
                 window.location.href = newUrl.toString();
             } else {
-                Swal.fire('No encontrado', 'No se encontró ninguna subvención con ese criterio.', 'error').then(() => {
+                Swal.fire('No encontrado', 'No se encontró ningún pago para esa subvención.', 'error').then(() => {
                     solicitarID();
                 });
             }
@@ -138,15 +129,5 @@ async function solicitarID() {
     } catch (e) {
         console.error(e);
         Swal.fire('Error', 'Error de conexión', 'error');
-    }
-}
-
-function formatearRUT(input) {
-    let value = input.value.replace(/[^0-9kK]/g, '');
-    if (value.length > 1) {
-        const dv = value.slice(-1);
-        const number = value.slice(0, -1);
-        const formattedNumber = number.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        input.value = formattedNumber + '-' + dv;
     }
 }

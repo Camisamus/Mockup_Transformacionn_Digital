@@ -78,8 +78,8 @@ function renderizarTabla(data) {
         tr.innerHTML = `
             <td class="ps-4 text-muted small">${item.tis_id}</td>
             <td class="text-end pe-4">
-                <button type="button" class="btn btn-toolbar p-1" title="Consultar">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <button type="button" class="btn btn-sm btn-outline-dark p-1" title="Consultar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                 </button>
             </td>
             <td>
@@ -89,13 +89,12 @@ function renderizarTabla(data) {
             <td><span class="small">${(item.tis_fecha || '').substring(0, 10)}</span></td>
             <td><span class="badge ${item.tis_estado === 'Ingresado' ? 'bg-success' : 'bg-primary'}">${item.tis_estado || '-'}</span></td>
             <td>${getRolBadge(item.rol_usuario)}</td>
-            <td class="rgt-container">
-                <button type="button" class="btn btn-toolbar p-1 btn-show-code" title="Ver Código">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            <td class="rgt-container text-end">
+                <button type="button" class="btn btn-sm btn-outline-secondary p-1 btn-show-code" title="Ver Código">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                 </button>
                 <code class="d-none">${rgtCode}</code>
             </td>
-            
             `;
 
         // Attach click to the show button

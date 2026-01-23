@@ -1,40 +1,53 @@
 // logs_consulta_log.js
-// Handles system log consultation functionality
-
-function buscarLog() {
-    console.log('Buscando log');
-    alert('Funcionalidad de búsqueda en desarrollo.');
-}
-
-function imprimirPDF() {
-    console.log('Imprimiendo PDF del log');
-    alert('Generando PDF del log del sistema...');
-}
-
-// Load log data from URL parameter if present
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const logId = urlParams.get('id');
 
     if (logId) {
         cargarLog(logId);
+    } else {
+        solicitarID();
     }
 });
 
+async function solicitarID() {
+    const { value: id } = await Swal.fire({
+        title: 'Consultar Log',
+        text: 'Ingrese el ID del Log a consultar',
+        input: 'text',
+        inputPlaceholder: 'LOG-XXXXX',
+        showCancelButton: true,
+        confirmButtonColor: '#212529',
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Consultar',
+        inputValidator: (value) => {
+            if (!value) return 'Debe ingresar un ID';
+        }
+    });
+
+    if (id) {
+        window.location.search = `?id=${id}`;
+    }
+}
+
 function cargarLog(id) {
-    // In production, this would fetch from API
+    // In production, fetch from API
     console.log('Cargando log:', id);
 
-    // Sample data
+    // Mock data population
     document.getElementById('log_id').value = id;
     document.getElementById('log_fecha').value = '2024-12-11T10:30';
-    document.getElementById('log_tipo').value = 'info';
-    document.getElementById('log_severidad').value = 'bajo';
+    document.getElementById('log_tipo').value = 'Información';
+    document.getElementById('log_severidad').value = 'Bajo';
     document.getElementById('log_usuario').value = 'admin';
     document.getElementById('log_modulo').value = 'Subvenciones';
     document.getElementById('log_accion').value = 'Creación de subvención';
     document.getElementById('log_ip').value = '192.168.1.100';
     document.getElementById('log_descripcion').value = 'Usuario creó nueva subvención SUB-2024-001';
-    document.getElementById('log_detalles').value = 'Operación completada exitosamente. Tiempo de ejecución: 245ms';
+    document.getElementById('log_detalles').value = 'Operación completada exitosamente. Tiempo de ejecución: 245ms\nPayload: {"monto": 5000000, "destinatario": "Org ABC"}';
     document.getElementById('log_resultado').value = 'Exitoso';
+}
+
+window.buscarLog = function () {
+    solicitarID();
 }
