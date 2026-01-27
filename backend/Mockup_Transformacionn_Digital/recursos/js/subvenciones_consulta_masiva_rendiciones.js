@@ -23,7 +23,7 @@ function renderizarTablaRendiciones(datos) {
         const tr = document.createElement('tr');
 
         let badgeClass = 'bg-success';
-        if (ren.estado.includes('PENDIENTE')) badgeClass = 'bg-info text-white';
+        if (ren.estado.includes('PENDIENTE')) badgeClass = 'bg-info ';
         if (ren.estado.includes('OBSERVADA')) badgeClass = 'bg-warning text-dark';
         if (ren.estado.includes('CERRADA')) badgeClass = 'bg-secondary';
 

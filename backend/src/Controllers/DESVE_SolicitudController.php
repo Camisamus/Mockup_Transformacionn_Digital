@@ -56,7 +56,8 @@ class DESVE_SolicitudController
         return [
             "status" => "error",
             "message" => "Unable to update solicitud",
-            "error" => $this->solicitud->lastError
+            "error" => $this->solicitud->lastError,
+            "data" => $data
         ];
     }
 

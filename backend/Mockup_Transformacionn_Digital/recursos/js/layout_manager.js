@@ -75,7 +75,7 @@ function injectLayout(pathPrefix) {
 
     // Instant Shell HTML (Static part of sidebar)
     sidebar.innerHTML = `
-        <aside id="sidebar" class="bg-primary text-white d-flex flex-column w-100 h-100" style="overflow-y: auto;">
+        <aside id="sidebar" class="bg-primary  d-flex flex-column w-100 h-100" style="overflow-y: auto;">
             <div class="p-3 border-bottom border-primary-subtle">
                 <a href="${pathPrefix}dashboard.html" style="cursor: pointer; display: block;">
                     <img src="${pathPrefix}recursos/img/logo_vina_del_mar_azul.png" alt="Viña del Mar"
@@ -84,7 +84,7 @@ function injectLayout(pathPrefix) {
             </div>
             <nav class="flex-grow-1 p-2">
                 <ul class="nav flex-column" id="menu-container">
-                    <li class="nav-item p-3 text-white-50 small">Cargando menú...</li>
+                    <li class="nav-item p-3 -50 small">Cargando menú...</li>
                 </ul>
             </nav>
             <div class="p-3 border-top border-primary-subtle small opacity-50">
@@ -342,7 +342,7 @@ function renderRepresentationSelector() {
         const wrapper = document.createElement('div');
         wrapper.className = 'mb-3 px-2';
         wrapper.innerHTML = `
-            <label class="form-label text-white-50 small text-uppercase fw-bold mb-1">Sesión representando a:</label>
+            <label class="form-label -50 small text-uppercase fw-bold mb-1">Sesión representando a:</label>
             <select class="form-select form-select-sm bg-primary-subtle border-0" id="representation-selector">
                 <option value="personal">Persona Natural</option>
             </select>
@@ -523,7 +523,7 @@ function buildDirectMenuHtml(items, level, prefix) {
             const hasChildren = item.contenido && item.contenido.length > 0;
             if (hasChildren) {
                 html += `
-                    <a class="nav-link collapsed text-white" data-bs-toggle="collapse" href="#${uniqueId}" role="button" aria-expanded="false" ${paddingLeft}>
+                    <a class="nav-link collapsed " data-bs-toggle="collapse" href="#${uniqueId}" role="button" aria-expanded="false" ${paddingLeft}>
                         <div class="d-flex justify-content-between align-items-center w-100">
                             <span>
                                ${item.icon ? `<i data-feather="${item.icon}" style="width:18px; margin-right:8px;"></i>` : ''} 
@@ -557,7 +557,7 @@ function buildDirectMenuHtml(items, level, prefix) {
             }
             // console.log(`Generated Menu Item: ${item.nombre}, HREF: ${href}`);
             html += `
-                <a class="nav-link leaf-link text-white-50 d-flex align-items-center" href="${href}" ${paddingLeft}>
+                <a class="nav-link leaf-link -50 d-flex align-items-center" href="${href}" ${paddingLeft}>
                     <span>
                        ${item.icon ? `<i data-feather="${item.icon}" style="width:18px; margin-right:8px;"></i>` : ''} 
                        ${item.nombre}
@@ -576,8 +576,8 @@ function highlightCurrentPage() {
     const links = document.querySelectorAll('.leaf-link');
     links.forEach(link => {
         if (link.getAttribute('href').includes(current)) {
-            link.classList.remove('text-white-50');
-            link.classList.add('text-white', 'fw-bold', 'bg-primary');
+            link.classList.remove('-50');
+            //link.classList.add('', 'fw-bold', 'bg-primary');
             // Open parents
             let parent = link.closest('.collapse');
             while (parent) {

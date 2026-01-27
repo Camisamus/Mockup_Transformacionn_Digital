@@ -122,10 +122,6 @@ async function loadSolicitationDetails(id) {
 
             document.getElementById('info_vencimiento').innerText = sol.sol_fecha_vencimiento || '-';
 
-            // Funcionario Interno
-            const func = funcionarios.find(f => f.fnc_id == sol.sol_funcionario_id);
-            document.getElementById('info_funcionario').innerText = func ? `${func.fnc_nombre} ${func.fnc_apellido}` : (sol.sol_funcionario_id || '-');
-
             // Responsable
             const resp = funcionarios.find(f => f.fnc_id == sol.sol_responsable);
             document.getElementById('info_responsable').innerText = resp ? `${resp.fnc_nombre} ${resp.fnc_apellido}` : (sol.sol_responsable || '-');
@@ -137,11 +133,12 @@ async function loadSolicitationDetails(id) {
             document.getElementById('info_dias_ingreso').innerText = sol.sol_dias_transcurridos || 0;
             document.getElementById('info_dias_vencimiento').innerText = sol.sol_dias_vencimiento || 0;
 
-            // Render Bitacoras
+            // Render Bitacoras & Destinations
             renderResponseBitacora(sol.respuestas || []);
             renderAuditBitacora(sol.bitacora || []);
             renderComments(sol.comentarios || []);
-            renderReingresos(sol.reingresos || []); // Adjust if API returns them differently
+            renderReingresos(sol.reingresos || []);
+            renderDestinos(sol.destinos || []);
 
             // Load Documents
             loadDocuments();
@@ -218,6 +215,29 @@ function renderReingresos(reingresos) {
         return;
     }
     // Note: This matches the previous logic for tabulating reingresos if available in the result.
+}
+
+function renderDestinos(destinos) {
+    const tbody = document.getElementById('tbody_destinos');
+    tbody.innerHTML = '';
+
+    if (!destinos || destinos.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="2" class="text-center text-muted small">Sin destinatarios.</td></tr>';
+        return;
+    }
+
+    destinos.forEach(d => {
+        // Fallback if joined fields are missing (should be present from backend query)
+        const name = d.usr_nombre_completo || 'Desconocido';
+        // const email = d.usr_email || '-'; // Assuming email might be available in future or via join
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${name}</td>
+            <td>${d.usr_email || '-'}</td>
+        `;
+        tbody.appendChild(tr);
+    });
 }
 
 async function loadDocuments() {

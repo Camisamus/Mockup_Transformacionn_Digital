@@ -50,7 +50,7 @@ function buildMenuHtml(items, level = 0) {
             const hasChildren = item.contenido && item.contenido.length > 0;
             if (hasChildren) {
                 html += `
-                    <a class="nav-link collapsed text-white" data-bs-toggle="collapse" href="#${uniqueId}" role="button" aria-expanded="false" ${paddingLeft}>
+                    <a class="nav-link collapsed " data-bs-toggle="collapse" href="#${uniqueId}" role="button" aria-expanded="false" ${paddingLeft}>
                         <span>
                            ${item.icon ? `<i data-feather="${item.icon}" style="width:18px; margin-right:8px;"></i>` : ''} 
                            ${item.nombre}
@@ -66,7 +66,7 @@ function buildMenuHtml(items, level = 0) {
             // If it has a specific link, pass it, otherwise just label
             const linkArg = item.Enlace ? `'${item.nombre}', '${item.Enlace}'` : `'${item.nombre}'`;
             html += `
-                <a class="nav-link leaf-link text-white-50" href="#" onclick="handleNavClick(${linkArg})" ${paddingLeft}>
+                <a class="nav-link leaf-link -50" href="#" onclick="handleNavClick(${linkArg})" ${paddingLeft}>
                     <span>
                        ${item.icon ? `<i data-feather="${item.icon}" style="width:18px; margin-right:8px;"></i>` : ''} 
                        ${item.nombre}

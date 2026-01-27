@@ -104,7 +104,7 @@ function renderTable(items, tbody) {
             <td>${item.origen}</td> 
             <td>
                 <div class="d-flex align-items-center gap-2">
-                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; font-size: 10px;">YO</div>
+                    <div class="bg-primary  rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; font-size: 10px;">YO</div>
                     <span>Mí mismo</span>
                 </div>
             </td>

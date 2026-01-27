@@ -43,3 +43,19 @@ function exportElementToPDF(elementId, filename = 'document') {
     // Use html2pdf lib
     html2pdf().set(opt).from(element).save();
 }
+
+/**
+ * Export JSON Data to Excel (.xlsx)
+ * @param {Array<Object>} data - Array of objects to export
+ * @param {string} filename - Desired filename (without extension)
+ */
+function exportJsonToExcel(data, filename = 'export') {
+    if (!data || !data.length) {
+        console.error('No data to export');
+        return;
+    }
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    XLSX.writeFile(wb, `${filename}.xlsx`);
+}

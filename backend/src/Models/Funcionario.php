@@ -18,7 +18,7 @@ class Funcionario
         // Map fields from trd_acceso_usuarios to expected trd_desve_funcionarios fields
         $query = "SELECT 
                     usr_id as fnc_id, 
-                    usr_rut as fnc_rut, 
+                    usr_email as fnc_email, 
                     usr_nombre as fnc_nombre, 
                     usr_apellido as fnc_apellido,
                     NULL as fnc_cargo 
@@ -33,7 +33,7 @@ class Funcionario
     {
         $query = "SELECT 
                     usr_id as fnc_id, 
-                    usr_rut as fnc_rut, 
+                    usr_email as fnc_email, 
                     usr_nombre as fnc_nombre, 
                     usr_apellido as fnc_apellido,
                     NULL as fnc_cargo 

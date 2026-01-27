@@ -247,6 +247,26 @@
                 "tipo": "Pagina",
                 "nombre": "Listado de Ingresos",
                 "Enlace": "paginas/desve_listado_ingresos.html"
+            },
+            {
+                "id": "7.3",
+                "tipo": "Pagina",
+                "nombre": "Historial DESVE",
+                "Enlace": "paginas/desve_historial.html"
+            }
+        ]
+    },
+    {
+        "id": "8",
+        "tipo": "categoria",
+        "nombre": "Ingresos",
+        "icon": "file-text",
+        "contenido": [
+            {
+                "id": "8.1",
+                "tipo": "Pagina",
+                "nombre": "Historial Ingresos",
+                "Enlace": "paginas/ingr_historial.html"
             }
         ]
     }

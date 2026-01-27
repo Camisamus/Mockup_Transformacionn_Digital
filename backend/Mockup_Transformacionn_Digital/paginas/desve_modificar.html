@@ -35,7 +35,7 @@
                 <p class="text-muted mb-0" id="header_expediente">Actualice los campos de la solicitud</p>
             </div>
             <div class="toolbar">
-                <button type="button" class="btn btn-toolbar btn-dark text-white"
+                <button type="button" class="btn btn-toolbar btn-dark "
                     onclick="location.href='desve_listado_ingresos.html'">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -106,14 +106,6 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <label class="form-label small fw-bold text-muted">Funcionario Interno (No
-                                        editable)</label>
-                                    <input type="text" class="form-control form-control-sm bg-light"
-                                        id="FuncionarioInternoNombre" readonly>
-                                    <input type="hidden" id="FuncionarioInternoId">
-                                </div>
-
-                                <div class="col-12">
                                     <label for="DetalleIngreso" class="form-label small fw-bold">Detalle de
                                         Ingreso</label>
                                     <textarea class="form-control form-control-sm" id="DetalleIngreso"
@@ -125,6 +117,42 @@
                                     <textarea class="form-control form-control-sm" id="Observaciones"
                                         rows="3"></textarea>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Destinatarios -->
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h5 class="fw-bold fs-6 mb-0">Destinatarios</h5>
+                                <button type="button" class="btn btn-toolbar btn-dark"
+                                    onclick="abrirModalBuscarFuncionario()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                    </svg>
+                                    Buscar Funcionario
+                                </button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0" id="tabla_destinos">
+                                    <thead class="table-light text-uppercase small">
+                                        <tr>
+                                            <th>Funcionario</th>
+                                            <th>Email</th>
+                                            <th class="text-end">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody_destinos" class="small">
+                                        <tr id="placeholder_destinos">
+                                            <td colspan="2" class="text-center text-muted py-4">No hay destinatarios
+                                                agregados.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -271,6 +299,151 @@
                         data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-dark btn-sm px-4"
                         onclick="guardarOrigenEspecial()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Funcionarios -->
+    <div class="modal fade" id="modalFuncionarios" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold fs-6">Buscar Funcionario Interno</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <input type="text" class="form-control form-control-sm" id="filtroFuncionario"
+                            placeholder="Filtrar por nombre o RUT...">
+                    </div>
+                    <div class="table-responsive" style="max-height: 400px;">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light text-uppercase small">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Email</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th class="text-end">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista_busqueda_fnc" class="small">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Nuevo Origen Especial -->
+    <div class="modal fade" id="modalNuevoOrigenEspecial" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold fs-6">Agregar Origen Especial</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-0">
+                        <label for="textoNuevoOrigenEspecial" class="form-label small fw-bold">Nuevo Origen
+                            Especial</label>
+                        <input type="text" class="form-control form-control-sm" id="textoNuevoOrigenEspecial"
+                            placeholder="Escriba aquí el origen especial...">
+                    </div>
+                </div>
+                <div class="modal-footer border-0 bg-light">
+                    <button type="button" class="btn btn-link text-muted text-decoration-none small"
+                        data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-dark btn-sm px-4"
+                        onclick="guardarOrigenEspecial()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Buscar Contribuyente -->
+    <div class="modal fade" id="modalBuscarContribuyente" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold fs-6">Buscar Contribuyente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <input type="text" class="form-control form-control-sm me-2" id="filtroContribuyente"
+                            placeholder="Filtrar por RUT o nombre...">
+                        <button type="button" class="btn btn-sm btn-dark" onclick="abrirModalNuevoContribuyente()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Nuevo
+                        </button>
+                    </div>
+                    <div class="table-responsive" style="max-height: 400px;">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light text-uppercase small">
+                                <tr>
+                                    <th>RUT</th>
+                                    <th>Nombre Completo</th>
+                                    <th class="text-end">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista_busqueda_contrib" class="small">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Nuevo Contribuyente -->
+    <div class="modal fade" id="modalNuevoContribuyente" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold fs-6">Nuevo Contribuyente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="form_nuevo_contribuyente">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label for="nc_rut" class="form-label small fw-bold">RUT <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" id="nc_rut" required
+                                    placeholder="12345678-9">
+                            </div>
+                            <div class="col-12">
+                                <label for="nc_nombre" class="form-label small fw-bold">Nombre <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" id="nc_nombre" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="nc_paterno" class="form-label small fw-bold">Apellido Paterno</label>
+                                <input type="text" class="form-control form-control-sm" id="nc_paterno">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="nc_materno" class="form-label small fw-bold">Apellido Materno <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm" id="nc_materno" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0 bg-light">
+                    <button type="button" class="btn btn-link text-muted text-decoration-none small"
+                        data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-dark btn-sm px-4"
+                        onclick="guardarNuevoContribuyente()">Guardar</button>
                 </div>
             </div>
         </div>

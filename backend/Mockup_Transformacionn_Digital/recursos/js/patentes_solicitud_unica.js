@@ -579,7 +579,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         inputsHTML += `
             <div class="col-12 text-end">
-                <button type="button" class="btn btn-info text-white" id="${btnAddId}">
+                <button type="button" class="btn btn-info " id="${btnAddId}">
                     <i data-feather="plus"></i> Agregar a ${tableName}
                 </button>
             </div>

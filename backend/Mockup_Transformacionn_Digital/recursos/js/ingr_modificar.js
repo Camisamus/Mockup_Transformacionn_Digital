@@ -226,12 +226,15 @@ function renderizarBusquedaFuncionarios(filtro) {
     const term = filtro.toLowerCase();
     const filtrados = funcionarios.filter(f =>
         f.fnc_nombre.toLowerCase().includes(term) ||
-        f.fnc_apellido.toLowerCase().includes(term)
+        f.fnc_apellido.toLowerCase().includes(term) ||
+        (f.fnc_email && f.fnc_email.toLowerCase().includes(term))
     );
 
     filtrados.forEach(f => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
+            <td>${f.fnc_id || '-'}</td>
+            <td>${f.fnc_email || '-'}</td>
             <td>${f.fnc_nombre}</td>
             <td>${f.fnc_apellido}</td>
             <td class="text-end">

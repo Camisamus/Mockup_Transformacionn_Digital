@@ -28,14 +28,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${item.total}</td>
                 <td>${item.vencimiento}</td>
                 <td>
-                    <button class="btn btn-danger btn-sm text-white" title="Descargar Comprobante">
+                    <button class="btn btn-danger btn-sm " title="Descargar Comprobante">
                         <i data-feather="file-text"></i> PDF
                     </button>
                 </td>
             `;
             tablePagadasBody.appendChild(row);
         });
-        
+
         // Re-initialize feather icons for new content
         if (typeof feather !== 'undefined') {
             feather.replace();

@@ -37,7 +37,7 @@ class DESVE_Solicitud
         $solicitud = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($solicitud) {
-            // ID para buscar respuestas: puede ser el actual o el original si es un re-ingreso
+            // ID para buscar respuestas
             $id_para_respuestas = $solicitud['sol_reingreso_id'] ?: $id;
 
             // Obtener respuestas relacionadas
@@ -46,6 +46,9 @@ class DESVE_Solicitud
             $stmt_respuestas->bindParam(1, $id_para_respuestas);
             $stmt_respuestas->execute();
             $solicitud['respuestas'] = $stmt_respuestas->fetchAll(PDO::FETCH_ASSOC);
+
+            // Obtener destinos
+            $solicitud['destinos'] = $this->getDestinosBySolicitud($id);
 
             // Registrar consulta en bitácora (si hay sesión de usuario)
             if (isset($_SESSION['user_id'])) {
@@ -56,16 +59,61 @@ class DESVE_Solicitud
 
             // Obtener comentarios generales
             $solicitud['comentarios'] = $this->comentario->getByRegistroId($solicitud['sol_registro_tramite']);
-
         }
 
         return $solicitud;
+    }
+
+    public function getDestinosBySolicitud($solId)
+    {
+        $query = "SELECT d.*, u.usr_nombre, u.usr_apellido, u.usr_email, CONCAT(u.usr_nombre, ' ', u.usr_apellido) as usr_nombre_completo 
+                  FROM trd_desve_destinos d
+                  LEFT JOIN trd_acceso_usuarios u ON d.tid_destino = u.usr_id
+                  WHERE d.tid_desve_solicitud = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $solId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function createDestinos($solId, $destinos)
+    {
+        if (!is_array($destinos) || empty($destinos))
+            return;
+
+        $query = "INSERT INTO trd_desve_destinos 
+                  (tid_desve_solicitud, tid_destino, tid_responde) 
+                  VALUES (:sol_id, :destino, null)";
+        $stmt = $this->conn->prepare($query);
+
+        foreach ($destinos as $d) {
+            $destinoId = is_array($d) ? ($d['usr_id'] ?? null) : $d;
+            if (!$destinoId) {
+                echo ("entro :(");
+                continue;
+            }
+
+            $stmt->bindValue(':sol_id', $solId);
+            $stmt->bindValue(':destino', $destinoId);
+            $stmt->execute();
+        }
+    }
+
+    public function deleteDestinosBySolicitud($solId)
+    {
+        $query = "DELETE FROM trd_desve_destinos WHERE tid_desve_solicitud = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $solId);
+        $stmt->execute();
     }
 
     public function create($data)
     {
         try {
             $this->conn->beginTransaction();
+
+            // Fallback for responsible user from session if not provided
+            $responsable_id = $data['sol_responsable'] ?? ($_SESSION['user_id'] ?? 1);
 
             // 1. Crear registro general de trámite
             $random_str = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2);
@@ -77,7 +125,7 @@ class DESVE_Solicitud
                           VALUES (:id_publica, '{$this->sysname}', :creador)";
             $stmt_rgt = $this->conn->prepare($query_rgt);
             $stmt_rgt->bindValue(":id_publica", $id_publica);
-            $stmt_rgt->bindValue(":creador", $data['sol_responsable'] ?? null);
+            $stmt_rgt->bindValue(":creador", $responsable_id);
             $stmt_rgt->execute();
             $rgt_id = $this->conn->lastInsertId();
 
@@ -134,16 +182,23 @@ class DESVE_Solicitud
             $stmt->bindValue(":sol_direccion", $data['sol_direccion'] ?? null);
             $stmt->bindValue(":sol_latitud", $data['sol_latitud'] ?? null);
             $stmt->bindValue(":sol_longitud", $data['sol_longitud'] ?? null);
-            $stmt->bindValue(":sol_responsable", $data['sol_responsable'] ?? null);
+            $stmt->bindValue(":sol_responsable", $responsable_id);
             $stmt->bindValue(":sol_registro_tramite", $rgt_id);
-            $stmt->bindValue(":sol_origen_esp", $data['sol_origen_esp'] ?? null);
+            // Cast to int directly to preserve 0, 1, 2 values
+            $stmt->bindValue(":sol_origen_esp", (int) ($data['sol_origen_esp'] ?? 0), PDO::PARAM_INT);
 
             if ($stmt->execute()) {
                 $data_id = $this->conn->lastInsertId();
-                // 3. Registrar en bitácora
-                $this->bitacora->registrar($rgt_id, "Ingresa solicitud: " . ($data['sol_nombre_expediente'] ?? 'Sin nombre'), $data['sol_responsable'] ?? null);
 
-                // 4. Registrar documentos adjuntos (Base64)
+                // 3. Crear destinos
+                if (isset($data['destinos'])) {
+                    $this->createDestinos($data_id, $data['destinos']);
+                }
+
+                // 4. Registrar en bitácora
+                $this->bitacora->registrar($rgt_id, "Ingresa solicitud: " . ($data['sol_nombre_expediente'] ?? 'Sin nombre'), $responsable_id);
+
+                // 5. Registrar documentos adjuntos (Base64)
                 if (isset($data['documentos']) && is_array($data['documentos'])) {
                     $docController = new \App\Controllers\DocumentoController($this->conn);
                     foreach ($data['documentos'] as $doc) {
@@ -187,6 +242,7 @@ class DESVE_Solicitud
         if (!$current)
             return false;
 
+        $this->conn->beginTransaction();
         $query = "UPDATE " . $this->table_name . " SET
             sol_ingreso_desve=:sol_ingreso_desve,
             sol_nombre_expediente=:sol_nombre_expediente,
@@ -195,7 +251,6 @@ class DESVE_Solicitud
             sol_detalle=:sol_detalle,
             sol_fecha_recepcion=:sol_fecha_recepcion,
             sol_prioridad_id=:sol_prioridad_id,
-            sol_funcionario_id=:sol_funcionario_id,
             sol_sector_id=:sol_sector_id,
             sol_fecha_vencimiento=:sol_fecha_vencimiento,
             sol_entrego_coordinador=:sol_entrego_coordinador,
@@ -221,7 +276,6 @@ class DESVE_Solicitud
         $stmt->bindParam(":sol_detalle", $data['sol_detalle']);
         $stmt->bindParam(":sol_fecha_recepcion", $data['sol_fecha_recepcion']);
         $stmt->bindParam(":sol_prioridad_id", $data['sol_prioridad_id']);
-        $stmt->bindParam(":sol_funcionario_id", $data['sol_funcionario_id']);
         $stmt->bindParam(":sol_sector_id", $data['sol_sector_id']);
         $stmt->bindParam(":sol_fecha_vencimiento", $data['sol_fecha_vencimiento']);
         $stmt->bindParam(":sol_entrego_coordinador", $data['sol_entrego_coordinador'], PDO::PARAM_BOOL);
@@ -235,7 +289,7 @@ class DESVE_Solicitud
         $stmt->bindParam(":sol_latitud", $data['sol_latitud']);
         $stmt->bindParam(":sol_longitud", $data['sol_longitud']);
         $stmt->bindParam(":sol_responsable", $data['sol_responsable']);
-        $stmt->bindValue(":sol_origen_esp", (bool) ($data['sol_origen_esp'] ?? false), PDO::PARAM_BOOL);
+        $stmt->bindValue(":sol_origen_esp", (int) ($data['sol_origen_esp'] ?? 0), PDO::PARAM_INT);
         $stmt->bindParam(":id", $id);
 
         try {
@@ -258,6 +312,12 @@ class DESVE_Solicitud
                 if (!empty($cambios)) {
                     $mensaje = "Edita: " . implode(", ", $cambios);
                     $this->bitacora->registrar($current['sol_registro_tramite'], $mensaje);
+                }
+
+                // Manejar destinos en actualización
+                if (isset($data['destinos'])) {
+                    $this->deleteDestinosBySolicitud($id);
+                    $this->createDestinos($id, $data['destinos']);
                 }
 
                 // Manejar nuevos documentos adjuntos (Base64)

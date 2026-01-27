@@ -41,8 +41,7 @@
                     </svg>
                     PDF
                 </button>
-                <button type="button" class="btn btn-toolbar btn-dark text-white"
-                    onclick="location.href='desve_nuevo.html'">
+                <button type="button" class="btn btn-toolbar btn-dark" onclick="location.href='desve_nuevo.html'">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -121,14 +120,13 @@
                     <table class="table table-hover align-middle mb-0" id="tablaAtenciones">
                         <thead class="table-light text-uppercase small">
                             <tr>
-                                <th style="width: 80px;">Acción</th>
-                                <th>RGT / Expediente</th>
-                                <th>Origen / Organización</th>
-                                <th>Fecha Rec.</th>
-                                <th>Funcionario / Sector</th>
-                                <th>Vencimiento</th>
-                                <th class="text-center">Estado</th>
-                                <th class="text-center">Días</th>
+                                <th style="width: 50px;">Acción</th>
+                                <th style="width: 80px;">ID</th>
+                                <th class="d-none d-md-table-cell">Fecha Rec.</th>
+                                <th class="d-none d-md-table-cell">Vencimiento</th>
+                                <th class="d-none d-md-table-cell">Prioridad</th>
+                                <th class="d-none d-md-table-cell text-center">Estado</th>
+                                <th style="width: 50px;" class="text-center"><i data-feather="plus-circle"></i></th>
                             </tr>
                         </thead>
                         <tbody id="tbody_desve" class="small">
@@ -143,6 +141,10 @@
     <script src="../recursos/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Export Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="../recursos/js/export_utils.js"></script>
     <script>
         feather.replace();
     </script>
