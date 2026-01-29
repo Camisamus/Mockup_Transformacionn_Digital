@@ -3,6 +3,7 @@
 // Handles path resolution for resources
 // Global API Configuration
 // Global API Configuration - Detect backend/api path automatically
+let Permisos = [];
 (function () {
     const path = window.location.pathname;
     const backendIdx = path.indexOf('/backend/');
@@ -461,6 +462,7 @@ function buildMenuHierarchy(flatItems) {
 
     // 1. Normalize and Map all items by ID
     items.forEach(item => {
+        Permisos.push(item.rol_enlace);
         // Normalize fields from DB (rol_*) to UI expectations
         item.id = item.rol_id || item.id;
         item.nombre = item.rol_nombre || item.nombre;

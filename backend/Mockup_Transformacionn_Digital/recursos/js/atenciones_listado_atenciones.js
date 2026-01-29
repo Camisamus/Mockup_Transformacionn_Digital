@@ -28,7 +28,7 @@ function renderizarTabla(datos) {
 
         tr.innerHTML = `
             <td class="fw-bold">${atencion.numero_atencion}</td>
-            <td>${atencion.fecha}</td>
+            <td>${atencion.fecha.substring(0, 10)}</td>
             <td><span class="badge bg-white text-dark border fw-normal px-2">${atencion.tipo}</span></td>
             <td>${atencion.organizacion}</td>
             <td>${atencion.proyecto}</td>

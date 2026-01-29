@@ -164,7 +164,11 @@ async function loadSolicitationDetails(id, currentUser) {
         if (result.status === 'success' && result.data) {
             const sol = result.data;
             currentSolRegistroId = sol.sol_registro_tramite;
-            if (sol.sol_responsable != String(currentUser.id) || sol.sol_responsable == null) {
+            let aux = sol.sol_responsable != String(currentUser.id) || sol.sol_responsable == null;
+            if (aux) {
+                aux = !Permisos.some(navlink => navlink === "paginas/desve_listado_ingresos.html");
+            }
+            if (aux) {
                 await Swal.fire({
                     title: 'Acceso Denegado',
                     text: `Usted no es el funcionario responsable de esta solicitud.`,
@@ -449,7 +453,7 @@ function renderResponseBitacora(respuestas) {
         const name = func ? `${func.fnc_nombre} ${func.fnc_apellido}` : (r.res_funcionario || 'N/A');
         const row = `
             <tr>
-                <td>${r.res_fecha}</td>
+                <td>${r.res_fecha.substring(0, 10)}</td>
                 <td>${name}</td>
                 <td><span class="badge ${r.res_tipo === 'Respuesta Final' ? 'bg-success' : 'bg-info'}">${r.res_tipo}</span></td>
                 <td class="small">${r.res_texto}</td>

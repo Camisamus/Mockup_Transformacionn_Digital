@@ -3,6 +3,13 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
 });
 
+// Esta función corre solo cuando TODO (imágenes, scripts, CSS) terminó de cargar
+window.addEventListener('load', () => {// Espera 100ms adicionales después de que todo cargó
+    setTimeout(() => {
+        seguridad();
+    }, 1);
+});
+
 let funcionarios = [];
 let destinos = [];
 let enlaces = [];

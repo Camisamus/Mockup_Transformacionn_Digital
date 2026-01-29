@@ -267,7 +267,7 @@ function renderResponseBitacora(respuestas) {
         const name = func ? `${func.fnc_nombre} ${func.fnc_apellido}` : (r.res_funcionario || 'N/A');
         const row = `
             <tr>
-                <td>${r.res_fecha}</td>
+                <td>${r.res_fecha.substring(0, 10)}</td>
                 <td>${name}</td>
                 <td><span class="badge ${r.res_tipo === 'Respuesta Final' ? 'bg-success' : 'bg-info'}">${r.res_tipo}</span></td>
                 <td class="small">${r.res_texto}</td>
@@ -289,7 +289,7 @@ function renderComments(comments) {
             <div class="list-group-item px-0 border-0 border-bottom">
                 <div class="d-flex justify-content-between x-small text-muted mb-1">
                     <strong>${c.usr_nombre} ${c.usr_apellido}</strong>
-                    <span>${c.gco_fecha}</span>
+                    <span>${c.gco_fecha.substring(0, 10)}</span>
                 </div>
                 <div class="small">${c.gco_comentario}</div>
             </div>

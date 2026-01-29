@@ -35,7 +35,7 @@ function renderizarTabla(datos) {
 
         tr.innerHTML = `
             <td class="fw-bold">${item.id}</td>
-            <td>${item.fecha}</td>
+            <td>${item.fecha.substring(0, 10)}</td>
             <td><span class="badge ${badgeClass} fw-normal">${item.estado}</span></td>
             <td>${item.tipo}</td>
             <td>${item.responsable}</td>

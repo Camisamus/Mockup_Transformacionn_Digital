@@ -91,6 +91,28 @@ async function cargarDatosIngreso(params) {
 
         if (result.status === 'success' || (result.data && !result.status)) {
             const data = result.data;
+            const sessionUser = await checkSession();
+            if (!sessionUser) return; // checkSession handles redirect
+            if (sessionUser.id != data.tis_responsable) {
+                const destinos = data.destinos || [];
+                // Convert both to strings or integers for safe comparison
+                const MiRelacion = destinos.find(d => parseInt(d.tid_destino) === parseInt(sessionUser.id));
+
+                if (!MiRelacion) {
+                    Swal.fire({
+                        title: 'Acceso Restringido',
+                        text: 'Usted no tiene autorización para consultar esta solicitud.',
+                        icon: 'warning',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        confirmButtonText: 'Volver a Bandeja'
+                    }).then(() => {
+                        window.location.href = 'ingr_bandeja.html';
+                    });
+                    return;
+                }
+            }
+
             currentRgtId = data.tis_registro_tramite;
             renderizarIngreso(data);
 
@@ -143,7 +165,7 @@ function renderizarIngreso(data) {
     document.getElementById('info_titulo').innerText = data.tis_titulo || '-';
     document.getElementById('info_rgt_id').innerText = data.rgt_id || '-';
     document.getElementById('info_id_publica').innerText = data.rgt_id_publica || '-';
-    document.getElementById('info_fecha').innerText = data.tis_fecha || '-';
+    document.getElementById('info_fecha').innerText = data.tis_fecha.substring(0, 10) || '-';
     const responsable = data.resp_nombre ? `${data.resp_nombre} ${data.resp_apellido}` : `ID: ${data.tis_responsable}`;
     document.getElementById('info_responsable').innerText = responsable;
     document.getElementById('info_contenido').innerHTML = data.tis_contenido ? data.tis_contenido.replace(/\n/g, '<br>') : 'Sin contenido';
@@ -176,7 +198,7 @@ function renderizarIngreso(data) {
             let estadoBadge = '<span class="badge bg-secondary">Pendiente</span>';
             if (dest.tid_responde == 1) {
                 estadoBadge = '<span class="badge bg-success">Aprobado</span>';
-            } else if (dest.tid_responde == 0 && dest.tid_fecha_respuesta) {
+            } else if (dest.tid_responde == 0 && dest.tid_fecha_respuesta.substring(0, 10)) {
                 estadoBadge = '<span class="badge bg-danger">Rechazado</span>';
             } else if (dest.tid_responde === '0') {
                 estadoBadge = '<span class="badge bg-danger">Rechazado</span>';
@@ -211,7 +233,7 @@ function renderizarIngreso(data) {
             item.innerHTML = `
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="fw-bold small">${entry.bit_evento}</div>
-                    <div class="text-muted" style="font-size: 0.75rem;">${entry.bit_fecha}</div>
+                    <div class="text-muted" style="font-size: 0.75rem;">${entry.bit_fecha.substring(0, 10)}</div>
                 </div>
                 <div class="small text-secondary">Por: ${entry.usr_nombre} ${entry.usr_apellido}</div>
             `;
@@ -272,7 +294,7 @@ function renderizarIngreso(data) {
             div.innerHTML = `
                 <div class="d-flex justify-content-between mb-1">
                     <span class="fw-bold small text-primary">${com.usr_nombre} ${com.usr_apellido}</span>
-                    <span class="text-muted" style="font-size: 0.7rem;">${com.gco_fecha}</span>
+                    <span class="text-muted" style="font-size: 0.7rem;">${com.gco_fecha.substring(0, 10)}</span>
                 </div>
                 <div class="small text-dark">${com.gco_comentario}</div>
             `;
@@ -548,5 +570,26 @@ async function checkAndRequestID() {
     } catch (e) {
         console.error(e);
         Swal.fire('Error', 'Error de conexión', 'error');
+    }
+}
+
+async function checkSession() {
+    try {
+        const response = await fetch(`${window.API_BASE_URL}/verify_session.php`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ACCION: "" })
+        });
+        const data = await response.json();
+        if (data.isAuthenticated) {
+            return data.user;
+        } else {
+            window.location.href = '../page.html';
+            return null;
+        }
+    } catch (e) {
+        console.error("Session check failed", e);
+        return null;
     }
 }

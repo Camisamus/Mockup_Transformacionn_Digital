@@ -104,6 +104,9 @@ async function loadSolicitationDetails(id) {
                     aux = true;
                 }
             });
+            if (!aux) {
+                aux = Permisos.some(navlink => navlink === "paginas/desve_listado_ingresos.html");
+            }
             // 3. Security Check (Only assigned official can respond)
             if (!aux) {
                 await Swal.fire({
@@ -251,7 +254,7 @@ function renderResponseBitacora(respuestas) {
             <tr>
                 <td>${r.res_id}</td>
                 <td>${name}</td>
-                <td>${r.res_fecha}</td>
+                <td>${r.res_fecha.substring(0, 10)}</td>
                 <td><span class="badge ${r.res_tipo === 'Respuesta Final' ? 'bg-success' : 'bg-info'}">${r.res_tipo}</span></td>
                 <td>${r.res_texto}</td>
             </tr>
@@ -266,7 +269,7 @@ function renderAuditBitacora(bitacora) {
     bitacora.forEach(entry => {
         const row = `
             <tr>
-                <td>${entry.bit_fecha}</td>
+                <td>${entry.bit_fecha.substring(0, 10)}</td>
                 <td>${entry.usr_nombre} ${entry.usr_apellido}</td>
                 <td>${entry.bit_evento}</td>
             </tr>
@@ -287,7 +290,7 @@ function renderComments(comments) {
             <div class="list-group-item px-0 border-0 border-bottom">
                 <div class="d-flex justify-content-between small text-muted mb-1">
                     <strong>${c.usr_nombre} ${c.usr_apellido}</strong>
-                    <span>${c.gco_fecha}</span>
+                    <span>${c.gco_fecha.substring(0, 10)}</span>
                 </div>
                 <div class="small">${c.gco_comentario}</div>
             </div>
