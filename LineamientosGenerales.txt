@@ -73,7 +73,7 @@ LINEAMIENTOS GENERALES DEL SISTEMA DE PATENTES
     - Las validaciones de los formularios deben realizarse por duplicado: en el front js y en el controlador php que lo recibe.
 
 16. FORMATO DE FECHAS
-    - Todas las fechas deben desplegarse siempre en formato DD-MM-AAAA.
+    - Todas las fechas deben desplegarse siempre en formato DD-MM-AAAA con excepcion de los comentarios que deben estar en formato DD-MM-AAAA HH:MM:SS.
 
 17. POLÍTICA DE DATOS FALTANTES (GET)
     - Si una página requiere un parámetro por GET (ej: `id=123`) para cargar un registro y este no está presente en la URL, la página NO debe mostrar un error seco ni redirigir.

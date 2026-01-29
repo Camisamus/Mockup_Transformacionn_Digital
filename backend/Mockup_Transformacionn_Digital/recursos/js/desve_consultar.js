@@ -68,6 +68,26 @@ function extractData(response) {
 
 async function loadSolicitationDetails(id) {
     try {
+        // 1. Verify Session
+        const sessionRes = await fetch(`${window.API_BASE_URL}/verify_session.php`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ACCION: "" })
+        });
+        const sessionData = await sessionRes.json();
+
+        if (!sessionData.isAuthenticated || !sessionData.user) {
+            await Swal.fire({
+                title: "Sesión Requerida",
+                text: "Debe iniciar sesión para acceder a esta página.",
+                icon: "warning",
+                confirmButtonText: "Ir al Login"
+            });
+            window.location.href = 'index.html'; // Assuming index is login
+            return;
+        }
+        currentUser = sessionData.user;
         const response = await fetch(`${window.API_BASE_URL}/solicitudes_desve.php`, {
             method: 'POST',
             credentials: 'include',
@@ -78,6 +98,23 @@ async function loadSolicitationDetails(id) {
 
         if (result.status === 'success' && result.data) {
             const sol = result.data;
+            let aux = false;
+            sol.destinos.forEach(destino => {
+                if (destino.tid_destino == String(currentUser.id)) {
+                    aux = true;
+                }
+            });
+            // 3. Security Check (Only assigned official can respond)
+            if (!aux) {
+                await Swal.fire({
+                    title: 'Acceso Denegado',
+                    text: `Esta solicitud está asignada a otro funcionario.`,
+                    icon: 'error',
+                    confirmButtonText: 'Volver a Bandeja'
+                });
+                window.location.href = 'desve_listado_ingresos.html';
+                return;
+            }
             currentSolRegistroId = sol.sol_registro_tramite;
 
             // Header info
@@ -98,29 +135,48 @@ async function loadSolicitationDetails(id) {
             document.getElementById('info_expediente').innerText = sol.sol_nombre_expediente || '-';
             document.getElementById('info_id').innerText = sol.sol_id || '-';
             document.getElementById('info_rgt').innerText = sol.rgt_id_publica || '-';
+            document.getElementById('info_desve').innerText = sol.sol_ingreso_desve || '';
+            document.getElementById('info_reingreso').innerText = sol.sol_reingreso_id || '';
 
             // Resolve Origin
             let originName = '-';
             let tipoOrgName = '-';
-            const orgList = sol.sol_origen_esp == 1 ? organizacionesDESVE : organizaciones;
-            const org = orgList.find(o => o.org_id == sol.sol_origen_id);
-            if (org) {
-                originName = org.org_nombre;
-                const tipo = tiposOrganizacion.find(t => t.tor_id == org.org_tipo_id);
-                if (tipo) tipoOrgName = tipo.tor_nombre;
+
+            // Resolve Organization Type and Origen
+            let orgList = [];
+            let org = {};
+            switch (parseInt(sol.sol_origen_esp)) {
+                case 0:
+                    orgList = organizaciones;
+                    org = orgList.find(o => o.org_id == sol.sol_origen_id);
+                    break;
+                case 1:
+                    orgList = organizacionesDESVE;
+                    org = orgList.find(o => o.org_id == sol.sol_origen_id);
+                    break;
+                case 2:
+                    orgList = organizacionesDESVE;
+                    org = orgList.find(o => o.org_id == sol.sol_origen_id);
+                    break;
+                default:
+                    OrigenEspecial = false;
             }
-            document.getElementById('info_origen').innerText = originName;
-            document.getElementById('info_tipo_org').innerText = tipoOrgName;
+            let tiporg = tiposOrganizacion.find(t => t.tor_id == org.org_tipo_id);
+            if (org) {
+                document.getElementById('info_tipo_org').innerText = tiporg.tor_nombre;
+                //handleTipoOrgChange(); // Populate OrigenSolicitud based on Type
+                document.getElementById('info_origen').innerText = org.org_nombre;
+            }
 
             const sector = sectores.find(s => s.sec_id == sol.sol_sector_id);
             document.getElementById('info_sector').innerText = sector ? sector.sec_nombre : '-';
 
-            document.getElementById('info_fecha_recepcion').innerText = sol.sol_fecha_recepcion || '-';
+            document.getElementById('info_fecha_recepcion').innerText = sol.sol_fecha_recepcion.substring(0, 10) || '-';
 
             const prio = prioridades.find(p => p.pri_id == sol.sol_prioridad_id);
             document.getElementById('info_prioridad').innerText = prio ? prio.pri_nombre : '-';
 
-            document.getElementById('info_vencimiento').innerText = sol.sol_fecha_vencimiento || '-';
+            document.getElementById('info_vencimiento').innerText = sol.sol_fecha_vencimiento.substring(0, 10) || '-';
 
             // Responsable
             const resp = funcionarios.find(f => f.fnc_id == sol.sol_responsable);
@@ -129,10 +185,43 @@ async function loadSolicitationDetails(id) {
             document.getElementById('info_detalle').innerText = sol.sol_detalle || 'Sin detalle';
             document.getElementById('info_observaciones').innerText = sol.sol_observaciones || 'Sin observaciones';
 
-            // Metrics
-            document.getElementById('info_dias_ingreso').innerText = sol.sol_dias_transcurridos || 0;
-            document.getElementById('info_dias_vencimiento').innerText = sol.sol_dias_vencimiento || 0;
+            const calcularTranscurridos = () => {
+                if (!sol.sol_fecha_recepcion) return 0;
+                const fecha_recep = new Date(sol.sol_fecha_recepcion.replace(/-/g, '/')); // replace para mejor compatibilidad
+                const hoy = new Date();
+                // Normalizamos a medianoche para comparar solo días
+                const inicio = new Date(fecha_recep.getFullYear(), fecha_recep.getMonth(), fecha_recep.getDate());
+                const fin = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
 
+                const diff = fin - inicio;
+                return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+            };
+
+            // 2. Lógica para Días de Vencimiento (desde hoy hasta el vencimiento)
+            const calcularVencimiento = () => {
+                if (!sol.sol_fecha_vencimiento) return 0;
+                const fecha_vence = new Date(sol.sol_fecha_vencimiento.replace(/-/g, '/'));
+                const hoy = new Date();
+
+                const fin = new Date(fecha_vence.getFullYear(), fecha_vence.getMonth(), fecha_vence.getDate());
+                const inicio = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+
+                const diff = fin - inicio;
+                // Aquí no usamos Math.max porque si es negativo significa que YA ESTÁ VENCIDO
+                return Math.floor(diff / (1000 * 60 * 60 * 24));
+            };
+            // Metrics
+            // 3. Asignación al DOM
+            // Usamos el cálculo solo si el valor del JSON es "0" o null
+            document.getElementById('info_dias_ingreso').innerText =
+                (sol.sol_dias_transcurridos && sol.sol_dias_transcurridos !== "0")
+                    ? sol.sol_dias_transcurridos
+                    : calcularTranscurridos();
+
+            document.getElementById('info_dias_vencimiento').innerText =
+                (sol.sol_dias_vencimiento && sol.sol_dias_vencimiento !== "0")
+                    ? sol.sol_dias_vencimiento
+                    : calcularVencimiento();
             // Render Bitacoras & Destinations
             renderResponseBitacora(sol.respuestas || []);
             renderAuditBitacora(sol.bitacora || []);
@@ -337,9 +426,9 @@ async function solicitarID() {
         `,
         focusConfirm: false,
         showCancelButton: true,
-        confirmButtonText: 'Buscar',
         cancelButtonText: 'Volver a Bandeja',
         allowOutsideClick: false,
+        confirmButtonText: 'Buscar',
         preConfirm: () => {
             const type = document.getElementById('swal-id-type').value;
             const value = document.getElementById('swal-id-value').value.trim();

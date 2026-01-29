@@ -120,7 +120,15 @@ class AuthController
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':usuario_id', $_SESSION['user_id']);
         $stmt->execute();
-
+        if ($stmt->rowCount() == 0) {
+            $permissions = [
+                "rol_id" => "0",
+                "rol_nombre" => "Bandeja",
+                "rol_enlace" => "paginas/Bandeja.html",
+                "rol_tipo" => "Pagina"
+            ];
+            return $permissions;
+        }
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     private function recoverSessionByEmail(string $email): void

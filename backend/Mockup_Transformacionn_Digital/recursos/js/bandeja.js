@@ -58,7 +58,8 @@ function renderPage(page) {
 
     renderTable(paginatedItems, tbody);
     renderPagination(allItems.length, page);
-
+    document.getElementById('totalTareas').innerText = allItems.length;
+    document.getElementById('totalTareasAtrasadas').innerText = allItems.filter(item => new Date(item.fecha) < new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)).length;
     // Update info text
     const infoDiv = document.querySelector('.pagination-info');
     if (infoDiv) {
@@ -105,17 +106,11 @@ function renderTable(items, tbody) {
             <td>
                 <div class="d-flex align-items-center gap-2">
                     <div class="bg-primary  rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; font-size: 10px;">YO</div>
-                    <span>Mí mismo</span>
+                    <span>Yo mismo</span>
                 </div>
             </td>
-            <td>${item.origen}</td> 
             <td>${new Date(item.fecha).toLocaleDateString()}</td>
             <td><span class="badge ${item.estado === 'Atrasada' ? 'bg-danger' : (item.estado === 'Completada' ? 'bg-success' : 'bg-warning text-dark')} fw-normal">${item.estado}</span></td>
-            <td class="text-end">
-                <button class="btn btn-sm btn-outline-secondary">
-                    <i data-feather="arrow-right"></i>
-                </button>
-            </td>
         `;
 
         // Navigation on row click (excluding the toggle button)
@@ -182,6 +177,11 @@ window.toggleRow = toggleRow;
 function renderPagination(totalItems, currentPage) {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     // Simplified pagination for the new UI buttons
+    const container = document.querySelector('.pagination-controls');
+
+    if (!container) return; // Should allow this gracefully
+
+    container.innerHTML = '';
     const btnAnt = document.getElementById('btnAnterior');
     const btnSig = document.getElementById('btnSiguiente');
 
@@ -202,9 +202,18 @@ function renderPagination(totalItems, currentPage) {
     } 
     */
 
+    // Previous Button
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'btn btn-sm btn-outline-secondary px-3';
+    prevBtn.innerText = 'Anterior';
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => renderPage(currentPage - 1);
+    container.appendChild(prevBtn);
+
+
     // Next Button
     const nextBtn = document.createElement('button');
-    nextBtn.className = 'pagination-btn';
+    nextBtn.className = 'btn btn-sm btn-outline-secondary px-3';
     nextBtn.innerText = 'Siguiente';
     nextBtn.disabled = currentPage === totalPages;
     nextBtn.onclick = () => renderPage(currentPage + 1);

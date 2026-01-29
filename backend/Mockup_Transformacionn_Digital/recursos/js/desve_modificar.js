@@ -8,10 +8,31 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     if (!window.API_BASE_URL) window.API_BASE_URL = 'http://127.0.0.1/api';
+    // 1. Verify Session
+    const sessionRes = await fetch(`${window.API_BASE_URL}/verify_session.php`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ACCION: "" })
+    });
+    const sessionData = await sessionRes.json();
+
+    if (!sessionData.isAuthenticated || !sessionData.user) {
+        await Swal.fire({
+            title: "Sesión Requerida",
+            text: "Debe iniciar sesión para acceder a esta página.",
+            icon: "warning",
+            confirmButtonText: "Ir al Login"
+        });
+        window.location.href = 'index.html'; // Assuming index is login
+        return;
+    }
+    currentUser = sessionData.user;
+
 
     await loadInitialData();
     populateSelects();
-    loadSolicitationDetails(solicitationId);
+    loadSolicitationDetails(solicitationId, currentUser);
     // Initialize modal
     modalBusqueda = new bootstrap.Modal(document.getElementById('modalFuncionarios'));
 
@@ -62,6 +83,7 @@ let OrigenEspecial = false;
 let destinos = []; // Array for multiple destinations
 let modalBusqueda = null;
 let contribuyentes = [];
+let Solicitudes = [];
 
 async function loadInitialData() {
     try {
@@ -71,14 +93,15 @@ async function loadInitialData() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: "CONSULTAM" })
         };
-        const [orgRes, orgResDESVE, tipoRes, prioRes, funcRes, contribRes, secRes] = await Promise.all([
+        const [orgRes, orgResDESVE, contribRes, tipoRes, prioRes, funcRes, secRes, solRes] = await Promise.all([
             fetch(`${window.API_BASE_URL}/organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/organizaciones_desve.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/funcionarios.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/contribuyentes_general.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/sectores.php`, fetchOptions).then(r => r.json())
+            fetch(`${window.API_BASE_URL}/sectores.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/solicitudes_desve.php`, fetchOptions).then(r => r.json())
         ]);
 
         organizaciones = extractData(orgRes);
@@ -88,6 +111,7 @@ async function loadInitialData() {
         prioridades = extractData(prioRes);
         funcionarios = extractData(funcRes);
         sectores = extractData(secRes);
+        Solicitudes = extractData(solRes);
     } catch (e) {
         console.error("Error loading initial data:", e);
     }
@@ -108,6 +132,14 @@ function populateSelects() {
         option.innerText = o.tor_nombre;
         IDorgSelect.appendChild(option);
     });
+    const ReingresoSelect = document.getElementById('Reingreso');
+    ReingresoSelect.innerHTML = '<option value="" selected disabled>Seleccione tipo...</option>';
+    Solicitudes.forEach(o => {
+        const option = document.createElement('option');
+        option.value = o.sol_id;
+        option.innerText = o.sol_ingreso_desve + " - " + o.sol_nombre_expediente;
+        ReingresoSelect.appendChild(option);
+    });
 
     const secSelect = document.getElementById('Sector');
     secSelect.innerHTML = '<option value="" selected disabled>Seleccione sector...</option>';
@@ -119,7 +151,7 @@ function populateSelects() {
     });
 }
 
-async function loadSolicitationDetails(id) {
+async function loadSolicitationDetails(id, currentUser) {
     try {
         const response = await fetch(`${window.API_BASE_URL}/solicitudes_desve.php`, {
             method: 'POST',
@@ -132,13 +164,26 @@ async function loadSolicitationDetails(id) {
         if (result.status === 'success' && result.data) {
             const sol = result.data;
             currentSolRegistroId = sol.sol_registro_tramite;
+            if (sol.sol_responsable != String(currentUser.id) || sol.sol_responsable == null) {
+                await Swal.fire({
+                    title: 'Acceso Denegado',
+                    text: `Usted no es el funcionario responsable de esta solicitud.`,
+                    icon: 'error',
+                    confirmButtonText: 'Volver a Bandeja'
+                });
+                window.location.href = 'desve_listado_ingresos.html';
+                return;
+            }
+
 
             document.getElementById('header_public_id').innerText = `Modificar DESVE: ${sol.sol_ingreso_desve || sol.sol_id}`;
             document.getElementById('header_expediente').innerText = sol.sol_nombre_expediente || '';
 
             // Map Fields
             document.getElementById('idIngreso').value = sol.sol_id;
-            document.getElementById('IngresoDesve').value = sol.sol_ingreso_desve || '';
+            document.getElementById('Codigo_DESVE').value = sol.sol_ingreso_desve || '';
+            document.getElementById('Reingreso').value = sol.sol_reingreso_id || '';
+            //document.getElementById('IngresoDesve').value = sol.sol_ingreso_desve || '';
             document.getElementById('NombreExpediente').value = sol.sol_nombre_expediente || '';
 
             // Resolve Organization Type and Origen
@@ -417,7 +462,8 @@ function renderResponseBitacora(respuestas) {
 async function actualizarSolicitud() {
     const body = {
         sol_id: document.getElementById('idIngreso').value,
-        sol_ingreso_desve: document.getElementById('IngresoDesve').value,
+        sol_ingreso_desve: document.getElementById('Codigo_DESVE').value,
+        sol_reingreso_id: document.getElementById('Reingreso').value,
         sol_nombre_expediente: document.getElementById('NombreExpediente').value,
         sol_origen_id: document.getElementById('OrigenSolicitud').value,
         sol_detalle: document.getElementById('DetalleIngreso').value,
@@ -427,7 +473,6 @@ async function actualizarSolicitud() {
         sol_fecha_vencimiento: document.getElementById('FechaVecimiento').value,
         sol_estado_entrega: document.getElementById('estadoRespondido').checked,
         sol_observaciones: document.getElementById('Observaciones').value,
-        sol_reingreso_id: document.getElementById('Reingresado').value || null,
         sol_responsable: document.getElementById('Responsable').value || null,
         destinos: destinos,
         sol_origen_esp: OrigenEspecial,

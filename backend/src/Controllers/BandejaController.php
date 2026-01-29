@@ -26,9 +26,12 @@ class BandejaController
                             sol_nombre_expediente as asunto, 
                             sol_fecha_recepcion as fecha,
                             'DESVE' as origen,
-                            CASE WHEN sol_estado_entrega = 0 THEN 'Pendiente' ELSE 'Respondido' END as estado
-                        FROM trd_desve_solicitudes 
-                        WHERE sol_funcionario_id = :fid AND sol_borrado = 0 AND sol_estado_entrega = 0";
+                            'Pendiente' as estado -- Hardcoded since WHERE filters for 0
+                        FROM trd_desve_solicitudes sol
+                        JOIN trd_desve_destinos dest ON sol.sol_id = dest.tid_desve_solicitud 
+                        WHERE dest.tid_destino = :fid 
+                        AND sol.sol_borrado = 0 
+                        AND sol.sol_estado_entrega = 0";
 
         $stmt1 = $this->db->prepare($desveSql);
         $stmt1->bindParam(':fid', $funcionarioId);

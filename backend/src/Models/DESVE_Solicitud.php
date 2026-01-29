@@ -27,6 +27,19 @@ class DESVE_Solicitud
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function getAllNL()
+    {
+        $query = "SELECT tds.*, tdd.* FROM " . $this->table_name . " tds 
+INNER JOIN trd_desve_destinos tdd ON tds.sol_id = tdd.tid_desve_solicitud 
+WHERE tds.sol_borrado = 0 
+and tdd.tid_destino = :usu
+ORDER BY tds.sol_id DESC;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':usu', $_SESSION['user_id']);
+        $stmt->execute();
+        $solicitudes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $solicitudes;
+    }
 
     public function getById(int $id): array|null
     {

@@ -14,13 +14,18 @@ $db = $database->getConnection();
 $controller = new DESVE_SolicitudController($db);
 
 $id = $data['sol_id'] ?? null;
+$S = $data['S'] ?? null;
 
 switch ($data['ACCION']) {
     case 'CONSULTAM':
         if ($id) {
             $response = $controller->getById($id);
         } else {
-            $response = $controller->getAll();
+            if ($S == 'NL') {
+                $response = $controller->getAllNL();
+            } else {
+                $response = $controller->getAll();
+            }
         }
         echo json_encode($response);
         break;

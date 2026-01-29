@@ -1,0 +1,92 @@
+[
+  {
+    "id": "TC-01",
+    "categoria": "Arquitectura y Estándares",
+    "descripcion": "Verificar que todas las páginas HTML se ubiquen en '/paginas' y recursos en '/recursos'[cite: 1, 2].",
+    "estado": "listo"
+  },
+  {
+    "id": "TC-02",
+    "categoria": "Arquitectura y Estándares",
+    "descripcion": "Validar nomenclatura de archivos en minúsculas con prefijo 'desve_' (ej: desve_nuevo_ingreso.html)[cite: 5, 6].",
+    "estado": "listo"
+  },
+  {
+    "id": "TC-03",
+    "categoria": "Componentes UI",
+    "descripcion": "Confirmar carga dinámica del Sidebar y renderizado de iconos Feather en todas las vistas[cite: 8, 10].",
+    "estado": "listo"
+  },
+  {
+    "id": "TC-04",
+    "categoria": "Componentes UI",
+    "descripcion": "Validar que todos los campos de entrada posean un atributo 'id' único y descriptivo[cite: 24].",
+    "estado": "listo"
+  },
+  {
+    "id": "TC-05",
+    "categoria": "Datos y Mocks",
+    "descripcion": "Verificar que las tablas consuman archivos '_mock.json' y no tengan datos hardcodeados[cite: 18, 20].",
+    "estado": "listo"
+  },
+  {
+    "id": "TC-06",
+    "categoria": "Funcionalidad - Notario",
+    "descripcion": "Validar que el Notario pueda asignar múltiples destinatarios a una misma solicitud.",
+    "estado": "listo"
+  },
+  {
+    "id": "TC-07",
+    "categoria": "Funcionalidad - Notario",
+    "descripcion": "Certificar que solo el Notario tiene la facultad de cambiar el estado a 'Entregado/Resuelto'.",
+    "estado": "listo"
+  },
+  {
+    "id": "TC-08",
+    "categoria": "Funcionalidad - Usuarios",
+    "descripcion": "Verificar que todos los destinatarios asignados puedan visualizar la solicitud en su Historial.",
+    "estado": "listo"
+  },
+  {
+    "id": "TC-09",
+    "categoria": "Funcionalidad - Respuesta",
+    "descripcion": "Validar que un destinatario pueda marcar una 'Respuesta Definitiva' como señalización para el Notario sin cerrar el trámite.",
+    "estado": "listo"
+  },
+  {
+    "id": "TC-10",
+    "categoria": "Seguridad",
+    "descripcion": "Comprobar la redirección a la bandeja si un usuario intenta acceder a una solicitud no asignada.",
+    "estado": "listo"
+  },
+  {
+    "id": "TC-11",
+    "categoria": "Validación de Formulario",
+    "descripcion": "Confirmar obligatoriedad de todos los campos excepto Observaciones y Documentos.",
+    "estado": "listo"
+  },
+  {
+    "id": "TC-12",
+    "categoria": "Exportación",
+    "descripcion": "Verificar botón de exportación a Excel en tablas de Listado e Historial[cite: 15].",
+    "estado": null
+  },
+  {
+    "id": "TC-13",
+    "categoria": "Exportación",
+    "descripcion": "Verificar botón de exportación a PDF en tablas de Listado e Historial[cite: 16].",
+    "estado": null
+  },
+  {
+    "id": "TC-14",
+    "categoria": "Exportación",
+    "descripcion": "Validar opción de exportar el formulario de consulta o ingreso a PDF[cite: 17].",
+    "estado": null
+  },
+  {
+    "id": "TC-15",
+    "categoria": "Cron y Notificaciones",
+    "descripcion": "Simular cron nocturno y verificar que notifique a todos los destinatarios con solicitudes 'Pendientes'.",
+    "estado": null
+  }
+]

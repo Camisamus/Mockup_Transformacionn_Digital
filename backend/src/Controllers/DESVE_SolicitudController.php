@@ -20,6 +20,12 @@ class DESVE_SolicitudController
         $result = $this->solicitud->getAll();
         return ["status" => "success", "data" => $result];
     }
+    public function getAllNL()
+    {
+        $result = $this->solicitud->getAllNL();
+
+        return ["status" => "success", "data" => $result];
+    }
 
     public function getById($id)
     {

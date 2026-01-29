@@ -2,6 +2,7 @@ let currentSol = null;
 let currentUser = null;
 
 let organizaciones = [];
+let organizacionesDESVE = [];
 let tiposOrganizacion = [];
 let prioridades = [];
 let funcionarios = [];
@@ -56,9 +57,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         if (result.status === 'success' && result.data) {
             currentSol = result.data;
-
+            let aux = false;
+            currentSol.destinos.forEach(destino => {
+                if (destino.tid_destino == String(currentUser.id)) {
+                    aux = true;
+                }
+            });
             // 3. Security Check (Only assigned official can respond)
-            if (String(currentSol.sol_funcionario_id) !== String(currentUser.id)) {
+            if (!aux) {
                 await Swal.fire({
                     title: 'Acceso Denegado',
                     text: `Esta solicitud está asignada a otro funcionario.`,
@@ -112,8 +118,9 @@ async function loadLookups() {
         body: JSON.stringify({ ACCION: "CONSULTAM" })
     };
     try {
-        const [orgRes, tipoRes, prioRes, funcRes, secRes] = await Promise.all([
+        const [orgRes, orgResDESVE, tipoRes, prioRes, funcRes, secRes] = await Promise.all([
             fetch(`${window.API_BASE_URL}/organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/organizaciones_desve.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/funcionarios.php`, fetchOptions).then(r => r.json()),
@@ -121,6 +128,7 @@ async function loadLookups() {
         ]);
 
         organizaciones = extractData(orgRes);
+        organizacionesDESVE = extractData(orgResDESVE);
         tiposOrganizacion = extractData(tipoRes);
         prioridades = extractData(prioRes);
         funcionarios = extractData(funcRes);
@@ -146,11 +154,30 @@ function renderSolicitationInfo() {
     document.getElementById('display-recepcion').innerText = currentSol.sol_fecha_recepcion?.split(' ')[0] || '-';
     document.getElementById('display-detalle').innerText = currentSol.sol_detalle || 'Sin detalle';
 
-    const org = organizaciones.find(o => o.org_id == currentSol.sol_origen_id);
-    document.getElementById('display-org-nombre').innerText = org ? org.org_nombre : '-';
+    // Resolve Organization Type and Origen
+    let orgList = [];
+    let org = {};
+    switch (parseInt(currentSol.sol_origen_esp)) {
+        case 0:
+            orgList = organizaciones;
+            org = orgList.find(o => o.org_id == currentSol.sol_origen_id);
+            break;
+        case 1:
+            orgList = organizacionesDESVE;
+            org = orgList.find(o => o.org_id == currentSol.sol_origen_id);
+            break;
+        case 2:
+            orgList = organizacionesDESVE;
+            org = orgList.find(o => o.org_id == currentSol.sol_origen_id);
+            break;
+        default:
+            OrigenEspecial = false;
+    }
+    let tiporg = tiposOrganizacion.find(t => t.tor_id == org.org_tipo_id);
     if (org) {
-        const tipo = tiposOrganizacion.find(t => t.tor_id == org.org_tipo_id);
-        document.getElementById('display-org-tipo').innerText = tipo ? tipo.tor_nombre : '-';
+        document.getElementById('display-org-tipo').innerText = tiporg.tor_nombre;
+        //handleTipoOrgChange(); // Populate OrigenSolicitud based on Type
+        document.getElementById('display-org-nombre').innerText = org.org_nombre;
     }
 
     const prio = prioridades.find(p => p.pri_id == currentSol.sol_prioridad_id);
@@ -158,10 +185,43 @@ function renderSolicitationInfo() {
 
     const sec = sectores.find(s => s.sec_id == currentSol.sol_sector_id);
     document.getElementById('display-sector').innerText = sec ? sec.sec_nombre : '-';
+    const calcularTranscurridos = () => {
+        if (!currentSol.sol_fecha_recepcion) return 0;
+        const fecha_recep = new Date(currentSol.sol_fecha_recepcion.replace(/-/g, '/')); // replace para mejor compatibilidad
+        const hoy = new Date();
+        // Normalizamos a medianoche para comparar solo días
+        const inicio = new Date(fecha_recep.getFullYear(), fecha_recep.getMonth(), fecha_recep.getDate());
+        const fin = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
 
+        const diff = fin - inicio;
+        return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+    };
+
+    // 2. Lógica para Días de Vencimiento (desde hoy hasta el vencimiento)
+    const calcularVencimiento = () => {
+        if (!currentSol.sol_fecha_vencimiento) return 0;
+        const fecha_vence = new Date(currentSol.sol_fecha_vencimiento.replace(/-/g, '/'));
+        const hoy = new Date();
+
+        const fin = new Date(fecha_vence.getFullYear(), fecha_vence.getMonth(), fecha_vence.getDate());
+        const inicio = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+
+        const diff = fin - inicio;
+        // Aquí no usamos Math.max porque si es negativo significa que YA ESTÁ VENCIDO
+        return Math.floor(diff / (1000 * 60 * 60 * 24));
+    };
     // Metrics
-    document.getElementById('display-dias-ingreso').innerText = currentSol.sol_dias_transcurridos || 0;
-    document.getElementById('display-dias-vencimiento').innerText = currentSol.sol_dias_vencimiento || 0;
+    // 3. Asignación al DOM
+    // Usamos el cálculo solo si el valor del JSON es "0" o null
+    document.getElementById('display-dias-ingreso').innerText =
+        (currentSol.sol_dias_transcurridos && currentSol.sol_dias_transcurridos !== "0")
+            ? currentSol.sol_dias_transcurridos
+            : calcularTranscurridos();
+
+    document.getElementById('display-dias-vencimiento').innerText =
+        (currentSol.sol_dias_vencimiento && currentSol.sol_dias_vencimiento !== "0")
+            ? currentSol.sol_dias_vencimiento
+            : calcularVencimiento();
 }
 
 function handleFiles(files) {

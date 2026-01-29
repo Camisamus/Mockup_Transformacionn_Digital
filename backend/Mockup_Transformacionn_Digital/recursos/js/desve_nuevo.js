@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     await loadInitialData();
+    seguridad();
     populateSelects();
 
     // Default to current date
@@ -20,7 +21,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Event Listeners
     document.getElementById('ID_Organizacion').addEventListener('change', handleTipoOrgChange);
-    document.getElementById('FechaUltimaRecepcion').addEventListener('change', handleTipoOrgChange);
+    //document.getElementById('FechaUltimaRecepcion').addEventListener('change', handleTipoOrgChange);
 
     // btn_nuevo_origen onclick is set dynamically in handleTipoOrgChange
 
@@ -121,6 +122,14 @@ function populateSelects() {
         option.value = o.tor_id;
         option.innerText = o.tor_nombre;
         IDorgSelect.appendChild(option);
+    });
+    const ReingresoSelect = document.getElementById('Reingreso');
+    ReingresoSelect.innerHTML = '<option value="" selected disabled>Seleccione tipo...</option>';
+    Solicitudes.forEach(o => {
+        const option = document.createElement('option');
+        option.value = o.sol_id;
+        option.innerText = o.sol_ingreso_desve + " - " + o.sol_nombre_expediente;
+        ReingresoSelect.appendChild(option);
     });
 
     const secSelect = document.getElementById('Sector');
@@ -304,6 +313,8 @@ async function guardarSolicitud() {
 
     const body = {
         sol_nombre_expediente: document.getElementById('NombreExpediente').value,
+        sol_ingreso_desve: document.getElementById('Codigo_DESVE').value,
+        sol_reingreso_id: document.getElementById('Reingreso').value,
         sol_origen_id: origenValue,
         sol_origen_texto: origenTexto,
         sol_detalle: document.getElementById('DetalleIngreso').value,

@@ -612,3 +612,26 @@ function attachLayoutEvents() {
         });
     }
 }
+
+function seguridad() {
+    let aux = false;
+    let tienepermiso = document.getElementsByClassName("nav-link");
+    if (tienepermiso.length > 0) {
+        tienepermiso.forEach(permiso => {
+            if (permiso.href == window.location.href) {
+                aux = true;
+            }
+        });
+    }
+    // 3. Security Check (Only assigned official can respond)
+    if (!aux) {
+        Swal.fire({
+            title: 'Acceso Denegado',
+            text: `No tiene permiso para acceder a esta Página.`,
+            icon: 'error',
+            confirmButtonText: 'Volver a Bandeja'
+        });
+        window.location.href = 'bandeja.html';
+        return;
+    }
+}

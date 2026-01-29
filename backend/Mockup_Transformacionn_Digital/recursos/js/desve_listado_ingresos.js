@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     await loadInitialData();
+    seguridad();
     renderTable(allSolicitudes);
 
     document.getElementById('btn_buscar').addEventListener('click', buscarAtenciones);
@@ -58,6 +59,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 async function loadInitialData() {
+
+
     try {
         const fetchOptions = {
             method: 'POST',

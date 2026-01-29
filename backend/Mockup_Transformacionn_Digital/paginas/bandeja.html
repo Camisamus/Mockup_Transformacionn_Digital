@@ -49,41 +49,28 @@
 
         <!-- KPI Metrics (Simplified standard cards) -->
         <div class="row g-3 mb-4">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card shadow-sm border-0 h-100">
                     <div class="card-body p-4 d-flex align-items-center">
                         <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
                             <i data-feather="check-circle" class="text-primary"></i>
                         </div>
                         <div>
-                            <h6 class="text-muted small fw-bold mb-1">CUMPLIMIENTO</h6>
-                            <h3 class="fw-bold mb-0">85%</h3>
+                            <h6 class="text-muted small fw-bold mb-1">Tareas</h6>
+                            <h3 class="fw-bold mb-0" id="totalTareas">Calculando...</h3>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card shadow-sm border-0 h-100">
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 h-100" title="Tareas con fecha 3 días atras o mas">
                     <div class="card-body p-4 d-flex align-items-center">
                         <div class="rounded-circle bg-warning bg-opacity-10 p-3 me-3">
                             <i data-feather="alert-triangle" class="text-warning"></i>
                         </div>
                         <div>
                             <h6 class="text-muted small fw-bold mb-1">ATRASADAS</h6>
-                            <h3 class="fw-bold mb-0 text-warning">12</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card shadow-sm border-0 h-100">
-                    <div class="card-body p-4 d-flex align-items-center">
-                        <div class="rounded-circle bg-dark bg-opacity-10 p-3 me-3">
-                            <i data-feather="list" class="text-dark"></i>
-                        </div>
-                        <div>
-                            <h6 class="text-muted small fw-bold mb-1">TOTAL TAREAS</h6>
-                            <h3 class="fw-bold mb-0">145</h3>
+                            <h3 class="fw-bold mb-0 text-warning" id="totalTareasAtrasadas">Calculando...</h3>
                         </div>
                     </div>
                 </div>
@@ -105,10 +92,8 @@
                                 <th>Asunto / Título</th>
                                 <th>Origen</th>
                                 <th>Responsable</th>
-                                <th>Sector</th>
                                 <th>Fecha</th>
                                 <th>Estado</th>
-                                <th class="text-end">Acciones</th>
                             </tr>
                         </thead>
                         <tbody class="small">
@@ -119,8 +104,12 @@
 
                 <!-- Simple pagination controls -->
                 <div class="d-flex justify-content-end gap-2 mt-4">
-                    <button class="btn btn-sm btn-outline-secondary px-3" id="btnAnterior" disabled>Anterior</button>
-                    <button class="btn btn-sm btn-outline-secondary px-3" id="btnSiguiente">Siguiente</button>
+
+                    <div class="pagination-controls">
+                        <button class="btn btn-sm btn-outline-secondary px-3" id="btnAnterior"
+                            disabled>Anterior</button>
+                        <button class="btn btn-sm btn-outline-secondary px-3" id="btnSiguiente">Siguiente</button>
+                    </div>
                 </div>
             </div>
         </div>
