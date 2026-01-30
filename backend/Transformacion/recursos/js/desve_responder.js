@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             renderSolicitationInfo();
             renderResponseBitacora(currentSol.respuestas || []);
             renderComments(currentSol.comentarios || []);
-
+            loadDocuments()
             // Drag and Drop
             const dropZone = document.getElementById('drop_zone');
             const fileInput = document.getElementById('inputArchivosRespuesta');
@@ -451,3 +451,59 @@ async function solicitarID() {
         Swal.fire('Error', 'Error de conexión', 'error');
     }
 }
+
+async function loadDocuments() {
+    try {
+        const response = await fetch(`${window.API_BASE_URL}/documentos.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ACCION: "BuscarporTramite", tramite_id: currentSol.sol_registro_tramite }),
+            credentials: 'include'
+        });
+        const result = await response.json();
+        const container = document.getElementById('lista_documentos');
+        container.innerHTML = '';
+
+        if (result.status === 'success' && result.data) {
+            result.data.forEach(doc => {
+                const item = document.createElement('div');
+                item.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center bg-light mb-1 border rounded';
+                item.innerHTML = `
+                    <div class="text-truncate" style="max-width: 80%;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file me-2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                        <span class="small">${doc.doc_nombre_documento}</span>
+                    </div>
+                    <button class="btn btn-sm btn-link p-0" onclick="descargarDocumento('${doc.doc_id}', '${doc.doc_nombre_documento}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    </button>
+                `;
+                container.appendChild(item);
+            });
+        } else {
+            container.innerHTML = '<div class="text-muted small">Sin documentos adjuntos.</div>';
+        }
+    } catch (e) {
+        console.error("Load Documents Error:", e);
+    }
+}
+
+window.descargarDocumento = async function (id, nombre) {
+    try {
+        const response = await fetch(`${window.API_BASE_URL}/documentos.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ACCION: 'Bajar', ID: id }),
+            credentials: 'include'
+        });
+        if (!response.ok) throw new Error('Error en descarga');
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = nombre;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    } catch (e) {
+        Swal.fire('Error', 'No se pudo descargar el archivo.', 'error');
+    }
+};

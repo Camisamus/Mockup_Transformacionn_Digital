@@ -96,10 +96,10 @@ async function loadInitialData() {
         const [orgRes, orgResDESVE, contribRes, tipoRes, prioRes, funcRes, secRes, solRes] = await Promise.all([
             fetch(`${window.API_BASE_URL}/organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/organizaciones_desve.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/contribuyentes_general.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/funcionarios.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/contribuyentes_general.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sectores.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/solicitudes_desve.php`, fetchOptions).then(r => r.json())
         ]);
