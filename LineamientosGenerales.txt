@@ -1,10 +1,10 @@
 LINEAMIENTOS GENERALES DEL SISTEMA DE PATENTES
 
 1. ESTRUCTURA DE CARPETAS
-   - Todas las páginas HTML (excepto page.html) deben ir en la carpeta "paginas".
+   - Todas las páginas HTML (excepto index.html) deben ir en la carpeta "paginas".
    - Todos los recursos CSS, JS e imágenes deben ir en la carpeta "recursos" (subcarpetas css, js, img).
    - Todos los archivos de datos JSON deben ir en la carpeta "recursos/jsons".
-   - El archivo principal de entrada es "page.html" en la raíz.
+   - El archivo principal de entrada es "index.html" en la raíz.
 
 2. NOMENCLATURA DE ARCHIVOS
    - Usar minúsculas para nombrar carpetas y archivos.

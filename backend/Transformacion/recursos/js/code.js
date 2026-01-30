@@ -1,5 +1,5 @@
 // --- App State ---
-const API_BASE_URL = window.location.origin + '/api';
+const API_BASE_URL = window.location.origin + '/transformacion/api';
 
 const state = {
     isLoggedIn: localStorage.getItem('isLoggedIn') === 'true'
@@ -108,8 +108,8 @@ window.logout = async function () {
     // Detect if we are in a subdirectory (paginas/) or root
     // If current path has 'paginas', go up one level.
     if (window.location.pathname.includes('/paginas/')) {
-        //window.location.href = '../page.html';
+        //window.location.href = '../index.html';
     } else {
-        // window.location.href = 'page.html';
+        // window.location.href = 'index.html';
     }
 }

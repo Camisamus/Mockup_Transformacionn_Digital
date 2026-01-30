@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         return;
     }
 
-    if (!window.API_BASE_URL) window.API_BASE_URL = 'http://127.0.0.1/api';
+    if (!window.API_BASE_URL) window.API_BASE_URL = 'http://127.0.0.1/Transformacion/api';
     // 1. Verify Session
     const sessionRes = await fetch(`${window.API_BASE_URL}/verify_session.php`, {
         method: 'POST',

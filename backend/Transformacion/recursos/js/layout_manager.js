@@ -10,7 +10,7 @@ let Permisos = [];
     if (backendIdx !== -1) {
         window.API_BASE_URL = window.location.origin + path.substring(0, backendIdx) + '/backend/api';
     } else {
-        window.API_BASE_URL = window.location.origin + '/api';
+        window.API_BASE_URL = window.location.origin + '/transformacion/api';
     }
 })();
 
@@ -89,7 +89,6 @@ function injectLayout(pathPrefix) {
                 </ul>
             </nav>
             <div class="p-3 border-top border-primary-subtle small opacity-50">
-                <div class="sidebar-footer-text">Usuario: Cargando...</div>
             </div>
         </aside>
     `;
@@ -225,10 +224,10 @@ window.logout = async function () {
     localStorage.removeItem('user_data');
 
     // Redirect to root login. 
-    // If we are deep in paginas/, we go to ../page.html. 
-    // If we are at root, we go to page.html
+    // If we are deep in paginas/, we go to ../index.html. 
+    // If we are at root, we go to index.html
     const isRoot = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
-    const target = isRoot ? 'page.html' : '../page.html';
+    const target = isRoot ? 'index.html' : '../index.html';
     window.location.href = target;
 };
 

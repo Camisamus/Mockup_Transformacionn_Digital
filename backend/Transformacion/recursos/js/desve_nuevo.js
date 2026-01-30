@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async function () {
     // Ensure API_BASE_URL is available
     if (!window.API_BASE_URL) {
-        window.API_BASE_URL = 'http://127.0.0.1/api';
+        window.API_BASE_URL = 'http://127.0.0.1/Transformacion/api';
     }
 
     await loadInitialData();

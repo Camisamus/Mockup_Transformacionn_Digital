@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         return;
     }
 
-    if (!window.API_BASE_URL) window.API_BASE_URL = 'http://127.0.0.1/api';
+    if (!window.API_BASE_URL) window.API_BASE_URL = 'http://127.0.0.1/Transformacion/api';
 
     await loadInitialData();
     loadSolicitationDetails(solicitationId);

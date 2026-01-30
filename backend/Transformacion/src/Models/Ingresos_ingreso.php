@@ -186,7 +186,7 @@ class Ingresos_ingreso
             $random_str = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2);
             $fecha_yymmdd = date('ymd-Hi');
             $id_publica = $fecha_yymmdd . "-" . $this->sysname . "-" . $random_str;
-
+            //echo ($id_publica);
             // Use session user for creator/responsible if not provided
             if (session_status() === PHP_SESSION_NONE) {
                 session_start();
@@ -201,10 +201,12 @@ class Ingresos_ingreso
 
             $query_rgt = "INSERT INTO " . $this->table_name_parent . " 
                           (rgt_id_publica, rgt_tramite, rgt_creador) 
-                          VALUES (:id_publica, " . $this->sysname . ", :creador)";
+                          VALUES (:id_publica, :sysname, :creador)";
+            //echo ($query_rgt);
             $stmt_rgt = $this->conn->prepare($query_rgt);
             $stmt_rgt->bindValue(":id_publica", $id_publica);
             $stmt_rgt->bindValue(":creador", $creador_id);
+            $stmt_rgt->bindValue(":sysname", $this->sysname);
             $stmt_rgt->execute();
             $rgt_id = $this->conn->lastInsertId();
 
@@ -218,7 +220,7 @@ class Ingresos_ingreso
                 tis_respuesta = :tis_respuesta,
                 tis_fecha = :tis_fecha,
                 tis_registro_tramite = :tis_registro_tramite";
-
+            //echo ($query);
             $stmt = $this->conn->prepare($query);
 
             $stmt->bindValue(":tis_tipo", $data['tis_tipo'] ?? null);

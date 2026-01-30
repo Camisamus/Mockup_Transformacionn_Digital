@@ -4,7 +4,7 @@ let currentPage = 1;
 const itemsPerPage = 5; // Mostrar 5 items por página
 
 document.addEventListener('DOMContentLoaded', async function () {
-    const API_BASE_URL = window.API_BASE_URL || (window.location.origin + '/api');
+    const API_BASE_URL = window.API_BASE_URL || (window.location.origin + '/transformacion/api');
     const tbody = document.querySelector('#tablaBandeja tbody');
 
     // Clear loading/static
@@ -13,10 +13,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     try {
         // Fetch Inbox
         // Check if API_BASE_URL is correct or needs adjustment based on environment
-        const fetchUrl = (API_BASE_URL.endsWith('/api') ? API_BASE_URL : API_BASE_URL + '/api') + '/bandeja.php';
+        const fetchUrl = (API_BASE_URL.endsWith('/transformacion/api') ? API_BASE_URL : API_BASE_URL + '/transformacion/api') + '/bandeja.php';
 
         // Fix for consistent URL usage
-        const cleanBaseUrl = window.location.origin + (window.location.pathname.includes('/backend/') ? '/backend/api' : '/api');
+        const cleanBaseUrl = window.location.origin + (window.location.pathname.includes('/backend/') ? '/backend/api' : '/transformacion/api');
 
         const response = await fetch(`${cleanBaseUrl}/bandeja.php`, {
             method: 'POST',
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (response.status === 401) {
             // Redirect or handle unauth
             window.logout();
-            //window.location.href = 'page.html';
+            //window.location.href = 'index.html';
             return;
         }
 

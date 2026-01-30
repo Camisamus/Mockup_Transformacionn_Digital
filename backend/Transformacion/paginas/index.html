@@ -33,10 +33,10 @@
             localStorage.removeItem('user_data');
 
             // Redirect to root login. 
-            // If we are deep in paginas/, we go to ../page.html. 
-            // If we are at root, we go to page.html
-            const isRoot = window.location.pathname.endsWith('page.html') || window.location.pathname.endsWith('/');
-            const target = isRoot ? 'page.html' : '../page.html';
+            // If we are deep in paginas/, we go to ../index.html. 
+            // If we are at root, we go to index.html
+            const isRoot = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/');
+            const target = isRoot ? 'index.html' : '../index.html';
             window.location.href = target;
         });
     </script>

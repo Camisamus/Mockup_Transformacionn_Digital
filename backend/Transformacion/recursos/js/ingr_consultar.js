@@ -585,7 +585,7 @@ async function checkSession() {
         if (data.isAuthenticated) {
             return data.user;
         } else {
-            window.location.href = '../page.html';
+            window.location.href = '../index.html';
             return null;
         }
     } catch (e) {

@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async function () {
     console.log('Consulta de Atención loaded');
-    if (!window.API_BASE_URL) window.API_BASE_URL = 'http://127.0.0.1/api';
+    if (!window.API_BASE_URL) window.API_BASE_URL = 'http://127.0.0.1/Transformacion/api';
 
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
