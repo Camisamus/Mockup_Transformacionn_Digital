@@ -269,5 +269,69 @@
                 "Enlace": "paginas/ingr_historial.html"
             }
         ]
+    },
+    {
+        "id": "9",
+        "tipo": "categoria",
+        "nombre": "Administración del Sistema",
+        "icon": "settings",
+        "contenido": [
+            {
+                "id": "9.1",
+                "tipo": "subcategoria",
+                "nombre": "Mantenedores Base",
+                "contenido": [
+                    {
+                        "id": "9.1.1",
+                        "tipo": "Pagina",
+                        "nombre": "Áreas",
+                        "Enlace": "paginas/sisadmin_mantenedor_general_areas.html"
+                    },
+                    {
+                        "id": "9.1.2",
+                        "tipo": "Pagina",
+                        "nombre": "Roles",
+                        "Enlace": "paginas/sisadmin_mantenedor_acceso_roles.html"
+                    },
+                    {
+                        "id": "9.1.3",
+                        "tipo": "Pagina",
+                        "nombre": "Perfiles",
+                        "Enlace": "paginas/sisadmin_mantenedor_acceso_perfiles.html"
+                    },
+                    {
+                        "id": "9.1.4",
+                        "tipo": "Pagina",
+                        "nombre": "Usuarios",
+                        "Enlace": "paginas/sisadmin_mantenedor_acceso_usuarios.html"
+                    }
+                ]
+            },
+            {
+                "id": "9.2",
+                "tipo": "subcategoria",
+                "nombre": "Asignaciones y Vínculos",
+                "contenido": [
+                    {
+                        "id": "9.2.1",
+                        "tipo": "Pagina",
+                        "nombre": "Perfiles / Roles",
+                        "Enlace": "paginas/sisadmin_mantenedor_acceso_perfiles_roles.html"
+                    },
+                    {
+                        "id": "9.2.2",
+                        "tipo": "Pagina",
+                        "nombre": "Usuarios / Perfiles",
+                        "Enlace": "paginas/sisadmin_mantenedor_acceso_usuarios_perfiles.html"
+                    },
+                    {
+                        "id": "9.2.3",
+                        "tipo": "Pagina",
+                        "nombre": "Usuarios / Áreas",
+                        "Enlace": "paginas/sisadmin_mantenedor_general_areas_usuarios.html"
+                    }
+                ]
+            }
+        ]
     }
 ]
