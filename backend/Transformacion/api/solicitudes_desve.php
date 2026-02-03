@@ -33,6 +33,24 @@ switch ($data['ACCION']) {
     case 'CREAR':
         if ($data) {
             $response = $controller->create($data);
+
+            // Log CREAR
+            if (($response['status'] ?? '') === 'success') {
+                require_once '../src/Models/SystemLog.php';
+                $logModel = new \App\Models\SystemLog($db);
+                $logModel->crear([
+                    'evento' => 'CREATE',
+                    'tipo' => 'info',
+                    'severidad' => 'Bajo',
+                    'modulo' => 'DESVE',
+                    'usuario_id' => $data['sol_responsable'] ?? $_SESSION['user_id'] ?? null,
+                    'accion' => 'CREAR_SOLICITUD',
+                    'descripcion' => "Creación de solicitud DESVE: " . ($response['id'] ?? 'N/A'),
+                    'detalles' => json_encode(['data' => $data]),
+                    'ip' => $_SERVER['REMOTE_ADDR'],
+                    'resultado' => 'Exitoso'
+                ]);
+            }
         } else {
             $response = ["status" => "error", "message" => "Invalid input"];
         }
@@ -42,6 +60,24 @@ switch ($data['ACCION']) {
     case 'ACTUALIZAR':
         if ($id && $data) {
             $response = $controller->update($id, $data);
+
+            // Log ACTUALIZAR
+            if (($response['status'] ?? '') === 'success') {
+                require_once '../src/Models/SystemLog.php';
+                $logModel = new \App\Models\SystemLog($db);
+                $logModel->crear([
+                    'evento' => 'UPDATE',
+                    'tipo' => 'info',
+                    'severidad' => 'Bajo',
+                    'modulo' => 'DESVE',
+                    'usuario_id' => $_SESSION['user_id'] ?? null,
+                    'accion' => 'ACTUALIZAR_SOLICITUD',
+                    'descripcion' => "Actualización de solicitud DESVE: $id",
+                    'detalles' => json_encode(['id' => $id, 'cambios' => $data]),
+                    'ip' => $_SERVER['REMOTE_ADDR'],
+                    'resultado' => 'Exitoso'
+                ]);
+            }
         } else {
             $response = ["status" => "error", "message" => "ID and Data required for update"];
         }
@@ -67,6 +103,24 @@ switch ($data['ACCION']) {
     case 'BORRAR':
         if ($id) {
             $response = $controller->delete($id);
+
+            // Log BORRAR
+            if (($response['status'] ?? '') === 'success') {
+                require_once '../src/Models/SystemLog.php';
+                $logModel = new \App\Models\SystemLog($db);
+                $logModel->crear([
+                    'evento' => 'DELETE',
+                    'tipo' => 'warning',
+                    'severidad' => 'Medio',
+                    'modulo' => 'DESVE',
+                    'usuario_id' => $_SESSION['user_id'] ?? null,
+                    'accion' => 'BORRAR_SOLICITUD',
+                    'descripcion' => "Eliminación de solicitud DESVE: $id",
+                    'detalles' => json_encode(['id' => $id]),
+                    'ip' => $_SERVER['REMOTE_ADDR'],
+                    'resultado' => 'Exitoso'
+                ]);
+            }
         } else {
             $response = ["status" => "error", "message" => "ID required for delete"];
         }

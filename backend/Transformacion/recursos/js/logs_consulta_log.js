@@ -30,22 +30,49 @@ async function solicitarID() {
     }
 }
 
-function cargarLog(id) {
-    // In production, fetch from API
-    console.log('Cargando log:', id);
+async function cargarLog(id) {
+    try {
+        const response = await fetch(`../api/logs.php`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ACCION: 'GET',
+                    id: id,
+                }),
+            }
+        );
+        if (!response.ok) throw new Error('Log no encontrado');
 
-    // Mock data population
-    document.getElementById('log_id').value = id;
-    document.getElementById('log_fecha').value = '2024-12-11T10:30';
-    document.getElementById('log_tipo').value = 'Información';
-    document.getElementById('log_severidad').value = 'Bajo';
-    document.getElementById('log_usuario').value = 'admin';
-    document.getElementById('log_modulo').value = 'Subvenciones';
-    document.getElementById('log_accion').value = 'Creación de subvención';
-    document.getElementById('log_ip').value = '192.168.1.100';
-    document.getElementById('log_descripcion').value = 'Usuario creó nueva subvención SUB-2024-001';
-    document.getElementById('log_detalles').value = 'Operación completada exitosamente. Tiempo de ejecución: 245ms\nPayload: {"monto": 5000000, "destinatario": "Org ABC"}';
-    document.getElementById('log_resultado').value = 'Exitoso';
+        const log = await response.json();
+
+        // Populate fields
+        document.getElementById('log_id').value = log.id;
+        document.getElementById('log_fecha').value = log.fecha;
+        document.getElementById('log_tipo').value = log.tipo;
+        document.getElementById('log_severidad').value = log.severidad || 'N/A';
+        document.getElementById('log_usuario').value = log.usuario;
+        document.getElementById('log_modulo').value = log.modulo;
+        document.getElementById('log_accion').value = log.accion;
+        document.getElementById('log_ip').value = log.ip || '0.0.0.0';
+        document.getElementById('log_descripcion').value = log.descripcion;
+        document.getElementById('log_detalles').value = log.detalles || 'Sin detalles técnicos registrados.';
+        document.getElementById('log_resultado').value = log.resultado || 'Desconocido';
+
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudo cargar la información del log: ' + error.message,
+            confirmButtonText: 'Volver',
+            confirmButtonColor: '#212529'
+        }).then(() => {
+            window.location.href = 'logs_listado_logs.html';
+        });
+    }
 }
 
 window.buscarLog = function () {

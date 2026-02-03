@@ -7,11 +7,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
 async function cargarLogs() {
     try {
-        const response = await fetch('../recursos/jsons/logs_listado_mock.json');
+        // Fetch from the new API
+        const response = await fetch('../api/logs.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ACCION: 'LIST',
+            }),
+        });
+        if (!response.ok) throw new Error('Error en la respuesta del servidor');
+
         logsData = await response.json();
         renderizarTablaLogs(logsData);
     } catch (error) {
         console.error('Error cargando logs:', error);
+        Swal.fire('Error', 'No se pudieron cargar los logs del sistema', 'error');
     }
 }
 
@@ -51,22 +63,31 @@ function renderizarTablaLogs(datos) {
     if (countEl) countEl.textContent = datos.length;
 }
 
-window.buscarLogs = function () {
-    const filtros = {
-        tipo: document.getElementById('filtro_tipo').value,
-        modulo: document.getElementById('filtro_modulo').value,
-        usuario: document.getElementById('filtro_usuario').value.toLowerCase()
-    };
+window.buscarLogs = async function () {
+    const tipo = document.getElementById('filtro_tipo').value;
+    const modulo = document.getElementById('filtro_modulo').value;
+    const usuario = document.getElementById('filtro_usuario').value;
+    const fechaDesde = document.getElementById('filtro_fecha_desde').value;
+    const fechaHasta = document.getElementById('filtro_fecha_hasta').value;
 
-    const datosFiltrados = logsData.filter(log => {
-        let cumple = true;
-        if (filtros.tipo && log.tipo !== filtros.tipo.toUpperCase()) cumple = false;
-        if (filtros.modulo && !log.modulo.toLowerCase().includes(filtros.modulo.toLowerCase())) cumple = false;
-        if (filtros.usuario && !log.usuario.toLowerCase().includes(filtros.usuario)) cumple = false;
-        return cumple;
-    });
+    const params = new URLSearchParams();
+    params.append('action', 'LIST');
+    if (tipo) params.append('tipo', tipo);
+    if (modulo) params.append('modulo', modulo);
+    if (usuario) params.append('usuario', usuario);
+    if (fechaDesde) params.append('fecha_desde', fechaDesde);
+    if (fechaHasta) params.append('fecha_hasta', fechaHasta);
 
-    renderizarTablaLogs(datosFiltrados);
+    try {
+        const response = await fetch(`../api/logs.php?${params.toString()}`);
+        if (!response.ok) throw new Error('Error filtrando logs');
+
+        logsData = await response.json();
+        renderizarTablaLogs(logsData);
+    } catch (error) {
+        console.error('Error buscando logs:', error);
+        Swal.fire('Error', 'No se pudieron filtrar los logs', 'error');
+    }
 }
 
 window.limpiarFiltros = function () {

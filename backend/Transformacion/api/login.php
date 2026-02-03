@@ -43,6 +43,23 @@ if (!isset($data['email']) || !isset($data['ACCION']) || $data['ACCION'] !== "LO
 
 $result = $authController->loginByEmail($data['email']);
 
+// Logging logic
+require_once '../src/Models/SystemLog.php';
+$logModel = new \App\Models\SystemLog($db);
+$logData = [
+    'evento' => $result['success'] ? 'LOGIN_SUCCESS' : 'LOGIN_FAILED',
+    'tipo' => $result['success'] ? 'info' : 'warning',
+    'severidad' => $result['success'] ? 'Bajo' : 'Medio',
+    'modulo' => 'Autenticación',
+    'usuario_id' => $result['success'] ? $result['user']['id'] : null,
+    'accion' => 'LOGIN',
+    'descripcion' => $result['success'] ? "Usuario {$data['email']} inició sesión correctamente" : "Fallo inicio de sesión para {$data['email']}: " . ($result['message'] ?? 'Razón desconocida'),
+    'detalles' => json_encode(['email' => $data['email'], 'ip' => $_SERVER['REMOTE_ADDR']]),
+    'ip' => $_SERVER['REMOTE_ADDR'],
+    'resultado' => $result['success'] ? 'Exitoso' : 'Fallido'
+];
+$logModel->crear($logData);
+
 if ($result['success']) {
     http_response_code(200);
     echo json_encode([
