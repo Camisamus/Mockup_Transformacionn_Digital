@@ -64,7 +64,15 @@ async function loadDependencies() {
         const dataP = await resP.json();
 
         if (dataU.status === 'success') {
-            usuarios = dataU.data;
+            // Fix: Filter by unique usr_id to avoid duplicate users in dropdowns
+            const userMap = new Map();
+            dataU.data.forEach(u => {
+                if (!userMap.has(u.usr_id)) {
+                    userMap.set(u.usr_id, u);
+                }
+            });
+            usuarios = Array.from(userMap.values());
+
             const selectU = document.getElementById('entry-usuario');
             const selectS = document.getElementById('entry-subrogante');
             usuarios.forEach(u => {

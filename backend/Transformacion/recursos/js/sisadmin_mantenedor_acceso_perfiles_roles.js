@@ -86,7 +86,15 @@ async function loadDependencies() {
         if (dataR.status === 'success') {
             roles = dataR.data;
             // Identify categories based on rol_tipo or dot notation
-            categorias = roles.filter(r => r.rol_tipo === 'categoria' || !r.rol_id.includes('.'));
+            // Fix: Filter by unique rol_id to avoid duplicate categories in dropdown
+            const rawCategorias = roles.filter(r => r.rol_tipo === 'categoria' || !r.rol_id.includes('.'));
+            const categoryMap = new Map();
+            rawCategorias.forEach(c => {
+                if (!categoryMap.has(c.rol_id)) {
+                    categoryMap.set(c.rol_id, c);
+                }
+            });
+            categorias = Array.from(categoryMap.values());
 
             const select = document.getElementById('entry-categoria');
             select.innerHTML = '<option value="">Seleccione Categoría</option>';

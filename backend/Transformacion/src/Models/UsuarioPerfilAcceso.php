@@ -22,7 +22,6 @@ class UsuarioPerfilAcceso
                   JOIN trd_acceso_usuarios u ON up.usp_usuario_id = u.usr_id
                   JOIN trd_acceso_perfiles p ON up.usp_perfil_id = p.prf_id
                   LEFT JOIN trd_acceso_usuarios s ON up.usp_usuario_subrogante_id = s.usr_id
-                  WHERE up.usp_borrado = 0
                   ORDER BY u.usr_apellido ASC, p.prf_nombre ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
@@ -76,7 +75,7 @@ class UsuarioPerfilAcceso
 
     public function delete($usuario_id, $perfil_id)
     {
-        $query = "UPDATE " . $this->table_name . " SET usp_borrado = 1 
+        $query = "DELETE FROM " . $this->table_name . " 
                   WHERE usp_usuario_id = :usp_usuario_id AND usp_perfil_id = :usp_perfil_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":usp_usuario_id", $usuario_id);

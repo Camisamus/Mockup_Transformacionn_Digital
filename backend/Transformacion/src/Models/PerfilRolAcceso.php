@@ -19,7 +19,6 @@ class PerfilRolAcceso
                   FROM " . $this->table_name . " pr
                   JOIN trd_acceso_perfiles p ON pr.pfr_perfil_id = p.prf_id
                   JOIN trd_acceso_roles r ON pr.pfr_rol_id = r.rol_id
-                  WHERE pr.pfr_borrado = 0
                   ORDER BY r.rol_id ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
@@ -45,7 +44,7 @@ class PerfilRolAcceso
 
     public function delete($perfil_id, $rol_id)
     {
-        $query = "UPDATE " . $this->table_name . " SET pfr_borrado = 1 
+        $query = "DELETE FROM " . $this->table_name . " 
                   WHERE pfr_perfil_id = :pfr_perfil_id AND pfr_rol_id = :pfr_rol_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":pfr_perfil_id", $perfil_id);

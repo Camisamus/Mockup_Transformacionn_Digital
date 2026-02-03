@@ -11,6 +11,8 @@ body {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
     z-index: 1050;
+    flex-shrink: 0;
+    /* Ensure sidebar doesn't shrink */
 }
 
 /* Fade-in Entrance Animation */
@@ -34,7 +36,7 @@ main.content-visible {
 }
 
 #sidebar {
-    background-color: #005cab !important;
+    background-color: #003399 !important;
     /* Bootstrap Primary Blue */
     height: 100%;
     transition: all 0.3s ease;
@@ -88,6 +90,11 @@ main.content-visible {
 }
 
 /* Nested Menus */
+.traslogo {
+    background: #51AEF1;
+    background: radial-gradient(circle, rgba(81, 174, 241, 1) 69%, rgba(0, 51, 153, 1) 93%);
+}
+
 .submenu {
     padding-left: 1.2rem;
     display: none;
@@ -172,7 +179,7 @@ main.content-visible {
     color: #212529;
 }
 
-/* Buttons */
+/* Buttons Base & Gold */
 .btn-gold {
     background-color: #c59123;
     /* Gold/Ochre color from image */
@@ -185,6 +192,19 @@ main.content-visible {
     background-color: #a87b1e;
     border-color: #a87b1e;
     color: white;
+}
+
+/* Dark Button Refinement */
+.btn-dark {
+    background-color: #1e293b !important;
+    border-color: #1e293b !important;
+    color: white !important;
+}
+
+.btn-dark:hover {
+    background-color: #0f172a !important;
+    border-color: #0f172a !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Table Badges */
@@ -213,6 +233,37 @@ main.content-visible {
     letter-spacing: 0.5px;
     padding: 0.35em 0.65em;
     border-radius: 4px;
+}
+
+/* Header & Toolbars Layout - ENFORCED VERTICAL LEFT ALIGNMENT */
+.main-header {
+    display: flex;
+    flex-direction: column;
+    /* Toolbar ALWAYS below title */
+    align-items: flex-start;
+    /* ALWAYS aligned to the left */
+    gap: 1.25rem;
+    width: 100%;
+    height: auto !important;
+    /* Ensure it expands with content */
+    min-height: min-content !important;
+    margin-bottom: 2rem;
+    margin-top: 0.5rem;
+    overflow: visible !important;
+    /* Prevent clipping of children */
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    /* ALWAYS to the left */
+    width: 100%;
+    /* Ensure it takes full width for wrapping */
+    height: auto !important;
+    min-height: min-content !important;
 }
 
 /* Table Styling */
@@ -261,8 +312,52 @@ main.content-visible {
     margin-top: 2px;
 }
 
-/* Mobile Responsiveness */
+/* Global Container Fixes - CRITICAL for Desktop Overflow */
+#wrapper-layout main {
+    overflow-x: hidden !important;
+    min-width: 0 !important;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Fix for container-fluid so it doesn't push width and respects box model */
+.container-fluid {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    box-sizing: border-box !important;
+}
+
+/* Responsive Rules for Buttons and Headers */
 @media (max-width: 768px) {
+    .main-header {
+        align-items: stretch;
+    }
+
+    .toolbar {
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .toolbar .btn,
+    .toolbar .btn-toolbar {
+        width: 100% !important;
+        margin-bottom: 5px;
+    }
+
+    .modal-footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-footer .btn {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
     #sidebar-container {
         position: fixed;
         left: -250px;
@@ -344,25 +439,76 @@ main.content-visible {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    color: #495057;
+    background-color: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    color: #334155 !important;
     padding: 0.4rem 0.8rem;
     font-size: 0.875rem;
-    font-weight: 500;
-    border-radius: 6px;
-    transition: all 0.2s ease;
+    font-weight: 500 !important;
+    border-radius: 6px !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
     text-decoration: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
 }
 
 .btn-toolbar:hover {
-    background-color: #e9ecef !important;
-    border-color: #adb5bd !important;
-    color: #212529 !important;
+    background-color: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+    color: #1e293b !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
 }
 
 .btn-toolbar svg {
     width: 18px;
     height: 18px;
     stroke-width: 2px;
+}
+
+/* --- GLOBAL BUTTON NORMALIZATION (MUST BE AT THE END) --- */
+.btn,
+.btn-sm,
+.btn-toolbar,
+.btn-dark,
+.btn-outline-danger,
+.btn-outline-primary,
+button.btn,
+a.btn,
+input[type="button"].btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    vertical-align: middle !important;
+    gap: 8px !important;
+    text-decoration: none !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+}
+
+.btn i,
+.btn svg {
+    display: inline-block !important;
+    flex-shrink: 0 !important;
+    margin: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    order: -1 !important;
+}
+
+.btn-sm svg,
+.btn-sm i {
+    width: 14px !important;
+    height: 14px !important;
+}
+
+.btn-sm {
+    min-height: 32px !important;
+    max-height: 32px !important;
+    padding: 0 1.2rem !important;
+}
+
+.btn:not(.btn-sm) {
+    min-height: 44px !important;
+    min-width: 200 !important;
+    padding: 0 2rem !important;
 }

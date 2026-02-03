@@ -76,12 +76,14 @@ function injectLayout(pathPrefix) {
 
     // Instant Shell HTML (Static part of sidebar)
     sidebar.innerHTML = `
-        <aside id="sidebar" class="bg-primary  d-flex flex-column w-100 h-100" style="overflow-y: auto;">
-            <div class="p-3 border-bottom border-primary-subtle">
+        <aside id="sidebar" class="d-flex flex-column w-100 h-100" style="overflow-y: auto; background-color: #003399;">
+            <div class="p-3 border-bottom border-white border-opacity-10 bg-white">
+                <div class="traslogo">
                 <a href="${pathPrefix}dashboard.html" style="cursor: pointer; display: block;">
-                    <img src="${pathPrefix}recursos/img/logo_vina_del_mar_azul.png" alt="Viña del Mar"
+                    <img src="${pathPrefix}recursos/img/cropped-logo-2022-v2-e1767721959431.png" alt="Viña del Mar"
                         style="width: 100%; max-width: 200px; height: auto;">
                 </a>
+                </div>
             </div>
             <nav class="flex-grow-1 p-2">
                 <ul class="nav flex-column" id="menu-container">
@@ -101,7 +103,7 @@ function injectLayout(pathPrefix) {
 
     // Header (Static template, will be updated if needed)
     const header = document.createElement('header');
-    header.className = 'bg-white shadow-sm p-3 mb-4 d-flex justify-content-between align-items-center sticky-top';
+    header.className = 'sticky-top p-0';
     header.style.zIndex = '1000';
 
     // Get user info from cache for initial display
@@ -109,17 +111,26 @@ function injectLayout(pathPrefix) {
     const userName = cachedData.user ? `${cachedData.user.nombre} ${cachedData.user.apellido}` : 'Cargando...';
 
     header.innerHTML = `
-        <div class="d-flex align-items-center gap-3">
-            <button type="button" class="btn btn-toolbar" id="sidebar-toggle">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-            </button>
-            <h4 class="m-0 text-primary fw-bold" id="page-title">${document.title}</h4>
+        <div class="header-gob" style="background-color: #003399; color: white; width: 100%; padding: 5px 20px;">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                    <img src="${pathPrefix}recursos/img/NdPOjvBw.jpeg" alt="Gobierno de Chile" style="height: 50px; width: auto; object-fit: contain;">
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="text-white small d-none d-md-inline" id="header-user-name">Usuario: ${userName}</span>
+                    <button type="button" class="btn btn-sm btn-danger border-0" style="background-color: #dc3545;" onclick="logout()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> <span class="d-none d-sm-inline">Salir</span>
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="d-flex gap-2 align-items-center">
-            <span class="text-muted small me-2 d-none d-md-inline" id="header-user-name">Usuario: ${userName}</span>
-            <button type="button" class="btn btn-toolbar" style="background-color: #dc3545; color: white; border-color: #dc3545;" onclick="logout()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> <span class="d-none d-sm-inline">Salir</span>
-            </button>
+        <div class="bg-white shadow-sm p-3 d-flex justify-content-between align-items-center w-100">
+            <div class="d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-outline-secondary btn-sm" id="sidebar-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+                <h4 class="m-0 text-primary fw-bold fs-5" id="page-title">${document.title}</h4>
+            </div>
         </div>
     `;
 
@@ -135,6 +146,16 @@ function injectLayout(pathPrefix) {
     main.appendChild(contentDiv);
     wrapper.appendChild(sidebar);
     wrapper.appendChild(main);
+
+    // CSS for sidebar visibility
+    const style = document.createElement('style');
+    style.innerHTML = `
+        #sidebar .nav-link { color: rgba(255,255,255,0.85) !important; }
+        #sidebar .nav-link:hover { background-color: rgba(255,255,255,0.1); color: #fff !important; }
+        #sidebar .border-bottom, #sidebar .border-top { border-color: rgba(255,255,255,0.1) !important; }
+        #sidebar .sidebar-footer-text { color: rgba(255,255,255,0.6) !important; }
+    `;
+    document.head.appendChild(style);
 
     // Sidebar Overlay for Mobile
     const overlay = document.createElement('div');
@@ -298,6 +319,26 @@ function loadDependencies(prefix, callback) {
         pending++;
         const script = document.createElement('script');
         script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+        script.onload = onDependencyLoad;
+        script.onerror = onDependencyLoad;
+        head.appendChild(script);
+    }
+
+    // 6. Gobierno Digital UI Kit
+    if (!document.querySelector('link[href*="gob.cl.css"]')) {
+        pending++;
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://cdn.digital.gob.cl/framework/css/gob.cl.css';
+        link.onload = onDependencyLoad;
+        link.onerror = onDependencyLoad;
+        head.appendChild(link);
+    }
+
+    if (!document.querySelector('script[src*="gob.cl.js"]')) {
+        pending++;
+        const script = document.createElement('script');
+        script.src = 'https://cdn.digital.gob.cl/framework/js/gob.cl.js';
         script.onload = onDependencyLoad;
         script.onerror = onDependencyLoad;
         head.appendChild(script);

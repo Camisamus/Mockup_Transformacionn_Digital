@@ -104,6 +104,14 @@ class AuthController
             }
         }
 
+        // Cleanup expired profiles before checking permissions
+        $cleanupSql = "DELETE FROM trd_acceso_usuarios_perfiles 
+                       WHERE usp_usuario_id = :usuario_id 
+                         AND usp_fecha_termino < CURRENT_DATE()";
+        $cleanupStmt = $this->conn->prepare($cleanupSql);
+        $cleanupStmt->bindParam(':usuario_id', $_SESSION['user_id']);
+        $cleanupStmt->execute();
+
         $sql = "SELECT DISTINCT 
                     r.rol_id, 
                     r.rol_nombre, 
@@ -114,7 +122,8 @@ class AuthController
                 JOIN trd_acceso_usuarios_perfiles up ON pr.pfr_perfil_id = up.usp_perfil_id
                 WHERE up.usp_usuario_id = :usuario_id 
                   AND r.rol_borrado = 0
-                  AND up.usp_borrado = 0
+                  AND (up.usp_fecha_inicio IS NULL OR up.usp_fecha_inicio <= CURRENT_DATE())
+                  AND (up.usp_fecha_termino IS NULL OR up.usp_fecha_termino >= CURRENT_DATE())
                   order by r.rol_id ASC";
 
         $stmt = $this->conn->prepare($sql);

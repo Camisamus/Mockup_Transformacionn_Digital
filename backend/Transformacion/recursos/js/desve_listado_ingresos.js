@@ -122,9 +122,11 @@ function renderTable(data) {
                     <i data-feather="eye" style="width: 14px;"></i>
                 </button>
             </td>
-            <td>${item.sol_id}</td>
-            <td class="d-none d-md-table-cell">${formatDate(item.sol_fecha_recepcion) || ''}</td>
-            <td class="d-none d-md-table-cell">${formatDate(item.sol_fecha_vencimiento) || ''}</td>
+            <td class="d-none d-md-table-cell">${item.sol_id}</td>
+            <td class="d-none d-sm-table-cell">${item.sol_ingreso_desve || '-'}</td>
+            <td class="d-none d-md-table-cell">${org.org_nombre || item.sol_origen_texto || '-'}</td>
+            <td class="d-none d-sm-table-cell">${formatDate(item.sol_fecha_recepcion) || ''}</td>
+            <td class="d-none d-sm-table-cell">${formatDate(item.sol_fecha_vencimiento) || ''}</td>
             <td class="d-none d-md-table-cell"><span class="badge bg-info text-dark">${prio.pri_nombre || 'N/A'}</span></td>
             <td class="d-none d-md-table-cell text-center">${(item.sol_estado_entrega == 1 || item.sol_estado_entrega === true) ? '<span class="badge bg-success">Entregado</span>' : '<span class="badge bg-warning text-dark">Pendiente</span>'}</td>
             <td class="text-center">
