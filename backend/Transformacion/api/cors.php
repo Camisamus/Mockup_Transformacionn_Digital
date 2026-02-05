@@ -2,16 +2,7 @@
 // cors.php - Manejo de CORS para la API
 ob_start();
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_set_cookie_params([
-        'lifetime' => 0,
-        'path' => '/',
-        'secure' => false,
-        'httponly' => true,
-        'samesite' => 'Lax'
-    ]);
-    session_start();
-}
+require_once 'session_start.php';
 
 // Error handler to ensure we always return JSON even on PHP errors
 set_error_handler(function ($errno, $errstr, $errfile, $errline) {
@@ -81,6 +72,7 @@ if (in_array($origin, $allowed_origins)) {
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
+header('Content-Type: application/json; charset=utf-8');
 
 // Handle preflight (OPTIONS)
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {

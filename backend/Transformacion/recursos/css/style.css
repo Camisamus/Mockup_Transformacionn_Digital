@@ -1,9 +1,8 @@
 /* CSS Reset & Basics match Bootstrap but adding custom tweaks */
 body {
     font-family: system-ui, -apple-system, sans-serif;
-    overflow: hidden;
-    /* Prevent body scroll, handle in containers */
-    visibility: hidden;
+    overflow: hidden !important;
+    height: 100vh;
 }
 
 /* Sidebar Customization */
@@ -12,23 +11,28 @@ body {
     overflow: hidden;
     z-index: 1050;
     flex-shrink: 0;
-    /* Ensure sidebar doesn't shrink */
+    height: 100vh;
+    max-height: 100vh;
 }
 
 /* Fade-in Entrance Animation */
+/* Main Content Fade-in */
+main.content-entrance {
+    opacity: 1 !important;
+    /* transition: opacity 0.3s ease-in-out !important; */
+}
+
+main.content-visible {
+    opacity: 1;
+}
+
 #sidebar-container.sidebar-entrance {
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out !important;
+    opacity: 1 !important;
+    /* transition: opacity 0.3s ease-in-out !important; */
 }
 
 #sidebar-container.sidebar-visible {
     opacity: 1;
-}
-
-/* Main Content Fade-in */
-main.content-entrance {
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out !important;
 }
 
 main.content-visible {
@@ -37,9 +41,11 @@ main.content-visible {
 
 #sidebar {
     background-color: #003399 !important;
-    /* Bootstrap Primary Blue */
     height: 100%;
-    transition: all 0.3s ease;
+    /* transition: all 0.3s ease; -- Causes conflicts with Bootstrap collapse height animations */
+    overflow-y: auto !important;
+    display: flex;
+    flex-direction: column;
 }
 
 #sidebar-container.collapsed {
@@ -97,14 +103,9 @@ main.content-visible {
 
 .submenu {
     padding-left: 1.2rem;
-    display: none;
-    /* Hidden by default */
+    /* transition: all 0.3s ease; */
     list-style: none;
     padding-top: 2px;
-}
-
-.submenu.show {
-    display: block;
 }
 
 .submenu .nav-link {
@@ -121,6 +122,18 @@ main.content-visible {
 .card {
     border: none;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Global Uppercase Support */
+.text-uppercase-all {
+    text-transform: uppercase !important;
+}
+
+input[type="text"],
+input[type="search"],
+textarea,
+select.form-select {
+    text-transform: uppercase;
 }
 
 /* Scrollbars */
@@ -293,6 +306,7 @@ main.content-visible {
     vertical-align: middle;
     font-size: 0.9rem;
     color: #495057;
+    text-transform: uppercase;
 }
 
 .table tbody tr:hover {

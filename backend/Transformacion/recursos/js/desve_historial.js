@@ -1,4 +1,4 @@
-let allSolicitudes = [];
+﻿let allSolicitudes = [];
 let organizaciones = [];
 let tiposOrganizacion = [];
 let prioridades = [];
@@ -66,8 +66,8 @@ async function loadInitialData() {
             body: JSON.stringify({ ACCION: "CONSULTAM", S: "NL" })
         };
         const [solRes, orgRes, tipoRes, prioRes, funcRes, secRes] = await Promise.all([
-            fetch(`${window.API_BASE_URL}/solicitudes_DESVE.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/organizaciones_DESVE.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/solicitudes_desve.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/organizaciones_desve.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/funcionarios.php`, fetchOptions).then(r => r.json()),
@@ -228,5 +228,6 @@ function limpiarFiltros() {
 }
 
 function responder(id) {
-    window.location.href = `desve_responder.html?id=${id}`;
+    window.location.href = `desve_responder.php?id=${id}`;
 }
+

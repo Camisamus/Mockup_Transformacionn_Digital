@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async function () {
+﻿document.addEventListener('DOMContentLoaded', async function () {
     console.log('Consulta de Atención loaded');
     if (!window.API_BASE_URL) window.API_BASE_URL = 'http://127.0.0.1/Transformacion/api';
 
@@ -19,7 +19,7 @@ function buscarAtencion() {
 }
 
 function nuevaAtencion() {
-    window.location.href = 'atenciones_nueva_atencion.html';
+    window.location.href = 'atenciones_nueva_atencion.php';
 }
 
 function modificarAtencion() {
@@ -96,7 +96,7 @@ async function solicitarID() {
     });
 
     if (!formValues) {
-        window.location.href = 'atenciones_listado_atenciones.html';
+        window.location.href = 'atenciones_listado_atenciones.php';
         return;
     }
 
@@ -126,3 +126,4 @@ async function solicitarID() {
         Swal.fire('Error', 'Error de conexión', 'error');
     }
 }
+

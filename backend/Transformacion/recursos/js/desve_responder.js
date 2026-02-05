@@ -1,4 +1,4 @@
-let currentSol = null;
+﻿let currentSol = null;
 let currentUser = null;
 
 let organizaciones = [];
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 icon: "warning",
                 confirmButtonText: "Ir al Login"
             });
-            window.location.href = 'index.html'; // Assuming index is login
+            window.location.href = 'index.php'; // Assuming index is login
             return;
         }
         currentUser = sessionData.user;
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     icon: 'error',
                     confirmButtonText: 'Volver a Bandeja'
                 });
-                window.location.href = 'desve_listado_ingresos.html';
+                window.location.href = 'desve_listado_ingresos.php';
                 return;
             }
 
@@ -339,7 +339,7 @@ async function saveResponse() {
         const result = await response.json();
         if (result.status === 'success') {
             await Swal.fire("Éxito", "Respuesta guardada correctamente.", "success");
-            window.location.href = 'desve_listado_ingresos.html';
+            window.location.href = 'desve_listado_ingresos.php';
         } else {
             Swal.fire("Error", result.message || "Error al guardar.", "error");
         }
@@ -408,7 +408,7 @@ async function solicitarID() {
     });
 
     if (!formValues) {
-        window.location.href = 'desve_listado_ingresos.html';
+        window.location.href = 'desve_listado_ingresos.php';
         return;
     }
 

@@ -79,7 +79,7 @@ ORDER BY tds.sol_id DESC;";
 
     public function getDestinosBySolicitud($solId)
     {
-        $query = "SELECT d.*, u.usr_nombre, u.usr_apellido, u.usr_email, CONCAT(u.usr_nombre, ' ', u.usr_apellido) as usr_nombre_completo 
+        $query = "SELECT d.*, UPPER(u.usr_nombre) as usr_nombre, UPPER(u.usr_apellido) as usr_apellido, u.usr_email, UPPER(CONCAT(u.usr_nombre, ' ', u.usr_apellido)) as usr_nombre_completo 
                   FROM trd_desve_destinos d
                   LEFT JOIN trd_acceso_usuarios u ON d.tid_destino = u.usr_id
                   WHERE d.tid_desve_solicitud = ?";

@@ -1,4 +1,4 @@
-// Logic for Mis Solicitudes Page
+﻿// Logic for Mis Solicitudes Page
 
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             row.innerHTML = `
-                <td><a href="patentes_consulta_solicitud.html?id=${solicitud.numero}" class="text-primary fw-bold">${solicitud.numero}</a></td>
+                <td><a href="patentes_consulta_solicitud.php?id=${solicitud.numero}" class="text-primary fw-bold">${solicitud.numero}</a></td>
                 <td>${solicitud.rut}</td>
                 <td>${solicitud.fechaIngreso}</td>
                 <td>${solicitud.tipoTramite || '-'}</td>
@@ -136,8 +136,8 @@ document.addEventListener('DOMContentLoaded', () => {
             timelineItem.innerHTML = `
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <strong>📋 Encargado(a): ${evento.encargado}</strong>
-                        <div class="text-muted small">📅 Fecha: ${evento.fecha} ⏰ Hora: ${evento.hora}</div>
+                        <strong>ðŸ“‹ Encargado(a): ${evento.encargado}</strong>
+                        <div class="text-muted small">ðŸ“… Fecha: ${evento.fecha} â° Hora: ${evento.hora}</div>
                         <div class="mt-1">${evento.estado}</div>
                         <div class="text-primary small mt-1">Detalle ${evento.detalle}</div>
                     </div>
@@ -190,3 +190,4 @@ document.addEventListener('DOMContentLoaded', () => {
 function descargarSolicitud(numero) {
     alert(`Descargando solicitud ${numero}...\n(Funcionalidad de mockup)`);
 }
+

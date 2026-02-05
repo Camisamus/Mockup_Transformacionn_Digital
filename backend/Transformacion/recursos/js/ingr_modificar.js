@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async () => {
+﻿document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id');
 
@@ -83,7 +83,7 @@ async function cargarDatosExistentes(id) {
                     confirmButtonText: 'Ver Detalle',
                     allowOutsideClick: false
                 }).then(() => {
-                    window.location.href = `ingr_consultar.html?id=${id}`;
+                    window.location.href = `ingr_consultar.php?id=${id}`;
                 });
                 return;
             }
@@ -97,7 +97,7 @@ async function cargarDatosExistentes(id) {
                     confirmButtonText: 'Ir a Consultar',
                     allowOutsideClick: false
                 }).then(() => {
-                    window.location.href = `ingr_consultar.html?id=${id}`;
+                    window.location.href = `ingr_consultar.php?id=${id}`;
                 });
                 return;
             }
@@ -215,7 +215,7 @@ function setupEventListeners() {
     };
 
     document.getElementById('btn_cancelar').onclick = () => {
-        window.location.href = 'ingr_bandeja.html';
+        window.location.href = 'ingr_bandeja.php';
     };
 }
 
@@ -465,7 +465,7 @@ async function actualizarIngreso() {
                 text: 'El ingreso ha sido actualizado correctamente.',
                 confirmButtonText: 'Ver Detalle'
             }).then(() => {
-                window.location.href = `ingr_consultar.html?id=${id}`;
+                window.location.href = `ingr_consultar.php?id=${id}`;
             });
         } else {
             Swal.fire('Error', result.message || 'No se pudo actualizar el ingreso', 'error');
@@ -571,7 +571,7 @@ async function checkAndRequestID() {
     });
 
     if (!formValues) {
-        window.location.href = 'ingr_bandeja.html';
+        window.location.href = 'ingr_bandeja.php';
         return;
     }
 
@@ -620,3 +620,4 @@ async function checkAndRequestID() {
         Swal.fire('Error', 'Error de conexión', 'error');
     }
 }
+

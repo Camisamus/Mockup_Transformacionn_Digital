@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     cargarBandeja();
 
     const formFiltros = document.getElementById('form_filtros');
@@ -70,7 +70,7 @@ function renderizarTabla(data) {
         const tr = document.createElement('tr');
         tr.className = 'cursor-pointer';
         tr.onclick = () => {
-            window.location.href = `ingr_consultar.html?id=${item.tis_id}`;
+            window.location.href = `ingr_consultar.php?id=${item.tis_id}`;
         };
 
         const rgtCode = item.rgt_id_publica || '-';
@@ -133,3 +133,4 @@ function getRolBadge(rol) {
             return `<span class="badge bg-secondary">${rol}</span>`;
     }
 }
+

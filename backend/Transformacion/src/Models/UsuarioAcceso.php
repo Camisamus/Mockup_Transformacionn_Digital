@@ -15,7 +15,7 @@ class UsuarioAcceso
 
     public function getAll()
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE usr_borrado = 0 ORDER BY usr_nombre ASC";
+        $query = "SELECT usr_id, UPPER(usr_nombre) as usr_nombre, UPPER(usr_apellido) as usr_apellido, usr_rut, usr_email, usr_borrado FROM " . $this->table_name . " WHERE usr_borrado = 0 ORDER BY usr_nombre ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -1,4 +1,4 @@
-// postulaciones_consulta_masiva.js
+﻿// postulaciones_consulta_masiva.js
 let postulacionesData = [];
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -74,9 +74,10 @@ window.limpiarFiltros = function () {
 }
 
 window.verDetalle = function (id) {
-    window.location.href = `postulaciones_consulta_postulacion.html?id=${id}`;
+    window.location.href = `postulaciones_consulta_postulacion.php?id=${id}`;
 }
 
 window.crearNueva = function () {
-    window.location.href = 'postulaciones_consulta_postulacion.html';
+    window.location.href = 'postulaciones_consulta_postulacion.php';
 }
+

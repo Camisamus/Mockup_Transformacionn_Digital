@@ -1,4 +1,4 @@
-// logs_listado_logs.js
+﻿// logs_listado_logs.js
 let logsData = [];
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -96,5 +96,6 @@ window.limpiarFiltros = function () {
 }
 
 window.verDetalle = function (logId) {
-    window.location.href = `logs_consulta_log.html?id=${logId}`;
+    window.location.href = `logs_consulta_log.php?id=${logId}`;
 }
+

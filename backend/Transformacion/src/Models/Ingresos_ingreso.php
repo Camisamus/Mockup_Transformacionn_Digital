@@ -35,7 +35,7 @@ class Ingresos_ingreso
     public function getAll(array $filters = [], ?int $current_user_id = null)
     {
         // Base Query with Role Logic
-        $query = "SELECT DISTINCT sol.*, rgt.*, usr.usr_nombre as resp_nombre, usr.usr_apellido as resp_apellido,
+        $query = "SELECT DISTINCT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido,
                   CASE 
                     WHEN sol.tis_responsable = :current_user THEN 'Responsable'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
@@ -101,7 +101,7 @@ class Ingresos_ingreso
 
     public function getById(int $id, ?int $current_user_id = null): array|null
     {
-        $query = "SELECT sol.*, rgt.*, usr.usr_nombre as resp_nombre, usr.usr_apellido as resp_apellido,
+        $query = "SELECT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido,
                   CASE 
                     WHEN sol.tis_responsable = :current_user THEN 'Responsable'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
@@ -140,7 +140,7 @@ class Ingresos_ingreso
 
     public function getByRgtId(int $rgtId, ?int $current_user_id = null): array|null
     {
-        $query = "SELECT sol.*, rgt.*, usr.usr_nombre as resp_nombre, usr.usr_apellido as resp_apellido,
+        $query = "SELECT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido,
                   CASE 
                     WHEN sol.tis_responsable = :current_user THEN 'Responsable'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
@@ -442,7 +442,7 @@ class Ingresos_ingreso
 
         $placeholders = implode(',', array_fill(0, count($rgt_ids), '?'));
 
-        $query = "SELECT sol.*, rgt.*, usr.usr_nombre as resp_nombre, usr.usr_apellido as resp_apellido 
+        $query = "SELECT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido 
                   FROM " . $this->table_name . " sol 
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
                   LEFT JOIN trd_acceso_usuarios usr ON sol.tis_responsable = usr.usr_id

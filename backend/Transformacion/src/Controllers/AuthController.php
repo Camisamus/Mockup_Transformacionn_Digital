@@ -89,7 +89,7 @@ class AuthController
             // Priority 2: Use Token if verified
             if (!isset($_SESSION['user_id']) && $token) {
                 try {
-                    echo ($token);
+                    // echo ($token);
                     $userData = $this->verifyGoogleToken($token);
                     if ($userData && isset($userData['email'])) {
                         $this->recoverSessionByEmail($userData['email']);
@@ -131,10 +131,12 @@ class AuthController
         $stmt->execute();
         if ($stmt->rowCount() == 0) {
             $permissions = [
-                "rol_id" => "0",
-                "rol_nombre" => "Bandeja",
-                "rol_enlace" => "paginas/Bandeja.html",
-                "rol_tipo" => "Pagina"
+                [
+                    "rol_id" => "0",
+                    "rol_nombre" => "Bandeja",
+                    "rol_enlace" => "paginas/Bandeja.php",
+                    "rol_tipo" => "Pagina"
+                ]
             ];
             return $permissions;
         }

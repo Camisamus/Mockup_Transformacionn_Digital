@@ -1,4 +1,4 @@
-// atenciones_nueva_atencion.js
+﻿// atenciones_nueva_atencion.js
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('formNuevaAtencion');
     const rutInput = document.getElementById('rut');
@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Simulate mock data for RUT autocomplete
     rutInput.addEventListener('blur', function () {
         if (this.value === '76.123.456-7') {
-            nombreInput.value = 'Junta de Vecinos N°1 El Progreso';
+            nombreInput.value = 'Junta de Vecinos NÂ°1 El Progreso';
         } else if (this.value.length > 8) {
             nombreInput.value = 'Juan Pérez (Simulado)';
         } else {
@@ -40,9 +40,10 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(() => {
                 Swal.fire('Éxito', 'Atención registrada correctamente.', 'success').then(() => {
                     form.reset();
-                    window.location.href = 'atenciones_lista_espera.html';
+                    window.location.href = 'atenciones_lista_espera.php';
                 });
             }, 1000);
         }
     };
 });
+

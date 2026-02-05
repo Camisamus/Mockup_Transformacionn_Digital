@@ -4,13 +4,13 @@
         "tipo": "Pagina",
         "nombre": "Bandeja",
         "icon": "file-text",
-        "Enlace": "paginas/Bandeja.html"
+        "Enlace": "paginas/Bandeja.php"
     },
     {
         "id": "1.c",
         "tipo": "Pagina",
         "nombre": "Gestión de Empresas",
-        "Enlace": "paginas/contribuyente_empresas.html"
+        "Enlace": "paginas/contribuyente_empresas.php"
     },
     {
         "id": "1",
@@ -22,34 +22,34 @@
                 "id": "1.1",
                 "tipo": "Pagina",
                 "nombre": "Mis Solicitudes",
-                "Enlace": "paginas/patentes_mis_solicitudes.html"
+                "Enlace": "paginas/patentes_mis_solicitudes.php"
             },
             {
                 "id": "1.1.b",
                 "tipo": "Pagina",
                 "nombre": "Mis Solicitudes",
-                "Enlace": "paginas/patentes_mis_solicitudes_C.html"
+                "Enlace": "paginas/patentes_mis_solicitudes_C.php"
             },
             {
                 "id": "1.2",
                 "tipo": "Pagina",
                 "nombre": "Pagos",
                 "icon": "dollar-sign",
-                "Enlace": "paginas/pagos.html"
+                "Enlace": "paginas/pagos.php"
             },
             {
                 "id": "1.3",
                 "tipo": "Pagina",
                 "nombre": "Solicitud Única de Patentes",
                 "icon": "file-plus",
-                "Enlace": "paginas/patentes_solicitud_unica.html"
+                "Enlace": "paginas/patentes_solicitud_unica.php"
             },
             {
                 "id": "1.4",
                 "tipo": "Pagina",
                 "nombre": "Consulta de Solicitud",
                 "icon": "search",
-                "Enlace": "paginas/patentes_consulta_solicitud.html"
+                "Enlace": "paginas/patentes_consulta_solicitud.php"
             }
         ]
     },
@@ -68,13 +68,13 @@
                         "id": "2.1.1",
                         "tipo": "Pagina",
                         "nombre": "Consulta Organizacion",
-                        "Enlace": "paginas/organizaciones_consulta_organizacion.html"
+                        "Enlace": "paginas/organizaciones_consulta_organizacion.php"
                     },
                     {
                         "id": "2.1.2",
                         "tipo": "Pagina",
                         "nombre": "Consulta Masiva Organizaciones",
-                        "Enlace": "paginas/organizaciones_consulta_masiva.html"
+                        "Enlace": "paginas/organizaciones_consulta_masiva.php"
                     }
                 ]
             }
@@ -95,43 +95,43 @@
                         "id": "3.1.1",
                         "tipo": "Pagina",
                         "nombre": "Consulta de Subvención",
-                        "Enlace": "paginas/subvenciones_consulta_subvencion.html"
+                        "Enlace": "paginas/subvenciones_consulta_subvencion.php"
                     },
                     {
                         "id": "3.1.2",
                         "tipo": "Pagina",
                         "nombre": "Consulta Masiva de Subvenciones",
-                        "Enlace": "paginas/subvenciones_consulta_masiva.html"
+                        "Enlace": "paginas/subvenciones_consulta_masiva.php"
                     },
                     {
                         "id": "3.1.3",
                         "tipo": "Pagina",
                         "nombre": "Consulta Masiva de Aprobaciones",
-                        "Enlace": "paginas/subvenciones_consulta_masiva_aprobaciones.html"
+                        "Enlace": "paginas/subvenciones_consulta_masiva_aprobaciones.php"
                     },
                     {
                         "id": "3.1.4",
                         "tipo": "Pagina",
                         "nombre": "Consulta Masiva de Rendiciones",
-                        "Enlace": "paginas/subvenciones_consulta_masiva_rendiciones.html"
+                        "Enlace": "paginas/subvenciones_consulta_masiva_rendiciones.php"
                     },
                     {
                         "id": "3.1.5",
                         "tipo": "Pagina",
                         "nombre": "Consulta Masiva de Fiscalizaciones",
-                        "Enlace": "paginas/subvenciones_consulta_masiva_fiscalizaciones.html"
+                        "Enlace": "paginas/subvenciones_consulta_masiva_fiscalizaciones.php"
                     },
                     {
                         "id": "3.1.6",
                         "tipo": "Pagina",
                         "nombre": "Consulta de Pago",
-                        "Enlace": "paginas/subvenciones_consulta_pago.html"
+                        "Enlace": "paginas/subvenciones_consulta_pago.php"
                     },
                     {
                         "id": "3.1.7",
                         "tipo": "Pagina",
                         "nombre": "Consulta Masiva de Pagos",
-                        "Enlace": "paginas/subvenciones_consulta_masiva_pagos.html"
+                        "Enlace": "paginas/subvenciones_consulta_masiva_pagos.php"
                     }
                 ]
             }
@@ -152,13 +152,13 @@
                         "id": "4.1.1",
                         "tipo": "Pagina",
                         "nombre": "Consulta de Postulación",
-                        "Enlace": "paginas/postulaciones_consulta_postulacion.html"
+                        "Enlace": "paginas/postulaciones_consulta_postulacion.php"
                     },
                     {
                         "id": "4.1.2",
                         "tipo": "Pagina",
                         "nombre": "Consulta Masiva de Postulaciones",
-                        "Enlace": "paginas/postulaciones_consulta_masiva.html"
+                        "Enlace": "paginas/postulaciones_consulta_masiva.php"
                     }
                 ]
             }
@@ -179,25 +179,25 @@
                         "id": "5.1.1",
                         "tipo": "Pagina",
                         "nombre": "Consulta de Atención",
-                        "Enlace": "paginas/atenciones_consulta_atencion.html"
+                        "Enlace": "paginas/atenciones_consulta_atencion.php"
                     },
                     {
                         "id": "5.1.2",
                         "tipo": "Pagina",
                         "nombre": "Lista de Espera",
-                        "Enlace": "paginas/atenciones_lista_espera.html"
+                        "Enlace": "paginas/atenciones_lista_espera.php"
                     },
                     {
                         "id": "5.1.3",
                         "tipo": "Pagina",
                         "nombre": "Tomar Atención",
-                        "Enlace": "paginas/atenciones_tomar_atencion.html"
+                        "Enlace": "paginas/atenciones_tomar_atencion.php"
                     },
                     {
                         "id": "5.1.4",
                         "tipo": "Pagina",
                         "nombre": "Listado de Atenciones",
-                        "Enlace": "paginas/atenciones_listado_atenciones.html"
+                        "Enlace": "paginas/atenciones_listado_atenciones.php"
                     }
                 ]
             }
@@ -218,13 +218,13 @@
                         "id": "6.1.1",
                         "tipo": "Pagina",
                         "nombre": "Consulta de Log",
-                        "Enlace": "paginas/logs_consulta_log.html"
+                        "Enlace": "paginas/logs_consulta_log.php"
                     },
                     {
                         "id": "6.1.2",
                         "tipo": "Pagina",
                         "nombre": "Listado de Logs",
-                        "Enlace": "paginas/logs_listado_logs.html"
+                        "Enlace": "paginas/logs_listado_logs.php"
                     }
                 ]
             }
@@ -240,19 +240,19 @@
                 "id": "7.1",
                 "tipo": "Pagina",
                 "nombre": "Nuevo Ingreso",
-                "Enlace": "paginas/desve_nuevo_ingreso.html"
+                "Enlace": "paginas/desve_nuevo_ingreso.php"
             },
             {
                 "id": "7.2",
                 "tipo": "Pagina",
                 "nombre": "Listado de Ingresos",
-                "Enlace": "paginas/desve_listado_ingresos.html"
+                "Enlace": "paginas/desve_listado_ingresos.php"
             },
             {
                 "id": "7.3",
                 "tipo": "Pagina",
                 "nombre": "Historial DESVE",
-                "Enlace": "paginas/desve_historial.html"
+                "Enlace": "paginas/desve_historial.php"
             }
         ]
     },
@@ -266,7 +266,7 @@
                 "id": "8.1",
                 "tipo": "Pagina",
                 "nombre": "Historial Ingresos",
-                "Enlace": "paginas/ingr_historial.html"
+                "Enlace": "paginas/ingr_historial.php"
             }
         ]
     },
@@ -285,25 +285,25 @@
                         "id": "9.1.1",
                         "tipo": "Pagina",
                         "nombre": "Áreas",
-                        "Enlace": "paginas/sisadmin_mantenedor_general_areas.html"
+                        "Enlace": "paginas/sisadmin_mantenedor_general_areas.php"
                     },
                     {
                         "id": "9.1.2",
                         "tipo": "Pagina",
                         "nombre": "Roles",
-                        "Enlace": "paginas/sisadmin_mantenedor_acceso_roles.html"
+                        "Enlace": "paginas/sisadmin_mantenedor_acceso_roles.php"
                     },
                     {
                         "id": "9.1.3",
                         "tipo": "Pagina",
                         "nombre": "Perfiles",
-                        "Enlace": "paginas/sisadmin_mantenedor_acceso_perfiles.html"
+                        "Enlace": "paginas/sisadmin_mantenedor_acceso_perfiles.php"
                     },
                     {
                         "id": "9.1.4",
                         "tipo": "Pagina",
                         "nombre": "Usuarios",
-                        "Enlace": "paginas/sisadmin_mantenedor_acceso_usuarios.html"
+                        "Enlace": "paginas/sisadmin_mantenedor_acceso_usuarios.php"
                     }
                 ]
             },
@@ -316,19 +316,19 @@
                         "id": "9.2.1",
                         "tipo": "Pagina",
                         "nombre": "Perfiles / Roles",
-                        "Enlace": "paginas/sisadmin_mantenedor_acceso_perfiles_roles.html"
+                        "Enlace": "paginas/sisadmin_mantenedor_acceso_perfiles_roles.php"
                     },
                     {
                         "id": "9.2.2",
                         "tipo": "Pagina",
                         "nombre": "Usuarios / Perfiles",
-                        "Enlace": "paginas/sisadmin_mantenedor_acceso_usuarios_perfiles.html"
+                        "Enlace": "paginas/sisadmin_mantenedor_acceso_usuarios_perfiles.php"
                     },
                     {
                         "id": "9.2.3",
                         "tipo": "Pagina",
                         "nombre": "Usuarios / Áreas",
-                        "Enlace": "paginas/sisadmin_mantenedor_general_areas_usuarios.html"
+                        "Enlace": "paginas/sisadmin_mantenedor_general_areas_usuarios.php"
                     }
                 ]
             }

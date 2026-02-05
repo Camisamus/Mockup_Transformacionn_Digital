@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+﻿document.addEventListener('DOMContentLoaded', function () {
     console.log('Lista de Espera loaded');
     cargarListaEspera();
 });
@@ -50,7 +50,7 @@ function cargarListaEspera() {
 }
 
 function verDetalle(id) {
-    window.location.href = `atenciones_consulta_atencion.html?id=${id}`;
+    window.location.href = `atenciones_consulta_atencion.php?id=${id}`;
 }
 
 function abrirModalAtencion(id) {
@@ -83,3 +83,4 @@ window.completarAtencion = async function () {
         }, 1000);
     }
 };
+

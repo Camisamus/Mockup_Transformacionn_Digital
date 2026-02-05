@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async function () {
+﻿document.addEventListener('DOMContentLoaded', async function () {
     const params = new URLSearchParams(window.location.search);
     const solicitationId = params.get('id');
 
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             icon: "warning",
             confirmButtonText: "Ir al Login"
         });
-        window.location.href = 'index.html'; // Assuming index is login
+        window.location.href = 'index.php'; // Assuming index is login
         return;
     }
     currentUser = sessionData.user;
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     };
 
     document.getElementById('btn_cancelar').onclick = () => {
-        window.location.href = `desve_consultar.html?id=${solicitationId}`;
+        window.location.href = `desve_consultar.php?id=${solicitationId}`;
     };
 
     // Drag and Drop for new files
@@ -166,7 +166,7 @@ async function loadSolicitationDetails(id, currentUser) {
             currentSolRegistroId = sol.sol_registro_tramite;
             let aux = sol.sol_responsable != String(currentUser.id) || sol.sol_responsable == null;
             if (aux) {
-                aux = !Permisos.some(navlink => navlink === "paginas/desve_listado_ingresos.html");
+                aux = !Permisos.some(navlink => navlink === "paginas/desve_listado_ingresos.php");
             }
             if (aux) {
                 await Swal.fire({
@@ -175,7 +175,7 @@ async function loadSolicitationDetails(id, currentUser) {
                     icon: 'error',
                     confirmButtonText: 'Volver a Bandeja'
                 });
-                window.location.href = 'desve_listado_ingresos.html';
+                window.location.href = 'desve_listado_ingresos.php';
                 return;
             }
 
@@ -495,7 +495,7 @@ async function actualizarSolicitud() {
         const result = await response.json();
         if (result.status === 'success') {
             await Swal.fire('Éxito', "Actualizado con éxito", 'success');
-            window.location.href = `desve_consultar.html?id=${body.sol_id}`;
+            window.location.href = `desve_consultar.php?id=${body.sol_id}`;
         } else {
             Swal.fire('Error', result.message || "Error al actualizar", 'error');
         }
@@ -568,7 +568,7 @@ async function solicitarID() {
     });
 
     if (!formValues) {
-        window.location.href = 'desve_listado_ingresos.html';
+        window.location.href = 'desve_listado_ingresos.php';
         return;
     }
 
@@ -822,3 +822,4 @@ window.guardarNuevoContribuyente = async function () {
         Swal.fire('Error', 'Error de conexión.', 'error');
     }
 };
+

@@ -1,4 +1,4 @@
-// organizaciones_consulta_masiva.js
+﻿// organizaciones_consulta_masiva.js
 let organizacionesData = [];
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -69,9 +69,10 @@ window.limpiarFiltros = function () {
 }
 
 window.verDetalle = function (codigo) {
-    window.location.href = `organizaciones_consulta_organizacion.html?id=${codigo}`;
+    window.location.href = `organizaciones_consulta_organizacion.php?id=${codigo}`;
 }
 
 window.nuevaOrganizacion = function () {
-    window.location.href = 'organizaciones_consulta_organizacion.html';
+    window.location.href = 'organizaciones_consulta_organizacion.php';
 }
+

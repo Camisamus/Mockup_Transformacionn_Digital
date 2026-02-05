@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     cargarListas();
     setupEventListeners();
 });
@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Esta función corre solo cuando TODO (imágenes, scripts, CSS) terminó de cargar
 window.addEventListener('load', () => {// Espera 100ms adicionales después de que todo cargó
     setTimeout(() => {
-        seguridad();
+        // Auth handled by PHP
     }, 1);
 });
 
@@ -124,7 +124,7 @@ function setupEventListeners() {
     };
 
     document.getElementById('btn_cancelar').onclick = () => {
-        window.location.href = 'ingr_bandeja.html';
+        window.location.href = 'ingr_bandeja.php';
     };
 }
 
@@ -294,7 +294,7 @@ async function guardarIngreso() {
                 text: 'El ingreso ha sido creado correctamente.',
                 confirmButtonText: 'Ir a la Bandeja'
             }).then(() => {
-                window.location.href = 'ingr_bandeja.html';
+                window.location.href = 'ingr_bandeja.php';
             });
         } else {
             Swal.fire('Error', result.message || 'No se pudo crear el ingreso', 'error');
@@ -305,3 +305,4 @@ async function guardarIngreso() {
         Swal.fire('Error', 'Ocurrió un error al conectar con el servidor', 'error');
     }
 }
+

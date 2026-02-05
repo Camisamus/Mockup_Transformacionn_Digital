@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+﻿document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id');
     const rgtId = urlParams.get('rgt_id');
@@ -58,10 +58,10 @@ async function buscarYConsultar(filters) {
                     Swal.fire('No encontrado', 'No se encontraron registros con esos criterios.', 'warning');
                 } else if (data.length === 1) {
                     // One result: redirect to detail
-                    window.location.href = `ingr_consultar.html?id=${data[0].tis_id}`;
+                    window.location.href = `ingr_consultar.php?id=${data[0].tis_id}`;
                 } else {
                     // Multiple: Ask user? or just pick first. Let's redirect to first one (most recent)
-                    window.location.href = `ingr_consultar.html?id=${data[0].tis_id}`;
+                    window.location.href = `ingr_consultar.php?id=${data[0].tis_id}`;
                 }
             } else {
                 renderizarIngreso(data);
@@ -107,7 +107,7 @@ async function cargarDatosIngreso(params) {
                         allowEscapeKey: false,
                         confirmButtonText: 'Volver a Bandeja'
                     }).then(() => {
-                        window.location.href = 'ingr_bandeja.html';
+                        window.location.href = 'ingr_bandeja.php';
                     });
                     return;
                 }
@@ -134,21 +134,21 @@ async function cargarDatosIngreso(params) {
             const btnResponder = document.getElementById('btn_ir_responder');
             if (btnResponder && id) {
                 btnResponder.onclick = () => {
-                    window.location.href = `ingr_responder.html?id=${id}`;
+                    window.location.href = `ingr_responder.php?id=${id}`;
                 };
             }
 
             const btnModificar = document.getElementById('btn_ir_modificar');
             if (btnModificar && id) {
                 btnModificar.onclick = () => {
-                    window.location.href = `ingr_modificar.html?id=${id}`;
+                    window.location.href = `ingr_modificar.php?id=${id}`;
                 };
             }
 
             const btnPreparar = document.getElementById('btn_ir_preparar');
             if (btnPreparar && id) {
                 btnPreparar.onclick = () => {
-                    window.location.href = `ingr_preparar.html?id=${id}`;
+                    window.location.href = `ingr_preparar.php?id=${id}`;
                 };
             }
         } else {
@@ -330,7 +330,7 @@ function renderizarIngreso(data) {
                 targetId = rel.gma_hijo;
                 icon = 'arrow-down-circle';
             } else {
-                label = `Relación: ${rel.gma_padre} → ${rel.gma_hijo}`;
+                label = `Relación: ${rel.gma_padre} â†’ ${rel.gma_hijo}`;
                 targetId = rel.gma_hijo;
             }
 
@@ -528,7 +528,7 @@ async function checkAndRequestID() {
     });
 
     if (!formValues) {
-        window.location.href = 'ingr_bandeja.html';
+        window.location.href = 'ingr_bandeja.php';
         return;
     }
 
@@ -585,7 +585,7 @@ async function checkSession() {
         if (data.isAuthenticated) {
             return data.user;
         } else {
-            window.location.href = '../index.html';
+            window.location.href = '../index.php';
             return null;
         }
     } catch (e) {

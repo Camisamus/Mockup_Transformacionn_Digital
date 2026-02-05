@@ -1,4 +1,4 @@
-// subvenciones_consulta_subvencion.js
+﻿// subvenciones_consulta_subvencion.js
 document.addEventListener('DOMContentLoaded', async function () {
     console.log('Consulta de Subvención loaded');
     if (!window.API_BASE_URL) window.API_BASE_URL = 'http://127.0.0.1:8081/api';
@@ -37,7 +37,7 @@ async function crearNuevo() {
     });
 
     if (isConfirmed) {
-        window.location.href = 'subvenciones_consulta_subvencion.html';
+        window.location.href = 'subvenciones_consulta_subvencion.php';
     }
 }
 
@@ -113,7 +113,7 @@ async function solicitarID() {
     });
 
     if (!formValues) {
-        window.location.href = 'subvenciones_consulta_masiva.html';
+        window.location.href = 'subvenciones_consulta_masiva.php';
         return;
     }
 
@@ -150,3 +150,4 @@ function formatearRUT(input) {
         input.value = formattedNumber + '-' + dv;
     }
 }
+

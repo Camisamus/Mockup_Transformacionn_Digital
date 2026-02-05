@@ -1,4 +1,4 @@
-// Sidebar Component Logic
+﻿// Sidebar Component Logic
 
 document.addEventListener('DOMContentLoaded', () => {
     loadSidebar();
@@ -8,7 +8,7 @@ function loadSidebar() {
     const container = document.getElementById('sidebar-container');
     if (!container) return;
 
-    fetch('paginas/sidebar.html')
+    fetch('paginas/sidebar.php')
         .then(response => response.text())
         .then(html => {
             container.innerHTML = html;
@@ -92,3 +92,4 @@ function initializeLogout() {
         });
     }
 }
+

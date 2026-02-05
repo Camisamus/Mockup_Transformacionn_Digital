@@ -1,0 +1,313 @@
+﻿<?php
+$pageTitle = "Consultar Solicitud DESVE";
+require_once '../api/auth_check.php';
+include '../api/header.php';
+?>
+
+<div class="container-fluid py-4">
+    <div class="main-header mb-4">
+        <div class="header-title">
+            <h2 class="fw-bold fs-4" id="header_public_id">Consulta DESVE</h2>
+            <p class="text-muted mb-0" id="header_expediente">Visualizando detalles de la solicitud</p>
+        </div>
+        <div class="toolbar d-flex gap-2">
+            <button type="button" class="btn btn-toolbar" id="btn_ir_responder">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-7.6-13.5 8.38 8.38 0 0 1 3.8.9L21 3z">
+                    </path>
+                </svg>
+                Responder
+            </button>
+            <button type="button" class="btn btn-toolbar" id="btn_ir_modificar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+                Modificar
+            </button>
+            <button type="button" class="btn btn-toolbar btn-dark "
+                onclick="location.href='desve_listado_ingresos.php'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Bandeja DESVE
+            </button>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Left Column: Main Info -->
+        <div class="col-lg-8">
+            <!-- Info Card -->
+            <div class="card shadow-sm border-0 border-start border-4 border-primary mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold fs-6 mb-0">Detalles de la Solicitud</h5>
+                        <span class="badge bg-light text-dark border fw-normal" id="badge_estado">Cargando...</span>
+                    </div>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label class="text-muted small d-block fw-bold mb-1">Nombre del Expediente</label>
+                            <span class="fs-5 fw-bold" id="info_expediente">-</span>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="text-muted small d-block fw-bold mb-1">ID Interno</label>
+                            <span id="info_id" class="small">-</span>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="text-muted small d-block fw-bold mb-1">Código RGT</label>
+                            <code id="info_rgt" class="small">-</code>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="text-muted small d-block fw-bold mb-1">Código DESVE</label>
+                            <code id="info_desve" class="small">-</code>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="text-muted small d-block fw-bold mb-1">Reingreso</label>
+                            <code id="info_reingreso" class="small">-</code>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="text-muted small d-block fw-bold mb-1">Origen</label>
+                            <span id="info_origen" class="small">-</span>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="text-muted small d-block fw-bold mb-1">Tipo Organización</label>
+                            <span id="info_tipo_org" class="small">-</span>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="text-muted small d-block fw-bold mb-1">Sector</label>
+                            <span id="info_sector" class="small">-</span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="text-muted small d-block fw-bold mb-1">Fecha Recepción</label>
+                            <span id="info_fecha_recepcion" class="small">-</span>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="text-muted small d-block fw-bold mb-1">Prioridad</label>
+                            <span id="info_prioridad" class="small">-</span>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="text-muted small d-block fw-bold mb-1">Vencimiento</label>
+                            <span id="info_vencimiento" class="small">-</span>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="text-muted small d-block fw-bold mb-2">Destinatarios</label>
+                            <div class="table-responsive border rounded">
+                                <table class="table table-sm table-hover mb-0">
+                                    <thead class="table-light text-uppercase small">
+                                        <tr>
+                                            <th>Funcionario</th>
+                                            <th>Email</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody_destinos" class="small">
+                                        <!-- Dynamic -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small d-block fw-bold mb-1">Responsable (Creador)</label>
+                            <span id="info_responsable" class="small">-</span>
+                        </div>
+
+                        <div class="col-12">
+                            <hr class="opacity-10">
+                            <label class="text-muted small d-block fw-bold mb-2">Detalle del Ingreso</label>
+                            <div class="bg-light p-3 rounded small border" id="info_detalle"
+                                style="white-space: pre-wrap;">-</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="text-muted small d-block fw-bold mb-2">Observaciones</label>
+                            <div class="bg-light p-3 rounded small border" id="info_observaciones"
+                                style="white-space: pre-wrap;">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bitácora de Respuestas -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold fs-6 mb-0">Bitácora de Respuestas</h5>
+                        <button class="btn btn-sm btn-link text-decoration-none p-0" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#collapseRespuestas">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="collapse show" id="collapseRespuestas">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0" id="tabla_respuestas">
+                                <thead class="table-light text-uppercase small">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Funcionario</th>
+                                        <th>Fecha</th>
+                                        <th>Tipo</th>
+                                        <th>Respuesta / Comentario</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_respuestas" class="small">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bitácora de Auditoría -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold fs-6 mb-0">Bitácora de Auditoría</h5>
+                        <button class="btn btn-sm btn-link text-decoration-none p-0" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#collapseAudit">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="collapse" id="collapseAudit">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light text-uppercase small">
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Usuario</th>
+                                        <th>Evento</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_audit" class="small">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Sidebar -->
+        <div class="col-lg-4">
+            <!-- Documentos -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold fs-6 mb-3">Documentos Adjuntos</h5>
+                    <div id="lista_documentos" class="list-group list-group-flush">
+                        <!-- Dynamic -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comentarios -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold fs-6 mb-0">Comentarios</h5>
+                        <button type="button" class="btn btn-toolbar p-1" id="btn_abrir_comentario"
+                            title="Agregar Comentario">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="lista_comentarios" class="list-group list-group-flush"
+                        style="max-height: 300px; overflow-y: auto;">
+                        <!-- Dynamic -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reingresos -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold fs-6 mb-3">Reingresos Vinculados</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0" id="tabla_reingresos">
+                            <thead class="table-light text-uppercase small">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Expediente</th>
+                                    <th class="text-end">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_reingresos" class="small">
+                                <!-- Dynamic -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metrics Card -->
+            <div class="card shadow-sm border-0 mb-4 bg-light">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold fs-6 mb-3">Estadísticas del Trámite</h5>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="small text-muted">Días Transcurridos:</span>
+                        <span class="fw-bold small" id="info_dias_ingreso">-</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="small text-muted">Días para Vencimiento:</span>
+                        <span class="fw-bold small" id="info_dias_vencimiento">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nuevo Comentario -->
+<div class="modal fade" id="modalNuevoComentario" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold fs-6">Agregar Comentario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-0">
+                    <label for="textoNuevoComentario" class="form-label small fw-bold">Su Comentario</label>
+                    <textarea class="form-control form-control-sm" id="textoNuevoComentario" rows="4"
+                        placeholder="Escriba aquí su comentario u observación..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer bg-light border-0">
+                <button type="button" class="btn btn-link text-muted text-decoration-none small"
+                    data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-dark btn-sm px-4" onclick="guardarComentario()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../recursos/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/feather-icons"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    feather.replace();
+</script>
+
+<script src="../recursos/js/desve_consultar.js"></script>
+
+<?php include '../api/footer.php'; ?>

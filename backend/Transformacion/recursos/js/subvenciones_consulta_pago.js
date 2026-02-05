@@ -1,4 +1,4 @@
-// subvenciones_consulta_pago.js
+﻿// subvenciones_consulta_pago.js
 document.addEventListener('DOMContentLoaded', async function () {
     console.log('Consulta de Pago loaded');
     if (!window.API_BASE_URL) window.API_BASE_URL = 'http://127.0.0.1:8081/api';
@@ -48,7 +48,7 @@ function mostrarDatosPago(id) {
         document.getElementById('pago_fecha_digitalizacion').value = '2024-09-20';
         document.getElementById('pago_responsable').value = 'María González López';
         document.getElementById('pago_glosa').value = 'Pago primera cuota subvención municipal';
-        document.getElementById('pago_observaciones').value = 'Pago procesado correctamente según resolución N° 123/2024';
+        document.getElementById('pago_observaciones').value = 'Pago procesado correctamente según resolución NÂ° 123/2024';
     }
 }
 
@@ -105,7 +105,7 @@ async function solicitarID() {
     });
 
     if (!formValues) {
-        window.location.href = 'subvenciones_consulta_masiva_pagos.html';
+        window.location.href = 'subvenciones_consulta_masiva_pagos.php';
         return;
     }
 
@@ -131,3 +131,4 @@ async function solicitarID() {
         Swal.fire('Error', 'Error de conexión', 'error');
     }
 }
+

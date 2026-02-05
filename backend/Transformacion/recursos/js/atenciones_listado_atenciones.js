@@ -1,4 +1,4 @@
-// atenciones_listado_atenciones.js
+﻿// atenciones_listado_atenciones.js
 let atencionesData = [];
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -74,5 +74,6 @@ window.limpiarFiltros = function () {
 }
 
 window.verDetalle = function (numero) {
-    window.location.href = 'atenciones_consulta_atencion.html?id=' + numero;
+    window.location.href = 'atenciones_consulta_atencion.php?id=' + numero;
 }
+

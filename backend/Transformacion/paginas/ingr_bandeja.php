@@ -1,0 +1,106 @@
+﻿<?php
+$pageTitle = "Bandeja Ingresos";
+require_once '../api/auth_check.php';
+include '../api/header.php';
+?>
+
+<div class="container-fluid py-4">
+    <div class="main-header mb-4">
+        <div class="header-title">
+            <h2 class="fw-bold fs-4">Bandeja de Ingresos</h2>
+            <p class="text-muted mb-0">Gestión y búsqueda de solicitudes de ingreso</p>
+        </div>
+        <div class="toolbar">
+            <button type="button" class="btn btn-toolbar btn-dark " onclick="location.href='ingr_crear.php'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Nuevo Ingreso
+            </button>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+            <h5 class="fw-bold fs-6 mb-3">Filtros de Búsqueda</h5>
+            <form id="form_filtros" class="row g-3">
+                <div class="col-md-4">
+                    <label for="filtro_titulo" class="form-label small fw-bold">Título</label>
+                    <input type="text" class="form-control form-control-sm" id="filtro_titulo"
+                        placeholder="Buscar por título...">
+                </div>
+                <div class="col-md-3">
+                    <label for="filtro_rgt" class="form-label small fw-bold">ID Público (RGT)</label>
+                    <input type="text" class="form-control form-control-sm" id="filtro_rgt" placeholder="Cód. RGT...">
+                </div>
+                <div class="col-md-2">
+                    <label for="filtro_id" class="form-label small fw-bold">ID Interno</label>
+                    <input type="number" class="form-control form-control-sm" id="filtro_id" placeholder="ID...">
+                </div>
+                <div class="col-md-3 d-flex align-items-end gap-2">
+                    <button type="submit"
+                        class="btn btn-dark btn-sm flex-grow-1 d-flex align-items-center justify-content-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        Buscar
+                    </button>
+                    <button type="reset" class="btn btn-outline-secondary btn-sm" id="btn_limpiar">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <polyline points="1 20 1 14 7 14"></polyline>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Tabla -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light text-uppercase small">
+                        <tr>
+                            <th class="ps-4">ID</th>
+                            <th>Título</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Rol</th>
+                            <th>Cód. Público</th>
+                            <th class="text-end pe-4">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla_ingresos" class="small">
+                        <!-- Dynamic -->
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
+                                <span class="ms-2 text-muted">Cargando ingresos...</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../recursos/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/feather-icons"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    feather.replace();
+</script>
+
+<script src="../recursos/js/ingr_bandeja.js"></script>
+
+<?php include '../api/footer.php'; ?>

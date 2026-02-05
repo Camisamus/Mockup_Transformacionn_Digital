@@ -1,4 +1,4 @@
-// Logic for Consulta Organizacion Page
+﻿// Logic for Consulta Organizacion Page
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('Consulta Organización loaded');
     if (!window.API_BASE_URL) window.API_BASE_URL = 'http://127.0.0.1:8081/api';
@@ -56,12 +56,12 @@ async function solicitarID() {
     });
 
     if (!formValues) {
-        window.location.href = 'organizaciones_consulta_masiva.html';
+        window.location.href = 'organizaciones_consulta_masiva.php';
         return;
     }
 
     const { type, value } = formValues;
-    window.location.href = `organizaciones_consulta_organizacion.html?id=${value}`;
+    window.location.href = `organizaciones_consulta_organizacion.php?id=${value}`;
 }
 
 async function loadOrganizacion(id) {
@@ -133,7 +133,7 @@ function renderProyectos() {
 }
 
 function buscarOrganizacion() { solicitarID(); }
-function nuevaOrganizacion() { window.location.href = 'organizaciones_consulta_organizacion.html'; }
+function nuevaOrganizacion() { window.location.href = 'organizaciones_consulta_organizacion.php'; }
 function editarFormulario() { Swal.fire('Edición', 'Habilitando campos...', 'info'); }
 function generarCertificado() { Swal.fire('PDF', 'Generando certificado...', 'info'); }
 
@@ -154,3 +154,4 @@ function formatearRUT(input) {
         input.value = formattedNumber + '-' + dv;
     }
 }
+

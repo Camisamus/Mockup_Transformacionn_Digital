@@ -1,11 +1,11 @@
-document.addEventListener('DOMContentLoaded', async function () {
+﻿document.addEventListener('DOMContentLoaded', async function () {
     // Ensure API_BASE_URL is available
     if (!window.API_BASE_URL) {
         window.API_BASE_URL = 'http://127.0.0.1/Transformacion/api';
     }
 
     await loadInitialData();
-    seguridad();
+    // Auth handled by PHP
     populateSelects();
 
     // Default to current date
@@ -123,15 +123,6 @@ function populateSelects() {
         option.innerText = o.tor_nombre;
         IDorgSelect.appendChild(option);
     });
-    const ReingresoSelect = document.getElementById('Reingreso');
-    ReingresoSelect.innerHTML = '<option value="" selected disabled>Seleccione tipo...</option>';
-    Solicitudes.forEach(o => {
-        const option = document.createElement('option');
-        option.value = o.sol_id;
-        option.innerText = o.sol_ingreso_desve + " - " + o.sol_nombre_expediente;
-        ReingresoSelect.appendChild(option);
-    });
-
     const secSelect = document.getElementById('Sector');
     secSelect.innerHTML = '<option value="" selected disabled>Seleccione sector...</option>';
     sectores.forEach(s => {
@@ -141,6 +132,43 @@ function populateSelects() {
         secSelect.appendChild(option);
     });
 }
+
+window.abrirModalReingreso = function () {
+    const tbody = document.getElementById('lista_busqueda_reingreso');
+    tbody.innerHTML = '';
+
+    Solicitudes.forEach(s => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${s.sol_ingreso_desve || '-'}</td>
+            <td>${s.sol_nombre_expediente || '-'}</td>
+            <td>${s.sol_fecha_recepcion ? s.sol_fecha_recepcion.split(' ')[0] : '-'}</td>
+            <td class="text-end">
+                <button type="button" class="btn btn-sm btn-primary" onclick="seleccionarReingreso('${s.sol_id}')">Seleccionar</button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    document.getElementById('filtroReingreso').onkeyup = function () {
+        const val = this.value.toLowerCase();
+        Array.from(tbody.querySelectorAll('tr')).forEach(tr => {
+            tr.style.display = tr.innerText.toLowerCase().includes(val) ? '' : 'none';
+        });
+    };
+
+    const modal = new bootstrap.Modal(document.getElementById('modalReingreso'));
+    modal.show();
+};
+
+window.seleccionarReingreso = function (id) {
+    const s = Solicitudes.find(x => x.sol_id == id);
+    if (s) {
+        document.getElementById('ReingresoDisplay').value = `${s.sol_ingreso_desve} - ${s.sol_nombre_expediente}`;
+        document.getElementById('Reingreso').value = s.sol_id;
+    }
+    bootstrap.Modal.getInstance(document.getElementById('modalReingreso')).hide();
+};
 
 function handleTipoOrgChange() {
     const idOrgId = document.getElementById('ID_Organizacion').value;
@@ -343,7 +371,7 @@ async function guardarSolicitud() {
 
         if (result.status === 'success') {
             await Swal.fire('Éxito', "Solicitud creada con éxito", 'success');
-            window.location.href = 'desve_listado_ingresos.html';
+            window.location.href = 'desve_listado_ingresos.php';
         } else {
             Swal.fire('Error', result.message || "Error al guardar solicitud", 'error');
         }
@@ -601,3 +629,4 @@ window.guardarNuevoContribuyente = async function () {
         Swal.fire('Error', 'Error de conexión.', 'error');
     }
 };
+

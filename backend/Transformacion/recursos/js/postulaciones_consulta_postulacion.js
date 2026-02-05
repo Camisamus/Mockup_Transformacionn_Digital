@@ -1,4 +1,4 @@
-// postulaciones_consulta_postulacion.js
+﻿// postulaciones_consulta_postulacion.js
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('Postulaciones loaded');
     if (!window.API_BASE_URL) window.API_BASE_URL = 'http://127.0.0.1:8081/api';
@@ -29,7 +29,7 @@ async function solicitarID() {
                 <label class="form-label small fw-bold">Tipo de Identificador:</label>
                 <select id="swal-id-type" class="form-select">
                     <option value="post_id">Cód. Interno (Interno)</option>
-                    <option value="post_num">N° Ingreso (Ej: POST-2024-001)</option>
+                    <option value="post_num">NÂ° Ingreso (Ej: POST-2024-001)</option>
                     <option value="post_rut">RUT Organización</option>
                 </select>
             </div>
@@ -55,11 +55,11 @@ async function solicitarID() {
     });
 
     if (!formValues) {
-        window.location.href = 'postulaciones_consulta_masiva.html';
+        window.location.href = 'postulaciones_consulta_masiva.php';
         return;
     }
 
-    window.location.href = `postulaciones_consulta_postulacion.html?id=${formValues.value}`;
+    window.location.href = `postulaciones_consulta_postulacion.php?id=${formValues.value}`;
 }
 
 function cargarDatosPostulacion(id) {
@@ -69,7 +69,7 @@ function cargarDatosPostulacion(id) {
 }
 
 function buscarPostulacion() { solicitarID(); }
-function crearNueva() { window.location.href = 'postulaciones_consulta_postulacion.html'; }
+function crearNueva() { window.location.href = 'postulaciones_consulta_postulacion.php'; }
 function modificar() { Swal.fire('Edición', 'Habilitando campos para modificación...', 'info'); }
 function imprimirPDF() { Swal.fire('PDF', 'Generando comprobante de postulación...', 'info'); }
 
@@ -96,3 +96,4 @@ function formatearRUT(input) {
         input.value = formattedNumber + '-' + dv;
     }
 }
+

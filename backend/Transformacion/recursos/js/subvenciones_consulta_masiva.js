@@ -1,4 +1,4 @@
-// subvenciones_consulta_masiva.js
+﻿// subvenciones_consulta_masiva.js
 let subvencionesData = [];
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -79,5 +79,6 @@ window.limpiarFiltros = function () {
 }
 
 window.verDetalle = function (numero) {
-    window.location.href = 'subvenciones_consulta_subvencion.html?id=' + numero;
+    window.location.href = 'subvenciones_consulta_subvencion.php?id=' + numero;
 }
+

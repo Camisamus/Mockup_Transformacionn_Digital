@@ -17,9 +17,9 @@ class OrganizacionComunitariaGeneral
     {
         // Join with types and contribuyentes for readability
         $query = "SELECT 
-                    oc.*,
+                    UPPER(oc.orgc_nombre) as orgc_nombre,
                     t.tor_nombre as tipo_nombre,
-                    c.tgc_nombre, c.tgc_apellido_paterno, c.tgc_apellido_materno, c.tgc_rut as rep_rut
+                    UPPER(c.tgc_nombre) as tgc_nombre, UPPER(c.tgc_apellido_paterno) as tgc_apellido_paterno, UPPER(c.tgc_apellido_materno) as tgc_apellido_materno, c.tgc_rut as rep_rut
                   FROM " . $this->table_name . " oc
                   LEFT JOIN trd_general_tipos_organizacion t ON oc.orgc_tipo_organizacion = t.tor_id
                   LEFT JOIN trd_general_contribuyentes c ON oc.ogc_rep_legal = c.tgc_id

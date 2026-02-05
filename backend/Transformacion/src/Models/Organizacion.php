@@ -15,7 +15,7 @@ class Organizacion
 
     public function getAll()
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE org_borrado = 0 ORDER BY org_nombre ASC";
+        $query = "SELECT org_id, UPPER(org_nombre) as org_nombre, org_tipo_id, org_borrado FROM " . $this->table_name . " WHERE org_borrado = 0 ORDER BY org_nombre ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

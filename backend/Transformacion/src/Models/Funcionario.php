@@ -19,8 +19,8 @@ class Funcionario
         $query = "SELECT 
                     usr_id as fnc_id, 
                     usr_email as fnc_email, 
-                    usr_nombre as fnc_nombre, 
-                    usr_apellido as fnc_apellido,
+                    UPPER(usr_nombre) as fnc_nombre, 
+                    UPPER(usr_apellido) as fnc_apellido,
                     NULL as fnc_cargo 
                   FROM " . $this->table_name . " 
                   ORDER BY usr_nombre ASC";
@@ -34,8 +34,8 @@ class Funcionario
         $query = "SELECT 
                     usr_id as fnc_id, 
                     usr_email as fnc_email, 
-                    usr_nombre as fnc_nombre, 
-                    usr_apellido as fnc_apellido,
+                    UPPER(usr_nombre) as fnc_nombre, 
+                    UPPER(usr_apellido) as fnc_apellido,
                     NULL as fnc_cargo 
                   FROM " . $this->table_name . " 
                   WHERE usr_id = ? LIMIT 0,1";

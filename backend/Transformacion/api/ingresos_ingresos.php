@@ -46,6 +46,11 @@ switch ($data['ACCION']) {
             if (($response['status'] ?? '') === 'success') {
                 require_once '../src/Models/SystemLog.php';
                 $logModel = new \App\Models\SystemLog($db);
+                $tempData = $data;
+                if (isset($tempData['documentos']) && is_array($tempData['documentos'])) {
+                    $tempData['documentos'] = array_map(function ($d) {
+                        return ['nombre' => $d['nombre'] ?? 'Sin nombre']; }, $tempData['documentos']);
+                }
                 $logModel->crear([
                     'evento' => 'CREATE',
                     'tipo' => 'info',
@@ -54,7 +59,7 @@ switch ($data['ACCION']) {
                     'usuario_id' => $_SESSION['user_id'] ?? null,
                     'accion' => 'CREAR_INGRESO',
                     'descripcion' => "Creación de ingreso: " . ($response['id'] ?? 'N/A'),
-                    'detalles' => json_encode(['data' => $data]),
+                    'detalles' => json_encode(['data' => $tempData]),
                     'ip' => $_SERVER['REMOTE_ADDR'],
                     'resultado' => 'Exitoso'
                 ]);
@@ -73,6 +78,11 @@ switch ($data['ACCION']) {
             if (($response['status'] ?? '') === 'success') {
                 require_once '../src/Models/SystemLog.php';
                 $logModel = new \App\Models\SystemLog($db);
+                $tempData = $data;
+                if (isset($tempData['documentos']) && is_array($tempData['documentos'])) {
+                    $tempData['documentos'] = array_map(function ($d) {
+                        return ['nombre' => $d['nombre'] ?? 'Sin nombre']; }, $tempData['documentos']);
+                }
                 $logModel->crear([
                     'evento' => 'UPDATE',
                     'tipo' => 'info',
@@ -81,7 +91,7 @@ switch ($data['ACCION']) {
                     'usuario_id' => $_SESSION['user_id'] ?? null,
                     'accion' => 'ACTUALIZAR_INGRESO',
                     'descripcion' => "Actualización de ingreso: $id",
-                    'detalles' => json_encode(['id' => $id, 'cambios' => $data]),
+                    'detalles' => json_encode(['id' => $id, 'cambios' => $tempData]),
                     'ip' => $_SERVER['REMOTE_ADDR'],
                     'resultado' => 'Exitoso'
                 ]);

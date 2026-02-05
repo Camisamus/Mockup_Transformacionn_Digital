@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async () => {
+﻿document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id');
 
@@ -31,7 +31,7 @@ async function checkSession() {
         if (data.isAuthenticated) {
             return data.user;
         } else {
-            window.location.href = '../index.html';
+            window.location.href = '../index.php';
             return null;
         }
     } catch (e) {
@@ -136,7 +136,7 @@ function validarAccesoYRenderizarAcciones(data, userId) {
             allowEscapeKey: false,
             confirmButtonText: 'Volver a Bandeja'
         }).then(() => {
-            window.location.href = 'ingr_bandeja.html';
+            window.location.href = 'ingr_bandeja.php';
         });
         return;
     }
@@ -149,7 +149,7 @@ function validarAccesoYRenderizarAcciones(data, userId) {
             timer: 2000,
             showConfirmButton: false
         }).then(() => {
-            window.location.href = `ingr_consultar.html?id=${currentId}`;
+            window.location.href = `ingr_consultar.php?id=${currentId}`;
         });
         return;
     }
@@ -164,7 +164,7 @@ function validarAccesoYRenderizarAcciones(data, userId) {
             confirmButtonText: 'Ver Detalle',
             allowOutsideClick: false
         }).then(() => {
-            window.location.href = `ingr_consultar.html?id=${currentId}`;
+            window.location.href = `ingr_consultar.php?id=${currentId}`;
         });
         return;
     }
@@ -252,7 +252,7 @@ function setupEventListeners() {
     const btnIrPreparar = document.getElementById('btn_ir_preparar');
     if (btnIrPreparar) {
         btnIrPreparar.onclick = () => {
-            window.location.href = `ingr_preparar.html?id=${currentId}`;
+            window.location.href = `ingr_preparar.php?id=${currentId}`;
         };
     }
 }
@@ -505,7 +505,7 @@ async function checkAndRequestID() {
     });
 
     if (!formValues) {
-        window.location.href = 'ingr_bandeja.html';
+        window.location.href = 'ingr_bandeja.php';
         return;
     }
 
@@ -553,3 +553,4 @@ async function checkAndRequestID() {
         Swal.fire('Error', 'Error de conexión', 'error');
     }
 }
+

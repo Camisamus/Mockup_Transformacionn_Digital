@@ -1,0 +1,231 @@
+﻿<?php
+$pageTitle = "Lista de Espera";
+require_once '../api/auth_check.php';
+include '../api/header.php';
+?>
+
+
+    <div class="container-fluid py-4">
+        <!-- Header & Toolbar -->
+        <div class="main-header mb-4">
+            <div class="header-title">
+                <h2 class="fw-bold fs-4">Lista de Espera</h2>
+                <p class="text-muted mb-0">Atenciones pendientes de ser atendidas</p>
+            </div>
+            <div class="toolbar">
+                <button class="btn btn-toolbar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    Exportar Excel
+                </button>
+                <button class="btn btn-toolbar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    Exportar PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- Métricas -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body p-3">
+                        <div class="metric-label">Total en Espera</div>
+                        <div class="metric-value">4</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0 h-100 card-alta">
+                    <div class="card-body p-3">
+                        <div class="metric-label">Prioridad Alta</div>
+                        <div class="metric-value">1</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0 h-100 card-normal">
+                    <div class="card-body p-3">
+                        <div class="metric-label">Prioridad Normal</div>
+                        <div class="metric-value">2</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0 h-100 card-promedio">
+                    <div class="card-body p-3">
+                        <div class="metric-label">Tiempo Promedio</div>
+                        <div class="metric-value">25m</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de Atenciones en Espera -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h5 class="fw-bold fs-6 mb-1">Atenciones en Espera</h5>
+                        <p class="text-muted small mb-0">Listado ordenado por tiempo de espera</p>
+                    </div>
+                    <div class="text-muted small d-flex align-items-center gap-1">
+                        <i data-feather="clock" style="width: 14px; height: 14px;"></i> Actualizado hace 1 min
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle" id="tablaEspera">
+                        <thead class="table-light">
+                            <tr class="small text-uppercase">
+                                <th>Prioridad</th>
+                                <th>Código</th>
+                                <th>Tipo</th>
+                                <th>Organización</th>
+                                <th>RUT</th>
+                                <th>Área</th>
+                                <th>UV</th>
+                                <th>Ingreso</th>
+                                <th>Tiempo</th>
+                                <th>Usuario</th>
+                                <th class="text-end">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            <!-- Data loaded dynamically from atenciones_lista_espera_mock.json -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="alert alert-info border-0 shadow-sm mt-4 d-flex align-items-center gap-3 mb-0">
+                    <i data-feather="info" class="text-info"></i>
+                    <div class="small">
+                        Nota: Las atenciones se ordenan automáticamente por prioridad y tiempo de espera. Las atenciones
+                        de
+                        alta prioridad se muestran primero.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal Atender Atención -->
+    <div class="modal fade" id="modalAtender" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 12px;">
+                <div class="modal-header border-0 pb-0 p-4">
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark" id="modalTitle">Atender: AT-001234</h5>
+                        <p class="text-muted small mb-0">Complete la información para procesar esta atención</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+
+                    <!-- Información de la Atención -->
+                    <div class="card bg-white border-0 shadow-sm mb-4" style="background-color: #f8f9fa !important;">
+                        <div class="card-body p-3">
+                            <h6 class="fw-bold mb-3 small">Detalles de la Cita</h6>
+
+                            <div class="row g-3 small">
+                                <div class="col-md-4">
+                                    <label class="d-block text-muted">Tipo:</label>
+                                    <span class="fw-bold">Consulta</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="d-block text-muted">Código:</label>
+                                    <span class="fw-bold">AT-001234</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="d-block text-muted">Fecha:</label>
+                                    <span class="fw-bold">2024-12-03 09:15</span>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="d-block text-muted">Organización:</label>
+                                    <span class="fw-bold d-block">Junta de Vecinos NÂ°1 El Progreso</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="d-block text-muted">RUT:</label>
+                                    <span class="fw-bold">76.123.456-7</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="d-block text-muted">Área/UV:</label>
+                                    <span class="fw-bold">Desarrollo Social / UV-15</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Formulario -->
+                    <form id="formAtender" onsubmit="event.preventDefault();">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Descripción Original</label>
+                            <div class="p-2 bg-light rounded small text-muted">Consulta sobre proceso de postulación a
+                                subvenciones municipales</div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Estado de la Atención</label>
+                                <select class="form-select form-select-sm">
+                                    <option>En Atención</option>
+                                    <option>Completada</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Usuario Responsable</label>
+                                <input type="text" class="form-control form-control-sm" value="Usuario Actual" readonly>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Solución / Respuesta <span
+                                    class="text-danger">*</span></label>
+                            <textarea class="form-control" rows="3"
+                                placeholder="Describa la solución proporcionada..."></textarea>
+                        </div>
+
+                        <div class="mb-0">
+                            <label class="form-label small fw-bold">Observaciones Adicionales</label>
+                            <textarea class="form-control" rows="2"
+                                placeholder="Observaciones adicionales..."></textarea>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer border-0 p-4 justify-content-end gap-2">
+                    <button type="button" class="btn btn-outline-secondary px-4"
+                        data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-dark px-4">
+                        Completar Atención
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
+    <script src="../recursos/js/atenciones_lista_espera.js"></script>
+    
+
+<?php include '../api/footer.php'; ?>
+

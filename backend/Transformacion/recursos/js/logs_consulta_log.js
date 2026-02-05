@@ -1,4 +1,4 @@
-// logs_consulta_log.js
+﻿// logs_consulta_log.js
 document.addEventListener('DOMContentLoaded', async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const logId = urlParams.get('id');
@@ -70,7 +70,7 @@ async function cargarLog(id) {
             confirmButtonText: 'Volver',
             confirmButtonColor: '#212529'
         }).then(() => {
-            window.location.href = 'logs_listado_logs.html';
+            window.location.href = 'logs_listado_logs.php';
         });
     }
 }
@@ -78,3 +78,4 @@ async function cargarLog(id) {
 window.buscarLog = function () {
     solicitarID();
 }
+

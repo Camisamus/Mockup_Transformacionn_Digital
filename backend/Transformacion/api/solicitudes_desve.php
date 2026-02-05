@@ -38,6 +38,17 @@ switch ($data['ACCION']) {
             if (($response['status'] ?? '') === 'success') {
                 require_once '../src/Models/SystemLog.php';
                 $logModel = new \App\Models\SystemLog($db);
+                $tempData = $data;
+                if (isset($tempData['sol_documentos']) && is_array($tempData['sol_documentos'])) {
+                    $tempData['sol_documentos'] = array_map(function ($d) {
+                        return ['nombre' => $d['nombre'] ?? 'Sin nombre'];
+                    }, $tempData['sol_documentos']);
+                }
+                if (isset($tempData['documentos']) && is_array($tempData['documentos'])) {
+                    $tempData['documentos'] = array_map(function ($d) {
+                        return ['nombre' => $d['nombre'] ?? 'Sin nombre'];
+                    }, $tempData['documentos']);
+                }
                 $logModel->crear([
                     'evento' => 'CREATE',
                     'tipo' => 'info',
@@ -46,7 +57,7 @@ switch ($data['ACCION']) {
                     'usuario_id' => $data['sol_responsable'] ?? $_SESSION['user_id'] ?? null,
                     'accion' => 'CREAR_SOLICITUD',
                     'descripcion' => "Creación de solicitud DESVE: " . ($response['id'] ?? 'N/A'),
-                    'detalles' => json_encode(['data' => $data]),
+                    'detalles' => json_encode(['data' => $tempData]),
                     'ip' => $_SERVER['REMOTE_ADDR'],
                     'resultado' => 'Exitoso'
                 ]);
@@ -60,11 +71,21 @@ switch ($data['ACCION']) {
     case 'ACTUALIZAR':
         if ($id && $data) {
             $response = $controller->update($id, $data);
-
             // Log ACTUALIZAR
             if (($response['status'] ?? '') === 'success') {
                 require_once '../src/Models/SystemLog.php';
                 $logModel = new \App\Models\SystemLog($db);
+                $tempData = $data;
+                if (isset($tempData['sol_documentos']) && is_array($tempData['sol_documentos'])) {
+                    $tempData['sol_documentos'] = array_map(function ($d) {
+                        return ['nombre' => $d['nombre'] ?? 'Sin nombre'];
+                    }, $tempData['sol_documentos']);
+                }
+                if (isset($tempData['documentos']) && is_array($tempData['documentos'])) {
+                    $tempData['documentos'] = array_map(function ($d) {
+                        return ['nombre' => $d['nombre'] ?? 'Sin nombre'];
+                    }, $tempData['documentos']);
+                }
                 $logModel->crear([
                     'evento' => 'UPDATE',
                     'tipo' => 'info',
@@ -73,7 +94,7 @@ switch ($data['ACCION']) {
                     'usuario_id' => $_SESSION['user_id'] ?? null,
                     'accion' => 'ACTUALIZAR_SOLICITUD',
                     'descripcion' => "Actualización de solicitud DESVE: $id",
-                    'detalles' => json_encode(['id' => $id, 'cambios' => $data]),
+                    'detalles' => json_encode(['id' => $id, 'cambios' => $tempData]),
                     'ip' => $_SERVER['REMOTE_ADDR'],
                     'resultado' => 'Exitoso'
                 ]);

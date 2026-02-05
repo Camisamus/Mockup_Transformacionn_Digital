@@ -1,0 +1,270 @@
+﻿<?php
+$pageTitle = "Modificación Razón Social y/o RUT";
+require_once '../api/auth_check.php';
+include '../api/header.php';
+?>
+
+
+    <div class="container-fluid">
+        <h3 class="mb-4">Solicitud de Modificación de Razón Social y/o RUT</h3>
+
+        <div id="form-container">
+            <div class="d-flex justify-content-end mb-3">
+                <button class="btn btn-sm btn-danger"
+                    onclick="exportElementToPDF('form-container', 'solicitud_modificacion_razon_social')">
+                    <i data-feather="file-text" class="me-1"></i> Exportar Formulario (PDF)
+                </button>
+            </div>
+
+            <!-- Notes Alert -->
+            <div class="alert alert-warning mb-4" role="alert">
+                <div class="d-flex">
+                    <div class="me-3"><i data-feather="alert-triangle"></i></div>
+                    <div>
+                        <h6 class="alert-heading fw-bold">Notas Importantes</h6>
+                        <ul class="mb-0 small">
+                            <li>La documentación debe estar emitida a nombre del contribuyente (persona natural) o de la
+                                sociedad (si tiene personalidad jurídica).</li>
+                            <li>El domicilio en la documentación debe corresponder al lugar donde se ejerce la actividad
+                                comercial.</li>
+                            <li>Un croquis claro de la ubicación exacta agilizará la visita inspectiva.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1. Datos de la Solicitud -->
+            <div class="section-card">
+                <div class="section-title">1. Datos de la Patente a Modificar</div>
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Rol Patente</label>
+                        <input type="text" class="form-control" id="rolPatente">
+                    </div>
+                    <div class="col-md-9">
+                        <label class="form-label">Giro</label>
+                        <input type="text" class="form-control" id="giroPatente">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-muted">Razón Social ANTERIOR</label>
+                        <input type="text" class="form-control bg-light" id="razonSocialAnterior">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-primary">Razón Social ACTUAL (Nueva)</label>
+                        <input type="text" class="form-control border-primary" id="razonSocialActual">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">RUT</label>
+                        <input type="text" class="form-control" id="rutContribuyente">
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label">Dirección Comercial</label>
+                        <input type="text" class="form-control" id="direccionComercial">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Requisitos y Antecedentes -->
+            <div class="section-card">
+                <div class="section-title">2. Requisitos y Antecedentes (Marque lo que adjunta)</div>
+
+                <div class="subsection-header">General</div>
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="docPatente">
+                            <label class="form-check-label" for="docPatente">Fotocopia simple de la(s) última(s)
+                                Patente(s) pagada(s).</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="docAviso">
+                            <label class="form-check-label" for="docAviso">Aviso de Modificación de Razón Social y/o RUT
+                                ante S.I.I.</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="docContribuciones">
+                            <label class="form-check-label" for="docContribuciones">Fotocopia simple del recibo de
+                                contribuciones o NÂ° de Rol Avalúo.</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-md-6">
+                        <div class="subsection-header">Persona Natural</div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="docCedula">
+                            <label class="form-check-label" for="docCedula">Fotocopia de la Cédula de Identidad.</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="subsection-header">Persona Jurídica (Sociedad)</div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="docRutSociedad">
+                            <label class="form-check-label" for="docRutSociedad">Fotocopia RUT sociedad y C.I. Rep.
+                                Legal.</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="docEscritura">
+                            <label class="form-check-label" for="docEscritura">Escrituras (Constitución/Modif.),
+                                Extracto y Vigencia.</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="docActa">
+                            <label class="form-check-label" for="docActa">Acta de Directorio (solo S.A.).</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection-header text-primary mt-3">Requisitos Específicos por Tipo de Giro</div>
+                <div class="row g-2">
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="docSanitaria">
+                            <label class="form-check-label" for="docSanitaria">Resolución Sanitaria (Alimentos,
+                                Talleres, Bodegas, etc.).</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="docInofensiva">
+                            <label class="form-check-label" for="docInofensiva">Calificación de Actividad
+                                Inofensiva/Molesta (Talleres, Bodegas, etc.).</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subsection-header text-danger mt-3">Solo Patentes de Alcohol (con nuevo socio)</div>
+                <div class="row g-2">
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="docAntecedentes">
+                            <label class="form-check-label" for="docAntecedentes">Certificado de Antecedentes (Todos los
+                                socios).</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="docJurada">
+                            <label class="form-check-label" for="docJurada">Declaración Jurada Art. 4Â° Ley NÂ° 19.925
+                                (Notarial).</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Datos de Contacto y Firma -->
+            <div class="section-card">
+                <div class="section-title">3. Datos de Contacto y Firma</div>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Nombre Contacto</label>
+                        <input type="text" class="form-control" id="nombreContacto">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Teléfono</label>
+                        <input type="tel" class="form-control" id="telefono">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Dirección Particular</label>
+                        <input type="text" class="form-control" id="dirParticular">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="email">
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <label class="form-label fw-bold">Firma del Contribuyente o Representante Legal</label>
+                    <div class="border border-2 border-secondary border-dashed p-5 text-center text-muted rounded bg-light"
+                        id="seccionFirma">
+                        [Espacio para Firma Digital]
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Geolocalización (Google Maps) -->
+            <div class="section-card">
+                <div class="section-title">4. Geolocalización de la Empresa</div>
+                <div class="alert alert-info small" role="alert">
+                    <i data-feather="map-pin" class="me-1"></i> Ingrese la dirección exacta para ubicarla en el mapa.
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Calle</label>
+                        <input type="text" class="form-control" id="mapCalle" placeholder="Ej: Av. Providencia">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Número</label>
+                        <input type="text" class="form-control" id="mapNumero" placeholder="Ej: 1234">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Comuna</label>
+                        <input type="text" class="form-control" id="mapComuna" value="Santiago">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Región</label>
+                        <input type="text" class="form-control" id="mapRegion" value="Metropolitana" readonly>
+                    </div>
+                    <div class="col-12 text-end">
+                        <button class="btn btn-primary btn-sm" onclick="buscarDireccion()">
+                            <i data-feather="search" class="me-1"></i> Buscar en Mapa
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Map Container -->
+                <div id="map" style="height: 400px; width: 100%; border-radius: 8px; border: 1px solid #ddd;"
+                    class="mb-3"></div>
+
+                <!-- Coordinates -->
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Latitud</label>
+                        <input type="text" class="form-control form-control-sm bg-light" id="mapLat" readonly>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Longitud</label>
+                        <input type="text" class="form-control form-control-sm bg-light" id="mapLng" readonly>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Actions -->
+        <div class="d-flex justify-content-end mb-5 gap-2">
+            <button class="btn btn-secondary">Cancelar</button>
+            <button class="btn btn-primary" onclick="alert('Formulario Enviado')">Enviar Solicitud</button>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="../recursos/js/export_utils.js"></script>
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom Maps Integration -->
+    <script src="../recursos/js/maps_integration.js"></script>
+
+    <!-- Google Maps API (Replace YOUR_API_KEY_HERE) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE&callback=initMap" async defer></script>
+
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
+
+
+<?php include '../api/footer.php'; ?>
+

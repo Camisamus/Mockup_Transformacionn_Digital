@@ -1,4 +1,4 @@
-// ingr_historial.js
+﻿// ingr_historial.js
 let ingresosData = [];
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -95,5 +95,6 @@ window.limpiarFiltros = function () {
 
 window.verDetalle = function (id) {
     // Placeholder for detail view redirect
-    window.location.href = 'ingr_consultar.html?id=' + id;
+    window.location.href = 'ingr_consultar.php?id=' + id;
 }
+

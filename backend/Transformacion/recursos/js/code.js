@@ -1,4 +1,4 @@
-// --- App State ---
+﻿// --- App State ---
 const API_BASE_URL = window.location.origin + '/transformacion/api';
 
 const state = {
@@ -17,10 +17,10 @@ if (loginForm) {
         e.preventDefault();
 
         // Check if we are on the Contribuyente page
-        if (window.location.pathname.includes('page_Contribuyente.html')) {
+        if (window.location.pathname.includes('page_Contribuyente.php')) {
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('is_contribuyente', 'true'); // Standardized key
-            window.location.href = 'paginas/patentes_mis_solicitudes_C.html';
+            window.location.href = 'paginas/patentes_mis_solicitudes_C.php';
             return;
         }
 
@@ -61,7 +61,7 @@ if (loginForm) {
                     localStorage.setItem('user_data', JSON.stringify(data.data));
                 }
 
-                window.location.href = 'paginas/dashboard.html';
+                window.location.href = 'paginas/dashboard.php';
             } else {
                 // Login failed
                 loginError.classList.remove('d-none');
@@ -80,7 +80,7 @@ function login() {
     state.isLoggedIn = true;
     localStorage.setItem('isLoggedIn', 'true');
     // Direct Redirect
-    window.location.href = 'paginas/dashboard.html';
+    window.location.href = 'paginas/dashboard.php';
 }
 
 // Helper: Logout (Used by layout_manager or others)
@@ -108,8 +108,9 @@ window.logout = async function () {
     // Detect if we are in a subdirectory (paginas/) or root
     // If current path has 'paginas', go up one level.
     if (window.location.pathname.includes('/paginas/')) {
-        //window.location.href = '../index.html';
+        //window.location.href = '../index.php';
     } else {
-        // window.location.href = 'index.html';
+        // window.location.href = 'index.php';
     }
 }
+

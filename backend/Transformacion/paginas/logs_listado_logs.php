@@ -1,0 +1,142 @@
+﻿<?php
+$pageTitle = "Listado de Logs";
+require_once '../api/auth_check.php';
+include '../api/header.php';
+?>
+
+
+    <div class="container-fluid py-4">
+        <!-- Header & Toolbar -->
+        <div class="main-header mb-4">
+            <div class="header-title">
+                <h2 class="fw-bold fs-4">Listado de Logs</h2>
+                <p class="text-muted mb-0">Visualización y gestión de eventos de auditoría del sistema</p>
+            </div>
+            <div class="toolbar">
+                <button class="btn btn-toolbar" onclick="buscarLogs()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    Buscar
+                </button>
+                <button class="btn btn-toolbar" onclick="Swal.fire('Info', 'Exportando logs...', 'info')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Exportar
+                </button>
+            </div>
+        </div>
+
+        <!-- Filtros de Búsqueda -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body p-4">
+                <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
+                <p class="text-muted small mb-4">Filtre los eventos por fecha, tipo o módulo</p>
+
+                <form id="formFiltros" onsubmit="event.preventDefault(); buscarLogs();">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label for="filtro_fecha_desde" class="form-label small fw-bold">Fecha Desde</label>
+                            <input type="date" class="form-control form-control-sm" id="filtro_fecha_desde">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filtro_fecha_hasta" class="form-label small fw-bold">Fecha Hasta</label>
+                            <input type="date" class="form-control form-control-sm" id="filtro_fecha_hasta">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filtro_tipo" class="form-label small fw-bold">Tipo de Evento</label>
+                            <select class="form-select form-select-sm" id="filtro_tipo">
+                                <option value="">Todos</option>
+                                <option value="info">Información</option>
+                                <option value="warning">Advertencia</option>
+                                <option value="error">Error</option>
+                                <option value="critical">Crítico</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="filtro_modulo" class="form-label small fw-bold">Módulo</label>
+                            <select class="form-select form-select-sm" id="filtro_modulo">
+                                <option value="">Todos</option>
+                                <option value="organizaciones">Organizaciones</option>
+                                <option value="patentes">Patentes</option>
+                                <option value="subvenciones">Subvenciones</option>
+                                <option value="postulaciones">Postulaciones</option>
+                                <option value="atenciones">Atenciones</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="filtro_usuario" class="form-label small fw-bold">Usuario / Operador</label>
+                            <input type="text" class="form-control form-control-sm" id="filtro_usuario"
+                                placeholder="Ej: jsmith">
+                        </div>
+
+                        <div class="col-12 d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-dark d-flex align-items-center gap-2 px-4 shadow-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                Buscar
+                            </button>
+                            <button type="button" class="btn btn-link text-decoration-none text-muted small"
+                                onclick="limpiarFiltros()">
+                                Limpiar Filtros
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Resultados -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="fw-bold fs-6">Eventos Registrados (<span id="resultados_count">0</span>)</div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle" id="tablaLogs">
+                        <thead class="table-light text-uppercase small">
+                            <tr>
+                                <th>ID</th>
+                                <th>Fecha/Hora</th>
+                                <th>Tipo</th>
+                                <th>Módulo</th>
+                                <th>Usuario</th>
+                                <th>Acción</th>
+                                <th>Descripción</th>
+                                <th>IP</th>
+                                <th class="text-end">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small">
+                            <!-- Data loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="../recursos/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        feather.replace();
+    </script>
+    <script src="../recursos/js/logs_listado_logs.js"></script>
+    
+
+<?php include '../api/footer.php'; ?>
+

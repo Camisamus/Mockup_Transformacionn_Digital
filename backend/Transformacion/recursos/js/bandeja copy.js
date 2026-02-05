@@ -1,4 +1,4 @@
-
+﻿
 let allItems = [];
 let currentPage = 1;
 const itemsPerPage = 5; // Mostrar 5 items por página
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (response.status === 401) {
             // Redirect or handle unauth
             window.logout();
-            //window.location.href = 'index.html';
+            //window.location.href = 'index.php';
             return;
         }
 
@@ -118,9 +118,9 @@ function renderTable(items, tbody) {
             if (e.target.closest('button')) return; // Ignore if clicked toggle
 
             if (item.origen === 'DESVE') {
-                window.location.href = `desve_responder.html?id=${item.id}`;
+                window.location.href = `desve_responder.php?id=${item.id}`;
             } else if (item.origen === 'Ingresos') {
-                window.location.href = `ingr_responder.html?id=${item.id}`;
+                window.location.href = `ingr_responder.php?id=${item.id}`;
             } else if (item.origen === 'Patentes') {
                 Swal.fire('Info', 'Módulo de Patentes en construcción', 'info');
             } else {
@@ -145,8 +145,8 @@ function renderTable(items, tbody) {
                     <p><strong>Proyecto/Sector:</strong> ${item.origen}</p>
                     <p><strong>Entrega:</strong> ${new Date(item.fecha).toLocaleDateString()}</p>
                     <button class="btn btn-sm btn-primary mt-2" onclick="
-                        if('${item.origen}' === 'DESVE') window.location.href = 'desve_responder.html?id=${item.id}';
-                        else if ('${item.origen}' === 'Ingresos') window.location.href = 'ingr_responder.html?id=${item.id}';
+                        if('${item.origen}' === 'DESVE') window.location.href = 'desve_responder.php?id=${item.id}';
+                        else if ('${item.origen}' === 'Ingresos') window.location.href = 'ingr_responder.php?id=${item.id}';
                         else Swal.fire('Info', 'Módulo en construcción', 'info');
                     ">Ver Detalle</button>
                 </div>
@@ -219,3 +219,4 @@ function renderPagination(totalItems, currentPage) {
     nextBtn.onclick = () => renderPage(currentPage + 1);
     container.appendChild(nextBtn);
 }
+
