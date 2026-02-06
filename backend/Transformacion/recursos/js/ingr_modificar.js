@@ -393,10 +393,10 @@ function eliminarDocumentoNuevo(index) { documentosNuevos.splice(index, 1); rend
 
 async function descargarDocumento(Id, nombre) {
     try {
-        const response = await fetch(`${window.API_BASE_URL}/documentos.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/gesdoc_general.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ACCION: 'Bajar', ID: Id }),
+            body: JSON.stringify({ ACCION: 'Bajar', doc_id: Id }),
             credentials: 'include'
         });
         if (!response.ok) throw new Error('Error en la respuesta del servidor');

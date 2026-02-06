@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "fecha": "2026-02-06",
+        "modulo": "GesDoc - Sistema de Encriptación",
+        "componente": "GesDoc.php - findCkFile()",
+        "comportamiento": "Múltiples archivos .ck en la misma carpeta",
+        "descripcion": "Si existen múltiples archivos .ck en la misma carpeta mensual (ej: halulu.ck, honoa.ck, paledo.ck), el sistema actualmente usa el primero que encuentra scandir() en orden alfabético. Esto puede causar ambigüedad sobre qué archivo de claves se está usando.",
+        "impacto": "Medio - Puede causar confusión sobre qué clave se está usando para encriptar archivos",
+        "solucion_propuesta": "Implementar una de las siguientes opciones: 1) Error si hay múltiples archivos .ck, 2) Usar siempre .ck por defecto y solo otros nombres si no existe, 3) Permitir especificar vía parámetro qué archivo usar",
+        "prioridad": "Media",
+        "estado": "Pendiente"
+    }
+]

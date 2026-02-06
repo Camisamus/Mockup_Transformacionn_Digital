@@ -420,7 +420,7 @@ function removeFile(index) {
 
 async function loadExistingDocuments() {
     try {
-        const response = await fetch(`${window.API_BASE_URL}/documentos.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/gesdoc_general.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: "BuscarporTramite", tramite_id: currentSolRegistroId }),
@@ -429,8 +429,8 @@ async function loadExistingDocuments() {
         const result = await response.json();
         const container = document.getElementById('lista_documentos_guardados');
         container.innerHTML = '';
-        if (result.status === 'success' && result.data) {
-            result.data.forEach(doc => {
+        if (result.status === 'success' && result.documentos) {
+            result.documentos.forEach(doc => {
                 const item = `
                     <div class="list-group-item d-flex justify-content-between align-items-center bg-light mb-1 border rounded">
                         <span class="small text-truncate" style="max-width: 80%;">${doc.doc_nombre_documento}</span>

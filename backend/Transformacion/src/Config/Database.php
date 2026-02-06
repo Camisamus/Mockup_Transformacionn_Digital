@@ -19,8 +19,8 @@ class Database
         // Headers CORS removed from here to avoid duplication
 
         try {
-            if (file_exists(__DIR__ . '/../../.env')) {
-                $dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+            if (file_exists(__DIR__ . '/../../../.env')) {
+                $dotenv = Dotenv::createImmutable(__DIR__ . '/../../../');
                 $dotenv->load();
             }
         } catch (\Exception $e) {
@@ -28,7 +28,7 @@ class Database
         }
 
         $this->host = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?: 'localhost';
-        $this->db_name = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?: 'transformacion_digital';
+        $this->db_name = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?: 'transformacion_digital_beta';
         $this->username = $_ENV['DB_USER'] ?? getenv('DB_USER') ?: 'root';
         $this->password = $_ENV['DB_PASS'] ?? getenv('DB_PASS') ?: 'root';
     }

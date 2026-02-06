@@ -8,7 +8,7 @@ use App\Models\Bitacora;
 use App\Models\Comentario;
 use App\Models\Enlace;
 use App\Models\Ingresos_Destinos;
-use App\Models\Documento;
+use App\Models\GesDoc;
 class Ingresos_ingreso
 {
     private $sysname = "Ingreso_ingresos";
@@ -19,14 +19,14 @@ class Ingresos_ingreso
     private $comentario;
     private $Destinos;
     private $Enlace;
-    private $Documentos;
+    private $GesDoc;
     private $Multiancestro;
     public function __construct($db)
     {
         $this->conn = $db;
         $this->bitacora = new Bitacora($db);
         $this->comentario = new Comentario($db);
-        $this->Documentos = new Documento($db);
+        $this->GesDoc = new GesDoc($db);
         $this->Enlace = new Enlace($db);
         $this->Destinos = new Ingresos_Destinos($db);
         $this->Multiancestro = new Multiancestro($db);
@@ -122,7 +122,7 @@ class Ingresos_ingreso
             return null;
 
         $solicitud['destinos'] = $this->Destinos->obtenerPorIngresoId($solicitud['tis_id']);
-        $solicitud['documentos'] = $this->Documentos->obtenerPorTramite($solicitud['tis_registro_tramite']);
+        $solicitud['documentos'] = $this->GesDoc->getDocumentosByTramite($solicitud['tis_registro_tramite']);
         $solicitud['comentarios'] = $this->comentario->getByRegistroId($solicitud['tis_registro_tramite']);
         $solicitud['enlaces'] = $this->Enlace->obtenerPorRegistroId($solicitud['tis_registro_tramite']);
 
@@ -161,7 +161,7 @@ class Ingresos_ingreso
             return null;
 
         $solicitud['destinos'] = $this->Destinos->obtenerPorIngresoId($solicitud['tis_id']);
-        $solicitud['documentos'] = $this->Documentos->obtenerPorTramite($solicitud['tis_registro_tramite']);
+        $solicitud['documentos'] = $this->GesDoc->getDocumentosByTramite($solicitud['tis_registro_tramite']);
         $solicitud['comentarios'] = $this->comentario->getByRegistroId($solicitud['tis_registro_tramite']);
         $solicitud['enlaces'] = $this->Enlace->obtenerPorRegistroId($solicitud['tis_registro_tramite']);
 
@@ -265,16 +265,24 @@ class Ingresos_ingreso
 
                 // 6. Registrar documentos
                 if (isset($data['documentos']) && is_array($data['documentos'])) {
-                    $docController = new \App\Controllers\DocumentoController($this->conn);
+                    $docController = new \App\Controllers\GesDocController($this->conn);
                     foreach ($data['documentos'] as $doc) {
-                        $docData = [
-                            'tramite_id' => $rgt_id,
-                            'responsable_id' => $creador_id,
-                            'es_docdigital' => 0,
-                            'nombre' => $doc['nombre'],
-                            'base64' => $doc['base64']
-                        ];
-                        $docController->createFromBase64($docData);
+                        try {
+                            $fileInfo = $docController->base64ToFileArray($doc['base64'], $doc['nombre']);
+                            $result = $docController->subirArchivo(
+                                [$fileInfo['array']],
+                                [
+                                    'tramite_id' => $rgt_id,
+                                    'user_id' => $creador_id
+                                ]
+                            );
+                            fclose($fileInfo['file']);
+                            if ($result['status'] !== 'success') {
+                                error_log("Error uploading document {$doc['nombre']}: " . ($result['message'] ?? 'Unknown error'));
+                            }
+                        } catch (\Exception $e) {
+                            error_log("Exception uploading document: " . $e->getMessage());
+                        }
                     }
                 }
 
@@ -369,17 +377,33 @@ class Ingresos_ingreso
 
             // 4. Manejar Nuevos Documentos
             if (isset($data['documentos']) && is_array($data['documentos'])) {
-                $docController = new \App\Controllers\DocumentoController($this->conn);
+                $docController = new \App\Controllers\GesDocController($this->conn);
                 $responsable_id = $data['tis_responsable'] ?? ($_SESSION['user_id'] ?? 1);
                 foreach ($data['documentos'] as $doc) {
-                    $docData = [
-                        'tramite_id' => $current['tis_registro_tramite'],
-                        'responsable_id' => $responsable_id,
-                        'es_docdigital' => 0,
-                        'nombre' => $doc['nombre'],
-                        'base64' => $doc['base64']
-                    ];
-                    $docController->createFromBase64($docData);
+                    try {
+                        $fileInfo = $docController->base64ToFileArray($doc['base64'], $doc['nombre']);
+                        $result = $docController->subirArchivo(
+                            [$fileInfo['array']],
+                            [
+                                'tramite_id' => $current['tis_registro_tramite'],
+                                'user_id' => $responsable_id
+                            ]
+                        );
+                        fclose($fileInfo['file']);
+                        if ($result['status'] !== 'success') {
+                            $errorsDetail = isset($result['errors']) ? implode('; ', $result['errors']) : '';
+                            $errorMsg = "Error uploading document {$doc['nombre']}: " . ($result['message'] ?? 'Unknown error') . ". Details: " . $errorsDetail;
+                            error_log($errorMsg);
+                            $this->lastError = $errorMsg;
+                            $this->conn->rollBack();
+                            return false;
+                        }
+                    } catch (\Exception $e) {
+                        error_log("Exception uploading document: " . $e->getMessage());
+                        $this->lastError = "Exception uploading document: " . $e->getMessage();
+                        $this->conn->rollBack();
+                        return false;
+                    }
                 }
             }
 
@@ -409,6 +433,7 @@ class Ingresos_ingreso
                 $this->conn->rollBack();
             }
             error_log("Database Exception in Ingresos_ingreso::update: " . $e->getMessage());
+            $this->lastError = $e->getMessage();
             return false;
         }
     }

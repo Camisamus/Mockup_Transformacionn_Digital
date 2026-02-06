@@ -17,6 +17,23 @@
 /*M!100616 SET @OLD_NOTE_VERBOSITY=@@NOTE_VERBOSITY, NOTE_VERBOSITY=0 */;
 
 --
+-- Table structure for table `trd_acceso_perfiles`
+--
+
+DROP TABLE IF EXISTS `trd_acceso_perfiles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_acceso_perfiles` (
+  `prf_id` int(11) NOT NULL AUTO_INCREMENT,
+  `prf_nombre` varchar(100) NOT NULL,
+  `prf_borrado` tinyint(1) DEFAULT 0,
+  `prf_creacion` datetime DEFAULT current_timestamp(),
+  `prf_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`prf_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `trd_acceso_perfiles`
 --
 
@@ -36,6 +53,26 @@ INSERT INTO `trd_acceso_perfiles` VALUES
 /*!40000 ALTER TABLE `trd_acceso_perfiles` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
+
+--
+-- Table structure for table `trd_acceso_perfiles_roles`
+--
+
+DROP TABLE IF EXISTS `trd_acceso_perfiles_roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_acceso_perfiles_roles` (
+  `pfr_perfil_id` int(11) DEFAULT NULL,
+  `pfr_rol_id` varchar(20) DEFAULT NULL,
+  `pfr_borrado` tinyint(1) DEFAULT 0,
+  `pfr_creacion` datetime DEFAULT current_timestamp(),
+  `pfr_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  KEY `trd_acceso_perfiles_roles_trd_acceso_roles_FK` (`pfr_rol_id`),
+  KEY `trd_acceso_perfiles_roles_trd_acceso_perfiles_FK` (`pfr_perfil_id`),
+  CONSTRAINT `trd_acceso_perfiles_roles_trd_acceso_perfiles_FK` FOREIGN KEY (`pfr_perfil_id`) REFERENCES `trd_acceso_perfiles` (`prf_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `trd_acceso_perfiles_roles_trd_acceso_roles_FK` FOREIGN KEY (`pfr_rol_id`) REFERENCES `trd_acceso_roles` (`rol_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `trd_acceso_perfiles_roles`
@@ -84,6 +121,25 @@ INSERT INTO `trd_acceso_perfiles_roles` VALUES
 /*!40000 ALTER TABLE `trd_acceso_perfiles_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
+
+--
+-- Table structure for table `trd_acceso_roles`
+--
+
+DROP TABLE IF EXISTS `trd_acceso_roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_acceso_roles` (
+  `rol_id` varchar(20) NOT NULL,
+  `rol_nombre` varchar(255) NOT NULL,
+  `rol_enlace` varchar(255) DEFAULT NULL,
+  `rol_tipo` varchar(50) DEFAULT NULL,
+  `rol_borrado` tinyint(1) DEFAULT 0,
+  `rol_creacion` datetime DEFAULT current_timestamp(),
+  `rol_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`rol_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `trd_acceso_roles`
@@ -156,6 +212,27 @@ UNLOCK TABLES;
 commit;
 
 --
+-- Table structure for table `trd_acceso_usuarios`
+--
+
+DROP TABLE IF EXISTS `trd_acceso_usuarios`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_acceso_usuarios` (
+  `usr_id` int(11) NOT NULL AUTO_INCREMENT,
+  `usr_nombre` varchar(100) NOT NULL,
+  `usr_apellido` varchar(100) NOT NULL,
+  `usr_rut` varchar(12) NOT NULL,
+  `usr_email` varchar(255) DEFAULT NULL,
+  `usr_borrado` tinyint(1) DEFAULT 0,
+  `usr_creacion` datetime DEFAULT current_timestamp(),
+  `usr_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`usr_id`),
+  UNIQUE KEY `usr_rut` (`usr_rut`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `trd_acceso_usuarios`
 --
 
@@ -169,6 +246,31 @@ INSERT INTO `trd_acceso_usuarios` VALUES
 /*!40000 ALTER TABLE `trd_acceso_usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
+
+--
+-- Table structure for table `trd_acceso_usuarios_perfiles`
+--
+
+DROP TABLE IF EXISTS `trd_acceso_usuarios_perfiles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_acceso_usuarios_perfiles` (
+  `usp_usuario_id` int(11) NOT NULL,
+  `usp_perfil_id` int(11) NOT NULL,
+  `usp_fecha_inicio` datetime DEFAULT current_timestamp(),
+  `usp_fecha_termino` datetime DEFAULT NULL,
+  `usp_usuario_subrogante_id` int(11) DEFAULT NULL,
+  `usp_borrado` tinyint(1) DEFAULT 0,
+  `usp_creacion` datetime DEFAULT current_timestamp(),
+  `usp_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`usp_usuario_id`,`usp_perfil_id`),
+  KEY `usp_perfil_id` (`usp_perfil_id`),
+  KEY `usp_usuario_subrogante_id` (`usp_usuario_subrogante_id`),
+  CONSTRAINT `1` FOREIGN KEY (`usp_usuario_id`) REFERENCES `trd_acceso_usuarios` (`usr_id`),
+  CONSTRAINT `2` FOREIGN KEY (`usp_perfil_id`) REFERENCES `trd_acceso_perfiles` (`prf_id`),
+  CONSTRAINT `3` FOREIGN KEY (`usp_usuario_subrogante_id`) REFERENCES `trd_acceso_usuarios` (`usr_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `trd_acceso_usuarios_perfiles`
@@ -192,6 +294,27 @@ INSERT INTO `trd_acceso_usuarios_perfiles` VALUES
 /*!40000 ALTER TABLE `trd_acceso_usuarios_perfiles` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
+
+--
+-- Table structure for table `trd_desve_destinos`
+--
+
+DROP TABLE IF EXISTS `trd_desve_destinos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_desve_destinos` (
+  `tid_id` int(11) NOT NULL AUTO_INCREMENT,
+  `tid_desve_solicitud` int(11) NOT NULL,
+  `tid_destino` int(11) NOT NULL,
+  `tid_responde` tinyint(1) DEFAULT NULL,
+  `tid_fecha_respuesta` datetime DEFAULT NULL,
+  PRIMARY KEY (`tid_id`),
+  KEY `ingresos_destinos` (`tid_desve_solicitud`) USING BTREE,
+  KEY `trd_ingresos_destinos_trd_acceso_usuarios_FK` (`tid_destino`) USING BTREE,
+  CONSTRAINT `trd_desve_destinos_trd_acceso_usuarios_FK` FOREIGN KEY (`tid_destino`) REFERENCES `trd_acceso_usuarios` (`usr_id`),
+  CONSTRAINT `trd_desve_destinos_trd_desve_solicitudes_FK` FOREIGN KEY (`tid_desve_solicitud`) REFERENCES `trd_desve_solicitudes` (`sol_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `trd_desve_destinos`
@@ -229,6 +352,28 @@ UNLOCK TABLES;
 commit;
 
 --
+-- Table structure for table `trd_desve_mails_enviados`
+--
+
+DROP TABLE IF EXISTS `trd_desve_mails_enviados`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_desve_mails_enviados` (
+  `men_id` int(11) NOT NULL AUTO_INCREMENT,
+  `men_solicitud_id` int(11) DEFAULT NULL,
+  `men_fecha` datetime DEFAULT current_timestamp(),
+  `men_destinatario` varchar(255) DEFAULT NULL,
+  `men_asunto` varchar(255) DEFAULT NULL,
+  `men_borrado` tinyint(1) DEFAULT 0,
+  `men_creacion` datetime DEFAULT current_timestamp(),
+  `men_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`men_id`),
+  KEY `men_solicitud_id` (`men_solicitud_id`),
+  CONSTRAINT `1` FOREIGN KEY (`men_solicitud_id`) REFERENCES `trd_desve_solicitudes` (`sol_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `trd_desve_mails_enviados`
 --
 
@@ -238,6 +383,29 @@ set autocommit=0;
 /*!40000 ALTER TABLE `trd_desve_mails_enviados` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
+
+--
+-- Table structure for table `trd_desve_organizaciones`
+--
+
+DROP TABLE IF EXISTS `trd_desve_organizaciones`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_desve_organizaciones` (
+  `org_id` int(11) NOT NULL AUTO_INCREMENT,
+  `org_nombre` varchar(255) DEFAULT NULL,
+  `org_tipo_id` int(11) DEFAULT NULL,
+  `org_direccion` varchar(255) DEFAULT NULL,
+  `org_latitud` decimal(10,8) DEFAULT NULL,
+  `org_longitud` decimal(11,8) DEFAULT NULL,
+  `org_borrado` tinyint(1) DEFAULT 0,
+  `org_creacion` datetime DEFAULT current_timestamp(),
+  `org_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`org_id`),
+  KEY `org_tipo_id` (`org_tipo_id`) USING BTREE,
+  CONSTRAINT `1_copy` FOREIGN KEY (`org_tipo_id`) REFERENCES `trd_general_tipos_organizacion` (`tor_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `trd_desve_organizaciones`
@@ -268,6 +436,25 @@ UNLOCK TABLES;
 commit;
 
 --
+-- Table structure for table `trd_desve_prioridades`
+--
+
+DROP TABLE IF EXISTS `trd_desve_prioridades`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_desve_prioridades` (
+  `pri_id` int(11) NOT NULL,
+  `pri_nombre` varchar(50) DEFAULT NULL,
+  `pri_tiempo_establecido` int(11) DEFAULT NULL,
+  `pri_estado` tinyint(1) DEFAULT 1,
+  `pri_borrado` tinyint(1) DEFAULT 0,
+  `pri_creacion` datetime DEFAULT current_timestamp(),
+  `pri_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`pri_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `trd_desve_prioridades`
 --
 
@@ -281,6 +468,29 @@ INSERT INTO `trd_desve_prioridades` VALUES
 /*!40000 ALTER TABLE `trd_desve_prioridades` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
+
+--
+-- Table structure for table `trd_desve_respuestas`
+--
+
+DROP TABLE IF EXISTS `trd_desve_respuestas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_desve_respuestas` (
+  `res_id` int(11) NOT NULL AUTO_INCREMENT,
+  `res_solicitud_id` int(11) DEFAULT NULL,
+  `res_texto` text DEFAULT NULL,
+  `res_fecha` datetime DEFAULT current_timestamp(),
+  `res_borrado` tinyint(1) DEFAULT 0,
+  `res_creacion` datetime DEFAULT current_timestamp(),
+  `res_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `res_tipo` varchar(100) DEFAULT 'Comentario',
+  `res_funcionaio` int(11) NOT NULL,
+  PRIMARY KEY (`res_id`),
+  KEY `res_solicitud_id` (`res_solicitud_id`),
+  CONSTRAINT `1` FOREIGN KEY (`res_solicitud_id`) REFERENCES `trd_desve_solicitudes` (`sol_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `trd_desve_respuestas`
@@ -302,6 +512,56 @@ INSERT INTO `trd_desve_respuestas` VALUES
 /*!40000 ALTER TABLE `trd_desve_respuestas` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
+
+--
+-- Table structure for table `trd_desve_solicitudes`
+--
+
+DROP TABLE IF EXISTS `trd_desve_solicitudes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_desve_solicitudes` (
+  `sol_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sol_ingreso_desve` varchar(50) DEFAULT NULL,
+  `sol_nombre_expediente` varchar(255) DEFAULT NULL,
+  `sol_origen_id` int(11) DEFAULT NULL,
+  `sol_origen_texto` text DEFAULT NULL,
+  `sol_detalle` text DEFAULT NULL,
+  `sol_fecha_recepcion` datetime DEFAULT NULL,
+  `sol_prioridad_id` int(11) DEFAULT NULL,
+  `sol_funcionario_id` int(11) DEFAULT NULL,
+  `sol_sector_id` int(11) DEFAULT NULL,
+  `sol_fecha_vencimiento` datetime DEFAULT NULL,
+  `sol_entrego_coordinador` tinyint(1) DEFAULT 0,
+  `sol_fecha_respuesta_coordinador` datetime DEFAULT NULL,
+  `sol_estado_entrega` tinyint(1) DEFAULT 0,
+  `sol_dias_vencimiento` int(11) DEFAULT NULL,
+  `sol_observaciones` text DEFAULT NULL,
+  `sol_dias_transcurridos` int(11) DEFAULT NULL,
+  `sol_reingreso_id` int(11) DEFAULT NULL,
+  `sol_direccion` varchar(255) DEFAULT NULL,
+  `sol_latitud` decimal(10,8) DEFAULT NULL,
+  `sol_longitud` decimal(11,8) DEFAULT NULL,
+  `sol_borrado` tinyint(1) DEFAULT 0,
+  `sol_creacion` datetime DEFAULT current_timestamp(),
+  `sol_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `sol_responsable` int(11) NOT NULL,
+  `sol_registro_tramite` int(11) NOT NULL,
+  `sol_origen_esp` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`sol_id`),
+  KEY `sol_origen_id` (`sol_origen_id`),
+  KEY `sol_prioridad_id` (`sol_prioridad_id`),
+  KEY `sol_sector_id` (`sol_sector_id`),
+  KEY `sol_reingreso_id` (`sol_reingreso_id`),
+  KEY `6` (`sol_registro_tramite`),
+  KEY `3` (`sol_funcionario_id`),
+  CONSTRAINT `2` FOREIGN KEY (`sol_prioridad_id`) REFERENCES `trd_desve_prioridades` (`pri_id`),
+  CONSTRAINT `3` FOREIGN KEY (`sol_funcionario_id`) REFERENCES `trd_acceso_usuarios` (`usr_id`),
+  CONSTRAINT `4` FOREIGN KEY (`sol_sector_id`) REFERENCES `trd_general_sectores` (`sec_id`),
+  CONSTRAINT `5` FOREIGN KEY (`sol_reingreso_id`) REFERENCES `trd_desve_solicitudes` (`sol_id`),
+  CONSTRAINT `6` FOREIGN KEY (`sol_registro_tramite`) REFERENCES `trd_general_registro_general_tramites` (`rgt_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `trd_desve_solicitudes`
@@ -339,6 +599,21 @@ UNLOCK TABLES;
 commit;
 
 --
+-- Table structure for table `trd_general_areas`
+--
+
+DROP TABLE IF EXISTS `trd_general_areas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_general_areas` (
+  `tga_id` int(11) NOT NULL AUTO_INCREMENT,
+  `tga_codigo_area` varchar(100) NOT NULL,
+  `tga_nombre` varchar(100) NOT NULL,
+  PRIMARY KEY (`tga_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `trd_general_areas`
 --
 
@@ -350,6 +625,26 @@ UNLOCK TABLES;
 commit;
 
 --
+-- Table structure for table `trd_general_areas_usuarios`
+--
+
+DROP TABLE IF EXISTS `trd_general_areas_usuarios`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_general_areas_usuarios` (
+  `tgau_id` int(11) NOT NULL AUTO_INCREMENT,
+  `tgau_usuario` int(11) NOT NULL,
+  `tgau_area` int(11) NOT NULL,
+  `tgau_estado` enum('Activo','Inactivo','Pendiente') DEFAULT NULL,
+  PRIMARY KEY (`tgau_id`),
+  KEY `trd_general_areas_usuarios_trd_general_areas_FK` (`tgau_area`),
+  KEY `trd_general_areas_usuarios_trd_acceso_usuarios_FK` (`tgau_usuario`),
+  CONSTRAINT `trd_general_areas_usuarios_trd_acceso_usuarios_FK` FOREIGN KEY (`tgau_usuario`) REFERENCES `trd_acceso_usuarios` (`usr_id`),
+  CONSTRAINT `trd_general_areas_usuarios_trd_general_areas_FK` FOREIGN KEY (`tgau_area`) REFERENCES `trd_general_areas` (`tga_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `trd_general_areas_usuarios`
 --
 
@@ -359,6 +654,27 @@ set autocommit=0;
 /*!40000 ALTER TABLE `trd_general_areas_usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
+
+--
+-- Table structure for table `trd_general_bitacora`
+--
+
+DROP TABLE IF EXISTS `trd_general_bitacora`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_general_bitacora` (
+  `bit_id` int(11) NOT NULL AUTO_INCREMENT,
+  `bit_tramite_registrado` int(11) NOT NULL,
+  `bit_evento` text NOT NULL,
+  `bit-responsable` int(11) NOT NULL,
+  `bit_fecha` datetime NOT NULL,
+  PRIMARY KEY (`bit_id`),
+  KEY `trd_general_bitacora_trd_general_registro_general_tramites_FK` (`bit_tramite_registrado`),
+  KEY `trd_general_bitacora_trd_acceso_usuarios_FK` (`bit-responsable`),
+  CONSTRAINT `trd_general_bitacora_trd_acceso_usuarios_FK` FOREIGN KEY (`bit-responsable`) REFERENCES `trd_acceso_usuarios` (`usr_id`),
+  CONSTRAINT `trd_general_bitacora_trd_general_registro_general_tramites_FK` FOREIGN KEY (`bit_tramite_registrado`) REFERENCES `trd_general_registro_general_tramites` (`rgt_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=600 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `trd_general_bitacora`
@@ -971,6 +1287,28 @@ UNLOCK TABLES;
 commit;
 
 --
+-- Table structure for table `trd_general_comentario`
+--
+
+DROP TABLE IF EXISTS `trd_general_comentario`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_general_comentario` (
+  `gco_id` int(11) NOT NULL AUTO_INCREMENT,
+  `gco_comentador` int(11) NOT NULL,
+  `gco_comentario` text DEFAULT NULL,
+  `gco_documento` text DEFAULT NULL,
+  `gco_tramite` int(11) NOT NULL,
+  `gco_fecha` datetime NOT NULL,
+  PRIMARY KEY (`gco_id`),
+  KEY `trd_geneal_comentario_trd_acceso_usuarios_FK` (`gco_comentador`),
+  KEY `trd_geneal_comentario_trd_general_registro_general_tramites_FK` (`gco_tramite`),
+  CONSTRAINT `trd_geneal_comentario_trd_acceso_usuarios_FK` FOREIGN KEY (`gco_comentador`) REFERENCES `trd_acceso_usuarios` (`usr_id`),
+  CONSTRAINT `trd_geneal_comentario_trd_general_registro_general_tramites_FK` FOREIGN KEY (`gco_tramite`) REFERENCES `trd_general_registro_general_tramites` (`rgt_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `trd_general_comentario`
 --
 
@@ -998,6 +1336,23 @@ UNLOCK TABLES;
 commit;
 
 --
+-- Table structure for table `trd_general_contribuyentes`
+--
+
+DROP TABLE IF EXISTS `trd_general_contribuyentes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_general_contribuyentes` (
+  `tgc_id` int(11) NOT NULL AUTO_INCREMENT,
+  `tgc_rut` varchar(15) NOT NULL,
+  `tgc_nombre` varchar(100) NOT NULL,
+  `tgc_apellido_paterno` varchar(100) DEFAULT NULL,
+  `tgc_apellido_materno` varchar(100) NOT NULL,
+  PRIMARY KEY (`tgc_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `trd_general_contribuyentes`
 --
 
@@ -1011,6 +1366,29 @@ INSERT INTO `trd_general_contribuyentes` VALUES
 /*!40000 ALTER TABLE `trd_general_contribuyentes` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
+
+--
+-- Table structure for table `trd_general_documento_adjunto`
+--
+
+DROP TABLE IF EXISTS `trd_general_documento_adjunto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_general_documento_adjunto` (
+  `doc_id` int(11) NOT NULL AUTO_INCREMENT,
+  `doc_tramite_registrado` int(11) NOT NULL,
+  `doc_fecha` datetime NOT NULL,
+  `doc_enlace_documento` text NOT NULL,
+  `doc_nombre_documento` varchar(100) NOT NULL,
+  `doc-responsable` int(11) NOT NULL,
+  `doc_docdigital` tinyint(1) NOT NULL,
+  PRIMARY KEY (`doc_id`),
+  KEY `trd_general_bitacora_trd_acceso_usuarios_FK` (`doc-responsable`) USING BTREE,
+  KEY `trd_general_bitacora_trd_general_registro_general_tramites_FK` (`doc_tramite_registrado`) USING BTREE,
+  CONSTRAINT `1` FOREIGN KEY (`doc-responsable`) REFERENCES `trd_acceso_usuarios` (`usr_id`),
+  CONSTRAINT `2` FOREIGN KEY (`doc_tramite_registrado`) REFERENCES `trd_general_registro_general_tramites` (`rgt_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `trd_general_documento_adjunto`
@@ -1056,6 +1434,27 @@ UNLOCK TABLES;
 commit;
 
 --
+-- Table structure for table `trd_general_enlaces`
+--
+
+DROP TABLE IF EXISTS `trd_general_enlaces`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_general_enlaces` (
+  `tge_id` int(11) NOT NULL AUTO_INCREMENT,
+  `tge_tramite` int(11) NOT NULL,
+  `tge_enlace` text NOT NULL,
+  `tge_responsable` int(11) NOT NULL,
+  `tge_fecha` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`tge_id`),
+  KEY `trd_general_enlaces_trd_acceso_usuarios_FK` (`tge_responsable`),
+  KEY `trd_general_enlaces_trd_general_registro_general_tramites_FK` (`tge_tramite`),
+  CONSTRAINT `trd_general_enlaces_trd_acceso_usuarios_FK` FOREIGN KEY (`tge_responsable`) REFERENCES `trd_acceso_usuarios` (`usr_id`),
+  CONSTRAINT `trd_general_enlaces_trd_general_registro_general_tramites_FK` FOREIGN KEY (`tge_tramite`) REFERENCES `trd_general_registro_general_tramites` (`rgt_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `trd_general_enlaces`
 --
 
@@ -1074,6 +1473,23 @@ INSERT INTO `trd_general_enlaces` VALUES
 /*!40000 ALTER TABLE `trd_general_enlaces` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
+
+--
+-- Table structure for table `trd_general_eventos_codigos`
+--
+
+DROP TABLE IF EXISTS `trd_general_eventos_codigos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_general_eventos_codigos` (
+  `evt_codigo` varchar(50) NOT NULL COMMENT 'Unique code for the event type (e.g. LOGIN_SUCCESS)',
+  `evt_descripcion` varchar(255) NOT NULL COMMENT 'Human readable description of the event type',
+  `evt_nivel_defecto` enum('info','warning','error','critical') DEFAULT 'info' COMMENT 'Default severity level',
+  `evt_creacion` datetime DEFAULT current_timestamp(),
+  `evt_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`evt_codigo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Catalogo de codigos de eventos del sistema';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `trd_general_eventos_codigos`
@@ -1096,6 +1512,36 @@ UNLOCK TABLES;
 commit;
 
 --
+-- Table structure for table `trd_general_logs`
+--
+
+DROP TABLE IF EXISTS `trd_general_logs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_general_logs` (
+  `log_id` int(11) NOT NULL AUTO_INCREMENT,
+  `log_fecha` datetime DEFAULT current_timestamp(),
+  `log_evento_codigo` varchar(50) DEFAULT NULL COMMENT 'Reference to known event code',
+  `log_tipo` enum('info','warning','error','critical') DEFAULT 'info' COMMENT 'Event type/severity (can override default)',
+  `log_severidad` varchar(50) DEFAULT NULL COMMENT 'Additional severity descriptor if needed (e.g. Alto, Medio)',
+  `log_modulo` varchar(100) DEFAULT NULL COMMENT 'System module (e.g. Patentes, Organizaciones)',
+  `log_usuario_id` int(11) DEFAULT NULL COMMENT 'User responsible for the action',
+  `log_accion` varchar(100) DEFAULT NULL COMMENT 'Short action name',
+  `log_descripcion` text DEFAULT NULL COMMENT 'Detailed description',
+  `log_detalles` text DEFAULT NULL COMMENT 'Technical details, stack trace, or JSON data',
+  `log_ip` varchar(45) DEFAULT NULL COMMENT 'IP Address',
+  `log_resultado` varchar(50) DEFAULT NULL COMMENT 'Outcome of the operation',
+  PRIMARY KEY (`log_id`),
+  KEY `log_usuario_id` (`log_usuario_id`),
+  KEY `log_evento_codigo` (`log_evento_codigo`),
+  KEY `log_fecha` (`log_fecha`),
+  KEY `log_modulo` (`log_modulo`),
+  CONSTRAINT `fk_logs_evento` FOREIGN KEY (`log_evento_codigo`) REFERENCES `trd_general_eventos_codigos` (`evt_codigo`) ON DELETE SET NULL,
+  CONSTRAINT `fk_logs_usuario` FOREIGN KEY (`log_usuario_id`) REFERENCES `trd_acceso_usuarios` (`usr_id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Registro de logs y auditoria del sistema';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `trd_general_logs`
 --
 
@@ -1112,10 +1558,30 @@ INSERT INTO `trd_general_logs` VALUES
 (7,'2026-02-03 15:22:22','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"::1\"}','::1','Exitoso'),
 (8,'2026-02-03 16:38:32','CREATE','info','Bajo','DESVE',1,'CREAR_SOLICITUD','Creación de solicitud DESVE: 80','{\"data\":{\"sol_nombre_expediente\":\"prueba php\",\"sol_ingreso_desve\":\"--php\",\"sol_reingreso_id\":\"57\",\"sol_origen_id\":\"5\",\"sol_origen_texto\":\"Juan fg Hervas\",\"sol_detalle\":\"ingreso php\",\"sol_fecha_recepcion\":\"2026-02-03 00:00:00\",\"sol_prioridad_id\":\"3\",\"sol_sector_id\":\"3\",\"sol_fecha_vencimiento\":\"2026-02-16 00:00:00\",\"sol_observaciones\":\"1234\",\"sol_responsable\":null,\"sol_origen_esp\":1,\"destinos\":[{\"usr_id\":\"2\",\"usr_nombre_completo\":\"Leticia meneses\"}],\"ACCION\":\"CREAR\"}}','::1','Exitoso'),
 (9,'2026-02-03 16:43:34','CREATE','info','Bajo','DESVE',1,'CREAR_SOLICITUD','Creación de solicitud DESVE: 82','{\"data\":{\"sol_nombre_expediente\":\"prueba php2\",\"sol_ingreso_desve\":\"--php2\",\"sol_reingreso_id\":\"80\",\"sol_origen_id\":\"5\",\"sol_origen_texto\":\"Juan fg Hervas\",\"sol_detalle\":\"2\",\"sol_fecha_recepcion\":\"2026-02-03 00:00:00\",\"sol_prioridad_id\":\"3\",\"sol_sector_id\":\"14\",\"sol_fecha_vencimiento\":\"2026-02-16 00:00:00\",\"sol_observaciones\":\"2\",\"sol_responsable\":null,\"sol_origen_esp\":1,\"destinos\":[{\"usr_id\":\"2\",\"usr_nombre_completo\":\"Leticia meneses\"}],\"documentos\":[{\"nombre\":\"6. Sistema Permisos Precarios Municipales.pdf\"}],\"ACCION\":\"CREAR\"}}','::1','Exitoso'),
-(10,'2026-02-03 17:08:21','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"::1\"}','::1','Exitoso');
+(10,'2026-02-03 17:08:21','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"::1\"}','::1','Exitoso'),
+(11,'2026-02-06 11:24:11','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso');
 /*!40000 ALTER TABLE `trd_general_logs` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
+
+--
+-- Table structure for table `trd_general_multiancestro`
+--
+
+DROP TABLE IF EXISTS `trd_general_multiancestro`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_general_multiancestro` (
+  `gma_id` int(11) NOT NULL AUTO_INCREMENT,
+  `gma_padre` int(11) DEFAULT NULL,
+  `gma_hijo` int(11) DEFAULT NULL,
+  PRIMARY KEY (`gma_id`),
+  KEY `padres` (`gma_padre`),
+  KEY `hijos` (`gma_hijo`),
+  CONSTRAINT `hijos` FOREIGN KEY (`gma_hijo`) REFERENCES `trd_general_registro_general_tramites` (`rgt_id`),
+  CONSTRAINT `padres` FOREIGN KEY (`gma_padre`) REFERENCES `trd_general_registro_general_tramites` (`rgt_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `trd_general_multiancestro`
@@ -1133,6 +1599,29 @@ UNLOCK TABLES;
 commit;
 
 --
+-- Table structure for table `trd_general_organizaciones`
+--
+
+DROP TABLE IF EXISTS `trd_general_organizaciones`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_general_organizaciones` (
+  `org_id` int(11) NOT NULL AUTO_INCREMENT,
+  `org_nombre` varchar(255) DEFAULT NULL,
+  `org_tipo_id` int(11) DEFAULT NULL,
+  `org_direccion` varchar(255) DEFAULT NULL,
+  `org_latitud` decimal(10,8) DEFAULT NULL,
+  `org_longitud` decimal(11,8) DEFAULT NULL,
+  `org_borrado` tinyint(1) DEFAULT 0,
+  `org_creacion` datetime DEFAULT current_timestamp(),
+  `org_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`org_id`),
+  KEY `org_tipo_id` (`org_tipo_id`),
+  CONSTRAINT `1` FOREIGN KEY (`org_tipo_id`) REFERENCES `trd_general_tipos_organizacion` (`tor_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `trd_general_organizaciones`
 --
 
@@ -1146,6 +1635,32 @@ UNLOCK TABLES;
 commit;
 
 --
+-- Table structure for table `trd_general_organizaciones_comunitarias`
+--
+
+DROP TABLE IF EXISTS `trd_general_organizaciones_comunitarias`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_general_organizaciones_comunitarias` (
+  `orgc_id` int(11) NOT NULL AUTO_INCREMENT,
+  `orgc_rut` varchar(15) NOT NULL,
+  `orgc_nombre` varchar(200) NOT NULL,
+  `orgc_codigo` varchar(100) DEFAULT NULL,
+  `orgc_rpj` varchar(100) DEFAULT NULL,
+  `ogc_inscripcion` datetime NOT NULL,
+  `orgc_vigencia` date DEFAULT NULL,
+  `ogc_rep_legal` int(11) NOT NULL,
+  `orgc_unidad_vecinal` varchar(100) DEFAULT NULL,
+  `orgc_tipo_organizacion` int(11) NOT NULL,
+  PRIMARY KEY (`orgc_id`),
+  KEY `trd_general_org_comu_trd_general_tipos_organizacion_FK` (`orgc_tipo_organizacion`),
+  KEY `trd_general_org_comu_trd_general_contribuyentes_FK` (`ogc_rep_legal`),
+  CONSTRAINT `trd_general_org_comu_trd_general_contribuyentes_FK` FOREIGN KEY (`ogc_rep_legal`) REFERENCES `trd_general_contribuyentes` (`tgc_id`),
+  CONSTRAINT `trd_general_org_comu_trd_general_tipos_organizacion_FK` FOREIGN KEY (`orgc_tipo_organizacion`) REFERENCES `trd_general_tipos_organizacion` (`tor_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `trd_general_organizaciones_comunitarias`
 --
 
@@ -1157,6 +1672,25 @@ INSERT INTO `trd_general_organizaciones_comunitarias` VALUES
 /*!40000 ALTER TABLE `trd_general_organizaciones_comunitarias` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
+
+--
+-- Table structure for table `trd_general_registro_general_tramites`
+--
+
+DROP TABLE IF EXISTS `trd_general_registro_general_tramites`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_general_registro_general_tramites` (
+  `rgt_id` int(11) NOT NULL AUTO_INCREMENT,
+  `rgt_id_publica` varchar(100) DEFAULT NULL,
+  `rgt_tramite` varchar(100) DEFAULT NULL,
+  `rgt_tramite_padre` int(11) DEFAULT NULL,
+  `rgt_creador` int(11) DEFAULT NULL,
+  PRIMARY KEY (`rgt_id`),
+  KEY `trd_general_registro_general_tramites_SK` (`rgt_tramite_padre`),
+  CONSTRAINT `trd_general_registro_general_tramites_SK` FOREIGN KEY (`rgt_tramite_padre`) REFERENCES `trd_general_registro_general_tramites` (`rgt_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=130 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `trd_general_registro_general_tramites`
@@ -1206,6 +1740,23 @@ UNLOCK TABLES;
 commit;
 
 --
+-- Table structure for table `trd_general_sectores`
+--
+
+DROP TABLE IF EXISTS `trd_general_sectores`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_general_sectores` (
+  `sec_id` int(11) NOT NULL,
+  `sec_nombre` varchar(100) DEFAULT NULL,
+  `sec_borrado` tinyint(1) DEFAULT 0,
+  `sec_creacion` datetime DEFAULT current_timestamp(),
+  `sec_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`sec_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `trd_general_sectores`
 --
 
@@ -1234,6 +1785,26 @@ UNLOCK TABLES;
 commit;
 
 --
+-- Table structure for table `trd_general_tipos_organizacion`
+--
+
+DROP TABLE IF EXISTS `trd_general_tipos_organizacion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_general_tipos_organizacion` (
+  `tor_id` int(11) NOT NULL,
+  `tor_nombre` varchar(100) DEFAULT NULL,
+  `tor_prioridad_id` int(11) DEFAULT NULL,
+  `tor_borrado` tinyint(1) DEFAULT 0,
+  `tor_creacion` datetime DEFAULT current_timestamp(),
+  `tor_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`tor_id`),
+  KEY `tor_prioridad_id` (`tor_prioridad_id`),
+  CONSTRAINT `1` FOREIGN KEY (`tor_prioridad_id`) REFERENCES `trd_desve_prioridades` (`pri_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `trd_general_tipos_organizacion`
 --
 
@@ -1251,6 +1822,30 @@ INSERT INTO `trd_general_tipos_organizacion` VALUES
 /*!40000 ALTER TABLE `trd_general_tipos_organizacion` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
+
+--
+-- Table structure for table `trd_ingresos_destinos`
+--
+
+DROP TABLE IF EXISTS `trd_ingresos_destinos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_ingresos_destinos` (
+  `tid_id` int(11) NOT NULL AUTO_INCREMENT,
+  `tid_ingreso_solicitud` int(11) NOT NULL,
+  `tid_destino` int(11) NOT NULL,
+  `tid_tipo` enum('Para','Copia') NOT NULL,
+  `tid_facultad` enum('Firmante','Visador','Consultor') NOT NULL,
+  `tid_requeido` tinyint(1) NOT NULL DEFAULT 0,
+  `tid_responde` tinyint(1) DEFAULT NULL,
+  `tid_fecha_respuesta` datetime DEFAULT NULL,
+  PRIMARY KEY (`tid_id`),
+  KEY `ingresos_destinos` (`tid_ingreso_solicitud`),
+  KEY `trd_ingresos_destinos_trd_acceso_usuarios_FK` (`tid_destino`),
+  CONSTRAINT `ingresos_destinos` FOREIGN KEY (`tid_ingreso_solicitud`) REFERENCES `trd_ingresos_solicitudes` (`tis_id`),
+  CONSTRAINT `trd_ingresos_destinos_trd_acceso_usuarios_FK` FOREIGN KEY (`tid_destino`) REFERENCES `trd_acceso_usuarios` (`usr_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `trd_ingresos_destinos`
@@ -1283,6 +1878,33 @@ UNLOCK TABLES;
 commit;
 
 --
+-- Table structure for table `trd_ingresos_solicitudes`
+--
+
+DROP TABLE IF EXISTS `trd_ingresos_solicitudes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_ingresos_solicitudes` (
+  `tis_id` int(11) NOT NULL AUTO_INCREMENT,
+  `tis_tipo` int(11) NOT NULL,
+  `tis_titulo` varchar(100) DEFAULT NULL,
+  `tis_contenido` text NOT NULL,
+  `tis_estado` varchar(100) NOT NULL DEFAULT 'Ingresado',
+  `tis_responsable` int(11) DEFAULT NULL,
+  `tis_respuesta` text DEFAULT NULL,
+  `tis_fecha` datetime NOT NULL DEFAULT current_timestamp(),
+  `tis_registro_tramite` int(11) NOT NULL,
+  PRIMARY KEY (`tis_id`),
+  KEY `trd_ingresos_solicitudes_trd_acceso_usuarios_FK` (`tis_responsable`),
+  KEY `trd_ingresos_solicitudes_trd_ingresos_tipos_ingreso_FK` (`tis_tipo`),
+  KEY `trd_ingresos_registro_general_tramites_FK` (`tis_registro_tramite`),
+  CONSTRAINT `trd_ingresos_registro_general_tramites_FK` FOREIGN KEY (`tis_registro_tramite`) REFERENCES `trd_general_registro_general_tramites` (`rgt_id`),
+  CONSTRAINT `trd_ingresos_solicitudes_trd_acceso_usuarios_FK` FOREIGN KEY (`tis_responsable`) REFERENCES `trd_acceso_usuarios` (`usr_id`),
+  CONSTRAINT `trd_ingresos_solicitudes_trd_ingresos_tipos_ingreso_FK` FOREIGN KEY (`tis_tipo`) REFERENCES `trd_ingresos_tipos_ingreso` (`titi_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `trd_ingresos_solicitudes`
 --
 
@@ -1307,6 +1929,20 @@ UNLOCK TABLES;
 commit;
 
 --
+-- Table structure for table `trd_ingresos_tipos_ingreso`
+--
+
+DROP TABLE IF EXISTS `trd_ingresos_tipos_ingreso`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_ingresos_tipos_ingreso` (
+  `titi_id` int(11) NOT NULL AUTO_INCREMENT,
+  `titi_nombre` varchar(100) NOT NULL,
+  PRIMARY KEY (`titi_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping data for table `trd_ingresos_tipos_ingreso`
 --
 
@@ -1319,13 +1955,18 @@ INSERT INTO `trd_ingresos_tipos_ingreso` VALUES
 /*!40000 ALTER TABLE `trd_ingresos_tipos_ingreso` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
+
+--
+-- Dumping routines for database 'transformacion_digital'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-02-05 16:17:31
+-- Dump completed on 2026-02-06 11:40:41

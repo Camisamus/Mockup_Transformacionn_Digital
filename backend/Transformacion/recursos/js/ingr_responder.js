@@ -379,7 +379,7 @@ async function procesarRespuesta(estado, accionLabel, respuesta, otp) {
             formData.append('doc_nombre_documento', renamedFile.name);
 
             try {
-                const uploadResp = await fetch(`${window.API_BASE_URL}/documentos.php`, {
+                const uploadResp = await fetch(`${window.API_BASE_URL}/gesdoc_general.php`, {
                     method: 'POST',
                     body: formData
                 });

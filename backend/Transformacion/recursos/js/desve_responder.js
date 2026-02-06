@@ -454,7 +454,7 @@ async function solicitarID() {
 
 async function loadDocuments() {
     try {
-        const response = await fetch(`${window.API_BASE_URL}/documentos.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/gesdoc_general.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: "BuscarporTramite", tramite_id: currentSol.sol_registro_tramite }),
@@ -464,8 +464,8 @@ async function loadDocuments() {
         const container = document.getElementById('lista_documentos');
         container.innerHTML = '';
 
-        if (result.status === 'success' && result.data) {
-            result.data.forEach(doc => {
+        if (result.status === 'success' && result.documentos) {
+            result.documentos.forEach(doc => {
                 const item = document.createElement('div');
                 item.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center bg-light mb-1 border rounded';
                 item.innerHTML = `
@@ -489,10 +489,10 @@ async function loadDocuments() {
 
 window.descargarDocumento = async function (id, nombre) {
     try {
-        const response = await fetch(`${window.API_BASE_URL}/documentos.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/gesdoc_general.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ACCION: 'Bajar', ID: id }),
+            body: JSON.stringify({ ACCION: 'Bajar', doc_id: id }),
             credentials: 'include'
         });
         if (!response.ok) throw new Error('Error en descarga');

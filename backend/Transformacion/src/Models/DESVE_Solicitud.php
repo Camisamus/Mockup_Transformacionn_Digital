@@ -213,16 +213,24 @@ ORDER BY tds.sol_id DESC;";
 
                 // 5. Registrar documentos adjuntos (Base64)
                 if (isset($data['documentos']) && is_array($data['documentos'])) {
-                    $docController = new \App\Controllers\DocumentoController($this->conn);
+                    $docController = new \App\Controllers\GesDocController($this->conn);
                     foreach ($data['documentos'] as $doc) {
-                        $docData = [
-                            'tramite_id' => $rgt_id,
-                            'responsable_id' => $data['sol_responsable'] ?? ($_SESSION['user_id'] ?? 1),
-                            'es_docdigital' => 0,
-                            'nombre' => $doc['nombre'],
-                            'base64' => $doc['base64']
-                        ];
-                        $docController->createFromBase64($docData);
+                        try {
+                            $fileInfo = $docController->base64ToFileArray($doc['base64'], $doc['nombre']);
+                            $result = $docController->subirArchivo(
+                                [$fileInfo['array']],
+                                [
+                                    'tramite_id' => $rgt_id,
+                                    'user_id' => $data['sol_responsable'] ?? ($_SESSION['user_id'] ?? 1)
+                                ]
+                            );
+                            fclose($fileInfo['file']);
+                            if ($result['status'] !== 'success') {
+                                error_log("Error uploading document {$doc['nombre']}: " . ($result['message'] ?? 'Unknown error'));
+                            }
+                        } catch (\Exception $e) {
+                            error_log("Exception uploading document: " . $e->getMessage());
+                        }
                     }
                 }
 
@@ -335,16 +343,24 @@ ORDER BY tds.sol_id DESC;";
 
                 // Manejar nuevos documentos adjuntos (Base64)
                 if (isset($data['documentos']) && is_array($data['documentos'])) {
-                    $docController = new \App\Controllers\DocumentoController($this->conn);
+                    $docController = new \App\Controllers\GesDocController($this->conn);
                     foreach ($data['documentos'] as $doc) {
-                        $docData = [
-                            'tramite_id' => $current['sol_registro_tramite'],
-                            'responsable_id' => $data['sol_responsable'] ?? ($_SESSION['user_id'] ?? 1),
-                            'es_docdigital' => 0,
-                            'nombre' => $doc['nombre'],
-                            'base64' => $doc['base64']
-                        ];
-                        $docController->createFromBase64($docData);
+                        try {
+                            $fileInfo = $docController->base64ToFileArray($doc['base64'], $doc['nombre']);
+                            $result = $docController->subirArchivo(
+                                [$fileInfo['array']],
+                                [
+                                    'tramite_id' => $current['sol_registro_tramite'],
+                                    'user_id' => $data['sol_responsable'] ?? ($_SESSION['user_id'] ?? 1)
+                                ]
+                            );
+                            fclose($fileInfo['file']);
+                            if ($result['status'] !== 'success') {
+                                error_log("Error uploading document {$doc['nombre']}: " . ($result['message'] ?? 'Unknown error'));
+                            }
+                        } catch (\Exception $e) {
+                            error_log("Exception uploading document: " . $e->getMessage());
+                        }
                     }
                 }
 

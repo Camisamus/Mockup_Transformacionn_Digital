@@ -63,7 +63,11 @@ class Ingresos_SolicitudControler
         if ($this->solicitud->update($id, $data)) {
             return ["status" => "success", "message" => "Solicitud updated successfully"];
         }
-        return ["status" => "error", "message" => "Unable to update solicitud"];
+        return [
+            "status" => "error",
+            "message" => "Unable to update solicitud",
+            "error" => $this->solicitud->lastError ?? "Unknown error"
+        ];
     }
 
     public function delete($id)
@@ -140,7 +144,7 @@ class Ingresos_SolicitudControler
         ];
 
         // Send Email using Variable.txt
-        ConfigLoader::load(__DIR__ . '/../../cron/Variables.txt');
+        ConfigLoader::load(__DIR__ . '/../../../cron/Variables.txt');
         $smtp = new SimpleSMTP(
             ConfigLoader::get('HOST_EMAIL'),
             ConfigLoader::get('PUERTO_EMAIL'),
