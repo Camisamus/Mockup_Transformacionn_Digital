@@ -88,6 +88,21 @@ class Ingresos_ingreso
             $params[':tis_id'] = $filters['tis_id'];
         }
 
+        if (!empty($filters['tis_estado'])) {
+            if (is_array($filters['tis_estado'])) {
+                $statusPlaceholders = [];
+                foreach ($filters['tis_estado'] as $i => $status) {
+                    $key = ":tis_estado_" . $i;
+                    $statusPlaceholders[] = $key;
+                    $params[$key] = $status;
+                }
+                $query .= " AND sol.tis_estado IN (" . implode(',', $statusPlaceholders) . ")";
+            } else {
+                $query .= " AND sol.tis_estado = :tis_estado";
+                $params[':tis_estado'] = $filters['tis_estado'];
+            }
+        }
+
         $query .= " ORDER BY sol.tis_id DESC";
 
         $stmt = $this->conn->prepare($query);

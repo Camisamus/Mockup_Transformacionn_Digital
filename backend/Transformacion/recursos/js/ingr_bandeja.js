@@ -1,4 +1,8 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
+﻿let currentPage = 1;
+const pageSize = 5;
+let allData = [];
+
+document.addEventListener('DOMContentLoaded', () => {
     cargarBandeja();
 
     const formFiltros = document.getElementById('form_filtros');
@@ -34,35 +38,98 @@
 async function cargarBandeja(filters = {}) {
     const tabla = document.getElementById('tabla_ingresos');
 
+    // Default status if not searching by specific IDs
+    const searchFilters = { ...filters };
+    if (!searchFilters.tis_id && !searchFilters.rgt_id_publica && !searchFilters.tis_estado) {
+        searchFilters.tis_estado = 'Ingresado';
+    }
+
     try {
         const response = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 ACCION: 'CONSULTAM',
-                ...filters
+                ...searchFilters
             })
         });
 
         const result = await response.json();
 
         if (result.status === 'success') {
-            renderizarTabla(result.data);
+            allData = result.data;
+            currentPage = 1;
+            renderTablaPaginada();
         } else {
-            tabla.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error: ${result.message}</td></tr>`;
+            tabla.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Error: ${result.message}</td></tr>`;
         }
     } catch (error) {
         console.error('Error:', error);
-        tabla.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error de conexión con el servidor.</td></tr>`;
+        tabla.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Error de conexión con el servidor.</td></tr>`;
     }
 }
+
+function renderTablaPaginada() {
+    const start = (currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    const paginatedData = allData.slice(start, end);
+
+    renderizarTabla(paginatedData);
+    renderPagination();
+}
+
+function renderPagination() {
+    const totalPages = Math.ceil(allData.length / pageSize);
+    const paginationContainer = document.getElementById('pagination_container');
+    if (!paginationContainer) return;
+
+    paginationContainer.innerHTML = '';
+
+    if (allData.length === 0) return;
+
+    const nav = document.createElement('nav');
+    const ul = document.createElement('ul');
+    ul.className = 'pagination pagination-sm justify-content-center mb-0';
+
+    // Anterior
+    ul.innerHTML += `
+        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="#" onclick="event.preventDefault(); changePage(${currentPage - 1})">Anterior</a>
+        </li>
+    `;
+
+    // Pages numbers (optional, but requested "botones de desplazamiento", usually includes numbers or just prev/next)
+    // Let's show simple info and buttons
+    ul.innerHTML += `
+        <li class="page-item disabled">
+            <span class="page-link text-dark">Página ${currentPage} de ${totalPages || 1}</span>
+        </li>
+    `;
+
+    // Siguiente
+    ul.innerHTML += `
+        <li class="page-item ${currentPage === totalPages || totalPages === 0 ? 'disabled' : ''}">
+            <a class="page-link" href="#" onclick="event.preventDefault(); changePage(${currentPage + 1})">Siguiente</a>
+        </li>
+    `;
+
+    nav.appendChild(ul);
+    paginationContainer.appendChild(nav);
+}
+
+window.changePage = function (page) {
+    const totalPages = Math.ceil(allData.length / pageSize);
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    renderTablaPaginada();
+};
 
 function renderizarTabla(data) {
     const tabla = document.getElementById('tabla_ingresos');
     tabla.innerHTML = '';
 
     if (data.length === 0) {
-        tabla.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">No se encontraron registros.</td></tr>';
+        tabla.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted">No se encontraron registros.</td></tr>';
         return;
     }
 
@@ -78,7 +145,7 @@ function renderizarTabla(data) {
         tr.innerHTML = `
             <td class="ps-4 text-muted small">${item.tis_id}</td>
             <td class="text-end pe-4">
-                <button type="button" class="btn btn-sm btn-outline-dark p-1" title="Consultar">
+                <button type="button" class="btn btn-lg btn-outline-dark p-1" title="Consultar">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                 </button>
             </td>
@@ -90,7 +157,7 @@ function renderizarTabla(data) {
             <td><span class="badge ${item.tis_estado === 'Ingresado' ? 'bg-success' : 'bg-primary'}">${item.tis_estado || '-'}</span></td>
             <td>${getRolBadge(item.rol_usuario)}</td>
             <td class="rgt-container text-end">
-                <button type="button" class="btn btn-sm btn-outline-secondary p-1 btn-show-code" title="Ver Código">
+                <button type="button" class="btn btn- btn-outline-secondary p-1 btn-show-code" title="Ver Código">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                 </button>
                 <code class="d-none">${rgtCode}</code>

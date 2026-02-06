@@ -1,4 +1,12 @@
-﻿<?php
+﻿<link href="https://unpkg.com/vis-network/styles/vis-network.min.css" rel="stylesheet" type="text/css" />
+<style>
+    #network-container {
+        width: 100%;
+        height: 600px;
+        background-color: #f8f9fa;
+    }
+</style>
+<?php
 $pageTitle = "Preparar Ingreso (Relaciones)";
 require_once '../api/auth_check.php';
 include '../api/header.php';
@@ -163,6 +171,7 @@ include '../api/header.php';
     feather.replace();
 </script>
 
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 <script src="../recursos/js/ingr_permissions.js"></script>
 <script src="../recursos/js/ingr_preparar.js"></script>
 

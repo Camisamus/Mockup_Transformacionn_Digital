@@ -49,12 +49,13 @@ function renderSidebar($flatPermissions, $pathPrefix, $currentScript)
     $menuData = buildMenuHierarchy($flatPermissions);
 
     $html = '<aside id="sidebar" class="d-flex flex-column w-100 h-100" style="overflow-y: auto; background-color: #003399;">
-        <div class="p-3 border-bottom border-white border-opacity-10 bg-white">
-            <div class="traslogo">
+        <div class="p-3">
+            
             <a href="' . $pathPrefix . 'paginas/dashboard.php" style="cursor: pointer; display: block;">
-                <img src="' . $pathPrefix . 'recursos/img/cropped-logo-2022-v2-e1767721959431.png" alt="Viña del Mar"
+                <img src="' . $pathPrefix . 'recursos/img/unnamed.webp" alt="Viña del Mar"
                     style="width: 100%; max-width: 200px; height: auto;">
             </a>
+            <div class="traslogo">
             </div>
         </div>
         <nav class="flex-grow-1 p-2">

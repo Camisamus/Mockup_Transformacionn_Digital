@@ -71,12 +71,12 @@ include '../api/header.php';
                     <thead class="table-light text-uppercase small">
                         <tr>
                             <th class="ps-4">ID</th>
+                            <th class="text-end pe-4">Acciones</th>
                             <th>Título</th>
                             <th>Fecha</th>
                             <th>Estado</th>
-                            <th>Rol</th>
+                            <th>Asignación</th>
                             <th>Cód. Público</th>
-                            <th class="text-end pe-4">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="tabla_ingresos" class="small">
@@ -90,6 +90,7 @@ include '../api/header.php';
                     </tbody>
                 </table>
             </div>
+            <div id="pagination_container" class="py-3 border-top"></div>
         </div>
     </div>
 </div>

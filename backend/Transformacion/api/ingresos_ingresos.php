@@ -28,11 +28,8 @@ switch ($data['ACCION']) {
             $response = $controller->getByRgtId($rgt_id, $current_user_id);
         } else {
             // Support for Bandeja Search Filters
-            $filters = [
-                'tis_titulo' => $data['tis_titulo'] ?? null,
-                'rgt_id_publica' => $data['rgt_id_publica'] ?? null,
-                'tis_id' => $data['tis_id'] ?? null
-            ];
+            $filters = $data;
+            // Remove non-filter fields if necessary, but the model only uses specific keys.
             $response = $controller->getAll($filters, $current_user_id);
         }
         echo json_encode($response);
@@ -49,7 +46,8 @@ switch ($data['ACCION']) {
                 $tempData = $data;
                 if (isset($tempData['documentos']) && is_array($tempData['documentos'])) {
                     $tempData['documentos'] = array_map(function ($d) {
-                        return ['nombre' => $d['nombre'] ?? 'Sin nombre']; }, $tempData['documentos']);
+                        return ['nombre' => $d['nombre'] ?? 'Sin nombre'];
+                    }, $tempData['documentos']);
                 }
                 $logModel->crear([
                     'evento' => 'CREATE',
@@ -81,7 +79,8 @@ switch ($data['ACCION']) {
                 $tempData = $data;
                 if (isset($tempData['documentos']) && is_array($tempData['documentos'])) {
                     $tempData['documentos'] = array_map(function ($d) {
-                        return ['nombre' => $d['nombre'] ?? 'Sin nombre']; }, $tempData['documentos']);
+                        return ['nombre' => $d['nombre'] ?? 'Sin nombre'];
+                    }, $tempData['documentos']);
                 }
                 $logModel->crear([
                     'evento' => 'UPDATE',
