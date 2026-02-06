@@ -83,6 +83,7 @@ function setupEventListeners() {
         const nombre = document.getElementById('fnc_nombre_config').textContent;
         const tipo = document.getElementById('m_destino_tipo').value;
         const facultad = document.getElementById('m_destino_facultad').value || '-';
+        const tarea = document.getElementById('m_destino_tarea').value || 'tomar conocimiento';
         const requerido = document.getElementById('m_destino_requerido').checked;
 
         destinos.push({
@@ -90,6 +91,7 @@ function setupEventListeners() {
             usr_nombre_completo: nombre,
             tid_tipo: tipo,
             tid_facultad: facultad,
+            tid_tarea: tarea,
             tid_requeido: requerido ? '1' : '0'
         });
 
@@ -169,6 +171,7 @@ function seleccionarFuncionario(id, nombre) {
     // Reset fields
     document.getElementById('m_destino_tipo').value = 'Para';
     document.getElementById('m_destino_facultad').value = 'Firmante';
+    document.getElementById('m_destino_tarea').value = 'ejecutar lo requerido';
     const checkReq = document.getElementById('m_destino_requerido');
     checkReq.checked = true;
     checkReq.disabled = false;
@@ -202,7 +205,10 @@ function renderizarDestinos() {
     destinos.forEach((d, index) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td class="small">${d.usr_nombre_completo}</td>
+            <td class="small">
+                <div>${d.usr_nombre_completo}</div>
+                <div class="x-small text-muted italic">${d.tid_tarea}</div>
+            </td>
             <td><span class="badge bg-light text-dark border small">${d.tid_tipo}</span></td>
             <td class="small">${d.tid_facultad}</td>
             <td class="text-center">

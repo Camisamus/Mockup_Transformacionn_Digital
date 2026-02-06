@@ -148,7 +148,9 @@ include '../api/header.php';
                                     <th>Funcionario</th>
                                     <th>Tipo</th>
                                     <th>Facultad</th>
+                                    <th>Tarea</th>
                                     <th class="text-center">Requerido</th>
+                                    <th class="text-end">Estado</th>
                                 </tr>
                             </thead>
                             <tbody id="tabla_destinos" class="small">
@@ -180,6 +182,9 @@ include '../api/header.php';
                     </div>
                 </div>
             </div>
+
+            <!-- Respuestas de Destinatarios -->
+            <div id="contenedor_respuestas"></div>
         </div>
 
         <!-- Right Column: Sidebar -->

@@ -180,25 +180,12 @@ function renderizarIngreso(data) {
     const tablaDestinos = document.getElementById('tabla_destinos');
     tablaDestinos.innerHTML = '';
 
-    // HEADER UPDATE: Add 'Estado' column if not exists
-    // Use closest table or previous element sibling if we are in tbody
-    const table = tablaDestinos.closest('table');
-    const thead = table ? table.querySelector('thead') : null;
-    const theadRow = thead ? thead.firstElementChild : null;
-
-    if (theadRow && theadRow.children.length === 4) { // Assuming initial cols: Funcionario, Rol, Fac., Req.
-        const th = document.createElement('th');
-        th.className = 'text-end';
-        th.innerText = 'Estado';
-        theadRow.appendChild(th);
-    }
-
     if (data.destinos && data.destinos.length > 0) {
         data.destinos.forEach(dest => {
             let estadoBadge = '<span class="badge bg-secondary">Pendiente</span>';
             if (dest.tid_responde == 1) {
                 estadoBadge = '<span class="badge bg-success">Aprobado</span>';
-            } else if (dest.tid_responde == 0 && dest.tid_fecha_respuesta.substring(0, 10)) {
+            } else if (dest.tid_responde == 0 && dest.tid_fecha_respuesta && dest.tid_fecha_respuesta.substring(0, 10)) {
                 estadoBadge = '<span class="badge bg-danger">Rechazado</span>';
             } else if (dest.tid_responde === '0') {
                 estadoBadge = '<span class="badge bg-danger">Rechazado</span>';
@@ -212,6 +199,7 @@ function renderizarIngreso(data) {
                 </td>
                 <td><span class="badge bg-light text-dark border">${dest.tid_tipo}</span></td>
                 <td><span class="small">${dest.tid_facultad}</span></td>
+                <td><span class="small text-muted italic">${dest.tid_tarea || '-'}</span></td>
                 <td class="text-center">
                     ${dest.tid_requeido === '1' ? '<i data-feather="check-circle" class="text-success" style="width:16px"></i>' : '<i data-feather="circle" class="text-muted" style="width:16px"></i>'}
                 </td>
@@ -354,7 +342,58 @@ function renderizarIngreso(data) {
         graphBtn.disabled = true;
     }
 
+    // Respuestas detalladas
+    renderizarRespuestas(data.destinos || []);
+
     if (window.feather) window.feather.replace();
+}
+
+function renderizarRespuestas(destinos) {
+    const contenedor = document.getElementById('contenedor_respuestas');
+    if (!contenedor) return;
+    contenedor.innerHTML = '';
+
+    const respondidos = destinos.filter(d => d.tid_fecha_respuesta || d.tid_respuesta);
+
+    if (respondidos.length === 0) return;
+
+    const card = document.createElement('div');
+    card.className = 'card shadow-sm border-0 mb-4';
+    card.innerHTML = `
+        <div class="card-body p-4">
+            <h5 class="fw-bold fs-6 mb-4">Respuestas de los Destinatarios</h5>
+            <div id="lista_respuestas_detalle"></div>
+        </div>
+    `;
+    contenedor.appendChild(card);
+
+    const lista = card.querySelector('#lista_respuestas_detalle');
+
+    respondidos.forEach(d => {
+        let estadoBadge = '<span class="badge bg-success">Favorable</span>';
+        if (d.tid_responde == 0 || d.tid_responde === '0') {
+            estadoBadge = '<span class="badge bg-danger">No Favorable</span>';
+        }
+
+        const item = document.createElement('div');
+        item.className = 'mb-4 pb-3 border-bottom';
+        item.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="fw-bold text-primary">${d.usr_nombre} ${d.usr_apellido}</div>
+                    <div class="small text-muted">(${d.tid_facultad})</div>
+                </div>
+                <div>
+                    ${estadoBadge}
+                    <span class="small text-muted ms-2">${d.tid_fecha_respuesta ? d.tid_fecha_respuesta.substring(0, 16) : ''}</span>
+                </div>
+            </div>
+            <div class="bg-light p-3 rounded border small text-dark" style="white-space: pre-wrap;">
+                ${d.tid_respuesta || '<i class="text-muted">Sin respuesta de texto</i>'}
+            </div>
+        `;
+        lista.appendChild(item);
+    });
 }
 
 function renderizarMapaRelaciones(multiancestro, currentId) {

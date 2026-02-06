@@ -37,7 +37,7 @@ class Ingresos_ingreso
         // Base Query with Role Logic
         $query = "SELECT DISTINCT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido,
                   CASE 
-                    WHEN sol.tis_responsable = :current_user THEN 'Responsable'
+                    WHEN sol.tis_responsable = :current_user THEN 'Propietario'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
                     ELSE 'Consultor' 
                   END as rol_usuario
@@ -118,7 +118,7 @@ class Ingresos_ingreso
     {
         $query = "SELECT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido,
                   CASE 
-                    WHEN sol.tis_responsable = :current_user THEN 'Responsable'
+                    WHEN sol.tis_responsable = :current_user THEN 'Propietario'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
                     ELSE 'Consultor' 
                   END as rol_usuario
@@ -157,7 +157,7 @@ class Ingresos_ingreso
     {
         $query = "SELECT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido,
                   CASE 
-                    WHEN sol.tis_responsable = :current_user THEN 'Responsable'
+                    WHEN sol.tis_responsable = :current_user THEN 'Propietario'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
                     ELSE 'Consultor' 
                   END as rol_usuario
@@ -259,6 +259,9 @@ class Ingresos_ingreso
                         $requerido = $dest['tid_requeido'];
                         if ($dest['tid_facultad'] === 'Consultor') {
                             $requerido = '0';
+                        }
+                        if ($dest['tid_facultad'] === 'Responsable') {
+                            $requerido = '1';
                         }
 
                         $this->Destinos->crear([
@@ -369,6 +372,9 @@ class Ingresos_ingreso
                     $requerido = $dest['tid_requeido'];
                     if ($dest['tid_facultad'] === 'Consultor') {
                         $requerido = '0';
+                    }
+                    if ($dest['tid_facultad'] === 'Responsable') {
+                        $requerido = '1';
                     }
 
                     $this->Destinos->crear([
@@ -514,23 +520,25 @@ class Ingresos_ingreso
             $responde_val = ($estado_resolucion === 'Resuelto_Favorable') ? 1 : 0;
             $query_dest = "UPDATE trd_ingresos_destinos SET 
                             tid_responde = :responde, 
-                            tid_fecha_respuesta = NOW() 
+                            tid_fecha_respuesta = NOW(),
+                            tid_respuesta = :respuesta 
                            WHERE tid_ingreso_solicitud = :ing_id 
                            AND tid_destino = :usr_id";
             $stmt_dest = $this->conn->prepare($query_dest);
             $stmt_dest->bindValue(':responde', $responde_val);
             $stmt_dest->bindValue(':ing_id', $id);
             $stmt_dest->bindValue(':usr_id', $usuario_id);
+            $stmt_dest->bindValue(':respuesta', $respuesta_texto);
             $stmt_dest->execute();
 
             // 2. Si hay respuesta de texto, actualizar en la solicitud
-            if ($respuesta_texto !== null) {
-                $query_resp = "UPDATE " . $this->table_name . " SET tis_respuesta = :respuesta WHERE tis_id = :id";
-                $stmt_resp = $this->conn->prepare($query_resp);
-                $stmt_resp->bindValue(':respuesta', $respuesta_texto);
-                $stmt_resp->bindValue(':id', $id);
-                $stmt_resp->execute();
-            }
+            //if ($respuesta_texto !== null) {
+            //    $query_resp = "UPDATE " . $this->table_name . " SET tis_respuesta = :respuesta WHERE tis_id = :id";
+            //    $stmt_resp = $this->conn->prepare($query_resp);
+            //    $stmt_resp->bindValue(':respuesta', $respuesta_texto);
+            //    $stmt_resp->bindValue(':id', $id);
+            //    $stmt_resp->execute();
+            //}
 
             // 3. Determinar el nuevo estado de la solicitud
             $nuevo_estado = null;

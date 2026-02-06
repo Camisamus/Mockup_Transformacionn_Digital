@@ -194,6 +194,15 @@ function renderizarAcciones(facultad) {
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Visar
             </button>
         `;
+    } else if (facultad === 'Responsable') {
+        contenedor.innerHTML = `
+            <button type="button" class="btn btn-toolbar me-2" onclick="enviarRespuesta('Resuelto_NO_Favorable', 'rechazar')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg> Rechazar
+            </button>
+            <button type="button" class="btn btn-toolbar" style="background-color: #0d6efd; color: white; border-color: #0d6efd;" onclick="enviarRespuesta('Resuelto_Favorable', 'responder')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Responder
+            </button>
+        `;
     }
 
     if (window.feather) window.feather.replace();
@@ -387,6 +396,7 @@ async function procesarRespuesta(estado, accionLabel, respuesta, otp) {
 
                 if (uploadResult.status !== 'success') {
                     Swal.fire('Error', `Error al subir el decreto: ${uploadResult.message}`, 'error');
+                    location.href = 'ingr_consultar.php?id=' + currentId;
                     return; // Stop process
                 }
             } catch (uploadErr) {

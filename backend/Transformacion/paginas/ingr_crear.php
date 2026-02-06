@@ -232,9 +232,18 @@ include '../api/header.php';
                     <div class="col-md-6">
                         <label for="m_destino_facultad" class="form-label small fw-bold">Facultad</label>
                         <select class="form-select form-select-sm" id="m_destino_facultad">
+                            <option value="Responsable">Responsable</option>
                             <option value="Firmante">Firmante</option>
                             <option value="Visador">Visador</option>
                             <option value="Consultor">Consultor</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12">
+                        <label for="m_destino_tarea" class="form-label small fw-bold">Labor / Tarea</label>
+                        <select class="form-select form-select-sm" id="m_destino_tarea">
+                            <option value="ejecutar lo requerido">Ejecutar lo requerido</option>
+                            <option value="generar informe">Generar informe</option>
+                            <option value="tomar conocimiento">Tomar conocimiento</option>
                         </select>
                     </div>
                     <div class="col-12">

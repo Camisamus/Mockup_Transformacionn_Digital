@@ -50,7 +50,8 @@ ins.tid_ingreso_solicitud = :id;";
             tid_destino = :tid_destino,
             tid_tipo = :tid_tipo,
             tid_facultad = :tid_facultad,
-            tid_requeido = :tid_requeido";
+            tid_requeido = :tid_requeido,
+            tid_tarea = :tid_tarea";
 
         $stmt = $this->conn->prepare($query);
 
@@ -59,6 +60,7 @@ ins.tid_ingreso_solicitud = :id;";
         $stmt->bindParam(":tid_tipo", $data['tid_tipo']);
         $stmt->bindParam(":tid_facultad", $data['tid_facultad']);
         $stmt->bindParam(":tid_requeido", $data['tid_requeido']);
+        $stmt->bindParam(":tid_tarea", $data['tid_tarea']);
 
         if ($stmt->execute()) {
             return true;
