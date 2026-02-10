@@ -49,7 +49,22 @@ class Ingresos_ingreso
 
         // Filter Logic: Show if Responsible OR is a Destination
         if ($current_user_id) {
-            $query .= " AND (sol.tis_responsable = :current_user_filter OR dest.tid_destino IS NOT NULL)";
+            $query .= " AND (
+                sol.tis_responsable = :current_user_filter 
+                OR (
+                    dest.tid_destino IS NOT NULL 
+                    AND NOT (
+                        dest.tid_facultad = 'Firmante' 
+                        AND EXISTS (
+                            SELECT 1 FROM trd_ingresos_destinos d2 
+                            WHERE d2.tid_ingreso_solicitud = sol.tis_id 
+                            AND d2.tid_facultad = 'Visador' 
+                            AND d2.tid_requeido = 1 
+                            AND (d2.tid_responde IS NULL OR d2.tid_responde != 1)
+                        )
+                    )
+                )
+            )";
         }
 
         $params = [];
@@ -126,11 +141,29 @@ class Ingresos_ingreso
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
                   LEFT JOIN trd_acceso_usuarios usr ON sol.tis_responsable = usr.usr_id
                   LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :current_user_join
-                  WHERE sol.tis_id = :id LIMIT 1";
+                  WHERE sol.tis_id = :id 
+                  AND (
+                    sol.tis_responsable = :current_user_filter 
+                    OR (
+                        dest.tid_destino IS NOT NULL 
+                        AND NOT (
+                            dest.tid_facultad = 'Firmante' 
+                            AND EXISTS (
+                                SELECT 1 FROM trd_ingresos_destinos d2 
+                                WHERE d2.tid_ingreso_solicitud = sol.tis_id 
+                                AND d2.tid_facultad = 'Visador' 
+                                AND d2.tid_requeido = 1 
+                                AND (d2.tid_responde IS NULL OR d2.tid_responde != 1)
+                            )
+                        )
+                    )
+                  )
+                  LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':id', $id);
         $stmt->bindValue(':current_user', $current_user_id ?? 0);
         $stmt->bindValue(':current_user_join', $current_user_id ?? 0);
+        $stmt->bindValue(':current_user_filter', $current_user_id ?? 0);
         $stmt->execute();
         $solicitud = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$solicitud)
@@ -165,11 +198,29 @@ class Ingresos_ingreso
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
                   LEFT JOIN trd_acceso_usuarios usr ON sol.tis_responsable = usr.usr_id
                   LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :current_user_join
-                  WHERE rgt.rgt_id = :rgtId LIMIT 1";
+                  WHERE rgt.rgt_id = :rgtId 
+                  AND (
+                    sol.tis_responsable = :current_user_filter 
+                    OR (
+                        dest.tid_destino IS NOT NULL 
+                        AND NOT (
+                            dest.tid_facultad = 'Firmante' 
+                            AND EXISTS (
+                                SELECT 1 FROM trd_ingresos_destinos d2 
+                                WHERE d2.tid_ingreso_solicitud = sol.tis_id 
+                                AND d2.tid_facultad = 'Visador' 
+                                AND d2.tid_requeido = 1 
+                                AND (d2.tid_responde IS NULL OR d2.tid_responde != 1)
+                            )
+                        )
+                    )
+                  )
+                  LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':rgtId', $rgtId);
         $stmt->bindValue(':current_user', $current_user_id ?? 0);
         $stmt->bindValue(':current_user_join', $current_user_id ?? 0);
+        $stmt->bindValue(':current_user_filter', $current_user_id ?? 0);
         $stmt->execute();
         $solicitud = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$solicitud)

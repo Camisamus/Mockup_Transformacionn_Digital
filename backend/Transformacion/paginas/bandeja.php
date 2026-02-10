@@ -29,7 +29,7 @@ include '../api/header.php';
                 </svg>
                 Exportar
             </button>
-            <button class="btn btn-toolbar btn-dark " onclick="Swal.fire('Info', 'Nueva tarea...', 'info')">
+            <button class="btn btn-toolbar btn-dark " onclick="abrirModalCrearTarea()">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -95,6 +95,7 @@ include '../api/header.php';
                             <th>Origen</th>
                             <th>Responsable</th>
                             <th>Fecha</th>
+                            <th>Fecha limite</th>
                             <th>Estado</th>
                         </tr>
                     </thead>
@@ -115,6 +116,131 @@ include '../api/header.php';
         </div>
     </div>
 
+    <!-- Tareas Table Layer -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold fs-6 mb-0">Listado de Tareas Asignadas por mí</h5>
+                <div class="pagination-info text-muted small" id="paginationInfoTareasQueAsigne"></div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle" id="tablaTareasQueAsigne">
+                    <thead class="table-light text-uppercase small">
+                        <tr>
+                            <th>Asunto / Título</th>
+                            <th>Responsable</th>
+                            <th>Fecha</th>
+                            <th>Fecha limite</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody class="small">
+                        <!-- Data loaded dynamically by bandeja.js -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Simple pagination controls -->
+            <div class="d-flex justify-content-end gap-2 mt-4">
+
+                <div class="pagination-controls">
+                    <button class="btn btn-sm btn-outline-secondary px-3" id="btnAnterior" disabled>Anterior</button>
+                    <button class="btn btn-sm btn-outline-secondary px-3" id="btnSiguiente">Siguiente</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Crear tarea -->
+<div class="modal fade" id="modalCrearTarea" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold fs-6">Crear Tarea</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="form-crear-tarea">
+                    <div class="mb-3">
+                        <label for="titulo" class="form-label">Asunto</label>
+                        <input type="text" name="tar_titulo" class="form-control" id="titulo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="detalle" class="form-label">Descripción</label>
+                        <textarea class="form-control" name="tar_detalle" id="detalle" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fecha_limite" class="form-label">plazo</label>
+                        <input type="datetime-local" name="tar_plazo" class="form-control" id="tar_plazo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="responsable" class="form-label">Responsable</label>
+                        <input type="text" class="form-control" name="responsable" id="responsable" required disabled>
+                        <input type="text" class="form-control" name="asignador" id="asignador" required hidden>
+                        <input type="text" class="form-control" name="usr_id" id="usr_id" required hidden>
+                        <button type="button" class="btn btn-toolbar btn-dark " onclick="abrirModalBuscarFuncionario()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            Buscar Funcionario
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnGuardarTarea"
+                    onclick="guardarTarea()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Buscar Funcionario -->
+<div class="modal fade" id="modalBusquedaFuncionario" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold fs-6">Buscar Funcionario Destino</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="input-group input-group-sm mb-4">
+                    <span class="input-group-text bg-white border-end-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </span>
+                    <input type="text" class="form-control border-start-0" id="buscar_fnc_input"
+                        placeholder="Buscar por nombre o apellido...">
+                </div>
+                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-uppercase small sticky-top">
+                            <tr>
+                                <th>ID</th>
+                                <th>Email</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th class="text-end">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista_busqueda_fnc" class="small">
+                            <!-- Dynamic -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Scripts -->
