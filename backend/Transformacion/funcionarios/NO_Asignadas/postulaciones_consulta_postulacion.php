@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Consulta de Postulaci�n";
+$pageTitle = "Consulta de Postulación";
 require_once '../../api/auth_check.php';
 include 'header.php';
 ?>
@@ -9,8 +9,8 @@ include 'header.php';
     <!-- Header -->
     <div class="main-header mb-4">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Consulta de Postulaci�n</h2>
-            <p class="text-muted mb-0">B�squeda, creaci�n y modificaci�n de postulaciones a fondos</p>
+            <h2 class="fw-bold fs-4">Consulta de Postulación</h2>
+            <p class="text-muted mb-0">Búsqueda, creación y modificación de postulaciones a fondos</p>
         </div>
     </div>
 
@@ -57,12 +57,12 @@ include 'header.php';
         <div class="card shadow-sm border-0 mb-4">
             <div class="card-body p-4">
                 <h5 class="fw-bold fs-6 mb-1">Datos Principales</h5>
-                <p class="text-muted small mb-4">Informaci�n b�sica de la postulaci�n y la organizaci�n</p>
+                <p class="text-muted small mb-4">Información b¿sica de la postulación y la organización</p>
                 <div class="row g-3">
                     <div class="col-md-3">
-                        <label for="organizacion" class="form-label small fw-bold">Organizaci�n</label>
+                        <label for="organizacion" class="form-label small fw-bold">Organización</label>
                         <input type="text" class="form-control form-control-sm" id="organizacion"
-                            placeholder="Nombre organizaci�n">
+                            placeholder="Nombre organización">
                     </div>
                     <div class="col-md-3">
                         <label for="rut" class="form-label small fw-bold">RUT</label>
@@ -77,7 +77,7 @@ include 'header.php';
                         <input type="text" class="form-control form-control-sm" id="unidad">
                     </div>
                     <div class="col-md-2">
-                        <label for="numero_ingreso" class="form-label small fw-bold">N� Ingreso</label>
+                        <label for="numero_ingreso" class="form-label small fw-bold">N° Ingreso</label>
                         <input type="text" class="form-control form-control-sm text-primary fw-bold"
                             id="numero_ingreso">
                     </div>
@@ -91,7 +91,7 @@ include 'header.php';
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label for="codigo" class="form-label small fw-bold">C�digo</label>
+                        <label for="codigo" class="form-label small fw-bold">Código</label>
                         <input type="text" class="form-control form-control-sm" id="codigo">
                     </div>
                     <div class="col-md-6">
@@ -107,7 +107,7 @@ include 'header.php';
         <div class="card shadow-sm border-0 mb-4">
             <div class="card-body p-4">
                 <h5 class="fw-bold fs-6 mb-1">1. Antecedentes del Proyecto</h5>
-                <p class="text-muted small mb-4">Detalles t�cnicos y descriptivos</p>
+                <p class="text-muted small mb-4">Detalles t¿cnicos y descriptivos</p>
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="ant_nombre" class="form-label small fw-bold">Nombre del Proyecto</label>
@@ -173,10 +173,10 @@ include 'header.php';
                     <table class="table table-hover align-middle" id="tablaRefrendaciones">
                         <thead class="table-light text-uppercase small">
                             <tr>
-                                <th>N� Decreto</th>
+                                <th>N° Decreto</th>
                                 <th>Tipo</th>
-                                <th>A�o</th>
-                                <th>N� Ref</th>
+                                <th>Año</th>
+                                <th>N° Ref</th>
                                 <th>Cuota</th>
                                 <th>F. Cheque</th>
                                 <th>Quien Retira</th>
@@ -191,7 +191,7 @@ include 'header.php';
                                 <td>REF-045</td>
                                 <td>1/1</td>
                                 <td>15-06-2024</td>
-                                <td>Juan P�rez</td>
+                                <td>Juan Pérez</td>
                             </tr>
                         </tbody>
                     </table>
@@ -199,10 +199,10 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- Evaluaci�n (Solo Lectura) -->
+        <!-- Evaluación (Solo Lectura) -->
         <div class="card shadow-sm border-0 bg-light mb-4">
             <div class="card-body p-4">
-                <h5 class="fw-bold fs-6 mb-1">Evaluaci�n <span class="badge bg-secondary fw-normal ms-2">Solo
+                <h5 class="fw-bold fs-6 mb-1">Evaluación <span class="badge bg-secondary fw-normal ms-2">Solo
                         Lectura</span></h5>
                 <div class="row g-3">
                     <div class="col-md-3">
@@ -214,7 +214,7 @@ include 'header.php';
                         <input type="text" class="form-control form-control-sm" id="eval_puntaje" readonly>
                     </div>
                     <div class="col-12">
-                        <label class="form-label small fw-bold">Observaci�n</label>
+                        <label class="form-label small fw-bold">Observación</label>
                         <textarea class="form-control form-control-sm" id="eval_observacion" rows="2"
                             readonly></textarea>
                     </div>
@@ -227,7 +227,7 @@ include 'header.php';
                 Limpiar / Cancelar
             </button>
             <button type="button" class="btn btn-primary px-4 shadow-sm" onclick="guardar()">
-                Guardar Postulaci�n
+                Guardar Postulación
             </button>
         </div>
     </form>

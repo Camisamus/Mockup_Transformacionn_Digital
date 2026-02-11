@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Nueva Atenci�n";
+$pageTitle = "Nueva Atención";
 require_once '../../api/auth_check.php';
 include 'header.php';
 ?>
@@ -9,8 +9,8 @@ include 'header.php';
     <!-- Header & Toolbar -->
     <div class="main-header mb-4 max-width-800 mx-auto">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Nueva Atenci�n</h2>
-            <p class="text-muted mb-0">Registrar una nueva atenci�n en el sistema</p>
+            <h2 class="fw-bold fs-4">Nueva Atención</h2>
+            <p class="text-muted mb-0">Registrar una nueva atención en el sistema</p>
         </div>
         <div class="toolbar">
             <button type="button" class="btn btn-toolbar" onclick="window.history.back()">
@@ -28,15 +28,15 @@ include 'header.php';
                     <polyline points="17 21 17 13 7 13 7 21"></polyline>
                     <polyline points="7 3 7 8 15 8"></polyline>
                 </svg>
-                Registrar Atenci�n
+                Registrar Atención
             </button>
         </div>
     </div>
 
-    <!-- Formulario de Nueva Atenci�n -->
+    <!-- Formulario de Nueva Atención -->
     <div class="card shadow-sm border-0 mx-auto" style="max-width: 800px;">
         <div class="card-body p-4">
-            <h3 class="h6 fw-bold mb-1">Datos de la Atenci�n</h3>
+            <h3 class="h6 fw-bold mb-1">Datos de la Atención</h3>
             <p class="text-muted small mb-4">Complete los campos obligatorios marcados con *</p>
 
             <form id="formNuevaAtencion" onsubmit="event.preventDefault(); window.registrarAtencion();">
@@ -53,37 +53,37 @@ include 'header.php';
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">Organizaci�n (Opcional)</label>
-                        <input type="text" class="form-control" id="organizacion" placeholder="Buscar organizaci�n...">
+                        <label class="form-label small fw-bold">Organización (Opcional)</label>
+                        <input type="text" class="form-control" id="organizacion" placeholder="Buscar organización...">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">Tipo de Atenci�n <span
+                        <label class="form-label small fw-bold">Tipo de Atención <span
                                 class="text-danger">*</span></label>
                         <select class="form-select" id="tipo_atencion" required>
                             <option value="">Seleccione...</option>
                             <option value="consulta">Consulta</option>
-                            <option value="tramite">Tr�mite</option>
+                            <option value="tramite">Trámite</option>
                             <option value="reclamo">Reclamo</option>
                             <option value="solicitud">Solicitud</option>
                         </select>
                     </div>
 
                     <div class="col-12">
-                        <label class="form-label small fw-bold">Descripci�n / Motivo <span
+                        <label class="form-label small fw-bold">Descripción / Motivo <span
                                 class="text-danger">*</span></label>
                         <textarea class="form-control" id="descripcion" rows="3"
-                            placeholder="Describa el motivo de la atenci�n..." required></textarea>
+                            placeholder="Describa el motivo de la atención..." required></textarea>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">�rea Derivaci�n</label>
+                        <label class="form-label small fw-bold">Área Derivación</label>
                         <select class="form-select" id="area">
                             <option value="">Seleccione...</option>
                             <option value="social">Desarrollo Social</option>
                             <option value="obras">Obras Municipales</option>
-                            <option value="transito">Tr�nsito</option>
+                            <option value="transito">Trónsito</option>
                             <option value="patentes">Patentes</option>
-                            <option value="juridico">Jur�dico</option>
+                            <option value="juridico">Jurídico</option>
                         </select>
                     </div>
 

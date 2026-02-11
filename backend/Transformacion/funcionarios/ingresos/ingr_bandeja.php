@@ -9,7 +9,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Bandeja de Ingresos</h2>
-            <p class="text-muted mb-0">Gesti�n y b�squeda de solicitudes de ingreso</p>
+            <p class="text-muted mb-0">Gestión y búsqueda de solicitudes de ingreso</p>
         </div>
     </div>
 
@@ -31,15 +31,15 @@ include 'header.php';
     <!-- Filtros -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <h5 class="fw-bold fs-6 mb-3">Filtros de B�squeda</h5>
+            <h5 class="fw-bold fs-6 mb-3">Filtros de Búsqueda</h5>
             <form id="form_filtros" class="row g-3">
                 <div class="col-md-4">
-                    <label for="filtro_titulo" class="form-label small fw-bold">T�tulo</label>
-                    <input type="text" class="form-control" id="filtro_titulo" placeholder="Buscar por t�tulo...">
+                    <label for="filtro_titulo" class="form-label small fw-bold">Título</label>
+                    <input type="text" class="form-control" id="filtro_titulo" placeholder="Buscar por título...">
                 </div>
                 <div class="col-md-3">
-                    <label for="filtro_rgt" class="form-label small fw-bold">ID P�blico (RGT)</label>
-                    <input type="text" class="form-control" id="filtro_rgt" placeholder="C�d. RGT...">
+                    <label for="filtro_rgt" class="form-label small fw-bold">ID Público (RGT)</label>
+                    <input type="text" class="form-control" id="filtro_rgt" placeholder="Cód. RGT...">
                 </div>
                 <div class="col-md-2">
                     <label for="filtro_id" class="form-label small fw-bold">ID Interno</label>
@@ -73,11 +73,11 @@ include 'header.php';
                         <tr>
                             <th class="ps-3">ID</th>
                             <th class="text-end pe-4">Acciones</th>
-                            <th>T�tulo</th>
+                            <th>Título</th>
                             <th>Fecha</th>
                             <th>Estado</th>
-                            <th>Asignaci�n</th>
-                            <th>C�d. P�blico</th>
+                            <th>Asignación</th>
+                            <th>Cód. Público</th>
                         </tr>
                     </thead>
                     <tbody id="tabla_ingresos" class="small">

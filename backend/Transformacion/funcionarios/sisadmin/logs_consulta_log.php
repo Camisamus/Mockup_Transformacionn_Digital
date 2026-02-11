@@ -10,7 +10,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Detalle de Log</h2>
-            <p class="text-muted mb-0">Informaci�n t�cnica detallada del evento registrado</p>
+            <p class="text-muted mb-0">Información técnica detallada del evento registrado</p>
         </div>
     </div>
 
@@ -38,8 +38,8 @@ include 'header.php';
     <!-- Detalle de Log -->
     <div class="card shadow-sm border-0 mb-4 mx-auto" style="max-width: 900px;">
         <div class="card-body p-4">
-            <h5 class="fw-bold fs-6 mb-1">Informaci�n del Evento</h5>
-            <p class="text-muted small mb-4">Datos capturados por el sistema de auditor�a</p>
+            <h5 class="fw-bold fs-6 mb-1">Información del Evento</h5>
+            <p class="text-muted small mb-4">Datos capturados por el sistema de auditor¿a</p>
 
             <div class="row g-3">
                 <div class="col-md-6">
@@ -65,33 +65,33 @@ include 'header.php';
                     <input type="text" class="form-control form-control-sm" id="log_usuario" readonly>
                 </div>
                 <div class="col-md-6">
-                    <label for="log_modulo" class="form-label small fw-bold">M�dulo de Origen</label>
+                    <label for="log_modulo" class="form-label small fw-bold">M¿dulo de Origen</label>
                     <input type="text" class="form-control form-control-sm" id="log_modulo" readonly>
                 </div>
 
                 <div class="col-md-6">
-                    <label for="log_accion" class="form-label small fw-bold">Acci�n Ejecutada</label>
+                    <label for="log_accion" class="form-label small fw-bold">Acción Ejecutada</label>
                     <input type="text" class="form-control form-control-sm" id="log_accion" readonly>
                 </div>
                 <div class="col-md-6">
-                    <label for="log_ip" class="form-label small fw-bold">Direcci�n IP</label>
+                    <label for="log_ip" class="form-label small fw-bold">Dirección IP</label>
                     <input type="text" class="form-control form-control-sm" id="log_ip" readonly>
                 </div>
 
                 <div class="col-12">
-                    <label for="log_descripcion" class="form-label small fw-bold">Descripci�n del Evento</label>
+                    <label for="log_descripcion" class="form-label small fw-bold">Descripción del Evento</label>
                     <textarea class="form-control form-control-sm" id="log_descripcion" rows="3" readonly></textarea>
                 </div>
 
                 <div class="col-12">
-                    <label for="log_detalles" class="form-label small fw-bold">Detalles T�cnicos / Stack
+                    <label for="log_detalles" class="form-label small fw-bold">Detalles T¿cnicos / Stack
                         Trace</label>
                     <textarea class="form-control form-control-sm bg-light font-monospace small" id="log_detalles"
                         rows="6" readonly></textarea>
                 </div>
 
                 <div class="col-md-6">
-                    <label for="log_resultado" class="form-label small fw-bold">Resultado de la Operaci�n</label>
+                    <label for="log_resultado" class="form-label small fw-bold">Resultado de la Operación</label>
                     <input type="text" class="form-control form-control-sm" id="log_resultado" readonly>
                 </div>
             </div>

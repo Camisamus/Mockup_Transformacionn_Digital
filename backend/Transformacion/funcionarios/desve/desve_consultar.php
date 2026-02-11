@@ -74,11 +74,11 @@ include 'header.php';
                             <span id="info_id" class="small">-</span>
                         </div>
                         <div class="col-md-3">
-                            <label class="text-muted small d-block fw-bold mb-1">C�digo RGT</label>
+                            <label class="text-muted small d-block fw-bold mb-1">Código RGT</label>
                             <code id="info_rgt" class="small">-</code>
                         </div>
                         <div class="col-md-3">
-                            <label class="text-muted small d-block fw-bold mb-1">C�digo DESVE</label>
+                            <label class="text-muted small d-block fw-bold mb-1">Código DESVE</label>
                             <code id="info_desve" class="small">-</code>
                         </div>
                         <div class="col-md-3">
@@ -91,7 +91,7 @@ include 'header.php';
                             <span id="info_origen" class="small">-</span>
                         </div>
                         <div class="col-md-4">
-                            <label class="text-muted small d-block fw-bold mb-1">Tipo Organizaci�n</label>
+                            <label class="text-muted small d-block fw-bold mb-1">Tipo Organización</label>
                             <span id="info_tipo_org" class="small">-</span>
                         </div>
                         <div class="col-md-4">
@@ -100,7 +100,7 @@ include 'header.php';
                         </div>
 
                         <div class="col-md-4">
-                            <label class="text-muted small d-block fw-bold mb-1">Fecha Recepci�n</label>
+                            <label class="text-muted small d-block fw-bold mb-1">Fecha Recepción</label>
                             <span id="info_fecha_recepcion" class="small">-</span>
                         </div>
                         <div class="col-md-4">
@@ -149,11 +149,11 @@ include 'header.php';
                 </div>
             </div>
 
-            <!-- Bit�cora de Respuestas -->
+            <!-- Bitácora de Respuestas -->
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="fw-bold fs-6 mb-0">Bit�cora de Respuestas</h5>
+                        <h5 class="fw-bold fs-6 mb-0">Bitácora de Respuestas</h5>
                         <button class="btn btn-sm btn-link text-decoration-none p-0" type="button"
                             data-bs-toggle="collapse" data-bs-target="#collapseRespuestas">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -184,11 +184,11 @@ include 'header.php';
                 </div>
             </div>
 
-            <!-- Bit�cora de Auditor�a -->
+            <!-- Bitácora de Auditoría -->
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="fw-bold fs-6 mb-0">Bit�cora de Auditor�a</h5>
+                        <h5 class="fw-bold fs-6 mb-0">Bitácora de Auditoría</h5>
                         <button class="btn btn-sm btn-link text-decoration-none p-0" type="button"
                             data-bs-toggle="collapse" data-bs-target="#collapseAudit">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -261,7 +261,7 @@ include 'header.php';
                                 <tr>
                                     <th>ID</th>
                                     <th>Expediente</th>
-                                    <th class="text-end">Acci�n</th>
+                                    <th class="text-end">Acción</th>
                                 </tr>
                             </thead>
                             <tbody id="tbody_reingresos" class="small">
@@ -275,13 +275,13 @@ include 'header.php';
             <!-- Metrics Card -->
             <div class="card shadow-sm border-0 mb-4 bg-light">
                 <div class="card-body p-4">
-                    <h5 class="fw-bold fs-6 mb-3">Estad�sticas del Tr�mite</h5>
+                    <h5 class="fw-bold fs-6 mb-3">Estadísticas del Trámite</h5>
                     <div class="d-flex justify-content-between mb-2">
-                        <span class="small text-muted">D�as Transcurridos:</span>
+                        <span class="small text-muted">Días Transcurridos:</span>
                         <span class="fw-bold small" id="info_dias_ingreso">-</span>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <span class="small text-muted">D�as para Vencimiento:</span>
+                        <span class="small text-muted">Días para Vencimiento:</span>
                         <span class="fw-bold small" id="info_dias_vencimiento">-</span>
                     </div>
                 </div>
@@ -302,7 +302,7 @@ include 'header.php';
                 <div class="mb-0">
                     <label for="textoNuevoComentario" class="form-label small fw-bold">Su Comentario</label>
                     <textarea class="form-control form-control-sm" id="textoNuevoComentario" rows="4"
-                        placeholder="Escriba aqu� su comentario u observaci�n..."></textarea>
+                        placeholder="Escriba aquí su comentario u observación..."></textarea>
                 </div>
             </div>
             <div class="modal-footer bg-light border-0">

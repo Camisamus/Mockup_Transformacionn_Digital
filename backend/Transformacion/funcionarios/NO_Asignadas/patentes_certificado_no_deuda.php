@@ -57,14 +57,14 @@ include 'header.php';
                 <div class="me-3"><i data-feather="info"></i></div>
                 <div>
                     <strong>Dirigido a:</strong> Director(a) del Departamento de Patentes y Publicidad.<br>
-                    <small>Amparado en el Art�culo N°29 de la Ley 3.063.</small>
+                    <small>Amparado en el Art¿culo N°29 de la Ley 3.063.</small>
                 </div>
             </div>
         </div>
 
-        <!-- 1. Identificaci�n Solicitante -->
+        <!-- 1. Identificación Solicitante -->
         <div class="section-card">
-            <div class="section-title">1. Identificaci�n del Solicitante</div>
+            <div class="section-title">1. Identificación del Solicitante</div>
             <div class="row g-3">
                 <div class="col-md-3">
                     <label class="form-label">Rol Patente</label>
@@ -75,7 +75,7 @@ include 'header.php';
                     <input type="text" class="form-control" id="rutContribuyente">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Nombre o Raz�n Social</label>
+                    <label class="form-label">Nombre o Razón Social</label>
                     <input type="text" class="form-control" id="nombreRazonSocial">
                 </div>
                 <div class="col-md-6">
@@ -83,11 +83,11 @@ include 'header.php';
                     <input type="text" class="form-control" id="giro">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Direcci�n</label>
+                    <label class="form-label">Dirección</label>
                     <input type="text" class="form-control" id="direccion">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Tel�fono</label>
+                    <label class="form-label">Tel¿fono</label>
                     <input type="tel" class="form-control" id="telefono">
                 </div>
                 <div class="col-md-6">
@@ -97,9 +97,9 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- 2. Prop�sito -->
+        <!-- 2. Prop¿sito -->
         <div class="section-card">
-            <div class="section-title">2. Prop�sito del Certificado</div>
+            <div class="section-title">2. Prop¿sito del Certificado</div>
             <div class="mb-3">
                 <label class="form-label">Para ser presentado en la Ilustre Municipalidad de:</label>
                 <input type="text" class="form-control" placeholder="Ingrese nombre de la Municipalidad de destino"
@@ -115,14 +115,14 @@ include 'header.php';
                 <div class="col-md-12">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="adjPatente">
-                        <label class="form-check-label" for="adjPatente">Fotocopia de la �ltima patente pagada
+                        <label class="form-check-label" for="adjPatente">Fotocopia de la ¿ltima patente pagada
                             (Requisito Obligatorio).</label>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="adjTermino">
-                        <label class="form-check-label" for="adjTermino">Ingreso T�rmino de Negocio Nº (Si
+                        <label class="form-check-label" for="adjTermino">Ingreso T¿rmino de Negocio Nº (Si
                             aplica).</label>
                     </div>
                     <input type="text" class="form-control form-control-sm mt-1 w-50 ms-4" placeholder="N° de Ingreso"
@@ -138,7 +138,7 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- Firma y Recepci�n -->
+        <!-- Firma y Recepción -->
         <div class="section-card">
             <div class="row">
                 <div class="col-md-6">
@@ -152,14 +152,14 @@ include 'header.php';
                 </div>
                 <div class="col-md-6 border-start">
                     <div class="mt-4 ps-md-3">
-                        <label class="form-label fw-bold text-muted">Uso Interno (Recepci�n)</label>
+                        <label class="form-label fw-bold text-muted">Uso Interno (Recepción)</label>
                         <div class="mb-3">
                             <label class="form-label small">Fecha de Ingreso</label>
                             <input type="date" class="form-control" disabled>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label small">N�mero de Ingreso</label>
-                            <input type="text" class="form-control" placeholder="Folio Autom�tico" disabled>
+                            <label class="form-label small">N°mero de Ingreso</label>
+                            <input type="text" class="form-control" placeholder="Folio Autom¿tico" disabled>
                         </div>
                     </div>
                 </div>

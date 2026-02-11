@@ -9,10 +9,10 @@ include 'header.php';
 
     <!-- Search Section -->
     <div class="section-card">
-        <div class="section-title">B�squeda de Solicitudes</div>
+        <div class="section-title">Búsqueda de Solicitudes</div>
         <div class="row g-3">
             <div class="col-md-3">
-                <label class="form-label">N�mero de Solicitud</label>
+                <label class="form-label">N°mero de Solicitud</label>
                 <input type="text" class="form-control" id="searchNumero" placeholder="Ej: PC-2022-001">
             </div>
             <div class="col-md-3">
@@ -43,7 +43,7 @@ include 'header.php';
     <!-- Results Table -->
     <div class="section-card">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="section-title m-0">Resultados de B�squeda</div>
+            <div class="section-title m-0">Resultados de Búsqueda</div>
             <div class="btn-group btn-group-sm">
                 <button class="btn btn-outline-success"
                     onclick="exportTableToExcel('tablaSolicitudes', 'mis_solicitudes')">Exportar Excel</button>
@@ -55,14 +55,14 @@ include 'header.php';
             <table class="table table-hover" id="tablaSolicitudes">
                 <thead class="table-light">
                     <tr>
-                        <th>N�mero de Solicitud</th>
+                        <th>N°mero de Solicitud</th>
                         <th>RUT Solicitante</th>
                         <th>Fecha de Ingreso</th>
                         <th>Tipo de Tramite</th>
                         <th>Grupo</th>
                         <th>Tramitador</th>
                         <th>Estado</th>
-                        <th>Acci�n</th>
+                        <th>Acción</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -90,7 +90,7 @@ include 'header.php';
     <!-- Timeline Section -->
     <div class="section-card">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="section-title m-0">Historial de Gesti�n</div>
+            <div class="section-title m-0">Historial de Gestión</div>
             <div class="btn-group btn-group-sm">
                 <button class="btn btn-outline-success" onclick="alert('Exportar a Excel: En desarrollo')">Exportar
                     Excel</button>

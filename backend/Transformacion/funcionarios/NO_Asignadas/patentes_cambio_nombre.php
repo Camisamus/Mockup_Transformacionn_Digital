@@ -9,7 +9,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Solicitud de Cambio de Nombre</h2>
-            <p class="text-muted mb-0">Gestione la actualizaci�n de nombre para patentes comerciales</p>
+            <p class="text-muted mb-0">Gestione la actualización de nombre para patentes comerciales</p>
         </div>
     </div>
 
@@ -58,9 +58,9 @@ include 'header.php';
                 <div>
                     <h6 class="alert-heading fw-bold">Notas Importantes</h6>
                     <ul class="mb-0 small">
-                        <li>La documentaci�n debe estar emitida a nombre del contribuyente o de la sociedad.</li>
+                        <li>La documentación debe estar emitida a nombre del contribuyente o de la sociedad.</li>
                         <li>El domicilio debe corresponder al lugar donde se ejerce la actividad comercial.</li>
-                        <li>Un croquis claro de la ubicaci�n exacta agilizar� la visita inspectiva.</li>
+                        <li>Un croquis claro de la ubicación exacta agilizar¿ la visita inspectiva.</li>
                     </ul>
                 </div>
             </div>
@@ -93,22 +93,22 @@ include 'header.php';
                     <input type="text" class="form-control" id="rutContribuyente">
                 </div>
                 <div class="col-md-8">
-                    <label class="form-label">Direcci�n</label>
+                    <label class="form-label">Dirección</label>
                     <input type="text" class="form-control" id="direccion">
                 </div>
             </div>
         </div>
 
-        <!-- 2. Requisitos y Documentaci�n -->
+        <!-- 2. Requisitos y Documentación -->
         <div class="section-card">
-            <div class="section-title">2. Requisitos y Documentaci�n (Marque lo que adjunta)</div>
+            <div class="section-title">2. Requisitos y Documentación (Marque lo que adjunta)</div>
 
             <div class="subsection-header">General Requerido</div>
             <div class="row g-2">
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docPatente">
-                        <label class="form-check-label" for="docPatente">Fotocopia simple de �ltima(s) patenete(s)
+                        <label class="form-check-label" for="docPatente">Fotocopia simple de ¿ltima(s) patenete(s)
                             pagada(s).</label>
                     </div>
                 </div>
@@ -129,21 +129,21 @@ include 'header.php';
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docSII">
-                        <label class="form-check-label" for="docSII">Iniciaci�n Actividades S.I.I. / Avisos
+                        <label class="form-check-label" for="docSII">Iniciación Actividades S.I.I. / Avisos
                             Modificaciones.</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docFotos">
-                        <label class="form-check-label" for="docFotos">2 Fotograf�as del establecimiento (interior y
+                        <label class="form-check-label" for="docFotos">2 Fotograf¿as del establecimiento (interior y
                             exterior).</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docTecnico">
-                        <label class="form-check-label" for="docTecnico">Certificado T�cnico Urban�stico
+                        <label class="form-check-label" for="docTecnico">Certificado T¿cnico Urban¿stico
                             (DOM).</label>
                     </div>
                 </div>
@@ -161,11 +161,11 @@ include 'header.php';
                     <div class="subsection-header">Persona Natural</div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docCedula">
-                        <label class="form-check-label" for="docCedula">Fotocopia C�dula de Identidad.</label>
+                        <label class="form-check-label" for="docCedula">Fotocopia C¿dula de Identidad.</label>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="subsection-header">Persona Jur�dica</div>
+                    <div class="subsection-header">Persona Jur¿dica</div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docSociedad">
                         <label class="form-check-label" for="docSociedad">Fotocopia RUT Sociedad y C.I. Rep.
@@ -179,13 +179,13 @@ include 'header.php';
                 </div>
             </div>
 
-            <div class="subsection-header text-primary mt-3">Requisitos Espec�ficos por Giro</div>
+            <div class="subsection-header text-primary mt-3">Requisitos Espec¿ficos por Giro</div>
             <div class="row g-2">
                 <div class="col-12">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docSanitaria">
-                        <label class="form-check-label" for="docSanitaria">Resoluci�n Sanitaria Favorable
-                            (Alimentos, M�dicos, etc.).</label>
+                        <label class="form-check-label" for="docSanitaria">Resolución Sanitaria Favorable
+                            (Alimentos, M¿dicos, etc.).</label>
                     </div>
                 </div>
                 <div class="col-12">
@@ -210,7 +210,7 @@ include 'header.php';
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docSucursal">
                         <label class="form-check-label" for="docSucursal">Apertura Sucursal S.I.I. y Cert.
-                            Distribuci�n Capital (Sucursales).</label>
+                            Distribución Capital (Sucursales).</label>
                     </div>
                 </div>
             </div>
@@ -226,15 +226,15 @@ include 'header.php';
                     <input type="text" class="form-control" id="nombreContacto">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Tel�fono</label>
+                    <label class="form-label">Tel¿fono</label>
                     <input type="tel" class="form-control" id="telefono">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Direcci�n Particular</label>
+                    <label class="form-label">Dirección Particular</label>
                     <input type="text" class="form-control" id="dirParticular">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Correo Electr�nico</label>
+                    <label class="form-label">Correo Electrónico</label>
                     <input type="email" class="form-control" id="email">
                 </div>
             </div>
@@ -248,11 +248,11 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- 4. Geolocalizaci�n (Google Maps) -->
+        <!-- 4. Geolocalización (Google Maps) -->
         <div class="section-card">
-            <div class="section-title">4. Geolocalizaci�n</div>
+            <div class="section-title">4. Geolocalización</div>
             <div class="alert alert-info small" role="alert">
-                <i data-feather="map-pin" class="me-1"></i> Ingrese la direcci�n exacta para ubicarla en el mapa.
+                <i data-feather="map-pin" class="me-1"></i> Ingrese la dirección exacta para ubicarla en el mapa.
             </div>
 
             <div class="row g-3 mb-3">
@@ -261,7 +261,7 @@ include 'header.php';
                     <input type="text" class="form-control" id="mapCalle" placeholder="Ej: Av. Providencia">
                 </div>
                 <div class="col-md-2">
-                    <label class="form-label">N�mero</label>
+                    <label class="form-label">N°mero</label>
                     <input type="text" class="form-control" id="mapNumero" placeholder="Ej: 1234">
                 </div>
                 <div class="col-md-3">
@@ -269,7 +269,7 @@ include 'header.php';
                     <input type="text" class="form-control" id="mapComuna" value="Santiago">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Regi�n</label>
+                    <label class="form-label">Región</label>
                     <input type="text" class="form-control" id="mapRegion" value="Metropolitana" readonly>
                 </div>
                 <div class="col-12 text-end">

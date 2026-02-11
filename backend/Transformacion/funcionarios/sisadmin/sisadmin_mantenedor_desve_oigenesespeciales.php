@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Mantenedor Or�genes Especiales";
+$pageTitle = "Mantenedor Or¿genes Especiales";
 require_once '../../api/auth_check.php';
 include 'header.php';
 ?>
@@ -9,8 +9,8 @@ include 'header.php';
     <!-- Header -->
     <div class="main-header mb-4">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Mantenedor de Or�genes Especiales</h2>
-            <p class="text-muted mb-0">Gesti�n de organizaciones externas y entidades p�blicas relacionadas</p>
+            <h2 class="fw-bold fs-4">Mantenedor de Or¿genes Especiales</h2>
+            <p class="text-muted mb-0">Gestión de organizaciones externas y entidades p¿blicas relacionadas</p>
         </div>
     </div>
 
@@ -37,17 +37,17 @@ include 'header.php';
     <!-- Filtros -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <h5 class="fw-bold fs-6 mb-1">Filtros de B�squeda</h5>
-            <p class="text-muted small mb-4">Refine el listado de or�genes por nombre o tipo</p>
+            <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
+            <p class="text-muted small mb-4">Refine el listado de or¿genes por nombre o tipo</p>
 
             <div class="row g-3">
                 <div class="col-md-6">
                     <label for="filter-name" class="form-label small fw-bold">Nombre del Origen</label>
                     <input type="text" class="form-control form-control-sm" id="filter-name"
-                        placeholder="Ej: Direcci�n de Obras">
+                        placeholder="Ej: Dirección de Obras">
                 </div>
                 <div class="col-md-6">
-                    <label for="filter-type" class="form-label small fw-bold">Tipo de Organizaci�n</label>
+                    <label for="filter-type" class="form-label small fw-bold">Tipo de Organización</label>
                     <select class="form-select form-select-sm" id="filter-type">
                         <option value="">Todos</option>
                     </select>
@@ -60,7 +60,7 @@ include 'header.php';
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="fw-bold fs-6 mb-0">Listado de Or�genes</h5>
+                <h5 class="fw-bold fs-6 mb-0">Listado de Or¿genes</h5>
             </div>
 
             <div class="table-responsive">
@@ -69,7 +69,7 @@ include 'header.php';
                         <tr>
                             <th style="width: 80px;">ID</th>
                             <th>Nombre</th>
-                            <th>Tipo de Organizaci�n</th>
+                            <th>Tipo de Organización</th>
                             <th class="text-end">Acciones</th>
                         </tr>
                     </thead>
@@ -106,7 +106,7 @@ include 'header.php';
                             placeholder="Nombre descriptivo">
                     </div>
                     <div class="mb-0">
-                        <label for="origin-type" class="form-label small fw-bold">Tipo de Organizaci�n <span
+                        <label for="origin-type" class="form-label small fw-bold">Tipo de Organización <span
                                 class="text-danger">*</span></label>
                         <select class="form-select" id="origin-type" required>
                             <option value="">Seleccione un tipo</option>

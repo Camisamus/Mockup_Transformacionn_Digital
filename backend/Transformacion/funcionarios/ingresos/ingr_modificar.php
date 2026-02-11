@@ -8,7 +8,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Modificar Ingreso</h2>
-            <p class="text-muted mb-0">Edite los campos necesarios para actualizar el tr�mite</p>
+            <p class="text-muted mb-0">Edite los campos necesarios para actualizar el trámite</p>
         </div>
     </div>
 
@@ -65,12 +65,12 @@ include 'header.php';
                 <!-- General Info -->
                 <div class="card shadow-sm border-0 border-start border-4 border-primary mb-4">
                     <div class="card-body p-4">
-                        <h5 class="fw-bold fs-6 mb-4">Informaci�n General</h5>
+                        <h5 class="fw-bold fs-6 mb-4">Información General</h5>
                         <div class="row g-3">
                             <div class="col-12">
-                                <label for="tis_titulo" class="form-label small fw-bold">T�tulo del Ingreso</label>
+                                <label for="tis_titulo" class="form-label small fw-bold">Título del Ingreso</label>
                                 <input type="text" class="form-control form-control-sm" id="tis_titulo" required
-                                    placeholder="Ej: Solicitud de Permiso de Edificaci�n">
+                                    placeholder="Ej: Solicitud de Permiso de Edificación">
                             </div>
                             <div class="col-md-12">
                                 <label for="tis_tipo" class="form-label small fw-bold">Tipo de Ingreso</label>
@@ -81,9 +81,9 @@ include 'header.php';
                             </div>
                             <div class="col-12">
                                 <label for="tis_contenido" class="form-label small fw-bold">Contenido /
-                                    Descripci�n</label>
+                                    Descripción</label>
                                 <textarea class="form-control form-control-sm" id="tis_contenido" rows="8"
-                                    placeholder="Detalle aqu� la solicitud..."></textarea>
+                                    placeholder="Detalle aquí la solicitud..."></textarea>
                             </div>
                         </div>
                     </div>
@@ -233,7 +233,7 @@ include 'header.php';
                                 <th>Email</th>
                                 <th>Nombre</th>
                                 <th>Apellido</th>
-                                <th class="text-end">Acci�n</th>
+                                <th class="text-end">Acción</th>
                             </tr>
                         </thead>
                         <tbody id="lista_busqueda_fnc" class="small">
@@ -294,7 +294,7 @@ include 'header.php';
             </div>
             <div class="modal-footer border-0 bg-light">
                 <button type="button" class="btn btn-link text-muted text-decoration-none small"
-                    data-bs-dismiss="modal">Atr�s</button>
+                    data-bs-dismiss="modal">Atrás</button>
                 <button type="button" class="btn btn-dark btn-sm px-4" id="btn_confirmar_destino">Actualizar</button>
             </div>
         </div>
@@ -313,7 +313,7 @@ include 'header.php';
                 <div class="mb-0">
                     <label for="textoNuevoComentario" class="form-label small fw-bold">Su Comentario</label>
                     <textarea class="form-control form-control-sm" id="textoNuevoComentario" rows="4"
-                        placeholder="Escriba aqu� su comentario interno..."></textarea>
+                        placeholder="Escriba aquí su comentario interno..."></textarea>
                 </div>
             </div>
             <div class="modal-footer border-0 bg-light">

@@ -10,7 +10,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Consulta Masiva de Aprobaciones</h2>
-            <p class="text-muted mb-0">B�squeda y generaci�n de reportes de aprobaciones del consejo</p>
+            <p class="text-muted mb-0">Búsqueda y generación de reportes de aprobaciones del consejo</p>
         </div>
     </div>
 
@@ -35,16 +35,16 @@ include 'header.php';
         </div>
     </div>
 
-    <!-- Filtros de B�squeda -->
+    <!-- Filtros de Búsqueda -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <h5 class="fw-bold fs-6 mb-1">Filtros de B�squeda</h5>
+            <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
             <p class="text-muted small mb-4">Aplique filtros para refinar los resultados</p>
 
             <form id="formFiltros" onsubmit="event.preventDefault(); buscarAprobaciones();">
                 <div class="row g-3">
                     <div class="col-md-3">
-                        <label for="filtro_numero" class="form-label small fw-bold">N�mero</label>
+                        <label for="filtro_numero" class="form-label small fw-bold">N°mero</label>
                         <input type="text" class="form-control form-control-sm" id="filtro_numero"
                             placeholder="Ej: SUB-2024-001">
                     </div>
@@ -74,10 +74,10 @@ include 'header.php';
                     <div class="col-md-4">
                         <label for="filtro_nombre" class="form-label small fw-bold">Nombre</label>
                         <input type="text" class="form-control form-control-sm" id="filtro_nombre"
-                            placeholder="Nombre organizaci�n">
+                            placeholder="Nombre organización">
                     </div>
                     <div class="col-md-4">
-                        <label for="filtro_monto_maximo" class="form-label small fw-bold">Monto M�ximo ($)</label>
+                        <label for="filtro_monto_maximo" class="form-label small fw-bold">Monto M¿ximo ($)</label>
                         <input type="number" class="form-control form-control-sm" id="filtro_monto_maximo"
                             placeholder="0">
                     </div>
@@ -108,14 +108,14 @@ include 'header.php';
                 <table class="table table-hover align-middle" id="tablaAprobaciones">
                     <thead class="table-light text-uppercase small">
                         <tr>
-                            <th>N�mero</th>
+                            <th>N°mero</th>
                             <th>Fecha</th>
                             <th>Estado</th>
                             <th>RUT</th>
                             <th>Nombre</th>
                             <th>Monto</th>
-                            <th>A�o Decreto</th>
-                            <th>N�mero Decreto</th>
+                            <th>Año Decreto</th>
+                            <th>N°mero Decreto</th>
                             <th class="text-end">Acciones</th>
                         </tr>
                     </thead>

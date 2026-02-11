@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Solicitud de Certificado de Distribuci�n Capital Apertura Sucursal";
+$pageTitle = "Solicitud de Certificado de Distribución Capital Apertura Sucursal";
 require_once '../../api/auth_check.php';
 include 'header.php';
 ?>
@@ -8,7 +8,7 @@ include 'header.php';
 <div class="container-fluid py-4">
     <div class="main-header mb-4">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Solicitud de Certificado de Distribuci�n Capital Apertura Sucursal</h2>
+            <h2 class="fw-bold fs-4">Solicitud de Certificado de Distribución Capital Apertura Sucursal</h2>
             <p class="text-muted mb-0">Gestione la apertura de sucursales en otras comunas</p>
         </div>
     </div>
@@ -54,12 +54,12 @@ include 'header.php';
         <!-- Header Info -->
         <div class="header-box mb-4">
             <div class="text-center mb-3">
-                <h5 class="fw-bold mb-1">I. MUNICIPALIDAD DE VI�A DEL MAR</h5>
+                <h5 class="fw-bold mb-1">I. MUNICIPALIDAD DE VI¿A DEL MAR</h5>
                 <p class="mb-0 text-muted">Departamento de Patentes y Publicidad</p>
-                <p class="mb-0 text-muted small">Rep�blica de Chile</p>
+                <p class="mb-0 text-muted small">Rep¿blica de Chile</p>
             </div>
             <div class="text-center mt-3">
-                <h6 class="fw-bold text-primary">SOLICITUD DE CERTIFICADO DE DISTRIBUCI�N CAPITAL APERTURA SUCURSAL
+                <h6 class="fw-bold text-primary">SOLICITUD DE CERTIFICADO DE DISTRIBUCI¿N CAPITAL APERTURA SUCURSAL
                 </h6>
             </div>
         </div>
@@ -69,16 +69,16 @@ include 'header.php';
             <div class="d-flex align-items-center">
                 <div class="me-3"><i data-feather="info"></i></div>
                 <div>
-                    <strong>Informaci�n Importante:</strong> Este certificado es requerido para la apertura de
+                    <strong>Información Importante:</strong> Este certificado es requerido para la apertura de
                     sucursales en otras comunas.
-                    Aseg�rese de completar todos los campos y adjuntar la documentaci�n requerida.
+                    Aseg¿rese de completar todos los campos y adjuntar la documentación requerida.
                 </div>
             </div>
         </div>
 
-        <!-- 1. Datos de Identificaci�n del Contribuyente -->
+        <!-- 1. Datos de Identificación del Contribuyente -->
         <div class="section-card">
-            <div class="section-title">1. Datos de Identificaci�n del Contribuyente</div>
+            <div class="section-title">1. Datos de Identificación del Contribuyente</div>
             <div class="row g-3">
                 <div class="col-md-3">
                     <label class="form-label">ROL</label>
@@ -90,22 +90,22 @@ include 'header.php';
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">NOMBRE</label>
-                    <input type="text" class="form-control" id="nombre" placeholder="Nombre o Raz�n Social">
+                    <input type="text" class="form-control" id="nombre" placeholder="Nombre o Razón Social">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">DIRECCI�N</label>
-                    <input type="text" class="form-control" id="direccion" placeholder="Direcci�n Comercial">
+                    <label class="form-label">DIRECCI¿N</label>
+                    <input type="text" class="form-control" id="direccion" placeholder="Dirección Comercial">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">GIRO</label>
                     <input type="text" class="form-control" id="giro" placeholder="Giro Comercial">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">TEL�FONO</label>
+                    <label class="form-label">TEL¿FONO</label>
                     <input type="tel" class="form-control" id="telefono" placeholder="+56 9 1234 5678">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">CORREO ELECTR�NICO</label>
+                    <label class="form-label">CORREO ELECTR¿NICO</label>
                     <input type="email" class="form-control" id="email" placeholder="correo@ejemplo.cl">
                 </div>
             </div>
@@ -119,35 +119,35 @@ include 'header.php';
                 <label class="form-label fw-bold">Ilustre Municipalidad de:</label>
                 <input type="text" class="form-control" id="municipalidadDestino"
                     placeholder="Ingrese el nombre de la municipalidad de destino del certificado">
-                <small class="text-muted">Indique la municipalidad donde se presentar� este certificado</small>
+                <small class="text-muted">Indique la municipalidad donde se presentar¿ este certificado</small>
             </div>
 
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label fw-bold">N�mero trabajadores sucursal</label>
+                    <label class="form-label fw-bold">N°mero trabajadores sucursal</label>
                     <input type="number" class="form-control" id="trabajadoresSucursal" min="0"
                         placeholder="Trabajadores proyectados en la nueva sucursal">
-                    <small class="text-muted">N�mero de trabajadores proyectados en la nueva sucursal</small>
+                    <small class="text-muted">N°mero de trabajadores proyectados en la nueva sucursal</small>
                 </div>
             </div>
         </div>
 
-        <!-- 3. Declaraci�n Trabajadores Casa Matriz -->
+        <!-- 3. Declaración Trabajadores Casa Matriz -->
         <div class="section-card">
-            <div class="section-title">3. Declaraci�n Trabajadores Casa Matriz Vi�a del Mar</div>
+            <div class="section-title">3. Declaración Trabajadores Casa Matriz Vi¿a del Mar</div>
 
             <div class="info-badge mb-3">
                 <i data-feather="users" class="me-2"></i>
-                <strong>Declaraci�n de Trabajadores:</strong> Indique el n�mero total de trabajadores de la casa
-                matriz en Vi�a del Mar
+                <strong>Declaración de Trabajadores:</strong> Indique el número total de trabajadores de la casa
+                matriz en Vi¿a del Mar
             </div>
 
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label fw-bold">N�mero trabajadores</label>
+                    <label class="form-label fw-bold">N°mero trabajadores</label>
                     <input type="number" class="form-control" id="trabajadoresCasaMatriz" min="0"
                         placeholder="Total de trabajadores en casa matriz">
-                    <small class="text-muted">Total de trabajadores de la casa matriz en Vi�a del Mar</small>
+                    <small class="text-muted">Total de trabajadores de la casa matriz en Vi¿a del Mar</small>
                 </div>
             </div>
         </div>
@@ -161,7 +161,7 @@ include 'header.php';
                     <div class="me-3"><i data-feather="alert-triangle"></i></div>
                     <div>
                         <strong>Documentos Requeridos:</strong> Debe adjuntar todos los documentos listados a
-                        continuaci�n para procesar su solicitud.
+                        continuación para procesar su solicitud.
                     </div>
                 </div>
             </div>
@@ -174,7 +174,7 @@ include 'header.php';
                             Formulario de solicitud completo
                         </label>
                         <div class="ms-4 mt-1">
-                            <small class="text-muted">Disponible en el Sitio Web y en el M�dulo de Informaciones del
+                            <small class="text-muted">Disponible en el Sitio Web y en el M¿dulo de Informaciones del
                                 Departamento de Patentes y Publicidad</small>
                         </div>
                     </div>
@@ -183,7 +183,7 @@ include 'header.php';
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="adjPatentes">
                         <label class="form-check-label fw-bold" for="adjPatentes">
-                            Fotocopia de la(s) �ltima(s) Patente(s) Cancelada(s)
+                            Fotocopia de la(s) ¿ltima(s) Patente(s) Cancelada(s)
                         </label>
                         <div class="ms-4 mt-1">
                             <small class="text-muted">Adjuntar copia de las patentes municipales pagadas</small>
@@ -205,7 +205,7 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- Firma y Recepci�n -->
+        <!-- Firma y Recepción -->
         <div class="section-card">
             <div class="row">
                 <div class="col-md-6">
@@ -223,14 +223,14 @@ include 'header.php';
                 </div>
                 <div class="col-md-6 border-start">
                     <div class="mt-4 ps-md-3">
-                        <label class="form-label fw-bold text-muted">Uso Interno (Recepci�n Municipal)</label>
+                        <label class="form-label fw-bold text-muted">Uso Interno (Recepción Municipal)</label>
                         <div class="mb-3">
-                            <label class="form-label small">Fecha de Recepci�n</label>
+                            <label class="form-label small">Fecha de Recepción</label>
                             <input type="date" class="form-control" disabled>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label small">N�mero de Ingreso</label>
-                            <input type="text" class="form-control" placeholder="Folio Autom�tico" disabled>
+                            <label class="form-label small">N°mero de Ingreso</label>
+                            <input type="text" class="form-control" placeholder="Folio Autom¿tico" disabled>
                         </div>
                         <div class="mb-3">
                             <label class="form-label small">Recibido por</label>

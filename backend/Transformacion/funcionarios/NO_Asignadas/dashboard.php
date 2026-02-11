@@ -10,7 +10,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Tablero de Control Municipal</h2>
-            <p class="text-muted mb-0">Resumen operativo y estad�sticas clave del sistema</p>
+            <p class="text-muted mb-0">Resumen operativo y estadísticas clave del sistema</p>
         </div>
     </div>
 
@@ -34,8 +34,8 @@ include 'header.php';
         <div class="card-body p-lg-5 p-4 position-relative" style="z-index: 1;">
             <div class="row align-items-center">
                 <div class="col-lg-8">
-                    <h2 class="fw-bold text-white mb-2">Bienvenido al Sistema de Gesti�n</h2>
-                    <p class="lead text-white mb-0 opacity-75">Visualice el estado de sus solicitudes y las m�tricas
+                    <h2 class="fw-bold text-white mb-2">Bienvenido al Sistema de Gestión</h2>
+                    <p class="lead text-white mb-0 opacity-75">Visualice el estado de sus solicitudes y las métricas
                         clave de su departamento.</p>
                 </div>
             </div>
@@ -114,7 +114,7 @@ include 'header.php';
                             <i data-feather="bar-chart-2" class="text-muted opacity-50"
                                 style="width: 32px; height: 32px;"></i>
                         </div>
-                        <p class="text-muted mb-0">No hay actividad registrada recientemente para mostrar gr�ficos.</p>
+                        <p class="text-muted mb-0">No hay actividad registrada recientemente para mostrar gráficos.</p>
                         <button class="btn btn-link btn-sm text-decoration-none mt-2"
                             onclick="location.reload()">Sincronizar Datos</button>
                     </div>

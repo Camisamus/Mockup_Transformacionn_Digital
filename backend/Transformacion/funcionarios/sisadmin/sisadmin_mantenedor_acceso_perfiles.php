@@ -10,7 +10,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Perfiles de Acceso</h2>
-            <p class="text-muted mb-0">Gesti�n de perfiles de usuario del sistema</p>
+            <p class="text-muted mb-0">Gestión de perfiles de usuario del sistema</p>
         </div>
     </div>
 
@@ -37,7 +37,7 @@ include 'header.php';
     <!-- Filtros -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <h5 class="fw-bold fs-6 mb-1">Filtros de B�squeda</h5>
+            <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
             <p class="text-muted small mb-4">Filtrar por Nombre de Perfil</p>
 
             <div class="row g-3">
@@ -63,7 +63,7 @@ include 'header.php';
                         <tr>
                             <th>ID</th>
                             <th>Nombre del Perfil</th>
-                            <th>Fecha Creaci�n</th>
+                            <th>Fecha Creación</th>
                             <th class="text-end">Acciones</th>
                         </tr>
                     </thead>
@@ -97,7 +97,7 @@ include 'header.php';
                             <label class="form-label small fw-bold">Nombre del Perfil <span
                                     class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="entry-nombre" required
-                                placeholder="Ej: Tesorer�a">
+                                placeholder="Ej: Tesorer¿a">
                         </div>
                     </div>
                 </form>

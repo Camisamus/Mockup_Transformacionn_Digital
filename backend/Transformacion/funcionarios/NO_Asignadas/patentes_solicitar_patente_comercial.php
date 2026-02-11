@@ -13,12 +13,12 @@ include 'header.php';
         </div>
     </div>
 
-    <!-- Tipo de Tr�mite -->
+    <!-- Tipo de Trámite -->
     <div class="section-card mb-4" id="tipoTramiteSection">
-        <div class="section-title">Tipo de Tr�mite</div>
+        <div class="section-title">Tipo de Trámite</div>
         <div class="row g-3">
             <div class="col-md-4">
-                <select class="form-select" id="tipoTr�mite">
+                <select class="form-select" id="tipoTrámite">
                     <option value="">Seleccione...</option>
                 </select>
             </div>
@@ -30,7 +30,7 @@ include 'header.php';
             </div>
         </div>
         <div class="mt-3 text-end">
-            <button id="btnIniciarTramite" class="btn btn-primary d-none">Iniciar Tr�mite</button>
+            <button id="btnIniciarTramite" class="btn btn-primary d-none">Iniciar Trámite</button>
         </div>
     </div>
 
@@ -74,9 +74,9 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- A. Individualizaci�n -->
+        <!-- A. Individualización -->
         <div class="section-card">
-            <div class="section-title">A. Individualizaci�n del Contribuyente</div>
+            <div class="section-title">A. Individualización del Contribuyente</div>
             <div class="row g-3">
                 <!-- Row 1 -->
                 <div class="col-md-6">
@@ -90,7 +90,7 @@ include 'header.php';
 
                 <!-- Row 2 -->
                 <div class="col-12">
-                    <label class="form-label">NOMBRE O RAZ�N SOCIAL</label>
+                    <label class="form-label">NOMBRE O RAZ¿N SOCIAL</label>
                     <input type="text" class="form-control" id="nombreRazonSocial">
                 </div>
 
@@ -102,23 +102,23 @@ include 'header.php';
 
                 <!-- Row 4 -->
                 <div class="col-12">
-                    <label class="form-label">DIRECCI�N COMERCIAL</label>
+                    <label class="form-label">DIRECCI¿N COMERCIAL</label>
                     <input type="text" class="form-control" id="direccionComercial">
                 </div>
 
                 <!-- Row 5 -->
                 <div class="col-12">
-                    <label class="form-label">DIRECCI�N PARTICULAR</label>
+                    <label class="form-label">DIRECCI¿N PARTICULAR</label>
                     <input type="text" class="form-control" id="direccionParticular">
                 </div>
 
                 <!-- Row 6 -->
                 <div class="col-md-6">
-                    <label class="form-label">TEL�FONO</label>
+                    <label class="form-label">TEL¿FONO</label>
                     <input type="tel" class="form-control" id="telefono" placeholder="+56 9 1234 5678">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">ROL AVAL�O</label>
+                    <label class="form-label">ROL AVAL¿O</label>
                     <input type="text" class="form-control" id="rolAvaluo">
                 </div>
 
@@ -130,16 +130,16 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- B. Actividad Econ�mica -->
+        <!-- B. Actividad Econ¿mica -->
         <div class="section-card">
-            <div class="section-title">B. Actividad Econ�mica y Calidad del Negocio Amparado por esta Patente</div>
+            <div class="section-title">B. Actividad Econ¿mica y Calidad del Negocio Amparado por esta Patente</div>
             <div class="row g-3">
                 <div class="col-12">
                     <label class="form-label">GIRO</label>
                     <input type="text" class="form-control" id="giro">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">C�DIGO ACTIVIDAD S.I.I</label>
+                    <label class="form-label">C¿DIGO ACTIVIDAD S.I.I</label>
                     <input type="text" class="form-control" id="codigoSII">
                 </div>
                 <div class="col-md-6">
@@ -161,10 +161,10 @@ include 'header.php';
         <div class="section-card">
             <div class="section-title">C. Detalle Todas las Patentes del Contribuyente</div>
 
-            <!-- Table 1: Vi�a del Mar -->
+            <!-- Table 1: Vi¿a del Mar -->
             <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <label class="form-label fw-bold m-0">Patente(s) Comuna Vi�a del Mar</label>
+                    <label class="form-label fw-bold m-0">Patente(s) Comuna Vi¿a del Mar</label>
                     <div class="btn-group btn-group-sm">
                         <button class="btn btn-outline-success"
                             onclick="exportTableToExcel('tablaVina', 'patentes_vina')">Exportar Excel</button>
@@ -185,12 +185,12 @@ include 'header.php';
                             <td><input type="text" class="form-control form-control-sm" id="vinaRol_0"></td>
                             <td><input type="number" class="form-control form-control-sm" id="vinaTrabajadores_0">
                             </td>
-                            <td><input type="text" class="form-control form-control-sm" value="Vi�a del Mar" readonly
+                            <td><input type="text" class="form-control form-control-sm" value="Vi¿a del Mar" readonly
                                     disabled></td>
                         </tr>
                     </tbody>
                 </table>
-                <button class="btn btn-sm btn-outline-secondary" id="btnAddVina">+ Agregar Patente Vi�a del
+                <button class="btn btn-sm btn-outline-secondary" id="btnAddVina">+ Agregar Patente Vi¿a del
                     Mar</button>
             </div>
 
@@ -229,7 +229,7 @@ include 'header.php';
 
         <!-- D. Propaganda -->
         <div class="section-card">
-            <div class="section-title">D. Declaraci�n de Propaganda</div>
+            <div class="section-title">D. Declaración de Propaganda</div>
             <div class="row g-3">
                 <div class="col-md-4">
                     <label class="form-label">LUMINOSA</label>
@@ -266,9 +266,9 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- F. Documentaci�n -->
+        <!-- F. Documentación -->
         <div class="section-card mb-5">
-            <div class="section-title">F. Documentaci�n Necesaria</div>
+            <div class="section-title">F. Documentación Necesaria</div>
             <div class="mb-2">Adjunte los documentos requeridos:</div>
             <div class="list-group" id="documentosList">
                 <!-- Dynamic Documents Here -->

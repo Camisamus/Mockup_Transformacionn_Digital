@@ -101,14 +101,14 @@ include 'header.php';
                             <label for="tis_respuesta" class="form-label small fw-bold">Contenido de la Respuesta
                                 (Opcional)</label>
                             <textarea class="form-control form-control-sm" id="tis_respuesta" rows="6"
-                                placeholder="Escriba aqu� la respuesta final o resoluci�n..."></textarea>
+                                placeholder="Escriba aquí la respuesta final o resolución..."></textarea>
                         </div>
                         <div class="mb-4">
                             <label for="inp_archivo_decreto" class="form-label small fw-bold">Incluir Decreto en
                                 respuesta (Opcional)</label>
                             <input class="form-control form-control-sm" type="file" id="inp_archivo_decreto"
                                 accept=".pdf,.doc,.docx,.jpg,.png">
-                            <div class="form-text x-small text-muted mt-2">Si adjunta un archivo, este se guardar�
+                            <div class="form-text x-small text-muted mt-2">Si adjunta un archivo, este se guardará
                                 con el prefijo <strong>"Decreto - "</strong>.</div>
                         </div>
                         <div class="row g-3 align-items-center">
@@ -152,7 +152,7 @@ include 'header.php';
                 <div class="mb-0">
                     <label for="textoNuevoComentario" class="form-label small fw-bold">Su Comentario</label>
                     <textarea class="form-control form-control-sm" id="textoNuevoComentario" rows="4"
-                        placeholder="Escriba aqu� su comentario u observaci�n..."></textarea>
+                        placeholder="Escriba aquí su comentario u observación..."></textarea>
                 </div>
             </div>
             <div class="modal-footer border-0 bg-light">
@@ -169,10 +169,10 @@ include 'header.php';
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow">
             <div class="modal-header bg-dark ">
-                <h5 class="modal-title fw-bold fs-6">Verificaci�n de Firma</h5>
+                <h5 class="modal-title fw-bold fs-6">Verificación de Firma</h5>
             </div>
             <div class="modal-body text-center p-5">
-                <p class="mb-4 small text-muted">Ingrese el c�digo de verificaci�n enviado a su correo electr�nico.
+                <p class="mb-4 small text-muted">Ingrese el código de verificación enviado a su correo electrónico.
                 </p>
                 <div class="mb-4 d-flex justify-content-center">
                     <input type="text" class="form-control text-center fw-bold fs-3 border-dark" id="inp_otp_code"

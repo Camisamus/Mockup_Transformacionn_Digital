@@ -8,7 +8,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Consulta de Solicitud</h2>
-            <p class="text-muted mb-0">Consulta y gestiona informaci�n detallada de patentes</p>
+            <p class="text-muted mb-0">Consulta y gestiona información detallada de patentes</p>
         </div>
     </div>
 
@@ -59,7 +59,7 @@ include 'header.php';
         <div class="mt-2">
             <small class="text-muted">
                 <i data-feather="info" style="width: 14px; height: 14px;"></i>
-                Puede buscar por ID de solicitud o por tramitador. Si ingresa ambos, se buscar� por ID.
+                Puede buscar por ID de solicitud o por tramitador. Si ingresa ambos, se buscar¿ por ID.
             </small>
         </div>
     </div>
@@ -69,9 +69,9 @@ include 'header.php';
         <div class="group-alert">
             <div class="d-flex align-items-center mb-2">
                 <i data-feather="users" class="me-2"></i>
-                <strong>Esta solicitud es parte de un grupo (multi-tr�mite)</strong>
+                <strong>Esta solicitud es parte de un grupo (multi-trámite)</strong>
             </div>
-            <p class="mb-2 small">Esta solicitud est� vinculada con otras solicitudes del mismo grupo.
+            <p class="mb-2 small">Esta solicitud está vinculada con otras solicitudes del mismo grupo.
                 Seleccione una solicitud del grupo para ver su contenido:</p>
             <div class="row g-2 align-items-center">
                 <div class="col-md-8">
@@ -98,10 +98,10 @@ include 'header.php';
 
         <!-- Solicitud Information Card -->
         <div class="section-card">
-            <div class="section-title">Informaci�n General</div>
+            <div class="section-title">Información General</div>
             <div class="row g-3">
                 <div class="col-md-3">
-                    <label class="form-label text-muted small">N�mero de Solicitud</label>
+                    <label class="form-label text-muted small">N°mero de Solicitud</label>
                     <div class="fw-bold" id="infoNumero">-</div>
                 </div>
                 <div class="col-md-3">
@@ -119,7 +119,7 @@ include 'header.php';
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label text-muted small">Tipo de Tr�mite</label>
+                    <label class="form-label text-muted small">Tipo de Trámite</label>
                     <div class="fw-bold" id="infoTramite">-</div>
                 </div>
                 <div class="col-md-3">
@@ -138,9 +138,9 @@ include 'header.php';
             <!-- Dynamic form content will be loaded here -->
         </div>
 
-        <!-- Timeline/Bit�cora Section -->
+        <!-- Timeline/Bitácora Section -->
         <div class="section-card">
-            <div class="section-title">Bit�cora de la Solicitud</div>
+            <div class="section-title">Bitácora de la Solicitud</div>
             <div id="timelineContainer">
                 <!-- Timeline loaded dynamically -->
             </div>
@@ -151,7 +151,7 @@ include 'header.php';
     <div class="section-card d-none" id="noResultsSection">
         <div class="alert alert-warning mb-0">
             <i data-feather="alert-circle" class="me-2"></i>
-            No se encontr� ninguna solicitud con el ID especificado.
+            No se encontr¿ ninguna solicitud con el ID especificado.
         </div>
     </div>
 </div>

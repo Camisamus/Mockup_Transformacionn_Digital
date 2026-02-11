@@ -45,10 +45,10 @@ include 'header.php';
         </div>
     </div>
 
-    <!-- Filtros de B�squeda -->
+    <!-- Filtros de Búsqueda -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4" style="display: none;">
-            <h5 class="fw-bold fs-6 mb-3">Filtros de B�squeda</h5>
+            <h5 class="fw-bold fs-6 mb-3">Filtros de Búsqueda</h5>
             <div class="row g-3">
                 <div class="col-md-3">
                     <label class="form-label small fw-bold">Fecha Desde</label>
@@ -111,7 +111,7 @@ include 'header.php';
                 <table class="table table-hover align-middle mb-0" id="tablaAtenciones">
                     <thead class="table-light text-uppercase small">
                         <tr>
-                            <th style="width: 50px;">Acci�n</th>
+                            <th style="width: 50px;">Acción</th>
                             <th style="width: 80px;">ID</th>
                             <th style="width: 80px;">Cod. DESVE</th>
                             <th style="width: 80px;">Solicitante</th>

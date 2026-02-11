@@ -71,13 +71,13 @@ include 'header.php';
         <div class="card-body p-4">
             <form id="form_filtros_consulta" class="row g-3 align-items-end">
                 <div class="col-md-4">
-                    <label for="filtro_titulo" class="form-label small fw-bold">T�tulo</label>
+                    <label for="filtro_titulo" class="form-label small fw-bold">Título</label>
                     <input type="text" class="form-control form-control-sm" id="filtro_titulo"
-                        placeholder="Buscar por t�tulo...">
+                        placeholder="Buscar por título...">
                 </div>
                 <div class="col-md-3">
-                    <label for="filtro_rgt" class="form-label small fw-bold">ID P�blico (RGT)</label>
-                    <input type="text" class="form-control form-control-sm" id="filtro_rgt" placeholder="C�d. RGT...">
+                    <label for="filtro_rgt" class="form-label small fw-bold">ID Público (RGT)</label>
+                    <input type="text" class="form-control form-control-sm" id="filtro_rgt" placeholder="Cód. RGT...">
                 </div>
                 <div class="col-md-2">
                     <label for="filtro_id" class="form-label small fw-bold">ID Interno</label>
@@ -118,15 +118,15 @@ include 'header.php';
                     </div>
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold text-muted d-block">T�tulo</label>
+                            <label class="form-label small fw-bold text-muted d-block">Título</label>
                             <div class="fs-6 fw-bold" id="info_titulo">-</div>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label small fw-bold text-muted d-block">ID Tr�mite (RGT)</label>
+                            <label class="form-label small fw-bold text-muted d-block">ID Trámite (RGT)</label>
                             <div class="fs-6 fw-bold" id="info_rgt_id">-</div>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label small fw-bold text-muted d-block">ID P�blico</label>
+                            <label class="form-label small fw-bold text-muted d-block">ID Público</label>
                             <div class="badge bg-light text-dark border fw-normal text-wrap text-break"
                                 id="info_id_publica">-</div>
                         </div>
@@ -175,11 +175,11 @@ include 'header.php';
                 </div>
             </div>
 
-            <!-- Bit�cora -->
+            <!-- Bitácora -->
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="fw-bold fs-6 mb-0">Bit�cora de Auditor�a</h5>
+                        <h5 class="fw-bold fs-6 mb-0">Bitácora de Auditoría</h5>
                         <button class="btn btn-sm btn-link text-dark p-0" type="button" data-bs-toggle="collapse"
                             data-bs-target="#collapseBitacora">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -244,13 +244,13 @@ include 'header.php';
             <div class="card shadow-sm border-0 mb-4 bg-light">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="fw-bold fs-6 mb-0">Relaciones (�rbol RGT)</h5>
+                        <h5 class="fw-bold fs-6 mb-0">Relaciones (Árbol RGT)</h5>
                         <button type="button" class="btn btn-sm btn-dark px-2 py-0 shadow-sm" id="btn_ver_mapa"
                             style="font-size: 0.75rem;">
                             Ver Mapa
                         </button>
                     </div>
-                    <p class="x-small text-muted mb-3">Listado de tr�mites correlacionados din�micamente.</p>
+                    <p class="x-small text-muted mb-3">Listado de trámites correlacionados dinámicamente.</p>
                     <ul id="lista_multiancestro" class="list-group list-group-flush bg-transparent">
                         <!-- Dynamic -->
                     </ul>
@@ -279,7 +279,7 @@ include 'header.php';
                         <line x1="12" y1="16" x2="12" y2="12"></line>
                         <line x1="12" y1="8" x2="12.01" y2="8"></line>
                     </svg>
-                    Navegue con el rat�n (zoom y arrastre).
+                    Navegue con el ratón (zoom y arrastre).
                 </div>
                 <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Cerrar</button>
             </div>
@@ -299,7 +299,7 @@ include 'header.php';
                 <div class="mb-0">
                     <label for="textoNuevoComentario" class="form-label small fw-bold">Su Comentario</label>
                     <textarea class="form-control form-control-sm" id="textoNuevoComentario" rows="4"
-                        placeholder="Escriba aqu� su comentario u observaci�n..."></textarea>
+                        placeholder="Escriba aquí su comentario u observación..."></textarea>
                 </div>
             </div>
             <div class="modal-footer border-0 bg-light">

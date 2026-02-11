@@ -40,7 +40,7 @@ include 'header.php';
         </div>
     </div>
 
-    <!-- M�tricas (Standardized) -->
+    <!-- Métricas (Standardized) -->
     <div class="row g-3 mb-4">
         <div class="col-md-3">
             <div class="card shadow-sm border-0 border-start border-4 border-primary h-100">
@@ -95,11 +95,11 @@ include 'header.php';
                     <thead class="table-light text-uppercase small">
                         <tr>
                             <th>Prioridad</th>
-                            <th>C�digo</th>
+                            <th>Código</th>
                             <th>Tipo</th>
-                            <th>Organizaci�n</th>
+                            <th>Organización</th>
                             <th>RUT</th>
-                            <th>�rea</th>
+                            <th>Área</th>
                             <th>UV</th>
                             <th>Ingreso</th>
                             <th>Tiempo</th>
@@ -124,7 +124,7 @@ include 'header.php';
                     <i data-feather="info" style="width: 18px; height: 18px;"></i>
                 </div>
                 <div class="small">
-                    <strong>Nota:</strong> Las atenciones se ordenan autom�ticamente por prioridad y tiempo de espera.
+                    <strong>Nota:</strong> Las atenciones se ordenan automáticamente por prioridad y tiempo de espera.
                     Las atenciones de <strong>alta prioridad</strong> se muestran primero para garantizar una respuesta
                     oportuna.
                 </div>
@@ -133,19 +133,19 @@ include 'header.php';
     </div>
 </div>
 
-<!-- Modal Atender Atenci�n -->
+<!-- Modal Atender Atención -->
 <div class="modal fade" id="modalAtender" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg">
             <div class="modal-header bg-light border-0 p-4">
                 <div>
                     <h5 class="modal-title fw-bold text-dark" id="modalTitle">Atender: AT-001234</h5>
-                    <p class="text-muted small mb-0">Complete la informaci�n para procesar esta atenci�n</p>
+                    <p class="text-muted small mb-0">Complete la información para procesar esta atención</p>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
-                <!-- Informaci�n de la Atenci�n -->
+                <!-- Información de la Atención -->
                 <div class="card bg-light border-0 mb-4 shadow-xs">
                     <div class="card-body p-3">
                         <h6 class="fw-bold mb-3 small d-flex align-items-center">
@@ -158,7 +158,7 @@ include 'header.php';
                                 <span class="fw-bold">Consulta</span>
                             </div>
                             <div class="col-md-4">
-                                <label class="d-block text-muted">C�digo:</label>
+                                <label class="d-block text-muted">Código:</label>
                                 <span class="fw-bold">AT-001234</span>
                             </div>
                             <div class="col-md-4">
@@ -166,15 +166,15 @@ include 'header.php';
                                 <span class="fw-bold">2024-12-03 09:15</span>
                             </div>
                             <div class="col-md-4">
-                                <label class="d-block text-muted">Organizaci�n:</label>
-                                <span class="fw-bold d-block">Junta de Vecinos N�1 El Progreso</span>
+                                <label class="d-block text-muted">Organización:</label>
+                                <span class="fw-bold d-block">Junta de Vecinos N°1 El Progreso</span>
                             </div>
                             <div class="col-md-4">
                                 <label class="d-block text-muted">RUT:</label>
                                 <span class="fw-bold">76.123.456-7</span>
                             </div>
                             <div class="col-md-4">
-                                <label class="d-block text-muted">�rea/UV:</label>
+                                <label class="d-block text-muted">Área/UV:</label>
                                 <span class="fw-bold">Desarrollo Social / UV-15</span>
                             </div>
                         </div>
@@ -184,17 +184,17 @@ include 'header.php';
                 <!-- Formulario -->
                 <form id="formAtender" onsubmit="event.preventDefault();">
                     <div class="mb-4">
-                        <label class="form-label small fw-bold">Descripci�n Original</label>
+                        <label class="form-label small fw-bold">Descripción Original</label>
                         <div class="p-3 bg-white border rounded small text-muted shadow-xs">
-                            Consulta sobre proceso de postulaci�n a subvenciones municipales
+                            Consulta sobre proceso de postulación a subvenciones municipales
                         </div>
                     </div>
 
                     <div class="row g-3 mb-4">
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold">Estado de la Atenci�n</label>
+                            <label class="form-label small fw-bold">Estado de la Atención</label>
                             <select class="form-select">
-                                <option>En Atenci�n</option>
+                                <option>En Atención</option>
                                 <option>Completada</option>
                             </select>
                         </div>
@@ -205,10 +205,10 @@ include 'header.php';
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">Soluci�n / Respuesta <span
+                        <label class="form-label small fw-bold">Solución / Respuesta <span
                                 class="text-danger">*</span></label>
                         <textarea class="form-control" rows="3"
-                            placeholder="Describa la soluci�n proporcionada..."></textarea>
+                            placeholder="Describa la solución proporcionada..."></textarea>
                     </div>
 
                     <div class="mb-0">
@@ -221,7 +221,7 @@ include 'header.php';
                 <button type="button" class="btn btn-link text-decoration-none text-muted small"
                     data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-dark px-4 shadow-sm">
-                    Completar Atenci�n
+                    Completar Atención
                 </button>
             </div>
         </div>

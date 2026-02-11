@@ -10,7 +10,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Roles de Acceso</h2>
-            <p class="text-muted mb-0">Gesti�n de roles y permisos del sistema</p>
+            <p class="text-muted mb-0">Gestión de roles y permisos del sistema</p>
         </div>
     </div>
 
@@ -37,7 +37,7 @@ include 'header.php';
     <!-- Filtros -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <h5 class="fw-bold fs-6 mb-1">Filtros de B�squeda</h5>
+            <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
             <p class="text-muted small mb-4">Filtrar por ID o Nombre de Rol</p>
 
             <div class="row g-3">
@@ -109,9 +109,9 @@ include 'header.php';
                         <div class="col-md-12">
                             <label class="form-label small fw-bold">Tipo</label>
                             <select class="form-select" id="entry-tipo">
-                                <option value="Pagina">P�gina</option>
-                                <option value="categoria">Categor�a</option>
-                                <option value="subcategoria">Subcategor�a</option>
+                                <option value="Pagina">P¿gina</option>
+                                <option value="categoria">Categoría</option>
+                                <option value="subcategoria">Subcategoría</option>
                             </select>
                         </div>
                     </div>

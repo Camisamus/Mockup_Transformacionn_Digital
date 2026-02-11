@@ -10,7 +10,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Consulta Masiva de Fiscalizaciones</h2>
-            <p class="text-muted mb-0">B�squeda y generaci�n de reportes de fiscalizaciones de subvenciones</p>
+            <p class="text-muted mb-0">Búsqueda y generación de reportes de fiscalizaciones de subvenciones</p>
         </div>
     </div>
 
@@ -35,21 +35,21 @@ include 'header.php';
         </div>
     </div>
 
-    <!-- Filtros de B�squeda -->
+    <!-- Filtros de Búsqueda -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <h5 class="fw-bold fs-6 mb-1">Filtros de B�squeda</h5>
-            <p class="text-muted small mb-4">Aplique filtros para refinar los resultados de fiscalizaci�n</p>
+            <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
+            <p class="text-muted small mb-4">Aplique filtros para refinar los resultados de fiscalización</p>
 
             <form id="formFiltros" onsubmit="event.preventDefault(); buscarFiscalizaciones();">
                 <div class="row g-3">
                     <div class="col-md-3">
-                        <label for="filtro_subvencion" class="form-label small fw-bold">Subvenci�n</label>
+                        <label for="filtro_subvencion" class="form-label small fw-bold">Subvención</label>
                         <input type="text" class="form-control form-control-sm" id="filtro_subvencion"
                             placeholder="Ej: SUB-2024-001">
                     </div>
                     <div class="col-md-3">
-                        <label for="filtro_fiscalizacion" class="form-label small fw-bold">Fiscalizaci�n</label>
+                        <label for="filtro_fiscalizacion" class="form-label small fw-bold">Fiscalización</label>
                         <input type="text" class="form-control form-control-sm" id="filtro_fiscalizacion"
                             placeholder="Ej: FISC-2024-001">
                     </div>
@@ -96,12 +96,12 @@ include 'header.php';
                 <table class="table table-hover align-middle" id="tablaFiscalizaciones">
                     <thead class="table-light text-uppercase small">
                         <tr>
-                            <th>Subvenci�n</th>
-                            <th>Fiscalizaci�n</th>
+                            <th>Subvención</th>
+                            <th>Fiscalización</th>
                             <th>Fecha</th>
                             <th>Estado</th>
                             <th>Fecha Estado</th>
-                            <th>N� Ingreso</th>
+                            <th>N° Ingreso</th>
                             <th>RUT Fiscalizador</th>
                             <th>Resultado</th>
                             <th class="text-end">Acciones</th>

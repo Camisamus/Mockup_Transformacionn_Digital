@@ -83,28 +83,28 @@ include 'header.php';
                         </div>
                         <div class="info-row">
                             <span class="info-label">REPRESENTANTE</span>
-                            <span class="info-value">Juan P�rez G.</span>
+                            <span class="info-value">Juan Pérez G.</span>
                         </div>
                         <div class="info-row">
-                            <span class="info-label">DIRECCI�N COMERCIAL</span>
+                            <span class="info-label">DIRECCI¿N COMERCIAL</span>
                             <span class="info-value">Av. Libertador Bernardo O'Higgins 1234, Local 5</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Clasificaci�n y Rubro -->
+            <!-- Clasificación y Rubro -->
             <div class="card-section">
                 <div class="section-header">
                     <h2 class="section-title">
                         <i data-feather="tag"></i>
-                        Clasificaci�n y Rubro
+                        Clasificación y Rubro
                     </h2>
                     <a href="#" class="edit-link">Ver Historial</a>
                 </div>
                 <div class="classification-grid">
                     <div class="classification-item">
-                        <span class="classification-label">C�digo Actividad</span>
+                        <span class="classification-label">Código Actividad</span>
                         <span class="classification-value">471100</span>
                     </div>
                     <div class="classification-item">
@@ -113,7 +113,7 @@ include 'header.php';
                     </div>
                 </div>
                 <div>
-                    <span class="classification-label">Descripci�n de Actividad/Giro Comercial</span>
+                    <span class="classification-label">Descripción de Actividad/Giro Comercial</span>
                     <div class="activity-description">
                         Venta al por menor en comercios no especializados con predominio de la venta de alimentos,
                         bebidas o tabaco (supermercados y minimarkets).
@@ -230,9 +230,9 @@ include 'header.php';
 
         <!-- Right Sidebar -->
         <div class="sidebar">
-            <!-- Acciones R�pidas -->
+            <!-- Acciones R¿pidas -->
             <div class="quick-actions">
-                <h3 class="quick-actions-title">ACCIONES R�PIDAS</h3>
+                <h3 class="quick-actions-title">ACCIONES R¿PIDAS</h3>
                 <div class="action-item" onclick="window.location.href='patentes_certificado_no_deuda.php'">
                     <div class="action-icon blue">
                         <i data-feather="file-text" style="width: 20px; height: 20px;"></i>
@@ -247,7 +247,7 @@ include 'header.php';
                         <i data-feather="award" style="width: 20px; height: 20px;"></i>
                     </div>
                     <div class="action-text">
-                        <div class="action-title">Declaraci�n propaganda</div>
+                        <div class="action-title">Declaración propaganda</div>
                         <div class="action-subtitle">Ir a formulario</div>
                     </div>
                 </div>
@@ -256,38 +256,38 @@ include 'header.php';
                         <i data-feather="file-text" style="width: 20px; height: 20px;"></i>
                     </div>
                     <div class="action-text">
-                        <div class="action-title">Revisi�n de cobro</div>
+                        <div class="action-title">Revisión de cobro</div>
                         <div class="action-subtitle">Ir a formulario</div>
                     </div>
                 </div>
-                <div class="action-item" onclick="alert('Funci�n requiere autorizaci�n')">
+                <div class="action-item" onclick="alert('Función requiere autorización')">
                     <div class="action-icon orange">
                         <i data-feather="lock" style="width: 20px; height: 20px;"></i>
                     </div>
                     <div class="action-text">
                         <div class="action-title">Bloquear Patente</div>
-                        <div class="action-subtitle">Requiere autorizaci�n</div>
+                        <div class="action-subtitle">Requiere autorización</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Auditor�a Reciente -->
+            <!-- Auditoría Reciente -->
             <div class="audit-section">
-                <h3 class="audit-title">AUDITOR�A RECIENTE</h3>
+                <h3 class="audit-title">AUDITOR¿A RECIENTE</h3>
                 <div class="audit-item">
                     <div class="audit-time">Hace 2 horas</div>
-                    <div class="audit-action">Emisi�n Certificado Deuda</div>
-                    <div class="audit-user">Usuario: M. Gonz�lez</div>
+                    <div class="audit-action">Emisión Certificado Deuda</div>
+                    <div class="audit-user">Usuario: M. Gonz¿lez</div>
                 </div>
                 <div class="audit-item">
                     <div class="audit-time">14 Jul, 10:30 AM</div>
-                    <div class="audit-action">Actualizaci�n Capital Propio</div>
+                    <div class="audit-action">Actualización Capital Propio</div>
                     <div class="audit-user">Usuario: Sistema SII</div>
                 </div>
                 <div class="audit-item">
                     <div class="audit-time">02 Ene, 09:15 AM</div>
                     <div class="audit-action">Pago Semestre 1-2025</div>
-                    <div class="audit-user">Caja: Tesorer�a</div>
+                    <div class="audit-user">Caja: Tesorer¿a</div>
                 </div>
             </div>
 

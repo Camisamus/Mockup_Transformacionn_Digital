@@ -34,17 +34,17 @@ include 'header.php';
                     <button class="btn btn-toolbar btn-dark w-100 shadow-sm"
                         onclick="location.href='atenciones_nueva_atencion.php'">
                         <i data-feather="plus" class="me-2"></i>
-                        Nueva Atenci�n
+                        Nueva Atención
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Filtros de B�squeda -->
+    <!-- Filtros de Búsqueda -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <h5 class="fw-bold fs-6 mb-3">Filtros de B�squeda</h5>
+            <h5 class="fw-bold fs-6 mb-3">Filtros de Búsqueda</h5>
             <form id="formFiltros" onsubmit="event.preventDefault(); buscarAtenciones();">
                 <div class="row g-3">
                     <div class="col-md-3">
@@ -65,18 +65,18 @@ include 'header.php';
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label small fw-bold">Tipo de Atenci�n</label>
+                        <label class="form-label small fw-bold">Tipo de Atención</label>
                         <select class="form-select" id="filtro_tipo">
                             <option value="">Todos</option>
                             <option value="consulta">Consulta</option>
-                            <option value="tramite">Tr�mite</option>
+                            <option value="tramite">Trámite</option>
                             <option value="reclamo">Reclamo</option>
                             <option value="seguimiento">Seguimiento</option>
                         </select>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label small fw-bold">Organizaci�n</label>
+                        <label class="form-label small fw-bold">Organización</label>
                         <input type="text" class="form-control" id="filtro_organizacion"
                             placeholder="Buscar por nombre...">
                     </div>
@@ -109,14 +109,14 @@ include 'header.php';
                 <table class="table table-hover align-middle" id="tablaAtenciones">
                     <thead class="table-light text-uppercase small">
                         <tr>
-                            <th>N� Atenci�n</th>
+                            <th>N° Atención</th>
                             <th>Fecha</th>
                             <th>Tipo</th>
-                            <th>Organizaci�n</th>
+                            <th>Organización</th>
                             <th>Proyecto</th>
                             <th>Estado</th>
                             <th>Usuario</th>
-                            <th>�rea</th>
+                            <th>Área</th>
                             <th class="text-end">Acciones</th>
                         </tr>
                     </thead>

@@ -75,15 +75,15 @@ include 'header.php';
                                 <div id="display-expediente" class="fw-bold small">-</div>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label small fw-bold text-muted">Tipo de Organizaci�n</label>
+                                <label class="form-label small fw-bold text-muted">Tipo de Organización</label>
                                 <div id="display-org-tipo" class="small">-</div>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label small fw-bold text-muted">Organizaci�n (Origen)</label>
+                                <label class="form-label small fw-bold text-muted">Organización (Origen)</label>
                                 <div id="display-org-nombre" class="small">-</div>
                             </div>
                             <div class="col-md-3">
-                                <label class="form-label small fw-bold text-muted">Fecha Recepci�n</label>
+                                <label class="form-label small fw-bold text-muted">Fecha Recepción</label>
                                 <div id="display-recepcion" class="small">-</div>
                             </div>
                             <div class="col-md-3">
@@ -158,7 +158,7 @@ include 'header.php';
                         <div class="mb-3">
                             <label for="input-respuesta" class="form-label small fw-bold">Contenido</label>
                             <textarea id="input-respuesta" class="form-control form-control-sm" rows="8"
-                                placeholder="Escriba su respuesta aqu�..."></textarea>
+                                placeholder="Escriba su respuesta aquí..."></textarea>
                         </div>
 
                         <div class="mb-3">
@@ -188,7 +188,7 @@ include 'header.php';
                                 <label class="form-check-label small fw-bold" for="check-respuesta-definitiva">Respuesta
                                     Definitiva</label>
                             </div>
-                            <div class="form-text x-small">Finaliza el tr�mite al guardar.</div>
+                            <div class="form-text x-small">Finaliza el trámite al guardar.</div>
                         </div>
 
                     </div>
@@ -197,10 +197,10 @@ include 'header.php';
                 <!-- Metrics Sidebar -->
                 <div class="card shadow-sm border-0 mb-4 bg-light">
                     <div class="card-body p-4">
-                        <h5 class="fw-bold fs-6 mb-3">M�tricas y Comentarios</h5>
+                        <h5 class="fw-bold fs-6 mb-3">Métricas y Comentarios</h5>
                         <div class="row g-2 mb-3">
                             <div class="col-6">
-                                <label class="form x-small text-muted d-block fw-bold mb-1">D�as
+                                <label class="form x-small text-muted d-block fw-bold mb-1">Días
                                     Transcurridos</label>
                                 <span id="display-dias-ingreso"
                                     class="badge bg-white text-dark border w-100 fw-normal py-2">-</span>
@@ -243,7 +243,7 @@ include 'header.php';
                 <div class="mb-0">
                     <label for="textoNuevoComentario" class="form-label small fw-bold">Su Comentario</label>
                     <textarea class="form-control form-control-sm" id="textoNuevoComentario" rows="4"
-                        placeholder="Escriba aqu� su comentario interno..."></textarea>
+                        placeholder="Escriba aquí su comentario interno..."></textarea>
                 </div>
             </div>
             <div class="modal-footer border-0 bg-light">

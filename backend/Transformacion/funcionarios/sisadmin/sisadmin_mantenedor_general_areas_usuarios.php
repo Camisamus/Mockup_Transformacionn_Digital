@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Asignaci�n Usuarios/�reas";
+$pageTitle = "Asignación Usuarios/Áreas";
 require_once '../../api/auth_check.php';
 include 'header.php';
 ?>
@@ -9,8 +9,8 @@ include 'header.php';
     <!-- Header -->
     <div class="main-header mb-4">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Asignaci�n Usuarios / �reas</h2>
-            <p class="text-muted mb-0">Gesti�n de pertenencia de usuarios a las �reas municipales</p>
+            <h2 class="fw-bold fs-4">Asignación Usuarios / Áreas</h2>
+            <p class="text-muted mb-0">Gestión de pertenencia de usuarios a las Áreas municipales</p>
         </div>
     </div>
 
@@ -27,7 +27,7 @@ include 'header.php';
                 <div class="col-12 col-md-auto">
                     <button class="btn btn-toolbar btn-dark w-100 shadow-sm" id="btn-new">
                         <i data-feather="plus" class="me-2"></i>
-                        Nueva Asignaci�n
+                        Nueva Asignación
                     </button>
                 </div>
             </div>
@@ -37,14 +37,14 @@ include 'header.php';
     <!-- Filtros -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <h5 class="fw-bold fs-6 mb-1">Filtros de B�squeda</h5>
-            <p class="text-muted small mb-4">Filtrar por nombre de Usuario o �rea</p>
+            <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
+            <p class="text-muted small mb-4">Filtrar por nombre de Usuario o Área</p>
 
             <div class="row g-3">
                 <div class="col-md-6">
                     <label for="filter-text" class="form-label small fw-bold">Buscar</label>
                     <input type="text" class="form-control form-control-sm" id="filter-text"
-                        placeholder="Ej: Juan o Tesorer�a...">
+                        placeholder="Ej: Juan o Tesorer¿a...">
                 </div>
             </div>
         </div>
@@ -62,7 +62,7 @@ include 'header.php';
                     <thead class="table-light text-uppercase">
                         <tr>
                             <th>Usuario</th>
-                            <th>�rea</th>
+                            <th>Área</th>
                             <th>Estado</th>
                             <th class="text-end">Acciones</th>
                         </tr>
@@ -86,7 +86,7 @@ include 'header.php';
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg">
             <div class="modal-header bg-light">
-                <h5 class="modal-title fw-bold fs-6" id="modalFormLabel">Nueva Asignaci�n</h5>
+                <h5 class="modal-title fw-bold fs-6" id="modalFormLabel">Nueva Asignación</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
@@ -100,9 +100,9 @@ include 'header.php';
                             </select>
                         </div>
                         <div class="col-md-12">
-                            <label class="form-label small fw-bold">�rea <span class="text-danger">*</span></label>
+                            <label class="form-label small fw-bold">Área <span class="text-danger">*</span></label>
                             <select class="form-select" id="entry-area" style="width: 100%;" required>
-                                <option value="">Seleccione �rea</option>
+                                <option value="">Seleccione Área</option>
                             </select>
                         </div>
                         <div class="col-md-12">
@@ -118,7 +118,7 @@ include 'header.php';
             <div class="modal-footer bg-light border-0">
                 <button type="button" class="btn btn-link text-decoration-none text-muted small"
                     data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-dark px-4 shadow-sm" id="btn-save">Guardar Asignaci�n</button>
+                <button type="button" class="btn btn-dark px-4 shadow-sm" id="btn-save">Guardar Asignación</button>
             </div>
         </div>
     </div>

@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Gesti�n de Empresas";
+$pageTitle = "Gestión de Empresas";
 require_once '../../api/auth_check.php';
 include 'header.php';
 ?>
@@ -9,8 +9,8 @@ include 'header.php';
     <!-- Header & Toolbar -->
     <div class="main-header mb-4">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Gesti�n de Empresas Representadas</h2>
-            <p class="text-muted mb-0">Inscriba y gestione las empresas que representa para tr�mites municipales</p>
+            <h2 class="fw-bold fs-4">Gestión de Empresas Representadas</h2>
+            <p class="text-muted mb-0">Inscriba y gestione las empresas que representa para trámites municipales</p>
         </div>
         <div class="toolbar">
             <button class="btn btn-toolbar" onclick="document.getElementById('empresaRut').focus()">
@@ -30,7 +30,7 @@ include 'header.php';
             <div class="card shadow-sm border-0 border-start border-4 border-primary">
                 <div class="card-body p-4">
                     <h5 class="fw-bold fs-6 mb-1">Inscribir Nueva Empresa</h5>
-                    <p class="text-muted small mb-4">Ingrese los datos de la raz�n social y adjunte acreditaci�n</p>
+                    <p class="text-muted small mb-4">Ingrese los datos de la razón social y adjunte acreditación</p>
 
                     <form id="form-empresa">
                         <div class="mb-3">
@@ -39,13 +39,13 @@ include 'header.php';
                                 placeholder="12.345.678-9" required>
                         </div>
                         <div class="mb-3">
-                            <label for="empresaNombre" class="form-label small fw-bold">Raz�n Social</label>
+                            <label for="empresaNombre" class="form-label small fw-bold">Razón Social</label>
                             <input type="text" class="form-control form-control-sm" id="empresaNombre"
                                 placeholder="Nombre de la Empresa SpA" required>
                         </div>
                         <div class="mb-4">
                             <label for="empresaDoc" class="form-label small fw-bold">Documento de
-                                Representaci�n</label>
+                                Representación</label>
                             <input type="file" class="form-control form-control-sm" id="empresaDoc" required>
                             <div class="form-text xsmall">Adjunte escritura o poder notarial (PDF, JPG).</div>
                         </div>
@@ -78,7 +78,7 @@ include 'header.php';
                             <thead class="table-light text-uppercase small">
                                 <tr>
                                     <th>RUT</th>
-                                    <th>Raz�n Social</th>
+                                    <th>Razón Social</th>
                                     <th>Documento</th>
                                     <th class="text-end">Acciones</th>
                                 </tr>

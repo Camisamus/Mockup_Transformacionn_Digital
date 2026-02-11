@@ -10,7 +10,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Usuarios de Acceso</h2>
-            <p class="text-muted mb-0">Gesti�n de usuarios y sus credenciales</p>
+            <p class="text-muted mb-0">Gestión de usuarios y sus credenciales</p>
         </div>
     </div>
 
@@ -37,7 +37,7 @@ include 'header.php';
     <!-- Filtros -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <h5 class="fw-bold fs-6 mb-1">Filtros de B�squeda</h5>
+            <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
             <p class="text-muted small mb-4">Filtrar por RUT o Nombre de Usuario</p>
 
             <div class="row g-3">

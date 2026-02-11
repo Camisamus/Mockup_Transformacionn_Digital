@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Consulta Organizaci�n";
+$pageTitle = "Consulta Organización";
 require_once '../../api/auth_check.php';
 include 'header.php';
 ?>
@@ -9,7 +9,7 @@ include 'header.php';
     <!-- Header & Toolbar -->
     <div class="main-header mb-4">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Gesti�n de Organizaciones</h2>
+            <h2 class="fw-bold fs-4">Gestión de Organizaciones</h2>
             <p class="text-muted mb-0">Consulta, crea y modifica organizaciones comunitarias</p>
         </div>
     </div>
@@ -77,22 +77,22 @@ include 'header.php';
     </div>
 
     <form id="formOrganizacion">
-        <!-- Secci�n: Informaci�n General -->
+        <!-- Sección: Información General -->
         <div class="card shadow-sm border-0 mb-4">
             <div class="card-body p-4">
-                <h5 class="fw-bold fs-6 mb-1">Informaci�n General</h5>
-                <p class="text-muted small mb-4">Datos principales de identificaci�n de la organizaci�n</p>
+                <h5 class="fw-bold fs-6 mb-1">Información General</h5>
+                <p class="text-muted small mb-4">Datos principales de identificación de la organización</p>
 
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <label for="tipoOrganizacion" class="form-label small fw-bold">Tipo de Organizaci�n</label>
+                        <label for="tipoOrganizacion" class="form-label small fw-bold">Tipo de Organización</label>
                         <select class="form-select" id="tipoOrganizacion">
                             <option value="">Seleccione...</option>
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label for="codigo" class="form-label small fw-bold">C�digo</label>
-                        <input type="text" class="form-control" id="codigo" placeholder="C�digo de organizaci�n">
+                        <label for="codigo" class="form-label small fw-bold">Código</label>
+                        <input type="text" class="form-control" id="codigo" placeholder="Código de organización">
                     </div>
                     <div class="col-md-4">
                         <label for="rut" class="form-label small fw-bold">RUT</label>
@@ -104,14 +104,14 @@ include 'header.php';
                         <input type="text" class="form-control" id="rpj" placeholder="RPJ">
                     </div>
                     <div class="col-md-4">
-                        <label for="categoria" class="form-label small fw-bold">Categor�a</label>
+                        <label for="categoria" class="form-label small fw-bold">Categoría</label>
                         <select class="form-select" id="categoria">
                             <option value="">Seleccione...</option>
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label for="subcategoria" class="form-label small fw-bold">Subcategor�a</label>
-                        <input type="text" class="form-control" id="subcategoria" placeholder="Subcategor�a">
+                        <label for="subcategoria" class="form-label small fw-bold">Subcategoría</label>
+                        <input type="text" class="form-control" id="subcategoria" placeholder="Subcategoría">
                     </div>
 
                     <div class="col-md-4">
@@ -122,12 +122,12 @@ include 'header.php';
                     </div>
                     <div class="col-md-8">
                         <label for="nombre" class="form-label small fw-bold">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" placeholder="Nombre de la organizaci�n">
+                        <input type="text" class="form-control" id="nombre" placeholder="Nombre de la organización">
                     </div>
 
                     <div class="col-12">
-                        <label for="razonSocial" class="form-label small fw-bold">Raz�n Social</label>
-                        <input type="text" class="form-control" id="razonSocial" placeholder="Raz�n social">
+                        <label for="razonSocial" class="form-label small fw-bold">Razón Social</label>
+                        <input type="text" class="form-control" id="razonSocial" placeholder="Razón social">
                     </div>
 
                     <div class="col-md-4">
@@ -136,11 +136,11 @@ include 'header.php';
                     </div>
                     <div class="col-md-4">
                         <label for="registro" class="form-label small fw-bold">Registro</label>
-                        <input type="text" class="form-control" id="registro" placeholder="N�mero de registro">
+                        <input type="text" class="form-control" id="registro" placeholder="N°mero de registro">
                     </div>
                     <div class="col-md-4">
                         <label for="folio" class="form-label small fw-bold">Folio</label>
-                        <input type="number" class="form-control" id="folio" placeholder="N�mero de folio">
+                        <input type="number" class="form-control" id="folio" placeholder="N°mero de folio">
                     </div>
 
                     <div class="col-md-6">
@@ -148,44 +148,44 @@ include 'header.php';
                         <input type="date" class="form-control" id="fechaRegistro">
                     </div>
                     <div class="col-md-6">
-                        <label for="numeroSocios" class="form-label small fw-bold">N�mero de Socios</label>
+                        <label for="numeroSocios" class="form-label small fw-bold">N°mero de Socios</label>
                         <input type="number" class="form-control" id="numeroSocios" placeholder="Cantidad de socios">
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Secci�n: Objeto Social -->
+        <!-- Sección: Objeto Social -->
         <div class="card shadow-sm border-0 mb-4">
             <div class="card-body p-4">
                 <h5 class="fw-bold fs-6 mb-1">Objeto Social</h5>
-                <p class="text-muted small mb-4">Informaci�n sobre el prop�sito y �reas de especializaci�n</p>
+                <p class="text-muted small mb-4">Información sobre el prop¿sito y Áreas de especialización</p>
 
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="objetoTipoOrganizacion" class="form-label small fw-bold">Tipo de
-                            Organizaci�n</label>
+                            Organización</label>
                         <select class="form-select" id="objetoTipoOrganizacion">
                             <option value="">Seleccione...</option>
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label for="areaEspecializacion" class="form-label small fw-bold">�rea de
-                            Especializaci�n</label>
+                        <label for="areaEspecializacion" class="form-label small fw-bold">Área de
+                            Especialización</label>
                         <input type="text" class="form-control" id="areaEspecializacion"
-                            placeholder="�rea de especializaci�n">
+                            placeholder="Área de especialización">
                     </div>
                     <div class="col-md-6">
                         <label for="fechaIngreso" class="form-label small fw-bold">Fecha de Ingreso</label>
                         <input type="date" class="form-control" id="fechaIngreso">
                     </div>
                     <div class="col-md-6">
-                        <label for="fechaTermino" class="form-label small fw-bold">Fecha de T�rmino de
+                        <label for="fechaTermino" class="form-label small fw-bold">Fecha de T¿rmino de
                             Vigencia</label>
                         <input type="date" class="form-control" id="fechaTermino">
                     </div>
                     <div class="col-12">
-                        <label for="descripcionObjeto" class="form-label small fw-bold">Descripci�n del Objeto
+                        <label for="descripcionObjeto" class="form-label small fw-bold">Descripción del Objeto
                             Social</label>
                         <textarea class="form-control" id="descripcionObjeto" rows="4"
                             placeholder="Describa detalladamente el objeto social..."></textarea>
@@ -194,7 +194,7 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- Secci�n: Representante y Domicilio (Grid split) -->
+        <!-- Sección: Representante y Domicilio (Grid split) -->
         <div class="row">
             <div class="col-md-6">
                 <div class="card shadow-sm border-0 mb-4 h-100">
@@ -228,14 +228,14 @@ include 'header.php';
                 <div class="card shadow-sm border-0 mb-4 h-100">
                     <div class="card-body p-4">
                         <h5 class="fw-bold fs-6 mb-1">Domicilio y Contacto</h5>
-                        <p class="text-muted small mb-4">Ubicaci�n y datos de contacto</p>
+                        <p class="text-muted small mb-4">Ubicación y datos de contacto</p>
                         <div class="row g-3">
                             <div class="col-md-8">
                                 <label for="domCalle" class="form-label small fw-bold">Calle/Avenida</label>
                                 <input type="text" class="form-control" id="domCalle">
                             </div>
                             <div class="col-md-4">
-                                <label for="domNumero" class="form-label small fw-bold">N�mero</label>
+                                <label for="domNumero" class="form-label small fw-bold">N°mero</label>
                                 <input type="text" class="form-control" id="domNumero">
                             </div>
                             <div class="col-md-6">
@@ -247,7 +247,7 @@ include 'header.php';
                                 <input type="text" class="form-control" id="domCelular">
                             </div>
                             <div class="col-12">
-                                <label for="domCorreo" class="form-label small fw-bold">Correo Electr�nico</label>
+                                <label for="domCorreo" class="form-label small fw-bold">Correo Electrónico</label>
                                 <input type="email" class="form-control" id="domCorreo">
                             </div>
                         </div>
@@ -262,15 +262,15 @@ include 'header.php';
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold fs-6 mb-0">Atenciones Registradas</h5>
                     <button type="button" class="btn btn-sm btn-dark"
-                        onclick="Swal.fire('Info', 'Nueva atenci�n...', 'info')">+ Nueva Atenci�n</button>
+                        onclick="Swal.fire('Info', 'Nueva atención...', 'info')">+ Nueva Atención</button>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover align-middle" id="tablaAtenciones">
                         <thead class="table-light text-uppercase small">
                             <tr>
-                                <th>N° Atenci�n</th>
+                                <th>N° Atención</th>
                                 <th>Fecha</th>
-                                <th>Atenci�n</th>
+                                <th>Atención</th>
                                 <th>Proyecto</th>
                                 <th>Estado</th>
                                 <th>Usuario</th>
@@ -297,7 +297,7 @@ include 'header.php';
                         <thead class="table-light text-uppercase small">
                             <tr>
                                 <th>Unidad</th>
-                                <th>A�o</th>
+                                <th>Año</th>
                                 <th>N° Ingreso</th>
                                 <th>Nombre del Proyecto</th>
                                 <th>Tipo Fondo</th>

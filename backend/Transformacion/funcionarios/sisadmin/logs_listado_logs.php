@@ -10,7 +10,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Listado de Logs</h2>
-            <p class="text-muted mb-0">Visualizaci�n y gesti�n de eventos de auditor�a del sistema</p>
+            <p class="text-muted mb-0">Visualización y gestión de eventos de auditor¿a del sistema</p>
         </div>
     </div>
 
@@ -29,11 +29,11 @@ include 'header.php';
         </div>
     </div>
 
-    <!-- Filtros de B�squeda -->
+    <!-- Filtros de Búsqueda -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <h5 class="fw-bold fs-6 mb-1">Filtros de B�squeda</h5>
-            <p class="text-muted small mb-4">Filtre los eventos por fecha, tipo o m�dulo</p>
+            <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
+            <p class="text-muted small mb-4">Filtre los eventos por fecha, tipo o m¿dulo</p>
 
             <form id="formFiltros" onsubmit="event.preventDefault(); buscarLogs();">
                 <div class="row g-3">
@@ -49,14 +49,14 @@ include 'header.php';
                         <label for="filtro_tipo" class="form-label small fw-bold">Tipo de Evento</label>
                         <select class="form-select form-select-sm" id="filtro_tipo">
                             <option value="">Todos</option>
-                            <option value="info">Informaci�n</option>
+                            <option value="info">Información</option>
                             <option value="warning">Advertencia</option>
                             <option value="error">Error</option>
-                            <option value="critical">Cr�tico</option>
+                            <option value="critical">Cr¿tico</option>
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label for="filtro_modulo" class="form-label small fw-bold">M�dulo</label>
+                        <label for="filtro_modulo" class="form-label small fw-bold">M¿dulo</label>
                         <select class="form-select form-select-sm" id="filtro_modulo">
                             <option value="">Todos</option>
                             <option value="organizaciones">Organizaciones</option>
@@ -102,10 +102,10 @@ include 'header.php';
                             <th>ID</th>
                             <th>Fecha/Hora</th>
                             <th>Tipo</th>
-                            <th>M�dulo</th>
+                            <th>M¿dulo</th>
                             <th>Usuario</th>
-                            <th>Acci�n</th>
-                            <th>Descripci�n</th>
+                            <th>Acción</th>
+                            <th>Descripción</th>
                             <th>IP</th>
                             <th class="text-end">Acciones</th>
                         </tr>

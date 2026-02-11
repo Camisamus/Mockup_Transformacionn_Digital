@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Consulta de Atenci�n";
+$pageTitle = "Consulta de Atención";
 require_once '../../api/auth_check.php';
 include 'header.php';
 ?>
@@ -9,8 +9,8 @@ include 'header.php';
     <!-- Header & Toolbar -->
     <div class="main-header mb-4">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Consulta de Atenci�n</h2>
-            <p class="text-muted mb-0">Consulta y gestiona informaci�n de atenciones individuales</p>
+            <h2 class="fw-bold fs-4">Consulta de Atención</h2>
+            <p class="text-muted mb-0">Consulta y gestiona información de atenciones individuales</p>
         </div>
         <div class="toolbar">
             <button class="btn btn-toolbar" onclick="buscarAtencion()">
@@ -60,31 +60,31 @@ include 'header.php';
         </div>
     </div>
 
-    <!-- Informaci�n de la Atenci�n -->
+    <!-- Información de la Atención -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <h3 class="h6 fw-bold mb-1">Informaci�n de la Atenci�n</h3>
-            <p class="text-muted small mb-4">Datos generales de la atenci�n realizada</p>
+            <h3 class="h6 fw-bold mb-1">Información de la Atención</h3>
+            <p class="text-muted small mb-4">Datos generales de la atención realizada</p>
 
             <form id="formConsultaAtencion" onsubmit="event.preventDefault(); guardarAtencion();">
                 <!-- Row 1 -->
                 <div class="row g-3 mb-3">
                     <div class="col-md-4">
-                        <label for="tipoAtencion" class="form-label small fw-bold">Tipo de Atenci�n</label>
+                        <label for="tipoAtencion" class="form-label small fw-bold">Tipo de Atención</label>
                         <select class="form-select" id="tipoAtencion">
                             <option selected disabled>Seleccione...</option>
                             <option value="consulta">Consulta</option>
-                            <option value="tramite">Tr�mite</option>
+                            <option value="tramite">Trámite</option>
                             <option value="reclamo">Reclamo</option>
                         </select>
                     </div>
                     <div class="col-md-4">
-                        <label for="codigoAtencion" class="form-label small fw-bold">C�digo de Atenci�n</label>
+                        <label for="codigoAtencion" class="form-label small fw-bold">Código de Atención</label>
                         <input type="text" class="form-control" id="codigoAtencion" placeholder="AT-XXXX">
                     </div>
                     <div class="col-md-4">
-                        <label for="codigoOrganizacion" class="form-label small fw-bold">C�digo de
-                            Organizaci�n</label>
+                        <label for="codigoOrganizacion" class="form-label small fw-bold">Código de
+                            Organización</label>
                         <input type="text" class="form-control" id="codigoOrganizacion" placeholder="OC-XXXX">
                     </div>
                 </div>
@@ -97,9 +97,9 @@ include 'header.php';
                     </div>
                     <div class="col-md-8">
                         <label for="nombreOrganizacion" class="form-label small fw-bold">Nombre de la
-                            Organizaci�n</label>
+                            Organización</label>
                         <input type="text" class="form-control" id="nombreOrganizacion"
-                            placeholder="Nombre de la Organizaci�n">
+                            placeholder="Nombre de la Organización">
                     </div>
                 </div>
 
@@ -119,12 +119,12 @@ include 'header.php';
                         <input type="text" class="form-control" id="proyecto" placeholder="Proyecto relacionado">
                     </div>
                     <div class="col-md-4">
-                        <label for="area" class="form-label small fw-bold">�rea</label>
+                        <label for="area" class="form-label small fw-bold">Área</label>
                         <select class="form-select" id="area">
                             <option selected disabled>Seleccione...</option>
                             <option value="social">Social</option>
                             <option value="legal">Legal</option>
-                            <option value="tecnica">T�cnica</option>
+                            <option value="tecnica">T¿cnica</option>
                         </select>
                     </div>
                 </div>
@@ -136,13 +136,13 @@ include 'header.php';
                         <input type="text" class="form-control" id="unidadVecinal" placeholder="Unidad vecinal">
                     </div>
                     <div class="col-md-4">
-                        <label for="fechaAtencion" class="form-label small fw-bold">Fecha de Atenci�n</label>
+                        <label for="fechaAtencion" class="form-label small fw-bold">Fecha de Atención</label>
                         <input type="date" class="form-control" id="fechaAtencion">
                     </div>
                     <div class="col-md-4">
                         <label for="usuarioIngreso" class="form-label small fw-bold">Usuario de Ingreso</label>
                         <input type="text" class="form-control" id="usuarioIngreso" placeholder="Nombre del usuario"
-                            value="Carlos P�rez">
+                            value="Carlos Pérez">
                     </div>
                 </div>
 
@@ -155,12 +155,12 @@ include 'header.php';
                     </div>
                 </div>
 
-                <!-- Descripci�n -->
+                <!-- Descripción -->
                 <div class="mb-3">
-                    <label for="descripcionAtencion" class="form-label small fw-bold">Descripci�n de la
-                        Atenci�n</label>
+                    <label for="descripcionAtencion" class="form-label small fw-bold">Descripción de la
+                        Atención</label>
                     <textarea class="form-control" id="descripcionAtencion" rows="3"
-                        placeholder="Describa detalladamente la atenci�n realizada..."></textarea>
+                        placeholder="Describa detalladamente la atención realizada..."></textarea>
                 </div>
 
                 <!-- Observaciones -->

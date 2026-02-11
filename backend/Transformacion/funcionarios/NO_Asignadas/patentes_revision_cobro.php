@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Solicitud de Revisi�n Cobro de Patente";
+$pageTitle = "Solicitud de Revisión Cobro de Patente";
 require_once '../../api/auth_check.php';
 include 'header.php';
 ?>
@@ -8,8 +8,8 @@ include 'header.php';
 <div class="container-fluid py-4">
     <div class="main-header mb-4">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Solicitud de Revisi�n Cobro de Patente</h2>
-            <p class="text-muted mb-0">Gestione la revisi�n y aclaraci�n de cobros para patentes municipales</p>
+            <h2 class="fw-bold fs-4">Solicitud de Revisión Cobro de Patente</h2>
+            <p class="text-muted mb-0">Gestione la revisión y aclaración de cobros para patentes municipales</p>
         </div>
     </div>
 
@@ -61,9 +61,9 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- 1. Identificaci�n Solicitante y Patente -->
+        <!-- 1. Identificación Solicitante y Patente -->
         <div class="section-card">
-            <div class="section-title">1. Identificaci�n de la Patente y Solicitante</div>
+            <div class="section-title">1. Identificación de la Patente y Solicitante</div>
             <div class="row g-3">
                 <div class="col-md-3">
                     <label class="form-label">Rol Patente</label>
@@ -74,7 +74,7 @@ include 'header.php';
                     <input type="text" class="form-control" id="rutContribuyente">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Nombre o Raz�n Social</label>
+                    <label class="form-label">Nombre o Razón Social</label>
                     <input type="text" class="form-control" id="nombreRazonSocial">
                 </div>
                 <div class="col-md-6">
@@ -82,7 +82,7 @@ include 'header.php';
                     <input type="text" class="form-control" id="giro">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Direcci�n</label>
+                    <label class="form-label">Dirección</label>
                     <input type="text" class="form-control" id="direccion">
                 </div>
 
@@ -99,20 +99,20 @@ include 'header.php';
                     <input type="email" class="form-control" id="emailContacto">
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">Tel�fono</label>
+                    <label class="form-label">Tel¿fono</label>
                     <input type="tel" class="form-control" id="fonoContacto">
                 </div>
             </div>
         </div>
 
-        <!-- 2. Motivo de la Revisi�n -->
+        <!-- 2. Motivo de la Revisión -->
         <div class="section-card">
-            <div class="section-title">2. Motivo de Revisi�n (Seleccione)</div>
+            <div class="section-title">2. Motivo de Revisión (Seleccione)</div>
             <div class="row g-2">
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="motivoCalculo">
-                        <label class="form-check-label" for="motivoCalculo">C�lculo de Patente</label>
+                        <label class="form-check-label" for="motivoCalculo">C¿lculo de Patente</label>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -124,7 +124,7 @@ include 'header.php';
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="motivoPropaganda">
-                        <label class="form-check-label" for="motivoPropaganda">C�lculo Propaganda</label>
+                        <label class="form-check-label" for="motivoPropaganda">C¿lculo Propaganda</label>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -139,10 +139,10 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- 3. Datos para Devoluci�n -->
+        <!-- 3. Datos para Devolución -->
         <div class="section-card">
-            <div class="section-title">3. Datos Bancarios para Devoluci�n (Si aplica)</div>
-            <p class="small text-muted">Complete solo si solicita devoluci�n de dinero.</p>
+            <div class="section-title">3. Datos Bancarios para Devolución (Si aplica)</div>
+            <p class="small text-muted">Complete solo si solicita devolución de dinero.</p>
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="form-label">Titular de la Cuenta</label>
@@ -166,7 +166,7 @@ include 'header.php';
                     </select>
                 </div>
                 <div class="col-md-4">
-                    <label class="form-label">N�mero de Cuenta</label>
+                    <label class="form-label">N°mero de Cuenta</label>
                     <input type="text" class="form-control" id="bancoNumCuenta">
                 </div>
             </div>
@@ -176,7 +176,7 @@ include 'header.php';
         <div class="section-card">
             <div class="section-title">4. Antecedentes Adjuntos</div>
             <div class="alert alert-light border small text-muted mb-3">
-                <strong>Requisito General:</strong> Se debe adjuntar Fotocopia de la(s) �ltima(s) Patente(s)
+                <strong>Requisito General:</strong> Se debe adjuntar Fotocopia de la(s) ¿ltima(s) Patente(s)
                 Cancelada(s).
             </div>
 
@@ -184,11 +184,11 @@ include 'header.php';
                 <div class="col-auto">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="adjRenta">
-                        <label class="form-check-label fw-bold" for="adjRenta">Declaraci�n de Renta S.I.I.</label>
+                        <label class="form-check-label fw-bold" for="adjRenta">Declaración de Renta S.I.I.</label>
                     </div>
                 </div>
                 <div class="col-auto">
-                    <input type="text" class="form-control form-control-sm" placeholder="Indicar A�os (ej: 2023, 2024)"
+                    <input type="text" class="form-control form-control-sm" placeholder="Indicar Años (ej: 2023, 2024)"
                         id="aniosRenta">
                 </div>
             </div>
@@ -201,7 +201,7 @@ include 'header.php';
                     </div>
                 </div>
                 <div class="col-auto">
-                    <input type="text" class="form-control form-control-sm" placeholder="Indicar A�os / Semestres"
+                    <input type="text" class="form-control form-control-sm" placeholder="Indicar Años / Semestres"
                         id="aniosPatentes">
                 </div>
             </div>

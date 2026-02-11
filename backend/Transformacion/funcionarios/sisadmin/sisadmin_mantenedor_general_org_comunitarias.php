@@ -10,7 +10,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Orgs. Comunitarias</h2>
-            <p class="text-muted mb-0">Gesti�n de organizaciones comunitarias y sus representantes</p>
+            <p class="text-muted mb-0">Gestión de organizaciones comunitarias y sus representantes</p>
         </div>
     </div>
 
@@ -27,7 +27,7 @@ include 'header.php';
                 <div class="col-12 col-md-auto">
                     <button class="btn btn-toolbar btn-dark w-100 shadow-sm" id="btn-new">
                         <i data-feather="plus" class="me-2"></i>
-                        Nueva Organizaci�n
+                        Nueva Organización
                     </button>
                 </div>
             </div>
@@ -37,8 +37,8 @@ include 'header.php';
     <!-- Filtros -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <h5 class="fw-bold fs-6 mb-1">Filtros de B�squeda</h5>
-            <p class="text-muted small mb-4">Filtrar por RUT de organizaci�n o Nombre</p>
+            <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
+            <p class="text-muted small mb-4">Filtrar por RUT de organización o Nombre</p>
 
             <div class="row g-3">
                 <div class="col-md-6">
@@ -65,7 +65,7 @@ include 'header.php';
                             <th>Nombre</th>
                             <th>Tipo</th>
                             <th>Rep. Legal</th>
-                            <th>Inscripci�n</th>
+                            <th>Inscripción</th>
                             <th>Vigencia</th>
                             <th class="text-end">Acciones</th>
                         </tr>
@@ -90,7 +90,7 @@ include 'header.php';
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg">
             <div class="modal-header bg-light">
-                <h5 class="modal-title fw-bold fs-6" id="modalFormLabel">Nueva Organizaci�n</h5>
+                <h5 class="modal-title fw-bold fs-6" id="modalFormLabel">Nueva Organización</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
@@ -98,7 +98,7 @@ include 'header.php';
                     <input type="hidden" id="entry-id">
                     <div class="row g-3">
                         <div class="col-md-4">
-                            <label class="form-label small fw-bold">RUT Organizaci�n <span
+                            <label class="form-label small fw-bold">RUT Organización <span
                                     class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="entry-rut" required placeholder="12345678-9">
                         </div>
@@ -107,7 +107,7 @@ include 'header.php';
                             <input type="text" class="form-control" id="entry-nombre" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold">Tipo Organizaci�n <span
+                            <label class="form-label small fw-bold">Tipo Organización <span
                                     class="text-danger">*</span></label>
                             <select class="form-select" id="entry-tipo" required>
                                 <option value="">Seleccione</option>
@@ -121,7 +121,7 @@ include 'header.php';
                             </select>
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label small fw-bold">Fecha Inscripci�n <span
+                            <label class="form-label small fw-bold">Fecha Inscripción <span
                                     class="text-danger">*</span></label>
                             <input type="datetime-local" class="form-control" id="entry-inscripcion" required>
                         </div>
@@ -134,7 +134,7 @@ include 'header.php';
                             <input type="text" class="form-control" id="entry-rpj">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold">C�digo</label>
+                            <label class="form-label small fw-bold">Código</label>
                             <input type="text" class="form-control" id="entry-codigo">
                         </div>
                         <div class="col-md-6">

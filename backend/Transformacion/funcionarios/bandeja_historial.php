@@ -52,7 +52,7 @@ include '../api/header.php';
                         <i data-feather="check-circle" class="text-primary" style="width: 24px; height: 24px;"></i>
                     </div>
                     <div>
-                        <h6 class="text-muted small fw-bold text-uppercase mb-1">Tareas Históricas</h6>
+                        <h6 class="text-muted small fw-bold text-uppercase mb-1">Tareas HistÃ³ricas</h6>
                         <h2 class="fw-bold mb-0" id="totalTareas">...</h2>
                     </div>
                 </div>
@@ -85,7 +85,7 @@ include '../api/header.php';
                 <table class="table table-hover align-middle" id="tablaBandeja">
                     <thead class="table-light text-uppercase small">
                         <tr>
-                            <th>Asunto / Título</th>
+                            <th>Asunto / TÃ­tulo</th>
                             <th>Origen</th>
                             <th>Responsable</th>
                             <th>Fecha</th>

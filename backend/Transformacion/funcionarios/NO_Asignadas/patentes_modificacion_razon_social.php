@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Modificaci�n Raz�n Social y/o RUT";
+$pageTitle = "Modificación Razón Social y/o RUT";
 require_once '../../api/auth_check.php';
 include 'header.php';
 ?>
@@ -8,8 +8,8 @@ include 'header.php';
 <div class="container-fluid py-4">
     <div class="main-header mb-4">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Solicitud de Modificaci�n de Raz�n Social y/o RUT</h2>
-            <p class="text-muted mb-0">Gestione la actualizaci�n de datos legales para patentes comerciales</p>
+            <h2 class="fw-bold fs-4">Solicitud de Modificación de Razón Social y/o RUT</h2>
+            <p class="text-muted mb-0">Gestione la actualización de datos legales para patentes comerciales</p>
         </div>
     </div>
 
@@ -58,11 +58,11 @@ include 'header.php';
                 <div>
                     <h6 class="alert-heading fw-bold">Notas Importantes</h6>
                     <ul class="mb-0 small">
-                        <li>La documentaci�n debe estar emitida a nombre del contribuyente (persona natural) o de la
-                            sociedad (si tiene personalidad jur�dica).</li>
-                        <li>El domicilio en la documentaci�n debe corresponder al lugar donde se ejerce la actividad
+                        <li>La documentación debe estar emitida a nombre del contribuyente (persona natural) o de la
+                            sociedad (si tiene personalidad jur¿dica).</li>
+                        <li>El domicilio en la documentación debe corresponder al lugar donde se ejerce la actividad
                             comercial.</li>
-                        <li>Un croquis claro de la ubicaci�n exacta agilizar� la visita inspectiva.</li>
+                        <li>Un croquis claro de la ubicación exacta agilizar¿ la visita inspectiva.</li>
                     </ul>
                 </div>
             </div>
@@ -82,11 +82,11 @@ include 'header.php';
                 </div>
 
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-muted">Raz�n Social ANTERIOR</label>
+                    <label class="form-label fw-bold text-muted">Razón Social ANTERIOR</label>
                     <input type="text" class="form-control bg-light" id="razonSocialAnterior">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label fw-bold text-primary">Raz�n Social ACTUAL (Nueva)</label>
+                    <label class="form-label fw-bold text-primary">Razón Social ACTUAL (Nueva)</label>
                     <input type="text" class="form-control border-primary" id="razonSocialActual">
                 </div>
 
@@ -95,7 +95,7 @@ include 'header.php';
                     <input type="text" class="form-control" id="rutContribuyente">
                 </div>
                 <div class="col-md-8">
-                    <label class="form-label">Direcci�n Comercial</label>
+                    <label class="form-label">Dirección Comercial</label>
                     <input type="text" class="form-control" id="direccionComercial">
                 </div>
             </div>
@@ -110,14 +110,14 @@ include 'header.php';
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docPatente">
-                        <label class="form-check-label" for="docPatente">Fotocopia simple de la(s) �ltima(s)
+                        <label class="form-check-label" for="docPatente">Fotocopia simple de la(s) ¿ltima(s)
                             Patente(s) pagada(s).</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docAviso">
-                        <label class="form-check-label" for="docAviso">Aviso de Modificaci�n de Raz�n Social y/o RUT
+                        <label class="form-check-label" for="docAviso">Aviso de Modificación de Razón Social y/o RUT
                             ante S.I.I.</label>
                     </div>
                 </div>
@@ -125,7 +125,7 @@ include 'header.php';
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docContribuciones">
                         <label class="form-check-label" for="docContribuciones">Fotocopia simple del recibo de
-                            contribuciones o N° de Rol Aval�o.</label>
+                            contribuciones o N° de Rol Aval¿o.</label>
                     </div>
                 </div>
             </div>
@@ -135,11 +135,11 @@ include 'header.php';
                     <div class="subsection-header">Persona Natural</div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docCedula">
-                        <label class="form-check-label" for="docCedula">Fotocopia de la C�dula de Identidad.</label>
+                        <label class="form-check-label" for="docCedula">Fotocopia de la C¿dula de Identidad.</label>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="subsection-header">Persona Jur�dica (Sociedad)</div>
+                    <div class="subsection-header">Persona Jur¿dica (Sociedad)</div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docRutSociedad">
                         <label class="form-check-label" for="docRutSociedad">Fotocopia RUT sociedad y C.I. Rep.
@@ -147,7 +147,7 @@ include 'header.php';
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docEscritura">
-                        <label class="form-check-label" for="docEscritura">Escrituras (Constituci�n/Modif.),
+                        <label class="form-check-label" for="docEscritura">Escrituras (Constitución/Modif.),
                             Extracto y Vigencia.</label>
                     </div>
                     <div class="form-check">
@@ -157,19 +157,19 @@ include 'header.php';
                 </div>
             </div>
 
-            <div class="subsection-header text-primary mt-3">Requisitos Espec�ficos por Tipo de Giro</div>
+            <div class="subsection-header text-primary mt-3">Requisitos Espec¿ficos por Tipo de Giro</div>
             <div class="row g-2">
                 <div class="col-12">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docSanitaria">
-                        <label class="form-check-label" for="docSanitaria">Resoluci�n Sanitaria (Alimentos,
+                        <label class="form-check-label" for="docSanitaria">Resolución Sanitaria (Alimentos,
                             Talleres, Bodegas, etc.).</label>
                     </div>
                 </div>
                 <div class="col-12">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docInofensiva">
-                        <label class="form-check-label" for="docInofensiva">Calificaci�n de Actividad
+                        <label class="form-check-label" for="docInofensiva">Calificación de Actividad
                             Inofensiva/Molesta (Talleres, Bodegas, etc.).</label>
                     </div>
                 </div>
@@ -187,7 +187,7 @@ include 'header.php';
                 <div class="col-12">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docJurada">
-                        <label class="form-check-label" for="docJurada">Declaraci�n Jurada Art. 4° Ley N° 19.925
+                        <label class="form-check-label" for="docJurada">Declaración Jurada Art. 4° Ley N° 19.925
                             (Notarial).</label>
                     </div>
                 </div>
@@ -203,15 +203,15 @@ include 'header.php';
                     <input type="text" class="form-control" id="nombreContacto">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Tel�fono</label>
+                    <label class="form-label">Tel¿fono</label>
                     <input type="tel" class="form-control" id="telefono">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Direcci�n Particular</label>
+                    <label class="form-label">Dirección Particular</label>
                     <input type="text" class="form-control" id="dirParticular">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Correo Electr�nico</label>
+                    <label class="form-label">Correo Electrónico</label>
                     <input type="email" class="form-control" id="email">
                 </div>
             </div>
@@ -225,11 +225,11 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- 4. Geolocalizaci�n (Google Maps) -->
+        <!-- 4. Geolocalización (Google Maps) -->
         <div class="section-card">
-            <div class="section-title">4. Geolocalizaci�n de la Empresa</div>
+            <div class="section-title">4. Geolocalización de la Empresa</div>
             <div class="alert alert-info small" role="alert">
-                <i data-feather="map-pin" class="me-1"></i> Ingrese la direcci�n exacta para ubicarla en el mapa.
+                <i data-feather="map-pin" class="me-1"></i> Ingrese la dirección exacta para ubicarla en el mapa.
             </div>
 
             <div class="row g-3 mb-3">
@@ -238,7 +238,7 @@ include 'header.php';
                     <input type="text" class="form-control" id="mapCalle" placeholder="Ej: Av. Providencia">
                 </div>
                 <div class="col-md-2">
-                    <label class="form-label">N�mero</label>
+                    <label class="form-label">N°mero</label>
                     <input type="text" class="form-control" id="mapNumero" placeholder="Ej: 1234">
                 </div>
                 <div class="col-md-3">
@@ -246,7 +246,7 @@ include 'header.php';
                     <input type="text" class="form-control" id="mapComuna" value="Santiago">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Regi�n</label>
+                    <label class="form-label">Región</label>
                     <input type="text" class="form-control" id="mapRegion" value="Metropolitana" readonly>
                 </div>
                 <div class="col-12 text-end">

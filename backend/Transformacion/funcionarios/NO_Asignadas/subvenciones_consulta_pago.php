@@ -50,12 +50,12 @@ include 'header.php';
     <div class="card shadow-sm border-0 mb-4 mx-auto" id="datos_pago_card" style="display: none; max-width: 800px;">
         <div class="card-body p-4">
             <h3 class="h6 fw-bold mb-1">Detalles del Pago</h3>
-            <p class="text-muted small mb-4">Informaci�n t�cnica y administrativa del pago realizado</p>
+            <p class="text-muted small mb-4">Información técnica y administrativa del pago realizado</p>
 
             <form id="formPago" onsubmit="event.preventDefault(); guardarCambios();">
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label for="pago_numero" class="form-label small fw-bold">N�mero Subvenci�n</label>
+                        <label for="pago_numero" class="form-label small fw-bold">N°mero Subvención</label>
                         <input type="text" class="form-control" id="pago_numero" readonly>
                     </div>
                     <div class="col-md-6">
@@ -69,7 +69,7 @@ include 'header.php';
                     </div>
                     <div class="col-md-6">
                         <label for="pago_fecha_digitalizacion" class="form-label small fw-bold">Fecha
-                            Digitalizaci�n</label>
+                            Digitalización</label>
                         <input type="date" class="form-control" id="pago_fecha_digitalizacion" readonly>
                     </div>
 

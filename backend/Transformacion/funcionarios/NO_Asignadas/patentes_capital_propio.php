@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Solicitud de Certificado de Distribuci�n de Capital Propio";
+$pageTitle = "Solicitud de Certificado de Distribución de Capital Propio";
 require_once '../../api/auth_check.php';
 include 'header.php';
 ?>
@@ -8,8 +8,8 @@ include 'header.php';
 <div class="container-fluid py-4">
     <div class="main-header mb-4">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Solicitud de Certificado de Distribuci�n de Capital Propio</h2>
-            <p class="text-muted mb-0">Gestione la distribuci�n de capital propio para patentes comerciales</p>
+            <h2 class="fw-bold fs-4">Solicitud de Certificado de Distribución de Capital Propio</h2>
+            <p class="text-muted mb-0">Gestione la distribución de capital propio para patentes comerciales</p>
         </div>
     </div>
 
@@ -54,9 +54,9 @@ include 'header.php';
         <!-- Header Info -->
         <div class="header-box mb-4">
             <div class="text-center mb-3">
-                <h5 class="fw-bold mb-1">I. MUNICIPALIDAD DE VI�A DEL MAR</h5>
+                <h5 class="fw-bold mb-1">I. MUNICIPALIDAD DE VI¿A DEL MAR</h5>
                 <p class="mb-0 text-muted">Departamento de Rentas Municipales</p>
-                <p class="mb-0 text-muted small">Rep�blica de Chile</p>
+                <p class="mb-0 text-muted small">Rep¿blica de Chile</p>
             </div>
             <div class="row g-3 mt-2">
                 <div class="col-md-6">
@@ -70,12 +70,12 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- 1. Informaci�n del Contribuyente/Empresa -->
+        <!-- 1. Información del Contribuyente/Empresa -->
         <div class="section-card">
-            <div class="section-title">1. Informaci�n del Contribuyente/Empresa</div>
+            <div class="section-title">1. Información del Contribuyente/Empresa</div>
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label">Nombre o Raz�n Social</label>
+                    <label class="form-label">Nombre o Razón Social</label>
                     <input type="text" class="form-control" id="nombreRazonSocial">
                 </div>
                 <div class="col-md-6">
@@ -87,7 +87,7 @@ include 'header.php';
                     <input type="text" class="form-control" id="rut" placeholder="12.345.678-9">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Tel�fono</label>
+                    <label class="form-label">Tel¿fono</label>
                     <input type="tel" class="form-control" id="telefono">
                 </div>
                 <div class="col-md-3">
@@ -101,9 +101,9 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- 2. Destino de Presentaci�n del Certificado -->
+        <!-- 2. Destino de Presentación del Certificado -->
         <div class="section-card">
-            <div class="section-title">2. Destino de Presentaci�n del Certificado</div>
+            <div class="section-title">2. Destino de Presentación del Certificado</div>
             <div class="mb-3">
                 <div class="form-check mb-2">
                     <input class="form-check-input" type="radio" name="destino" id="destinoMunicipalidad"
@@ -120,11 +120,11 @@ include 'header.php';
                     <input class="form-check-input" type="radio" name="destino" id="destinoOtraInstitucion"
                         value="otra">
                     <label class="form-check-label" for="destinoOtraInstitucion">
-                        Otra Instituci�n
+                        Otra Institución
                     </label>
                 </div>
                 <input type="text" class="form-control ms-4 w-75" id="nombreOtraInstitucion"
-                    placeholder="Ingrese nombre de la Instituci�n">
+                    placeholder="Ingrese nombre de la Institución">
             </div>
         </div>
 
@@ -155,17 +155,17 @@ include 'header.php';
 
         <!-- 4. Total de Trabajadores -->
         <div class="section-card">
-            <div class="section-title">4. Informaci�n Laboral</div>
+            <div class="section-title">4. Información Laboral</div>
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="form-label">Total de trabajadores empresa al 30/04/20...</label>
                     <input type="number" class="form-control" id="totalTrabajadores" min="0"
-                        placeholder="Ingrese n�mero de trabajadores">
+                        placeholder="Ingrese número de trabajadores">
                 </div>
             </div>
         </div>
 
-        <!-- Firma y Recepci�n -->
+        <!-- Firma y Recepción -->
         <div class="section-card">
             <div class="row">
                 <div class="col-md-6">
@@ -179,14 +179,14 @@ include 'header.php';
                 </div>
                 <div class="col-md-6 border-start">
                     <div class="mt-4 ps-md-3">
-                        <label class="form-label fw-bold text-muted">Uso Interno (Recepci�n)</label>
+                        <label class="form-label fw-bold text-muted">Uso Interno (Recepción)</label>
                         <div class="mb-3">
-                            <label class="form-label small">Fecha de Recepci�n</label>
+                            <label class="form-label small">Fecha de Recepción</label>
                             <input type="date" class="form-control" disabled>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label small">N�mero de Folio</label>
-                            <input type="text" class="form-control" placeholder="Folio Autom�tico" disabled>
+                            <label class="form-label small">N°mero de Folio</label>
+                            <input type="text" class="form-control" placeholder="Folio Autom¿tico" disabled>
                         </div>
                         <div class="mb-3">
                             <label class="form-label small">Recibido por</label>

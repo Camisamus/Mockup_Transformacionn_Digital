@@ -10,7 +10,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Consulta Masiva de Rendiciones</h2>
-            <p class="text-muted mb-0">B�squeda y generaci�n de reportes de rendiciones de subvenciones</p>
+            <p class="text-muted mb-0">Búsqueda y generación de reportes de rendiciones de subvenciones</p>
         </div>
     </div>
 
@@ -29,21 +29,21 @@ include 'header.php';
         </div>
     </div>
 
-    <!-- Filtros de B�squeda -->
+    <!-- Filtros de Búsqueda -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <h5 class="fw-bold fs-6 mb-1">Filtros de B�squeda</h5>
-            <p class="text-muted small mb-4">Aplique filtros para refinar los resultados de rendici�n</p>
+            <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
+            <p class="text-muted small mb-4">Aplique filtros para refinar los resultados de rendición</p>
 
             <form id="formFiltros" onsubmit="event.preventDefault(); buscarRendiciones();">
                 <div class="row g-3">
                     <div class="col-md-3">
-                        <label for="filtro_subvencion" class="form-label small fw-bold">Subvenci�n</label>
+                        <label for="filtro_subvencion" class="form-label small fw-bold">Subvención</label>
                         <input type="text" class="form-control form-control-sm" id="filtro_subvencion"
                             placeholder="Ej: SUB-2024-001">
                     </div>
                     <div class="col-md-3">
-                        <label for="filtro_rendicion" class="form-label small fw-bold">Rendici�n</label>
+                        <label for="filtro_rendicion" class="form-label small fw-bold">Rendición</label>
                         <input type="text" class="form-control form-control-sm" id="filtro_rendicion"
                             placeholder="Ej: REN-2024-001">
                     </div>
@@ -70,9 +70,9 @@ include 'header.php';
                     </div>
                     <div class="col-md-6">
                         <label for="filtro_informe_juridico" class="form-label small fw-bold">Informe
-                            Jur�dico</label>
+                            Jurídico</label>
                         <input type="text" class="form-control form-control-sm" id="filtro_informe_juridico"
-                            placeholder="N� o detalle de informe">
+                            placeholder="N° o detalle de informe">
                     </div>
 
                     <div class="col-12 d-flex gap-2 mt-4">
@@ -101,12 +101,12 @@ include 'header.php';
                 <table class="table table-hover align-middle" id="tablaRendiciones">
                     <thead class="table-light text-uppercase small">
                         <tr>
-                            <th>Subvenci�n</th>
-                            <th>Rendici�n</th>
+                            <th>Subvención</th>
+                            <th>Rendición</th>
                             <th>Fecha</th>
                             <th>Estado</th>
-                            <th>Jur�dico</th>
-                            <th>N� Ingreso</th>
+                            <th>Jurídico</th>
+                            <th>N° Ingreso</th>
                             <th>RUT</th>
                             <th>Fiscalizador</th>
                             <th>Monto Rendido</th>

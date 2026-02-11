@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Asignaci�n Perfiles/Roles";
+$pageTitle = "Asignación Perfiles/Roles";
 require_once '../../api/auth_check.php';
 include 'header.php';
 ?>
@@ -9,8 +9,8 @@ include 'header.php';
     <!-- Header -->
     <div class="main-header mb-4">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Asignaci�n Perfiles / Roles</h2>
-            <p class="text-muted mb-0">Gesti�n de v�nculos entre perfiles de usuario y roles del sistema</p>
+            <h2 class="fw-bold fs-4">Asignación Perfiles / Roles</h2>
+            <p class="text-muted mb-0">Gestión de vónculos entre perfiles de usuario y roles del sistema</p>
         </div>
     </div>
 
@@ -27,7 +27,7 @@ include 'header.php';
                 <div class="col-12 col-md-auto">
                     <button class="btn btn-toolbar btn-dark w-100 shadow-sm" id="btn-new">
                         <i data-feather="plus" class="me-2"></i>
-                        Nueva Asignaci�n
+                        Nueva Asignación
                     </button>
                 </div>
             </div>
@@ -37,7 +37,7 @@ include 'header.php';
     <!-- Filtros -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <h5 class="fw-bold fs-6 mb-1">Filtros de B�squeda</h5>
+            <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
             <p class="text-muted small mb-4">Filtrar por nombre de Perfil o Rol</p>
 
             <div class="row g-3">
@@ -54,7 +54,7 @@ include 'header.php';
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="fw-bold fs-6 mb-0">Listado de V�nculos</h5>
+                <h5 class="fw-bold fs-6 mb-0">Listado de Vínculos</h5>
             </div>
 
             <div class="table-responsive">
@@ -86,7 +86,7 @@ include 'header.php';
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg">
             <div class="modal-header bg-light">
-                <h5 class="modal-title fw-bold fs-6" id="modalFormLabel">Nueva Asignaci�n</h5>
+                <h5 class="modal-title fw-bold fs-6" id="modalFormLabel">Nueva Asignación</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
@@ -99,16 +99,16 @@ include 'header.php';
                             </select>
                         </div>
                         <div class="col-md-12">
-                            <label class="form-label small fw-bold">Categor�a <span class="text-danger">*</span></label>
+                            <label class="form-label small fw-bold">Categoría <span class="text-danger">*</span></label>
                             <select class="form-select" id="entry-categoria" style="width: 100%;" required>
-                                <option value="">Seleccione Categor�a</option>
+                                <option value="">Seleccione Categoría</option>
                             </select>
                         </div>
                         <div class="col-md-12">
                             <label class="form-label small fw-bold">Roles <span class="text-danger">*</span></label>
                             <div id="roles-checkbox-container" class="border rounded p-3 bg-white"
                                 style="max-height: 200px; overflow-y: auto;">
-                                <p class="text-muted small mb-0">Seleccione una categor�a para ver los roles.</p>
+                                <p class="text-muted small mb-0">Seleccione una categor¿a para ver los roles.</p>
                             </div>
                         </div>
                     </div>

@@ -9,7 +9,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Periodos Adeudados Patentes Municipales</h2>
-            <p class="text-muted mb-0">Consulte deudas, pagos anteriores e informaci�n hist�rica de sus patentes</p>
+            <p class="text-muted mb-0">Consulte deudas, pagos anteriores e información histórica de sus patentes</p>
         </div>
     </div>
 
@@ -49,7 +49,7 @@ include 'header.php';
                         </div>
                         <div>
                             <h6 class="mb-0 fw-bold text-uppercase">COMERCIALIZADORA EJEMPLO SPA</h6>
-                            <p class="text-muted mb-0 small text-uppercase">Nombre o Raz�n Social</p>
+                            <p class="text-muted mb-0 small text-uppercase">Nombre o Razón Social</p>
                         </div>
                     </div>
                 </div>
@@ -74,7 +74,7 @@ include 'header.php';
         <li class="nav-item" role="presentation">
             <button class="nav-link rounded-pill px-4 shadow-sm" id="history-tab" data-bs-toggle="tab"
                 data-bs-target="#history" type="button" role="tab" aria-selected="false">
-                <i data-feather="clock" class="me-1" style="width: 16px;"></i> Informaci�n Hist�rica
+                <i data-feather="clock" class="me-1" style="width: 16px;"></i> Información Hist¿rica
             </button>
         </li>
     </ul>
@@ -176,7 +176,7 @@ include 'header.php';
                     <div class="row g-2 justify-content-md-end">
                         <div class="col-12 col-md-auto">
                             <button class="btn btn-toolbar btn-outline-warning w-100 shadow-sm fw-bold">
-                                Borrar Selecci�n
+                                Borrar Selección
                             </button>
                         </div>
                         <div class="col-12 col-md-auto">
@@ -220,7 +220,7 @@ include 'header.php';
                                 <th>Pagado En</th>
                                 <th>Total</th>
                                 <th>Vencimiento</th>
-                                <th class="text-center pe-3">Acci�n</th>
+                                <th class="text-center pe-3">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -238,7 +238,7 @@ include 'header.php';
                     <div class="opacity-25 mb-3">
                         <i data-feather="database" style="width: 48px; height: 48px;"></i>
                     </div>
-                    <p class="text-muted">No hay informaci�n hist�rica disponible actualmente.</p>
+                    <p class="text-muted">No hay información histórica disponible actualmente.</p>
                 </div>
             </div>
         </div>

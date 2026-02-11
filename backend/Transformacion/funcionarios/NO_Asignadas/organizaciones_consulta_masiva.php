@@ -10,7 +10,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Consulta Masiva de Organizaciones</h2>
-            <p class="text-muted mb-0">B�squeda y generaci�n de reportes de organizaciones comunitarias</p>
+            <p class="text-muted mb-0">Búsqueda y generación de reportes de organizaciones comunitarias</p>
         </div>
     </div>
 
@@ -35,26 +35,26 @@ include 'header.php';
         </div>
     </div>
 
-    <!-- Filtros de B�squeda -->
+    <!-- Filtros de Búsqueda -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <h5 class="fw-bold fs-6 mb-1">Filtros de B�squeda</h5>
+            <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
             <p class="text-muted small mb-4">Aplique filtros para refinar el listado de organizaciones</p>
 
             <form id="formFiltros" onsubmit="event.preventDefault(); buscarOrganizaciones();">
                 <div class="row g-3">
                     <div class="col-md-3">
-                        <label for="filtro_rut" class="form-label small fw-bold">RUT (Organizaci�n)</label>
+                        <label for="filtro_rut" class="form-label small fw-bold">RUT (Organización)</label>
                         <input type="text" class="form-control form-control-sm" id="filtro_rut"
                             placeholder="XX.XXX.XXX-X">
                     </div>
                     <div class="col-md-6">
                         <label for="filtro_nombre" class="form-label small fw-bold">Nombre</label>
                         <input type="text" class="form-control form-control-sm" id="filtro_nombre"
-                            placeholder="Nombre de la organizaci�n">
+                            placeholder="Nombre de la organización">
                     </div>
                     <div class="col-md-3">
-                        <label for="filtro_codigo" class="form-label small fw-bold">C�digo</label>
+                        <label for="filtro_codigo" class="form-label small fw-bold">Código</label>
                         <input type="text" class="form-control form-control-sm" id="filtro_codigo"
                             placeholder="Ej: ORG-001">
                     </div>
@@ -70,12 +70,12 @@ include 'header.php';
                             placeholder="Ej: UV-12">
                     </div>
                     <div class="col-md-3">
-                        <label for="filtro_fecha_inicio" class="form-label small fw-bold">Inscripci�n
+                        <label for="filtro_fecha_inicio" class="form-label small fw-bold">Inscripción
                             (Desde)</label>
                         <input type="date" class="form-control form-control-sm" id="filtro_fecha_inicio">
                     </div>
                     <div class="col-md-3">
-                        <label for="filtro_fecha_fin" class="form-label small fw-bold">Inscripci�n (Hasta)</label>
+                        <label for="filtro_fecha_fin" class="form-label small fw-bold">Inscripción (Hasta)</label>
                         <input type="date" class="form-control form-control-sm" id="filtro_fecha_fin">
                     </div>
 
@@ -107,9 +107,9 @@ include 'header.php';
                         <tr>
                             <th>RUT</th>
                             <th>Nombre</th>
-                            <th>C�digo</th>
+                            <th>Código</th>
                             <th>RPJ</th>
-                            <th>Inscripci�n</th>
+                            <th>Inscripción</th>
                             <th>Vigencia</th>
                             <th>Rep. Legal</th>
                             <th>U. Vecinal</th>

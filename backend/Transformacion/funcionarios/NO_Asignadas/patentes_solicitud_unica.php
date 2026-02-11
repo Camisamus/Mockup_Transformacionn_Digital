@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Solicitud �nica de Tr�mites";
+$pageTitle = "Solicitud ónica de Trámites";
 require_once '../../api/auth_check.php';
 include 'header.php';
 ?>
@@ -8,16 +8,16 @@ include 'header.php';
 <div class="container-fluid py-4">
     <div class="main-header mb-4">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Solicitud �nica de Tr�mites</h2>
-            <p class="text-muted mb-0">Gestione m�ltiples tr�mites de patentes en una sola solicitud unificada</p>
+            <h2 class="fw-bold fs-4">Solicitud ónica de Trámites</h2>
+            <p class="text-muted mb-0">Gestione m¿ltiples trámites de patentes en una sola solicitud unificada</p>
         </div>
     </div>
 
-    <!-- Step 1: Selecci�n de Tr�mites -->
+    <!-- Step 1: Selección de Trámites -->
     <div class="section-card" id="step1_Section">
-        <div class="section-title">Paso 1: Selecci�n de Tr�mites</div>
+        <div class="section-title">Paso 1: Selección de Trámites</div>
         <div class="alert alert-info">
-            <small><i data-feather="info" class="me-1"></i> Seleccione uno o m�s tr�mites para realizar en una sola
+            <small><i data-feather="info" class="me-1"></i> Seleccione uno o más trámites para realizar en una sola
                 solicitud.</small>
         </div>
 
@@ -44,9 +44,9 @@ include 'header.php';
         </div>
     </div>
 
-    <!-- Step 2: Preguntas de Variaci�n -->
+    <!-- Step 2: Preguntas de Variación -->
     <div class="section-card d-none" id="step2_Section">
-        <div class="section-title">Paso 2: Detalles Espec�ficos</div>
+        <div class="section-title">Paso 2: Detalles Espec¿ficos</div>
         <p class="text-muted mb-3">Seleccione de las siguientes preguntas Todas aquellas cuya respuesta sea
             afirmativa.</p>
 

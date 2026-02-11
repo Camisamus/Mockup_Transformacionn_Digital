@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Solicitud de Modificaci�n de Domicilio";
+$pageTitle = "Solicitud de Modificación de Domicilio";
 require_once '../../api/auth_check.php';
 include 'header.php';
 ?>
@@ -8,8 +8,8 @@ include 'header.php';
 <div class="container-fluid py-4">
     <div class="main-header mb-4">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Solicitud de Modificaci�n y/o Rectificaci�n de Domicilio</h2>
-            <p class="text-muted mb-0">Gestione la actualizaci�n de domicilio para patentes comerciales</p>
+            <h2 class="fw-bold fs-4">Solicitud de Modificación y/o Rectificación de Domicilio</h2>
+            <p class="text-muted mb-0">Gestione la actualización de domicilio para patentes comerciales</p>
         </div>
     </div>
 
@@ -58,19 +58,19 @@ include 'header.php';
                 <div>
                     <h6 class="alert-heading fw-bold">Notas Importantes</h6>
                     <ul class="mb-0 small">
-                        <li>Toda la documentaci�n debe estar a nombre del contribuyente o de la sociedad si tiene
-                            personalidad jur�dica.</li>
+                        <li>Toda la documentación debe estar a nombre del contribuyente o de la sociedad si tiene
+                            personalidad jur¿dica.</li>
                         <li>El domicilio debe corresponder al lugar donde se ejerce la actividad comercial.</li>
-                        <li>Podr�n ser requeridos otros documentos no mencionados para giros o rubros m�s
-                            espec�ficos.</li>
+                        <li>Podrón ser requeridos otros documentos no mencionados para giros o rubros más
+                            espec¿ficos.</li>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <!-- 1. Identificaci�n y Giro -->
+        <!-- 1. Identificación y Giro -->
         <div class="section-card">
-            <div class="section-title">1. Identificaci�n del Contribuyente y Actividad</div>
+            <div class="section-title">1. Identificación del Contribuyente y Actividad</div>
             <div class="row g-3">
                 <div class="col-md-3">
                     <label class="form-label">Rol Patente</label>
@@ -81,7 +81,7 @@ include 'header.php';
                     <input type="text" class="form-control" id="rutContribuyente">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Nombre o Raz�n Social</label>
+                    <label class="form-label">Nombre o Razón Social</label>
                     <input type="text" class="form-control" id="nombreRazonSocial">
                 </div>
                 <div class="col-12">
@@ -97,41 +97,41 @@ include 'header.php';
             <div class="row g-3">
                 <div class="col-md-6">
                     <div class="p-3 bg-light rounded border">
-                        <label class="form-label fw-bold text-muted">Direcci�n Anterior</label>
+                        <label class="form-label fw-bold text-muted">Dirección Anterior</label>
                         <textarea class="form-control" id="direccionAnterior" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="p-3 bg-white rounded border border-primary">
-                        <label class="form-label fw-bold text-primary">Direcci�n Modificada (Nueva)</label>
+                        <label class="form-label fw-bold text-primary">Dirección Modificada (Nueva)</label>
                         <textarea class="form-control" id="direccionNueva" rows="3"></textarea>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 3. Documentaci�n Requerida -->
+        <!-- 3. Documentación Requerida -->
         <div class="section-card">
             <div class="section-title">3. Requisitos y Antecedentes (Marque lo que adjunta)</div>
             <div class="row g-2">
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docPatente">
-                        <label class="form-check-label" for="docPatente">Fotocopia simple de la(s) �ltima(s)
+                        <label class="form-check-label" for="docPatente">Fotocopia simple de la(s) ¿ltima(s)
                             patente(s) pagada(s).</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docCedula">
-                        <label class="form-check-label" for="docCedula">Fotocopia C�dula de Identidad (P. Natural) o
+                        <label class="form-check-label" for="docCedula">Fotocopia C¿dula de Identidad (P. Natural) o
                             RUT Sociedad y Rep. Legal.</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docSII">
-                        <label class="form-check-label" for="docSII">Fotocopia Aviso de Modificaci�n de Domicilio
+                        <label class="form-check-label" for="docSII">Fotocopia Aviso de Modificación de Domicilio
                             ante S.I.I.</label>
                     </div>
                 </div>
@@ -139,33 +139,33 @@ include 'header.php';
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docContribuciones">
                         <label class="form-check-label" for="docContribuciones">Fotocopia Recibo de Contribuciones o
-                            N° Rol Aval�o.</label>
+                            N° Rol Aval¿o.</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docCertNumero">
-                        <label class="form-check-label" for="docCertNumero">Certificado de N�mero.</label>
+                        <label class="form-check-label" for="docCertNumero">Certificado de N°mero.</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docFotos">
-                        <label class="form-check-label" for="docFotos">2 Fotograf�as (interior y exterior) del
+                        <label class="form-check-label" for="docFotos">2 Fotograf¿as (interior y exterior) del
                             establecimiento.</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docUrb">
-                        <label class="form-check-label" for="docUrb">Certificado T�cnico Urban�stico e Informe
+                        <label class="form-check-label" for="docUrb">Certificado T¿cnico Urban¿stico e Informe
                             Factibilidad Uso Suelo.</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="docRecepcion">
-                        <label class="form-check-label" for="docRecepcion">Recepci�n Definitiva.</label>
+                        <label class="form-check-label" for="docRecepcion">Recepción Definitiva.</label>
                     </div>
                 </div>
             </div>
@@ -174,12 +174,12 @@ include 'header.php';
                 <label class="form-label fw-bold">Documentos Sanitarios (si aplican)</label>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="docSanitaria">
-                    <label class="form-check-label" for="docSanitaria">Resoluci�n Sanitaria favorable (Seremi de
+                    <label class="form-check-label" for="docSanitaria">Resolución Sanitaria favorable (Seremi de
                         Salud - Quinta N° 231).</label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="docInofensiva">
-                    <label class="form-check-label" for="docInofensiva">Calificaci�n de Actividad Inofensiva y/o
+                    <label class="form-check-label" for="docInofensiva">Calificación de Actividad Inofensiva y/o
                         Molesta (Seremi de Salud).</label>
                 </div>
             </div>
@@ -190,15 +190,15 @@ include 'header.php';
             <div class="section-title">4. Datos de Contacto y Firma</div>
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label">Direcci�n Particular</label>
+                    <label class="form-label">Dirección Particular</label>
                     <input type="text" class="form-control" id="dirParticular">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Tel�fono</label>
+                    <label class="form-label">Tel¿fono</label>
                     <input type="tel" class="form-control" id="telefono">
                 </div>
                 <div class="col-12">
-                    <label class="form-label">Correo Electr�nico</label>
+                    <label class="form-label">Correo Electrónico</label>
                     <input type="email" class="form-control" id="email">
                 </div>
             </div>
@@ -212,11 +212,11 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- 5. Geolocalizaci�n (Google Maps) -->
+        <!-- 5. Geolocalización (Google Maps) -->
         <div class="section-card">
-            <div class="section-title">5. Geolocalizaci�n del Nuevo Domicilio</div>
+            <div class="section-title">5. Geolocalización del Nuevo Domicilio</div>
             <div class="alert alert-info small" role="alert">
-                <i data-feather="map-pin" class="me-1"></i> Ingrese la direcci�n exacta para ubicarla en el mapa.
+                <i data-feather="map-pin" class="me-1"></i> Ingrese la dirección exacta para ubicarla en el mapa.
             </div>
 
             <div class="row g-3 mb-3">
@@ -225,7 +225,7 @@ include 'header.php';
                     <input type="text" class="form-control" id="mapCalle" placeholder="Ej: Av. Providencia">
                 </div>
                 <div class="col-md-2">
-                    <label class="form-label">N�mero</label>
+                    <label class="form-label">N°mero</label>
                     <input type="text" class="form-control" id="mapNumero" placeholder="Ej: 1234">
                 </div>
                 <div class="col-md-3">
@@ -233,7 +233,7 @@ include 'header.php';
                     <input type="text" class="form-control" id="mapComuna" value="Santiago">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Regi�n</label>
+                    <label class="form-label">Región</label>
                     <input type="text" class="form-control" id="mapRegion" value="Metropolitana" readonly>
                 </div>
                 <div class="col-12 text-end">

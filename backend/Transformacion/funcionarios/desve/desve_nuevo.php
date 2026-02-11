@@ -65,7 +65,7 @@ include 'header.php';
                 <!-- General Info -->
                 <div class="card shadow-sm border-0 border-start border-4 border-primary mb-4">
                     <div class="card-body p-4">
-                        <h5 class="fw-bold fs-6 mb-4">Informaci�n de la Solicitud</h5>
+                        <h5 class="fw-bold fs-6 mb-4">Información de la Solicitud</h5>
                         <div class="row g-3">
                             <div class="col-12">
                                 <label for="NombreExpediente" class="form-label small fw-bold">Nombre del
@@ -100,7 +100,7 @@ include 'header.php';
 
                             <div class="col-md-6">
                                 <label for="ID_Organizacion" class="form-label small fw-bold">Tipo de
-                                    Organizaci�n</label>
+                                    Organización</label>
                                 <select class="form-select form-select-sm" id="ID_Organizacion" required>
                                     <option value="" selected disabled>Seleccione tipo...</option>
                                 </select>
@@ -111,7 +111,7 @@ include 'header.php';
                                     Solicitud</label>
                                 <div class="input-group input-group-sm">
                                     <select class="form-select" id="OrigenSolicitud" required>
-                                        <option value="" selected disabled>Seleccione organizaci�n...</option>
+                                        <option value="" selected disabled>Seleccione organización...</option>
                                     </select>
                                     <button class="btn btn-outline-secondary" type="button" id="btn_nuevo_origen"
                                         disabled>
@@ -127,7 +127,7 @@ include 'header.php';
 
                             <div class="col-md-6">
                                 <label for="FechaUltimaRecepcion" class="form-label small fw-bold">Fecha de
-                                    Recepci�n</label>
+                                    Recepción</label>
                                 <input type="date" class="form-control form-control-sm" id="FechaUltimaRecepcion"
                                     required>
                             </div>
@@ -143,7 +143,7 @@ include 'header.php';
                                 <label for="DetalleIngreso" class="form-label small fw-bold">Detalle de
                                     Ingreso</label>
                                 <textarea class="form-control form-control-sm" id="DetalleIngreso" rows="4"
-                                    placeholder="Escriba el detalle aqu�..."></textarea>
+                                    placeholder="Escriba el detalle aquí..."></textarea>
                             </div>
 
                             <div class="col-12">
@@ -196,7 +196,7 @@ include 'header.php';
                 <!-- Calculated Data Card -->
                 <div class="card shadow-sm border-0 mb-4 bg-light">
                     <div class="card-body p-4">
-                        <h5 class="fw-bold fs-6 mb-3">Informaci�n Autom�tica</h5>
+                        <h5 class="fw-bold fs-6 mb-3">Información Automática</h5>
                         <div class="mb-3">
                             <label class="form-label small fw-bold">Prioridad Estimada</label>
                             <input type="text" class="form-control form-control-sm bg-white" id="Prioridad" readonly
@@ -224,7 +224,7 @@ include 'header.php';
                                     <polyline points="16 10 12 6 8 10"></polyline>
                                     <line x1="12" y1="6" x2="12" y2="18"></line>
                                 </svg>
-                                <br>Arrastre archivos o haga clic aqu�
+                                <br>Arrastre archivos o haga clic aquí
                             </div>
                         </div>
                         <div id="listaArchivosSolicitud" class="list-group list-group-flush small">
@@ -259,7 +259,7 @@ include 'header.php';
                                 <th>Email</th>
                                 <th>Nombre</th>
                                 <th>Apellido</th>
-                                <th class="text-end">Acci�n</th>
+                                <th class="text-end">Acción</th>
                             </tr>
                         </thead>
                         <tbody id="lista_busqueda_fnc" class="small">
@@ -285,7 +285,7 @@ include 'header.php';
                     <label for="textoNuevoOrigenEspecial" class="form-label small fw-bold">Nuevo Origen
                         Especial</label>
                     <input type="text" class="form-control form-control-sm" id="textoNuevoOrigenEspecial"
-                        placeholder="Escriba aqu� el origen especial...">
+                        placeholder="Escriba aquí el origen especial...">
                 </div>
             </div>
             <div class="modal-footer border-0 bg-light">
@@ -325,7 +325,7 @@ include 'header.php';
                             <tr>
                                 <th>RUT</th>
                                 <th>Nombre Completo</th>
-                                <th class="text-end">Acci�n</th>
+                                <th class="text-end">Acción</th>
                             </tr>
                         </thead>
                         <tbody id="lista_busqueda_contrib" class="small">
@@ -393,16 +393,16 @@ include 'header.php';
             <div class="modal-body p-4">
                 <div class="mb-3">
                     <input type="text" class="form-control form-control-sm" id="filtroReingreso"
-                        placeholder="Buscar por c�digo DESVE o nombre de expediente...">
+                        placeholder="Buscar por código DESVE o nombre de expediente...">
                 </div>
                 <div class="table-responsive" style="max-height: 400px;">
                     <table class="table table-hover align-middle">
                         <thead class="table-light text-uppercase small">
                             <tr>
-                                <th>C�digo DESVE</th>
+                                <th>Código DESVE</th>
                                 <th>Expediente</th>
                                 <th>Fecha</th>
-                                <th class="text-end">Acci�n</th>
+                                <th class="text-end">Acción</th>
                             </tr>
                         </thead>
                         <tbody id="lista_busqueda_reingreso" class="small">

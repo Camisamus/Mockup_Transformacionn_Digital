@@ -10,7 +10,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Consulta Masiva de Postulaciones</h2>
-            <p class="text-muted mb-0">B�squeda y generaci�n de reportes de postulaciones a fondos</p>
+            <p class="text-muted mb-0">Búsqueda y generación de reportes de postulaciones a fondos</p>
         </div>
     </div>
 
@@ -35,10 +35,10 @@ include 'header.php';
         </div>
     </div>
 
-    <!-- Filtros de B�squeda -->
+    <!-- Filtros de Búsqueda -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <h5 class="fw-bold fs-6 mb-1">Filtros de B�squeda</h5>
+            <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
             <p class="text-muted small mb-4">Aplique filtros para refinar el listado de postulaciones</p>
 
             <form id="formFiltros" onsubmit="event.preventDefault(); buscarPostulaciones();">
@@ -48,32 +48,32 @@ include 'header.php';
                         <input type="number" class="form-control form-control-sm" id="filtro_id" placeholder="Ej: 1">
                     </div>
                     <div class="col-md-2">
-                        <label for="filtro_rut" class="form-label small fw-bold">RUT Organizaci�n</label>
+                        <label for="filtro_rut" class="form-label small fw-bold">RUT Organización</label>
                         <input type="text" class="form-control form-control-sm" id="filtro_rut"
                             placeholder="XX.XXX.XXX-X">
                     </div>
                     <div class="col-md-5">
-                        <label for="filtro_nombre_org" class="form-label small fw-bold">Nombre Organizaci�n</label>
+                        <label for="filtro_nombre_org" class="form-label small fw-bold">Nombre Organización</label>
                         <input type="text" class="form-control form-control-sm" id="filtro_nombre_org"
-                            placeholder="Nombre de la organizaci�n">
+                            placeholder="Nombre de la organización">
                     </div>
                     <div class="col-md-3">
                         <label for="filtro_estado" class="form-label small fw-bold">Estado</label>
                         <select class="form-select form-select-sm" id="filtro_estado">
                             <option value="">Todos</option>
                             <option value="aprobado">Aprobado</option>
-                            <option value="evaluacion">En Evaluaci�n</option>
+                            <option value="evaluacion">En Evaluación</option>
                             <option value="pendiente">Pendiente</option>
                         </select>
                     </div>
 
                     <div class="col-md-3">
                         <label for="filtro_tipo_postulacion" class="form-label small fw-bold">Tipo
-                            Postulaci�n</label>
+                            Postulación</label>
                         <select class="form-select form-select-sm" id="filtro_tipo_postulacion">
                             <option value="">Todos</option>
                             <option value="nueva">Nueva</option>
-                            <option value="renovacion">Renovaci�n</option>
+                            <option value="renovacion">Renovación</option>
                         </select>
                     </div>
                     <div class="col-md-3">
@@ -120,8 +120,8 @@ include 'header.php';
                     <thead class="table-light text-uppercase small">
                         <tr>
                             <th>RUT</th>
-                            <th>Organizaci�n</th>
-                            <th>N� Ingreso</th>
+                            <th>Organización</th>
+                            <th>N° Ingreso</th>
                             <th>Proyecto</th>
                             <th>Tipo Fondo</th>
                             <th>Fecha Ingreso</th>

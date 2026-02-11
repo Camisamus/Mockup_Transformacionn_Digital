@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Declaraci�n de Propaganda";
+$pageTitle = "Declaración de Propaganda";
 require_once '../../api/auth_check.php';
 include 'header.php';
 ?>
@@ -8,8 +8,8 @@ include 'header.php';
 <div class="container-fluid py-4">
     <div class="main-header mb-4">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Declaraci�n de Propaganda</h2>
-            <p class="text-muted mb-0">Gestione la declaraci�n y regularizaci�n de elementos publicitarios</p>
+            <h2 class="fw-bold fs-4">Declaración de Propaganda</h2>
+            <p class="text-muted mb-0">Gestione la declaración y regularización de elementos publicitarios</p>
         </div>
     </div>
 
@@ -37,13 +37,13 @@ include 'header.php';
                     </button>
                 </div>
                 <div class="col-12 col-md-auto">
-                    <button class="btn btn-toolbar btn-dark w-100 shadow-sm" onclick="alert('Declaraci�n Enviada')">
+                    <button class="btn btn-toolbar btn-dark w-100 shadow-sm" onclick="alert('Declaración Enviada')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="22 2 11 13"></polyline>
                             <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                         </svg>
-                        Enviar Declaraci�n
+                        Enviar Declaración
                     </button>
                 </div>
             </div>
@@ -56,17 +56,17 @@ include 'header.php';
             <div class="d-flex">
                 <div class="me-3"><i data-feather="info"></i></div>
                 <div>
-                    <h6 class="alert-heading fw-bold">Excepci�n de Cobro</h6>
-                    <p class="small mb-0">El Municipio <strong>no podr� cobrar</strong> la propaganda cuando esta
-                        solo d� a conocer el giro del establecimiento y se encuentre adosada a la(s) edificaci�n(es)
+                    <h6 class="alert-heading fw-bold">Excepción de Cobro</h6>
+                    <p class="small mb-0">El Municipio <strong>no podr¿ cobrar</strong> la propaganda cuando esta
+                        solo d¿ a conocer el giro del establecimiento y se encuentre adosada a la(s) edificación(es)
                         donde se realiza la actividad propia del giro.</p>
                 </div>
             </div>
         </div>
 
-        <!-- 1. Identificaci�n Solicitante -->
+        <!-- 1. Identificación Solicitante -->
         <div class="section-card">
-            <div class="section-title">1. Identificaci�n del Contribuyente</div>
+            <div class="section-title">1. Identificación del Contribuyente</div>
             <div class="row g-3">
                 <div class="col-md-3">
                     <label class="form-label">Rol Patente</label>
@@ -77,11 +77,11 @@ include 'header.php';
                     <input type="text" class="form-control" id="rutContribuyente">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Nombre o Raz�n Social</label>
+                    <label class="form-label">Nombre o Razón Social</label>
                     <input type="text" class="form-control" id="nombreRazonSocial">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Direcci�n</label>
+                    <label class="form-label">Dirección</label>
                     <input type="text" class="form-control" id="direccion">
                 </div>
                 <div class="col-md-6">
@@ -89,7 +89,7 @@ include 'header.php';
                     <input type="text" class="form-control" id="giro">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Tel�fono</label>
+                    <label class="form-label">Tel¿fono</label>
                     <input type="tel" class="form-control" id="telefono">
                 </div>
                 <div class="col-md-6">
@@ -99,13 +99,13 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- 2. Detalle del Tr�mite y Propaganda -->
+        <!-- 2. Detalle del Trámite y Propaganda -->
         <div class="section-card">
             <div class="section-title">2. Detalle de la Propaganda</div>
 
             <div class="row mb-4">
                 <div class="col-md-6">
-                    <label class="form-label fw-bold d-block mb-2">Tipo de Tr�mite</label>
+                    <label class="form-label fw-bold d-block mb-2">Tipo de Trámite</label>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="tipoTramite" id="tramiteInstala">
                         <label class="form-check-label" for="tramiteInstala">Instala</label>
@@ -178,24 +178,24 @@ include 'header.php';
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="adjPlano">
-                        <label class="form-check-label" for="adjPlano">Plano de ubicaci�n de calles.</label>
+                        <label class="form-check-label" for="adjPlano">Plano de ubicación de calles.</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="adjFotos">
-                        <label class="form-check-label" for="adjFotos">Fotograf�as con elementos publicitarios (con
+                        <label class="form-check-label" for="adjFotos">Fotograf¿as con elementos publicitarios (con
                             medidas).</label>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 4. Geolocalizaci�n (Google Maps) -->
+        <!-- 4. Geolocalización (Google Maps) -->
         <div class="section-card">
-            <div class="section-title">4. Geolocalizaci�n</div>
+            <div class="section-title">4. Geolocalización</div>
             <div class="alert alert-info small" role="alert">
-                <i data-feather="map-pin" class="me-1"></i> Ingrese la direcci�n exacta para ubicarla en el mapa.
+                <i data-feather="map-pin" class="me-1"></i> Ingrese la dirección exacta para ubicarla en el mapa.
             </div>
 
             <div class="row g-3 mb-3">
@@ -204,7 +204,7 @@ include 'header.php';
                     <input type="text" class="form-control" id="mapCalle" placeholder="Ej: Av. Providencia">
                 </div>
                 <div class="col-md-2">
-                    <label class="form-label">N�mero</label>
+                    <label class="form-label">N°mero</label>
                     <input type="text" class="form-control" id="mapNumero" placeholder="Ej: 1234">
                 </div>
                 <div class="col-md-3">
@@ -212,7 +212,7 @@ include 'header.php';
                     <input type="text" class="form-control" id="mapComuna" value="Santiago">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Regi�n</label>
+                    <label class="form-label">Región</label>
                     <input type="text" class="form-control" id="mapRegion" value="Metropolitana" readonly>
                 </div>
                 <div class="col-12 text-end">
@@ -249,7 +249,7 @@ include 'header.php';
                 </div>
             </div>
             <div class="mt-4 pt-3 border-top">
-                <label class="form-label fw-bold text-muted small text-uppercase">Informe de Fiscalizaci�n (Uso
+                <label class="form-label fw-bold text-muted small text-uppercase">Informe de Fiscalización (Uso
                     Interno)</label>
                 <textarea class="form-control bg-light" rows="3" disabled></textarea>
             </div>

@@ -16,7 +16,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Preparar Relaciones</h2>
-            <p class="text-muted mb-0" id="subtitulo_preparar">Gestionando �rbol multiancestro para la solicitud</p>
+            <p class="text-muted mb-0" id="subtitulo_preparar">Gestionando Árbol multiancestro para la solicitud</p>
         </div>
     </div>
 
@@ -98,9 +98,9 @@ include 'header.php';
             <div class="modal-body p-4">
                 <form id="form_crear_hija">
                     <div class="mb-3">
-                        <label for="h_titulo" class="form-label small fw-bold">T�tulo</label>
+                        <label for="h_titulo" class="form-label small fw-bold">Título</label>
                         <input type="text" class="form-control form-control-sm" id="h_titulo" required
-                            placeholder="T�tulo de la sub-solicitud">
+                            placeholder="Título de la sub-solicitud">
                     </div>
                     <div class="mb-3">
                         <label for="h_tipo" class="form-label small fw-bold">Tipo de Ingreso</label>
@@ -109,7 +109,7 @@ include 'header.php';
                         </select>
                     </div>
                     <div class="mb-4">
-                        <label for="h_contenido" class="form-label small fw-bold">Contenido / Descripci�n</label>
+                        <label for="h_contenido" class="form-label small fw-bold">Contenido / Descripción</label>
                         <textarea class="form-control form-control-sm" id="h_contenido" rows="5"
                             placeholder="Detalles de la sub-solicitud..."></textarea>
                     </div>
@@ -153,16 +153,16 @@ include 'header.php';
                         </svg>
                     </span>
                     <input type="text" class="form-control border-start-0" id="buscar_padre"
-                        placeholder="Filtrar por t�tulo o ID...">
+                        placeholder="Filtrar por título o ID...">
                 </div>
                 <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
                     <table class="table table-hover align-middle mb-0">
                         <thead class="table-light text-uppercase small sticky-top">
                             <tr>
                                 <th>ID</th>
-                                <th>T�tulo</th>
+                                <th>Título</th>
                                 <th>Estado</th>
-                                <th class="text-end">Acci�n</th>
+                                <th class="text-end">Acción</th>
                             </tr>
                         </thead>
                         <tbody id="lista_solicitudes_padre" class="small">

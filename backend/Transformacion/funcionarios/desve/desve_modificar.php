@@ -64,7 +64,7 @@ include 'header.php';
                 <!-- General Info -->
                 <div class="card shadow-sm border-0 border-start border-4 border-primary mb-4">
                     <div class="card-body p-4">
-                        <h5 class="fw-bold fs-6 mb-4">Informaci�n de la Solicitud</h5>
+                        <h5 class="fw-bold fs-6 mb-4">Información de la Solicitud</h5>
                         <div class="row g-3">
                             <div class="col-12">
                                 <label for="NombreExpediente" class="form-label small fw-bold">Nombre del
@@ -86,7 +86,7 @@ include 'header.php';
 
                             <div class="col-md-6">
                                 <label for="ID_Organizacion" class="form-label small fw-bold">Tipo de
-                                    Organizaci�n</label>
+                                    Organización</label>
                                 <select class="form-select form-select-sm" id="ID_Organizacion" required>
                                     <option value="" selected disabled>Seleccione tipo...</option>
                                 </select>
@@ -97,7 +97,7 @@ include 'header.php';
                                     Solicitud</label>
                                 <div class="input-group input-group-sm">
                                     <select class="form-select" id="OrigenSolicitud" required>
-                                        <option value="" selected disabled>Seleccione organizaci�n...</option>
+                                        <option value="" selected disabled>Seleccione organización...</option>
                                     </select>
                                     <button class="btn btn-outline-secondary" type="button" id="btn_nuevo_origen">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
@@ -112,7 +112,7 @@ include 'header.php';
 
                             <div class="col-md-6">
                                 <label for="FechaUltimaRecepcion" class="form-label small fw-bold">Fecha de
-                                    Recepci�n</label>
+                                    Recepción</label>
                                 <input type="date" class="form-control form-control-sm" id="FechaUltimaRecepcion"
                                     required>
                             </div>
@@ -174,17 +174,17 @@ include 'header.php';
                     </div>
                 </div>
 
-                <!-- Bit�cora de Respuestas -->
+                <!-- Bitácora de Respuestas -->
                 <div class="card shadow-sm border-0 mb-4 bg-light">
                     <div class="card-body p-4">
-                        <h5 class="fw-bold fs-6 mb-3">Respuestas del Tr�mite</h5>
+                        <h5 class="fw-bold fs-6 mb-3">Respuestas del Trámite</h5>
                         <div class="table-responsive">
                             <table class="table table-hover align-middle mb-0" id="tabla_respuestas">
                                 <thead class="table-light text-uppercase small">
                                     <tr>
                                         <th>Fecha</th>
                                         <th>Funcionario</th>
-                                        <th>Acci�n</th>
+                                        <th>Acción</th>
                                         <th>Contenido</th>
                                     </tr>
                                 </thead>
@@ -216,12 +216,12 @@ include 'header.php';
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label small fw-bold">D�as Transcurridos</label>
+                            <label class="form-label small fw-bold">Días Transcurridos</label>
                             <input type="text" class="form-control form-control-sm bg-light" id="info_dias_ingreso"
                                 readonly>
                         </div>
                         <div class="mb-0">
-                            <label class="form-label small fw-bold">D�as para Vencimiento</label>
+                            <label class="form-label small fw-bold">Días para Vencimiento</label>
                             <input type="text" class="form-control form-control-sm bg-light" id="info_dias_vencimiento"
                                 readonly>
                         </div>
@@ -236,7 +236,7 @@ include 'header.php';
                             <!-- Existing -->
                         </div>
 
-                        <label class="form-label small fw-bold">A�adir Nuevos Archivos</label>
+                        <label class="form-label small fw-bold">Añadir Nuevos Archivos</label>
                         <div class="drop-zone mb-3" id="drop_zone">
                             <input type="file" id="inputArchivosSolicitud" hidden multiple>
                             <div class="small text-muted">
@@ -280,7 +280,7 @@ include 'header.php';
                     <label for="textoNuevoOrigenEspecial" class="form-label small fw-bold">Nuevo Origen
                         Especial</label>
                     <input type="text" class="form-control form-control-sm" id="textoNuevoOrigenEspecial"
-                        placeholder="Escriba aqu� el origen especial...">
+                        placeholder="Escriba aquí el origen especial...">
                 </div>
             </div>
             <div class="modal-footer border-0 bg-light">
@@ -314,7 +314,7 @@ include 'header.php';
                                 <th>Email</th>
                                 <th>Nombre</th>
                                 <th>Apellido</th>
-                                <th class="text-end">Acci�n</th>
+                                <th class="text-end">Acción</th>
                             </tr>
                         </thead>
                         <tbody id="lista_busqueda_fnc" class="small">
@@ -340,7 +340,7 @@ include 'header.php';
                     <label for="textoNuevoOrigenEspecial" class="form-label small fw-bold">Nuevo Origen
                         Especial</label>
                     <input type="text" class="form-control form-control-sm" id="textoNuevoOrigenEspecial"
-                        placeholder="Escriba aqu� el origen especial...">
+                        placeholder="Escriba aquí el origen especial...">
                 </div>
             </div>
             <div class="modal-footer border-0 bg-light">
@@ -380,7 +380,7 @@ include 'header.php';
                             <tr>
                                 <th>RUT</th>
                                 <th>Nombre Completo</th>
-                                <th class="text-end">Acci�n</th>
+                                <th class="text-end">Acción</th>
                             </tr>
                         </thead>
                         <tbody id="lista_busqueda_contrib" class="small">

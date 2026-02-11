@@ -10,7 +10,7 @@ include '../api/header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Bandeja de Entrada</h2>
-            <p class="text-muted mb-0">Gesti�n centralizada de tareas y solicitudes pendientes</p>
+            <p class="text-muted mb-0">Gestión centralizada de tareas y solicitudes pendientes</p>
         </div>
     </div>
 
@@ -66,7 +66,7 @@ include '../api/header.php';
         </div>
         <div class="col-md-6">
             <div class="card shadow-sm border-0 border-start border-4 border-warning h-100"
-                title="Tareas con fecha 3 d�as atr�s o m�s">
+                title="Tareas con fecha 3 días atrás o más">
                 <div class="card-body p-4 d-flex align-items-center">
                     <div class="rounded-circle bg-warning bg-opacity-10 p-3 me-4">
                         <i data-feather="alert-triangle" class="text-warning" style="width: 24px; height: 24px;"></i>
@@ -92,7 +92,7 @@ include '../api/header.php';
                 <table class="table table-hover align-middle" id="tablaBandeja">
                     <thead class="table-light text-uppercase small">
                         <tr>
-                            <th>Asunto / T�tulo</th>
+                            <th>Asunto / Título</th>
                             <th>Origen</th>
                             <th>Responsable</th>
                             <th>Fecha</th>
@@ -125,7 +125,7 @@ include '../api/header.php';
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-                <h5 class="fw-bold fs-6 mb-0">Listado de Tareas Asignadas por m�</h5>
+                <h5 class="fw-bold fs-6 mb-0">Listado de Tareas Asignadas por mí</h5>
                 <div class="pagination-info text-muted small" id="paginationInfoTareasQueAsigne"></div>
             </div>
 
@@ -133,7 +133,7 @@ include '../api/header.php';
                 <table class="table table-hover align-middle" id="tablaTareasQueAsigne">
                     <thead class="table-light text-uppercase small">
                         <tr>
-                            <th>Asunto / T�tulo</th>
+                            <th>Asunto / Título</th>
                             <th>Responsable</th>
                             <th>Fecha</th>
                             <th>Fecha limite</th>
@@ -175,16 +175,16 @@ include '../api/header.php';
                             <label for="titulo" class="form-label small fw-bold">Asunto <span
                                     class="text-danger">*</span></label>
                             <input type="text" name="tar_titulo" class="form-control" id="titulo" required
-                                placeholder="T�tulo descriptivo">
+                                placeholder="Título descriptivo">
                         </div>
                         <div class="col-12">
-                            <label for="detalle" class="form-label small fw-bold">Descripci�n <span
+                            <label for="detalle" class="form-label small fw-bold">Descripción <span
                                     class="text-danger">*</span></label>
                             <textarea class="form-control" name="tar_detalle" id="detalle" rows="3" required
                                 placeholder="Detalle de la tarea"></textarea>
                         </div>
                         <div class="col-md-6">
-                            <label for="tar_plazo" class="form-label small fw-bold">Fecha L�mite <span
+                            <label for="tar_plazo" class="form-label small fw-bold">Fecha Límite <span
                                     class="text-danger">*</span></label>
                             <input type="datetime-local" name="tar_plazo" class="form-control" id="tar_plazo" required>
                         </div>
@@ -238,7 +238,7 @@ include '../api/header.php';
                                 <th>Email</th>
                                 <th>Nombre</th>
                                 <th>Apellido</th>
-                                <th class="text-end">Acci�n</th>
+                                <th class="text-end">Acción</th>
                             </tr>
                         </thead>
                         <tbody id="lista_busqueda_fnc" class="small">

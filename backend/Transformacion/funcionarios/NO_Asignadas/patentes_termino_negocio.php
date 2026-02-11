@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Solicitud de T�rmino de Negocio";
+$pageTitle = "Solicitud de T¿rmino de Negocio";
 require_once '../../api/auth_check.php';
 include 'header.php';
 ?>
@@ -8,7 +8,7 @@ include 'header.php';
 <div class="container-fluid py-4">
     <div class="main-header mb-4">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Solicitud de T�rmino de Negocio</h2>
+            <h2 class="fw-bold fs-4">Solicitud de T¿rmino de Negocio</h2>
             <p class="text-muted mb-0">Gestione el cierre formal de actividades para patentes comerciales</p>
         </div>
     </div>
@@ -51,9 +51,9 @@ include 'header.php';
     </div>
 
     <div id="form-container">
-        <!-- 1. Identificaci�n Solicitante -->
+        <!-- 1. Identificación Solicitante -->
         <div class="section-card">
-            <div class="section-title">1. Identificaci�n del Contribuyente y Patente</div>
+            <div class="section-title">1. Identificación del Contribuyente y Patente</div>
             <div class="row g-3">
                 <div class="col-md-3">
                     <label class="form-label">Rol Patente</label>
@@ -64,11 +64,11 @@ include 'header.php';
                     <input type="text" class="form-control" id="rutContribuyente">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Nombre o Raz�n Social</label>
+                    <label class="form-label">Nombre o Razón Social</label>
                     <input type="text" class="form-control" id="nombreRazonSocial">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Direcci�n (Calle, N°, Poblaci�n)</label>
+                    <label class="form-label">Dirección (Calle, N°, Población)</label>
                     <input type="text" class="form-control" id="direccion">
                 </div>
                 <div class="col-md-6">
@@ -76,7 +76,7 @@ include 'header.php';
                     <input type="text" class="form-control" id="giro">
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Tel�fono</label>
+                    <label class="form-label">Tel¿fono</label>
                     <input type="tel" class="form-control" id="telefono">
                 </div>
                 <div class="col-md-6">
@@ -124,14 +124,14 @@ include 'header.php';
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="adjPatente">
-                        <label class="form-check-label" for="adjPatente">Fotocopia simple �ltima Patente pagada (al
-                            d�a).</label>
+                        <label class="form-check-label" for="adjPatente">Fotocopia simple ¿ltima Patente pagada (al
+                            d¿a).</label>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="adjTerminoGiro">
-                        <label class="form-check-label" for="adjTerminoGiro">T�rmino de Giro / Cierre Sucursal
+                        <label class="form-check-label" for="adjTerminoGiro">T¿rmino de Giro / Cierre Sucursal
                             (S.I.I.).</label>
                     </div>
                 </div>
@@ -159,11 +159,11 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- 4. Geolocalizaci�n (Google Maps) -->
+        <!-- 4. Geolocalización (Google Maps) -->
         <div class="section-card">
-            <div class="section-title">4. Geolocalizaci�n</div>
+            <div class="section-title">4. Geolocalización</div>
             <div class="alert alert-info small" role="alert">
-                <i data-feather="map-pin" class="me-1"></i> Ingrese la direcci�n exacta para ubicarla en el mapa.
+                <i data-feather="map-pin" class="me-1"></i> Ingrese la dirección exacta para ubicarla en el mapa.
             </div>
 
             <div class="row g-3 mb-3">
@@ -172,7 +172,7 @@ include 'header.php';
                     <input type="text" class="form-control" id="mapCalle" placeholder="Ej: Av. Providencia">
                 </div>
                 <div class="col-md-2">
-                    <label class="form-label">N�mero</label>
+                    <label class="form-label">N°mero</label>
                     <input type="text" class="form-control" id="mapNumero" placeholder="Ej: 1234">
                 </div>
                 <div class="col-md-3">
@@ -180,7 +180,7 @@ include 'header.php';
                     <input type="text" class="form-control" id="mapComuna" value="Santiago">
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label">Regi�n</label>
+                    <label class="form-label">Región</label>
                     <input type="text" class="form-control" id="mapRegion" value="Metropolitana" readonly>
                 </div>
                 <div class="col-12 text-end">
@@ -207,7 +207,7 @@ include 'header.php';
             </div>
         </div>
 
-        <!-- Firma y Fiscalizaci�n -->
+        <!-- Firma y Fiscalización -->
         <div class="section-card">
             <div class="mt-2">
                 <label class="form-label fw-bold">Firma del Contribuyente</label>
@@ -218,14 +218,14 @@ include 'header.php';
             </div>
             <div class="mt-4 pt-3 border-top">
                 <label class="form-label fw-bold text-muted small text-uppercase">Uso Exclusivo Dpto.
-                    Fiscalizaci�n</label>
+                    Fiscalización</label>
                 <div class="row">
                     <div class="col-md-3">
-                        <label class="form-label small">Fecha Fiscalizaci�n</label>
+                        <label class="form-label small">Fecha Fiscalización</label>
                         <input type="date" class="form-control form-control-sm" disabled>
                     </div>
                     <div class="col-md-9">
-                        <label class="form-label small">Informe (Verificaci�n Direcci�n y Estado Patente)</label>
+                        <label class="form-label small">Informe (Verificación Dirección y Estado Patente)</label>
                         <textarea class="form-control form-control-sm bg-light" rows="3" disabled></textarea>
                     </div>
                 </div>

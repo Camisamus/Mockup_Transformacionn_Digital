@@ -10,7 +10,7 @@ include 'header.php';
     <div class="main-header mb-4">
         <div class="header-title">
             <h2 class="fw-bold fs-4">Consulta Masiva de Pagos</h2>
-            <p class="text-muted mb-0">B�squeda y generaci�n de reportes de pagos realizados</p>
+            <p class="text-muted mb-0">Búsqueda y generación de reportes de pagos realizados</p>
         </div>
     </div>
 
@@ -29,16 +29,16 @@ include 'header.php';
         </div>
     </div>
 
-    <!-- Filtros de B�squeda -->
+    <!-- Filtros de Búsqueda -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <h5 class="fw-bold fs-6 mb-1">Filtros de B�squeda</h5>
+            <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
             <p class="text-muted small mb-4">Aplique filtros para encontrar transacciones de pagos</p>
 
             <form id="formFiltros" onsubmit="event.preventDefault(); buscarPagos();">
                 <div class="row g-3">
                     <div class="col-md-3">
-                        <label for="filtro_numero_subvencion" class="form-label small fw-bold">N� Subvenci�n</label>
+                        <label for="filtro_numero_subvencion" class="form-label small fw-bold">N° Subvención</label>
                         <input type="text" class="form-control form-control-sm" id="filtro_numero_subvencion"
                             placeholder="Ej: SUB-2024-001">
                     </div>
@@ -93,10 +93,10 @@ include 'header.php';
                 <table class="table table-hover align-middle" id="tablaPagos">
                     <thead class="table-light text-uppercase small">
                         <tr>
-                            <th>N� Subvenci�n</th>
+                            <th>N° Subvención</th>
                             <th>Fecha Evento</th>
                             <th>Estado</th>
-                            <th>Fecha Digitalizaci�n</th>
+                            <th>Fecha Digitalización</th>
                             <th>Responsable</th>
                             <th>Glosa</th>
                             <th class="text-end">Acciones</th>
