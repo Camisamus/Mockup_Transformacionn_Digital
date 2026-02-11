@@ -146,10 +146,10 @@ func enviarEmail(sol_id int, nombre, destino string, dias int) {
 	var subject, body string
 	if dias >= 0 {
 		subject = "Recordatorio Fecha Limite"
-		body = fmt.Sprintf("Hola %s,\n\nTe quedan %d dias para la fecha limite de tu solicitud pendiente.\n\nResponda Aqui:,\n\nhttp://"+config["SERVIDORPAGINA"]+"/Mockup_Transformacionn_Digital/paginas/desve_responder.html?id=%d,\n\nAtte,\nSistema", nombre, dias, sol_id)
+		body = fmt.Sprintf("Hola %s,\n\nTe quedan %d dias para la fecha limite de tu solicitud pendiente.\n\nResponda Aqui:,\n\nhttp://"+config["SERVIDORPAGINA"]+"/Mockup_Transformacionn_Digital/Funcionarios/desve_responder.html?id=%d,\n\nAtte,\nSistema", nombre, dias, sol_id)
 	} else {
 		subject = "Alerta de Expiracion"
-		body = fmt.Sprintf("Hola %s,\n\nTu solicitud expiro hace %d dias.\n\nResponda Aqui:,\n\nhttp://"+config["SERVIDORPAGINA"]+"/Mockup_Transformacionn_Digital/paginas/desve_responder.html?id=%d,\n\nAtte,\nSistema", nombre, -dias, sol_id)
+		body = fmt.Sprintf("Hola %s,\n\nTu solicitud expiro hace %d dias.\n\nResponda Aqui:,\n\nhttp://"+config["SERVIDORPAGINA"]+"/Mockup_Transformacionn_Digital/Funcionarios/desve_responder.html?id=%d,\n\nAtte,\nSistema", nombre, -dias, sol_id)
 	}
 
 	msg := fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%s", from, destino, subject, body)

@@ -7,7 +7,7 @@
     const backendIdx = path.indexOf('/backend/');
     if (backendIdx !== -1) {
         // We are in a subfolder structure
-        // path is like /.../backend/Transformacion/paginas/dashboard.php
+        // path is like /.../backend/Transformacion/Funcionarios/dashboard.php
         // we want /.../backend/Transformacion/api
         // But wait, the original logic found '/backend/' and appended 'backend/api'.
         // If path is .../backend/Transformacion/... 
@@ -20,7 +20,7 @@
         // backend/Transformacion/api 
         // backend/Transformacion/index.php
 
-        // If I am at .../Transformacion/paginas/dashboard.php
+        // If I am at .../Transformacion/Funcionarios/dashboard.php
         // API is at ../api
 
         // JS often uses absolute paths. 
@@ -97,6 +97,7 @@ function renderRepresentationSelector() {
 }
 
 // Global Logout Function
+// Global Logout Function
 window.logout = async function () {
     try {
         await fetch(`${window.API_BASE_URL}/logout.php`, {
@@ -114,6 +115,7 @@ window.logout = async function () {
     localStorage.removeItem('current_representation');
     localStorage.removeItem('user_data');
     localStorage.removeItem('google_token');
+    localStorage.removeItem('active_category'); // Clear active category on logout
 
     // Redirect to index (login)
     // Use PHP page logic
@@ -123,3 +125,104 @@ window.logout = async function () {
     // Simplest: Reload current page, auth_check will redirect to login if session is gone.
     location.reload();
 };
+
+// --- Drill-down Menu Logic ---
+
+window.drillDown = function (event, categoryId) {
+    if (event) event.preventDefault();
+    console.log("Drilling down to category:", categoryId);
+
+    localStorage.setItem('active_category', categoryId);
+    applyMenuState(categoryId);
+};
+
+window.goBackToPanel = function (event) {
+    if (event) event.preventDefault();
+    console.log("Going back to main panel");
+
+    localStorage.removeItem('active_category');
+    applyMenuState(null);
+};
+
+function applyMenuState(activeCategoryId) {
+    console.log("Applying menu state for:", activeCategoryId);
+    const topLevelCategories = document.querySelectorAll('.top-level-category');
+    const subItems = document.querySelectorAll('.sub-item');
+    const backButton = document.getElementById('back-to-panel-item');
+
+    if (activeCategoryId) {
+        // Hide all top-level categories first, then only show the active one
+        topLevelCategories.forEach(el => {
+            const catId = el.getAttribute('data-category-id');
+            const anchor = el.querySelector('.nav-link');
+
+            if (catId === activeCategoryId) {
+                el.classList.remove('d-none');
+                if (anchor) {
+                    anchor.classList.add('category-header-active');
+                    // Add a class to indicate it's the "current header"
+                }
+
+                // Show and expand the contents
+                const collapse = el.querySelector('.collapse');
+                if (collapse) {
+                    collapse.classList.add('show');
+                    // Ensure all descendant li's are visible
+                    collapse.querySelectorAll('.sub-item').forEach(sub => {
+                        sub.classList.remove('d-none');
+                    });
+                }
+            } else {
+                el.classList.add('d-none');
+            }
+        });
+
+        // Show back button
+        if (backButton) backButton.classList.remove('d-none');
+    } else {
+        // Standard View: Show all top-level categories, hide all sub-content
+        topLevelCategories.forEach(el => {
+            el.classList.remove('d-none');
+            const anchor = el.querySelector('.nav-link');
+            if (anchor) anchor.classList.remove('category-header-active');
+
+            const collapse = el.querySelector('.collapse');
+            if (collapse) {
+                collapse.classList.remove('show');
+            }
+        });
+
+        // Hide all sub-items when in main view
+        subItems.forEach(el => el.classList.add('d-none'));
+
+        // Hide back button
+        if (backButton) backButton.classList.add('d-none');
+    }
+
+    // Refresh icons if feather is available
+    if (window.feather) {
+        feather.replace();
+    }
+}
+
+
+// Initialize menu state on load
+document.addEventListener('DOMContentLoaded', () => {
+    const activeCategory = localStorage.getItem('active_category');
+
+    // Check if we have an active page that belongs to a category
+    const activePageLink = document.querySelector('.active-page');
+    if (activePageLink) {
+        const parentLi = activePageLink.closest('.sub-item');
+        if (parentLi) {
+            const parentCategory = parentLi.getAttribute('data-parent-category');
+            if (parentCategory) {
+                localStorage.setItem('active_category', parentCategory);
+                applyMenuState(parentCategory);
+                return;
+            }
+        }
+    }
+
+    applyMenuState(activeCategory);
+});

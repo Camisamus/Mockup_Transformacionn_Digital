@@ -20,7 +20,7 @@ if (loginForm) {
         if (window.location.pathname.includes('page_Contribuyente.php')) {
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('is_contribuyente', 'true'); // Standardized key
-            window.location.href = 'paginas/patentes_mis_solicitudes_C.php';
+            window.location.href = 'Funcionarios/patentes_mis_solicitudes_C.php';
             return;
         }
 
@@ -61,7 +61,7 @@ if (loginForm) {
                     localStorage.setItem('user_data', JSON.stringify(data.data));
                 }
 
-                window.location.href = 'paginas/dashboard.php';
+                window.location.href = 'Funcionarios/dashboard.php';
             } else {
                 // Login failed
                 loginError.classList.remove('d-none');
@@ -80,7 +80,7 @@ function login() {
     state.isLoggedIn = true;
     localStorage.setItem('isLoggedIn', 'true');
     // Direct Redirect
-    window.location.href = 'paginas/dashboard.php';
+    window.location.href = 'Funcionarios/dashboard.php';
 }
 
 // Helper: Logout (Used by layout_manager or others)
@@ -105,9 +105,9 @@ window.logout = async function () {
     localStorage.removeItem('user_data');
 
     // Redirect to root login
-    // Detect if we are in a subdirectory (paginas/) or root
+    // Detect if we are in a subdirectory (Funcionarios/) or root
     // If current path has 'paginas', go up one level.
-    if (window.location.pathname.includes('/paginas/')) {
+    if (window.location.pathname.includes('/Funcionarios/')) {
         //window.location.href = '../index.php';
     } else {
         // window.location.href = 'index.php';

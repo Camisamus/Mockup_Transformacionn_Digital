@@ -10,18 +10,18 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
-<body class="bg-light">
+<body class="watermark-bg" style="font-family: 'Roboto', sans-serif;">
 
     <!-- Login Screen Only -->
     <div id="login-screen" class="d-flex align-items-center justify-content-center vh-100">
-        <div class="card shadow-sm border-0" style="width: 350px;">
+        <div class="card shadow-sm border-0" style="width: 350px; border-radius: 4px !important;">
             <div class="card-body p-4">
                 <div class="text-center mb-4">
-                    <div class="bg-primary  rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                        style="width: 64px; height: 64px;">
-                        <i data-feather="lock" style="width: 32px; height: 32px;"></i>
+                    <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3 shadow"
+                        style="width: 64px; height: 64px; background-color: #006FB3 !important;">
+                        <i data-feather="lock" class="text-white" style="width: 32px; height: 32px;"></i>
                     </div>
-                    <h3 class="fw-bold text-dark">Acceso Municipal</h3>
+                    <h3 class="fw-bold text-dark font-serif">Acceso Municipal</h3>
                     <p class="text-muted small">Gestión Municipal de Solicitudes</p>
                 </div>
 
@@ -119,7 +119,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             // If already logged in, redirect to PHP page
             if (localStorage.getItem('isLoggedIn') === 'true') {
-                window.location.href = 'paginas/bandeja.php';
+                window.location.href = 'Funcionarios/bandeja.php';
                 return;
             }
 
@@ -165,7 +165,7 @@
                         if (data.data && data.data.user) {
                             localStorage.setItem('user_data', JSON.stringify({ user: data.data.user }));
                         }
-                        window.location.href = 'paginas/bandeja.php';
+                        window.location.href = 'Funcionarios/bandeja.php';
                     } else {
                         loadingSpinner.classList.add('d-none');
                         loginContainer.classList.remove('d-none');
@@ -210,7 +210,7 @@
                         if (data.user) {
                             localStorage.setItem('user_data', JSON.stringify(data.user));
                         }
-                        window.location.href = 'paginas/bandeja.php';
+                        window.location.href = 'Funcionarios/bandeja.php';
                     } else {
                         loadingSpinner.classList.add('d-none');
                         loginContainer.classList.remove('d-none');

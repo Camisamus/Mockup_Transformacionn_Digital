@@ -18,7 +18,7 @@ LINEAMIENTOS GENERALES DEL SISTEMA DE PATENTES
 
 4. COMPONENTES
    - El Sidebar (menú lateral) es un componente modular.
-   - El Sidebar se carga dinámicamente desde "paginas/sidebar.html" mediante "recursos/js/sidebar.js".
+   - El Sidebar se carga dinámicamente desde "Funcionarios/sidebar.html" mediante "recursos/js/sidebar.js".
    - El contenido principal se carga en el iframe "content-frame".
 
 5. DATOS

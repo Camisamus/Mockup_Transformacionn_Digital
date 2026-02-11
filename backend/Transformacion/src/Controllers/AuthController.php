@@ -116,6 +116,7 @@ class AuthController
                     r.rol_id, 
                     r.rol_nombre, 
                     r.rol_enlace, 
+                    r.rol_simbolo, 
                     r.rol_tipo
                 FROM trd_acceso_roles r
                 JOIN trd_acceso_perfiles_roles pr ON r.rol_id = pr.pfr_rol_id
@@ -134,7 +135,7 @@ class AuthController
                 [
                     "rol_id" => "0",
                     "rol_nombre" => "Bandeja",
-                    "rol_enlace" => "paginas/Bandeja.php",
+                    "rol_enlace" => "Funcionarios/bandeja.php",
                     "rol_tipo" => "Pagina"
                 ]
             ];

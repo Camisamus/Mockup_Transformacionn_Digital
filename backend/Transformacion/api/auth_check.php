@@ -23,14 +23,24 @@ $db = $database->getConnection();
 $auth = new AuthController($db);
 
 // Determine Paths
-// If this file is included from paginas/, script path is .../paginas/foo.php
+// If this file is included from Funcionarios/, script path is .../Funcionarios/foo.php
 // Auth check is in .../api/auth_check.php
 // We need to know where we are relative to root to set includes correctly.
 
-// Heuristic: if current script is in 'paginas', prefix is '../'
+// Heuristic: if current script is in 'Funcionarios', prefix is '../' or '../../'
 $currentScriptPath = $_SERVER['SCRIPT_NAME'];
-$isInPaginas = strpos($currentScriptPath, '/paginas/') !== false;
-$pathPrefix = $isInPaginas ? '../' : './';
+$pathPrefix = './';
+if (strpos($currentScriptPath, '/Funcionarios/') !== false) {
+    $pathPrefix = '../';
+    // Check if 2 levels deep
+    $subfolders = ['DESVE', 'INGRESOS', 'NO_Asignadas', 'OIRS', 'SISADMIN'];
+    foreach ($subfolders as $sub) {
+        if (strpos($currentScriptPath, "/Funcionarios/$sub/") !== false) {
+            $pathPrefix = '../../';
+            break;
+        }
+    }
+}
 
 // Verify Auth
 $permissions = $auth->isAuthenticated(); // This checks session and token
@@ -50,7 +60,7 @@ $currentFile = basename($currentScriptPath);
 $allowed = false;
 
 // Always allow dashboard and bandeja
-if ($currentFile === 'dashboard.php' || $currentFile === 'bandeja.php' || $currentFile === 'index.php' || $currentFile === 'logout.php') {
+if ($currentFile === 'dashboard.php' || $currentFile === 'bandeja.php' || $currentFile === 'bandeja_historial.php' || $currentFile === 'index.php' || $currentFile === 'logout.php') {
     $allowed = true;
 } else {
     // Check permissions
@@ -69,7 +79,7 @@ if ($currentFile === 'dashboard.php' || $currentFile === 'bandeja.php' || $curre
 // If strict Check fails
 if (!$allowed && $permissions !== false && basename($currentScriptPath) !== 'index.php') {
     // Redirect to Bandeja
-    header("Location: " . $pathPrefix . "paginas/bandeja.php");
+    header("Location: " . $pathPrefix . "Funcionarios/bandeja.php");
     exit;
 }
 

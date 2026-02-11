@@ -46,7 +46,7 @@ include 'api/header.php';
     document.addEventListener('DOMContentLoaded', () => {
         // If already logged in, redirect immediately
         if (localStorage.getItem('isLoggedIn') === 'true') {
-            window.location.href = '/paginas/patentes_mis_solicitudes_C.php';
+            window.location.href = '/Funcionarios/patentes_mis_solicitudes_C.php';
         }
     });
 </script>

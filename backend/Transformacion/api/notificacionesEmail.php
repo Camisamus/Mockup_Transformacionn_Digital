@@ -41,20 +41,20 @@ $sendNotification = function ($db, $smtp, $solId, $nombre, $email, $vencimientoS
 
             if ($dias >= 0) {
                 $subject = "Recordatorio Fecha Limite";
-                $body = "Hola $nombre,<br><br>Te quedan $dias dias para la fecha limite de tu solicitud pendiente.<br><br>Responda Aqui:<br><br>http://$servidor/Transformacion/paginas/desve_responder.html?id=$solId<br><br>Atte,<br>Sistema";
+                $body = "Hola $nombre,<br><br>Te quedan $dias dias para la fecha limite de tu solicitud pendiente.<br><br>Responda Aqui:<br><br>http://$servidor/Transformacion/Funcionarios/desve_responder.html?id=$solId<br><br>Atte,<br>Sistema";
             } else {
                 $abs_dias = abs($dias);
                 $subject = "Alerta de Expiracion";
-                $body = "Hola $nombre,<br><br>Tu solicitud expiro hace $abs_dias dias.<br><br>Responda Aqui:<br><br>http://$servidor/Transformacion/paginas/desve_responder.html?id=$solId<br><br>Atte,<br>Sistema";
+                $body = "Hola $nombre,<br><br>Tu solicitud expiro hace $abs_dias dias.<br><br>Responda Aqui:<br><br>http://$servidor/Transformacion/Funcionarios/desve_responder.html?id=$solId<br><br>Atte,<br>Sistema";
             }
             break;
         case 'Ingresos':
             $subject = "Notificación de Ingreso Pendiente";
-            $body = "Hola $nombre,<br><br>Tienes un ingreso pendiente que requiere tu atención.<br><br>Responda Aqui:<br><br>http://$servidor/Transformacion/paginas/ingr_responder.html?id=$solId<br><br>Atte,<br>Sistema";
+            $body = "Hola $nombre,<br><br>Tienes un ingreso pendiente que requiere tu atención.<br><br>Responda Aqui:<br><br>http://$servidor/Transformacion/Funcionarios/ingr_responder.html?id=$solId<br><br>Atte,<br>Sistema";
             break;
         default:
             $subject = "Notificación Pendiente";
-            $body = "Hola $nombre,<br><br>Tienes una solicitud pendiente que requiere tu atención.<br><br>Responda Aqui:<br><br>http://$servidor/Transformacion/paginas/ingr_responder.html?id=$solId<br><br>Atte,<br>Sistema";
+            $body = "Hola $nombre,<br><br>Tienes una solicitud pendiente que requiere tu atención.<br><br>Responda Aqui:<br><br>http://$servidor/Transformacion/Funcionarios/ingr_responder.html?id=$solId<br><br>Atte,<br>Sistema";
             break;
     }
     $smtp->send($email, $subject, $body);
