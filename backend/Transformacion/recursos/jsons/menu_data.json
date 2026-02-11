@@ -271,6 +271,50 @@
         ]
     },
     {
+        "id": "10",
+        "tipo": "categoria",
+        "nombre": "OIRS",
+        "icon": "mail",
+        "contenido": [
+            {
+                "id": "10.1",
+                "tipo": "Pagina",
+                "nombre": "Bandeja OIRS",
+                "Enlace": "paginas/oirs_bandeja.php"
+            },
+            {
+                "id": "10.2",
+                "tipo": "Pagina",
+                "nombre": "Ingresar OIRS",
+                "Enlace": "paginas/oirs_ingresar.php"
+            },
+            {
+                "id": "10.3",
+                "tipo": "Pagina",
+                "nombre": "Listar OIRS",
+                "Enlace": "paginas/oirs_listar.php"
+            },
+            {
+                "id": "10.4",
+                "tipo": "Pagina",
+                "nombre": "Consulta OIRS",
+                "Enlace": "paginas/oirs_consulta.php"
+            },
+            {
+                "id": "10.5",
+                "tipo": "Pagina",
+                "nombre": "Solicitudes por Revisar",
+                "Enlace": "paginas/oirs_revisar.php"
+            },
+            {
+                "id": "10.6",
+                "tipo": "Pagina",
+                "nombre": "Visación de Solicitudes",
+                "Enlace": "paginas/oirs_visacion.php"
+            }
+        ]
+    },
+    {
         "id": "9",
         "tipo": "categoria",
         "nombre": "Administración del Sistema",
