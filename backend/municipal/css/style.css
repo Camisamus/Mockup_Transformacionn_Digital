@@ -1,0 +1,14 @@
+body {
+    font-family: "Public Sans", sans-serif
+}
+
+.watermark-bg {
+    background-image: linear-gradient(rgba(246, 247, 248, 0.94), rgba(246, 247, 248, 0.94)), url(https://lh3.googleusercontent.com/aida-public/AB6AXuDS48FiSVm1Dm_CrCnXD7jJf43Q-z_5G1D7qCfsAeIEUPEYPuSBj62ljLtGUCoRPUxcioxXEsdWT7Ce3_l_lWpXqNkqcMpmMF4waV4sUPX8Jq2aUDkdzvrXMPyv8702kD5NbN7sCijiO0g2X-hqmzcM45IsrmIxXf9wCIqKvGbe2XZxzJ_eExpxhFO-2zZocrga3XikNL5Akq-cuh7XcQsSQ7TUvMmSu43HC3PwW9oVY7myepwffZLjOMr_hLFYGrhxmDL_p6lTWZsU);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.dark .watermark-bg {
+    background-image: linear-gradient(rgba(16, 25, 34, 0.96), rgba(16, 25, 34, 0.96)), url(https://lh3.googleusercontent.com/aida-public/AB6AXuD5IBoDUqfpD_J0A8lBHHSlq9r9MsOrAVeFH9gZZgIY0lhwT3L5y_nCftD1ArEvlmiVWm8dTdOOaHfxBtWWgjf9GFvDrdkaDbrviRaIxgjpM9SHQ5jCNYznk_MSwAFKcTtlte_ndBi2-t-Qxy20LE5UGymTaC7dQA18b1opHVcfxVQTW1UN3qEny1J3_J31w3mYPz4E7nKYdoXuoJo5-M9RppHzt3CYaBkXOxpr7_SySYKtfpRKoi46PrOfoJtk4vFEiVpEohUJynYa);
+}

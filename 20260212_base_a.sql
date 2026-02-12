@@ -17,6 +17,77 @@
 /*M!100616 SET @OLD_NOTE_VERBOSITY=@@NOTE_VERBOSITY, NOTE_VERBOSITY=0 */;
 
 --
+-- Table structure for table `sup_feriados`
+--
+
+DROP TABLE IF EXISTS `sup_feriados`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sup_feriados` (
+  `fer_id` int(11) NOT NULL AUTO_INCREMENT,
+  `fer_fecha` date NOT NULL,
+  `fer_motivo` varchar(100) DEFAULT NULL,
+  `fer_tipo` varchar(20) DEFAULT 'Civil',
+  PRIMARY KEY (`fer_id`),
+  UNIQUE KEY `fer_fecha` (`fer_fecha`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sup_feriados`
+--
+
+LOCK TABLES `sup_feriados` WRITE;
+/*!40000 ALTER TABLE `sup_feriados` DISABLE KEYS */;
+set autocommit=0;
+INSERT INTO `sup_feriados` VALUES
+(1,'2026-01-01','Año Nuevo','Civil'),
+(2,'2026-04-03','Viernes Santo','Civil'),
+(3,'2026-04-04','Sábado Santo','Civil'),
+(4,'2026-05-01','Día del Trabajo','Civil'),
+(5,'2026-05-21','Día de las Glorias Navales','Civil'),
+(6,'2026-06-29','San Pedro y San Pablo','Civil'),
+(7,'2026-07-16','Día de la Virgen del Carmen','Civil'),
+(8,'2026-08-15','Asunción de la Virgen','Civil'),
+(9,'2026-09-18','Fiestas Patrias','Civil'),
+(10,'2026-09-19','Glorias del Ejército','Civil'),
+(11,'2026-10-12','Encuentro de Dos Mundos','Civil'),
+(12,'2026-10-31','Día de las Iglesias Evangélicas','Civil'),
+(13,'2026-11-01','Día de Todos los Santos','Civil'),
+(14,'2026-12-08','Inmaculada Concepción','Civil'),
+(15,'2026-12-25','Navidad','Civil');
+/*!40000 ALTER TABLE `sup_feriados` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
+-- Table structure for table `tdr_oirs_asignaciones`
+--
+
+DROP TABLE IF EXISTS `tdr_oirs_asignaciones`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tdr_oirs_asignaciones` (
+  `oia_id` int(11) NOT NULL AUTO_INCREMENT,
+  `oia_solicitud` int(11) NOT NULL,
+  `oia_asignacion` int(11) NOT NULL,
+  `oia_nivel_asignacion` tinyint(4) NOT NULL,
+  PRIMARY KEY (`oia_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tdr_oirs_asignaciones`
+--
+
+LOCK TABLES `tdr_oirs_asignaciones` WRITE;
+/*!40000 ALTER TABLE `tdr_oirs_asignaciones` DISABLE KEYS */;
+set autocommit=0;
+/*!40000 ALTER TABLE `tdr_oirs_asignaciones` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
 -- Table structure for table `trd_acceso_perfiles`
 --
 
@@ -30,7 +101,7 @@ CREATE TABLE `trd_acceso_perfiles` (
   `prf_creacion` datetime DEFAULT current_timestamp(),
   `prf_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`prf_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -49,7 +120,8 @@ INSERT INTO `trd_acceso_perfiles` VALUES
 (6,'6',0,'2025-12-29 12:53:09','2026-02-02 08:34:42'),
 (7,'Subvenciones',0,'2026-01-19 13:35:49','2026-01-19 13:35:49'),
 (8,'Ingresos',0,'2026-01-19 13:35:49','2026-01-19 13:35:49'),
-(9,'Abogado_DESVE',0,'2026-02-02 15:42:11','2026-02-02 15:42:11');
+(9,'Abogado_DESVE',0,'2026-02-02 15:42:11','2026-02-02 15:42:11'),
+(10,'OIRS',0,'2026-02-10 16:34:32','2026-02-10 16:34:32');
 /*!40000 ALTER TABLE `trd_acceso_perfiles` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -99,7 +171,7 @@ INSERT INTO `trd_acceso_perfiles_roles` VALUES
 (1,'1.2.3.3',0,'2026-02-02 08:34:56','2026-02-02 08:34:56'),
 (1,'1.2.3.4',0,'2026-02-02 08:34:57','2026-02-02 08:34:57'),
 (1,'1.2.3.5',0,'2026-02-02 08:34:57','2026-02-02 08:34:57'),
-(1,'0',0,'2026-02-02 08:40:58','2026-02-02 08:40:58'),
+(1,'A.0',0,'2026-02-02 08:40:58','2026-02-02 08:40:58'),
 (4,'4',0,'2026-02-02 08:41:16','2026-02-02 08:41:16'),
 (4,'4.1',0,'2026-02-02 08:41:16','2026-02-02 08:41:16'),
 (4,'4.2',0,'2026-02-02 08:41:16','2026-02-02 08:41:16'),
@@ -117,7 +189,25 @@ INSERT INTO `trd_acceso_perfiles_roles` VALUES
 (8,'8.7',0,'2026-02-02 08:41:43','2026-02-02 08:41:43'),
 (9,'4.3',0,'2026-02-02 15:42:38','2026-02-02 15:42:38'),
 (9,'4.6',0,'2026-02-02 15:42:38','2026-02-02 15:42:38'),
-(9,'4',0,'2026-02-02 15:52:03','2026-02-02 15:52:03');
+(9,'4',0,'2026-02-02 15:52:03','2026-02-02 15:52:03'),
+(2,'A.0',0,'2026-02-06 13:45:20','2026-02-06 13:45:20'),
+(7,'A.0',0,'2026-02-06 13:45:20','2026-02-06 13:45:20'),
+(8,'A.0',0,'2026-02-06 13:45:20','2026-02-06 13:45:20'),
+(9,'A.0',0,'2026-02-06 13:45:20','2026-02-06 13:45:20'),
+(3,'A.0',0,'2026-02-06 13:45:29','2026-02-06 13:45:29'),
+(4,'A.0',0,'2026-02-06 13:45:29','2026-02-06 13:45:29'),
+(5,'A.0',0,'2026-02-06 13:45:29','2026-02-06 13:45:29'),
+(6,'A.0',0,'2026-02-06 13:45:29','2026-02-06 13:45:29'),
+(10,'10',0,'2026-02-10 16:35:45','2026-02-10 16:35:45'),
+(10,'10.1',0,'2026-02-10 16:35:45','2026-02-10 16:35:45'),
+(10,'10.2',0,'2026-02-10 16:35:46','2026-02-10 16:35:46'),
+(10,'10.3',0,'2026-02-10 16:35:46','2026-02-10 16:35:46'),
+(10,'10.4',0,'2026-02-10 16:35:46','2026-02-10 16:35:46'),
+(10,'10.5',0,'2026-02-10 16:35:46','2026-02-10 16:35:46'),
+(10,'10.6',0,'2026-02-10 16:35:47','2026-02-10 16:35:47'),
+(10,'10',0,'2026-02-11 09:42:39','2026-02-11 09:42:39'),
+(10,'10.7',0,'2026-02-11 09:42:39','2026-02-11 09:42:39'),
+(10,'A.0',0,'2026-02-11 11:40:33','2026-02-11 11:40:33');
 /*!40000 ALTER TABLE `trd_acceso_perfiles_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -134,6 +224,7 @@ CREATE TABLE `trd_acceso_roles` (
   `rol_nombre` varchar(255) NOT NULL,
   `rol_enlace` varchar(255) DEFAULT NULL,
   `rol_tipo` varchar(50) DEFAULT NULL,
+  `rol_simbolo` varchar(100) DEFAULT 'dashboard',
   `rol_borrado` tinyint(1) DEFAULT 0,
   `rol_creacion` datetime DEFAULT current_timestamp(),
   `rol_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -149,64 +240,73 @@ LOCK TABLES `trd_acceso_roles` WRITE;
 /*!40000 ALTER TABLE `trd_acceso_roles` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `trd_acceso_roles` VALUES
-('0','Bandeja','paginas/Bandeja.html','Pagina',0,'2025-12-29 12:53:09','2025-12-29 12:53:09'),
-('1','Administracion sistema',NULL,'categoria',0,'2025-12-29 12:53:09','2026-01-30 15:46:31'),
-('1.1','Logs del Sistema',NULL,'subcategoria',0,'2025-12-29 12:53:09','2026-01-30 15:46:31'),
-('1.1.1','Consulta de Log','paginas/logs_consulta_log.html','Pagina',0,'2025-12-29 12:53:09','2026-01-30 15:46:31'),
-('1.1.2','Listado de Logs','paginas/logs_listado_logs.html','Pagina',0,'2025-12-29 12:53:09','2026-01-30 15:46:31'),
-('1.1.3','Acceso','','subcategoria',1,'2026-01-30 11:29:05','2026-01-30 15:46:31'),
-('1.2','Mantenedores',NULL,'subcategoria',0,'2026-01-14 09:33:54','2026-01-30 15:46:31'),
-('1.2.1','General',NULL,'subcategoria',0,'2026-01-14 09:33:54','2026-01-30 15:46:31'),
-('1.2.1.1','Contribuyentes','paginas/sisadmin_mantenedor_general_contribuyentes.html','Pagina',0,'2026-01-14 09:33:54','2026-01-30 15:46:31'),
-('1.2.1.2','Organizaciones Comunitarias','paginas/sisadmin_mantenedor_general_org_comunitarias.html','Pagina',0,'2026-01-26 10:30:51','2026-01-30 15:46:31'),
-('1.2.1.3','Roles','sisadmin_mantenedor_acceso_roles.html','Pagina',1,'2026-01-30 11:27:02','2026-02-03 16:45:09'),
-('1.2.2','DESVE','','subcategoria',0,'2026-01-26 10:28:30','2026-01-30 15:46:31'),
-('1.2.2.1','Oigenes especiales','paginas/sisadmin_mantenedor_desve_oigenesespeciales.html','Pagina',0,'2026-01-26 10:30:51','2026-01-30 15:46:31'),
-('1.2.3','Acceso','','subcategoria',0,'2026-01-30 11:30:27','2026-01-30 15:46:31'),
-('1.2.3.1','Usuaios','paginas/sisadmin_mantenedor_acceso_usuarios.html','Pagina',0,'2026-01-30 11:33:12','2026-01-30 15:46:31'),
-('1.2.3.2','Usuarios por Perfil','paginas/sisadmin_mantenedor_acceso_usuarios_perfiles.html','Pagina',0,'2026-01-30 13:22:26','2026-01-30 15:46:31'),
-('1.2.3.3','Perfiles','paginas/sisadmin_mantenedor_acceso_perfiles.html','Pagina',0,'2026-01-30 13:22:26','2026-01-30 15:46:31'),
-('1.2.3.4','Perfiles por Rol','paginas/sisadmin_mantenedor_acceso_perfiles_roles.html','Pagina',0,'2026-01-30 13:22:26','2026-01-30 15:46:31'),
-('1.2.3.5','Roles','paginas/sisadmin_mantenedor_acceso_roles.html','Pagina',0,'2026-01-30 13:22:26','2026-01-30 15:46:31'),
-('11','Patentes',NULL,'categoria',0,'2025-12-29 12:53:09','2026-01-30 15:45:41'),
-('11.1','Mis Solicitudes','paginas/patentes_mis_solicitudes.html','Pagina',0,'2025-12-29 12:53:09','2026-01-30 15:45:41'),
-('11.2','Pagos','paginas/pagos.html','Pagina',0,'2025-12-29 12:53:09','2026-01-30 15:45:41'),
-('11.3','Solicitud Única de Patentes','paginas/patentes_solicitud_unica.html','Pagina',0,'2025-12-29 12:53:09','2026-01-30 15:45:41'),
-('11.4','Consulta de Solicitud','paginas/patentes_consulta_solicitud.html','Pagina',0,'2025-12-29 12:53:09','2026-01-30 15:45:41'),
-('11.c','Gestión de Empresas','paginas/contribuyente_empresas.html','Pagina',0,'2025-12-29 12:53:09','2026-01-30 15:45:41'),
-('2','Organizaciones Comunitarias',NULL,'categoria',0,'2025-12-29 12:53:09','2025-12-29 12:53:09'),
-('2.1','Organizaciones',NULL,'subcategoria',0,'2025-12-29 12:53:09','2025-12-29 12:53:09'),
-('2.1.1','Consulta Organizacion','paginas/organizaciones_consulta_organizacion.html','Pagina',0,'2025-12-29 12:53:09','2025-12-29 12:53:09'),
-('2.1.2','Consulta Masiva Organizaciones','paginas/organizaciones_consulta_masiva.html','Pagina',0,'2025-12-29 12:53:09','2025-12-29 12:53:09'),
-('3','Subvenciones',NULL,'categoria',0,'2025-12-29 12:53:09','2025-12-29 12:53:09'),
-('3.1','Subvenciones',NULL,'subcategoria',0,'2025-12-29 12:53:09','2025-12-29 12:53:09'),
-('3.1.1','Consulta de Subvención','paginas/subvenciones_consulta_subvencion.html','Pagina',0,'2025-12-29 12:53:09','2025-12-29 12:53:09'),
-('3.1.2','Consulta Masiva de Subvenciones','paginas/subvenciones_consulta_masiva.html','Pagina',0,'2025-12-29 12:53:09','2025-12-29 12:53:09'),
-('3.1.7','Consulta Masiva de Pagos','paginas/subvenciones_consulta_masiva_pagos.html','Pagina',0,'2025-12-29 12:53:09','2025-12-29 12:53:09'),
-('3.2','Postulaciones',NULL,NULL,0,'2026-01-30 13:37:13','2026-01-30 13:37:13'),
-('3.2.1','Consulta de Postulación','paginas/postulaciones_consulta_postulacion.html',NULL,0,'2026-01-30 13:37:13','2026-01-30 13:37:13'),
-('3.2.2','Consulta Masiva de Postulaciones','paginas/postulaciones_consulta_masiva.html',NULL,0,'2026-01-30 13:37:13','2026-01-30 13:37:13'),
-('4','DESVE',NULL,'categoria',0,'2026-01-30 13:45:50','2026-01-30 15:44:42'),
-('4.1','Nuevo Ingreso ','paginas/desve_nuevo.html','Pagina',0,'2026-01-30 13:45:50','2026-01-30 15:44:42'),
-('4.2','Listado ','paginas/desve_listado_ingresos.html','Pagina',0,'2026-01-30 13:45:50','2026-01-30 15:44:42'),
-('4.3','Historial ','paginas/desve_historial.html','Pagina',0,'2026-01-30 13:45:50','2026-01-30 15:44:42'),
-('4.4','Edicion ','paginas/desve_modificar.html','Pagina',0,'2026-01-30 13:45:50','2026-01-30 15:44:42'),
-('4.5','Responder ','paginas/desve_responder.html','Pagina',0,'2026-01-30 13:45:50','2026-01-30 15:44:42'),
-('4.6','Consulta ','paginas/desve_consultar.html','Pagina',0,'2026-01-30 13:45:50','2026-01-30 15:44:42'),
-('5','Atenciones',NULL,'categoria',0,'2025-12-29 12:53:09','2025-12-29 12:53:09'),
-('5.1','Lista de espera','paginas/atenciones_lista_espera.html','Pagina',0,'2025-12-29 12:53:09','2026-01-29 12:49:05'),
-('5.2','Historial','paginas/atenciones_listado_atenciones.html','Pagina',0,'2025-12-29 12:53:09','2026-01-29 12:49:05'),
-('5.3','Nueva','paginas/atenciones_nueva_atencion.html','Pagina',0,'2025-12-29 12:53:09','2026-01-29 12:49:05'),
-('5.4','Tomar Atención','paginas/atenciones_tomar_atencion.html','Pagina',0,'2025-12-29 12:53:09','2026-01-29 12:49:05'),
-('5.5','Consultar','paginas/atenciones_consulta_atencion.html','Pagina',0,'2025-12-29 12:53:09','2026-01-29 12:49:05'),
-('8','Ingresos',NULL,'categoria',0,'2026-01-19 10:44:56','2026-01-19 11:14:39'),
-('8.1','Bandeja','paginas/ingr_bandeja.html','Pagina',0,'2026-01-19 10:54:34','2026-01-19 11:14:39'),
-('8.2','Crear ','paginas/ingr_crear.html','Pagina',0,'2026-01-19 10:54:34','2026-01-19 11:14:39'),
-('8.3','Consultar ','paginas/ingr_consultar.html','Pagina',0,'2026-01-19 10:54:34','2026-01-19 11:14:39'),
-('8.4','Moificar ','paginas/ingr_modificar.html','Pagina',0,'2026-01-19 10:54:34','2026-01-19 11:14:39'),
-('8.5','Respoder','paginas/ingr_responder.html','Pagina',0,'2026-01-19 10:54:34','2026-01-19 11:14:39'),
-('8.6','Preparar','paginas/ingr_preparar.html','Pagina',0,'2026-01-19 10:54:34','2026-01-26 08:06:32'),
-('8.7','Historial ','paginas/ingr_historial.html','Pagina',0,'2026-01-26 07:52:09','2026-01-26 07:52:09');
+('1','Administracion sistema',NULL,'categoria','settings',0,'2025-12-29 12:53:09','2026-02-11 15:28:33'),
+('1.1','Logs del Sistema',NULL,'subcategoria','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('1.1.1','Consulta de Log','Funcionarios/SISADMIN/logs_consulta_log.html','Pagina','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('1.1.2','Listado de Logs','Funcionarios/SISADMIN/logs_listado_logs.html','Pagina','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('1.1.3','Acceso','','subcategoria','menu',1,'2026-01-30 11:29:05','2026-02-11 15:16:37'),
+('1.2','Mantenedores',NULL,'subcategoria','menu',0,'2026-01-14 09:33:54','2026-02-11 15:16:37'),
+('1.2.1','General',NULL,'subcategoria','menu',0,'2026-01-14 09:33:54','2026-02-11 15:16:37'),
+('1.2.1.1','Contribuyentes','Funcionarios/SISADMIN/sisadmin_mantenedor_general_contribuyentes.html','Pagina','menu',0,'2026-01-14 09:33:54','2026-02-11 15:16:37'),
+('1.2.1.2','Organizaciones Comunitarias','Funcionarios/SISADMIN/sisadmin_mantenedor_general_org_comunitarias.html','Pagina','menu',0,'2026-01-26 10:30:51','2026-02-11 15:16:37'),
+('1.2.1.3','Roles','sisadmin_mantenedor_acceso_roles.html','Pagina','menu',1,'2026-01-30 11:27:02','2026-02-11 15:16:37'),
+('1.2.2','DESVE','','subcategoria','menu',0,'2026-01-26 10:28:30','2026-02-11 15:16:37'),
+('1.2.2.1','Oigenes especiales','Funcionarios/SISADMIN/sisadmin_mantenedor_desve_oigenesespeciales.html','Pagina','menu',0,'2026-01-26 10:30:51','2026-02-11 15:16:37'),
+('1.2.3','Acceso','','subcategoria','menu',0,'2026-01-30 11:30:27','2026-02-11 15:16:37'),
+('1.2.3.1','Usuaios','Funcionarios/SISADMIN/sisadmin_mantenedor_acceso_usuarios.html','Pagina','menu',0,'2026-01-30 11:33:12','2026-02-11 15:16:37'),
+('1.2.3.2','Usuarios por Perfil','Funcionarios/SISADMIN/sisadmin_mantenedor_acceso_usuarios_perfiles.html','Pagina','menu',0,'2026-01-30 13:22:26','2026-02-11 15:16:37'),
+('1.2.3.3','Perfiles','Funcionarios/SISADMIN/sisadmin_mantenedor_acceso_perfiles.html','Pagina','menu',0,'2026-01-30 13:22:26','2026-02-11 15:16:37'),
+('1.2.3.4','Perfiles por Rol','Funcionarios/SISADMIN/sisadmin_mantenedor_acceso_perfiles_roles.html','Pagina','menu',0,'2026-01-30 13:22:26','2026-02-11 15:16:37'),
+('1.2.3.5','Roles','Funcionarios/SISADMIN/sisadmin_mantenedor_acceso_roles.html','Pagina','menu',0,'2026-01-30 13:22:26','2026-02-11 15:16:37'),
+('10','OIRS',NULL,'categoria','command',0,'2026-02-10 16:23:11','2026-02-11 15:22:19'),
+('10.1','Bandeja OIRS','Funcionarios/OIRS/oirs_bandeja.php','Pagina','list',0,'2026-02-10 16:23:11','2026-02-11 15:33:00'),
+('10.2','Ingresar OIRS','Funcionarios/OIRS/oirs_ingresar.php','Pagina','plus',0,'2026-02-10 16:23:11','2026-02-11 15:18:30'),
+('10.3','Listar OIRS','Funcionarios/OIRS/oirs_listar.php','Pagina','map',0,'2026-02-10 16:23:11','2026-02-11 15:35:11'),
+('10.4','Consulta OIRS','Funcionarios/OIRS/oirs_consulta.php','Pagina','search',0,'2026-02-10 16:23:11','2026-02-11 15:36:18'),
+('10.5','Solicitudes por Revisar','Funcionarios/OIRS/oirs_revisar.php','Pagina','message-square',0,'2026-02-10 16:23:11','2026-02-11 15:36:18'),
+('10.6','Visación de Solicitudes','Funcionarios/OIRS/oirs_visacion.php','Pagina','edit',0,'2026-02-10 16:23:11','2026-02-11 15:19:38'),
+('10.7','Historial de Solicitudes','Funcionarios/OIRS/oirs_historial.php','Pagina','archive',0,'2026-02-11 09:42:08','2026-02-11 15:33:00'),
+('11','Patentes',NULL,'categoria','command',0,'2025-12-29 12:53:09','2026-02-11 15:22:19'),
+('11.1','Mis Solicitudes','Funcionarios/NO_Asignadas/patentes_mis_solicitudes.html','Pagina','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('11.2','Pagos','Funcionarios/NO_Asignadas/pagos.html','Pagina','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('11.3','Solicitud Única de Patentes','Funcionarios/NO_Asignadas/patentes_solicitud_unica.html','Pagina','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('11.4','Consulta de Solicitud','Funcionarios/NO_Asignadas/patentes_consulta_solicitud.html','Pagina','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('11.c','Gestión de Empresas','Funcionarios/NO_Asignadas/contribuyente_empresas.html','Pagina','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('2','Organizaciones Comunitarias',NULL,'categoria','command',0,'2025-12-29 12:53:09','2026-02-11 15:22:19'),
+('2.1','Organizaciones',NULL,'subcategoria','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('2.1.1','Consulta Organizacion','Funcionarios/NO_Asignadas/organizaciones_consulta_organizacion.html','Pagina','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('2.1.2','Consulta Masiva Organizaciones','Funcionarios/NO_Asignadas/organizaciones_consulta_masiva.html','Pagina','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('3','Subvenciones',NULL,'categoria','command',0,'2025-12-29 12:53:09','2026-02-11 15:22:19'),
+('3.1','Subvenciones',NULL,'subcategoria','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('3.1.1','Consulta de Subvención','Funcionarios/NO_Asignadas/subvenciones_consulta_subvencion.html','Pagina','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('3.1.2','Consulta Masiva de Subvenciones','Funcionarios/NO_Asignadas/subvenciones_consulta_masiva.html','Pagina','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('3.1.7','Consulta Masiva de Pagos','Funcionarios/NO_Asignadas/subvenciones_consulta_masiva_pagos.html','Pagina','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('3.2','Postulaciones',NULL,NULL,'menu',0,'2026-01-30 13:37:13','2026-02-11 15:16:37'),
+('3.2.1','Consulta de Postulación','Funcionarios/NO_Asignadas/postulaciones_consulta_postulacion.html',NULL,'menu',0,'2026-01-30 13:37:13','2026-02-11 15:16:37'),
+('3.2.2','Consulta Masiva de Postulaciones','Funcionarios/NO_Asignadas/postulaciones_consulta_masiva.html',NULL,'menu',0,'2026-01-30 13:37:13','2026-02-11 15:16:37'),
+('4','DESVE',NULL,'categoria','command',0,'2026-01-30 13:45:50','2026-02-11 15:22:19'),
+('4.1','Nuevo Ingreso ','Funcionarios/DESVE/desve_nuevo.html','Pagina','plus',0,'2026-01-30 13:45:50','2026-02-11 15:18:30'),
+('4.2','Listado ','Funcionarios/DESVE/desve_listado_ingresos.html','Pagina','list',0,'2026-01-30 13:45:50','2026-02-11 15:33:00'),
+('4.3','Historial ','Funcionarios/DESVE/desve_historial.html','Pagina','archive',0,'2026-01-30 13:45:50','2026-02-11 15:35:11'),
+('4.4','Edicion ','Funcionarios/DESVE/desve_modificar.html','Pagina','edit',0,'2026-01-30 13:45:50','2026-02-11 15:19:38'),
+('4.5','Responder ','Funcionarios/DESVE/desve_responder.html','Pagina','message-square',0,'2026-01-30 13:45:50','2026-02-11 15:36:18'),
+('4.6','Consulta ','Funcionarios/DESVE/desve_consultar.html','Pagina','search',0,'2026-01-30 13:45:50','2026-02-11 15:36:18'),
+('5','Atenciones',NULL,'categoria','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('5.1','Lista de espera','Funcionarios/NO_Asignadas/atenciones_lista_espera.html','Pagina','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('5.2','Historial','Funcionarios/NO_Asignadas/atenciones_listado_atenciones.html','Pagina','archive',0,'2025-12-29 12:53:09','2026-02-11 15:33:00'),
+('5.3','Nueva','Funcionarios/NO_Asignadas/atenciones_nueva_atencion.html','Pagina','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('5.4','Tomar Atención','Funcionarios/NO_Asignadas/atenciones_tomar_atencion.html','Pagina','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('5.5','Consultar','Funcionarios/NO_Asignadas/atenciones_consulta_atencion.html','Pagina','menu',0,'2025-12-29 12:53:09','2026-02-11 15:16:37'),
+('8','Ingresos',NULL,'categoria','command',0,'2026-01-19 10:44:56','2026-02-11 15:22:19'),
+('8.1','Bandeja','Funcionarios/INGRESOS/ingr_bandeja.html','Pagina','list',0,'2026-01-19 10:54:34','2026-02-11 15:33:00'),
+('8.2','Crear ','Funcionarios/INGRESOS/ingr_crear.html','Pagina','plus',0,'2026-01-19 10:54:34','2026-02-11 15:18:30'),
+('8.3','Consultar ','Funcionarios/INGRESOS/ingr_consultar.html','Pagina','menu',0,'2026-01-19 10:54:34','2026-02-11 15:16:37'),
+('8.4','Moificar ','Funcionarios/INGRESOS/ingr_modificar.html','Pagina','edit',0,'2026-01-19 10:54:34','2026-02-11 15:19:38'),
+('8.5','Respoder','Funcionarios/INGRESOS/ingr_responder.html','Pagina','message-square',0,'2026-01-19 10:54:34','2026-02-11 15:36:18'),
+('8.6','Preparar','Funcionarios/INGRESOS/ingr_preparar.html','Pagina','menu',0,'2026-01-19 10:54:34','2026-02-11 15:16:37'),
+('8.7','Historial ','Funcionarios/INGRESOS/ingr_historial.html','Pagina','archive',0,'2026-01-26 07:52:09','2026-02-11 15:33:00'),
+('A.0','Bandeja','Funcionarios/bandeja.html','Pagina','menu',0,'2025-12-29 12:53:09','2026-02-11 16:40:38'),
+('A.1','Bandeja Historial','Funcionarios/bandeja_historial.php','Pagina','clock',0,'2026-02-11 16:34:04','2026-02-11 16:40:38');
 /*!40000 ALTER TABLE `trd_acceso_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -224,6 +324,7 @@ CREATE TABLE `trd_acceso_usuarios` (
   `usr_apellido` varchar(100) NOT NULL,
   `usr_rut` varchar(12) NOT NULL,
   `usr_email` varchar(255) DEFAULT NULL,
+  `usr_rango` tinyint(4) NOT NULL DEFAULT 1,
   `usr_borrado` tinyint(1) DEFAULT 0,
   `usr_creacion` datetime DEFAULT current_timestamp(),
   `usr_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -240,9 +341,9 @@ LOCK TABLES `trd_acceso_usuarios` WRITE;
 /*!40000 ALTER TABLE `trd_acceso_usuarios` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `trd_acceso_usuarios` VALUES
-(1,'Juan','hervas','14711939-9','juan.hervas@munivina.cl',0,'2025-12-29 12:53:09','2026-01-07 13:43:55'),
-(2,'Leticia','meneses','17619949-0','leticia.meneses@munivina.cl',0,'2026-01-06 11:47:58','2026-01-06 11:48:23'),
-(3,'Ramon','Evil Guy','14037230-7','ramon.martinez@munivina.cl',0,'2026-01-09 10:13:01','2026-01-09 10:13:01');
+(1,'Juan','hervas','14711939-9','juan.hervas@munivina.cl',1,0,'2025-12-29 12:53:09','2026-01-07 13:43:55'),
+(2,'Leticia','meneses','17619949-0','leticia.meneses@munivina.cl',1,0,'2026-01-06 11:47:58','2026-01-06 11:48:23'),
+(3,'Ramon','Evil Guy','14037230-7','ramon.martinez@munivina.cl',1,0,'2026-01-09 10:13:01','2026-01-09 10:13:01');
 /*!40000 ALTER TABLE `trd_acceso_usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -281,17 +382,87 @@ LOCK TABLES `trd_acceso_usuarios_perfiles` WRITE;
 set autocommit=0;
 INSERT INTO `trd_acceso_usuarios_perfiles` VALUES
 (1,1,NULL,NULL,NULL,0,'2025-12-29 12:53:09','2026-01-30 15:48:51'),
-(1,2,NULL,NULL,NULL,1,'2026-01-06 18:28:37','2026-01-19 13:32:10'),
-(1,3,NULL,NULL,NULL,1,'2026-01-06 16:51:57','2026-01-19 13:32:18'),
 (1,4,NULL,NULL,NULL,0,'2026-01-30 13:48:40','2026-01-30 13:48:40'),
-(1,5,NULL,NULL,NULL,1,'2026-01-29 12:49:37','2026-01-29 13:12:46'),
 (1,8,NULL,NULL,NULL,0,'2026-01-19 13:37:24','2026-01-19 13:37:24'),
+(1,10,NULL,NULL,NULL,0,'2026-02-10 16:36:13','2026-02-10 16:36:13'),
 (2,6,NULL,NULL,NULL,0,'2026-01-06 12:29:03','2026-01-06 12:29:03'),
 (2,8,NULL,NULL,NULL,0,'2026-01-21 16:21:00','2026-01-21 16:21:00'),
-(3,4,NULL,NULL,NULL,1,'2026-02-02 15:40:43','2026-02-02 15:43:08'),
-(3,6,NULL,NULL,NULL,1,'2026-01-09 10:15:40','2026-01-28 16:45:06'),
-(3,9,NULL,'2026-02-03 15:43:00',NULL,0,'2026-02-02 15:43:23','2026-02-02 15:43:23');
+(3,8,'2026-02-05 13:39:00','2027-06-12 13:39:00',NULL,0,'2026-02-06 13:39:31','2026-02-06 13:52:29');
 /*!40000 ALTER TABLE `trd_acceso_usuarios_perfiles` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
+-- Table structure for table `trd_cont_direcciones`
+--
+
+DROP TABLE IF EXISTS `trd_cont_direcciones`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_cont_direcciones` (
+  `tcd_id` int(11) NOT NULL AUTO_INCREMENT,
+  `tcd_contribuyente` int(11) NOT NULL,
+  `tcd_tipo_direccion` varchar(50) DEFAULT 'Particular',
+  `tcd_calle` varchar(255) NOT NULL,
+  `tcd_numero` varchar(20) DEFAULT NULL,
+  `tcd_departamento` varchar(20) DEFAULT NULL,
+  `tcd_casa` varchar(20) DEFAULT NULL,
+  `tcd_aclaratoria` text DEFAULT NULL,
+  `tcd_latitud` decimal(10,8) DEFAULT NULL,
+  `tcd_longitud` decimal(11,8) DEFAULT NULL,
+  `tcd_dir_creacion` datetime DEFAULT current_timestamp(),
+  `tcd_dir_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`tcd_id`),
+  KEY `trd_cont_direcciones_trd_general_contribuyentes_FK` (`tcd_contribuyente`),
+  CONSTRAINT `trd_cont_direcciones_trd_general_contribuyentes_FK` FOREIGN KEY (`tcd_contribuyente`) REFERENCES `trd_general_contribuyentes` (`tgc_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `trd_cont_direcciones`
+--
+
+LOCK TABLES `trd_cont_direcciones` WRITE;
+/*!40000 ALTER TABLE `trd_cont_direcciones` DISABLE KEYS */;
+set autocommit=0;
+/*!40000 ALTER TABLE `trd_cont_direcciones` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
+-- Table structure for table `trd_cont_escolaridad`
+--
+
+DROP TABLE IF EXISTS `trd_cont_escolaridad`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_cont_escolaridad` (
+  `esc_id` int(11) NOT NULL AUTO_INCREMENT,
+  `esc_nombre` varchar(100) NOT NULL,
+  PRIMARY KEY (`esc_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `trd_cont_escolaridad`
+--
+
+LOCK TABLES `trd_cont_escolaridad` WRITE;
+/*!40000 ALTER TABLE `trd_cont_escolaridad` DISABLE KEYS */;
+set autocommit=0;
+INSERT INTO `trd_cont_escolaridad` VALUES
+(1,'Sin instrucción'),
+(2,'Básica Incompleta'),
+(3,'Básica Completa'),
+(4,'Media Incompleta'),
+(5,'Media Completa (Científico-Humanista)'),
+(6,'Media Completa (Técnico-Profesional)'),
+(7,'Superior Técnica Incompleta'),
+(8,'Superior Técnica Completa'),
+(9,'Superior Profesional Incompleta'),
+(10,'Superior Profesional Completa'),
+(11,'Postgrado (Magíster/Doctorado)');
+/*!40000 ALTER TABLE `trd_cont_escolaridad` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
 
@@ -628,7 +799,7 @@ CREATE TABLE `trd_documentos_metadata` (
   PRIMARY KEY (`tdm_id_meta`),
   KEY `trd_documentos_metadata_versiones_FK` (`tdm_documento`),
   CONSTRAINT `trd_documentos_metadata_versiones_FK` FOREIGN KEY (`tdm_documento`) REFERENCES `trd_general_documento_adjunto_versiones` (`docv_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -638,6 +809,70 @@ CREATE TABLE `trd_documentos_metadata` (
 LOCK TABLES `trd_documentos_metadata` WRITE;
 /*!40000 ALTER TABLE `trd_documentos_metadata` DISABLE KEYS */;
 set autocommit=0;
+INSERT INTO `trd_documentos_metadata` VALUES
+(1,1,'Tamaño','118801'),
+(2,1,'Tipo MIME','application/pdf'),
+(3,1,'Extensión','pdf'),
+(4,1,'Hash SHA256','4569238b6f29cef6ac0e5a0ed52ec6dc6bde3f847197e45b8b476c390537001b'),
+(5,1,'Sistema Origen','GesDoc'),
+(6,1,'Fecha Subida','2026-02-06 16:47:02'),
+(7,1,'Usuario','1'),
+(8,2,'Tamaño','118801'),
+(9,2,'Tipo MIME','application/pdf'),
+(10,2,'Extensión','pdf'),
+(11,2,'Hash SHA256','4569238b6f29cef6ac0e5a0ed52ec6dc6bde3f847197e45b8b476c390537001b'),
+(12,2,'Sistema Origen','GesDoc'),
+(13,2,'Fecha Subida','2026-02-06 17:00:46'),
+(14,2,'Usuario','1'),
+(15,3,'Tamaño','145329'),
+(16,3,'Tipo MIME','application/vnd.openxmlformats-officedocument.wordprocessingml.document'),
+(17,3,'Extensión','docx'),
+(18,3,'Hash SHA256','e8646b2dbbcf0ab4f6c99b23bee910339d7b93ad3082ba6b4082df3b617f8297'),
+(19,3,'Sistema Origen','GesDoc'),
+(20,3,'Fecha Subida','2026-02-06 17:05:20'),
+(21,3,'Usuario','1'),
+(22,4,'Tamaño','145329'),
+(23,4,'Tipo MIME','application/vnd.openxmlformats-officedocument.wordprocessingml.document'),
+(24,4,'Extensión','docx'),
+(25,4,'Hash SHA256','e8646b2dbbcf0ab4f6c99b23bee910339d7b93ad3082ba6b4082df3b617f8297'),
+(26,4,'Sistema Origen','GesDoc'),
+(27,4,'Fecha Subida','2026-02-06 17:06:43'),
+(28,4,'Usuario','1'),
+(29,5,'Tamaño','118801'),
+(30,5,'Tipo MIME','application/pdf'),
+(31,5,'Extensión','pdf'),
+(32,5,'Hash SHA256','4569238b6f29cef6ac0e5a0ed52ec6dc6bde3f847197e45b8b476c390537001b'),
+(33,5,'Sistema Origen','GesDoc'),
+(34,5,'Fecha Subida','2026-02-06 17:11:17'),
+(35,5,'Usuario','1'),
+(36,6,'Tamaño','118801'),
+(37,6,'Tipo MIME','application/pdf'),
+(38,6,'Extensión','pdf'),
+(39,6,'Hash SHA256','4569238b6f29cef6ac0e5a0ed52ec6dc6bde3f847197e45b8b476c390537001b'),
+(40,6,'Sistema Origen','GesDoc'),
+(41,6,'Fecha Subida','2026-02-06 17:12:52'),
+(42,6,'Usuario','1'),
+(43,7,'Tamaño','706583'),
+(44,7,'Tipo MIME','application/pdf'),
+(45,7,'Extensión','pdf'),
+(46,7,'Hash SHA256','bf405cfbcd6963fe497f426c19d81bb471f9663931c68777711f7debf8f2e245'),
+(47,7,'Sistema Origen','GesDoc'),
+(48,7,'Fecha Subida','2026-02-06 17:58:38'),
+(49,7,'Usuario','3'),
+(50,8,'Tamaño','118801'),
+(51,8,'Tipo MIME','application/pdf'),
+(52,8,'Extensión','pdf'),
+(53,8,'Hash SHA256','4569238b6f29cef6ac0e5a0ed52ec6dc6bde3f847197e45b8b476c390537001b'),
+(54,8,'Sistema Origen','GesDoc'),
+(55,8,'Fecha Subida','2026-02-06 18:00:47'),
+(56,8,'Usuario','1'),
+(57,9,'Tamaño','220367'),
+(58,9,'Tipo MIME','application/pdf'),
+(59,9,'Extensión','pdf'),
+(60,9,'Hash SHA256','38e46ea9ef04ab1bdd5e5b21ab8d007fa35508a4e6ced256addc4e9b006d854b'),
+(61,9,'Sistema Origen','GesDoc'),
+(62,9,'Fecha Subida','2026-02-10 21:03:40'),
+(63,9,'Usuario','3');
 /*!40000 ALTER TABLE `trd_documentos_metadata` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -773,7 +1008,7 @@ CREATE TABLE `trd_general_bitacora` (
   KEY `trd_general_bitacora_trd_acceso_usuarios_FK` (`bit-responsable`),
   CONSTRAINT `trd_general_bitacora_trd_acceso_usuarios_FK` FOREIGN KEY (`bit-responsable`) REFERENCES `trd_acceso_usuarios` (`usr_id`),
   CONSTRAINT `trd_general_bitacora_trd_general_registro_general_tramites_FK` FOREIGN KEY (`bit_tramite_registrado`) REFERENCES `trd_general_registro_general_tramites` (`rgt_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=605 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=617 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -786,7 +1021,18 @@ set autocommit=0;
 INSERT INTO `trd_general_bitacora` VALUES
 (602,4,'Ingresa solicitud Ingresos',1,'2026-02-06 11:58:46'),
 (603,4,'Añade comentario al trámite',1,'2026-02-06 12:14:48'),
-(604,4,'Edita: contenido',1,'2026-02-06 12:18:23');
+(604,4,'Edita: contenido',1,'2026-02-06 12:18:23'),
+(605,4,'Solicitud finalizada con estado: Resuelto_NO_Favorable',1,'2026-02-06 13:05:20'),
+(606,5,'Ingresa solicitud Ingresos',1,'2026-02-06 13:06:42'),
+(607,5,'Solicitud finalizada con estado: Resuelto_Favorable',1,'2026-02-06 13:11:18'),
+(608,6,'Ingresa solicitud Ingresos',1,'2026-02-06 13:12:19'),
+(609,6,'Solicitud finalizada con estado: Resuelto_NO_Favorable',1,'2026-02-06 13:12:52'),
+(610,7,'Ingresa solicitud Ingresos',1,'2026-02-06 13:13:41'),
+(611,8,'Ingresa solicitud Ingresos',1,'2026-02-06 13:21:12'),
+(612,9,'Ingresa solicitud Ingresos',3,'2026-02-06 13:58:38'),
+(613,10,'Ingresa solicitud Ingresos',1,'2026-02-06 14:19:15'),
+(614,10,'Solicitud finalizada con estado: Resuelto_Favorable',3,'2026-02-06 15:11:30'),
+(616,11,'Ingresa solicitud Ingresos',3,'2026-02-10 17:03:39');
 /*!40000 ALTER TABLE `trd_general_bitacora` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -839,7 +1085,18 @@ CREATE TABLE `trd_general_contribuyentes` (
   `tgc_nombre` varchar(100) NOT NULL,
   `tgc_apellido_paterno` varchar(100) DEFAULT NULL,
   `tgc_apellido_materno` varchar(100) NOT NULL,
-  PRIMARY KEY (`tgc_id`)
+  `tgc_sexo` varchar(10) DEFAULT NULL,
+  `tgc_fecha_nacimiento` date DEFAULT NULL,
+  `tgc_estado_civil` varchar(50) DEFAULT NULL,
+  `tgc_escolaridad` int(11) DEFAULT NULL,
+  `tgc_nacionalidad` varchar(50) DEFAULT NULL,
+  `tgc_correo_electronico` varchar(150) DEFAULT NULL,
+  `tgc_telefono_contacto` varchar(20) DEFAULT NULL,
+  `tgc_acepta_privacidad` tinyint(1) DEFAULT 0,
+  `tgc_fecha_acepta_privacidad` datetime DEFAULT NULL,
+  PRIMARY KEY (`tgc_id`),
+  KEY `trd_general_contribuyentes_trd_cont_escolaridad_FK` (`tgc_escolaridad`),
+  CONSTRAINT `trd_general_contribuyentes_trd_cont_escolaridad_FK` FOREIGN KEY (`tgc_escolaridad`) REFERENCES `trd_cont_escolaridad` (`esc_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -870,7 +1127,7 @@ CREATE TABLE `trd_general_documento_adjunto` (
   KEY `trd_general_bitacora_trd_general_registro_general_tramites_FK` (`doc_tramite_registrado`) USING BTREE,
   KEY `trd_versiones_FK` (`doc_version_actual`),
   CONSTRAINT `trd_versiones_FK` FOREIGN KEY (`doc_version_actual`) REFERENCES `trd_general_documento_adjunto_versiones` (`docv_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -880,6 +1137,16 @@ CREATE TABLE `trd_general_documento_adjunto` (
 LOCK TABLES `trd_general_documento_adjunto` WRITE;
 /*!40000 ALTER TABLE `trd_general_documento_adjunto` DISABLE KEYS */;
 set autocommit=0;
+INSERT INTO `trd_general_documento_adjunto` VALUES
+(4,4,'2026-02-06 12:47:02',1),
+(5,4,'2026-02-06 13:00:46',2),
+(6,4,'2026-02-06 13:05:20',3),
+(7,5,'2026-02-06 13:06:43',4),
+(8,5,'2026-02-06 13:11:17',5),
+(9,6,'2026-02-06 13:12:52',6),
+(10,9,'2026-02-06 13:58:38',7),
+(11,9,'2026-02-06 14:00:47',8),
+(12,11,'2026-02-10 17:03:40',9);
 /*!40000 ALTER TABLE `trd_general_documento_adjunto` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -904,7 +1171,7 @@ CREATE TABLE `trd_general_documento_adjunto_versiones` (
   KEY `trd_general_bitacora_trd_acceso_usuarios_FK` (`doc-responsable`) USING BTREE,
   KEY `trd_versiones_doc_FK` (`docv_doc_id`),
   CONSTRAINT `trd_versiones_doc_FK` FOREIGN KEY (`docv_doc_id`) REFERENCES `trd_general_documento_adjunto` (`doc_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -914,6 +1181,16 @@ CREATE TABLE `trd_general_documento_adjunto_versiones` (
 LOCK TABLES `trd_general_documento_adjunto_versiones` WRITE;
 /*!40000 ALTER TABLE `trd_general_documento_adjunto_versiones` DISABLE KEYS */;
 set autocommit=0;
+INSERT INTO `trd_general_documento_adjunto_versiones` VALUES
+(1,4,'2026-02-06 12:47:02','gestordocumental/202602/2602061647T4jrQ.mvm','certificado pisee1.pdf',1,0,'202602/.ck'),
+(2,5,'2026-02-06 13:00:46','gestordocumental/202602/2602061700rIAs9.imv','certificado pisee1.pdf',1,0,'202602/.ck'),
+(3,6,'2026-02-06 13:05:20','gestordocumental/202602/2602061705nhSWF.imv','Decreto - Doc1.docx',1,0,'202602/.ck'),
+(4,7,'2026-02-06 13:06:43','gestordocumental/202602/2602061706L6Lum.imv','Doc1.docx',1,0,'202602/.ck'),
+(5,8,'2026-02-06 13:11:17','gestordocumental/202602/2602061711SiubZ.imv','Decreto - certificado pisee1.pdf',1,0,'202602/.ck'),
+(6,9,'2026-02-06 13:12:52','gestordocumental/202602/26020617127hkGn.imv','Decreto - certificado pisee1.pdf',1,0,'202602/.ck'),
+(7,10,'2026-02-06 13:58:38','gestordocumental/202602/2602061758pK21C.imv','System BPMN - MODELO NUEVO DE FERIAS.pdf',3,0,'202602/.ck'),
+(8,11,'2026-02-06 14:00:47','gestordocumental/202602/2602061800kqYoZ.imv','Decreto - certificado pisee1.pdf',1,0,'202602/.ck'),
+(9,12,'2026-02-10 17:03:40','gestordocumental/202602/2602102103yzmRv.imv','27. Sistema Tramites y Solicitudes.pdf',3,0,'202602/.ck');
 /*!40000 ALTER TABLE `trd_general_documento_adjunto_versiones` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -936,7 +1213,7 @@ CREATE TABLE `trd_general_enlaces` (
   KEY `trd_general_enlaces_trd_general_registro_general_tramites_FK` (`tge_tramite`) USING BTREE,
   CONSTRAINT `trd_general_enlaces_trd_acceso_usuarios_FK` FOREIGN KEY (`tge_responsable`) REFERENCES `trd_acceso_usuarios` (`usr_id`),
   CONSTRAINT `trd_general_enlaces_trd_general_registro_general_tramites_FK` FOREIGN KEY (`tge_tramite`) REFERENCES `trd_general_registro_general_tramites` (`rgt_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -947,7 +1224,8 @@ LOCK TABLES `trd_general_enlaces` WRITE;
 /*!40000 ALTER TABLE `trd_general_enlaces` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `trd_general_enlaces` VALUES
-(10,4,'https://mail.google.com/',1,'2026-02-06 12:22:07');
+(14,4,'https://mail.google.com/',1,'2026-02-06 13:00:45'),
+(15,9,'https://docs.google.com/document/d/1nhTv63CyxT5HSdPSthsRbeRXbdm7QzroCH_yw7TNE-s/edit?usp=sharing',3,'2026-02-06 13:58:38');
 /*!40000 ALTER TABLE `trd_general_enlaces` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -1014,7 +1292,7 @@ CREATE TABLE `trd_general_logs` (
   KEY `log_evento_codigo` (`log_evento_codigo`),
   CONSTRAINT `fk_logs_evento` FOREIGN KEY (`log_evento_codigo`) REFERENCES `trd_general_eventos_codigos` (`evt_codigo`),
   CONSTRAINT `fk_logs_usuario` FOREIGN KEY (`log_usuario_id`) REFERENCES `trd_acceso_usuarios` (`usr_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1029,7 +1307,44 @@ INSERT INTO `trd_general_logs` VALUES
 (3,'2026-02-06 11:58:46','CREATE','info','Bajo','INGRESOS',1,'CREAR_INGRESO','Creación de ingreso: 4','{\"data\":{\"ACCION\":\"CREAR\",\"tis_titulo\":\"prueba ingreso de ingreso 001\",\"tis_tipo\":\"1\",\"tis_contenido\":\"detalle de solicitud\",\"tis_estado\":\"Ingresado\",\"tis_fecha\":\"2026-02-06\",\"destinos\":[{\"usr_id\":\"1\",\"usr_nombre_completo\":\"JUAN HERVAS\",\"tid_tipo\":\"Para\",\"tid_facultad\":\"Firmante\",\"tid_requeido\":\"1\"},{\"usr_id\":\"1\",\"usr_nombre_completo\":\"JUAN HERVAS\",\"tid_tipo\":\"Para\",\"tid_facultad\":\"Firmante\",\"tid_requeido\":\"1\"}],\"enlaces\":[\"https:\\/\\/mail.google.com\\/\"],\"documentos\":[]}}','192.168.0.169','Exitoso'),
 (4,'2026-02-06 12:18:23','UPDATE','info','Bajo','INGRESOS',1,'ACTUALIZAR_INGRESO','Actualización de ingreso: 4','{\"id\":\"4\",\"cambios\":{\"ACCION\":\"ACTUALIZAR\",\"ing_id\":\"4\",\"tis_titulo\":\"prueba ingreso de ingreso 001\",\"tis_tipo\":\"1\",\"tis_contenido\":\"detalle de solicitud 3\",\"destinos\":[{\"usr_id\":\"1\",\"usr_nombre_completo\":\"Juan hervas\",\"tid_tipo\":\"Para\",\"tid_facultad\":\"Firmante\",\"tid_requeido\":\"1\",\"tid_responde\":null,\"tid_fecha_respuesta\":null},{\"usr_id\":\"1\",\"usr_nombre_completo\":\"Juan hervas\",\"tid_tipo\":\"Para\",\"tid_facultad\":\"Firmante\",\"tid_requeido\":\"1\",\"tid_responde\":null,\"tid_fecha_respuesta\":null}],\"enlaces\":[\"https:\\/\\/mail.google.com\\/\"],\"documentos\":[]}}','192.168.0.169','Exitoso'),
 (5,'2026-02-06 12:18:41','UPDATE','info','Bajo','INGRESOS',1,'ACTUALIZAR_INGRESO','Actualización de ingreso: 4','{\"id\":\"4\",\"cambios\":{\"ACCION\":\"ACTUALIZAR\",\"ing_id\":\"4\",\"tis_titulo\":\"prueba ingreso de ingreso 001\",\"tis_tipo\":\"1\",\"tis_contenido\":\"detalle de solicitud 3\",\"destinos\":[{\"usr_id\":\"1\",\"usr_nombre_completo\":\"Juan hervas\",\"tid_tipo\":\"Para\",\"tid_facultad\":\"Firmante\",\"tid_requeido\":\"1\",\"tid_responde\":null,\"tid_fecha_respuesta\":null}],\"enlaces\":[\"https:\\/\\/mail.google.com\\/\"],\"documentos\":[]}}','192.168.0.169','Exitoso'),
-(6,'2026-02-06 12:22:07','UPDATE','info','Bajo','INGRESOS',1,'ACTUALIZAR_INGRESO','Actualización de ingreso: 4','{\"id\":\"4\",\"cambios\":{\"ACCION\":\"ACTUALIZAR\",\"ing_id\":\"4\",\"tis_titulo\":\"prueba ingreso de ingreso 001\",\"tis_tipo\":\"1\",\"tis_contenido\":\"detalle de solicitud 3\",\"destinos\":[{\"usr_id\":\"1\",\"usr_nombre_completo\":\"Juan hervas\",\"tid_tipo\":\"Para\",\"tid_facultad\":\"Firmante\",\"tid_requeido\":\"1\",\"tid_responde\":null,\"tid_fecha_respuesta\":null}],\"enlaces\":[\"https:\\/\\/mail.google.com\\/\"],\"documentos\":[{\"nombre\":\"certificado pisee1.pdf\"}]}}','192.168.0.169','Exitoso');
+(6,'2026-02-06 12:22:07','UPDATE','info','Bajo','INGRESOS',1,'ACTUALIZAR_INGRESO','Actualización de ingreso: 4','{\"id\":\"4\",\"cambios\":{\"ACCION\":\"ACTUALIZAR\",\"ing_id\":\"4\",\"tis_titulo\":\"prueba ingreso de ingreso 001\",\"tis_tipo\":\"1\",\"tis_contenido\":\"detalle de solicitud 3\",\"destinos\":[{\"usr_id\":\"1\",\"usr_nombre_completo\":\"Juan hervas\",\"tid_tipo\":\"Para\",\"tid_facultad\":\"Firmante\",\"tid_requeido\":\"1\",\"tid_responde\":null,\"tid_fecha_respuesta\":null}],\"enlaces\":[\"https:\\/\\/mail.google.com\\/\"],\"documentos\":[{\"nombre\":\"certificado pisee1.pdf\"}]}}','192.168.0.169','Exitoso'),
+(7,'2026-02-06 12:47:02','UPDATE','info','Bajo','INGRESOS',1,'ACTUALIZAR_INGRESO','Actualización de ingreso: 4','{\"id\":\"4\",\"cambios\":{\"ACCION\":\"ACTUALIZAR\",\"ing_id\":\"4\",\"tis_titulo\":\"prueba ingreso de ingreso 001\",\"tis_tipo\":\"1\",\"tis_contenido\":\"detalle de solicitud 3\",\"destinos\":[{\"usr_id\":\"1\",\"usr_nombre_completo\":\"Juan hervas\",\"tid_tipo\":\"Para\",\"tid_facultad\":\"Firmante\",\"tid_requeido\":\"1\",\"tid_responde\":null,\"tid_fecha_respuesta\":null}],\"enlaces\":[\"https:\\/\\/mail.google.com\\/\"],\"documentos\":[{\"nombre\":\"certificado pisee1.pdf\"}]}}','192.168.0.169','Exitoso'),
+(8,'2026-02-06 13:00:46','UPDATE','info','Bajo','INGRESOS',1,'ACTUALIZAR_INGRESO','Actualización de ingreso: 4','{\"id\":\"4\",\"cambios\":{\"ACCION\":\"ACTUALIZAR\",\"ing_id\":\"4\",\"tis_titulo\":\"prueba ingreso de ingreso 001\",\"tis_tipo\":\"1\",\"tis_contenido\":\"detalle de solicitud 3\",\"destinos\":[{\"usr_id\":\"1\",\"usr_nombre_completo\":\"Juan hervas\",\"tid_tipo\":\"Para\",\"tid_facultad\":\"Firmante\",\"tid_requeido\":\"1\",\"tid_responde\":null,\"tid_fecha_respuesta\":null}],\"enlaces\":[\"https:\\/\\/mail.google.com\\/\"],\"documentos\":[{\"nombre\":\"certificado pisee1.pdf\"}]}}','192.168.0.169','Exitoso'),
+(9,'2026-02-06 13:06:43','CREATE','info','Bajo','INGRESOS',1,'CREAR_INGRESO','Creación de ingreso: 5','{\"data\":{\"ACCION\":\"CREAR\",\"tis_titulo\":\"prueba ingreso de ingreso 002\",\"tis_tipo\":\"1\",\"tis_contenido\":\"prueba 2 \",\"tis_estado\":\"Ingresado\",\"tis_fecha\":\"2026-02-06\",\"destinos\":[{\"usr_id\":\"1\",\"usr_nombre_completo\":\"JUAN HERVAS\",\"tid_tipo\":\"Para\",\"tid_facultad\":\"Firmante\",\"tid_requeido\":\"1\"}],\"enlaces\":[],\"documentos\":[{\"nombre\":\"Doc1.docx\"}]}}','192.168.0.169','Exitoso'),
+(10,'2026-02-06 13:12:19','CREATE','info','Bajo','INGRESOS',1,'CREAR_INGRESO','Creación de ingreso: 6','{\"data\":{\"ACCION\":\"CREAR\",\"tis_titulo\":\"prueba ingreso de ingreso 003\",\"tis_tipo\":\"1\",\"tis_contenido\":\"ASD\",\"tis_estado\":\"Ingresado\",\"tis_fecha\":\"2026-02-06\",\"destinos\":[{\"usr_id\":\"1\",\"usr_nombre_completo\":\"JUAN HERVAS\",\"tid_tipo\":\"Para\",\"tid_facultad\":\"Firmante\",\"tid_requeido\":\"1\"}],\"enlaces\":[],\"documentos\":[]}}','192.168.0.169','Exitoso'),
+(11,'2026-02-06 13:13:41','CREATE','info','Bajo','INGRESOS',1,'CREAR_INGRESO','Creación de ingreso: 7','{\"data\":{\"ACCION\":\"CREAR\",\"tis_titulo\":\"prueba ingreso de ingreso 004\",\"tis_tipo\":\"2\",\"tis_contenido\":\"\",\"tis_estado\":\"Ingresado\",\"tis_fecha\":\"2026-02-06\",\"destinos\":[{\"usr_id\":\"1\",\"usr_nombre_completo\":\"JUAN HERVAS\",\"tid_tipo\":\"Para\",\"tid_facultad\":\"Firmante\",\"tid_requeido\":\"1\"}],\"enlaces\":[],\"documentos\":[]}}','192.168.0.169','Exitoso'),
+(12,'2026-02-06 13:21:12','CREATE','info','Bajo','INGRESOS',1,'CREAR_INGRESO','Creación de ingreso: 8','{\"data\":{\"ACCION\":\"CREAR\",\"tis_titulo\":\"comprar papel hijenico\",\"tis_tipo\":\"1\",\"tis_contenido\":\"por favorelpapel\",\"tis_estado\":\"Ingresado\",\"tis_fecha\":\"2026-02-06\",\"destinos\":[]}}','192.168.0.169','Exitoso'),
+(13,'2026-02-06 13:40:31','LOGIN_SUCCESS','info','Bajo','Autenticación',3,'LOGIN','Usuario ramon.martinez@munivina.cl inició sesión correctamente','{\"email\":\"ramon.martinez@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso'),
+(14,'2026-02-06 13:46:29','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso'),
+(15,'2026-02-06 13:46:36','LOGIN_SUCCESS','info','Bajo','Autenticación',3,'LOGIN','Usuario ramon.martinez@munivina.cl inició sesión correctamente','{\"email\":\"ramon.martinez@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso'),
+(16,'2026-02-06 13:52:04','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso'),
+(17,'2026-02-06 13:52:55','LOGIN_SUCCESS','info','Bajo','Autenticación',3,'LOGIN','Usuario ramon.martinez@munivina.cl inició sesión correctamente','{\"email\":\"ramon.martinez@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso'),
+(18,'2026-02-06 13:54:43','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso'),
+(19,'2026-02-06 13:58:38','CREATE','info','Bajo','INGRESOS',3,'CREAR_INGRESO','Creación de ingreso: 9','{\"data\":{\"ACCION\":\"CREAR\",\"tis_titulo\":\"Revisi\\u00f3n de ingreso\",\"tis_tipo\":\"1\",\"tis_contenido\":\"por favor revisar esta informaci\\u00f3n\",\"tis_estado\":\"Ingresado\",\"tis_fecha\":\"2026-02-06\",\"destinos\":[{\"usr_id\":\"2\",\"usr_nombre_completo\":\"LETICIA MENESES\",\"tid_tipo\":\"Copia\",\"tid_facultad\":\"Visador\",\"tid_requeido\":\"1\"},{\"usr_id\":\"1\",\"usr_nombre_completo\":\"JUAN HERVAS\",\"tid_tipo\":\"Para\",\"tid_facultad\":\"Firmante\",\"tid_requeido\":\"1\"}],\"enlaces\":[\"https:\\/\\/docs.google.com\\/document\\/d\\/1nhTv63CyxT5HSdPSthsRbeRXbdm7QzroCH_yw7TNE-s\\/edit?usp=sharing\"],\"documentos\":[{\"nombre\":\"System BPMN - MODELO NUEVO DE FERIAS.pdf\"}]}}','192.168.0.112','Exitoso'),
+(20,'2026-02-06 14:17:51','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"192.168.0.112\"}','192.168.0.112','Exitoso'),
+(21,'2026-02-06 14:19:15','CREATE','info','Bajo','INGRESOS',1,'CREAR_INGRESO','Creación de ingreso: 10','{\"data\":{\"ACCION\":\"CREAR\",\"tis_titulo\":\"revision 1\",\"tis_tipo\":\"1\",\"tis_contenido\":\"test 1\",\"tis_estado\":\"Ingresado\",\"tis_fecha\":\"2026-02-06\",\"destinos\":[{\"usr_id\":\"3\",\"usr_nombre_completo\":\"RAMON EVIL GUY\",\"tid_tipo\":\"Para\",\"tid_facultad\":\"Firmante\",\"tid_requeido\":\"1\"}],\"enlaces\":[],\"documentos\":[]}}','192.168.0.112','Exitoso'),
+(22,'2026-02-06 14:19:23','LOGIN_SUCCESS','info','Bajo','Autenticación',3,'LOGIN','Usuario ramon.martinez@munivina.cl inició sesión correctamente','{\"email\":\"ramon.martinez@munivina.cl\",\"ip\":\"192.168.0.112\"}','192.168.0.112','Exitoso'),
+(23,'2026-02-06 14:45:56','UPDATE','info','Bajo','INGRESOS',1,'ACTUALIZAR_INGRESO','Actualización de ingreso: 10','{\"id\":\"10\",\"cambios\":{\"ACCION\":\"ACTUALIZAR\",\"ing_id\":\"10\",\"tis_titulo\":\"revision 1\",\"tis_tipo\":\"1\",\"tis_contenido\":\"test 1\",\"destinos\":[{\"usr_id\":\"3\",\"usr_nombre_completo\":\"RAMON EVIL GUY\",\"tid_tipo\":\"Para\",\"tid_facultad\":\"Responsable\",\"tid_requeido\":\"1\"}],\"enlaces\":[],\"documentos\":[]}}','192.168.0.169','Exitoso'),
+(24,'2026-02-06 14:46:28','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso'),
+(25,'2026-02-06 14:46:34','LOGIN_SUCCESS','info','Bajo','Autenticación',3,'LOGIN','Usuario ramon.martinez@munivina.cl inició sesión correctamente','{\"email\":\"ramon.martinez@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso'),
+(26,'2026-02-09 09:59:46','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso'),
+(27,'2026-02-09 12:25:30','LOGIN_SUCCESS','info','Bajo','Autenticación',3,'LOGIN','Usuario ramon.martinez@munivina.cl inició sesión correctamente','{\"email\":\"ramon.martinez@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso'),
+(28,'2026-02-09 12:25:49','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso'),
+(29,'2026-02-10 16:36:22','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso'),
+(30,'2026-02-10 17:02:28','LOGIN_SUCCESS','info','Bajo','Autenticación',3,'LOGIN','Usuario ramon.martinez@munivina.cl inició sesión correctamente','{\"email\":\"ramon.martinez@munivina.cl\",\"ip\":\"192.168.0.112\"}','192.168.0.112','Exitoso'),
+(31,'2026-02-10 17:03:40','CREATE','info','Bajo','INGRESOS',3,'CREAR_INGRESO','Creación de ingreso: 11','{\"data\":{\"ACCION\":\"CREAR\",\"tis_titulo\":\"revisi\\u00f3n de muchas cosas\",\"tis_tipo\":\"1\",\"tis_contenido\":\"por favor revisar documento atendido\",\"tis_estado\":\"Ingresado\",\"tis_fecha\":\"2026-02-10\",\"destinos\":[{\"usr_id\":\"1\",\"usr_nombre_completo\":\"JUAN HERVAS\",\"tid_tipo\":\"Para\",\"tid_facultad\":\"Responsable\",\"tid_tarea\":\"ejecutar lo requerido\",\"tid_requeido\":\"1\"},{\"usr_id\":\"2\",\"usr_nombre_completo\":\"LETICIA MENESES\",\"tid_tipo\":\"Para\",\"tid_facultad\":\"Visador\",\"tid_tarea\":\"ejecutar lo requerido\",\"tid_requeido\":\"1\"}],\"enlaces\":[],\"documentos\":[{\"nombre\":\"27. Sistema Tramites y Solicitudes.pdf\"}]}}','192.168.0.112','Exitoso'),
+(32,'2026-02-10 17:04:07','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"192.168.0.112\"}','192.168.0.112','Exitoso'),
+(33,'2026-02-10 17:04:45','LOGIN_SUCCESS','info','Bajo','Autenticación',2,'LOGIN','Usuario leticia.meneses@munivina.cl inició sesión correctamente','{\"email\":\"leticia.meneses@munivina.cl\",\"ip\":\"192.168.0.112\"}','192.168.0.112','Exitoso'),
+(34,'2026-02-10 17:05:59','LOGIN_SUCCESS','info','Bajo','Autenticación',3,'LOGIN','Usuario ramon.martinez@munivina.cl inició sesión correctamente','{\"email\":\"ramon.martinez@munivina.cl\",\"ip\":\"192.168.0.112\"}','192.168.0.112','Exitoso'),
+(35,'2026-02-11 08:47:51','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso'),
+(36,'2026-02-11 10:34:55','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso'),
+(37,'2026-02-11 13:12:48','LOGIN_SUCCESS','info','Bajo','Autenticación',3,'LOGIN','Usuario ramon.martinez@munivina.cl inició sesión correctamente','{\"email\":\"ramon.martinez@munivina.cl\",\"ip\":\"192.168.0.112\"}','192.168.0.112','Exitoso'),
+(38,'2026-02-11 13:14:01','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"192.168.0.112\"}','192.168.0.112','Exitoso'),
+(39,'2026-02-11 13:27:55','LOGIN_SUCCESS','info','Bajo','Autenticación',3,'LOGIN','Usuario ramon.martinez@munivina.cl inició sesión correctamente','{\"email\":\"ramon.martinez@munivina.cl\",\"ip\":\"192.168.0.112\"}','192.168.0.112','Exitoso'),
+(40,'2026-02-11 13:42:19','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso'),
+(41,'2026-02-11 14:01:55','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso'),
+(42,'2026-02-11 16:26:31','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso'),
+(43,'2026-02-11 16:29:55','LOGIN_SUCCESS','info','Bajo','Autenticación',1,'LOGIN','Usuario juan.hervas@munivina.cl inició sesión correctamente','{\"email\":\"juan.hervas@munivina.cl\",\"ip\":\"192.168.0.169\"}','192.168.0.169','Exitoso');
 /*!40000 ALTER TABLE `trd_general_logs` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -1050,7 +1365,7 @@ CREATE TABLE `trd_general_multiancestro` (
   KEY `hijos` (`gma_hijo`),
   CONSTRAINT `hijos` FOREIGN KEY (`gma_hijo`) REFERENCES `trd_general_registro_general_tramites` (`rgt_id`),
   CONSTRAINT `padres` FOREIGN KEY (`gma_padre`) REFERENCES `trd_general_registro_general_tramites` (`rgt_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1060,6 +1375,8 @@ CREATE TABLE `trd_general_multiancestro` (
 LOCK TABLES `trd_general_multiancestro` WRITE;
 /*!40000 ALTER TABLE `trd_general_multiancestro` DISABLE KEYS */;
 set autocommit=0;
+INSERT INTO `trd_general_multiancestro` VALUES
+(1,7,8);
 /*!40000 ALTER TABLE `trd_general_multiancestro` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -1156,7 +1473,7 @@ CREATE TABLE `trd_general_registro_general_tramites` (
   KEY `trd_general_registro_general_tramites_SK` (`rgt_tramite_padre`) USING BTREE,
   KEY `trd_general_registro_general_tramites_trd_acceso_usuarios_FK` (`rgt_creador`),
   CONSTRAINT `trd_general_registro_general_tramites_trd_acceso_usuarios_FK` FOREIGN KEY (`rgt_creador`) REFERENCES `trd_acceso_usuarios` (`usr_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1167,7 +1484,14 @@ LOCK TABLES `trd_general_registro_general_tramites` WRITE;
 /*!40000 ALTER TABLE `trd_general_registro_general_tramites` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `trd_general_registro_general_tramites` VALUES
-(4,'260206-1558-Ingreso_ingresos-wp','Ingreso_ingresos',NULL,1);
+(4,'260206-1558-Ingreso_ingresos-wp','Ingreso_ingresos',NULL,1),
+(5,'260206-1706-Ingreso_ingresos-Ze','Ingreso_ingresos',NULL,1),
+(6,'260206-1712-Ingreso_ingresos-cF','Ingreso_ingresos',NULL,1),
+(7,'260206-1713-Ingreso_ingresos-kB','Ingreso_ingresos',NULL,1),
+(8,'260206-1721-Ingreso_ingresos-hB','Ingreso_ingresos',NULL,1),
+(9,'260206-1758-Ingreso_ingresos-zh','Ingreso_ingresos',NULL,3),
+(10,'260206-1819-Ingreso_ingresos-dO','Ingreso_ingresos',NULL,1),
+(11,'260210-2103-Ingreso_ingresos-hz','Ingreso_ingresos',NULL,3);
 /*!40000 ALTER TABLE `trd_general_registro_general_tramites` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -1268,7 +1592,9 @@ CREATE TABLE `trd_ingresos_destinos` (
   `tid_ingreso_solicitud` int(11) NOT NULL,
   `tid_destino` int(11) NOT NULL,
   `tid_tipo` enum('Para','Copia') NOT NULL,
-  `tid_facultad` enum('Firmante','Visador','Consultor') NOT NULL,
+  `tid_respuesta` text DEFAULT NULL,
+  `tid_tarea` varchar(100) DEFAULT NULL,
+  `tid_facultad` enum('Firmante','Visador','Consultor','Responsable') NOT NULL,
   `tid_requeido` tinyint(1) NOT NULL DEFAULT 0,
   `tid_responde` tinyint(1) DEFAULT NULL,
   `tid_fecha_respuesta` datetime DEFAULT NULL,
@@ -1277,7 +1603,7 @@ CREATE TABLE `trd_ingresos_destinos` (
   KEY `trd_ingresos_destinos_trd_acceso_usuarios_FK` (`tid_destino`),
   CONSTRAINT `ingresos_destinos_ing` FOREIGN KEY (`tid_ingreso_solicitud`) REFERENCES `trd_ingresos_solicitudes` (`tis_id`),
   CONSTRAINT `trd_ingresos_destinos_trd_acceso_usuarios_FK` FOREIGN KEY (`tid_destino`) REFERENCES `trd_acceso_usuarios` (`usr_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1288,7 +1614,15 @@ LOCK TABLES `trd_ingresos_destinos` WRITE;
 /*!40000 ALTER TABLE `trd_ingresos_destinos` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `trd_ingresos_destinos` VALUES
-(14,4,1,'Para','Firmante',1,NULL,NULL);
+(18,4,1,'Para',NULL,NULL,'Firmante',1,0,'2026-02-06 13:05:20'),
+(19,5,1,'Para',NULL,NULL,'Firmante',1,1,'2026-02-06 13:11:18'),
+(20,6,1,'Para',NULL,NULL,'Firmante',1,0,'2026-02-06 13:12:52'),
+(21,7,1,'Para',NULL,NULL,'Firmante',1,NULL,NULL),
+(22,9,2,'Copia',NULL,NULL,'Visador',1,NULL,NULL),
+(23,9,1,'Para',NULL,NULL,'Firmante',1,0,'2026-02-06 14:00:47'),
+(25,10,3,'Para','ingrewso de respuesta con texto 01',NULL,'Responsable',1,1,'2026-02-06 15:11:30'),
+(26,11,1,'Para',NULL,NULL,'Responsable',1,NULL,NULL),
+(27,11,2,'Para','',NULL,'Visador',1,1,'2026-02-10 17:05:13');
 /*!40000 ALTER TABLE `trd_ingresos_destinos` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -1317,7 +1651,7 @@ CREATE TABLE `trd_ingresos_solicitudes` (
   CONSTRAINT `trd_ingresos_registro_general_tramites_FK` FOREIGN KEY (`tis_registro_tramite`) REFERENCES `trd_general_registro_general_tramites` (`rgt_id`),
   CONSTRAINT `trd_ingresos_solicitudes_trd_acceso_usuarios_FK` FOREIGN KEY (`tis_responsable`) REFERENCES `trd_acceso_usuarios` (`usr_id`),
   CONSTRAINT `trd_ingresos_solicitudes_trd_ingresos_tipos_ingreso_FK` FOREIGN KEY (`tis_tipo`) REFERENCES `trd_ingresos_tipos_ingreso` (`titi_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -1328,7 +1662,14 @@ LOCK TABLES `trd_ingresos_solicitudes` WRITE;
 /*!40000 ALTER TABLE `trd_ingresos_solicitudes` DISABLE KEYS */;
 set autocommit=0;
 INSERT INTO `trd_ingresos_solicitudes` VALUES
-(4,1,'prueba ingreso de ingreso 001','detalle de solicitud 3','Ingresado',1,NULL,'2026-02-06 00:00:00',4);
+(4,1,'prueba ingreso de ingreso 001','detalle de solicitud 3','Resuelto_NO_Favorable',1,'halo','2026-02-06 00:00:00',4),
+(5,1,'prueba ingreso de ingreso 002','prueba 2 ','Resuelto_Favorable',1,'.','2026-02-06 00:00:00',5),
+(6,1,'prueba ingreso de ingreso 003','ASD','Resuelto_NO_Favorable',1,'.','2026-02-06 00:00:00',6),
+(7,2,'prueba ingreso de ingreso 004','','Ingresado',1,NULL,'2026-02-06 00:00:00',7),
+(8,1,'comprar papel hijenico','por favorelpapel','Ingresado',1,NULL,'2026-02-06 00:00:00',8),
+(9,1,'Revisión de ingreso','por favor revisar esta información','Ingresado',3,'cualquier cosa','2026-02-06 00:00:00',9),
+(10,1,'revision 1','test 1','Resuelto_Favorable',1,NULL,'2026-02-06 00:00:00',10),
+(11,1,'revisión de muchas cosas','por favor revisar documento atendido','Ingresado',3,NULL,'2026-02-10 00:00:00',11);
 /*!40000 ALTER TABLE `trd_ingresos_solicitudes` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
@@ -1362,6 +1703,260 @@ UNLOCK TABLES;
 commit;
 
 --
+-- Table structure for table `trd_oirs_condiciones`
+--
+
+DROP TABLE IF EXISTS `trd_oirs_condiciones`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_oirs_condiciones` (
+  `con_id` int(11) NOT NULL AUTO_INCREMENT,
+  `con_nombre` varchar(100) NOT NULL,
+  PRIMARY KEY (`con_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `trd_oirs_condiciones`
+--
+
+LOCK TABLES `trd_oirs_condiciones` WRITE;
+/*!40000 ALTER TABLE `trd_oirs_condiciones` DISABLE KEYS */;
+set autocommit=0;
+INSERT INTO `trd_oirs_condiciones` VALUES
+(1,'Embarazada'),
+(2,'Persona con Discapacidad'),
+(3,'Dirigente Social / Comunitario'),
+(4,'Adulto Mayor'),
+(5,'Pueblos Originarios'),
+(6,'Cuidador/a');
+/*!40000 ALTER TABLE `trd_oirs_condiciones` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
+-- Table structure for table `trd_oirs_gestion`
+--
+
+DROP TABLE IF EXISTS `trd_oirs_gestion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_oirs_gestion` (
+  `oig_id` int(11) NOT NULL AUTO_INCREMENT,
+  `oig_solicitud` int(11) NOT NULL,
+  `oig_asignacion` int(11) DEFAULT NULL,
+  `oig_respuesta_preliminar` text DEFAULT NULL,
+  `oig_requiere_respuesta_tecnica` tinyint(1) DEFAULT NULL,
+  `oig_respuesta_tecnica` text DEFAULT NULL,
+  `oig_solicitud_ejecutada` tinyint(1) DEFAULT NULL,
+  `oig_fuente_financiamiento` varchar(100) DEFAULT NULL,
+  `oig_notificacion_ejecucion` text DEFAULT NULL,
+  `oig_realizada_en_plazo` tinyint(1) DEFAULT NULL,
+  `oig_aclaratoria_contribuyente` text DEFAULT NULL,
+  `oig_respuesta_aclaratoria` text DEFAULT NULL,
+  PRIMARY KEY (`oig_id`),
+  KEY `fk_gestion_solicitud` (`oig_solicitud`),
+  CONSTRAINT `fk_gestion_solicitud` FOREIGN KEY (`oig_solicitud`) REFERENCES `trd_oirs_solicitud` (`oirs_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `trd_oirs_gestion`
+--
+
+LOCK TABLES `trd_oirs_gestion` WRITE;
+/*!40000 ALTER TABLE `trd_oirs_gestion` DISABLE KEYS */;
+set autocommit=0;
+/*!40000 ALTER TABLE `trd_oirs_gestion` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
+-- Table structure for table `trd_oirs_solicitud`
+--
+
+DROP TABLE IF EXISTS `trd_oirs_solicitud`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_oirs_solicitud` (
+  `oirs_id` int(11) NOT NULL AUTO_INCREMENT,
+  `oirs_registro_tramite` int(11) NOT NULL,
+  `oirs_tipo_atencion` int(11) NOT NULL,
+  `oirs_origen_consulta` varchar(100) NOT NULL,
+  `oirs_condicion` int(11) DEFAULT NULL,
+  `oirs_prioridad_municipal` tinyint(4) NOT NULL,
+  `oirs_fecha_hora` datetime NOT NULL DEFAULT current_timestamp(),
+  `oirs_tematica` int(11) NOT NULL,
+  `oirs_subtematica` int(11) DEFAULT NULL,
+  `oirs_calle` varchar(100) DEFAULT NULL,
+  `oirs_numero` varchar(100) DEFAULT NULL,
+  `oirs_aclaratoia` text DEFAULT NULL,
+  `oirs_latitud` decimal(10,8) DEFAULT NULL,
+  `oirs_longitud` decimal(10,8) DEFAULT NULL,
+  `oirs_descripcion` text NOT NULL,
+  `oirs_estado` tinyint(4) NOT NULL,
+  `oirs_fecha_limite` date NOT NULL,
+  PRIMARY KEY (`oirs_id`),
+  KEY `trd_oirs_solicitud_trd_general_registro_general_tramites_FK` (`oirs_registro_tramite`),
+  KEY `trd_oirs_solicitud_trd_oirs_condiciones_FK` (`oirs_condicion`),
+  KEY `trd_oirs_solicitud_trd_oirs_tipo_atencion_FK` (`oirs_tipo_atencion`),
+  KEY `trd_oirs_solicitud_trd_oirs_tematicas_FK` (`oirs_tematica`),
+  KEY `trd_oirs_solicitud_trd_oirs_subtematicas_FK` (`oirs_subtematica`),
+  CONSTRAINT `trd_oirs_solicitud_trd_general_registro_general_tramites_FK` FOREIGN KEY (`oirs_registro_tramite`) REFERENCES `trd_general_registro_general_tramites` (`rgt_id`),
+  CONSTRAINT `trd_oirs_solicitud_trd_oirs_condiciones_FK` FOREIGN KEY (`oirs_condicion`) REFERENCES `trd_oirs_condiciones` (`con_id`),
+  CONSTRAINT `trd_oirs_solicitud_trd_oirs_subtematicas_FK` FOREIGN KEY (`oirs_subtematica`) REFERENCES `trd_oirs_subtematicas` (`sub_id`),
+  CONSTRAINT `trd_oirs_solicitud_trd_oirs_tematicas_FK` FOREIGN KEY (`oirs_tematica`) REFERENCES `trd_oirs_tematicas` (`tem_id`),
+  CONSTRAINT `trd_oirs_solicitud_trd_oirs_tipo_atencion_FK` FOREIGN KEY (`oirs_tipo_atencion`) REFERENCES `trd_oirs_tipo_atencion` (`tat_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `trd_oirs_solicitud`
+--
+
+LOCK TABLES `trd_oirs_solicitud` WRITE;
+/*!40000 ALTER TABLE `trd_oirs_solicitud` DISABLE KEYS */;
+set autocommit=0;
+/*!40000 ALTER TABLE `trd_oirs_solicitud` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
+-- Table structure for table `trd_oirs_subtematicas`
+--
+
+DROP TABLE IF EXISTS `trd_oirs_subtematicas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_oirs_subtematicas` (
+  `sub_id` int(11) NOT NULL AUTO_INCREMENT,
+  `tem_id` int(11) NOT NULL,
+  `sub_nombre` varchar(100) NOT NULL,
+  PRIMARY KEY (`sub_id`),
+  KEY `fk_sub_tematica` (`tem_id`),
+  CONSTRAINT `fk_sub_tematica` FOREIGN KEY (`tem_id`) REFERENCES `trd_oirs_tematicas` (`tem_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `trd_oirs_subtematicas`
+--
+
+LOCK TABLES `trd_oirs_subtematicas` WRITE;
+/*!40000 ALTER TABLE `trd_oirs_subtematicas` DISABLE KEYS */;
+set autocommit=0;
+INSERT INTO `trd_oirs_subtematicas` VALUES
+(1,1,'otro'),
+(2,2,'Extracción de microbasurales'),
+(3,2,'Tenencia responsable de mascotas'),
+(4,3,'Iluminación pública deficiente'),
+(5,3,'Patrullaje preventivo'),
+(6,4,'Subsidios y Ayudas sociales');
+/*!40000 ALTER TABLE `trd_oirs_subtematicas` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
+-- Table structure for table `trd_oirs_tematicas`
+--
+
+DROP TABLE IF EXISTS `trd_oirs_tematicas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_oirs_tematicas` (
+  `tem_id` int(11) NOT NULL AUTO_INCREMENT,
+  `tem_nombre` varchar(100) NOT NULL,
+  PRIMARY KEY (`tem_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `trd_oirs_tematicas`
+--
+
+LOCK TABLES `trd_oirs_tematicas` WRITE;
+/*!40000 ALTER TABLE `trd_oirs_tematicas` DISABLE KEYS */;
+set autocommit=0;
+INSERT INTO `trd_oirs_tematicas` VALUES
+(1,'Otro'),
+(2,'Medio Ambiente'),
+(3,'Seguridad'),
+(4,'Social');
+/*!40000 ALTER TABLE `trd_oirs_tematicas` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
+-- Table structure for table `trd_oirs_tipo_atencion`
+--
+
+DROP TABLE IF EXISTS `trd_oirs_tipo_atencion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_oirs_tipo_atencion` (
+  `tat_id` int(11) NOT NULL AUTO_INCREMENT,
+  `tat_nombre` varchar(50) NOT NULL,
+  PRIMARY KEY (`tat_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `trd_oirs_tipo_atencion`
+--
+
+LOCK TABLES `trd_oirs_tipo_atencion` WRITE;
+/*!40000 ALTER TABLE `trd_oirs_tipo_atencion` DISABLE KEYS */;
+set autocommit=0;
+INSERT INTO `trd_oirs_tipo_atencion` VALUES
+(1,'Consulta'),
+(2,'Reclamo'),
+(3,'Sugerencia'),
+(4,'Felicitación'),
+(5,'Denuncia');
+/*!40000 ALTER TABLE `trd_oirs_tipo_atencion` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
+-- Table structure for table `trd_tareas`
+--
+
+DROP TABLE IF EXISTS `trd_tareas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `trd_tareas` (
+  `tar_id` int(11) NOT NULL AUTO_INCREMENT,
+  `tar_asignador` int(11) NOT NULL,
+  `tar_asignado` int(11) NOT NULL,
+  `tar_titulo` varchar(100) NOT NULL,
+  `tar_detalle` text DEFAULT NULL,
+  `tar_plazo` datetime DEFAULT NULL,
+  `tar_estado` tinyint(4) NOT NULL,
+  `tar_fecha_creacion` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`tar_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `trd_tareas`
+--
+
+LOCK TABLES `trd_tareas` WRITE;
+/*!40000 ALTER TABLE `trd_tareas` DISABLE KEYS */;
+set autocommit=0;
+INSERT INTO `trd_tareas` VALUES
+(1,1,1,'1','2','2026-02-16 08:00:00',1,'2026-02-09 11:40:36'),
+(2,1,1,'2','2','2026-02-16 08:00:00',1,'2026-02-09 11:40:36'),
+(3,1,1,'3','3','2026-02-16 08:00:00',1,'2026-02-09 11:40:36'),
+(4,1,1,'4','4','2026-02-16 08:00:00',1,'2026-02-09 11:51:34'),
+(5,1,1,'5','5','2026-02-16 08:00:00',1,'2026-02-09 11:52:18'),
+(6,1,3,'revisart ingresos','hay que revisar todo el sistema d ingresos','2026-02-16 08:00:00',0,'2026-02-09 12:25:18'),
+(7,1,3,'6','6','2026-02-16 08:00:00',0,'2026-02-09 12:48:16');
+/*!40000 ALTER TABLE `trd_tareas` ENABLE KEYS */;
+UNLOCK TABLES;
+commit;
+
+--
 -- Dumping routines for database 'transformacion_digital_beta'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1374,4 +1969,4 @@ commit;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-02-06 12:40:07
+-- Dump completed on 2026-02-12 14:50:06
