@@ -124,10 +124,10 @@ function renderizarTablaDestinos(destinos) {
 
 function validarAccesoYRenderizarAcciones(data, userId) {
     const destinos = data.destinos || [];
-    // Convert both to strings or integers for safe comparison
-    const MiRelacion = destinos.find(d => parseInt(d.tid_destino) === parseInt(userId));
+    // Filter all relationships for this user
+    const misRelaciones = destinos.filter(d => parseInt(d.tid_destino) === parseInt(userId));
 
-    if (!MiRelacion) {
+    if (misRelaciones.length === 0) {
         Swal.fire({
             title: 'Acceso Restringido',
             text: 'Usted no tiene autorización para responder esta solicitud.',
@@ -141,7 +141,43 @@ function validarAccesoYRenderizarAcciones(data, userId) {
         return;
     }
 
-    if (MiRelacion.tid_facultad === 'Consultor') {
+    // Sort to prioritize actionable roles over Consultor
+    // Priority: Firmante (1), Visador (2), Responsable (3), others ... Consultor last
+    const rolePriority = {
+        'firmante': 1,
+        'firmador': 1,
+        'firmafor': 1,
+        'visador': 2,
+        'responsable': 3,
+        'propietario': 3,
+        'consultor': 10
+    };
+
+    // Filter out those already responded if possible
+    const pendientes = misRelaciones.filter(r => !r.tid_fecha_respuesta && r.tid_responde === null);
+
+    // Select the best relationship to act on
+    let MiRelacion = null;
+    if (pendientes.length > 0) {
+        pendientes.sort((a, b) => {
+            const pa = rolePriority[(a.tid_facultad || '').toLowerCase()] || 99;
+            const pb = rolePriority[(b.tid_facultad || '').toLowerCase()] || 99;
+            return pa - pb;
+        });
+        MiRelacion = pendientes[0];
+    } else {
+        // All responded or none pending, pick the one with highest priority for status check
+        misRelaciones.sort((a, b) => {
+            const pa = rolePriority[(a.tid_facultad || '').toLowerCase()] || 99;
+            const pb = rolePriority[(b.tid_facultad || '').toLowerCase()] || 99;
+            return pa - pb;
+        });
+        MiRelacion = misRelaciones[0];
+    }
+
+    const facultad = (MiRelacion.tid_facultad || '').toLowerCase();
+
+    if (facultad === 'consultor') {
         Swal.fire({
             title: 'Modo Consulta',
             text: 'Usted tiene acceso como Consultor. Redirigiendo a vista de consulta.',
@@ -154,12 +190,11 @@ function validarAccesoYRenderizarAcciones(data, userId) {
         return;
     }
 
-    // Check if user already responded
-    // If tid_fecha_respuesta is present or tid_responde is not null/undefined (considering 0 is valid response)
+    // Check if the picked relationship already has a response
     if (MiRelacion.tid_fecha_respuesta || (MiRelacion.tid_responde !== null && MiRelacion.tid_responde !== undefined)) {
         Swal.fire({
             title: 'Respuesta ya registrada',
-            text: 'Usted ya ha emitido su respuesta para esta solicitud. Se redirigirá a la vista de consulta.',
+            text: `Usted ya ha emitido su respuesta para este rol (${MiRelacion.tid_facultad}). Se redirigirá a la vista de consulta.`,
             icon: 'info',
             confirmButtonText: 'Ver Detalle',
             allowOutsideClick: false
@@ -172,35 +207,36 @@ function validarAccesoYRenderizarAcciones(data, userId) {
     renderizarAcciones(MiRelacion.tid_facultad);
 }
 
-function renderizarAcciones(facultad) {
+function renderizarAcciones(facultadRaw) {
+    const facultad = (facultadRaw || '').toLowerCase();
     const contenedor = document.getElementById('contenedor_acciones_card');
     contenedor.innerHTML = '';
 
-    if (facultad === 'Firmante') {
+    const btnRechazar = `
+        <button type="button" class="btn btn-dark shadow-sm px-4" onclick="enviarRespuesta('Resuelto_NO_Favorable', 'rechazar')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle me-1"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg> Rechazar
+        </button>
+    `;
+
+    if (facultad === 'firmante' || facultad === 'firmador' || facultad === 'firmafor') {
         contenedor.innerHTML = `
-            <button type="button" class="btn btn-toolbar w-100" onclick="enviarRespuesta('Resuelto_NO_Favorable', 'rechazar')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg> Rechazar
-            </button>
-            <button type="button" class="btn btn-toolbar w-100" style="background-color: #198754; color: white; border-color: #198754;" onclick="enviarRespuesta('Resuelto_Favorable', 'firmar')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Firmar
+            ${btnRechazar}
+            <button type="button" class="btn btn-success shadow-sm px-4" style="background-color: #198754; border-color: #198754;" onclick="enviarRespuesta('Resuelto_Favorable', 'firmar')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle me-1"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Firmar
             </button>
         `;
-    } else if (facultad === 'Visador') {
+    } else if (facultad === 'visador') {
         contenedor.innerHTML = `
-            <button type="button" class="btn btn-toolbar w-100" onclick="enviarRespuesta('Resuelto_NO_Favorable', 'rechazar')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg> Rechazar
-            </button>
-            <button type="button" class="btn btn-toolbar w-100" style="background-color: #0d6efd; color: white; border-color: #0d6efd;" onclick="enviarRespuesta('Resuelto_Favorable', 'visar')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Visar
+            ${btnRechazar}
+            <button type="button" class="btn btn-primary shadow-sm px-4" onclick="enviarRespuesta('Resuelto_Favorable', 'visar')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye me-1"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Visar
             </button>
         `;
-    } else if (facultad === 'Responsable') {
+    } else if (facultad === 'responsable' || facultad === 'propietario') {
         contenedor.innerHTML = `
-            <button type="button" class="btn btn-toolbar w-100" onclick="enviarRespuesta('Resuelto_NO_Favorable', 'rechazar')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg> Rechazar
-            </button>
-            <button type="button" class="btn btn-toolbar w-100" style="background-color: #0d6efd; color: white; border-color: #0d6efd;" onclick="enviarRespuesta('Resuelto_Favorable', 'responder')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Responder
+            ${btnRechazar}
+            <button type="button" class="btn btn-primary shadow-sm px-4" onclick="enviarRespuesta('Resuelto_Favorable', 'responder')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye me-1"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> Responder
             </button>
         `;
     }
@@ -399,6 +435,7 @@ async function procesarRespuesta(estado, accionLabel, respuesta, otp) {
                     location.href = 'ingr_consultar.php?id=' + currentId;
                     return; // Stop process
                 }
+                location.href = 'ingr_consultar.php?id=' + currentId;
             } catch (uploadErr) {
                 console.error("Upload error:", uploadErr);
                 Swal.fire('Error', 'Error de red al subir el documento.', 'error');
@@ -426,7 +463,7 @@ async function procesarRespuesta(estado, accionLabel, respuesta, otp) {
 
         if (result.status === 'success') {
             Swal.fire('¡Éxito!', `El trámite ha sido procesado (${accionLabel}) correctamente.`, 'success').then(() => {
-                location.reload();
+                location.href = 'ingr_consultar.php?id=' + currentId;
             });
         } else {
             Swal.fire('Error', result.message || 'No se pudo procesar la solicitud.', 'error');

@@ -27,15 +27,15 @@ $auth = new AuthController($db);
 // Auth check is in .../api/auth_check.php
 // We need to know where we are relative to root to set includes correctly.
 
-// Heuristic: if current script is in 'Funcionarios', prefix is '../' or '../../'
+// Heuristic: if current script is in 'funcionarios', prefix is '../' or '../../'
 $currentScriptPath = $_SERVER['SCRIPT_NAME'];
 $pathPrefix = './';
-if (strpos($currentScriptPath, '/Funcionarios/') !== false) {
+if (stripos($currentScriptPath, '/funcionarios/') !== false) {
     $pathPrefix = '../';
     // Check if 2 levels deep
     $subfolders = ['DESVE', 'INGRESOS', 'NO_Asignadas', 'OIRS', 'SISADMIN'];
     foreach ($subfolders as $sub) {
-        if (strpos($currentScriptPath, "/Funcionarios/$sub/") !== false) {
+        if (stripos($currentScriptPath, "/funcionarios/$sub/") !== false) {
             $pathPrefix = '../../';
             break;
         }
@@ -59,8 +59,23 @@ if ($permissions === false) {
 $currentFile = basename($currentScriptPath);
 $allowed = false;
 
-// Always allow dashboard and bandeja
-if ($currentFile === 'dashboard.php' || $currentFile === 'bandeja.php' || $currentFile === 'bandeja_historial.php' || $currentFile === 'index.php' || $currentFile === 'logout.php') {
+// Always allow dashboard and bandeja, and common action pages which are often accessed via links
+$actionPages = [
+    'dashboard.php',
+    'bandeja.php',
+    'bandeja_historial.php',
+    'index.php',
+    'logout.php',
+    'ingr_consultar.php',
+    'ingr_responder.php',
+    'ingr_preparar.php',
+    'ingr_modificar.php',
+    'desve_consultar.php',
+    'desve_responder.php',
+    'desve_modificar.php'
+];
+
+if (in_array($currentFile, $actionPages)) {
     $allowed = true;
 } else {
     // Check permissions

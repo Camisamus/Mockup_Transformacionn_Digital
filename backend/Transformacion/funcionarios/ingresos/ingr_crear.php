@@ -45,6 +45,12 @@ include 'header.php';
                                     <!-- Dynamic -->
                                 </select>
                             </div>
+                            <div class="col-md-12">
+                                <label for="tis_fecha_limite" class="form-label small fw-bold">Fecha Límite</label>
+                                <input type="date" class="form-control form-control-sm" id="tis_fecha_limite"
+                                    placeholder="Seleccione fecha límite (opcional)">
+                                <div class="form-text small">Si se deja vacío, se calcularán 20 días hábiles.</div>
+                            </div>
                             <div class="col-12">
                                 <label for="tis_contenido" class="form-label small fw-bold">Contenido /
                                     Descripción</label>
@@ -178,16 +184,28 @@ include 'header.php';
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body p-4">
-                <div class="input-group input-group-sm mb-4">
-                    <span class="input-group-text bg-white border-end-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                    </span>
-                    <input type="text" class="form-control border-start-0" id="buscar_fnc_input"
-                        placeholder="Buscar por nombre o apellido...">
+                <div class="row g-2 mb-4">
+                    <div class="col-md-7">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text bg-white border-end-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                            </span>
+                            <input type="text" class="form-control border-start-0" id="buscar_fnc_input"
+                                placeholder="Buscar por nombre o apellido...">
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <select class="form-select form-select-sm" id="filtro_area_fnc">
+                            <option value="">Todas las Áreas</option>
+                            <option value="SIN_AREA">Sin Área Asignada</option>
+                            <!-- Dynamic -->
+                        </select>
+                    </div>
                 </div>
                 <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
                     <table class="table table-hover align-middle mb-0">
@@ -222,11 +240,11 @@ include 'header.php';
             <div class="modal-body p-4">
                 <input type="hidden" id="fnc_id_config">
                 <div class="row g-3">
-                    <div class="col-md-6">
+                    <div class="col-md-6" style="display: none;">
                         <label for="m_destino_tipo" class="form-label small fw-bold">Tipo de Destino</label>
                         <select class="form-select form-select-sm" id="m_destino_tipo">
                             <option value="Para">Para</option>
-                            <option value="Copia">Copia</option>
+                            <!-- <option value="Copia">Copia</option>-->
                         </select>
                     </div>
                     <div class="col-md-6">

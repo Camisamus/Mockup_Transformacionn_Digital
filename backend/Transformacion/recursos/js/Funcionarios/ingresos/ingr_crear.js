@@ -11,6 +11,7 @@ window.addEventListener('load', () => {// Espera 100ms adicionales después de q
 });
 
 let funcionarios = [];
+let areas = [];
 let destinos = [];
 let enlaces = [];
 let documentos = [];
@@ -52,6 +53,26 @@ async function cargarListas() {
             funcionarios = resultFunc.data;
         }
 
+        // Cargar Áreas
+        const respAreas = await fetch(`${window.API_BASE_URL}/areas_general.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ACCION: 'CONSULTAM' })
+        });
+        const resultAreas = await respAreas.json();
+        if (resultAreas.status === 'success') {
+            areas = resultAreas.data;
+            const selectArea = document.getElementById('filtro_area_fnc');
+            if (selectArea) {
+                areas.forEach(a => {
+                    const opt = document.createElement('option');
+                    opt.value = a.tga_id;
+                    opt.textContent = a.tga_nombre;
+                    selectArea.appendChild(opt);
+                });
+            }
+        }
+
     } catch (error) {
         console.error('Error al cargar listas:', error);
     }
@@ -62,18 +83,32 @@ function setupEventListeners() {
     modalConfig = new bootstrap.Modal(document.getElementById('modalConfigurarDestino'));
 
     // Búsqueda de funcionarios
-    document.getElementById('buscar_fnc_input').addEventListener('input', (e) => {
-        renderizarBusquedaFuncionarios(e.target.value);
+    document.getElementById('buscar_fnc_input').addEventListener('input', () => {
+        filtrarBusquedaFuncionarios();
+    });
+
+    document.getElementById('filtro_area_fnc').addEventListener('change', () => {
+        filtrarBusquedaFuncionarios();
     });
 
     // Control de requerido según facultad
     document.getElementById('m_destino_facultad').addEventListener('change', (e) => {
         const checkReq = document.getElementById('m_destino_requerido');
+        const tareaSelect = document.getElementById('m_destino_tarea');
+        const tareaContainer = tareaSelect.closest('.col-md-12'); // Assuming it's in a col-md-12
+
         if (e.target.value === 'Consultor') {
             checkReq.checked = false;
             checkReq.disabled = true;
+            tareaContainer.style.display = 'none'; // Ensure visible for Consultor
+        } else if (e.target.value === 'Visador') {
+            checkReq.checked = true;
+            checkReq.disabled = false;
+            tareaContainer.style.display = 'none'; // Hide for Visador
+            tareaSelect.value = 'tomar conocimiento';
         } else {
             checkReq.disabled = false;
+            tareaContainer.style.display = 'block'; // Show for others
         }
     });
 
@@ -132,27 +167,46 @@ function setupEventListeners() {
 
 function abrirModalBuscarFuncionario() {
     document.getElementById('buscar_fnc_input').value = '';
-    renderizarBusquedaFuncionarios('');
+    document.getElementById('filtro_area_fnc').value = '';
+    renderizarBusquedaFuncionarios(funcionarios);
     modalBusqueda.show();
 }
 
-function renderizarBusquedaFuncionarios(filtro) {
+function filtrarBusquedaFuncionarios() {
+    const term = document.getElementById('buscar_fnc_input').value.toLowerCase();
+    const areaId = document.getElementById('filtro_area_fnc').value;
+
+    const filtrados = funcionarios.filter(f => {
+        const matchesTerm = f.fnc_nombre.toLowerCase().includes(term) ||
+            f.fnc_apellido.toLowerCase().includes(term) ||
+            (f.fnc_email && f.fnc_email.toLowerCase().includes(term));
+
+        let matchesArea = true;
+        if (areaId === 'SIN_AREA') {
+            matchesArea = !f.fnc_area_id;
+        } else if (areaId) {
+            matchesArea = f.fnc_area_id == areaId;
+        }
+
+        return matchesTerm && matchesArea;
+    });
+
+    renderizarBusquedaFuncionarios(filtrados);
+}
+
+function renderizarBusquedaFuncionarios(lista) {
     const tbody = document.getElementById('lista_busqueda_fnc');
     tbody.innerHTML = '';
 
-    const term = filtro.toLowerCase();
-    const filtrados = funcionarios.filter(f =>
-        f.fnc_nombre.toLowerCase().includes(term) ||
-        f.fnc_apellido.toLowerCase().includes(term) ||
-        (f.fnc_email && f.fnc_email.toLowerCase().includes(term))
-    );
-
-    filtrados.forEach(f => {
+    lista.forEach(f => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${f.fnc_id || '-'}</td>
             <td>${f.fnc_email || '-'}</td>
-            <td>${f.fnc_nombre}</td>
+            <td>
+                <div>${f.fnc_nombre}</div>
+                <div class="x-small text-muted">${f.fnc_area_nombre || '<span class="italic">Sin Área</span>'}</div>
+            </td>
             <td>${f.fnc_apellido}</td>
             <td class="text-end">
                 <button class="btn btn-sm btn-outline-primary" onclick="seleccionarFuncionario(${f.fnc_id}, '${f.fnc_nombre} ${f.fnc_apellido}')">

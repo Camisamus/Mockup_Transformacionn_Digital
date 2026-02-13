@@ -81,6 +81,65 @@
         </div>
     </div>
 
+    <!-- Temporary Login Help -->
+    <div class="position-fixed bottom-0 start-0 p-3" style="z-index: 1000; max-width: 300px;">
+        <div class="card shadow border-0 bg-white bg-opacity-75">
+            <div
+                class="card-header bg-dark text-white p-2 small fw-bold d-flex justify-content-between align-items-center">
+                <span>Cuentas de Prueba (Temporal)</span>
+                <button type="button" class="btn-close btn-close-white" style="font-size: 0.5rem;"
+                    onclick="this.parentElement.parentElement.parentElement.remove()"></button>
+            </div>
+            <div class="card-body p-2 overflow-auto" style="max-height: 200px;">
+                <div class="list-group list-group-flush small">
+                    <button class="list-group-item list-group-item-action p-1 border-0"
+                        onclick="copyToLogin(this.textContent)">juan.hervas@munivina.cl</button>
+                    <button class="list-group-item list-group-item-action p-1 border-0"
+                        onclick="copyToLogin(this.textContent)">leticia.meneses@munivina.cl</button>
+                    <button class="list-group-item list-group-item-action p-1 border-0"
+                        onclick="copyToLogin(this.textContent)">ramon.martinez@munivina.cl</button>
+                    <button class="list-group-item list-group-item-action p-1 border-0"
+                        onclick="copyToLogin(this.textContent)">ingresos.admin@test.cl</button>
+                    <button class="list-group-item list-group-item-action p-1 border-0"
+                        onclick="copyToLogin(this.textContent)">ingresos.operador@test.cl</button>
+                    <button class="list-group-item list-group-item-action p-1 border-0"
+                        onclick="copyToLogin(this.textContent)">ingresos.funcionario@test.cl</button>
+                    <button class="list-group-item list-group-item-action p-1 border-0"
+                        onclick="copyToLogin(this.textContent)">ingresos.externo@test.cl</button>
+                    <button class="list-group-item list-group-item-action p-1 border-0"
+                        onclick="copyToLogin(this.textContent)">desve.admin@test.cl</button>
+                    <button class="list-group-item list-group-item-action p-1 border-0"
+                        onclick="copyToLogin(this.textContent)">desve.operador@test.cl</button>
+                    <button class="list-group-item list-group-item-action p-1 border-0"
+                        onclick="copyToLogin(this.textContent)">desve.funcionario@test.cl</button>
+                    <button class="list-group-item list-group-item-action p-1 border-0"
+                        onclick="copyToLogin(this.textContent)">desve.externo@test.cl</button>
+                    <button class="list-group-item list-group-item-action p-1 border-0"
+                        onclick="copyToLogin(this.textContent)">oirs.admin@test.cl</button>
+                    <button class="list-group-item list-group-item-action p-1 border-0"
+                        onclick="copyToLogin(this.textContent)">oirs.operador@test.cl</button>
+                    <button class="list-group-item list-group-item-action p-1 border-0"
+                        onclick="copyToLogin(this.textContent)">oirs.funcionario@test.cl</button>
+                    <button class="list-group-item list-group-item-action p-1 border-0"
+                        onclick="copyToLogin(this.textContent)">oirs.externo@test.cl</button>
+                </div>
+            </div>
+            <div class="card-footer p-1 text-center bg-light">
+                <small class="text-muted" style="font-size: 0.6rem;">Click para copiar al login</small>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyToLogin(email) {
+            const input = document.getElementById('emailInput');
+            if (input) {
+                input.value = email;
+                input.focus();
+            }
+        }
+    </script>
+
     <!-- Scripts -->
     <script src="recursos/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
@@ -119,6 +178,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             // If already logged in, redirect to PHP page
             if (localStorage.getItem('isLoggedIn') === 'true') {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('user_data');
                 window.location.href = 'Funcionarios/bandeja.php';
                 return;
             }

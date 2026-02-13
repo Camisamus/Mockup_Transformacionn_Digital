@@ -163,7 +163,7 @@ function renderTable(items, tbody) {
                 </div>
             </td>
             <td>${new Date(item.fecha).toLocaleDateString()}</td>
-            <td>${item.fecha_limite || '-'}</td>
+            <td>${getDeadlineBadgeGeneral(item.fecha_limite)}</td>
             <td><span class="badge ${item.estado === 'Atrasada' ? 'bg-danger' : (item.estado === 'Completada' ? 'bg-success' : 'bg-warning text-dark')} fw-normal">${item.estado}</span></td>
         `;
 
@@ -172,9 +172,9 @@ function renderTable(items, tbody) {
             if (e.target.closest('button')) return; // Ignore if clicked toggle
 
             if (item.origen === 'DESVE') {
-                window.location.href = `desve_responder.php?id=${item.id}`;
+                window.location.href = `desve/desve_consultar.php?id=${item.id}`;
             } else if (item.origen === 'Ingresos') {
-                window.location.href = `ingr_responder.php?id=${item.id}`;
+                window.location.href = `ingresos/ingr_consultar.php?id=${item.id}`;
             } else if (item.origen === 'Patentes') {
                 Swal.fire('Info', 'Módulo de Patentes en construcción', 'info');
             } else if (item.origen === 'TAREAS') {
@@ -215,8 +215,8 @@ function renderTable(items, tbody) {
                     <p><strong>Proyecto/Sector:</strong> ${item.origen}</p>
                     <p><strong>Entrega:</strong> ${new Date(item.fecha).toLocaleDateString()}</p>
                     <button class="btn btn-sm btn-primary mt-2" onclick="
-                        if('${item.origen}' === 'DESVE') window.location.href = 'desve_responder.php?id=${item.id}';
-                        else if ('${item.origen}' === 'Ingresos') window.location.href = 'ingr_responder.php?id=${item.id}';
+                        if('${item.origen}' === 'DESVE') window.location.href = 'desve/desve_consultar.php?id=${item.id}';
+                        else if ('${item.origen}' === 'Ingresos') window.location.href = 'ingresos/ingr_consultar.php?id=${item.id}';
                         else Swal.fire('Info', 'Módulo en construcción', 'info');
                     ">Ver Detalle</button>
                 </div>
@@ -524,4 +524,21 @@ function fechaformato(fecha1) {
     const mes = fecha.getMonth() + 1;
     const anio = fecha.getFullYear();
     return `${dia}/${mes}/${anio}`;
+}
+
+function getDeadlineBadgeGeneral(fecha) {
+    if (!fecha || fecha === '-') return '<span class="text-muted small">-</span>';
+
+    const d = new Date(fecha);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const diff = d.getTime() - today.getTime();
+    const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
+
+    let color = 'text-dark';
+    if (diffDays < 0) color = 'text-danger fw-bold';
+    else if (diffDays <= 3) color = 'text-warning fw-bold';
+
+    return `<span class="small ${color}">${fecha.substring(0, 10)}</span>`;
 }

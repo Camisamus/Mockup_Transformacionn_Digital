@@ -5,13 +5,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <html class="light" lang="es"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Municipio de Cuidados - Panel de Funcionarios</title>
+<title>Municipio de Cuidados - Gestión OIRS</title>
     <!-- Framework Kit Digital (Gob.cl) -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:300,400,700&display=swap" rel="stylesheet">
     <link href="/municipal/css/gob.cl.css" rel="stylesheet">
-
-
 
     <!-- Bootstrap 4 / Kit Digital Base (Gob.cl) -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -48,13 +46,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #dbe0e6; border-radius: 10px; }
         
-        .stat-card {
-            background: white;
-            padding: 1.25rem;
-            border-radius: 0;
-            border: 1px solid #dbe0e6;
-        }
-
         /* Navegación Estándar Bootstrap 4 */
         .sidebar-portal .nav-pills .nav-link {
             border-radius: 0;
@@ -81,13 +72,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             border-left: 4px solid var(--gob-primary);
         }
 
-        .sidebar-portal .nav-pills .nav-link .material-symbols-outlined,
-        .material-symbols-outlined {
-            font-family: 'Material Symbols Outlined' !important;
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            vertical-align: middle;
-            display: inline-block;
-            line-height: inherit;
+        .sidebar-portal .nav-pills .nav-link .material-symbols-outlined {
             font-size: 24px;
         }
 
@@ -131,10 +116,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
             }
         }
 
-        /* Utilidades mínimas */
         .bg-primary { background-color: var(--gob-primary) !important; }
         .font-serif { font-family: 'Roboto Slab', serif !important; }
-        .hover-bg-light:hover { background-color: #f8f9fa; }
     </style>
 </head>
 <body>
@@ -144,83 +127,73 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <div class="p-4 d-flex flex-column h-100" style="gap: 1.5rem;">
                 <div class="d-flex align-items-center mb-4 px-2" style="gap: 0.75rem;">
                     <div class="bg-primary d-flex align-items-center justify-content-center text-white rounded" style="width: 40px; height: 40px; flex-shrink: 0;">
-                        <span class="material-symbols-outlined">location_city</span>
+                        <span class="material-symbols-outlined">description</span>
                     </div>
                     <div class="d-flex flex-column overflow-hidden">
-                        <h1 class="font-weight-bold text-uppercase mb-0 text-truncate" style="font-size: 11px; letter-spacing: -0.0125em; line-height: 1.2;">Municipio de Cuidados</h1>
-                        <p class="text-muted mb-0" style="font-size: 10px;">Viña del Mar</p>
+                        <h1 class="font-weight-bold text-uppercase mb-0 text-truncate" style="font-size: 11px; letter-spacing: -0.0125em; line-height: 1.2;">Gestión Ingresos</h1>
+                        <p class="text-muted mb-0" style="font-size: 10px;">Municipio de Cuidados</p>
                     </div>
                 </div>
 
                 <ul class="nav nav-pills flex-column flex-grow-1 overflow-auto custom-scrollbar" style="gap: 2px;">
+                    <li class="nav-item mb-2">
+                        <a class="nav-link text-muted" href="/municipal/funcionarios/index.php" style="font-size: 12px; opacity: 0.8;">
+                            <span class="material-symbols-outlined" style="font-size: 18px;">arrow_back</span>
+                            <span>Volver al Panel</span>
+                        </a>
+                    </li>
+
                     <li class="px-3 mb-2 mt-2">
-                        <small class="text-muted text-uppercase font-weight-bold" style="font-size: 10px; letter-spacing: 0.1em; opacity: 0.7;">Gestión</small>
+                        <small class="text-muted text-uppercase font-weight-bold" style="font-size: 10px; letter-spacing: 0.1em; opacity: 0.7;">Mi Gestión</small>
                     </li>
                     
                     <li class="nav-item">
-                        <a class="nav-link <?php echo ($_SERVER['PHP_SELF'] == '/municipal/funcionarios/index.php') ? 'active' : ''; ?>" href="/municipal/funcionarios/index.php">
+                        <a class="nav-link <?php echo ($current_page == 'index.php') ? 'active' : ''; ?>" href="/municipal/funcionarios/ingresos/index.php">
                             <span class="material-symbols-outlined">dashboard</span>
-                            <span>Panel Principal</span>
+                            <span>Dashboard Ingresos</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link <?php echo ($_SERVER['PHP_SELF'] == '/municipal/funcionarios/pendientes.php') ? 'active' : ''; ?>" href="#">
-                            <span class="material-symbols-outlined">pending_actions</span>
-                            <span>Revisiones Pendientes</span>
+                        <a class="nav-link <?php echo ($current_page == 'crear.php') ? 'active' : ''; ?>" href="/municipal/funcionarios/ingresos/crear.php">
+                            <span class="material-symbols-outlined">post_add</span>
+                            <span>Nuevo Ingreso</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link <?php echo ($_SERVER['PHP_SELF'] == '/municipal/funcionarios/emprendedores.php') ? 'active' : ''; ?>" href="#">
-                            <span class="material-symbols-outlined">groups</span>
-                            <span>Emprendedores</span>
+                        <a class="nav-link <?php echo ($current_page == 'bandeja.php') ? 'active' : ''; ?>" href="/municipal/funcionarios/ingresos/bandeja.php">
+                            <span class="material-symbols-outlined">inbox</span>
+                            <span>Bandeja de Entrada</span>
+                        </a>
+                    </li>
+
+                    <li class="px-3 mb-2 mt-4">
+                        <small class="text-muted text-uppercase font-weight-bold" style="font-size: 10px; letter-spacing: 0.1em; opacity: 0.7;">Flujo de Firmas</small>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link <?php echo ($current_page == 'por-visar.php') ? 'active' : ''; ?>" href="/municipal/funcionarios/ingresos/por-visar.php">
+                            <span class="material-symbols-outlined">verified</span>
+                            <span>Por Visar</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link <?php echo ($_SERVER['PHP_SELF'] == '/municipal/funcionarios/inspeccion.php') ? 'active' : ''; ?>" href="#">
-                            <span class="material-symbols-outlined">fact_check</span>
-                            <span>Inspección</span>
+                        <a class="nav-link <?php echo ($current_page == 'mis-ingresos.php') ? 'active' : ''; ?>" href="/municipal/funcionarios/ingresos/mis-ingresos.php">
+                            <span class="material-symbols-outlined">folder_shared</span>
+                            <span>Mis Ingresados</span>
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo (strpos($_SERVER['PHP_SELF'], '/proyectos/') !== false) ? 'active' : ''; ?>" href="/municipal/funcionarios/proyectos/index.php">
-                            <span class="material-symbols-outlined">map</span>
-                            <span>Proyectos</span>
-                        </a>
+                    <li class="px-3 mb-2 mt-4">
+                        <small class="text-muted text-uppercase font-weight-bold" style="font-size: 10px; letter-spacing: 0.1em; opacity: 0.7;">Historial</small>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link <?php echo (strpos($_SERVER['PHP_SELF'], '/oirs/') !== false) ? 'active' : ''; ?>" href="/municipal/funcionarios/oirs/index.php">
-                            <span class="material-symbols-outlined">map</span>
-                            <span>OIRS</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo (strpos($_SERVER['PHP_SELF'], '/ingresos/') !== false) ? 'active' : ''; ?>" href="/municipal/funcionarios/ingresos/index.php">
-                            <span class="material-symbols-outlined">map</span>
-                            <span>Ingresos</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo (strpos($_SERVER['PHP_SELF'], '/transito/') !== false) ? 'active' : ''; ?>" href="/municipal/funcionarios/transito/index.php">
-                            <span class="material-symbols-outlined">directions_car</span>
-                            <span>Gestión Tránsito</span>
-                        </a>
-                    </li>
-
-
-                    <li class="mt-4 pt-4 border-top px-3 mb-2">
-                        <small class="text-muted text-uppercase font-weight-bold" style="font-size: 10px; letter-spacing: 0.1em; opacity: 0.7;">Configuración</small>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span class="material-symbols-outlined">settings</span>
-                            <span>Ajustes</span>
+                        <a class="nav-link <?php echo ($current_page == 'busqueda.php') ? 'active' : ''; ?>" href="/municipal/funcionarios/ingresos/busqueda.php">
+                            <span class="material-symbols-outlined">manage_search</span>
+                            <span>Búsqueda Avanzada</span>
                         </a>
                     </li>
                 </ul>
@@ -231,9 +204,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <p class="font-weight-bold text-dark mb-0 text-truncate" style="font-size: 11px;">Alejandro M.</p>
                         <p class="text-primary font-weight-bold text-uppercase mb-0" style="font-size: 9px;">Administrador</p>
                     </div>
-                    <button class="btn btn-link p-0 ml-auto text-muted shadow-none">
-                        <span class="material-symbols-outlined" style="font-size: 18px;">logout</span>
-                    </button>
                 </div>
             </div>
         </aside>

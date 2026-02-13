@@ -10,11 +10,11 @@ const IngrPermissions = {
 
         return {
             consultar: true, // Everyone with access can see
-            editar: r === 'responsable',
-            preparar: ['responsable', 'visador', 'firmante'].includes(r),
-            comentar: ['responsable', 'visador', 'firmante'].includes(r),
-            bitacora: ['responsable', 'consultor'].includes(r),
-            visar: r === 'visador',
+            editar: ['propietario'].includes(r),
+            preparar: ['responsable', 'propietario', 'visador', 'firmante', 'consultor'].includes(r),
+            comentar: ['responsable', 'propietario', 'visador', 'firmante', 'consultor'].includes(r),
+            bitacora: ['responsable', 'propietario', 'consultor'].includes(r),
+            visar: ['propietario', 'visador'].includes(r),
             firmar: r === 'firmante'
         };
     },
@@ -38,10 +38,10 @@ const IngrPermissions = {
         const containerBitacora = sectionBitacora ? sectionBitacora.closest('.card') : null;
         if (containerBitacora) containerBitacora.style.display = p.bitacora ? 'block' : 'none';
 
-        // Responder Column (Visar/Firmar)
+        // Responder Column (Visar/Firmar/Respondar-Resp)
         const colResponder = document.getElementById('col_ir_responder');
         if (colResponder) {
-            colResponder.style.display = (p.visar || p.firmar) ? 'block' : 'none';
+            colResponder.style.display = (p.visar || p.firmar || p.editar) ? 'block' : 'none';
         }
 
         // Preparar Column

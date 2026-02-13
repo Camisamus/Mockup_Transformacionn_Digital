@@ -105,6 +105,7 @@ async function cargarDatosExistentes(id) {
             document.getElementById('tis_titulo').value = data.tis_titulo || '';
             document.getElementById('tis_tipo').value = data.tis_tipo || '';
             document.getElementById('tis_contenido').value = data.tis_contenido || '';
+            document.getElementById('tis_fecha_limite').value = data.tis_fecha_limite ? data.tis_fecha_limite.substring(0, 10) : '';
 
             // Map Destinos
             if (data.destinos) {
@@ -165,11 +166,21 @@ function setupEventListeners() {
     if (selectFacultad) {
         selectFacultad.addEventListener('change', (e) => {
             const checkReq = document.getElementById('m_destino_requerido');
+            const tareaSelect = document.getElementById('m_destino_tarea');
+            const tareaContainer = tareaSelect.closest('.col-md-12'); // Assuming it's in a col-md-12
+
             if (e.target.value === 'Consultor') {
                 checkReq.checked = false;
                 checkReq.disabled = true;
+                tareaContainer.style.display = 'block';
+            } else if (e.target.value === 'Visador') {
+                checkReq.checked = true;
+                checkReq.disabled = false;
+                tareaContainer.style.display = 'none';
+                tareaSelect.value = 'tomar conocimiento';
             } else {
                 checkReq.disabled = false;
+                tareaContainer.style.display = 'block';
             }
         });
     }
@@ -441,6 +452,7 @@ async function actualizarIngreso() {
             tis_titulo: document.getElementById('tis_titulo').value,
             tis_tipo: document.getElementById('tis_tipo').value,
             tis_contenido: document.getElementById('tis_contenido').value,
+            tis_fecha_limite: document.getElementById('tis_fecha_limite').value,
             destinos: destinos,
             enlaces: enlaces,
             documentos: documentosNuevos

@@ -58,9 +58,9 @@ class Ingresos_SolicitudControler
         ];
     }
 
-    public function update($id, $data)
+    public function update($id, $data, $current_user_id = null)
     {
-        if ($this->solicitud->update($id, $data)) {
+        if ($this->solicitud->update($id, $data, $current_user_id)) {
             return ["status" => "success", "message" => "Solicitud updated successfully"];
         }
         return [

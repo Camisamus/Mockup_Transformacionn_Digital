@@ -74,10 +74,13 @@ include 'header.php';
                             </div>
                             <div class="col-md-12">
                                 <label for="tis_tipo" class="form-label small fw-bold">Tipo de Ingreso</label>
-                                <select class="form-select form-select-sm" id="tis_tipo" required>
-                                    <option value="" selected disabled>Cargando tipos...</option>
-                                    <!-- Dynamic -->
                                 </select>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="tis_fecha_limite" class="form-label small fw-bold">Fecha Límite</label>
+                                <input type="date" class="form-control form-control-sm" id="tis_fecha_limite">
+                                <div class="form-text small">Si se deja vacío, se mantendrá la fecha actual o se
+                                    calcularán 20 días hábiles si es nuevo.</div>
                             </div>
                             <div class="col-12">
                                 <label for="tis_contenido" class="form-label small fw-bold">Contenido /

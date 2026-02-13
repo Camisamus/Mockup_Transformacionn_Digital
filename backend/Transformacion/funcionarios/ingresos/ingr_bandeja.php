@@ -74,7 +74,8 @@ include 'header.php';
                             <th class="ps-3">ID</th>
                             <th class="text-end pe-4">Acciones</th>
                             <th>Título</th>
-                            <th>Fecha</th>
+                            <th>Fecha Solo</th>
+                            <th>Límite</th>
                             <th>Estado</th>
                             <th>Asignación</th>
                             <th>Cód. Público</th>

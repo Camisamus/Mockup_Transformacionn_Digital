@@ -61,11 +61,11 @@ async function cargarBandeja(filters = {}) {
             currentPage = 1;
             renderTablaPaginada();
         } else {
-            tabla.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Error: ${result.message}</td></tr>`;
+            tabla.innerHTML = `<tr><td colspan="8" class="text-center text-danger">Error: ${result.message}</td></tr>`;
         }
     } catch (error) {
         console.error('Error:', error);
-        tabla.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Error de conexión con el servidor.</td></tr>`;
+        tabla.innerHTML = `<tr><td colspan="8" class="text-center text-danger">Error de conexión con el servidor.</td></tr>`;
     }
 }
 
@@ -129,7 +129,7 @@ function renderizarTabla(data) {
     tabla.innerHTML = '';
 
     if (data.length === 0) {
-        tabla.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted">No se encontraron registros.</td></tr>';
+        tabla.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">No se encontraron registros.</td></tr>';
         return;
     }
 
@@ -154,6 +154,7 @@ function renderizarTabla(data) {
                 <div class="small text-muted text-truncate" style="max-width: 300px;">${item.tis_contenido || ''}</div>
             </td>
             <td><span class="small">${(item.tis_fecha || '').substring(0, 10)}</span></td>
+            <td>${getDeadlineBadge(item.tis_fecha_limite)}</td>
             <td><span class="badge ${item.tis_estado === 'Ingresado' ? 'bg-success' : 'bg-primary'}">${item.tis_estado || '-'}</span></td>
             <td>${getRolBadge(item.rol_usuario)}</td>
             <td class="rgt-container text-end">
@@ -200,4 +201,22 @@ function getRolBadge(rol) {
             return `<span class="badge bg-secondary">${rol}</span>`;
     }
 }
+
+function getDeadlineBadge(fecha) {
+    if (!fecha) return '<span class="text-muted small">-</span>';
+
+    const d = new Date(fecha);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const diff = d.getTime() - today.getTime();
+    const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
+
+    let color = 'text-dark';
+    if (diffDays < 0) color = 'text-danger fw-bold';
+    else if (diffDays <= 3) color = 'text-warning fw-bold';
+
+    return `<span class="small ${color}">${fecha.substring(0, 10)}</span>`;
+}
+
 

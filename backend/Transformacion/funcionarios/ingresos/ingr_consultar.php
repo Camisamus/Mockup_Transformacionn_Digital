@@ -3,6 +3,14 @@ $pageTitle = "Consultar Ingreso";
 require_once '../../api/auth_check.php';
 include 'header.php';
 ?>
+<link href="https://unpkg.com/vis-network/styles/vis-network.min.css" rel="stylesheet" type="text/css" />
+<style>
+    #network-container {
+        width: 100%;
+        height: 600px;
+        background-color: #f8f9fa;
+    }
+</style>
 
 <div class="container-fluid py-4">
     <div class="main-header mb-4">
@@ -137,6 +145,10 @@ include 'header.php';
                         <div class="col-md-6">
                             <label class="form-label small fw-bold text-muted d-block">Responsable</label>
                             <div class="small" id="info_responsable">-</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-muted d-block">Fecha Límite</label>
+                            <div class="small fw-bold text-danger" id="info_fecha_limite">-</div>
                         </div>
                         <div class="col-12">
                             <hr class="my-4 opacity-10">
@@ -314,10 +326,9 @@ include 'header.php';
 <script src="../../recursos/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/feather-icons"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    feather.replace();
 </script>
 
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 <script src="../../recursos/js/funcionarios/ingresos/ingr_permissions.js"></script>
 <script src="../../recursos/js/funcionarios/ingresos/ingr_consultar.js"></script>
 

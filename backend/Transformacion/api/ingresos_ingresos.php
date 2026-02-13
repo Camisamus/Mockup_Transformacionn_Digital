@@ -69,8 +69,12 @@ switch ($data['ACCION']) {
         break;
 
     case 'ACTUALIZAR':
+        if (session_status() === PHP_SESSION_NONE)
+            session_start();
+        $current_user_id = $_SESSION['user_id'] ?? null;
+
         if ($id && $data) {
-            $response = $controller->update($id, $data);
+            $response = $controller->update($id, $data, $current_user_id);
 
             // Log ACTUALIZAR
             if (($response['status'] ?? '') === 'success') {

@@ -36,8 +36,9 @@ class Ingresos_ingreso
     {
         // Base Query with Role Logic
         $query = "SELECT DISTINCT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido,
+                  sol.tis_fecha_limite,
                   CASE 
-                    WHEN sol.tis_responsable = :current_user THEN 'Propietario'
+                    WHEN sol.tis_responsable = :current_user THEN 'Responsable'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
                     ELSE 'Consultor' 
                   END as rol_usuario
@@ -52,16 +53,13 @@ class Ingresos_ingreso
             $query .= " AND (
                 sol.tis_responsable = :current_user_filter 
                 OR (
-                    dest.tid_destino IS NOT NULL 
-                    AND NOT (
-                        dest.tid_facultad = 'Firmante' 
-                        AND EXISTS (
-                            SELECT 1 FROM trd_ingresos_destinos d2 
-                            WHERE d2.tid_ingreso_solicitud = sol.tis_id 
-                            AND d2.tid_facultad = 'Visador' 
-                            AND d2.tid_requeido = 1 
-                            AND (d2.tid_responde IS NULL OR d2.tid_responde != 1)
-                        )
+                    dest.tid_facultad IN ('Visador', 'Consultor')
+                    OR NOT EXISTS (
+                        SELECT 1 FROM trd_ingresos_destinos d2 
+                        WHERE d2.tid_ingreso_solicitud = sol.tis_id 
+                        AND d2.tid_facultad = 'Visador' 
+                        AND d2.tid_requeido = 1 
+                        AND (d2.tid_responde IS NULL OR d2.tid_responde != 1)
                     )
                 )
             )";
@@ -81,7 +79,6 @@ class Ingresos_ingreso
             // But for safety in query construction:
             $params[':current_user'] = 0;
             $params[':current_user_join'] = 0;
-            $params[':current_user_filter'] = 0;
             // Ideally we shouldn't be here without ID if we want filtering, but let's allow "all" if ID is null?
             // Requirement says "solo debes poder ver...". So strict filter.
             // If ID is null (e.g. cron), maybe show empty?
@@ -126,14 +123,30 @@ class Ingresos_ingreso
         }
 
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!class_exists('App\Helpers\Fechas')) {
+            require_once __DIR__ . '/../Helpers/Fechas.php';
+        }
+
+        foreach ($results as &$item) {
+            if (isset($item['tis_fecha']))
+                $item['tis_fecha'] = \App\Helpers\Fechas::formatearFecha($item['tis_fecha']);
+            if (isset($item['tis_fecha_limite']))
+                $item['tis_fecha_limite'] = \App\Helpers\Fechas::formatearFecha($item['tis_fecha_limite']);
+            if (isset($item['rgt_fecha']))
+                $item['rgt_fecha'] = \App\Helpers\Fechas::formatearFecha($item['rgt_fecha']);
+        }
+
+        return $results;
     }
 
     public function getById(int $id, ?int $current_user_id = null): array|null
     {
         $query = "SELECT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido,
+                  sol.tis_fecha_limite,
                   CASE 
-                    WHEN sol.tis_responsable = :current_user THEN 'Propietario'
+                    WHEN sol.tis_responsable = :current_user THEN 'Responsable'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
                     ELSE 'Consultor' 
                   END as rol_usuario
@@ -143,7 +156,8 @@ class Ingresos_ingreso
                   LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :current_user_join
                   WHERE sol.tis_id = :id 
                   AND (
-                    sol.tis_responsable = :current_user_filter 
+                    :ignore_perms = 1
+                    OR sol.tis_responsable = :current_user_filter 
                     OR (
                         dest.tid_destino IS NOT NULL 
                         AND NOT (
@@ -161,6 +175,7 @@ class Ingresos_ingreso
                   LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(':id', $id);
+        $stmt->bindValue(':ignore_perms', $current_user_id === null ? 1 : 0);
         $stmt->bindValue(':current_user', $current_user_id ?? 0);
         $stmt->bindValue(':current_user_join', $current_user_id ?? 0);
         $stmt->bindValue(':current_user_filter', $current_user_id ?? 0);
@@ -182,6 +197,17 @@ class Ingresos_ingreso
             $solicitud['bitacora'] = []; // No enviar info sensible
         }
 
+        if (!class_exists('App\Helpers\Fechas')) {
+            require_once __DIR__ . '/../Helpers/Fechas.php';
+        }
+
+        if (isset($solicitud['tis_fecha']))
+            $solicitud['tis_fecha'] = \App\Helpers\Fechas::formatearFecha($solicitud['tis_fecha']);
+        if (isset($solicitud['tis_fecha_limite']))
+            $solicitud['tis_fecha_limite'] = \App\Helpers\Fechas::formatearFecha($solicitud['tis_fecha_limite']);
+        if (isset($solicitud['rgt_fecha']))
+            $solicitud['rgt_fecha'] = \App\Helpers\Fechas::formatearFecha($solicitud['rgt_fecha']);
+
         $solicitud['multiancestro'] = $this->Multiancestro->obtenerAbolFamiliar($solicitud['tis_registro_tramite']);
         return $solicitud;
     }
@@ -189,6 +215,7 @@ class Ingresos_ingreso
     public function getByRgtId(int $rgtId, ?int $current_user_id = null): array|null
     {
         $query = "SELECT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido,
+                  sol.tis_fecha_limite,
                   CASE 
                     WHEN sol.tis_responsable = :current_user THEN 'Propietario'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
@@ -239,6 +266,17 @@ class Ingresos_ingreso
             $solicitud['bitacora'] = []; // No enviar info sensible
         }
 
+        if (!class_exists('App\Helpers\Fechas')) {
+            require_once __DIR__ . '/../Helpers/Fechas.php';
+        }
+
+        if (isset($solicitud['tis_fecha']))
+            $solicitud['tis_fecha'] = \App\Helpers\Fechas::formatearFecha($solicitud['tis_fecha']);
+        if (isset($solicitud['tis_fecha_limite']))
+            $solicitud['tis_fecha_limite'] = \App\Helpers\Fechas::formatearFecha($solicitud['tis_fecha_limite']);
+        if (isset($solicitud['rgt_fecha']))
+            $solicitud['rgt_fecha'] = \App\Helpers\Fechas::formatearFecha($solicitud['rgt_fecha']);
+
         $solicitud['multiancestro'] = $this->Multiancestro->obtenerAbolFamiliar($solicitud['tis_registro_tramite']);
         return $solicitud;
     }
@@ -246,6 +284,14 @@ class Ingresos_ingreso
     public function create($data)
     {
         try {
+            // Calculate deadline if not provided
+            if (empty($data['tis_fecha_limite'])) {
+                if (!class_exists('App\Helpers\Fechas')) {
+                    require_once __DIR__ . '/../Helpers/Fechas.php';
+                }
+                $data['tis_fecha_limite'] = \App\Helpers\Fechas::sumarDiasHabiles(date('Y-m-d'), 20, $this->conn);
+            }
+
             $this->conn->beginTransaction();
 
             // 1. Crear registro general de trámite
@@ -285,6 +331,7 @@ class Ingresos_ingreso
                 tis_responsable = :tis_responsable,
                 tis_respuesta = :tis_respuesta,
                 tis_fecha = :tis_fecha,
+                tis_fecha_limite = :tis_fecha_limite,
                 tis_registro_tramite = :tis_registro_tramite";
             //echo ($query);
             $stmt = $this->conn->prepare($query);
@@ -296,6 +343,7 @@ class Ingresos_ingreso
             $stmt->bindValue(":tis_responsable", $creador_id);
             $stmt->bindValue(":tis_respuesta", $data['tis_respuesta'] ?? null);
             $stmt->bindValue(":tis_fecha", $data['tis_fecha'] ?? date('Y-m-d'));
+            $stmt->bindValue(":tis_fecha_limite", $data['tis_fecha_limite']);
             $stmt->bindValue(":tis_registro_tramite", $rgt_id);
 
             if ($stmt->execute()) {
@@ -377,14 +425,15 @@ class Ingresos_ingreso
     public $lastError = "";
 
 
-    public function update($id, $data)
+    public function update($id, $data, ?int $current_user_id = null)
     {
         try {
             $this->conn->beginTransaction();
 
             // 1. Obtener estado actual para comparación y bitácora
-            $current = $this->getById($id);
+            $current = $this->getById($id, $current_user_id);
             if (!$current) {
+                $this->lastError = "Solicitud not found or access denied for ID: $id";
                 $this->conn->rollBack();
                 return false;
             }
@@ -396,7 +445,8 @@ class Ingresos_ingreso
                     tis_estado = :tis_estado,
                     tis_responsable = :tis_responsable,
                     tis_respuesta = :tis_respuesta,
-                    tis_fecha = :tis_fecha
+                    tis_fecha = :tis_fecha,
+                    tis_fecha_limite = :tis_fecha_limite
                     WHERE tis_id = :id";
 
             $stmt = $this->conn->prepare($query);
@@ -408,9 +458,12 @@ class Ingresos_ingreso
             $stmt->bindValue(":tis_responsable", $data['tis_responsable'] ?? $current['tis_responsable']);
             $stmt->bindValue(":tis_respuesta", $data['tis_respuesta'] ?? $current['tis_respuesta']);
             $stmt->bindValue(":tis_fecha", $data['tis_fecha'] ?? $current['tis_fecha']);
+            $stmt->bindValue(":tis_fecha_limite", $data['tis_fecha_limite'] ?? $current['tis_fecha_limite']);
             $stmt->bindValue(":id", $id);
 
             if (!$stmt->execute()) {
+                $errorInfo = $stmt->errorInfo();
+                $this->lastError = "Execute failed: " . ($errorInfo[2] ?? "Unknown database error");
                 $this->conn->rollBack();
                 return false;
             }
@@ -433,7 +486,8 @@ class Ingresos_ingreso
                         'tid_funcionario' => $dest['usr_id'],
                         'tid_tipo' => $dest['tid_tipo'],
                         'tid_facultad' => $dest['tid_facultad'],
-                        'tid_requeido' => $requerido
+                        'tid_requeido' => $requerido,
+                        'tid_tarea' => $dest['tid_tarea'] ?? 'tomar conocimiento'
                     ]);
                 }
             }
@@ -539,7 +593,7 @@ class Ingresos_ingreso
 
         $placeholders = implode(',', array_fill(0, count($rgt_ids), '?'));
 
-        $query = "SELECT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido 
+        $query = "SELECT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido, sol.tis_fecha_limite 
                   FROM " . $this->table_name . " sol 
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
                   LEFT JOIN trd_acceso_usuarios usr ON sol.tis_responsable = usr.usr_id

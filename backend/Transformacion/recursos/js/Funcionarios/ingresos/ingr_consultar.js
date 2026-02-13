@@ -168,6 +168,7 @@ function renderizarIngreso(data) {
     document.getElementById('info_fecha').innerText = data.tis_fecha.substring(0, 10) || '-';
     const responsable = data.resp_nombre ? `${data.resp_nombre} ${data.resp_apellido}` : `ID: ${data.tis_responsable}`;
     document.getElementById('info_responsable').innerText = responsable;
+    document.getElementById('info_fecha_limite').innerText = data.tis_fecha_limite ? data.tis_fecha_limite.substring(0, 10) : 'Sin fecha límite';
     document.getElementById('info_contenido').innerHTML = data.tis_contenido ? data.tis_contenido.replace(/\n/g, '<br>') : 'Sin contenido';
 
     const badgeEstado = document.getElementById('badge_estado');
@@ -331,11 +332,35 @@ function renderizarIngreso(data) {
         });
 
         graphBtn.disabled = false;
-        graphBtn.onclick = () => {
+        graphBtn.onclick = async () => {
             const modal = new bootstrap.Modal(document.getElementById('modalMapa'));
             modal.show();
-            // Usamos tis_registro_tramite como el ID actual para el mapa
-            setTimeout(() => renderizarMapaRelaciones(data.multiancestro, data.tis_registro_tramite), 300);
+
+            // Fetch tree details before rendering
+            const rgtIds = new Set();
+            rgtIds.add(parseInt(data.tis_registro_tramite));
+            if (data.multiancestro) {
+                Object.values(data.multiancestro).forEach(rel => {
+                    rgtIds.add(parseInt(rel.gma_padre));
+                    rgtIds.add(parseInt(rel.gma_hijo));
+                });
+            }
+
+            try {
+                const respDetalles = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ACCION: 'DETALLES_ARBOL', rgt_ids: Array.from(rgtIds) })
+                });
+                const resDetalles = await respDetalles.json();
+                const sessionUser = await checkSession();
+                const userId = sessionUser ? sessionUser.id : null;
+
+                setTimeout(() => renderizarMapa(data.multiancestro, resDetalles.data || [], data.tis_registro_tramite, userId), 300);
+            } catch (e) {
+                console.error("Error loading tree details:", e);
+                setTimeout(() => renderizarMapaRelaciones(data.multiancestro, data.tis_registro_tramite), 300);
+            }
         };
     } else {
         listaMulti.innerHTML = '<li class="list-group-item text-muted small">No hay relaciones registradas.</li>';
@@ -394,6 +419,81 @@ function renderizarRespuestas(destinos) {
         `;
         lista.appendChild(item);
     });
+}
+
+function renderizarMapa(relaciones, detalles = [], currentRgtId, userId = null) {
+    const container = document.getElementById('network-container');
+    const nodes = new vis.DataSet();
+    const edges = new vis.DataSet();
+    const addedNodes = new Set();
+    const detallesMap = new Map();
+
+    if (Array.isArray(detalles)) {
+        detalles.forEach(d => { if (d.rgt_id) detallesMap.set(parseInt(d.rgt_id), d); });
+    }
+
+    function getColorForNode(rgtId) {
+        const idInt = parseInt(rgtId);
+        if (idInt === parseInt(currentRgtId)) return '#ffc107';
+        const det = detallesMap.get(idInt);
+        if (det) {
+            if (det.tis_estado === 'Resuelto_Favorable') return '#198754';
+            if (det.tis_estado === 'Resuelto_NO_Favorable') return '#000000';
+            const hasDest = det.destinos && det.destinos.length > 0;
+            if (!hasDest) {
+                return (parseInt(det.tis_responsable) === parseInt(userId)) ? '#dc3545' : '#fd7e14';
+            }
+        }
+        return '#97c2fc';
+    }
+
+    function getTooltip(rgtId) {
+        const det = detallesMap.get(parseInt(rgtId));
+        return det ? det.tis_titulo : `RT-${rgtId}`;
+    }
+
+    const childrenOf = {};
+    Object.values(relaciones).forEach(rel => {
+        const p = parseInt(rel.gma_padre);
+        const h = parseInt(rel.gma_hijo);
+
+        if (!childrenOf[p]) childrenOf[p] = [];
+        childrenOf[p].push(h);
+
+        [p, h].forEach(id => {
+            if (!addedNodes.has(id)) {
+                nodes.add({ id, label: `RT-${id}`, color: getColorForNode(id), title: getTooltip(id) });
+                addedNodes.add(id);
+            }
+        });
+        edges.add({ from: p, to: h, arrows: 'from' });
+    });
+
+    if (!addedNodes.has(parseInt(currentRgtId)) && currentRgtId) {
+        const curId = parseInt(currentRgtId);
+        nodes.add({ id: curId, label: `RT-${curId}`, color: '#ffc107', title: getTooltip(curId) });
+    }
+
+    const data = { nodes, edges };
+    const options = {
+        layout: { hierarchical: { direction: 'UD', sortMethod: 'directed' } },
+        physics: false,
+        nodes: { shape: 'box', margin: 10 },
+        interaction: { hover: true, selectConnectedEdges: false }
+    };
+
+    let network = new vis.Network(container, data, options);
+
+    network.on("selectNode", (params) => {
+        const sid = parseInt(params.nodes[0]);
+        const det = detallesMap.get(sid);
+        if (det && det.tis_id) {
+            if (sid === parseInt(currentRgtId)) return;
+            window.location.href = `ingr_consultar.php?id=${det.tis_id}`;
+        }
+    });
+
+    if (window.feather) window.feather.replace();
 }
 
 function renderizarMapaRelaciones(multiancestro, currentId) {

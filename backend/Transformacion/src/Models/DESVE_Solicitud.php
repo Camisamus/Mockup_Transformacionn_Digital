@@ -260,8 +260,10 @@ ORDER BY tds.sol_id DESC;";
     {
         // 1. Obtener estado actual para comparación
         $current = $this->getById($id);
-        if (!$current)
+        if (!$current) {
+            $this->lastError = "Solicitud not found or access denied for ID: $id";
             return false;
+        }
 
         $this->conn->beginTransaction();
         $query = "UPDATE " . $this->table_name . " SET
@@ -366,6 +368,11 @@ ORDER BY tds.sol_id DESC;";
 
                 $this->conn->commit();
                 return true;
+            } else {
+                $errorInfo = $stmt->errorInfo();
+                $this->lastError = "Execute failed: " . ($errorInfo[2] ?? "Unknown database error");
+                $this->conn->rollBack();
+                return false;
             }
         } catch (PDOException $e) {
             error_log("Database Exception in Solicitud::update: " . $e->getMessage());
