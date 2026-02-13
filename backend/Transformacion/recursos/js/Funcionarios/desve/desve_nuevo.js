@@ -57,6 +57,7 @@ let contribuyentes = [];
 let tiposOrganizacion = [];
 let prioridades = [];
 let funcionarios = [];
+let areas = [];
 let sectores = [];
 let Solicitudes = [];
 let selectedFiles = [];
@@ -82,27 +83,31 @@ async function loadInitialData() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: "CONSULTAM" })
         };
-        const [orgRes, orgResDESVE, orgComRes, contribRes, tipoRes, prioRes, funcRes, secRes, solRes] = await Promise.all([
+        const [orgRes, orgResDESVE, contribRes, tipoRes, prioRes, funcRes, secRes, solRes, orgComRes, areasRes] = await Promise.all([
             fetch(`${window.API_BASE_URL}/organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/organizaciones_desve.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/organizaciones_comunitarias_general.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/contribuyentes_general.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/funcionarios.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sectores.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/solicitudes_desve.php`, fetchOptions).then(r => r.json())
+            fetch(`${window.API_BASE_URL}/solicitudes_desve.php`, { ...fetchOptions, body: JSON.stringify({ ACCION: "CONSULTAM", S: "REINGRESO" }) }).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/organizaciones_comunitarias_general.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/areas_general.php`, fetchOptions).then(r => r.json())
         ]);
 
         organizaciones = extractData(orgRes);
         organizacionesDESVE = extractData(orgResDESVE);
-        organizacionesComunitarias = extractData(orgComRes);
         contribuyentes = extractData(contribRes);
         tiposOrganizacion = extractData(tipoRes);
         prioridades = extractData(prioRes);
         funcionarios = extractData(funcRes);
         sectores = extractData(secRes);
         Solicitudes = extractData(solRes);
+        console.log('Solicitudes cargadas para reingreso:', Solicitudes.length, Solicitudes);
+        organizacionesComunitarias = extractData(orgComRes);
+        areas = extractData(areasRes);
+
     } catch (e) {
         console.error("Error loading initial data:", e);
     }
@@ -134,6 +139,7 @@ function populateSelects() {
 }
 
 window.abrirModalReingreso = function () {
+    console.log('abrirModalReingreso llamado. Solicitudes:', Solicitudes.length, Solicitudes);
     const tbody = document.getElementById('lista_busqueda_reingreso');
     tbody.innerHTML = '';
 
@@ -417,12 +423,31 @@ function abrirModalBuscarFuncionario() {
     const tbody = document.getElementById('lista_busqueda_fnc');
     tbody.innerHTML = '';
 
+
+
+    // Populate Areas if not already
+    // Populate Areas if not already
+    const areaSelect = document.getElementById('filtro_area_fnc');
+    if (areaSelect && areaSelect.options.length <= 2) {
+        areaSelect.innerHTML = '<option value="">Todas las Áreas</option><option value="SIN_AREA">Sin Área Asignada</option>';
+        areas.forEach(a => {
+            const opt = document.createElement('option');
+            opt.value = a.tga_id;
+            opt.textContent = a.tga_nombre;
+            areaSelect.appendChild(opt);
+        });
+    }
+
     funcionarios.forEach(f => {
         const row = document.createElement('tr');
+        row.setAttribute('data-area-id', f.fnc_area_id || 'SIN_AREA');
         row.innerHTML = `
             <td>${f.fnc_id || '-'}</td>
             <td>${f.fnc_email || '-'}</td>
-            <td>${f.fnc_nombre || '-'}</td>
+            <td>
+                <div>${f.fnc_nombre || '-'}</div>
+                <div class="x-small text-muted">${f.fnc_area_nombre || 'Sin Área'}</div>
+            </td>
             <td>${f.fnc_apellido || '-'}</td>
             <td class="text-end">
                 <button type="button" class="btn btn-sm btn-primary" onclick="seleccionarFuncionario('${f.fnc_id}')">Seleccionar</button>
@@ -431,12 +456,31 @@ function abrirModalBuscarFuncionario() {
         tbody.appendChild(row);
     });
 
-    document.getElementById('filtroFuncionario').onkeyup = function () {
-        const val = this.value.toLowerCase();
-        Array.from(tbody.querySelectorAll('tr')).forEach(tr => {
-            tr.style.display = tr.innerText.toLowerCase().includes(val) ? '' : 'none';
+    const filterFunc = function () {
+        const val = document.getElementById('buscar_fnc_input').value.toLowerCase();
+        const areaVal = document.getElementById('filtro_area_fnc').value;
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        rows.forEach(tr => {
+            const textMatch = tr.innerText.toLowerCase().includes(val);
+            const rowAreaId = tr.getAttribute('data-area-id');
+
+            let areaMatch = true;
+            if (areaVal === '') {
+                areaMatch = true;
+            } else {
+                areaMatch = (rowAreaId == areaVal);
+            }
+
+            tr.style.display = textMatch && areaMatch ? '' : 'none';
         });
     };
+
+    const inputFunc = document.getElementById('buscar_fnc_input');
+    const selectFunc = document.getElementById('filtro_area_fnc');
+
+    if (inputFunc) inputFunc.onkeyup = filterFunc;
+    if (selectFunc) selectFunc.onchange = filterFunc;
 
     modalBusqueda.show();
 }

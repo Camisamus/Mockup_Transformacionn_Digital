@@ -13,6 +13,11 @@ let existingFiles = [];
 document.addEventListener('DOMContentLoaded', async function () {
     if (!window.API_BASE_URL) window.API_BASE_URL = 'http://127.0.0.1/Transformacion/api';
 
+    document.getElementById('btn_abrir_comentario').addEventListener('click', () => {
+        const modal = new bootstrap.Modal(document.getElementById('modalNuevoComentario'));
+        modal.show();
+    });
+
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
 
@@ -96,7 +101,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             fileInput.onchange = (e) => handleFiles(e.target.files);
 
             // Save Response
-            document.getElementById('btn-save-response').onclick = saveResponse;
+            document.getElementById('btn-save-response-toolbar').onclick = saveResponse;
 
             if (window.feather) feather.replace();
 

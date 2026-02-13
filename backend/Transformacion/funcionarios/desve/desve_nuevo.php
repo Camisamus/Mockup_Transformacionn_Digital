@@ -246,30 +246,48 @@ include 'header.php';
                 <h5 class="modal-title fw-bold fs-6">Buscar Funcionario Interno</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body p-4">
-                <div class="mb-3">
-                    <input type="text" class="form-control form-control-sm" id="filtroFuncionario"
-                        placeholder="Filtrar por nombre o RUT...">
+            <div class="row g-2 mb-4">
+                <div class="col-md-7">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-white border-end-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </span>
+                        <input type="text" class="form-control border-start-0" id="buscar_fnc_input"
+                            placeholder="Buscar por nombre o apellido...">
+                    </div>
                 </div>
-                <div class="table-responsive" style="max-height: 400px;">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light text-uppercase small">
-                            <tr>
-                                <th>ID</th>
-                                <th>Email</th>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th class="text-end">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="lista_busqueda_fnc" class="small">
-                            <!-- Populated dynamically -->
-                        </tbody>
-                    </table>
+                <div class="col-md-5">
+                    <select class="form-select form-select-sm" id="filtro_area_fnc">
+                        <option value="">Todas las Áreas</option>
+                        <option value="SIN_AREA">Sin Área Asignada</option>
+                        <!-- Dynamic -->
+                    </select>
                 </div>
+            </div>
+            <div class="table-responsive" style="max-height: 400px;">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light text-uppercase small">
+                        <tr>
+                            <th>ID</th>
+                            <th>Email</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th class="text-end">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista_busqueda_fnc" class="small">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <!-- Modal Nuevo Origen Especial -->

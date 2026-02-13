@@ -18,6 +18,8 @@ class OrganizacionComunitariaGeneral
         // Join with types and contribuyentes for readability
         $query = "SELECT 
                     UPPER(oc.orgc_nombre) as orgc_nombre,
+                    oc.orgc_id,
+                    oc.orgc_tipo_organizacion,
                     t.tor_nombre as tipo_nombre,
                     UPPER(c.tgc_nombre) as tgc_nombre, UPPER(c.tgc_apellido_paterno) as tgc_apellido_paterno, UPPER(c.tgc_apellido_materno) as tgc_apellido_materno, c.tgc_rut as rep_rut
                   FROM " . $this->table_name . " oc

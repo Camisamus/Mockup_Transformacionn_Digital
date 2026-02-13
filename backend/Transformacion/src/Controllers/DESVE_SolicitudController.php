@@ -26,6 +26,18 @@ class DESVE_SolicitudController
 
         return ["status" => "success", "data" => $result];
     }
+    public function getAllCompletedNL()
+    {
+        $result = $this->solicitud->getAllCompletedNL();
+
+        return ["status" => "success", "data" => $result];
+    }
+
+    public function getAllForReingreso()
+    {
+        $result = $this->solicitud->getAllForReingreso();
+        return ["status" => "success", "data" => $result];
+    }
 
     public function getById($id)
     {

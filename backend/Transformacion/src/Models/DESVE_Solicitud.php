@@ -22,6 +22,14 @@ class DESVE_Solicitud
 
     public function getAll()
     {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE sol_borrado = 0 AND sol_estado_entrega = 0 ORDER BY sol_id DESC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getAllForReingreso()
+    {
         $query = "SELECT * FROM " . $this->table_name . " WHERE sol_borrado = 0 ORDER BY sol_id DESC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
@@ -32,7 +40,23 @@ class DESVE_Solicitud
         $query = "SELECT tds.*, tdd.* FROM " . $this->table_name . " tds 
 INNER JOIN trd_desve_destinos tdd ON tds.sol_id = tdd.tid_desve_solicitud 
 WHERE tds.sol_borrado = 0 
-and tdd.tid_destino = :usu
+AND tds.sol_estado_entrega = 0
+AND tdd.tid_destino = :usu
+ORDER BY tds.sol_id DESC;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':usu', $_SESSION['user_id']);
+        $stmt->execute();
+        $solicitudes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $solicitudes;
+    }
+
+    public function getAllCompletedNL()
+    {
+        $query = "SELECT DISTINCT tds.* FROM " . $this->table_name . " tds 
+LEFT JOIN trd_desve_destinos tdd ON tds.sol_id = tdd.tid_desve_solicitud AND tdd.tid_destino = :usu
+WHERE tds.sol_borrado = 0 
+AND tds.sol_estado_entrega = 1
+AND (tdd.tid_destino IS NOT NULL OR tds.sol_responsable = :usu)
 ORDER BY tds.sol_id DESC;";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':usu', $_SESSION['user_id']);
@@ -292,28 +316,33 @@ ORDER BY tds.sol_id DESC;";
 
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bindParam(":sol_ingreso_desve", $data['sol_ingreso_desve']);
-        $stmt->bindParam(":sol_nombre_expediente", $data['sol_nombre_expediente']);
-        $stmt->bindParam(":sol_origen_id", $data['sol_origen_id']);
-        $stmt->bindParam(":sol_origen_texto", $data['sol_origen_texto']);
-        $stmt->bindParam(":sol_detalle", $data['sol_detalle']);
-        $stmt->bindParam(":sol_fecha_recepcion", $data['sol_fecha_recepcion']);
-        $stmt->bindParam(":sol_prioridad_id", $data['sol_prioridad_id']);
-        $stmt->bindParam(":sol_sector_id", $data['sol_sector_id']);
-        $stmt->bindParam(":sol_fecha_vencimiento", $data['sol_fecha_vencimiento']);
-        $stmt->bindParam(":sol_entrego_coordinador", $data['sol_entrego_coordinador'], PDO::PARAM_BOOL);
-        $stmt->bindParam(":sol_fecha_respuesta_coordinador", $data['sol_fecha_respuesta_coordinador']);
-        $stmt->bindParam(":sol_estado_entrega", $data['sol_estado_entrega'], PDO::PARAM_BOOL);
-        $stmt->bindParam(":sol_dias_vencimiento", $data['sol_dias_vencimiento']);
-        $stmt->bindParam(":sol_observaciones", $data['sol_observaciones']);
-        $stmt->bindParam(":sol_dias_transcurridos", $data['sol_dias_transcurridos']);
-        $stmt->bindParam(":sol_reingreso_id", $data['sol_reingreso_id']);
-        $stmt->bindParam(":sol_direccion", $data['sol_direccion']);
-        $stmt->bindParam(":sol_latitud", $data['sol_latitud']);
-        $stmt->bindParam(":sol_longitud", $data['sol_longitud']);
-        $stmt->bindParam(":sol_responsable", $data['sol_responsable']);
+        // Helper to handle empty strings as null for IDs/numbers
+        $toNull = function ($val) {
+            return ($val === '' || $val === null) ? null : $val;
+        };
+
+        $stmt->bindValue(":sol_ingreso_desve", $data['sol_ingreso_desve'] ?? null);
+        $stmt->bindValue(":sol_nombre_expediente", $data['sol_nombre_expediente'] ?? null);
+        $stmt->bindValue(":sol_origen_id", $toNull($data['sol_origen_id'] ?? null));
+        $stmt->bindValue(":sol_origen_texto", $data['sol_origen_texto'] ?? null);
+        $stmt->bindValue(":sol_detalle", $data['sol_detalle'] ?? null);
+        $stmt->bindValue(":sol_fecha_recepcion", $toNull($data['sol_fecha_recepcion'] ?? null));
+        $stmt->bindValue(":sol_prioridad_id", $toNull($data['sol_prioridad_id'] ?? null));
+        $stmt->bindValue(":sol_sector_id", $toNull($data['sol_sector_id'] ?? null));
+        $stmt->bindValue(":sol_fecha_vencimiento", $toNull($data['sol_fecha_vencimiento'] ?? null));
+        $stmt->bindValue(":sol_entrego_coordinador", (bool) ($data['sol_entrego_coordinador'] ?? false), PDO::PARAM_BOOL);
+        $stmt->bindValue(":sol_fecha_respuesta_coordinador", $toNull($data['sol_fecha_respuesta_coordinador'] ?? null));
+        $stmt->bindValue(":sol_estado_entrega", (bool) ($data['sol_estado_entrega'] ?? false), PDO::PARAM_BOOL);
+        $stmt->bindValue(":sol_dias_vencimiento", $data['sol_dias_vencimiento'] ?? null);
+        $stmt->bindValue(":sol_observaciones", $data['sol_observaciones'] ?? null);
+        $stmt->bindValue(":sol_dias_transcurridos", $data['sol_dias_transcurridos'] ?? null);
+        $stmt->bindValue(":sol_reingreso_id", $toNull($data['sol_reingreso_id'] ?? null));
+        $stmt->bindValue(":sol_direccion", $data['sol_direccion'] ?? null);
+        $stmt->bindValue(":sol_latitud", $data['sol_latitud'] ?? null);
+        $stmt->bindValue(":sol_longitud", $data['sol_longitud'] ?? null);
+        $stmt->bindValue(":sol_responsable", $data['sol_responsable'] ?? null);
         $stmt->bindValue(":sol_origen_esp", (int) ($data['sol_origen_esp'] ?? 0), PDO::PARAM_INT);
-        $stmt->bindParam(":id", $id);
+        $stmt->bindValue(":id", $id);
 
         try {
             if ($stmt->execute()) {

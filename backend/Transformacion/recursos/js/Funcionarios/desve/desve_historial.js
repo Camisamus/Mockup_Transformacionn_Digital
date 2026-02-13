@@ -63,7 +63,7 @@ async function loadInitialData() {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ACCION: "CONSULTAM", S: "NL" })
+            body: JSON.stringify({ ACCION: "CONSULTAM", S: "HISTORIAL" })
         };
         const [solRes, orgRes, tipoRes, prioRes, funcRes, secRes] = await Promise.all([
             fetch(`${window.API_BASE_URL}/solicitudes_desve.php`, fetchOptions).then(r => r.json()),
@@ -115,7 +115,7 @@ function renderTable(data) {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>
-                <button class="btn btn-sm btn-dark" onclick="responder(${item.sol_id})" title="Responder Registro">
+                <button class="btn btn-sm btn-dark" onclick="consultar(${item.sol_id})" title="Consultar Registro">
                     <i data-feather="eye" style="width: 14px;"></i>
                 </button>
             </td>
@@ -227,7 +227,7 @@ function limpiarFiltros() {
     renderTable(allSolicitudes);
 }
 
-function responder(id) {
-    window.location.href = `desve_responder.php?id=${id}`;
+function consultar(id) {
+    window.location.href = `desve_consultar.php?id=${id}`;
 }
 

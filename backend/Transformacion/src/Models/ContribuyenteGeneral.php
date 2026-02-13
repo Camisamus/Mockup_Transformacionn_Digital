@@ -15,7 +15,7 @@ class ContribuyenteGeneral
 
     public function getAll()
     {
-        $query = "SELECT tgc_id, tgc_rut, UPPER(tgc_nombre) as tgc_nombre, UPPER(tgc_apellido_paterno) as tgc_apellido_paterno, UPPER(tgc_apellido_materno) as tgc_apellido_materno, tgc_borrado FROM " . $this->table_name . " ORDER BY tgc_nombre ASC";
+        $query = "SELECT tgc_id, tgc_rut, UPPER(tgc_nombre) as tgc_nombre, UPPER(tgc_apellido_paterno) as tgc_apellido_paterno, UPPER(tgc_apellido_materno) as tgc_apellido_materno FROM " . $this->table_name . " ORDER BY tgc_nombre ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

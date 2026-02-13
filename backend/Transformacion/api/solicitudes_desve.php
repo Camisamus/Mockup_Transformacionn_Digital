@@ -23,6 +23,10 @@ switch ($data['ACCION']) {
         } else {
             if ($S == 'NL') {
                 $response = $controller->getAllNL();
+            } elseif ($S == 'HISTORIAL') {
+                $response = $controller->getAllCompletedNL();
+            } elseif ($S == 'REINGRESO') {
+                $response = $controller->getAllForReingreso();
             } else {
                 $response = $controller->getAll();
             }
