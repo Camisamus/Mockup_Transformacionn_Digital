@@ -227,27 +227,63 @@ async function loadSolicitationDetails(id, currentUser) {
             // Resolve Organization Type and Origen
             let orgList = [];
             let org = {};
+            let orgTipoId = null;
+
             switch (parseInt(sol.sol_origen_esp)) {
                 case 0:
-                    orgList = organizaciones;
-                    org = orgList.find(o => o.org_id == sol.sol_origen_id);
+                    // Check if it's from organizaciones or organizacionesComunitarias
+                    org = organizaciones.find(o => o.org_id == sol.sol_origen_id);
+                    if (!org) {
+                        // Try organizacionesComunitarias
+                        org = organizacionesComunitarias.find(o => o.orgc_id == sol.sol_origen_id);
+                        if (org) {
+                            orgTipoId = org.orgc_tipo_organizacion;
+                        }
+                    } else {
+                        orgTipoId = org.org_tipo_id;
+                    }
                     break;
                 case 1:
-                    orgList = contribuyentes;
-                    org = orgList.find(o => o.tgc_id == sol.sol_origen_id);
+                    org = contribuyentes.find(o => o.tgc_id == sol.sol_origen_id);
+                    if (org) {
+                        orgTipoId = org.tgc_tipo_organizacion || "3"; // Particular default
+                    }
                     break;
                 case 2:
-                    orgList = organizacionesDESVE;
-                    org = orgList.find(o => o.org_id == sol.sol_origen_id);
+                    org = organizacionesDESVE.find(o => o.org_id == sol.sol_origen_id);
+                    if (org) {
+                        orgTipoId = org.org_tipo_id;
+                    }
                     break;
                 default:
                     OrigenEspecial = false;
             }
 
-            if (org) {
-                document.getElementById('ID_Organizacion').value = org.org_tipo_id;
-                handleTipoOrgChange(); // Populate OrigenSolicitud based on Type
-                document.getElementById('OrigenSolicitud').value = sol.sol_origen_id;
+            if (org && orgTipoId) {
+                // Set the organization type using VALUE, not selectedIndex
+                document.getElementById('ID_Organizacion').value = orgTipoId;
+                OrigenEspecial = parseInt(sol.sol_origen_esp);
+
+                // Populate OrigenSolicitud based on Type
+                handleTipoOrgChange();
+
+                // Set the origin value with proper prefix for organizaciones comunitarias
+                if (parseInt(sol.sol_origen_esp) === 0 && (orgTipoId == "1" || orgTipoId == "2")) {
+                    // Organizaciones Comunitarias need OC_ prefix
+                    document.getElementById('OrigenSolicitud').value = `OC_${sol.sol_origen_id}`;
+                } else {
+                    if (parseInt(sol.sol_origen_esp) === 1 && (orgTipoId == "3" || orgTipoId == "5")) {
+                        // Organizaciones Comunitarias need OC_ prefix
+                        const c = contribuyentes.find(x => x.tgc_id == sol.sol_origen_id);
+                        if (c) {
+                            const orgSelect = document.getElementById('OrigenSolicitud');
+                            orgSelect.disabled = false;
+                            orgSelect.innerHTML = `<option value="${c.tgc_id}" selected>${c.tgc_nombre} ${c.tgc_apellido_paterno} ${c.tgc_apellido_materno} (${c.tgc_rut})</option>`;
+                        }
+                    } else {
+                        document.getElementById('OrigenSolicitud').value = sol.sol_origen_id;
+                    }
+                }
             }
 
             document.getElementById('FechaUltimaRecepcion').value = sol.sol_fecha_recepcion?.split(' ')[0] || '';

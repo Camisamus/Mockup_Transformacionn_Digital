@@ -65,6 +65,34 @@ ORDER BY tds.sol_id DESC;";
         return $solicitudes;
     }
 
+    public function getAllCompletedNLWithDateFilter($fechaInicio = null, $fechaFin = null)
+    {
+        // Default to last 30 days if no dates provided
+        if (!$fechaInicio) {
+            $fechaInicio = date('Y-m-d', strtotime('-30 days'));
+        }
+        if (!$fechaFin) {
+            $fechaFin = date('Y-m-d');
+        }
+
+        $query = "SELECT DISTINCT tds.* FROM " . $this->table_name . " tds 
+LEFT JOIN trd_desve_destinos tdd ON tds.sol_id = tdd.tid_desve_solicitud AND tdd.tid_destino = :usu
+WHERE tds.sol_borrado = 0 
+AND tds.sol_estado_entrega = 1
+AND (tdd.tid_destino IS NOT NULL OR tds.sol_responsable = :usu)
+AND DATE(tds.sol_fecha_recepcion) >= :fecha_inicio
+AND DATE(tds.sol_fecha_recepcion) <= :fecha_fin
+ORDER BY tds.sol_id DESC;";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':usu', $_SESSION['user_id']);
+        $stmt->bindParam(':fecha_inicio', $fechaInicio);
+        $stmt->bindParam(':fecha_fin', $fechaFin);
+        $stmt->execute();
+        $solicitudes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $solicitudes;
+    }
+
     public function getById(int $id): array|null
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE sol_id = :id AND sol_borrado = 0 LIMIT 1";

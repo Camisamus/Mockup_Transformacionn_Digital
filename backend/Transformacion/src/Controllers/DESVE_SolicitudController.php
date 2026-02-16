@@ -33,6 +33,13 @@ class DESVE_SolicitudController
         return ["status" => "success", "data" => $result];
     }
 
+    public function getAllCompletedNLWithDateFilter($fechaInicio = null, $fechaFin = null)
+    {
+        $result = $this->solicitud->getAllCompletedNLWithDateFilter($fechaInicio, $fechaFin);
+
+        return ["status" => "success", "data" => $result];
+    }
+
     public function getAllForReingreso()
     {
         $result = $this->solicitud->getAllForReingreso();
