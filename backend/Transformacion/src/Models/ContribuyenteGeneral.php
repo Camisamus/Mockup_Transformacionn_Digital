@@ -36,17 +36,43 @@ class ContribuyenteGeneral
             tgc_rut=:tgc_rut,
             tgc_nombre=:tgc_nombre,
             tgc_apellido_paterno=:tgc_apellido_paterno,
-            tgc_apellido_materno=:tgc_apellido_materno";
+            tgc_apellido_materno=:tgc_apellido_materno,
+            tgc_sexo=:tgc_sexo,
+            tgc_fecha_nacimiento=:tgc_fecha_nacimiento,
+            tgc_estado_civil=:tgc_estado_civil,
+            tgc_escolaridad=:tgc_escolaridad,
+            tgc_nacionalidad=:tgc_nacionalidad,
+            tgc_correo_electronico=:tgc_correo_electronico,
+            tgc_telefono_contacto=:tgc_telefono_contacto,
+            tgc_tipo=:tgc_tipo,
+            tgc_razon_social=:tgc_razon_social,
+            tgc_nombre_fantasia=:tgc_nombre_fantasia,
+            tgc_giro=:tgc_giro,
+            tgc_rep_rut=:tgc_rep_rut,
+            tgc_rep_nombre_completo=:tgc_rep_nombre_completo";
 
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bindParam(":tgc_rut", $data['tgc_rut']);
-        $stmt->bindParam(":tgc_nombre", $data['tgc_nombre']);
-        $stmt->bindParam(":tgc_apellido_paterno", $data['tgc_apellido_paterno']);
-        $stmt->bindParam(":tgc_apellido_materno", $data['tgc_apellido_materno']);
+        $stmt->bindValue(":tgc_rut", $data['tgc_rut'] ?? null);
+        $stmt->bindValue(":tgc_nombre", $data['tgc_nombre'] ?? null);
+        $stmt->bindValue(":tgc_apellido_paterno", $data['tgc_apellido_paterno'] ?? null);
+        $stmt->bindValue(":tgc_apellido_materno", $data['tgc_apellido_materno'] ?? null);
+        $stmt->bindValue(":tgc_sexo", $data['tgc_sexo'] ?? null);
+        $stmt->bindValue(":tgc_fecha_nacimiento", $data['tgc_fecha_nacimiento'] ?? null);
+        $stmt->bindValue(":tgc_estado_civil", $data['tgc_estado_civil'] ?? null);
+        $stmt->bindValue(":tgc_escolaridad", $data['tgc_escolaridad'] ?? null);
+        $stmt->bindValue(":tgc_nacionalidad", $data['tgc_nacionalidad'] ?? null);
+        $stmt->bindValue(":tgc_correo_electronico", $data['tgc_correo_electronico'] ?? null);
+        $stmt->bindValue(":tgc_telefono_contacto", $data['tgc_telefono_contacto'] ?? null);
+        $stmt->bindValue(":tgc_tipo", $data['tgc_tipo'] ?? 'natural');
+        $stmt->bindValue(":tgc_razon_social", $data['tgc_razon_social'] ?? null);
+        $stmt->bindValue(":tgc_nombre_fantasia", $data['tgc_nombre_fantasia'] ?? null);
+        $stmt->bindValue(":tgc_giro", $data['tgc_giro'] ?? null);
+        $stmt->bindValue(":tgc_rep_rut", $data['tgc_rep_rut'] ?? null);
+        $stmt->bindValue(":tgc_rep_nombre_completo", $data['tgc_rep_nombre_completo'] ?? null);
 
         if ($stmt->execute()) {
-            return true;
+            return $this->conn->lastInsertId();
         }
         return false;
     }
@@ -57,19 +83,45 @@ class ContribuyenteGeneral
             tgc_rut=:tgc_rut,
             tgc_nombre=:tgc_nombre,
             tgc_apellido_paterno=:tgc_apellido_paterno,
-            tgc_apellido_materno=:tgc_apellido_materno
+            tgc_apellido_materno=:tgc_apellido_materno,
+            tgc_sexo=:tgc_sexo,
+            tgc_fecha_nacimiento=:tgc_fecha_nacimiento,
+            tgc_estado_civil=:tgc_estado_civil,
+            tgc_escolaridad=:tgc_escolaridad,
+            tgc_nacionalidad=:tgc_nacionalidad,
+            tgc_correo_electronico=:tgc_correo_electronico,
+            tgc_telefono_contacto=:tgc_telefono_contacto,
+            tgc_tipo=:tgc_tipo,
+            tgc_razon_social=:tgc_razon_social,
+            tgc_nombre_fantasia=:tgc_nombre_fantasia,
+            tgc_giro=:tgc_giro,
+            tgc_rep_rut=:tgc_rep_rut,
+            tgc_rep_nombre_completo=:tgc_rep_nombre_completo
             WHERE tgc_id=:tgc_id";
 
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bindParam(":tgc_id", $id);
-        $stmt->bindParam(":tgc_rut", $data['tgc_rut']);
-        $stmt->bindParam(":tgc_nombre", $data['tgc_nombre']);
-        $stmt->bindParam(":tgc_apellido_paterno", $data['tgc_apellido_paterno']);
-        $stmt->bindParam(":tgc_apellido_materno", $data['tgc_apellido_materno']);
+        $stmt->bindValue(":tgc_id", $id);
+        $stmt->bindValue(":tgc_rut", $data['tgc_rut'] ?? null);
+        $stmt->bindValue(":tgc_nombre", $data['tgc_nombre'] ?? null);
+        $stmt->bindValue(":tgc_apellido_paterno", $data['tgc_apellido_paterno'] ?? null);
+        $stmt->bindValue(":tgc_apellido_materno", $data['tgc_apellido_materno'] ?? null);
+        $stmt->bindValue(":tgc_sexo", $data['tgc_sexo'] ?? null);
+        $stmt->bindValue(":tgc_fecha_nacimiento", $data['tgc_fecha_nacimiento'] ?? null);
+        $stmt->bindValue(":tgc_estado_civil", $data['tgc_estado_civil'] ?? null);
+        $stmt->bindValue(":tgc_escolaridad", $data['tgc_escolaridad'] ?? null);
+        $stmt->bindValue(":tgc_nacionalidad", $data['tgc_nacionalidad'] ?? null);
+        $stmt->bindValue(":tgc_correo_electronico", $data['tgc_correo_electronico'] ?? null);
+        $stmt->bindValue(":tgc_telefono_contacto", $data['tgc_telefono_contacto'] ?? null);
+        $stmt->bindValue(":tgc_tipo", $data['tgc_tipo'] ?? 'natural');
+        $stmt->bindValue(":tgc_razon_social", $data['tgc_razon_social'] ?? null);
+        $stmt->bindValue(":tgc_nombre_fantasia", $data['tgc_nombre_fantasia'] ?? null);
+        $stmt->bindValue(":tgc_giro", $data['tgc_giro'] ?? null);
+        $stmt->bindValue(":tgc_rep_rut", $data['tgc_rep_rut'] ?? null);
+        $stmt->bindValue(":tgc_rep_nombre_completo", $data['tgc_rep_nombre_completo'] ?? null);
 
         if ($stmt->execute()) {
-            return $stmt->rowCount() > 0;
+            return true;
         }
         return false;
     }
@@ -77,7 +129,8 @@ class ContribuyenteGeneral
     public function getDetailsByRut($rut)
     {
         $query = "SELECT c.*, 
-                         d.tcd_calle, d.tcd_numero, d.tcd_departamento, d.tcd_casa, d.tcd_aclaratoria
+                         d.tcd_calle, d.tcd_numero, d.tcd_departamento, d.tcd_casa, d.tcd_aclaratoria,
+                         d.tcd_latitud, d.tcd_longitud
                   FROM " . $this->table_name . " c
                   LEFT JOIN (
                       SELECT * FROM trd_cont_direcciones 
@@ -90,6 +143,15 @@ class ContribuyenteGeneral
                   WHERE c.tgc_rut = :tgc_rut
                   LIMIT 0,1";
 
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":tgc_rut", $rut);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getByRut($rut)
+    {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE tgc_rut = :tgc_rut LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":tgc_rut", $rut);
         $stmt->execute();

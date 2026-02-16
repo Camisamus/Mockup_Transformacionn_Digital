@@ -52,7 +52,7 @@ include 'header-oirs-funcionarios.php';
                                 <div class="col-md-4 mb-3">
                                     <label class="font-weight-bold small text-muted text-uppercase">Tipo
                                         Contribuyente</label>
-                                    <select class="form-control form-control-sm" id="tipo_persona">
+                                    <select class="form-control form-control-sm" id="cont_tipo_persona">
                                         <option value="natural">Persona Natural</option>
                                         <option value="juridica">Persona Jurídica</option>
                                     </select>
@@ -125,7 +125,8 @@ include 'header-oirs-funcionarios.php';
                                     <div class="col-md-12 mb-3">
                                         <label class="font-weight-bold small text-muted text-uppercase">Razón
                                             Social</label>
-                                        <input type="text" class="form-control form-control-sm">
+                                        <input type="text" class="form-control form-control-sm" id="cont_razon_social"
+                                            name="cont_razon_social">
                                     </div>
                                 </div>
                                 <h6 class="font-weight-bold text-dark mb-3 mt-2" style="font-size: 12px;">Datos
@@ -134,16 +135,19 @@ include 'header-oirs-funcionarios.php';
                                     <div class="col-md-3 mb-3">
                                         <label class="font-weight-bold small text-muted text-uppercase">RUT
                                             Representante</label>
-                                        <input type="text" class="form-control form-control-sm">
+                                        <input type="text" class="form-control form-control-sm" id="cont_rep_rut"
+                                            name="cont_rep_rut">
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="font-weight-bold small text-muted text-uppercase">Nombre
                                             Completo</label>
-                                        <input type="text" class="form-control form-control-sm">
+                                        <input type="text" class="form-control form-control-sm" id="cont_rep_nombre"
+                                            name="cont_rep_nombre">
                                     </div>
                                     <div class="col-md-3 mb-3">
                                         <label class="font-weight-bold small text-muted text-uppercase">Cargo</label>
-                                        <input type="text" class="form-control form-control-sm">
+                                        <input type="text" class="form-control form-control-sm" id="cont_rep_cargo"
+                                            name="cont_rep_cargo">
                                     </div>
                                 </div>
                             </div>
@@ -174,14 +178,15 @@ include 'header-oirs-funcionarios.php';
                                     <label class="font-weight-bold small text-muted text-uppercase">Dirección</label>
                                     <input type="text" class="form-control form-control-sm" id="cont_direccion"
                                         placeholder="Calle, Número, Depto/Casa">
-                                    <div class="map-container mt-2">
-                                        <span class="material-symbols-outlined mr-2">map</span>
-                                        <span class="small font-weight-bold">MAPA DE GOOGLE (Interface)</span>
+                                    <input type="hidden" id="cont_lat" name="cont_lat">
+                                    <input type="hidden" id="cont_lng" name="cont_lng">
+                                    <div id="map" class="mt-2"
+                                        style="height: 300px; width: 100%; border-radius: 8px; border: 1px solid #ddd;">
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label class="font-weight-bold small text-muted text-uppercase">Comuna</label>
-                                    <select class="form-control form-control-sm">
+                                    <select class="form-control form-control-sm" id="cont_comuna">
                                         <option>Viña del Mar</option>
                                         <option>Valparaíso</option>
                                         <option>Concón</option>
@@ -237,14 +242,14 @@ include 'header-oirs-funcionarios.php';
                                 <div class="col-md-3 mb-3">
                                     <label class="font-weight-bold small text-muted text-uppercase">Fecha
                                         Registro</label>
-                                    <input type="date" class="form-control form-control-sm"
-                                        value="<?php echo date('Y-m-d'); ?>">
+                                    <input type="date" class="form-control form-control-sm" id="oirs_fecha_reg"
+                                        name="oirs_fecha_reg" value="<?php echo date('Y-m-d'); ?>">
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="font-weight-bold small text-muted text-uppercase">Hora
                                         Registro</label>
-                                    <input type="time" class="form-control form-control-sm"
-                                        value="<?php echo date('H:i'); ?>">
+                                    <input type="time" class="form-control form-control-sm" id="oirs_hora_reg"
+                                        name="oirs_hora_reg" value="<?php echo date('H:i'); ?>">
                                 </div>
                                 <div class="col-md-3 mb-3">
                                     <label class="font-weight-bold small text-muted text-uppercase">Temática
@@ -268,10 +273,12 @@ include 'header-oirs-funcionarios.php';
                                     <label class="font-weight-bold small text-muted text-uppercase">Dirección del
                                         Incidente/Solicitud</label>
                                     <input type="text" class="form-control form-control-sm"
+                                        id="oirs_direccion_incidente" name="oirs_direccion_incidente"
                                         placeholder="¿Dónde ocurre?">
-                                    <div class="map-container mt-2">
-                                        <span class="material-symbols-outlined mr-2">map</span>
-                                        <span class="small font-weight-bold">UBICACIÓN DE LA SOLICITUD</span>
+                                    <input type="hidden" id="oirs_lat" name="oirs_lat">
+                                    <input type="hidden" id="oirs_lng" name="oirs_lng">
+                                    <div id="map_incidente" class="mt-2"
+                                        style="height: 250px; width: 100%; border-radius: 8px; border: 1px solid #ddd;">
                                     </div>
                                 </div>
                                 <div class="col-md-5 mb-3">
@@ -286,7 +293,8 @@ include 'header-oirs-funcionarios.php';
                                 <div class="col-md-12 mb-3">
                                     <label class="font-weight-bold small text-muted text-uppercase">Descripción de la
                                         Solicitud</label>
-                                    <textarea class="form-control border bg-light shadow-none" rows="4"
+                                    <textarea class="form-control border bg-light shadow-none" id="oirs_descripcion"
+                                        name="oirs_descripcion" rows="4"
                                         placeholder="Detalle aquí lo solicitado por el contribuyente..."></textarea>
                                 </div>
                             </div>
@@ -295,7 +303,8 @@ include 'header-oirs-funcionarios.php';
                                 <div class="col-md-12 mb-3">
                                     <label class="font-weight-bold small text-muted text-uppercase">Respuesta Inmediata
                                         (Opcional)</label>
-                                    <textarea class="form-control border bg-white shadow-none" rows="3"
+                                    <textarea class="form-control border bg-white shadow-none" id="oirs_respuesta"
+                                        name="oirs_respuesta" rows="3"
                                         placeholder="Si el funcionario entrega respuesta en el acto, regístrela aquí..."></textarea>
                                 </div>
                             </div>
@@ -305,8 +314,9 @@ include 'header-oirs-funcionarios.php';
                                     <label class="font-weight-bold small text-muted text-uppercase">Adjuntar Archivos /
                                         Usuario</label>
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="customFile" multiple>
-                                        <label class="custom-file-label font-weight-bold text-muted" for="customFile"
+                                        <input type="file" class="custom-file-input" id="oirs_adjuntos"
+                                            name="oirs_adjuntos[]" multiple>
+                                        <label class="custom-file-label font-weight-bold text-muted" for="oirs_adjuntos"
                                             style="font-size: 11px;">Elegir archivos...</label>
                                     </div>
                                     <small class="text-muted">Puede subir imágenes, PDFs o documentos (Máx. 5MB cada
@@ -336,7 +346,7 @@ include 'header-oirs-funcionarios.php';
                             </div>
                             <h3 class="font-weight-bold text-dark">¡Solicitud Registrada con Éxito!</h3>
                             <p class="text-muted mb-4">La OIRS ha sido ingresada al sistema con el folio:
-                                <strong>#OIRS-2024-8921</strong>
+                                <strong id="oirs_folio_final">#OIRS-2024-8921</strong>
                             </p>
 
                             <hr class="my-4">
@@ -370,6 +380,14 @@ include 'header-oirs-funcionarios.php';
     </div>
 </div>
 
+<?php
+use App\Config\AppConfig;
+$googleMapsKey = AppConfig::getGoogleMapsKey();
+?>
+<!-- Google Maps API -->
+<script
+    src="https://maps.googleapis.com/maps/api/js?key=<?php echo $googleMapsKey; ?>&callback=initMap&libraries=places"
+    async defer></script>
 
 <script src="../../recursos/js/funcionarios/oirs/oirs_ingresar.js"></script>
 <?php include 'footer-funcionarios.php'; ?>
