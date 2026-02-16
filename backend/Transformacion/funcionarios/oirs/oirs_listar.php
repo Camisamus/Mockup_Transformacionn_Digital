@@ -1,163 +1,83 @@
 <?php
-$pageTitle = "Listar OIRS";
+$pageTitle = "Listado OIRS";
 require_once '../../api/auth_check.php';
-include 'header.php';
+include 'header-oirs-funcionarios.php';
 ?>
 
-<style>
-    .status-badge {
-        font-size: 10px;
-        font-weight: 700;
-        padding: 4px 10px;
-        border-radius: 4px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-
-    .badge-ingresada {
-        background: #e3f2fd;
-        color: #007bff;
-    }
-
-    .badge-proceso {
-        background: #fff3e0;
-        color: #ef6c00;
-    }
-
-    .badge-resuelta {
-        background: #e8f5e9;
-        color: #2e7d32;
-    }
-
-    .badge-vencida {
-        background: #ffebee;
-        color: #c62828;
-    }
-
-    .oirs-row:hover {
-        background-color: rgba(0, 51, 153, 0.02) !important;
-        cursor: pointer;
-    }
-
-    .bg-primary-soft {
-        background-color: #e7f1ff;
-    }
-
-    .bg-danger-soft {
-        background-color: #fff5f5;
-    }
-
-    .advanced-filters {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease-out;
-    }
-
-    .advanced-filters.show {
-        max-height: 500px;
-        padding-top: 1rem;
-        border-top: 1px dashed #dee2e6;
-        margin-top: 1rem;
-    }
-</style>
-
-<div class="container-fluid py-4">
-    <!-- Header -->
-    <div class="main-header mb-4">
-        <div class="header-title">
-            <h2 class="fw-bold fs-4">Listado General de OIRS</h2>
-            <p class="text-muted mb-0">Buscador avanzado de solicitudes</p>
-        </div>
-    </div>
-
-    <!-- Actions Card -->
-    <div class="card shadow-sm border-0 mb-4 bg-white">
-        <div class="card-body p-3">
-            <div class="row g-2 justify-content-md-end text-end">
-                <div class="col-12 col-md-auto">
-                    <button type="button" class="btn btn-toolbar btn-outline-primary w-100 shadow-sm">
-                        <i data-feather="download" class="me-2"></i>
-                        Exportar Excel
-                    </button>
-                </div>
-                <div class="col-12 col-md-auto">
-                    <button type="button" class="btn btn-toolbar btn-dark w-100 shadow-sm"
-                        onclick="location.href='oirs_ingresar.php'">
-                        <i data-feather="plus" class="me-2"></i>
-                        Nuevo Ingreso
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="container-fluid p-4">
 
     <!-- Filtros de Búsqueda -->
-    <div class="card shadow-sm border-0 mb-4">
+    <div class="card search-card mb-4 border-0">
         <div class="card-body p-4">
-            <div class="row align-items-end g-3">
-                <div class="col-md-4">
-                    <label class="form-label small fw-bold text-muted text-uppercase">Búsqueda Rápida</label>
+            <div class="row align-items-end">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <label class="filter-label">Búsqueda Rápida (ID / RUT / Nombre)</label>
                     <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0">
-                            <i data-feather="search" class="text-muted" style="width: 14px;"></i>
-                        </span>
-                        <input type="text" class="form-control border-start-0" placeholder="Folio, RUT o Nombre...">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text border-0 bg-transparent text-muted">
+                                <span class="material-symbols-outlined" style="font-size: 18px;">search</span>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control form-control-cool pl-0 border-left-0"
+                            style="background-color: #f8f9fa;" placeholder="Escribe para buscar...">
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <label class="form-label small fw-bold text-muted text-uppercase">Fecha de Ingreso</label>
-                    <input type="date" class="form-control">
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <label class="filter-label">Fecha de Ingreso</label>
+                    <input type="date" class="form-control form-control-cool">
                 </div>
-                <div class="col-md-3">
-                    <label class="form-label small fw-bold text-muted text-uppercase">Estado</label>
-                    <select class="form-select">
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <label class="filter-label">Estado de la Solicitud</label>
+                    <select class="form-control form-control-cool">
                         <option>Todos los estados</option>
-                        <option>Recibida</option>
-                        <option>Asignada / En Proceso</option>
-                        <option>Resuelta / Finalizada</option>
-                        <option>Fuera de Plazo</option>
+                        <option>Recibida / Nueva</option>
+                        <option>En Proceso</option>
+                        <option>Finalizada / Resuelta</option>
+                        <option>Vencida / Fuera de Plazo</option>
                     </select>
                 </div>
-                <div class="col-md-2 text-end">
-                    <button class="btn btn-outline-primary fw-bold w-100 shadow-sm" id="btnAdvancedToggle">
+                <div class="col-md-2">
+                    <button class="btn btn-outline-primary btn-block font-weight-bold" id="btnAdvanced"
+                        style="font-size: 11px; height: 38px;">
                         MÁS FILTROS
                     </button>
                 </div>
             </div>
 
-            <!-- Filtros Avanzados -->
+            <!-- Filtros Avanzados (Colapsable) -->
             <div class="advanced-filters" id="advancedPanel">
-                <div class="row g-3">
-                    <div class="col-md-3">
-                        <label class="form-label small fw-bold text-muted text-uppercase">Sector Territorial</label>
-                        <select class="form-select">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label class="filter-label">Sector Territorial</label>
+                        <select class="form-control form-control-cool">
                             <option>Todos los sectores</option>
                             <option>Plan de Viña</option>
+                            <option>Santa Inés</option>
+                            <option>Miraflores</option>
                             <option>Reñaca</option>
-                            <option>Cerros Orientales</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <label class="form-label small fw-bold text-muted text-uppercase">Temática</label>
-                        <select class="form-select">
+                    <div class="col-md-3 mb-3">
+                        <label class="filter-label">Temática Principal</label>
+                        <select class="form-control form-control-cool">
                             <option>Todas las temáticas</option>
                             <option>Aseo y Ornato</option>
+                            <option>Infraestructura Urbana</option>
                             <option>Seguridad Pública</option>
-                            <option>Obras</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <label class="form-label small fw-bold text-muted text-uppercase">Subtemática</label>
-                        <select class="form-select">
-                            <option>Todas</option>
-                            <option>Bacheo</option>
-                            <option>Iluminación</option>
-                            <option>Microbasural</option>
+                    <div class="col-md-3 mb-3">
+                        <label class="filter-label">Subtemática</label>
+                        <select class="form-control form-control-cool">
+                            <option>Todas las subtemáticas</option>
+                            <option>Bacheo / Hoyos</option>
+                            <option>Luminarias</option>
+                            <option>Microbasurales</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <label class="form-label small fw-bold text-muted text-uppercase">Prioridad</label>
-                        <select class="form-select">
+                    <div class="col-md-3 mb-3">
+                        <label class="filter-label">Prioridad</label>
+                        <select class="form-control form-control-cool">
                             <option>Todas</option>
                             <option>Urgente</option>
                             <option>Alta</option>
@@ -165,109 +85,187 @@ include 'header.php';
                         </select>
                     </div>
                 </div>
-                <div class="d-flex justify-content-end mt-4 gap-2">
-                    <button class="btn btn-link text-muted text-decoration-none fw-bold small">Limpiar Filtros</button>
-                    <button class="btn btn-primary px-4 fw-bold shadow-sm">APLICAR FILTROS</button>
+                <div class="text-right mt-2">
+                    <button class="btn btn-link text-muted small font-weight-bold shadow-none" id="btnReset">Limpiar
+                        todo</button>
+                    <button class="btn btn-primary px-4 font-weight-bold ml-2" style="font-size: 12px;">APLICAR
+                        FILTROS</button>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Resultados -->
-    <div class="card shadow-sm border-0 mb-4">
-        <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
-                <h5 class="fw-bold fs-6 mb-0">Resultados Encontrados <span class="badge bg-light border text-dark ms-2"
-                        style="font-size: 11px;">12 registros</span></h5>
-                <div class="d-flex align-items-center gap-3">
-                    <span class="small text-muted">Ordenar por: <span class="text-dark fw-bold">Más
-                            recientes</span></span>
-                </div>
+    <div class="card search-card border-0 mb-4 overflow-hidden">
+        <div class="card-header bg-white p-4 border-0 d-flex justify-content-between align-items-center">
+            <h3 class="h6 font-weight-bold text-dark mb-0">Resultados encontrados <span
+                    class="badge badge-light border ml-2">12 Solicitudes</span></h3>
+            <div class="d-flex align-items-center" style="gap: 15px;">
+                <span class="small text-muted">Ordenar por: <span class="text-dark font-weight-bold">Más
+                        recientes</span></span>
+                <span class="material-symbols-outlined text-muted" style="font-size: 20px;">sort</span>
             </div>
-
+        </div>
+        <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light text-uppercase small">
+                <table class="table table-hover mb-0">
+                    <thead class="bg-light text-muted"
+                        style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em;">
                         <tr>
-                            <th class="ps-3">Folio / Fecha</th>
-                            <th>Contribuyente</th>
-                            <th>Temática</th>
-                            <th>Estado</th>
-                            <th class="text-end pe-3">Acciones</th>
+                            <th class="px-4 py-3 border-0">FOLIO / FECHA</th>
+                            <th class="px-4 py-3 border-0">CONTRIBUYENTE</th>
+                            <th class="px-4 py-3 border-0">TEMÁTICA</th>
+                            <th class="px-4 py-3 border-0">ESTADO</th>
+                            <th class="px-4 py-3 border-0 text-right">ACCIONES</th>
                         </tr>
                     </thead>
-                    <tbody class="small" id="tableBody">
-                        <tr class="oirs-row" onclick="location.href='oirs_consulta.php?folio=OIRS-2024-8851'">
-                            <td class="ps-3 py-3">
+                    <tbody style="font-size: 13px;">
+                        <!-- Fila 1 -->
+                        <tr class="oirs-row">
+                            <td class="px-4 py-4 align-middle">
                                 <div class="d-flex flex-column">
-                                    <span class="fw-bold text-dark">#OIRS-2024-8851</span>
-                                    <span class="text-muted" style="font-size: 11px;">11/02/2024 09:45 AM</span>
+                                    <span class="font-weight-bold text-dark mb-1">#OIRS-2024-8851</span>
+                                    <span class="text-muted small">Hoy, 09:45 AM</span>
                                 </div>
                             </td>
-                            <td>
+                            <td class="px-4 py-4 align-middle">
                                 <div class="d-flex align-items-center">
-                                    <div class="bg-primary-soft text-primary rounded-circle d-flex align-items-center justify-content-center me-3 fw-bold shadow-xs"
-                                        style="width: 36px; height: 36px; font-size: 11px;">RC</div>
+                                    <div class="bg-primary-soft text-primary rounded-circle d-flex align-items-center justify-content-center mr-3"
+                                        style="width: 32px; height: 32px; font-weight: bold; font-size: 11px; background: #e7f1ff;">
+                                        RC</div>
                                     <div class="d-flex flex-column">
-                                        <span class="fw-bold">Rodrigo Canales</span>
-                                        <span class="text-muted" style="font-size: 11px;">15.441.229-K</span>
+                                        <span class="font-weight-bold">Rodrigo Canales</span>
+                                        <span class="text-muted x-small" style="font-size: 11px;">15.441.229-K</span>
                                     </div>
                                 </div>
                             </td>
-                            <td>
+                            <td class="px-4 py-4 align-middle">
                                 <div class="d-flex flex-column">
-                                    <span class="fw-bold">Aseo y Ornato</span>
-                                    <span class="text-muted small" style="font-size: 10px;">Microbasural</span>
+                                    <span class="text-dark mb-1">Aseo y Ornato</span>
+                                    <span class="badge badge-light border text-muted x-small align-self-start"
+                                        style="font-size: 9px;">Microbasural</span>
                                 </div>
                             </td>
-                            <td>
+                            <td class="px-4 py-4 align-middle">
                                 <span class="status-badge badge-ingresada">Recibida</span>
                             </td>
-                            <td class="text-end pe-3">
-                                <button class="btn btn-sm btn-light shadow-xs me-1"><i data-feather="eye"
-                                        style="width: 14px;"></i></button>
-                                <button class="btn btn-sm btn-light shadow-xs me-1"><i data-feather="edit-2"
-                                        style="width: 14px;"></i></button>
-                                <button class="btn btn-sm btn-primary shadow-sm"><i data-feather="corner-up-left"
-                                        style="width: 14px;"></i></button>
+                            <td class="px-4 py-4 align-middle text-right">
+                                <button class="btn btn-link action-btn text-muted p-0" title="Ver Detalles">
+                                    <span class="material-symbols-outlined" style="font-size: 20px;">visibility</span>
+                                </button>
+                                <button class="btn btn-link action-btn text-muted p-0" title="Editar">
+                                    <span class="material-symbols-outlined" style="font-size: 20px;">edit</span>
+                                </button>
+                                <button class="btn btn-link action-btn text-primary p-0" title="Responder">
+                                    <span class="material-symbols-outlined" style="font-size: 20px;">reply</span>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Fila 2 -->
+                        <tr class="oirs-row">
+                            <td class="px-4 py-4 align-middle">
+                                <div class="d-flex flex-column">
+                                    <span class="font-weight-bold text-dark mb-1">#OIRS-2024-8832</span>
+                                    <span class="text-muted small">Ayer, 16:20 PM</span>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 align-middle">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-light text-muted rounded-circle d-flex align-items-center justify-content-center mr-3"
+                                        style="width: 32px; height: 32px; font-weight: bold; font-size: 11px;">MM</div>
+                                    <div class="d-flex flex-column">
+                                        <span class="font-weight-bold">María Mejías</span>
+                                        <span class="text-muted x-small" style="font-size: 11px;">10.122.990-2</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 align-middle">
+                                <div class="d-flex flex-column">
+                                    <span class="text-dark mb-1">Obras Públicas</span>
+                                    <span class="badge badge-light border text-muted x-small align-self-start"
+                                        style="font-size: 9px;">Bacheo Calle</span>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 align-middle">
+                                <span class="status-badge badge-proceso">Asignada</span>
+                            </td>
+                            <td class="px-4 py-4 align-middle text-right">
+                                <button class="btn btn-link action-btn text-muted p-0"><span
+                                        class="material-symbols-outlined"
+                                        style="font-size: 20px;">visibility</span></button>
+                                <button class="btn btn-link action-btn text-muted p-0"><span
+                                        class="material-symbols-outlined" style="font-size: 20px;">edit</span></button>
+                                <button class="btn btn-link action-btn text-primary p-0"><span
+                                        class="material-symbols-outlined" style="font-size: 20px;">reply</span></button>
+                            </td>
+                        </tr>
+
+                        <!-- Fila 3 -->
+                        <tr class="oirs-row v-overdue">
+                            <td class="px-4 py-4 align-middle">
+                                <div class="d-flex flex-column">
+                                    <span class="font-weight-bold text-dark mb-1">#OIRS-2024-8790</span>
+                                    <span class="text-muted small">05 Feb 2024</span>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 align-middle">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-danger-soft text-danger rounded-circle d-flex align-items-center justify-content-center mr-3"
+                                        style="width: 32px; height: 32px; font-weight: bold; font-size: 11px; background: #fff5f5;">
+                                        JS</div>
+                                    <div class="d-flex flex-column">
+                                        <span class="font-weight-bold">Juan Salazar</span>
+                                        <span class="text-muted x-small" style="font-size: 11px;">8.332.110-3</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 align-middle">
+                                <div class="d-flex flex-column">
+                                    <span class="text-dark mb-1">Seguridad Pública</span>
+                                    <span class="badge badge-light border text-muted x-small align-self-start"
+                                        style="font-size: 9px;">Ruidos Molestos</span>
+                                </div>
+                            </td>
+                            <td class="px-4 py-4 align-middle">
+                                <span class="status-badge badge-vencida">Fuera de Plazo</span>
+                            </td>
+                            <td class="px-4 py-4 align-middle text-right">
+                                <button class="btn btn-link action-btn text-muted p-0"><span
+                                        class="material-symbols-outlined"
+                                        style="font-size: 20px;">visibility</span></button>
+                                <button class="btn btn-link action-btn text-muted p-0"><span
+                                        class="material-symbols-outlined" style="font-size: 20px;">edit</span></button>
+                                <button class="btn btn-link action-btn text-primary p-0"><span
+                                        class="material-symbols-outlined" style="font-size: 20px;">reply</span></button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-
-            <!-- Footer con paginación -->
-            <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
-                <span class="small text-muted">Mostrando 1 a 1 de 12 registros</span>
-                <nav>
-                    <ul class="pagination pagination-sm mb-0">
-                        <li class="page-item disabled"><a class="page-link shadow-xs" href="#"><i
-                                    data-feather="chevron-left" style="width: 14px;"></i></a></li>
-                        <li class="page-item active"><a class="page-link shadow-xs" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link shadow-xs" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link shadow-xs" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link shadow-xs" href="#"><i data-feather="chevron-right"
-                                    style="width: 14px;"></i></a></li>
-                    </ul>
-                </nav>
-            </div>
+        </div>
+        <div class="card-footer bg-white border-top p-4">
+            <nav class="d-flex justify-content-between align-items-center">
+                <span class="small text-muted font-weight-bold">Mostrando 1 a 3 de 12 registros</span>
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item disabled"><a class="page-link border-0 bg-transparent" href="#"><span
+                                class="material-symbols-outlined" style="font-size: 18px;">chevron_left</span></a></li>
+                    <li class="page-item active"><a
+                            class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center"
+                            style="width: 28px; height: 28px;" href="#">1</a></li>
+                    <li class="page-item"><a
+                            class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center text-dark"
+                            style="width: 28px; height: 28px;" href="#">2</a></li>
+                    <li class="page-item"><a
+                            class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center text-dark"
+                            style="width: 28px; height: 28px;" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link border-0 bg-transparent text-primary" href="#"><span
+                                class="material-symbols-outlined" style="font-size: 18px;">chevron_right</span></a></li>
+                </ul>
+            </nav>
         </div>
     </div>
+
 </div>
-
-<script src="../../recursos/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/feather-icons"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    feather.replace();
-    $(document).ready(function () {
-        $('#btnAdvancedToggle').click(function () {
-            $('#advancedPanel').toggleClass('show');
-            $(this).text($('#advancedPanel').hasClass('show') ? 'MENOS FILTROS' : 'MÁS FILTROS');
-        });
-    });
-</script>
-
 <script src="../../recursos/js/funcionarios/oirs/oirs_listar.js"></script>
-
-<?php include '../../api/footer.php'; ?>
+<?php include 'footer-funcionarios.php'; ?>

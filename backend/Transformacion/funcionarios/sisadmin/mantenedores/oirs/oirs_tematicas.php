@@ -1,16 +1,15 @@
 <?php
-$pageTitle = "Mantenedor General de Contribuyentes";
-require_once '../../api/auth_check.php';
-include 'header.php';
+$pageTitle = "Mantenedor Temáticas OIRS";
+require_once '../../../../api/auth_check.php';
+include '../../header.php';
 ?>
-
 
 <div class="container-fluid py-4">
     <!-- Header -->
     <div class="main-header mb-4">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Mantenedor de Contribuyentes</h2>
-            <p class="text-muted mb-0">Gestión de contribuyentes generales del sistema</p>
+            <h2 class="fw-bold fs-4">Temáticas OIRS</h2>
+            <p class="text-muted mb-0">Gestión de temáticas principales para solicitudes OIRS</p>
         </div>
     </div>
 
@@ -27,7 +26,7 @@ include 'header.php';
                 <div class="col-12 col-md-auto">
                     <button class="btn btn-toolbar btn-dark w-100 shadow-sm" id="btn-new">
                         <i data-feather="plus" class="me-2"></i>
-                        Nuevo Contribuyente
+                        Nueva Temática
                     </button>
                 </div>
             </div>
@@ -38,13 +37,13 @@ include 'header.php';
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
             <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
-            <p class="text-muted small mb-4">Busque por RUT o Nombre</p>
+            <p class="text-muted small mb-4">Filtrar por Nombre de Temática</p>
 
             <div class="row g-3">
                 <div class="col-md-6">
                     <label for="filter-text" class="form-label small fw-bold">Buscar</label>
                     <input type="text" class="form-control form-control-sm" id="filter-text"
-                        placeholder="Ej: 11111111-1 o Juan Perez">
+                        placeholder="Ej: Aseo, Seguridad...">
                 </div>
             </div>
         </div>
@@ -54,25 +53,21 @@ include 'header.php';
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="fw-bold fs-6 mb-0">Listado de Contribuyentes</h5>
+                <h5 class="fw-bold fs-6 mb-0">Listado de Temáticas</h5>
             </div>
 
             <div class="table-responsive">
-                <table class="table table-hover align-middle" id="tablaDatos">
-                    <thead class="table-light text-uppercase small">
+                <table class="table table-hover align-middle small" id="tablaDatos">
+                    <thead class="table-light text-uppercase">
                         <tr>
-                            <th style="width: 50px;">ID</th>
-                            <th>RUT</th>
+                            <th>ID</th>
                             <th>Nombre</th>
-                            <th>Apellido Paterno</th>
-                            <th>Apellido Materno</th>
                             <th class="text-end">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody id="table-body" class="small">
-                        <!-- Content loaded dynamically -->
+                    <tbody id="table-body">
                         <tr>
-                            <td colspan="6" class="text-center py-5">
+                            <td colspan="3" class="text-center py-5">
                                 <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
                                 Cargando datos...
                             </td>
@@ -89,32 +84,18 @@ include 'header.php';
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg">
             <div class="modal-header bg-light">
-                <h5 class="modal-title fw-bold fs-6" id="modalFormLabel">Nuevo Contribuyente</h5>
+                <h5 class="modal-title fw-bold fs-6" id="modalFormLabel">Nueva Temática</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
                 <form id="main-form">
                     <input type="hidden" id="entry-id">
                     <div class="row g-3">
-                        <div class="col-12">
-                            <label for="entry-rut" class="form-label small fw-bold">RUT <span
+                        <div class="col-md-12">
+                            <label class="form-label small fw-bold">Nombre de Temática <span
                                     class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="entry-rut" required placeholder="12345678-9">
-                        </div>
-                        <div class="col-12">
-                            <label for="entry-nombre" class="form-label small fw-bold">Nombre <span
-                                    class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="entry-nombre" required placeholder="Nombre">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="entry-paterno" class="form-label small fw-bold">Apellido Paterno</label>
-                            <input type="text" class="form-control" id="entry-paterno" placeholder="Apellido P.">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="entry-materno" class="form-label small fw-bold">Apellido Materno <span
-                                    class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="entry-materno" required
-                                placeholder="Apellido M.">
+                            <input type="text" class="form-control" id="entry-nombre" required
+                                placeholder="Ej: Seguridad Pública">
                         </div>
                     </div>
                 </form>
@@ -122,20 +103,21 @@ include 'header.php';
             <div class="modal-footer bg-light border-0">
                 <button type="button" class="btn btn-link text-decoration-none text-muted small"
                     data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-dark px-4 shadow-sm" id="btn-save">Guardar</button>
+                <button type="button" class="btn btn-dark px-4 shadow-sm" id="btn-save">Guardar Temática</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Scripts -->
-<script src="../../recursos/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="../../../../recursos/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/feather-icons"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     feather.replace();
 </script>
 
-<script src="../../recursos/js/funcionarios/sisadmin/sisadmin_mantenedor_general_contribuyentes.js"></script>
+<script src="../../../../recursos/js/funcionarios/sisadmin/mantenedores/oirs/oirs_tematicas.js"></script>
 
-<?php include '../../api/footer.php'; ?>
+<?php include '../../../../api/footer.php'; ?>

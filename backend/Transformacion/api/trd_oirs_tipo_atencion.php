@@ -5,12 +5,12 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\ContribuyenteControllerGeneral;
+use App\Controllers\OIRS_TipoAtencionController;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new ContribuyenteControllerGeneral($db);
+$controller = new OIRS_TipoAtencionController($db);
 
 // Get JSON input
 $data = json_decode(file_get_contents("php://input"), true);
@@ -32,39 +32,26 @@ switch ($data['ACCION']) {
         break;
 
     case 'CREAR':
-        if ($data) {
-            $response = $controller->create($data);
-        } else {
-            $response = ["status" => "error", "message" => "Entrada inválida"];
-        }
+        $response = $controller->create($data);
         echo json_encode($response);
         break;
 
     case 'ACTUALIZAR':
-        if ($data && isset($data['tgc_id'])) {
-            $id = $data['tgc_id'];
+        if (isset($data['tat_id'])) {
+            $id = $data['tat_id'];
             $response = $controller->update($id, $data);
         } else {
-            $response = ["status" => "error", "message" => "ID de contribuyente requerido"];
+            $response = ["status" => "error", "message" => "ID de tipo de atención requerido"];
         }
         echo json_encode($response);
         break;
 
     case 'BORRAR':
-        if ($data && isset($data['tgc_id'])) {
-            $id = $data['tgc_id'];
+        if (isset($data['tat_id'])) {
+            $id = $data['tat_id'];
             $response = $controller->delete($id);
         } else {
-            $response = ["status" => "error", "message" => "ID de contribuyente requerido"];
-        }
-        echo json_encode($response);
-        break;
-
-    case 'BUSCAR_RUT':
-        if (isset($data['tgc_rut'])) {
-            $response = $controller->getDetailsByRut($data['tgc_rut']);
-        } else {
-            $response = ["status" => "error", "message" => "RUT requerido"];
+            $response = ["status" => "error", "message" => "ID de tipo de atención requerido"];
         }
         echo json_encode($response);
         break;

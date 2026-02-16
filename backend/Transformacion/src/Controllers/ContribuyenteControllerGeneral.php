@@ -41,6 +41,20 @@ class ContribuyenteControllerGeneral
         return ["status" => "error", "message" => "No se pudo actualizar el contribuyente"];
     }
 
+    public function getDetailsByRut($rut)
+    {
+        if (empty($rut)) {
+            return ["status" => "error", "message" => "RUT requerido"];
+        }
+
+        $result = $this->contribuyente->getDetailsByRut($rut);
+        if ($result) {
+            return ["status" => "success", "data" => $result];
+        } else {
+            return ["status" => "error", "message" => "Contribuyente no encontrado"];
+        }
+    }
+
     public function delete($id)
     {
         if ($this->contribuyente->delete($id)) {

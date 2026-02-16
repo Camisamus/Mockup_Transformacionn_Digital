@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
 async function cargarLogs() {
     try {
         // Fetch from the new API
-        const response = await fetch('../api/logs.php', {
+        const response = await fetch(`${window.API_BASE_URL}/logs.php`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ window.buscarLogs = async function () {
     if (fechaHasta) params.append('fecha_hasta', fechaHasta);
 
     try {
-        const response = await fetch(`../api/logs.php?${params.toString()}`);
+        const response = await fetch(`${window.API_BASE_URL}/logs.php?${params.toString()}`);
         if (!response.ok) throw new Error('Error filtrando logs');
 
         logsData = await response.json();

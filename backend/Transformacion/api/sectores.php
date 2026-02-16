@@ -13,6 +13,14 @@ $db = $database->getConnection();
 
 $controller = new SectorController($db);
 
+// Get JSON input
+$data = json_decode(file_get_contents("php://input"), true);
+
+if (!$data || !isset($data['ACCION'])) {
+    echo json_encode(["status" => "error", "message" => "Acción no especificada"]);
+    exit;
+}
+
 switch ($data['ACCION']) {
     case 'CONSULTAM':
         $response = $controller->getAll();

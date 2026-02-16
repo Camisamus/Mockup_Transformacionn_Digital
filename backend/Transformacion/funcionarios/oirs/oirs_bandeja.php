@@ -1,286 +1,341 @@
 <?php
 $pageTitle = "Bandeja OIRS";
 require_once '../../api/auth_check.php';
-include 'header.php';
+include 'header-oirs-funcionarios.php';
 ?>
 
-<style>
-    .status-badge {
-        font-size: 10px;
-        font-weight: 700;
-        padding: 4px 10px;
-        border-radius: 4px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
+<div class="container-fluid p-4">
 
-    .badge-ingresada {
-        background: #e3f2fd;
-        color: #007bff;
-    }
-
-    .badge-proceso {
-        background: #fff3e0;
-        color: #ef6c00;
-    }
-
-    .badge-resuelta {
-        background: #e8f5e9;
-        color: #2e7d32;
-    }
-
-    .badge-vencida {
-        background: #ffebee;
-        color: #c62828;
-    }
-
-    .oirs-row:hover {
-        background-color: rgba(0, 51, 153, 0.02) !important;
-        cursor: pointer;
-    }
-
-    .bg-primary-soft {
-        background-color: #e7f1ff;
-    }
-
-    .bg-danger-soft {
-        background-color: #fff5f5;
-    }
-</style>
-
-<div class="container-fluid py-4">
-    <div class="main-header mb-4">
-        <div class="header-title">
-            <h2 class="fw-bold fs-4">Bandeja de Entrada OIRS</h2>
-            <p class="text-muted mb-0">Solicitudes Recientes y Pendientes</p>
-        </div>
-    </div>
-
-    <!-- Actions Card -->
-    <div class="card shadow-sm border-0 mb-4 bg-white">
-        <div class="card-body p-3">
-            <div class="row g-2 justify-content-md-end">
-                <div class="col-12 col-md-auto">
-                    <button type="button" class="btn btn-toolbar btn-dark w-100 shadow-sm"
-                        onclick="location.href='oirs_ingresar.php'">
-                        <i data-feather="plus" class="me-2"></i> Nuevo Ingreso
-                    </button>
-                </div>
-                <div class="col-12 col-md-auto">
-                    <button type="button" class="btn btn-toolbar btn-outline-secondary w-100 shadow-sm"
-                        onclick="location.reload()">
-                        <i data-feather="refresh-cw" class="me-2"></i> Actualizar
-                    </button>
+    <!-- Tarjetas de Indicadores Rápidos -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3 mb-md-0">
+            <div class="card border-0 shadow-sm"
+                style="border-radius: 8px; border-left: 4px solid var(--gob-primary) !important;">
+                <div class="card-body p-4">
+                    <p class="text-muted text-uppercase font-weight-bold mb-1"
+                        style="font-size: 10px; letter-spacing: 0.05em;">Total Solicitudes</p>
+                    <div class="d-flex align-items-end justify-content-between">
+                        <h3 class="h2 font-weight-bold mb-0">1.284</h3>
+                        <span class="text-success font-weight-bold" style="font-size: 11px;">+12% mes</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Indicadores Rápidos (Resumen) -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0 border-start border-4 border-primary">
-                <div class="card-body p-3">
-                    <p class="text-muted text-uppercase fw-bold mb-1" style="font-size: 10px;">Enviadas Hoy</p>
+        <div class="col-md-3 mb-3 mb-md-0">
+            <div class="card border-0 shadow-sm"
+                style="border-radius: 8px; border-left: 4px solid var(--gob-warning) !important;">
+                <div class="card-body p-4">
+                    <p class="text-muted text-uppercase font-weight-bold mb-1"
+                        style="font-size: 10px; letter-spacing: 0.05em;">Pendientes</p>
                     <div class="d-flex align-items-end justify-content-between">
-                        <h3 class="fw-bold mb-0">12</h3>
-                        <span class="text-primary"><i data-feather="file-text"></i></span>
+                        <h3 class="h2 font-weight-bold mb-0">42</h3>
+                        <span class="text-warning font-weight-bold" style="font-size: 11px;">Crítico</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3 mb-md-0">
+            <div class="card border-0 shadow-sm" style="border-radius: 8px; border-left: 4px solid #6c757d !important;">
+                <div class="card-body p-4">
+                    <p class="text-muted text-uppercase font-weight-bold mb-1"
+                        style="font-size: 10px; letter-spacing: 0.05em;">Tiempo Promedio</p>
+                    <div class="d-flex align-items-end justify-content-between">
+                        <h3 class="h2 font-weight-bold mb-0">3.2d</h3>
+                        <span class="text-muted font-weight-bold" style="font-size: 11px;">Días hábiles</span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card shadow-sm border-0 border-start border-4 border-warning">
-                <div class="card-body p-3">
-                    <p class="text-muted text-uppercase fw-bold mb-1" style="font-size: 10px;">Pendientes</p>
+            <div class="card border-0 shadow-sm"
+                style="border-radius: 8px; border-left: 4px solid var(--gob-success) !important;">
+                <div class="card-body p-4">
+                    <p class="text-muted text-uppercase font-weight-bold mb-1"
+                        style="font-size: 10px; letter-spacing: 0.05em;">Resueltas (Mes)</p>
                     <div class="d-flex align-items-end justify-content-between">
-                        <h3 class="fw-bold mb-0">45</h3>
-                        <span class="text-warning"><i data-feather="clock"></i></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0 border-start border-4 border-danger">
-                <div class="card-body p-3">
-                    <p class="text-muted text-uppercase fw-bold mb-1" style="font-size: 10px;">Vencidas</p>
-                    <div class="d-flex align-items-end justify-content-between">
-                        <h3 class="fw-bold mb-0">8</h3>
-                        <span class="text-danger"><i data-feather="alert-circle"></i></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0 border-start border-4 border-success">
-                <div class="card-body p-3">
-                    <p class="text-muted text-uppercase fw-bold mb-1" style="font-size: 10px;">Resueltas Mes</p>
-                    <div class="d-flex align-items-end justify-content-between">
-                        <h3 class="fw-bold mb-0">156</h3>
-                        <span class="text-success"><i data-feather="check-circle"></i></span>
+                        <h3 class="h2 font-weight-bold mb-0">156</h3>
+                        <span class="text-success font-weight-bold" style="font-size: 11px;">94% tasa</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Tabla de Resultados -->
-    <div class="card shadow-sm border-0 overflow-hidden">
-        <div class="card-header bg-white p-4 border-0 d-flex justify-content-between align-items-center">
-            <h5 class="fw-bold text-dark mb-0">Últimas Solicitudes</h5>
-            <div class="d-flex align-items-center gap-3">
-                <div class="input-group input-group-sm" style="width: 250px;">
-                    <span class="input-group-text bg-light border-0"><i data-feather="search"
-                            style="width: 14px;"></i></span>
-                    <input type="text" class="form-control bg-light border-0" placeholder="Buscar folio o RUT...">
+    <div class="row">
+        <!-- Gráficos Placeholder -->
+        <div class="col-lg-8 mb-4">
+            <div class="card border-0 shadow-sm h-100" style="border-radius: 8px;">
+                <div class="card-header bg-white border-bottom p-4">
+                    <h3 class="h6 font-weight-bold text-dark mb-0 d-flex align-items-center">
+                        <span class="material-symbols-outlined text-primary mr-2">bar_chart</span>
+                        Solicitudes por Estado (Últimos 30 días)
+                    </h3>
                 </div>
-                <a href="oirs_listar.php" class="btn btn-link btn-sm text-primary fw-bold text-decoration-none">Ver
-                    Todo</a>
+                <div class="card-body p-4 d-flex align-items-center justify-content-center bg-light-soft"
+                    style="min-height: 300px;">
+                    <div class="text-center">
+                        <span class="material-symbols-outlined text-muted"
+                            style="font-size: 48px; opacity: 0.3;">monitoring</span>
+                        <p class="text-muted mt-2" style="font-size: 13px;">[Gráfico de barras: Distribución de estados]
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm h-100" style="border-radius: 8px;">
+                <div class="card-header bg-white border-bottom p-4">
+                    <h3 class="h6 font-weight-bold text-dark mb-0 d-flex align-items-center">
+                        <span class="material-symbols-outlined text-primary mr-2">Grain</span>
+                        Tipos de Solicitud
+                    </h3>
+                </div>
+                <div class="card-body p-4 d-flex align-items-center justify-content-center" style="min-height: 300px;">
+                    <div class="text-center">
+                        <span class="material-symbols-outlined text-muted"
+                            style="font-size: 48px; opacity: 0.3;">Grain</span>
+                        <p class="text-muted mt-2" style="font-size: 13px;">[Gráfico Multitud: Reclamos vs Consultas]
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================
+         TABLA DE RESULTADOS
+         ======================================== -->
+    <div class="card search-card border-0 mb-4 overflow-hidden">
+        <!-- Tabla -->
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
-                    <thead class="bg-light text-muted small text-uppercase fw-bold">
+                    <thead class="bg-light text-muted table-header">
                         <tr>
-                            <th class="px-4 py-3">Folio / Fecha</th>
-                            <th class="px-4 py-3">Contribuyente</th>
-                            <th class="px-4 py-3">Temática</th>
-                            <th class="px-4 py-3">Estado</th>
-                            <th class="px-4 py-3 text-end">Acciones</th>
+                            <th class="px-4 py-3 border-0">FOLIO / FECHA</th>
+                            <th class="px-4 py-3 border-0">CONTRIBUYENTE</th>
+                            <th class="px-4 py-3 border-0">TEMÁTICA</th>
+                            <th class="px-4 py-3 border-0">ESTADO</th>
+                            <th class="px-4 py-3 border-0 text-right">ACCIONES</th>
                         </tr>
                     </thead>
-                    <tbody class="small">
-                        <tr class="oirs-row" onclick="location.href='oirs_consulta.php?folio=OIRS-2024-8851'">
-                            <td class="px-4 py-3">
+                    <tbody class="table-body">
+                        <!-- Fila 1 -->
+                        <tr class="oirs-row">
+                            <td class="px-4 py-4 align-middle">
                                 <div class="d-flex flex-column">
-                                    <span class="fw-bold text-dark">#OIRS-2024-8851</span>
-                                    <span class="text-muted" style="font-size: 11px;">11/02/2024 09:45 AM</span>
+                                    <span class="font-weight-bold text-dark mb-1">#OIRS-2024-8851</span>
+                                    <span class="text-muted small">Hoy, 09:45 AM</span>
                                 </div>
                             </td>
-                            <td class="px-4 py-3">
+                            <td class="px-4 py-4 align-middle">
                                 <div class="d-flex align-items-center">
-                                    <div class="bg-primary-soft text-primary rounded-circle d-flex align-items-center justify-content-center me-3 fw-bold"
-                                        style="width: 32px; height: 32px; font-size: 10px;">RC</div>
+                                    <div
+                                        class="text-primary rounded-circle d-flex align-items-center justify-content-center mr-3 user-avatar user-avatar-primary">
+                                        RC
+                                    </div>
                                     <div class="d-flex flex-column">
-                                        <span class="fw-bold">Rodrigo Canales</span>
-                                        <span class="text-muted" style="font-size: 11px;">15.441.229-K</span>
+                                        <span class="font-weight-bold">Rodrigo Canales</span>
+                                        <span class="text-muted text-xxs">15.441.229-K</span>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-4 py-3">
+                            <td class="px-4 py-4 align-middle">
                                 <div class="d-flex flex-column">
-                                    <span>Aseo y Ornato</span>
-                                    <span class="badge bg-light border text-muted x-small align-self-start"
-                                        style="font-size: 9px;">Microbasural</span>
+                                    <span class="text-dark mb-1">Aseo y Ornato</span>
+                                    <span class="badge badge-light border text-muted align-self-start text-xs">
+                                        Microbasural
+                                    </span>
                                 </div>
                             </td>
-                            <td class="px-4 py-3">
+                            <td class="px-4 py-4 align-middle">
                                 <span class="status-badge badge-ingresada">Recibida</span>
                             </td>
-                            <td class="px-4 py-3 text-end">
-                                <button class="btn btn-sm btn-icon text-muted me-1" title="Ver"><i data-feather="eye"
-                                        style="width: 16px;"></i></button>
-                                <button class="btn btn-sm btn-icon text-muted me-1" title="Editar"><i
-                                        data-feather="edit-2" style="width: 16px;"></i></button>
-                                <button class="btn btn-sm btn-icon text-primary" title="Responder"><i
-                                        data-feather="corner-up-left" style="width: 16px;"></i></button>
+                            <td class="px-4 py-4 align-middle text-right">
+                                <button class="btn btn-link action-btn text-muted p-0" title="Ver Detalles">
+                                    <span class="material-symbols-outlined icon-md">visibility</span>
+                                </button>
+                                <button class="btn btn-link action-btn text-muted p-0" title="Editar">
+                                    <span class="material-symbols-outlined icon-md">edit</span>
+                                </button>
+                                <button class="btn btn-link action-btn text-primary p-0" title="Responder">
+                                    <span class="material-symbols-outlined icon-md">reply</span>
+                                </button>
                             </td>
                         </tr>
-                        <tr class="oirs-row" onclick="location.href='oirs_consulta.php?folio=OIRS-2024-8832'">
-                            <td class="px-4 py-3">
+
+                        <!-- Fila 2 -->
+                        <tr class="oirs-row">
+                            <td class="px-4 py-4 align-middle">
                                 <div class="d-flex flex-column">
-                                    <span class="fw-bold text-dark">#OIRS-2024-8832</span>
-                                    <span class="text-muted" style="font-size: 11px;">10/02/2024 16:20 PM</span>
+                                    <span class="font-weight-bold text-dark mb-1">#OIRS-2024-8832</span>
+                                    <span class="text-muted small">Ayer, 16:20 PM</span>
                                 </div>
                             </td>
-                            <td class="px-4 py-3">
+                            <td class="px-4 py-4 align-middle">
                                 <div class="d-flex align-items-center">
-                                    <div class="bg-light text-muted rounded-circle d-flex align-items-center justify-content-center me-3 fw-bold"
-                                        style="width: 32px; height: 32px; font-size: 10px;">MM</div>
+                                    <div
+                                        class="bg-light text-muted rounded-circle d-flex align-items-center justify-content-center mr-3 user-avatar">
+                                        MM
+                                    </div>
                                     <div class="d-flex flex-column">
-                                        <span class="fw-bold">María Mejías</span>
-                                        <span class="text-muted" style="font-size: 11px;">10.122.990-2</span>
+                                        <span class="font-weight-bold">María Mejías</span>
+                                        <span class="text-muted text-xxs">10.122.990-2</span>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-4 py-3">
+                            <td class="px-4 py-4 align-middle">
                                 <div class="d-flex flex-column">
-                                    <span>Obras Públicas</span>
-                                    <span class="badge bg-light border text-muted x-small align-self-start"
-                                        style="font-size: 9px;">Bacheo Calle</span>
+                                    <span class="text-dark mb-1">Obras Públicas</span>
+                                    <span class="badge badge-light border text-muted align-self-start text-xs">
+                                        Bacheo Calle
+                                    </span>
                                 </div>
                             </td>
-                            <td class="px-4 py-3">
+                            <td class="px-4 py-4 align-middle">
                                 <span class="status-badge badge-proceso">Asignada</span>
                             </td>
-                            <td class="px-4 py-3 text-end">
-                                <button class="btn btn-sm btn-icon text-muted me-1"><i data-feather="eye"
-                                        style="width: 16px;"></i></button>
-                                <button class="btn btn-sm btn-icon text-muted me-1"><i data-feather="edit-2"
-                                        style="width: 16px;"></i></button>
-                                <button class="btn btn-sm btn-icon text-primary"><i data-feather="corner-up-left"
-                                        style="width: 16px;"></i></button>
+                            <td class="px-4 py-4 align-middle text-right">
+                                <button class="btn btn-link action-btn text-muted p-0" title="Ver Detalles">
+                                    <span class="material-symbols-outlined icon-md">visibility</span>
+                                </button>
+                                <button class="btn btn-link action-btn text-muted p-0" title="Editar">
+                                    <span class="material-symbols-outlined icon-md">edit</span>
+                                </button>
+                                <button class="btn btn-link action-btn text-primary p-0" title="Responder">
+                                    <span class="material-symbols-outlined icon-md">reply</span>
+                                </button>
                             </td>
                         </tr>
-                        <tr class="oirs-row bg-danger-soft bg-opacity-10"
-                            onclick="location.href='oirs_consulta.php?folio=OIRS-2024-8790'">
-                            <td class="px-4 py-3">
+
+                        <!-- Fila 3 -->
+                        <tr class="oirs-row">
+                            <td class="px-4 py-4 align-middle">
                                 <div class="d-flex flex-column">
-                                    <span class="fw-bold text-dark">#OIRS-2024-8790</span>
-                                    <span class="text-muted" style="font-size: 11px;">05/02/2024 11:30 AM</span>
+                                    <span class="font-weight-bold text-dark mb-1">#OIRS-2024-8790</span>
+                                    <span class="text-muted small">05 Feb 2024</span>
                                 </div>
                             </td>
-                            <td class="px-4 py-3">
+                            <td class="px-4 py-4 align-middle">
                                 <div class="d-flex align-items-center">
-                                    <div class="bg-danger-soft text-danger rounded-circle d-flex align-items-center justify-content-center me-3 fw-bold"
-                                        style="width: 32px; height: 32px; font-size: 10px;">JS</div>
+                                    <div
+                                        class="text-danger rounded-circle d-flex align-items-center justify-content-center mr-3 user-avatar user-avatar-danger">
+                                        JS
+                                    </div>
                                     <div class="d-flex flex-column">
-                                        <span class="fw-bold">Juan Salazar</span>
-                                        <span class="text-muted" style="font-size: 11px;">8.332.110-3</span>
+                                        <span class="font-weight-bold">Juan Salazar</span>
+                                        <span class="text-muted text-xxs">8.332.110-3</span>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-4 py-3">
+                            <td class="px-4 py-4 align-middle">
                                 <div class="d-flex flex-column">
-                                    <span>Seguridad Pública</span>
-                                    <span class="badge bg-light border text-muted x-small align-self-start"
-                                        style="font-size: 9px;">Ruidos Molestos</span>
+                                    <span class="text-dark mb-1">Seguridad Pública</span>
+                                    <span class="badge badge-light border text-muted align-self-start text-xs">
+                                        Ruidos Molestos
+                                    </span>
                                 </div>
                             </td>
-                            <td class="px-4 py-3">
+                            <td class="px-4 py-4 align-middle">
                                 <span class="status-badge badge-vencida">Fuera de Plazo</span>
                             </td>
-                            <td class="px-4 py-3 text-end">
-                                <button class="btn btn-sm btn-icon text-muted me-1"><i data-feather="eye"
-                                        style="width: 16px;"></i></button>
-                                <button class="btn btn-sm btn-icon text-muted me-1"><i data-feather="edit-2"
-                                        style="width: 16px;"></i></button>
-                                <button class="btn btn-sm btn-icon text-primary"><i data-feather="corner-up-left"
-                                        style="width: 16px;"></i></button>
+                            <td class="px-4 py-4 align-middle text-right">
+                                <button class="btn btn-link action-btn text-muted p-0" title="Ver Detalles">
+                                    <span class="material-symbols-outlined icon-md">visibility</span>
+                                </button>
+                                <button class="btn btn-link action-btn text-muted p-0" title="Editar">
+                                    <span class="material-symbols-outlined icon-md">edit</span>
+                                </button>
+                                <button class="btn btn-link action-btn text-primary p-0" title="Responder">
+                                    <span class="material-symbols-outlined icon-md">reply</span>
+                                </button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+
+        <!-- Footer con Paginación -->
         <div class="card-footer bg-white border-top p-4">
             <nav class="d-flex justify-content-between align-items-center">
-                <span class="small text-muted fw-bold">Mostrando 3 registros recientes</span>
-                <a href="oirs_listar.php" class="small fw-bold text-decoration-none">Ver todos los resultados <i
-                        data-feather="chevron-right" style="width: 14px;"></i></a>
+                <span class="small text-muted font-weight-bold">Mostrando 1 a 3 de 12 registros</span>
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item disabled">
+                        <a class="page-link border-0 bg-transparent" href="#">
+                            <span class="material-symbols-outlined icon-sm">chevron_left</span>
+                        </a>
+                    </li>
+                    <li class="page-item active">
+                        <a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center"
+                            style="width: 28px; height: 28px;" href="#">1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center text-dark"
+                            style="width: 28px; height: 28px;" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center text-dark"
+                            style="width: 28px; height: 28px;" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link border-0 bg-transparent text-primary" href="#">
+                            <span class="material-symbols-outlined icon-sm">chevron_right</span>
+                        </a>
+                    </li>
+                </ul>
             </nav>
         </div>
     </div>
+
 </div>
 
-<script src="../../recursos/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/feather-icons"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    feather.replace();
+    $(document).ready(function () {
+        // ========================================
+        // TOGGLE FILTROS AVANZADOS
+        // ========================================
+        $('#btnAdvanced').on('click', function () {
+            const $panel = $('#advancedPanel');
+            const $btn = $(this);
+
+            $panel.toggleClass('show');
+            $btn.toggleClass('active btn-primary btn-outline-primary');
+            $btn.text($btn.hasClass('active') ? 'MENOS FILTROS' : 'MÁS FILTROS');
+        });
+
+        // ========================================
+        // LIMPIAR FILTROS
+        // ========================================
+        $('#btnReset').on('click', function () {
+            $('.form-control-cool').val('');
+        });
+
+        // ========================================
+        // ACCIONES DE BOTONES
+        // ========================================
+        $('.action-btn').on('click', function (e) {
+            e.stopPropagation();
+            Swal.fire({
+                title: 'Vista previa',
+                text: 'Aquí se abrirá la gestión de la solicitud seleccionada.',
+                icon: 'info',
+                confirmButtonColor: '#006FB3'
+            });
+        });
+
+        // ========================================
+        // CLICK EN FILA
+        // ========================================
+        $('.oirs-row').on('click', function () {
+            const folio = $(this).data('folio');
+            if (folio) {
+                window.location.href = 'oirs-ver.php?folio=' + folio;
+            }
+        });
+    });
 </script>
 
 <script src="../../recursos/js/funcionarios/oirs/oirs_bandeja.js"></script>
-
-<?php include '../../api/footer.php'; ?>
+<?php include 'footer-funcionarios.php'; ?>

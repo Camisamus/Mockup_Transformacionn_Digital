@@ -1,7 +1,7 @@
 <?php
 $pageTitle = "Listado de Logs";
-require_once '../../api/auth_check.php';
-include 'header.php';
+require_once '../../../api/auth_check.php';
+include '../header.php';
 ?>
 
 
@@ -120,13 +120,13 @@ include 'header.php';
 
 </div>
 
-<script src="../../recursos/js/bootstrap.bundle.min.js"></script>
+<script src="../../../recursos/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/feather-icons"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     feather.replace();
 </script>
-<script src="../../recursos/js/funcionarios/sisadmin/logs_listado_logs.js"></script>
+<script src="../../../recursos/js/funcionarios/sisadmin/logs/logs_listado_logs.js"></script>
 
 
-<?php include '../../api/footer.php'; ?>
+<?php include '../../../api/footer.php'; ?>

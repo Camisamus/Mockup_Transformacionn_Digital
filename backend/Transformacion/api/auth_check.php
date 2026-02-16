@@ -31,15 +31,16 @@ $auth = new AuthController($db);
 $currentScriptPath = $_SERVER['SCRIPT_NAME'];
 $pathPrefix = './';
 if (stripos($currentScriptPath, '/funcionarios/') !== false) {
-    $pathPrefix = '../';
-    // Check if 2 levels deep
-    $subfolders = ['DESVE', 'INGRESOS', 'NO_Asignadas', 'OIRS', 'SISADMIN'];
-    foreach ($subfolders as $sub) {
-        if (stripos($currentScriptPath, "/funcionarios/$sub/") !== false) {
-            $pathPrefix = '../../';
-            break;
-        }
-    }
+    // Count how many directory levels deep we are under the root (where recursos/, api/ live)
+    // Root = Transformacion/, funcionarios/ is 1 level deep
+    // funcionarios/SISADMIN/ is 2 levels deep => '../../'
+    // funcionarios/sisadmin/logs/ is 3 levels deep => '../../../'
+    // funcionarios/sisadmin/mantenedores/acceso/ is 4 levels deep => '../../../../'
+    $afterFuncionarios = substr($currentScriptPath, stripos($currentScriptPath, '/funcionarios/') + strlen('/funcionarios/'));
+    $subDirs = explode('/', $afterFuncionarios);
+    // subDirs includes the filename as last element, so depth = count - 1 (for subdirs) + 1 (for funcionarios itself)
+    $depth = count($subDirs); // This equals subdirs + filename, which matches levels to go up
+    $pathPrefix = str_repeat('../', $depth);
 }
 
 // Verify Auth
@@ -103,7 +104,13 @@ $userData = [
     'nombre' => $_SESSION['nombre'] ?? '',
     'apellido' => $_SESSION['apellido'] ?? ''
 ];
-
+/*
+if ($_GET['debug'] == 1) {
+    print_r($permissions);
+    print_r($pathPrefix);
+    print_r($currentFile);
+}
+*/
 $sidebarHtml = renderSidebar($permissions, $pathPrefix, $currentFile);
 
 ?>

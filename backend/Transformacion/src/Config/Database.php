@@ -19,12 +19,12 @@ class Database
         // Headers CORS removed from here to avoid duplication
 
         try {
-            if (file_exists(__DIR__ . '/../../../.env')) {
-                $dotenv = Dotenv::createImmutable(__DIR__ . '/../../../');
+            if (file_exists(__DIR__ . '/../../../.env') && class_exists('\\Dotenv\\Dotenv')) {
+                $dotenv = \Dotenv\Dotenv::createImmutable(__DIR__ . '/../../../');
                 $dotenv->load();
             }
-        } catch (\Exception $e) {
-            // Silently fail if .env is missing and variables are set otherwise
+        } catch (\Throwable $e) {
+            // Silently fail if .env is missing or Dotenv is not available
         }
 
         $this->host = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?: 'localhost';

@@ -1,16 +1,15 @@
 <?php
-$pageTitle = "Mantenedor Áreas Generales";
-require_once '../../api/auth_check.php';
-include 'header.php';
+$pageTitle = "Mantenedor Tipos de Atención OIRS";
+require_once '../../../../api/auth_check.php';
+include '../../header.php';
 ?>
-
 
 <div class="container-fluid py-4">
     <!-- Header -->
     <div class="main-header mb-4">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Áreas Generales</h2>
-            <p class="text-muted mb-0">Gestión de Áreas de la organización</p>
+            <h2 class="fw-bold fs-4">Tipos de Atención OIRS</h2>
+            <p class="text-muted mb-0">Gestión de tipos de atención para solicitudes OIRS</p>
         </div>
     </div>
 
@@ -27,7 +26,7 @@ include 'header.php';
                 <div class="col-12 col-md-auto">
                     <button class="btn btn-toolbar btn-dark w-100 shadow-sm" id="btn-new">
                         <i data-feather="plus" class="me-2"></i>
-                        Nueva Área
+                        Nuevo Tipo
                     </button>
                 </div>
             </div>
@@ -38,13 +37,13 @@ include 'header.php';
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
             <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
-            <p class="text-muted small mb-4">Filtrar por Código o Nombre de Área</p>
+            <p class="text-muted small mb-4">Filtrar por Nombre de Tipo</p>
 
             <div class="row g-3">
                 <div class="col-md-6">
                     <label for="filter-text" class="form-label small fw-bold">Buscar</label>
                     <input type="text" class="form-control form-control-sm" id="filter-text"
-                        placeholder="Ej: AREA_01 o Inform¿tica...">
+                        placeholder="Ej: Consulta, Reclamo...">
                 </div>
             </div>
         </div>
@@ -54,7 +53,7 @@ include 'header.php';
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="fw-bold fs-6 mb-0">Listado de Áreas</h5>
+                <h5 class="fw-bold fs-6 mb-0">Listado de Tipos de Atención</h5>
             </div>
 
             <div class="table-responsive">
@@ -62,14 +61,13 @@ include 'header.php';
                     <thead class="table-light text-uppercase">
                         <tr>
                             <th>ID</th>
-                            <th>Código</th>
                             <th>Nombre</th>
                             <th class="text-end">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="table-body">
                         <tr>
-                            <td colspan="4" class="text-center py-5">
+                            <td colspan="3" class="text-center py-5">
                                 <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
                                 Cargando datos...
                             </td>
@@ -86,7 +84,7 @@ include 'header.php';
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg">
             <div class="modal-header bg-light">
-                <h5 class="modal-title fw-bold fs-6" id="modalFormLabel">Nueva Área</h5>
+                <h5 class="modal-title fw-bold fs-6" id="modalFormLabel">Nuevo Tipo de Atención</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body p-4">
@@ -94,15 +92,10 @@ include 'header.php';
                     <input type="hidden" id="entry-id">
                     <div class="row g-3">
                         <div class="col-md-12">
-                            <label class="form-label small fw-bold">Código de Área <span
-                                    class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="entry-codigo" required placeholder="Ej: INF_01">
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label small fw-bold">Nombre de Área <span
+                            <label class="form-label small fw-bold">Nombre del Tipo <span
                                     class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="entry-nombre" required
-                                placeholder="Ej: Inform¿tica">
+                                placeholder="Ej: Consulta">
                         </div>
                     </div>
                 </form>
@@ -110,7 +103,7 @@ include 'header.php';
             <div class="modal-footer bg-light border-0">
                 <button type="button" class="btn btn-link text-decoration-none text-muted small"
                     data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-dark px-4 shadow-sm" id="btn-save">Guardar Area</button>
+                <button type="button" class="btn btn-dark px-4 shadow-sm" id="btn-save">Guardar Tipo</button>
             </div>
         </div>
     </div>
@@ -118,13 +111,13 @@ include 'header.php';
 
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="../../recursos/js/bootstrap.bundle.min.js"></script>
+<script src="../../../../recursos/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/feather-icons"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     feather.replace();
 </script>
 
-<script src="../../recursos/js/funcionarios/sisadmin/sisadmin_mantenedor_general_areas.js"></script>
+<script src="../../../../recursos/js/funcionarios/sisadmin/mantenedores/oirs/oirs_tipo_atencion.js"></script>
 
-<?php include '../../api/footer.php'; ?>
+<?php include '../../../../api/footer.php'; ?>

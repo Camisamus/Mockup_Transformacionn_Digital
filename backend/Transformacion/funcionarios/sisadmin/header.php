@@ -10,6 +10,7 @@
     <link href="<?php echo $pathPrefix; ?>recursos/css/style.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="<?php echo $pathPrefix; ?>recursos/js/layout_manager.js"></script>
     <!-- Additional CSS can be injected here if needed -->
 </head>
 
@@ -22,7 +23,7 @@
                 <div class="d-flex align-items-center mb-4 px-2" style="gap: 0.75rem;">
 
                     <div class="d-flex flex-column overflow-hidden">
-                        <img src="../../recursos/img/logo.png" />
+                        <img src="<?php echo $pathPrefix; ?>recursos/img/logo.png" />
                     </div>
                 </div>
 

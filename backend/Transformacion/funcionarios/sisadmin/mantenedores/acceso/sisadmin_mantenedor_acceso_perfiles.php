@@ -1,7 +1,7 @@
 <?php
 $pageTitle = "Mantenedor Perfiles de Acceso";
-require_once '../../api/auth_check.php';
-include 'header.php';
+require_once '../../../../api/auth_check.php';
+include '../../header.php';
 ?>
 
 
@@ -110,6 +110,7 @@ include 'header.php';
     </div>
 </div>
 
-<script src="../../recursos/js/funcionarios/sisadmin/sisadmin_mantenedor_acceso_perfiles.js"></script>
+<script
+    src="../../../../recursos/js/funcionarios/sisadmin/mantenedores/acceso/sisadmin_mantenedor_acceso_perfiles.js"></script>
 
-<?php include '../../api/footer.php'; ?>
+<?php include '../../../../api/footer.php'; ?>

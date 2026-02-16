@@ -1,7 +1,7 @@
 <?php
 $pageTitle = "Asignación Usuarios/Áreas";
-require_once '../../api/auth_check.php';
-include 'header.php';
+require_once '../../../../api/auth_check.php';
+include '../../header.php';
 ?>
 
 
@@ -126,7 +126,7 @@ include 'header.php';
 
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="../../recursos/js/bootstrap.bundle.min.js"></script>
+<script src="../../../../recursos/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/feather-icons"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -134,6 +134,7 @@ include 'header.php';
     feather.replace();
 </script>
 
-<script src="../../recursos/js/funcionarios/sisadmin/sisadmin_mantenedor_general_areas_usuarios.js"></script>
+<script
+    src="../../../../recursos/js/funcionarios/sisadmin/mantenedores/general/sisadmin_mantenedor_general_areas_usuarios.js"></script>
 
-<?php include '../../api/footer.php'; ?>
+<?php include '../../../../api/footer.php'; ?>

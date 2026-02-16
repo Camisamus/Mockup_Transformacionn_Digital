@@ -74,6 +74,28 @@ class ContribuyenteGeneral
         return false;
     }
 
+    public function getDetailsByRut($rut)
+    {
+        $query = "SELECT c.*, 
+                         d.tcd_calle, d.tcd_numero, d.tcd_departamento, d.tcd_casa, d.tcd_aclaratoria
+                  FROM " . $this->table_name . " c
+                  LEFT JOIN (
+                      SELECT * FROM trd_cont_direcciones 
+                      WHERE (tcd_contribuyente, tcd_dir_creacion) IN (
+                          SELECT tcd_contribuyente, MAX(tcd_dir_creacion)
+                          FROM trd_cont_direcciones
+                          GROUP BY tcd_contribuyente
+                      )
+                  ) d ON c.tgc_id = d.tcd_contribuyente
+                  WHERE c.tgc_rut = :tgc_rut
+                  LIMIT 0,1";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":tgc_rut", $rut);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function delete($id)
     {
         // Physical delete as there is no 'borrado' column
