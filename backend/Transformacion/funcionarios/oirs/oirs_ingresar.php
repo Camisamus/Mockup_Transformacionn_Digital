@@ -313,11 +313,12 @@ include 'header-oirs-funcionarios.php';
                                 <div class="col-md-12 mb-4">
                                     <label class="font-weight-bold small text-muted text-uppercase">Adjuntar Archivos /
                                         Usuario</label>
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="oirs_adjuntos"
+                                    <div>
+                                        <input type="file" class="form-control form-control-sm" id="oirs_adjuntos"
                                             name="oirs_adjuntos[]" multiple>
-                                        <label class="custom-file-label font-weight-bold text-muted" for="oirs_adjuntos"
-                                            style="font-size: 11px;">Elegir archivos...</label>
+                                        <div id="lista_archivos_oirs" class="list-group list-group-flush mt-2 small">
+                                            <!-- Dynamic list of selected files -->
+                                        </div>
                                     </div>
                                     <small class="text-muted">Puede subir imágenes, PDFs o documentos (Máx. 5MB cada
                                         uno).</small>

@@ -103,250 +103,34 @@ include 'header-oirs-funcionarios.php';
     <!-- ========================================
          TABLA DE RESULTADOS
          ======================================== -->
-    <div class="card search-card border-0 mb-4 overflow-hidden">
-        <!-- Header -->
-        <div class="card-header bg-white p-4 border-0 d-flex justify-content-between align-items-center">
-            <h3 class="h6 font-weight-bold text-dark mb-0">
-                Resultados encontrados
-                <span class="badge badge-light border ml-2">12 Solicitudes</span>
-            </h3>
-            <div class="d-flex align-items-center" style="gap: 15px;">
-                <span class="small text-muted">
-                    Ordenar por: <span class="text-dark font-weight-bold">Más recientes</span>
-                </span>
-                <span class="material-symbols-outlined text-muted icon-md">sort</span>
-            </div>
-        </div>
 
-        <!-- Tabla -->
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                    <thead class="bg-light text-muted table-header">
-                        <tr>
-                            <th class="px-4 py-3 border-0">FOLIO / FECHA</th>
-                            <th class="px-4 py-3 border-0">CONTRIBUYENTE</th>
-                            <th class="px-4 py-3 border-0">TEMÁTICA</th>
-                            <th class="px-4 py-3 border-0">ESTADO</th>
-                            <th class="px-4 py-3 border-0 text-right">ACCIONES</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-body">
-                        <!-- Fila 1 -->
-                        <tr class="oirs-row">
-                            <td class="px-4 py-4 align-middle">
-                                <div class="d-flex flex-column">
-                                    <span class="font-weight-bold text-dark mb-1">#OIRS-2024-8851</span>
-                                    <span class="text-muted small">Hoy, 09:45 AM</span>
-                                </div>
-                            </td>
-                            <td class="px-4 py-4 align-middle">
-                                <div class="d-flex align-items-center">
-                                    <div
-                                        class="text-primary rounded-circle d-flex align-items-center justify-content-center mr-3 user-avatar user-avatar-primary">
-                                        RC
-                                    </div>
-                                    <div class="d-flex flex-column">
-                                        <span class="font-weight-bold">Rodrigo Canales</span>
-                                        <span class="text-muted text-xxs">15.441.229-K</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-4 py-4 align-middle">
-                                <div class="d-flex flex-column">
-                                    <span class="text-dark mb-1">Aseo y Ornato</span>
-                                    <span class="badge badge-light border text-muted align-self-start text-xs">
-                                        Microbasural
-                                    </span>
-                                </div>
-                            </td>
-                            <td class="px-4 py-4 align-middle">
-                                <span class="status-badge badge-ingresada">Recibida</span>
-                            </td>
-                            <td class="px-4 py-4 align-middle text-right">
-                                <button class="btn btn-link action-btn text-muted p-0" title="Ver Detalles">
-                                    <span class="material-symbols-outlined icon-md">visibility</span>
-                                </button>
-                                <button class="btn btn-link action-btn text-muted p-0" title="Editar">
-                                    <span class="material-symbols-outlined icon-md">edit</span>
-                                </button>
-                                <button class="btn btn-link action-btn text-primary p-0" title="Responder">
-                                    <span class="material-symbols-outlined icon-md">reply</span>
-                                </button>
-                            </td>
-                        </tr>
-
-                        <!-- Fila 2 -->
-                        <tr class="oirs-row">
-                            <td class="px-4 py-4 align-middle">
-                                <div class="d-flex flex-column">
-                                    <span class="font-weight-bold text-dark mb-1">#OIRS-2024-8832</span>
-                                    <span class="text-muted small">Ayer, 16:20 PM</span>
-                                </div>
-                            </td>
-                            <td class="px-4 py-4 align-middle">
-                                <div class="d-flex align-items-center">
-                                    <div
-                                        class="bg-light text-muted rounded-circle d-flex align-items-center justify-content-center mr-3 user-avatar">
-                                        MM
-                                    </div>
-                                    <div class="d-flex flex-column">
-                                        <span class="font-weight-bold">María Mejías</span>
-                                        <span class="text-muted text-xxs">10.122.990-2</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-4 py-4 align-middle">
-                                <div class="d-flex flex-column">
-                                    <span class="text-dark mb-1">Obras Públicas</span>
-                                    <span class="badge badge-light border text-muted align-self-start text-xs">
-                                        Bacheo Calle
-                                    </span>
-                                </div>
-                            </td>
-                            <td class="px-4 py-4 align-middle">
-                                <span class="status-badge badge-proceso">Asignada</span>
-                            </td>
-                            <td class="px-4 py-4 align-middle text-right">
-                                <button class="btn btn-link action-btn text-muted p-0" title="Ver Detalles">
-                                    <span class="material-symbols-outlined icon-md">visibility</span>
-                                </button>
-                                <button class="btn btn-link action-btn text-muted p-0" title="Editar">
-                                    <span class="material-symbols-outlined icon-md">edit</span>
-                                </button>
-                                <button class="btn btn-link action-btn text-primary p-0" title="Responder">
-                                    <span class="material-symbols-outlined icon-md">reply</span>
-                                </button>
-                            </td>
-                        </tr>
-
-                        <!-- Fila 3 -->
-                        <tr class="oirs-row">
-                            <td class="px-4 py-4 align-middle">
-                                <div class="d-flex flex-column">
-                                    <span class="font-weight-bold text-dark mb-1">#OIRS-2024-8790</span>
-                                    <span class="text-muted small">05 Feb 2024</span>
-                                </div>
-                            </td>
-                            <td class="px-4 py-4 align-middle">
-                                <div class="d-flex align-items-center">
-                                    <div
-                                        class="text-danger rounded-circle d-flex align-items-center justify-content-center mr-3 user-avatar user-avatar-danger">
-                                        JS
-                                    </div>
-                                    <div class="d-flex flex-column">
-                                        <span class="font-weight-bold">Juan Salazar</span>
-                                        <span class="text-muted text-xxs">8.332.110-3</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-4 py-4 align-middle">
-                                <div class="d-flex flex-column">
-                                    <span class="text-dark mb-1">Seguridad Pública</span>
-                                    <span class="badge badge-light border text-muted align-self-start text-xs">
-                                        Ruidos Molestos
-                                    </span>
-                                </div>
-                            </td>
-                            <td class="px-4 py-4 align-middle">
-                                <span class="status-badge badge-vencida">Fuera de Plazo</span>
-                            </td>
-                            <td class="px-4 py-4 align-middle text-right">
-                                <button class="btn btn-link action-btn text-muted p-0" title="Ver Detalles">
-                                    <span class="material-symbols-outlined icon-md">visibility</span>
-                                </button>
-                                <button class="btn btn-link action-btn text-muted p-0" title="Editar">
-                                    <span class="material-symbols-outlined icon-md">edit</span>
-                                </button>
-                                <button class="btn btn-link action-btn text-primary p-0" title="Responder">
-                                    <span class="material-symbols-outlined icon-md">reply</span>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Footer con Paginación -->
-        <div class="card-footer bg-white border-top p-4">
-            <nav class="d-flex justify-content-between align-items-center">
-                <span class="small text-muted font-weight-bold">Mostrando 1 a 3 de 12 registros</span>
-                <ul class="pagination pagination-sm mb-0">
-                    <li class="page-item disabled">
-                        <a class="page-link border-0 bg-transparent" href="#">
-                            <span class="material-symbols-outlined icon-sm">chevron_left</span>
-                        </a>
-                    </li>
-                    <li class="page-item active">
-                        <a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center"
-                            style="width: 28px; height: 28px;" href="#">1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center text-dark"
-                            style="width: 28px; height: 28px;" href="#">2</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center text-dark"
-                            style="width: 28px; height: 28px;" href="#">3</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link border-0 bg-transparent text-primary" href="#">
-                            <span class="material-symbols-outlined icon-sm">chevron_right</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </div>
+    <div id="tabla-resultados-oirs"></div>
 
 </div>
 
 <script>
     $(document).ready(function () {
-        // ========================================
-        // TOGGLE FILTROS AVANZADOS
-        // ========================================
+        // Toggle Filtros Avanzados
         $('#btnAdvanced').on('click', function () {
             const $panel = $('#advancedPanel');
             const $btn = $(this);
-
             $panel.toggleClass('show');
             $btn.toggleClass('active btn-primary btn-outline-primary');
             $btn.text($btn.hasClass('active') ? 'MENOS FILTROS' : 'MÁS FILTROS');
         });
 
-        // ========================================
-        // LIMPIAR FILTROS
-        // ========================================
+        // Limpiar Filtros
         $('#btnReset').on('click', function () {
             $('.form-control-cool').val('');
-        });
-
-        // ========================================
-        // ACCIONES DE BOTONES
-        // ========================================
-        $('.action-btn').on('click', function (e) {
-            e.stopPropagation();
-            Swal.fire({
-                title: 'Vista previa',
-                text: 'Aquí se abrirá la gestión de la solicitud seleccionada.',
-                icon: 'info',
-                confirmButtonColor: '#006FB3'
-            });
-        });
-
-        // ========================================
-        // CLICK EN FILA
-        // ========================================
-        $('.oirs-row').on('click', function () {
-            const folio = $(this).data('folio');
-            if (folio) {
-                window.location.href = 'oirs-ver.php?folio=' + folio;
-            }
         });
     });
 </script>
 
 <script src="../../recursos/js/funcionarios/oirs/oirs_bandeja.js"></script>
+<script src="../../recursos/js/funcionarios/oirs/oirs_tabla_flujo.js"></script>
+<script>
+    $(document).ready(function () {
+        OirsTable.init('historial');
+    });
+</script>
 <?php include 'footer-funcionarios.php'; ?>

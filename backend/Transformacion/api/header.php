@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="flex-grow-1 overflow-auto custom-scrollbar">
-                    <?php // echo $sidebarHtml; ?>
+                    <?php echo $sidebarHtml; ?>
                 </div>
 
                 <div class="mt-auto d-flex align-items-center pt-3 border-top px-2" style="gap: 0.75rem;">

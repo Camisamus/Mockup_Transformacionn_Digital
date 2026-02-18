@@ -180,7 +180,7 @@
             if (localStorage.getItem('isLoggedIn') === 'true') {
                 localStorage.removeItem('isLoggedIn');
                 localStorage.removeItem('user_data');
-                window.location.href = 'Funcionarios/bandeja.php';
+                window.location.href = 'funcionarios/index.php';
                 return;
             }
 
@@ -226,7 +226,7 @@
                         if (data.data && data.data.user) {
                             localStorage.setItem('user_data', JSON.stringify({ user: data.data.user }));
                         }
-                        window.location.href = 'Funcionarios/bandeja.php';
+                        window.location.href = 'funcionarios/index.php';
                     } else {
                         loadingSpinner.classList.add('d-none');
                         loginContainer.classList.remove('d-none');
@@ -271,7 +271,7 @@
                         if (data.user) {
                             localStorage.setItem('user_data', JSON.stringify(data.user));
                         }
-                        window.location.href = 'Funcionarios/bandeja.php';
+                        window.location.href = 'funcionarios/index.php';
                     } else {
                         loadingSpinner.classList.add('d-none');
                         loginContainer.classList.remove('d-none');

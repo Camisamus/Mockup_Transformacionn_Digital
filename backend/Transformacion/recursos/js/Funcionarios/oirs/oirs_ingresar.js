@@ -3,6 +3,9 @@ let mapCont, markerCont, mapInc, markerInc, geocoder;
 let isUpdatingFromMapCont = false;
 let isUpdatingFromMapInc = false;
 
+// Lista de archivos seleccionados
+let selectedFilesOirs = [];
+
 // Helper: Formatear RUT
 function formatRut(rut) {
     let value = rut.replace(/[.-]/g, '');
@@ -172,6 +175,20 @@ $(document).ready(function () {
         });
     });
 
+    // Lógica de Archivos Adjuntos
+    $('#oirs_adjuntos').on('change', async function (e) {
+        const files = e.target.files;
+        if (files.length > 0) {
+            for (let i = 0; i < files.length; i++) {
+                const fileData = await readFileAsBase64(files[i]);
+                selectedFilesOirs.push(fileData);
+            }
+            renderFileListOirs();
+            // Limpiar input para permitir seleccionar el mismo archivo si se elimina
+            $(this).val('');
+        }
+    });
+
     // Finalizar Registro
     $('#btnFinalizar').click(async function () {
         let btn = $(this);
@@ -241,18 +258,11 @@ $(document).ready(function () {
             oirs_latitud: $('#oirs_lat').val(),
             oirs_longitud: $('#oirs_lng').val(),
 
-            // Documentos
-            documentos: []
-        };
+            oirs_respuesta: $('#oirs_respuesta').val(),
 
-        // 4. Leer archivos (si hay)
-        const files = $('#oirs_adjuntos')[0].files;
-        if (files.length > 0) {
-            for (let i = 0; i < files.length; i++) {
-                const fileData = await readFileAsBase64(files[i]);
-                payload.documentos.push(fileData);
-            }
-        }
+            // Documentos
+            documentos: selectedFilesOirs
+        };
 
         // 5. Enviar a API
         try {
@@ -292,20 +302,46 @@ $(document).ready(function () {
             btn.prop('disabled', false).html('Finalizar Registro <span class="material-symbols-outlined ml-2" style="font-size: 18px;">check_circle</span>');
         }
     });
-
-    // Helper: Leer archivo como Base64
-    function readFileAsBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve({
-                nombre: file.name,
-                base64: reader.result.split(',')[1]
-            });
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-        });
-    }
 });
+
+// Helper: Leer archivo como Base64
+function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve({
+            nombre: file.name,
+            base64: reader.result.split(',')[1]
+        });
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+// Funciones para renderizar y eliminar archivos (Globales)
+function renderFileListOirs() {
+    const listContainer = $('#lista_archivos_oirs');
+    listContainer.empty();
+
+    selectedFilesOirs.forEach((file, index) => {
+        const item = $(`
+            <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-2">
+                <div class="d-flex align-items-center">
+                    <span class="material-symbols-outlined mr-2 text-primary" style="font-size: 18px;">description</span>
+                    <span class="small text-truncate" style="max-width: 250px;">${file.nombre}</span>
+                </div>
+                <button type="button" class="btn btn-sm btn-link text-danger p-0" onclick="removeFileOirs(${index})">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">close</span>
+                </button>
+            </div>
+        `);
+        listContainer.append(item);
+    });
+}
+
+window.removeFileOirs = function (index) {
+    selectedFilesOirs.splice(index, 1);
+    renderFileListOirs();
+};
 
 async function cargarListas() {
     const apiBase = '../../api';

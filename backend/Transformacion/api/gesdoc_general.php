@@ -30,10 +30,14 @@ switch ($accion) {
             }
             $userId = $_SESSION['user_id'] ?? null;
 
+            // Get doc_privado from request data
+            $docPrivado = $data['doc_privado'] ?? $_POST['doc_privado'] ?? 0;
+
             // Prepare data for controller
             $requestData = [
                 'tramite_id' => $tramiteId,
-                'user_id' => $userId
+                'user_id' => $userId,
+                'doc_privado' => $docPrivado
             ];
 
             $resultado = $gesdocController->subirArchivo($files, $requestData);

@@ -73,76 +73,92 @@ function buildMenuHierarchy($flatItems)
     return $roots;
 }
 
-function renderSidebar($flatPermissions, $pathPrefix, $currentScript)
-{
-    // Enforce Essential Items at the start of permissions list if not already there
-    $essentialItems = [
-        [
-            "rol_id" => "A.0",
-            "rol_nombre" => "Bandeja",
-            "rol_enlace" => "Funcionarios/bandeja.php",
-            "rol_tipo" => "Pagina",
-            "rol_icono" => "file-text"
-        ],
-        [
-            "rol_id" => "A.1",
-            "rol_nombre" => "Bandeja Historial",
-            "rol_enlace" => "Funcionarios/bandeja_historial.php",
-            "rol_tipo" => "Pagina",
-            "rol_icono" => "clock"
-        ]
-    ];
+function renderSidebar($flatPermissions, $pathPrefix, $currentScript) {
+    // 1. Detectar módulo actual basado en la ruta
+    $currentPath = $_SERVER['SCRIPT_NAME'];
+    $module = 'principal'; // Módulo por defecto
 
-    // Filter out these items from flatPermissions to avoid duplicates, then prepend
-    $filteredPermissions = array_filter($flatPermissions, function ($item) {
-        $link = $item['rol_enlace'] ?? ($item['Enlace'] ?? '');
-        return ($link !== "Funcionarios/bandeja.php" && $link !== "Funcionarios/bandeja_historial.php" && $link !== "Funcionarios/Bandeja.php");
+    // Determinamos el módulo según la carpeta en la que estamos
+    if (stripos($currentPath, '/oirs/') !== false) {
+        $module = 'oirs';
+    } 
+    // Aquí se pueden agregar más módulos en el futuro (e.g., /transparencia/, /permisos/, etc.)
+
+    // 2. Filtrar los permisos (roles) por el módulo detectado
+    $filteredPermissions = array_filter($flatPermissions, function($item) use ($module) {
+        return isset($item['rol_modulo']) && $item['rol_modulo'] === $module;
     });
 
-    $finalPermissions = array_merge($essentialItems, $filteredPermissions);
+    // 3. Renderizar usando la nueva interfaz estilizada
+    return renderSidebarPrincipal($filteredPermissions, $currentScript, $pathPrefix, $module);
+}
 
-    $menuData = buildMenuHierarchy($finalPermissions);
+function renderSidebarPrincipal($permissions, $currentScript, $pathPrefix, $currentModule = 'principal') {
+    $html = '<aside id="sidebar" class="d-flex flex-column w-100 h-100 bg-white border-end shadow-sm">';
+    
+    // Botón Volver al Panel Principal si estamos en un submódulo
+    if ($currentModule !== 'principal') {
+        $html .= '
+        <div class="px-3 mt-3 mb-2">
+            <a class="nav-link text-muted d-flex align-items-center" href="' . $pathPrefix . 'funcionarios/index.php" style="font-size: 0.85rem;">
+                <i class="me-2" style="width:16px; height:16px;">' . getIcon('arrow-left') . '</i> 
+                <span>Volver al Panel</span>
+            </a>
+        </div>';
+    }
 
-    // Identify active category in PHP to prevent visual flash
-    $activeCategoryId = null;
-    foreach ($menuData as $item) {
-        if (isChildActive($item, $currentScript)) {
-            // Get root ID to keep grouped items (like Bandeja + Historial) visible together
-            $rootId = explode('.', $item['id'])[0];
-            // If it's the Bandeja group (A), we don't treat it as a drill-down selection
-            if ($rootId !== 'A') {
-                $activeCategoryId = $rootId;
-            }
-            break;
+    $html .= '<nav class="flex-grow-1 mt-2 px-2"><ul class="nav flex-column">';
+
+    foreach ($permissions as $item) {
+        if ($item['rol_tipo'] === 'separador') {
+            // Diseño para "GESTIÓN", "CONFIGURACIÓN", etc.
+            $html .= '
+            <li class="nav-item mt-4 mb-2 ps-3">
+                <small class="text-uppercase fw-bold text-muted" style="font-size: 0.75rem; letter-spacing: 1px;">
+                    ' . htmlspecialchars($item['rol_nombre']) . '
+                </small>
+            </li>';
+        } else {
+            // Diseño para los botones con link (Categorías o Páginas)
+            $enlace = $item['rol_enlace'] ?: '#';
+            $href = ($enlace !== '#') ? $pathPrefix . $enlace : '#';
+            
+            // Estado activo: verificamos si el script actual contiene el enlace del menú
+            $currentPath = $_SERVER['SCRIPT_NAME'];
+            $isActive = ($enlace !== '#' && strpos(strtolower($currentPath), strtolower($enlace)) !== false) ? 'active-main' : '';
+            $icon = !empty($item['rol_simbolo']) ? $item['rol_simbolo'] : 'grid';
+            
+            $html .= '
+            <li class="nav-item">
+                <a class="nav-link d-flex align-items-center px-3 py-2 ' . $isActive . '" 
+                   href="' . $href . '" 
+                   style="color: #444; font-weight: 500; transition: 0.2s; border-radius: 6px; margin-bottom: 2px;">
+                    <i class="me-3" style="width:20px; height:20px; display: inline-flex; align-items: center; justify-content: center;">' . getIcon($icon) . '</i>
+                    <span>' . htmlspecialchars($item['rol_nombre']) . '</span>
+                </a>
+            </li>';
         }
     }
 
-    $backButtonClass = $activeCategoryId ? "" : "d-none";
-
-    $html = '<aside id="sidebar" class="d-flex flex-column w-100 h-100" style="overflow-y: auto;">
-        <nav class="flex-grow-1">
-            <ul class="nav flex-column" id="menu-container">
-                <!-- Back Button -->
-                <li class="nav-item ' . $backButtonClass . '" id="back-to-panel-item">
-                    <a class="nav-link fw-bold text-primary d-flex align-items-center" href="#" onclick="goBackToPanel(event)">
-                        ' . str_replace('width="24" height="24"', 'style="width:18px; margin-right:8px;"', getIcon('arrow-left')) . '
-                        <span>Volver al panel</span>
-                    </a>
-                </li>
-    ';
-
-    $html .= buildMenuHtml($menuData, 0, $pathPrefix, $currentScript, $activeCategoryId);
-
-    $html .= '</ul>
-        </nav>
-        <div class="p-3 border-top border-primary-subtle small opacity-50">
-           <!-- Footer Text -->
-        </div>
-    </aside>';
-
+    $html .= '</ul></nav></aside>';
     return $html;
 }
 
+function renderMenuItem($item, $class = "", $isRoot = false) {
+    $icon = $item['rol_simbolo'] ?? 'file';
+    $chevron = $isRoot ? '<i data-feather="chevron-right" class="ms-auto opacity-50" style="width:14px"></i>' : '';
+    // Si es categoría raíz, su enlace es el de su primera página para "entrar"
+    $href = $item['rol_enlace'] ?: '#'; 
+
+    return "
+    <li class='nav-item'>
+        <a class='nav-link d-flex align-items-center px-3 py-2 $class' href='$href'>
+            <i class='me-3 text-dark icon-style' data-feather='$icon'></i>
+            <span class='text-dark'>{$item['rol_nombre']}</span>
+            $chevron
+        </a>
+    </li>";
+}
 function buildMenuHtml($items, $level, $pathPrefix, $currentScript, $activeCategoryId = null)
 {
     $html = '';

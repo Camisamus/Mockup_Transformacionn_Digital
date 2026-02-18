@@ -63,7 +63,7 @@ $allowed = false;
 // Always allow dashboard and bandeja, and common action pages which are often accessed via links
 $actionPages = [
     'dashboard.php',
-    'bandeja.php',
+    'index.php',
     'bandeja_historial.php',
     'index.php',
     'logout.php',
@@ -95,7 +95,7 @@ if (in_array($currentFile, $actionPages)) {
 // If strict Check fails
 if (!$allowed && $permissions !== false && basename($currentScriptPath) !== 'index.php') {
     // Redirect to Bandeja
-    header("Location: " . $pathPrefix . "Funcionarios/bandeja.php");
+    header("Location: " . $pathPrefix . "Funcionarios/index.php");
     exit;
 }
 
@@ -104,13 +104,9 @@ $userData = [
     'nombre' => $_SESSION['nombre'] ?? '',
     'apellido' => $_SESSION['apellido'] ?? ''
 ];
-/*
-if ($_GET['debug'] == 1) {
-    print_r($permissions);
-    print_r($pathPrefix);
-    print_r($currentFile);
-}
-*/
+
+
+
 $sidebarHtml = renderSidebar($permissions, $pathPrefix, $currentFile);
 
 ?>

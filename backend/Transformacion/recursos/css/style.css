@@ -341,3 +341,34 @@ textarea,
 select.form-select {
     text-transform: uppercase;
 }
+
+/* Estilo general de los links (Categorías - Imagen 2) */
+#sidebar .nav-link {
+    border-left: 4px solid transparent;
+    margin: 2px 0;
+}
+
+#sidebar .nav-link:hover {
+    background-color: #f8f9fa;
+    color: #0d6efd !important;
+}
+
+/* Estado Activo (Imagen 2) */
+.active-main {
+    background-color: #eef6ff !important;
+    /* Azul muy suave */
+    color: #0d6efd !important;
+    border-left: 4px solid #0d6efd !important;
+    /* El borde azul de la imagen */
+    font-weight: 600 !important;
+}
+
+.active-main i,
+.active-main svg {
+    color: #0d6efd !important;
+}
+
+/* Separadores */
+.text-muted {
+    opacity: 0.8;
+}

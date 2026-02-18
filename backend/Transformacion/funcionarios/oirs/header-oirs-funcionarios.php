@@ -12,7 +12,7 @@ require_once '../../api/auth_check.php';
     <!-- Framework Kit Digital (Gob.cl) -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:300,400,700&display=swap" rel="stylesheet">
-    <link href="/municipal/css/gob.cl.css" rel="stylesheet">
+    <link href="<?php echo $pathPrefix; ?>recursos/css/gob.cl.css" rel="stylesheet">
 
     <!-- Bootstrap 4 / Kit Digital Base (Gob.cl) -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

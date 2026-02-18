@@ -11,7 +11,7 @@ class OirsSolicitud
     private $conn;
     private $table_name = "trd_oirs_solicitud";
     private $table_name_parent = "trd_general_registro_general_tramites";
-    private $sysname = "oirs_solicitud";
+    private $sysname = "oirs";
     private $bitacora;
     private $GesDoc;
 
@@ -61,6 +61,7 @@ class OirsSolicitud
                 oirs_aclaratoia = :aclaratoria,
                 oirs_latitud = :latitud,
                 oirs_longitud = :longitud,
+                oirs_sector = :sector,
                 oirs_descripcion = :descripcion,
                 oirs_estado = :estado,
                 oirs_fecha_limite = :fecha_limite";
@@ -79,6 +80,7 @@ class OirsSolicitud
             $stmt->bindValue(":aclaratoria", $data['oirs_aclaratoria'] ?? null);
             $stmt->bindValue(":latitud", $data['oirs_latitud'] ?? null);
             $stmt->bindValue(":longitud", $data['oirs_longitud'] ?? null);
+            $stmt->bindValue(":sector", $data['oirs_sector'] ?? null);
             $stmt->bindValue(":descripcion", $data['oirs_descripcion']);
             $stmt->bindValue(":estado", $data['oirs_estado'] ?? 1); // 1 = Recibida
 
@@ -148,6 +150,63 @@ class OirsSolicitud
         $query .= " ORDER BY o.oirs_id DESC";
 
         $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getById($id)
+    {
+        $query = "SELECT o.*, r.*, t.tem_nombre, s.sub_nombre, 
+                  tgc.tgc_nombre, tgc.tgc_apellido_paterno, tgc.tgc_apellido_materno, tgc.tgc_rut,
+                  tgc.tgc_razon_social, tgc.tgc_tipo, tgc.tgc_correo_electronico, tgc.tgc_telefono_contacto, tgc.tgc_fecha_nacimiento,
+                  tgc.tgc_sexo, tgc.tgc_estado_civil, tgc.tgc_nacionalidad, tgc.tgc_escolaridad,
+                  tgc.tgc_nombre_fantasia, tgc.tgc_giro, tgc.tgc_rep_rut, tgc.tgc_rep_nombre_completo,
+                  d.tcd_calle as cont_calle, d.tcd_numero as cont_numero, d.tcd_latitud as cont_lat, d.tcd_longitud as cont_lng
+                  FROM " . $this->table_name . " o
+                  JOIN " . $this->table_name_parent . " r ON o.oirs_registro_tramite = r.rgt_id
+                  LEFT JOIN trd_oirs_tematicas t ON o.oirs_tematica = t.tem_id
+                  LEFT JOIN trd_oirs_subtematicas s ON o.oirs_subtematica = s.sub_id
+                  LEFT JOIN trd_general_contribuyentes tgc ON r.rgt_contribuyente = tgc.tgc_id
+                  LEFT JOIN trd_cont_direcciones d ON tgc.tgc_id = d.tcd_contribuyente
+                  WHERE o.oirs_id = :id";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(":id", $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function search($criteria)
+    {
+        $query = "SELECT o.oirs_id 
+                  FROM " . $this->table_name . " o
+                  JOIN " . $this->table_name_parent . " r ON o.oirs_registro_tramite = r.rgt_id
+                  LEFT JOIN trd_general_contribuyentes tgc ON r.rgt_contribuyente = tgc.tgc_id
+                  WHERE 1=1";
+
+        $params = [];
+
+        if (!empty($criteria['oirs_id'])) {
+            $query .= " AND o.oirs_id = :oirs_id";
+            $params[':oirs_id'] = $criteria['oirs_id'];
+        }
+
+        if (!empty($criteria['folio'])) {
+            $query .= " AND r.rgt_id_publica LIKE :folio";
+            $params[':folio'] = '%' . $criteria['folio'] . '%';
+        }
+
+        if (!empty($criteria['rut'])) {
+            $query .= " AND tgc.tgc_rut = :rut";
+            $params[':rut'] = $criteria['rut'];
+        }
+
+        $query .= " ORDER BY o.oirs_id DESC LIMIT 10"; // Limit results
+
+        $stmt = $this->conn->prepare($query);
+        foreach ($params as $key => $val) {
+            $stmt->bindValue($key, $val);
+        }
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

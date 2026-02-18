@@ -28,7 +28,13 @@ switch ($data['ACCION']) {
         echo json_encode($response);
         break;
 
+    case 'CONSULTA_ID':
+        $response = $controller->getById($data['id'] ?? null);
+        echo json_encode($response);
+        break;
+
     case 'CREAR':
+        $data = json_decode(file_get_contents("php://input"), true); // Re-decode to ensure consistency if needed, or just use $data
         $response = $controller->create($data);
 
         // Audit log (SystemLog)
@@ -58,6 +64,11 @@ switch ($data['ACCION']) {
             ]);
         }
 
+        echo json_encode($response);
+        break;
+
+    case 'BUSCAR':
+        $response = $controller->search($data);
         echo json_encode($response);
         break;
 

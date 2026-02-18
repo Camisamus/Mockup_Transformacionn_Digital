@@ -77,14 +77,89 @@ class OirsSolicitudController
             ]);
         }
 
+        // DETERMINAR ESTADO Y REQUERIMIENTO TÉCNICO
+        $tieneRespuesta = !empty($data['oirs_respuesta']);
+        $data['oirs_estado'] = $tieneRespuesta ? 1 : 0;
+
         // 3. Crear OIRS
         $data['rgt_contribuyente'] = $contId;
-        return $this->oirsModel->create($data);
+        $result = $this->oirsModel->create($data);
+
+        // 4. SIEMPRE crear registro de gestión
+        if ($result['status'] === 'success') {
+            $gestController = new \App\Controllers\OIRS_GestionController($this->db);
+            $gestController->create([
+                'oig_solicitud' => $result['id'],
+                'oig_respuesta_preliminar' => $data['oirs_respuesta'] ?? null,
+                'oig_requiere_respuesta_tecnica' => $tieneRespuesta ? 0 : 1,
+                'creador_id' => $data['rgt_creador'] ?? $_SESSION['user_id'] ?? 1
+            ]);
+        }
+
+        return $result;
     }
 
     public function getAll()
     {
         $result = $this->oirsModel->getAll();
+        return ["status" => "success", "data" => $result];
+    }
+
+    public function getById($id)
+    {
+        $oirs = $this->oirsModel->getById($id);
+        if (!$oirs) {
+            return ["status" => "error", "message" => "Solicitud no encontrada"];
+        }
+
+        // Obtener gestión
+        $gestController = new \App\Controllers\OIRS_GestionController($this->db);
+        $gestion = $gestController->getBySolicitud($id);
+        $oirs['gestion'] = $gestion['data'] ?? null;
+
+        // Obtener Historial (Bitacora)
+        if (!empty($oirs['oirs_registro_tramite'])) {
+            require_once __DIR__ . '/../Models/Bitacora.php';
+            $bitacoraModel = new \App\Models\Bitacora($this->db);
+            $oirs['historial'] = $bitacoraModel->obtenerPorTramite($oirs['oirs_registro_tramite']);
+
+            // Obtener Adjuntos (GesDoc)
+            require_once __DIR__ . '/../Models/GesDoc.php';
+            $gesDocModel = new \App\Models\GesDoc($this->db);
+            $oirs['adjuntos'] = $gesDocModel->getDocumentosByTramite($oirs['oirs_registro_tramite']);
+        } else {
+            $oirs['historial'] = [];
+            $oirs['adjuntos'] = [];
+        }
+
+        // Obtener Asignaciones (trd_oirs_asignaciones)
+        require_once __DIR__ . '/../Models/OirsAsignacion.php';
+        $asignacionModel = new \App\Models\OirsAsignacion($this->db);
+        $oirs['asignaciones'] = $asignacionModel->getBySolicitud($id);
+
+        return ["status" => "success", "data" => $oirs];
+    }
+
+    public function search($data)
+    {
+        $criteria = [];
+        if (!empty($data['id']))
+            $criteria['oirs_id'] = $data['id'];
+        if (!empty($data['folio']))
+            $criteria['folio'] = $data['folio'];
+        if (!empty($data['rut']))
+            $criteria['rut'] = $data['rut'];
+
+        if (empty($criteria)) {
+            return ["status" => "error", "message" => "Debe proporcionar al menos un criterio de búsqueda"];
+        }
+
+        $result = $this->oirsModel->search($criteria);
+
+        if (empty($result)) {
+            return ["status" => "error", "message" => "No se encontraron resultados"];
+        }
+
         return ["status" => "success", "data" => $result];
     }
 }

@@ -3,17 +3,20 @@
 namespace App\Controllers;
 
 use App\Models\GesDoc;
+use App\Models\Bitacora;
 use App\Helpers\FileEncryption;
 
 class GesDocController
 {
     private $db;
     private $gesdoc;
+    private $bitacora;
 
     public function __construct($db)
     {
         $this->db = $db;
         $this->gesdoc = new GesDoc($this->db);
+        $this->bitacora = new Bitacora($this->db);
     }
 
     /**
@@ -205,7 +208,8 @@ class GesDocController
                 // Save to database
                 $fileData = [
                     'original_name' => $file['name'],
-                    'encrypted_name' => $filename
+                    'encrypted_name' => $filename,
+                    'doc_privado' => $data['doc_privado'] ?? 0
                 ];
 
                 list($dbSuccess, $docId, $versionId, $dbError) = $this->gesdoc->saveFileToDatabase(
@@ -236,6 +240,19 @@ class GesDocController
                     ];
                 } else {
                     $errors[] = "Error al guardar en base de datos " . $file['name'] . ": " . $dbError;
+                }
+            }
+
+            // Log uploads to Bitacora
+            if (count($uploadedFiles) > 0) {
+                foreach ($uploadedFiles as $upFile) {
+                    try {
+                        $tipo = ($data['doc_privado'] ?? 0) == 1 ? "Interno" : "Público";
+                        $msg = "Carga de documento $tipo: " . $upFile['original_name'];
+                        $this->bitacora->registrar($tramiteId, $msg, $userId);
+                    } catch (\Exception $e) {
+                        error_log("Error logging to Bitacora: " . $e->getMessage());
+                    }
                 }
             }
 
