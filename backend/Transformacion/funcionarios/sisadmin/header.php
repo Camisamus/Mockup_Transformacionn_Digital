@@ -11,6 +11,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="<?php echo $pathPrefix; ?>recursos/js/layout_manager.js"></script>
+    <script src="<?php echo $pathPrefix; ?>recursos/js/helpers.js"></script>
     <!-- Additional CSS can be injected here if needed -->
 </head>
 
@@ -69,7 +70,7 @@
                         </h2>
                         <p class="text-primary font-weight-bold text-uppercase mb-0"
                             style="font-size: 9px; letter-spacing: 0.15em; margin-top: 2px; color: #006FB3 !important;">
-                            Sistema Unificado de Gestión Municipal de Cuidados</p>
+                            Sistema Unificado de Gestión Municipal</p>
                     </div>
                 </div>
                 <!-- Notifications/Widgets as per mockup -->

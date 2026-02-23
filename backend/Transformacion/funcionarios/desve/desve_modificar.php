@@ -42,7 +42,7 @@ include 'header.php';
                 </div>
                 <div class="col-12 col-md-auto">
                     <button type="button" class="btn btn-toolbar btn-dark w-100 shadow-sm"
-                        onclick="location.href='desve_listado_ingresos.php'">
+                        onclick="location.href='index.php.php'">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="3" y="3" width="7" height="7"></rect>
@@ -104,12 +104,21 @@ include 'header.php';
                             </div>
 
                             <div class="col-md-6">
-                                <label for="OrigenSolicitud" class="form-label small fw-bold">Origen de
+                                <label for="OrigenSolicitudDisplay" class="form-label small fw-bold">Origen de
                                     Solicitud</label>
                                 <div class="input-group input-group-sm">
-                                    <select class="form-select" id="OrigenSolicitud" required>
-                                        <option value="" selected disabled>Seleccione organización...</option>
-                                    </select>
+                                    <input type="text" class="form-control" id="OrigenSolicitudDisplay" readonly
+                                        placeholder="Seleccione organización...">
+                                    <input type="hidden" id="OrigenSolicitud" required>
+                                    <button class="btn btn-outline-secondary" type="button" id="btn_buscar_origen"
+                                        onclick="abrirModalBuscarOrganizacion()">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                        </svg>
+                                    </button>
                                     <button class="btn btn-outline-secondary" type="button" id="btn_nuevo_origen">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -144,6 +153,46 @@ include 'header.php';
                             <div class="col-12">
                                 <label for="Observaciones" class="form-label small fw-bold">Observaciones</label>
                                 <textarea class="form-control form-control-sm" id="Observaciones" rows="3"></textarea>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="Geoloc" class="form-label small fw-bold">Agregar Geolocalizacion</label>
+                                <input type="checkbox" id="chk_geoloc">
+                            </div>
+
+                            <div id="geolocalizacion_area" class="col-12" style="display: none;">
+                                <div class="row g-3 px-3">
+                                    <div class="col-md-6">
+                                        <label for="Geo_dir" class="form-label small fw-bold">Dirección</label>
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" id="Geo_dir"
+                                                placeholder="Calle, número">
+                                            <button class="btn btn-outline-secondary" type="button" id="btn_buscar_geo">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="11" cy="11" r="8"></circle>
+                                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="Latitud" class="form-label small fw-bold">Latitud</label>
+                                        <input type="text" class="form-control form-control-sm" id="Latitud"
+                                            placeholder="-33.024..." readonly>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="Longitud" class="form-label small fw-bold">Longitud</label>
+                                        <input type="text" class="form-control form-control-sm" id="Longitud"
+                                            placeholder="-71.557..." readonly>
+                                    </div>
+                                    <div class="col-12 pt-2">
+                                        <div id="map_desve"
+                                            style="height: 350px; width: 100%; border-radius: 8px; border: 1px solid #dee2e6;">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -466,6 +515,89 @@ include 'header.php';
     </div>
 </div>
 
+<!-- Modal Buscar Organización -->
+<div class="modal fade" id="modalBuscarOrganizacion" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold fs-6">Buscar Organización</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <input type="text" class="form-control form-control-sm me-2" id="filtroOrganizacion"
+                        placeholder="Filtrar por nombre o RUT...">
+                    <button type="button" class="btn btn-sm btn-dark" onclick="abrirModalNuevaOrganizacion()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Nuevo
+                    </button>
+                </div>
+                <div class="table-responsive" style="max-height: 400px;">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light text-uppercase small">
+                            <tr>
+                                <th>RUT</th>
+                                <th>Nombre</th>
+                                <th>Tipo</th>
+                                <th class="text-end">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista_busqueda_org" class="small">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nueva Organización (Comunitaria) -->
+<div class="modal fade" id="modalNuevaOrganizacion" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold fs-6">Nueva Organización</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="form_nueva_organizacion">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label for="orgc_rut" class="form-label small fw-bold">RUT</label>
+                            <input type="text" class="form-control form-control-sm" id="orgc_rut"
+                                placeholder="12.345.678-9">
+                        </div>
+                        <div class="col-12">
+                            <label for="orgc_nombre" class="form-label small fw-bold">Nombre <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm" id="orgc_nombre" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="orgc_codigo" class="form-label small fw-bold">Código</label>
+                            <input type="text" class="form-control form-control-sm" id="orgc_codigo">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="orgc_rpj" class="form-label small fw-bold">RPJ</label>
+                            <input type="text" class="form-control form-control-sm" id="orgc_rpj">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 bg-light">
+                <button type="button" class="btn btn-link text-muted text-decoration-none small"
+                    data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-dark btn-sm px-4"
+                    onclick="guardarNuevaOrganizacion()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal Reingreso -->
 <div class="modal fade" id="modalReingreso" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -503,9 +635,17 @@ include 'header.php';
 <script src="https://unpkg.com/feather-icons"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    feather.replace();
+    if (window.feather) feather.replace();
 </script>
 
 <script src="../../recursos/js/funcionarios/desve/desve_modificar.js"></script>
+
+<?php
+use App\Config\AppConfig;
+$googleMapsKey = AppConfig::getGoogleMapsKey();
+?>
+<script
+    src="https://maps.googleapis.com/maps/api/js?key=<?php echo $googleMapsKey; ?>&libraries=places&callback=initMap"
+    async defer></script>
 
 <?php include '../../api/footer.php'; ?>

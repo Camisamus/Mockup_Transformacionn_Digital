@@ -49,8 +49,9 @@ $permissions = $auth->isAuthenticated(); // This checks session and token
 if ($permissions === false) {
     // Redirect to login
     $target = $pathPrefix . 'index.php';
-    // If we are already at index.php, do nothing (prevent loop if index.php uses this)
-    if (basename($currentScriptPath) !== 'index.php') {
+    // If we are already at the ROOT index.php, do nothing (prevent loop)
+    // We know we are at root if pathPrefix is ./
+    if (basename($currentScriptPath) !== 'index.php' || $pathPrefix !== './') {
         header("Location: $target");
         exit;
     }
@@ -63,6 +64,7 @@ $allowed = false;
 // Always allow dashboard and bandeja, and common action pages which are often accessed via links
 $actionPages = [
     'dashboard.php',
+    'test.php',
     'index.php',
     'bandeja_historial.php',
     'index.php',

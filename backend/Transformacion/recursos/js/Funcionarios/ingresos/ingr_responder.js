@@ -136,7 +136,7 @@ function validarAccesoYRenderizarAcciones(data, userId) {
             allowEscapeKey: false,
             confirmButtonText: 'Volver a Bandeja'
         }).then(() => {
-            window.location.href = 'ingr_bandeja.php';
+            window.location.href = 'index.php';
         });
         return;
     }
@@ -552,7 +552,7 @@ async function checkAndRequestID() {
     });
 
     if (!formValues) {
-        window.location.href = 'ingr_bandeja.php';
+        window.location.href = 'index.php';
         return;
     }
 

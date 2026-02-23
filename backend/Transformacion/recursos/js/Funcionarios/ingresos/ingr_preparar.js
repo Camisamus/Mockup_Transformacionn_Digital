@@ -515,7 +515,7 @@ async function checkAndRequestID() {
     });
 
     if (!formValues) {
-        window.location.href = 'ingr_bandeja.php';
+        window.location.href = 'index.php';
         return;
     }
 

@@ -188,7 +188,7 @@ INSERT INTO `trd_acceso_roles` VALUES
 ('3.2.2','Consulta Masiva de Postulaciones','paginas/postulaciones_consulta_masiva.html',NULL,0,'2026-01-30 13:37:13','2026-01-30 13:37:13'),
 ('4','DESVE',NULL,'categoria',0,'2026-01-30 13:45:50','2026-01-30 15:44:42'),
 ('4.1','Nuevo Ingreso ','paginas/desve_nuevo.html','Pagina',0,'2026-01-30 13:45:50','2026-01-30 15:44:42'),
-('4.2','Listado ','paginas/desve_listado_ingresos.html','Pagina',0,'2026-01-30 13:45:50','2026-01-30 15:44:42'),
+('4.2','Listado ','paginas/index.php.html','Pagina',0,'2026-01-30 13:45:50','2026-01-30 15:44:42'),
 ('4.3','Historial ','paginas/desve_historial.html','Pagina',0,'2026-01-30 13:45:50','2026-01-30 15:44:42'),
 ('4.4','Edicion ','paginas/desve_modificar.html','Pagina',0,'2026-01-30 13:45:50','2026-01-30 15:44:42'),
 ('4.5','Responder ','paginas/desve_responder.html','Pagina',0,'2026-01-30 13:45:50','2026-01-30 15:44:42'),

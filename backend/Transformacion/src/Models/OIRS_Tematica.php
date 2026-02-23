@@ -15,7 +15,7 @@ class OIRS_Tematica
 
     public function getAll()
     {
-        $query = "SELECT tem_id, tem_nombre FROM " . $this->table_name . " ORDER BY tem_nombre ASC";
+        $query = "SELECT tem_id, tem_nombre FROM " . $this->table_name . " WHERE tem_borrado = 0 ORDER BY tem_nombre ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -23,7 +23,7 @@ class OIRS_Tematica
 
     public function getById($id)
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE tem_id = ? LIMIT 0,1";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE tem_id = ? AND tem_borrado = 0 LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $id);
         $stmt->execute();
@@ -59,7 +59,7 @@ class OIRS_Tematica
 
     public function delete($id)
     {
-        $query = "DELETE FROM " . $this->table_name . " WHERE tem_id = :tem_id";
+        $query = "UPDATE " . $this->table_name . " SET tem_borrado = 1 WHERE tem_id = :tem_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":tem_id", $id);
 

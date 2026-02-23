@@ -24,7 +24,8 @@ class ContribuyenteDireccion
             tcd_casa=:tcd_casa,
             tcd_aclaratoria=:tcd_aclaratoria,
             tcd_latitud=:tcd_latitud,
-            tcd_longitud=:tcd_longitud";
+            tcd_longitud=:tcd_longitud,
+            tcd_direccion_completa=:tcd_direccion_completa";
 
         $stmt = $this->conn->prepare($query);
 
@@ -37,6 +38,19 @@ class ContribuyenteDireccion
         $stmt->bindValue(":tcd_aclaratoria", $data['tcd_aclaratoria'] ?? null);
         $stmt->bindValue(":tcd_latitud", $data['tcd_latitud'] ?? null);
         $stmt->bindValue(":tcd_longitud", $data['tcd_longitud'] ?? null);
+
+        // Build full address
+        $full = ($data['tcd_calle'] ?? '');
+        if (!empty($data['tcd_numero']))
+            $full .= " " . $data['tcd_numero'];
+        if (!empty($data['tcd_casa']))
+            $full .= " Casa " . $data['tcd_casa'];
+        if (!empty($data['tcd_departamento']))
+            $full .= " Depto " . $data['tcd_departamento'];
+        if (!empty($data['tcd_aclaratoria']))
+            $full .= " (" . $data['tcd_aclaratoria'] . ")";
+
+        $stmt->bindValue(":tcd_direccion_completa", trim($full));
 
         if ($stmt->execute()) {
             return $this->conn->lastInsertId();

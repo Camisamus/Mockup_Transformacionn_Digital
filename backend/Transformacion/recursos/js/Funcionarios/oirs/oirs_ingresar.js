@@ -6,14 +6,6 @@ let isUpdatingFromMapInc = false;
 // Lista de archivos seleccionados
 let selectedFilesOirs = [];
 
-// Helper: Formatear RUT
-function formatRut(rut) {
-    let value = rut.replace(/[.-]/g, '');
-    if (value.length < 2) return value;
-    let dv = value.slice(-1);
-    let num = value.slice(0, -1);
-    return num.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '-' + dv;
-}
 
 $('#rut_contribuyente').on('blur', function () {
     // Formatear RUT 
@@ -246,7 +238,7 @@ $(document).ready(function () {
             oirs_tipo_atencion: $('#oirs_tipo_atencion').val(),
             oirs_origen_consulta: $('#oirs_origen').val(),
             oirs_condicion: $('#oirs_condicion').val(),
-            oirs_fecha_hora: $('#oirs_fecha_reg').val() + ' ' + $('#oirs_hora_reg').val(),
+            oirs_creacion: $('#oirs_fecha_reg').val() + ' ' + $('#oirs_hora_reg').val(),
             oirs_tematica: $('#oirs_tematica').val(),
             oirs_subtematica: $('#oirs_subtematica').val(),
             oirs_calle: $('#oirs_direccion_incidente').val(),

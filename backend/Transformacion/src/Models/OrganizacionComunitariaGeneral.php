@@ -24,7 +24,8 @@ class OrganizacionComunitariaGeneral
                     UPPER(c.tgc_nombre) as tgc_nombre, UPPER(c.tgc_apellido_paterno) as tgc_apellido_paterno, UPPER(c.tgc_apellido_materno) as tgc_apellido_materno, c.tgc_rut as rep_rut
                   FROM " . $this->table_name . " oc
                   LEFT JOIN trd_general_tipos_organizacion t ON oc.orgc_tipo_organizacion = t.tor_id
-                  LEFT JOIN trd_general_contribuyentes c ON oc.ogc_rep_legal = c.tgc_id
+                  LEFT JOIN trd_general_contribuyentes c ON oc.orgc_rep_legal = c.tgc_id
+                  WHERE oc.orgc_borrado = 0
                   ORDER BY oc.orgc_nombre ASC";
 
         $stmt = $this->conn->prepare($query);
@@ -34,7 +35,7 @@ class OrganizacionComunitariaGeneral
 
     public function getById($id)
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE orgc_id = ? LIMIT 0,1";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE orgc_id = ? AND orgc_borrado = 0 LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $id);
         $stmt->execute();
@@ -107,8 +108,8 @@ class OrganizacionComunitariaGeneral
 
     public function delete($id)
     {
-        // Physical delete
-        $query = "DELETE FROM " . $this->table_name . " WHERE orgc_id = :orgc_id";
+        // Soft delete (Rule 2 implementation)
+        $query = "UPDATE " . $this->table_name . " SET orgc_borrado = 1 WHERE orgc_id = :orgc_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":orgc_id", $id);
 

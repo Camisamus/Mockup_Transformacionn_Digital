@@ -49,7 +49,7 @@ class BandejaController
         $ingresosSql = "SELECT DISTINCT
                             sol.tis_id as id, 
                             sol.tis_titulo as asunto, 
-                            sol.tis_fecha as fecha,
+                            sol.tis_creacion as fecha,
                             sol.tis_fecha_limite as fecha_limite,
                             'Ingresos' as origen,
                             sol.tis_estado as estado,
@@ -85,7 +85,7 @@ class BandejaController
                             sol.tar_id as id, 
                             sol.tar_titulo as asunto, 
                             sol.tar_detalle as detalle,
-                            sol.tar_fecha_creacion as fecha,
+                            sol.tar_creacion as fecha,
                             sol.tar_plazo as fecha_limite,
                             'TAREAS' as origen,
                             'Pendiente' as estado,
@@ -172,21 +172,21 @@ class BandejaController
         $ingresosSql = "SELECT DISTINCT
                             sol.tis_id as id, 
                             sol.tis_titulo as asunto, 
-                            sol.tis_fecha as fecha,
-                            sol.tis_fecha_limite as fecha_cierre,
-                            'Ingresos' as origen,
-                            sol.tis_estado as estado,
-                            CASE 
-                                WHEN sol.tis_responsable = :fid_owner THEN 'Responsable'
-                                WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
-                                ELSE 'Consultor' 
-                            END as rol_usuario
-                        FROM trd_ingresos_solicitudes sol
-                        LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :fid
-                        WHERE (sol.tis_responsable = :fid_owner1 OR dest.tid_destino IS NOT NULL)
-                        AND sol.tis_estado IN ('Resuelto_Favorable', 'Resuelto_NO_Favorable')
-                        AND DATE(sol.tis_fecha) >= :fecha_inicio_ingr
-                        AND DATE(sol.tis_fecha) <= :fecha_fin_ingr";
+                sol.tis_creacion as fecha,
+                sol.tis_fecha_limite as fecha_cierre,
+                'Ingresos' as origen,
+                sol.tis_estado as estado,
+                CASE 
+                    WHEN sol.tis_responsable = :fid_owner THEN 'Responsable'
+                    WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
+                    ELSE 'Consultor' 
+                END as rol_usuario
+            FROM trd_ingresos_solicitudes sol
+            LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :fid
+            WHERE (sol.tis_responsable = :fid_owner1 OR dest.tid_destino IS NOT NULL)
+            AND sol.tis_estado IN ('Resuelto_Favorable', 'Resuelto_NO_Favorable')
+            AND DATE(sol.tis_creacion) >= :fecha_inicio_ingr
+            AND DATE(sol.tis_creacion) <= :fecha_fin_ingr";
 
         $stmt2 = $this->db->prepare($ingresosSql);
         $stmt2->bindParam(':fid', $funcionarioId);
@@ -202,16 +202,16 @@ class BandejaController
                             sol.tar_id as id, 
                             sol.tar_titulo as asunto, 
                             sol.tar_detalle as detalle,
-                            sol.tar_fecha_creacion as fecha,
-                            sol.tar_plazo as fecha_cierre,
-                            'TAREAS' as origen,
-                            'Completada' as estado,
-                            'Responsable' as rol_usuario
-                        FROM trd_tareas sol
-                        WHERE sol.tar_asignado = :fid 
-                        AND sol.tar_estado = 1
-                        AND DATE(sol.tar_fecha_creacion) >= :fecha_inicio_tar
-                        AND DATE(sol.tar_fecha_creacion) <= :fecha_fin_tar";
+                sol.tar_creacion as fecha,
+                sol.tar_plazo as fecha_cierre,
+                'TAREAS' as origen,
+                'Completada' as estado,
+                'Responsable' as rol_usuario
+            FROM trd_tareas sol
+            WHERE sol.tar_asignado = :fid 
+            AND sol.tar_estado = 1
+            AND DATE(sol.tar_creacion) >= :fecha_inicio_tar
+            AND DATE(sol.tar_creacion) <= :fecha_fin_tar";
 
         $stmt3 = $this->db->prepare($tareasSql);
         $stmt3->bindParam(':fid', $funcionarioId);

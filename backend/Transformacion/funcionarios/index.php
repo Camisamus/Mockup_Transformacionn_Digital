@@ -6,49 +6,35 @@ include '../api/header.php';
 
 
 <div class="container-fluid py-4">
-    <!-- Header -->
-    <div class="main-header mb-4">
-        <div class="header-title">
-            <h2 class="fw-bold fs-4">Bandeja de Entrada</h2>
-            <p class="text-muted mb-0">Gestión centralizada de tareas y solicitudes pendientes</p>
-        </div>
-    </div>
 
     <!-- Actions Card -->
-    <div class="card shadow-sm border-0 mb-4 bg-white">
+    <div class="card shadow-sm border-0 mb-4 bg-white" style="border-radius: 10px;">
         <div class="card-body p-3">
-            <div class="row g-2 justify-content-md-end text-end">
-                <div class="col-12 col-md-auto">
-                    <button class="btn btn-toolbar btn-outline-primary w-100 shadow-sm"
-                        onclick="Swal.fire('Info', 'Funcionamiento de filtros...', 'info')">
-                        <i data-feather="filter" class="me-2"></i>
-                        Filtrar
-                    </button>
+            <!-- Header -->
+            <div class="main-header mb-4" style="display: flex; justify-content: space-between;">
+                <div class="header-title">
+                    <h2 class="fw-bold fs-4">Bienvenido <?php echo $_SESSION['nombre']; ?></h2>
+                    <p class="text-muted mb-0">Aquí puedes encontrar todas tus tareas y solicitudes pendientes</p>
                 </div>
-                <div class="col-12 col-md-auto">
-                    <button class="btn btn-toolbar btn-outline-primary w-100 shadow-sm"
-                        onclick="Swal.fire('Info', 'Exportando tareas...', 'info')">
-                        <i data-feather="download" class="me-2"></i>
-                        Exportar
-                    </button>
-                </div>
-                <div class="col-12 col-md-auto">
-                    <button class="btn btn-toolbar btn-dark w-100 shadow-sm" onclick="abrirModalCrearTarea()">
-                        <i data-feather="plus" class="me-2"></i>
-                        Nueva Tarea
-                    </button>
-                </div>
-                <div class="col-12 col-md-auto">
-                    <button class="btn btn-toolbar btn-dark w-100 shadow-sm"
-                        onclick="window.location.href = 'bandeja_historial.php'">
-                        <i data-feather="clock" class="me-2"></i>
-                        Historial
-                    </button>
+                <div class="row g-2 justify-content-md-end text-end">
+                    <div class="col-12 col-md-auto">
+                        <button class="btn btn-toolbar btn-dark w-100 shadow-sm" onclick="abrirModalCrearTarea()">
+                            <i data-feather="plus" class="me-2"></i>
+                            Nueva Tarea
+                        </button>
+                    </div>
+                    <div class="col-12 col-md-auto">
+                        <button class="btn btn-toolbar btn-dark w-100 shadow-sm"
+                            onclick="window.location.href = 'bandeja_historial.php'">
+                            <i data-feather="clock" class="me-2"></i>
+                            Historial
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
+    <div class="card shadow-sm border-0 mb-4 bg-white" style="border-radius: 10px;"></div>
     <!-- KPI Metrics (Standardized) -->
     <div class="row g-3 mb-4">
         <div class="col-md-6">

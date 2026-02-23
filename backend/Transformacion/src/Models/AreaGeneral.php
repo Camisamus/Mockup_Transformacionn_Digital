@@ -15,7 +15,7 @@ class AreaGeneral
 
     public function getAll()
     {
-        $query = "SELECT * FROM " . $this->table_name . " ORDER BY tga_nombre ASC";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE tga_borrado = 0 ORDER BY tga_nombre ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -23,7 +23,7 @@ class AreaGeneral
 
     public function getById($id)
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE tga_id = ? LIMIT 0,1";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE tga_id = ? AND tga_borrado = 0 LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $id);
         $stmt->execute();
@@ -68,14 +68,9 @@ class AreaGeneral
 
     public function delete($id)
     {
-        // Physical delete as there is no 'borrado' column in the schema I found
-        $query = "DELETE FROM " . $this->table_name . " WHERE tga_id = :tga_id";
+        $query = "UPDATE " . $this->table_name . " SET tga_borrado = 1 WHERE tga_id = :tga_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":tga_id", $id);
-
-        if ($stmt->execute()) {
-            return true;
-        }
-        return false;
+        return $stmt->execute();
     }
 }

@@ -27,8 +27,8 @@ echo "Testing sumarDiasHabiles WITH Holidays...\n";
 
 // Force a test holiday
 $test_holiday = '2024-05-16'; // A Thursday
-$conn->exec("DELETE FROM sup_feriados WHERE fer_fecha = '$test_holiday'");
-$conn->exec("INSERT INTO sup_feriados (fer_fecha, fer_motivo, fer_tipo) VALUES ('$test_holiday', 'Test Holiday skip', 'Civil')");
+$conn->exec("DELETE FROM trd_soporte_feriados WHERE fer_fecha = '$test_holiday'");
+$conn->exec("INSERT INTO trd_soporte_feriados (fer_fecha, fer_motivo, fer_tipo) VALUES ('$test_holiday', 'Test Holiday skip', 'Civil')");
 
 echo "Inserted test holiday on $test_holiday (Thursday)\n";
 
@@ -42,5 +42,5 @@ echo "Inserted test holiday on $test_holiday (Thursday)\n";
 testSumarDias('2024-05-15', 2, '2024-05-20', $conn);
 
 // Clean up
-$conn->exec("DELETE FROM sup_feriados WHERE fer_fecha = '$test_holiday' AND fer_motivo = 'Test Holiday skip'");
+$conn->exec("DELETE FROM trd_soporte_feriados WHERE fer_fecha = '$test_holiday' AND fer_motivo = 'Test Holiday skip'");
 echo "Cleaned up test holiday.\n";

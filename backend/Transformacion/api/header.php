@@ -78,7 +78,7 @@
                         </h2>
                         <p class="text-primary font-weight-bold text-uppercase mb-0"
                             style="font-size: 9px; letter-spacing: 0.15em; margin-top: 2px; color: #006FB3 !important;">
-                            Sistema Unificado de Gestión Municipal de Cuidados</p>
+                            Sistema Unificado de Gestión Municipal</p>
                     </div>
                 </div>
                 <!-- Notifications/Widgets as per mockup -->
@@ -86,7 +86,7 @@
                     <div class="d-none d-md-flex align-items-center text-muted font-weight-bold mr-3"
                         style="font-size: 10px; gap: 0.5rem;">
                         <span class="rounded-circle bg-warning" style="width: 8px; height: 8px;"></span>
-                        <span class="text-uppercase" style="letter-spacing: 0.05em;">Solicitudes Pendientes</span>
+                        <span class="text-uppercase" style="letter-spacing: 0.05em;"></span>
                     </div>
                     <button class="btn btn-light btn-sm rounded-circle p-2 border-0 shadow-none position-relative">
                         <?php echo getIcon('bell', 'text-muted'); ?>

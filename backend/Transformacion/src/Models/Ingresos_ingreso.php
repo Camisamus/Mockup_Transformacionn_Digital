@@ -13,7 +13,7 @@ class Ingresos_ingreso
 {
     private $sysname = "Ingreso_ingresos";
     private $conn;
-    private $table_name_parent = "trd_general_registro_general_tramites";
+    private $table_name_parent = "trd_general_registro_general_expedientes";
     private $table_name = "trd_ingresos_solicitudes";
     private $bitacora;
     private $comentario;
@@ -45,8 +45,8 @@ class Ingresos_ingreso
                   FROM " . $this->table_name . " sol 
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
                   LEFT JOIN trd_acceso_usuarios usr ON sol.tis_responsable = usr.usr_id
-                  LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :current_user_join
-                  WHERE 1=1";
+                  LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :current_user_join AND dest.tid_borrado = 0
+                  WHERE sol.tis_borrado = 0 AND rgt.rgt_borrado = 0";
 
         // Filter Logic: Show if Responsible OR is a Destination
         if ($current_user_id) {
@@ -60,6 +60,7 @@ class Ingresos_ingreso
                         AND d2.tid_facultad = 'Visador' 
                         AND d2.tid_requeido = 1 
                         AND (d2.tid_responde IS NULL OR d2.tid_responde != 1)
+                        AND d2.tid_borrado = 0
                     )
                 )
             )";
@@ -130,12 +131,12 @@ class Ingresos_ingreso
         }
 
         foreach ($results as &$item) {
-            if (isset($item['tis_fecha']))
-                $item['tis_fecha'] = \App\Helpers\Fechas::formatearFecha($item['tis_fecha']);
+            if (isset($item['tis_creacion']))
+                $item['tis_creacion'] = \App\Helpers\Fechas::formatearFecha($item['tis_creacion']);
             if (isset($item['tis_fecha_limite']))
                 $item['tis_fecha_limite'] = \App\Helpers\Fechas::formatearFecha($item['tis_fecha_limite']);
-            if (isset($item['rgt_fecha']))
-                $item['rgt_fecha'] = \App\Helpers\Fechas::formatearFecha($item['rgt_fecha']);
+            if (isset($item['rgt_creacion']))
+                $item['rgt_creacion'] = \App\Helpers\Fechas::formatearFecha($item['rgt_creacion']);
         }
 
         return $results;
@@ -154,7 +155,7 @@ class Ingresos_ingreso
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
                   LEFT JOIN trd_acceso_usuarios usr ON sol.tis_responsable = usr.usr_id
                   LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :current_user_join
-                  WHERE sol.tis_id = :id 
+                  WHERE sol.tis_id = :id AND sol.tis_borrado = 0 AND rgt.rgt_borrado = 0
                   AND (
                     :ignore_perms = 1
                     OR sol.tis_responsable = :current_user_filter 
@@ -189,24 +190,19 @@ class Ingresos_ingreso
         $solicitud['comentarios'] = $this->comentario->getByRegistroId($solicitud['tis_registro_tramite']);
         $solicitud['enlaces'] = $this->Enlace->obtenerPorRegistroId($solicitud['tis_registro_tramite']);
 
-        // REGLA: Solo Responsables y Consultores ven bitácora
-        $rol = $solicitud['rol_usuario'] ?? 'Consultor';
-        if ($rol === 'Responsable' || $rol === 'Consultor') {
-            $solicitud['bitacora'] = $this->bitacora->obtenerPorTramite($solicitud['tis_registro_tramite']);
-        } else {
-            $solicitud['bitacora'] = []; // No enviar info sensible
+        // REMOVED REGLA: Relaxed visibility so all authorized users see bitacora
+        if ($current_user_id) {
+            $this->bitacora->registrar($solicitud['tis_registro_tramite'], "Consulta detalles de solicitud", $current_user_id);
         }
+        $solicitud['bitacora'] = $this->bitacora->obtenerPorTramite($solicitud['tis_registro_tramite']);
 
         if (!class_exists('App\Helpers\Fechas')) {
             require_once __DIR__ . '/../Helpers/Fechas.php';
         }
 
-        if (isset($solicitud['tis_fecha']))
-            $solicitud['tis_fecha'] = \App\Helpers\Fechas::formatearFecha($solicitud['tis_fecha']);
+        // Stop formatting tis_creacion/rgt_creacion to keep time info for the frontend
         if (isset($solicitud['tis_fecha_limite']))
             $solicitud['tis_fecha_limite'] = \App\Helpers\Fechas::formatearFecha($solicitud['tis_fecha_limite']);
-        if (isset($solicitud['rgt_fecha']))
-            $solicitud['rgt_fecha'] = \App\Helpers\Fechas::formatearFecha($solicitud['rgt_fecha']);
 
         $solicitud['multiancestro'] = $this->Multiancestro->obtenerAbolFamiliar($solicitud['tis_registro_tramite']);
         return $solicitud;
@@ -217,7 +213,7 @@ class Ingresos_ingreso
         $query = "SELECT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido,
                   sol.tis_fecha_limite,
                   CASE 
-                    WHEN sol.tis_responsable = :current_user THEN 'Propietario'
+                    WHEN sol.tis_responsable = :current_user THEN 'Responsable'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
                     ELSE 'Consultor' 
                   END as rol_usuario
@@ -225,7 +221,7 @@ class Ingresos_ingreso
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
                   LEFT JOIN trd_acceso_usuarios usr ON sol.tis_responsable = usr.usr_id
                   LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :current_user_join
-                  WHERE rgt.rgt_id = :rgtId 
+                  WHERE rgt.rgt_id = :rgtId AND sol.tis_borrado = 0 AND rgt.rgt_borrado = 0
                   AND (
                     sol.tis_responsable = :current_user_filter 
                     OR (
@@ -258,24 +254,19 @@ class Ingresos_ingreso
         $solicitud['comentarios'] = $this->comentario->getByRegistroId($solicitud['tis_registro_tramite']);
         $solicitud['enlaces'] = $this->Enlace->obtenerPorRegistroId($solicitud['tis_registro_tramite']);
 
-        // REGLA: Solo Responsables y Consultores ven bitácora
-        $rol = $solicitud['rol_usuario'] ?? 'Consultor';
-        if ($rol === 'Responsable' || $rol === 'Consultor') {
-            $solicitud['bitacora'] = $this->bitacora->obtenerPorTramite($solicitud['tis_registro_tramite']);
-        } else {
-            $solicitud['bitacora'] = []; // No enviar info sensible
+        // REMOVED REGLA: Relaxed visibility so all authorized users see bitacora
+        if ($current_user_id) {
+            $this->bitacora->registrar($solicitud['tis_registro_tramite'], "Consulta detalles de solicitud", $current_user_id);
         }
+        $solicitud['bitacora'] = $this->bitacora->obtenerPorTramite($solicitud['tis_registro_tramite']);
 
         if (!class_exists('App\Helpers\Fechas')) {
             require_once __DIR__ . '/../Helpers/Fechas.php';
         }
 
-        if (isset($solicitud['tis_fecha']))
-            $solicitud['tis_fecha'] = \App\Helpers\Fechas::formatearFecha($solicitud['tis_fecha']);
+        // Stop formatting tis_creacion/rgt_creacion to keep time info for the frontend
         if (isset($solicitud['tis_fecha_limite']))
             $solicitud['tis_fecha_limite'] = \App\Helpers\Fechas::formatearFecha($solicitud['tis_fecha_limite']);
-        if (isset($solicitud['rgt_fecha']))
-            $solicitud['rgt_fecha'] = \App\Helpers\Fechas::formatearFecha($solicitud['rgt_fecha']);
 
         $solicitud['multiancestro'] = $this->Multiancestro->obtenerAbolFamiliar($solicitud['tis_registro_tramite']);
         return $solicitud;
@@ -330,7 +321,7 @@ class Ingresos_ingreso
                 tis_estado = :tis_estado,
                 tis_responsable = :tis_responsable,
                 tis_respuesta = :tis_respuesta,
-                tis_fecha = :tis_fecha,
+                tis_creacion = :tis_creacion,
                 tis_fecha_limite = :tis_fecha_limite,
                 tis_registro_tramite = :tis_registro_tramite";
             //echo ($query);
@@ -342,7 +333,7 @@ class Ingresos_ingreso
             $stmt->bindValue(":tis_estado", $data['tis_estado'] ?? 'Ingresado');
             $stmt->bindValue(":tis_responsable", $creador_id);
             $stmt->bindValue(":tis_respuesta", $data['tis_respuesta'] ?? null);
-            $stmt->bindValue(":tis_fecha", $data['tis_fecha'] ?? date('Y-m-d'));
+            $stmt->bindValue(":tis_creacion", $data['tis_creacion'] ?? date('Y-m-d'));
             $stmt->bindValue(":tis_fecha_limite", $data['tis_fecha_limite']);
             $stmt->bindValue(":tis_registro_tramite", $rgt_id);
 
@@ -445,7 +436,7 @@ class Ingresos_ingreso
                     tis_estado = :tis_estado,
                     tis_responsable = :tis_responsable,
                     tis_respuesta = :tis_respuesta,
-                    tis_fecha = :tis_fecha,
+                    tis_creacion = :tis_creacion,
                     tis_fecha_limite = :tis_fecha_limite
                     WHERE tis_id = :id";
 
@@ -457,7 +448,7 @@ class Ingresos_ingreso
             $stmt->bindValue(":tis_estado", $data['tis_estado'] ?? $current['tis_estado']);
             $stmt->bindValue(":tis_responsable", $data['tis_responsable'] ?? $current['tis_responsable']);
             $stmt->bindValue(":tis_respuesta", $data['tis_respuesta'] ?? $current['tis_respuesta']);
-            $stmt->bindValue(":tis_fecha", $data['tis_fecha'] ?? $current['tis_fecha']);
+            $stmt->bindValue(":tis_creacion", $data['tis_creacion'] ?? $current['tis_creacion']);
             $stmt->bindValue(":tis_fecha_limite", $data['tis_fecha_limite'] ?? $current['tis_fecha_limite']);
             $stmt->bindValue(":id", $id);
 
@@ -566,8 +557,7 @@ class Ingresos_ingreso
 
     public function delete($id)
     {
-        // Physical delete or use an actual existing column for logical delete
-        $query = "DELETE FROM " . $this->table_name . " WHERE tis_id = ?";
+        $query = "UPDATE " . $this->table_name . " SET tis_borrado = 1 WHERE tis_id = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $id);
         return $stmt->execute();
@@ -597,7 +587,7 @@ class Ingresos_ingreso
                   FROM " . $this->table_name . " sol 
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
                   LEFT JOIN trd_acceso_usuarios usr ON sol.tis_responsable = usr.usr_id
-                  WHERE rgt.rgt_id IN ($placeholders)";
+                  WHERE rgt.rgt_id IN ($placeholders) AND sol.tis_borrado = 0 AND rgt.rgt_borrado = 0";
 
         $stmt = $this->conn->prepare($query);
         $stmt->execute($rgt_ids);
@@ -636,14 +626,16 @@ class Ingresos_ingreso
             $stmt_dest->bindValue(':respuesta', $respuesta_texto);
             $stmt_dest->execute();
 
-            // 2. Si hay respuesta de texto, actualizar en la solicitud
-            //if ($respuesta_texto !== null) {
-            //    $query_resp = "UPDATE " . $this->table_name . " SET tis_respuesta = :respuesta WHERE tis_id = :id";
-            //    $stmt_resp = $this->conn->prepare($query_resp);
-            //    $stmt_resp->bindValue(':respuesta', $respuesta_texto);
-            //    $stmt_resp->bindValue(':id', $id);
-            //    $stmt_resp->execute();
-            //}
+            // 2. Obtener el RGT ID para la bitácora antes de proceder
+            $query_rgt = "SELECT tis_registro_tramite FROM " . $this->table_name . " WHERE tis_id = :id";
+            $stmt_rgt = $this->conn->prepare($query_rgt);
+            $stmt_rgt->bindValue(':id', $id);
+            $stmt_rgt->execute();
+            $rgt_id = $stmt_rgt->fetchColumn();
+
+            if ($rgt_id) {
+                $this->bitacora->registrar($rgt_id, "Funcionario responde a solicitud ($estado_resolucion)");
+            }
 
             // 3. Determinar el nuevo estado de la solicitud
             $nuevo_estado = null;
@@ -657,10 +649,7 @@ class Ingresos_ingreso
                 $pendientes_requeridos = 0;
 
                 foreach ($destinos as $d) {
-                    // Notar que tid_requeido tiene una errata en el nombre (según SQL anterior era tid_requeido o similar)
-                    // Verificamos si es requerido (1) y si NO ha respondido con éxito (tid_responde !== 1)
                     $es_requerido = (isset($d['tid_requeido']) && $d['tid_requeido'] == 1) || (isset($d['tid_requerido']) && $d['tid_requerido'] == 1);
-
                     if ($es_requerido && (is_null($d['tid_responde']) || $d['tid_responde'] != 1)) {
                         $pendientes_requeridos++;
                     }
@@ -673,7 +662,9 @@ class Ingresos_ingreso
 
             if ($nuevo_estado) {
                 $this->updateStatus($id, $nuevo_estado);
-                $this->bitacora->registrar($id, "Solicitud finalizada con estado: $nuevo_estado");
+                if ($rgt_id) {
+                    $this->bitacora->registrar($rgt_id, "Solicitud finalizada con estado: $nuevo_estado");
+                }
             }
 
             $this->conn->commit();

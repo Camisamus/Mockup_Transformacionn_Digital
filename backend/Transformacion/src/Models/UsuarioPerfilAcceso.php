@@ -6,7 +6,7 @@ use PDO;
 class UsuarioPerfilAcceso
 {
     private $conn;
-    private $table_name = "trd_acceso_usuarios_perfiles";
+    private $table_name = "trd_acceso_rol_usuario";
 
     public function __construct($db)
     {
@@ -18,11 +18,12 @@ class UsuarioPerfilAcceso
         $query = "SELECT up.*, u.usr_nombre as usuario_nombre, u.usr_apellido as usuario_apellido, 
                          p.prf_nombre as perfil_nombre, 
                          s.usr_nombre as subrogante_nombre, s.usr_apellido as subrogante_apellido
-                  FROM " . $this->table_name . " up
-                  JOIN trd_acceso_usuarios u ON up.usp_usuario_id = u.usr_id
-                  JOIN trd_acceso_perfiles p ON up.usp_perfil_id = p.prf_id
-                  LEFT JOIN trd_acceso_usuarios s ON up.usp_usuario_subrogante_id = s.usr_id
-                  ORDER BY u.usr_apellido ASC, p.prf_nombre ASC";
+                   FROM " . $this->table_name . " up
+                   JOIN trd_acceso_usuarios u ON up.usp_usuario_id = u.usr_id
+                   JOIN trd_acceso_roles p ON up.usp_perfil_id = p.prf_id
+                   LEFT JOIN trd_acceso_usuarios s ON up.usp_usuario_subrogante_id = s.usr_id
+                   WHERE up.usp_borrado = 0
+                   ORDER BY u.usr_apellido ASC, p.prf_nombre ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -75,7 +76,7 @@ class UsuarioPerfilAcceso
 
     public function delete($usuario_id, $perfil_id)
     {
-        $query = "DELETE FROM " . $this->table_name . " 
+        $query = "UPDATE " . $this->table_name . " SET usp_borrado = 1
                   WHERE usp_usuario_id = :usp_usuario_id AND usp_perfil_id = :usp_perfil_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":usp_usuario_id", $usuario_id);

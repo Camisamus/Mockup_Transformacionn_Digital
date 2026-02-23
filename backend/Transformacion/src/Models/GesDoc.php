@@ -304,7 +304,7 @@ class GesDoc
     {
         try {
             $sql = "INSERT INTO trd_general_documento_adjunto 
-                    (doc_tramite_registrado, doc_fecha, doc_version_actual) 
+                    (doc_tramite_registrado, doc_creacion, doc_version_actual) 
                     VALUES (:tramite_id, NOW(), 0)";
 
             $stmt = $this->conn->prepare($sql);
@@ -337,7 +337,7 @@ class GesDoc
         try {
             $sql = "INSERT INTO trd_general_documento_adjunto_versiones 
                     (docv_doc_id, doc_fecha, doc_enlace_documento, doc_nombre_documento, 
-                     `doc-responsable`, doc_docdigital, doc_partner, doc_privado) 
+                     `docv_responsable`, doc_docdigital, doc_partner, doc_privado) 
                     VALUES (:doc_id, NOW(), :enlace, :nombre, :responsable, :docdigital, :partner, :privado)";
 
             $stmt = $this->conn->prepare($sql);
@@ -487,7 +487,7 @@ class GesDoc
     {
         try {
             $sql = "SELECT docv_id, docv_doc_id, doc_fecha, doc_enlace_documento, 
-                           doc_nombre_documento, `doc-responsable`, doc_docdigital, doc_partner
+                           doc_nombre_documento, `docv_responsable`, doc_docdigital, doc_partner
                     FROM trd_general_documento_adjunto_versiones
                     WHERE docv_id = :version_id";
 
@@ -512,7 +512,7 @@ class GesDoc
     {
         try {
             $sql = "SELECT docv_id, docv_doc_id, doc_fecha, doc_enlace_documento, 
-                           doc_nombre_documento, `doc-responsable`, doc_docdigital, doc_partner, doc_privado
+                           doc_nombre_documento, `docv_responsable`, doc_docdigital, doc_partner, doc_privado
                     FROM trd_general_documento_adjunto_versiones
                     WHERE docv_doc_id = :doc_id
                     ORDER BY doc_fecha DESC
@@ -609,7 +609,7 @@ class GesDoc
     {
         try {
             $sql = "SELECT docv_id, docv_doc_id, doc_fecha, doc_enlace_documento, 
-                           doc_nombre_documento, `doc-responsable`, doc_docdigital, doc_partner, doc_privado
+                           doc_nombre_documento, `docv_responsable`, doc_docdigital, doc_partner, doc_privado
                     FROM trd_general_documento_adjunto_versiones
                     WHERE docv_doc_id = :doc_id
                     ORDER BY doc_fecha DESC";
@@ -727,13 +727,13 @@ class GesDoc
             $sql = "SELECT 
                         da.doc_id,
                         da.doc_tramite_registrado,
-                        da.doc_fecha,
+                        da.doc_creacion,
                         da.doc_version_actual,
                         dv.docv_id,
                         dv.doc_fecha as version_fecha,
                         dv.doc_enlace_documento,
                         dv.doc_nombre_documento,
-                        dv.`doc-responsable`,
+                        dv.`docv_responsable`,
                         dv.doc_docdigital,
                         dv.doc_partner,
                         dv.doc_privado
@@ -741,7 +741,7 @@ class GesDoc
                     LEFT JOIN trd_general_documento_adjunto_versiones dv 
                         ON da.doc_version_actual = dv.docv_id
                     WHERE da.doc_tramite_registrado = :tramite_id
-                    ORDER BY da.doc_fecha DESC";
+                    ORDER BY da.doc_creacion DESC";
 
             $stmt = $this->conn->prepare($sql);
             $stmt->bindParam(':tramite_id', $tramiteId, PDO::PARAM_INT);

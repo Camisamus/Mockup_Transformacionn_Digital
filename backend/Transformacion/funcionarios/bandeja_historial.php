@@ -25,15 +25,8 @@ include '../api/header.php';
                     </button>
                 </div>
                 <div class="col-12 col-md-auto">
-                    <button class="btn btn-toolbar btn-outline-primary w-100 shadow-sm"
-                        onclick="Swal.fire('Info', 'Exportando historial...', 'info')">
-                        <i data-feather="download" class="me-2"></i>
-                        Exportar
-                    </button>
-                </div>
-                <div class="col-12 col-md-auto">
                     <button class="btn btn-toolbar btn-dark w-100 shadow-sm"
-                        onclick="window.location.href = 'bandeja.php'">
+                        onclick="window.location.href = 'index.php'">
                         <i data-feather="arrow-left" class="me-2"></i>
                         Volver a Bandeja
                     </button>

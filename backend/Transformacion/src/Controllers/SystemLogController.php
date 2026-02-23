@@ -58,7 +58,7 @@ class SystemLogController
         $responseData = array_map(function ($log) {
             return [
                 'id' => $log['log_id'],
-                'fecha' => $log['log_fecha'],
+                'fecha' => $log['log_creacion'],
                 'tipo' => strtoupper($log['log_tipo']), // Ensure uppercase for badges
                 'modulo' => $log['log_modulo'],
                 'usuario' => $log['usr_nombre'] ? ($log['usr_nombre'] . ' ' . $log['usr_apellido']) : 'Sistema/Desconocido',
@@ -90,7 +90,7 @@ class SystemLogController
 
         $this->jsonResponse([
             'id' => $log['log_id'],
-            'fecha' => $log['log_fecha'],
+            'fecha' => $log['log_creacion'],
             'tipo' => ucfirst($log['log_tipo']),
             'severidad' => $log['log_severidad'],
             'modulo' => $log['log_modulo'],

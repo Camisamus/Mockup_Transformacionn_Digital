@@ -1,50 +1,56 @@
 <?php
-$pageTitle = "Bandeja DESVE";
+$pageTitle = "DESVE";
 require_once '../../api/auth_check.php';
 include 'header.php';
 ?>
 
 <div class="container-fluid py-4">
-    <!-- Main Header -->
-    <div class="main-header mb-4">
-        <div class="header-title">
-            <h2 class="fw-bold fs-4">Listado DESVE</h2>
-            <p class="text-muted mb-0">Visualiza y gestiona todas las solicitudes DESVE</p>
-        </div>
-        <div class="toolbar d-flex gap-2">
-            <button type="button" class="btn btn-toolbar" id="btn_exportar_excel">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <polyline points="10 9 9 9 8 9"></polyline>
-                </svg>
-                Excel
-            </button>
-            <button type="button" class="btn btn-toolbar" id="btn_exportar_pdf">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <polyline points="10 9 9 9 8 9"></polyline>
-                </svg>
-                PDF
-            </button>
-            <button type="button" class="btn btn-toolbar btn-dark" onclick="location.href='desve_nuevo.php'">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-                Nuevo DESVE
-            </button>
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+            <!-- Main Header -->
+            <div class="main-header mb-4">
+                <div class="header-title">
+                    <h2 class="fw-bold fs-4">Solicitudes DESVE</h2>
+                    <p class="text-muted mb-0">Aquí tienes las solicitudes que requieren tu atención. Puedes ver sus
+                        detalles y
+                        avanzar en su gestion desde la lista.</p>
+                </div>
+                <div class="header-action">
+                    <button type="button" class="btn btn-toolbar btn-dark" id="btn_exportar_excel">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        Excel
+                    </button>
+                    <button type="button" class="btn btn-toolbar btn-dark" id="btn_exportar_pdf">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        PDF
+                    </button>
+                    <button type="button" class="btn btn-toolbar btn-dark" onclick="location.href='desve_nuevo.php'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Nuevo DESVE
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
-
     <!-- Filtros de Búsqueda -->
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4" style="display: none;">

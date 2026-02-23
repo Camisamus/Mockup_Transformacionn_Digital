@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     icon: 'error',
                     confirmButtonText: 'Volver a Bandeja'
                 });
-                window.location.href = 'desve_listado_ingresos.php';
+                window.location.href = 'index.php.php';
                 return;
             }
 
@@ -344,7 +344,7 @@ async function saveResponse() {
         const result = await response.json();
         if (result.status === 'success') {
             await Swal.fire("Éxito", "Respuesta guardada correctamente.", "success");
-            window.location.href = 'desve_listado_ingresos.php';
+            window.location.href = 'index.php.php';
         } else {
             Swal.fire("Error", result.message || "Error al guardar.", "error");
         }
@@ -413,7 +413,7 @@ async function solicitarID() {
     });
 
     if (!formValues) {
-        window.location.href = 'desve_listado_ingresos.php';
+        window.location.href = 'index.php.php';
         return;
     }
 

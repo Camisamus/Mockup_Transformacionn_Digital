@@ -104,8 +104,8 @@ class AuthController
             }
         }
 
-        // Cleanup expired profiles before checking permissions
-        $cleanupSql = "DELETE FROM trd_acceso_usuarios_perfiles 
+        // Cleanup expired profiles before checking permissions (Soft Delete)
+        $cleanupSql = "UPDATE trd_acceso_rol_usuario SET usp_borrado = 1 
                        WHERE usp_usuario_id = :usuario_id 
                          AND usp_fecha_termino < CURRENT_DATE()";
         $cleanupStmt = $this->conn->prepare($cleanupSql);
@@ -119,11 +119,12 @@ class AuthController
                     r.rol_simbolo, 
                     r.rol_tipo,
                     r.rol_modulo
-                FROM trd_acceso_roles r
-                JOIN trd_acceso_perfiles_roles pr ON r.rol_id = pr.pfr_rol_id
-                JOIN trd_acceso_usuarios_perfiles up ON pr.pfr_perfil_id = up.usp_perfil_id
+                FROM trd_acceso_permisos r
+                JOIN trd_acceso_permiso_rol pr ON r.rol_id = pr.pfr_rol_id
+                JOIN trd_acceso_rol_usuario up ON pr.pfr_perfil_id = up.usp_perfil_id
                 WHERE up.usp_usuario_id = :usuario_id 
                   AND r.rol_borrado = 0
+                  AND up.usp_borrado = 0
                   AND (up.usp_fecha_inicio IS NULL OR up.usp_fecha_inicio <= CURRENT_DATE())
                   AND (up.usp_fecha_termino IS NULL OR up.usp_fecha_termino >= CURRENT_DATE())
                   order by r.rol_id ASC";

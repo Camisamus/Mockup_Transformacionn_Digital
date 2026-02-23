@@ -57,4 +57,11 @@ class Organizacion
         }
         return false;
     }
+    public function delete($id)
+    {
+        $query = "UPDATE " . $this->table_name . " SET org_borrado = 1 WHERE org_id = :org_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":org_id", $id);
+        return $stmt->execute();
+    }
 }

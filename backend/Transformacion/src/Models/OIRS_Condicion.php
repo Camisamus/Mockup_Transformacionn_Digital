@@ -15,7 +15,7 @@ class OIRS_Condicion
 
     public function getAll()
     {
-        $query = "SELECT con_id, con_nombre FROM " . $this->table_name . " ORDER BY con_nombre ASC";
+        $query = "SELECT con_id, con_nombre FROM " . $this->table_name . " WHERE con_borrado = 0 ORDER BY con_id ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -23,7 +23,7 @@ class OIRS_Condicion
 
     public function getById($id)
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE con_id = ? LIMIT 0,1";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE con_id = ? AND con_borrado = 0 LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $id);
         $stmt->execute();
@@ -59,7 +59,7 @@ class OIRS_Condicion
 
     public function delete($id)
     {
-        $query = "DELETE FROM " . $this->table_name . " WHERE con_id = :con_id";
+        $query = "UPDATE " . $this->table_name . " SET con_borrado = 1 WHERE con_id = :con_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":con_id", $id);
 

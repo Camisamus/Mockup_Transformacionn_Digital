@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use PDO;
+use App\Helpers\RUT;
 
 class ContribuyenteGeneral
 {
@@ -15,7 +16,10 @@ class ContribuyenteGeneral
 
     public function getAll()
     {
-        $query = "SELECT tgc_id, tgc_rut, UPPER(tgc_nombre) as tgc_nombre, UPPER(tgc_apellido_paterno) as tgc_apellido_paterno, UPPER(tgc_apellido_materno) as tgc_apellido_materno FROM " . $this->table_name . " ORDER BY tgc_nombre ASC";
+        $query = "SELECT tgc_id, tgc_rut, UPPER(tgc_nombre) as tgc_nombre, UPPER(tgc_apellido_paterno) as tgc_apellido_paterno, UPPER(tgc_apellido_materno) as tgc_apellido_materno 
+                  FROM " . $this->table_name . " 
+                  WHERE tgc_borrado = 0
+                  ORDER BY tgc_nombre ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -23,7 +27,7 @@ class ContribuyenteGeneral
 
     public function getById($id)
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE tgc_id = ? LIMIT 0,1";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE tgc_id = ? AND tgc_borrado = 0 LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $id);
         $stmt->execute();
@@ -53,7 +57,10 @@ class ContribuyenteGeneral
 
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bindValue(":tgc_rut", $data['tgc_rut'] ?? null);
+        $rut = RUT::format($data['tgc_rut'] ?? null);
+        $rep_rut = RUT::format($data['tgc_rep_rut'] ?? null);
+
+        $stmt->bindValue(":tgc_rut", $rut);
         $stmt->bindValue(":tgc_nombre", $data['tgc_nombre'] ?? null);
         $stmt->bindValue(":tgc_apellido_paterno", $data['tgc_apellido_paterno'] ?? null);
         $stmt->bindValue(":tgc_apellido_materno", $data['tgc_apellido_materno'] ?? null);
@@ -68,7 +75,7 @@ class ContribuyenteGeneral
         $stmt->bindValue(":tgc_razon_social", $data['tgc_razon_social'] ?? null);
         $stmt->bindValue(":tgc_nombre_fantasia", $data['tgc_nombre_fantasia'] ?? null);
         $stmt->bindValue(":tgc_giro", $data['tgc_giro'] ?? null);
-        $stmt->bindValue(":tgc_rep_rut", $data['tgc_rep_rut'] ?? null);
+        $stmt->bindValue(":tgc_rep_rut", $rep_rut);
         $stmt->bindValue(":tgc_rep_nombre_completo", $data['tgc_rep_nombre_completo'] ?? null);
 
         if ($stmt->execute()) {
@@ -101,8 +108,11 @@ class ContribuyenteGeneral
 
         $stmt = $this->conn->prepare($query);
 
+        $rut = RUT::format($data['tgc_rut'] ?? null);
+        $rep_rut = RUT::format($data['tgc_rep_rut'] ?? null);
+
         $stmt->bindValue(":tgc_id", $id);
-        $stmt->bindValue(":tgc_rut", $data['tgc_rut'] ?? null);
+        $stmt->bindValue(":tgc_rut", $rut);
         $stmt->bindValue(":tgc_nombre", $data['tgc_nombre'] ?? null);
         $stmt->bindValue(":tgc_apellido_paterno", $data['tgc_apellido_paterno'] ?? null);
         $stmt->bindValue(":tgc_apellido_materno", $data['tgc_apellido_materno'] ?? null);
@@ -117,7 +127,7 @@ class ContribuyenteGeneral
         $stmt->bindValue(":tgc_razon_social", $data['tgc_razon_social'] ?? null);
         $stmt->bindValue(":tgc_nombre_fantasia", $data['tgc_nombre_fantasia'] ?? null);
         $stmt->bindValue(":tgc_giro", $data['tgc_giro'] ?? null);
-        $stmt->bindValue(":tgc_rep_rut", $data['tgc_rep_rut'] ?? null);
+        $stmt->bindValue(":tgc_rep_rut", $rep_rut);
         $stmt->bindValue(":tgc_rep_nombre_completo", $data['tgc_rep_nombre_completo'] ?? null);
 
         if ($stmt->execute()) {
@@ -134,13 +144,13 @@ class ContribuyenteGeneral
                   FROM " . $this->table_name . " c
                   LEFT JOIN (
                       SELECT * FROM trd_cont_direcciones 
-                      WHERE (tcd_contribuyente, tcd_dir_creacion) IN (
-                          SELECT tcd_contribuyente, MAX(tcd_dir_creacion)
+                      WHERE (tcd_contribuyente, tcd_creacion) IN (
+                          SELECT tcd_contribuyente, MAX(tcd_creacion)
                           FROM trd_cont_direcciones
                           GROUP BY tcd_contribuyente
                       )
                   ) d ON c.tgc_id = d.tcd_contribuyente
-                  WHERE c.tgc_rut = :tgc_rut
+                  WHERE c.tgc_rut = :tgc_rut AND c.tgc_borrado = 0
                   LIMIT 0,1";
 
         $stmt = $this->conn->prepare($query);
@@ -151,7 +161,7 @@ class ContribuyenteGeneral
 
     public function getByRut($rut)
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE tgc_rut = :tgc_rut LIMIT 0,1";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE tgc_rut = :tgc_rut AND tgc_borrado = 0 LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":tgc_rut", $rut);
         $stmt->execute();
@@ -160,8 +170,8 @@ class ContribuyenteGeneral
 
     public function delete($id)
     {
-        // Physical delete as there is no 'borrado' column
-        $query = "DELETE FROM " . $this->table_name . " WHERE tgc_id = :tgc_id";
+        // Soft delete (Rule 2 implementation)
+        $query = "UPDATE " . $this->table_name . " SET tgc_borrado = 1 WHERE tgc_id = :tgc_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":tgc_id", $id);
 
@@ -170,4 +180,5 @@ class ContribuyenteGeneral
         }
         return false;
     }
+
 }

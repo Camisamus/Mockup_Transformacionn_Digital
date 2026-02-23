@@ -10,7 +10,7 @@ class OirsSolicitud
 {
     private $conn;
     private $table_name = "trd_oirs_solicitud";
-    private $table_name_parent = "trd_general_registro_general_tramites";
+    private $table_name_parent = "trd_general_registro_general_expedientes";
     private $sysname = "oirs";
     private $bitacora;
     private $GesDoc;
@@ -58,13 +58,15 @@ class OirsSolicitud
                 oirs_subtematica = :subtematica,
                 oirs_calle = :calle,
                 oirs_numero = :numero,
-                oirs_aclaratoia = :aclaratoria,
+                oirs_aclaratoria = :aclaratoria,
                 oirs_latitud = :latitud,
                 oirs_longitud = :longitud,
                 oirs_sector = :sector,
                 oirs_descripcion = :descripcion,
                 oirs_estado = :estado,
-                oirs_fecha_limite = :fecha_limite";
+                oirs_fecha_limite = :fecha_limite,
+                oirs_direccion_completa = :direccion_completa,
+                oirs_propietario = :propietario";
 
             $stmt = $this->conn->prepare($query);
 
@@ -83,6 +85,7 @@ class OirsSolicitud
             $stmt->bindValue(":sector", $data['oirs_sector'] ?? null);
             $stmt->bindValue(":descripcion", $data['oirs_descripcion']);
             $stmt->bindValue(":estado", $data['oirs_estado'] ?? 1); // 1 = Recibida
+            $stmt->bindValue(":propietario", $creador_id);
 
             // Default deadline: 15 working days
             if (empty($data['oirs_fecha_limite'])) {
@@ -92,6 +95,15 @@ class OirsSolicitud
                 $data['oirs_fecha_limite'] = \App\Helpers\Fechas::sumarDiasHabiles(date('Y-m-d'), 15, $this->conn);
             }
             $stmt->bindValue(":fecha_limite", $data['oirs_fecha_limite']);
+
+            // Build full address
+            $full = ($data['oirs_calle'] ?? '');
+            if (!empty($data['oirs_numero']))
+                $full .= " " . $data['oirs_numero'];
+            if (!empty($data['oirs_aclaratoria']))
+                $full .= " (" . $data['oirs_aclaratoria'] . ")";
+
+            $stmt->bindValue(":direccion_completa", trim($full));
 
             if ($stmt->execute()) {
                 $oirs_id = $this->conn->lastInsertId();
@@ -144,7 +156,7 @@ class OirsSolicitud
                   LEFT JOIN trd_oirs_tematicas t ON o.oirs_tematica = t.tem_id
                   LEFT JOIN trd_oirs_subtematicas s ON o.oirs_subtematica = s.sub_id
                   LEFT JOIN trd_general_contribuyentes tgc ON r.rgt_contribuyente = tgc.tgc_id
-                  WHERE 1=1";
+                  WHERE o.oirs_borrado = 0 AND r.rgt_borrado = 0";
 
         // basic filtering could go here
         $query .= " ORDER BY o.oirs_id DESC";
@@ -168,7 +180,7 @@ class OirsSolicitud
                   LEFT JOIN trd_oirs_subtematicas s ON o.oirs_subtematica = s.sub_id
                   LEFT JOIN trd_general_contribuyentes tgc ON r.rgt_contribuyente = tgc.tgc_id
                   LEFT JOIN trd_cont_direcciones d ON tgc.tgc_id = d.tcd_contribuyente
-                  WHERE o.oirs_id = :id";
+                  WHERE o.oirs_id = :id AND o.oirs_borrado = 0 AND r.rgt_borrado = 0";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(":id", $id);
@@ -182,7 +194,7 @@ class OirsSolicitud
                   FROM " . $this->table_name . " o
                   JOIN " . $this->table_name_parent . " r ON o.oirs_registro_tramite = r.rgt_id
                   LEFT JOIN trd_general_contribuyentes tgc ON r.rgt_contribuyente = tgc.tgc_id
-                  WHERE 1=1";
+                  WHERE o.oirs_borrado = 0 AND r.rgt_borrado = 0";
 
         $params = [];
 

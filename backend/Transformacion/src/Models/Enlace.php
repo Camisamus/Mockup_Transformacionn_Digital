@@ -35,7 +35,7 @@ class Enlace
         }
 
         $query = "INSERT INTO " . $this->table_name . " 
-                  (`tge_tramite`, `tge_enlace`, `tge_responsable`, `tge_fecha`) 
+                  (`tge_tramite`, `tge_enlace`, `tge_responsable`, `tge_creacion`) 
                   VALUES (:tramite_id, :tge_enlace, :tge_responsable, NOW())";
 
         $stmt = $this->conn->prepare($query);
@@ -57,8 +57,8 @@ class Enlace
         $query = "SELECT b.*, u.usr_nombre, u.usr_apellido 
                   FROM " . $this->table_name . " b
                   JOIN trd_acceso_usuarios u ON b.`tge_responsable` = u.usr_id
-                  WHERE b.tge_tramite = :tramite_id 
-                  ORDER BY b.tge_fecha ASC";
+                   WHERE b.tge_tramite = :tramite_id AND b.tge_borrado = 0
+                   ORDER BY b.tge_creacion ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':tramite_id', $tramite_id);
         $stmt->execute();
@@ -69,7 +69,7 @@ class Enlace
     {
         $query = "SELECT b.* 
                   FROM " . $this->table_name . " b
-                  WHERE b.doc_id = :id ";
+                   WHERE b.tge_id = :id AND b.tge_borrado = 0";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
@@ -79,18 +79,15 @@ class Enlace
     }
     public function borrar($id)
     {
-        $query = "DELETE FROM " . $this->table_name . " 
-                  WHERE tge_id = :id ";
+        $query = "UPDATE " . $this->table_name . " SET tge_borrado = 1 WHERE tge_id = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->execute();
     }
 
     public function borrarPorTramiteId($tramite_id)
     {
-        $query = "DELETE FROM " . $this->table_name . " WHERE tge_tramite = :tramite_id";
+        $query = "UPDATE " . $this->table_name . " SET tge_borrado = 1 WHERE tge_tramite = :tramite_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':tramite_id', $tramite_id);
         return $stmt->execute();

@@ -17,13 +17,13 @@
 /*M!100616 SET @OLD_NOTE_VERBOSITY=@@NOTE_VERBOSITY, NOTE_VERBOSITY=0 */;
 
 --
--- Table structure for table `sup_feriados`
+-- Table structure for table `trd_soporte_feriados`
 --
 
-DROP TABLE IF EXISTS `sup_feriados`;
+DROP TABLE IF EXISTS `trd_soporte_feriados`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sup_feriados` (
+CREATE TABLE `trd_soporte_feriados` (
   `fer_id` int(11) NOT NULL AUTO_INCREMENT,
   `fer_fecha` date NOT NULL,
   `fer_motivo` varchar(100) DEFAULT NULL,
@@ -34,13 +34,13 @@ CREATE TABLE `sup_feriados` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `sup_feriados`
+-- Dumping data for table `trd_soporte_feriados`
 --
 
-LOCK TABLES `sup_feriados` WRITE;
-/*!40000 ALTER TABLE `sup_feriados` DISABLE KEYS */;
+LOCK TABLES `trd_soporte_feriados` WRITE;
+/*!40000 ALTER TABLE `trd_soporte_feriados` DISABLE KEYS */;
 set autocommit=0;
-INSERT INTO `sup_feriados` VALUES
+INSERT INTO `trd_soporte_feriados` VALUES
 (1,'2026-01-01','Año Nuevo','Civil'),
 (2,'2026-04-03','Viernes Santo','Civil'),
 (3,'2026-04-04','Sábado Santo','Civil'),
@@ -56,7 +56,7 @@ INSERT INTO `sup_feriados` VALUES
 (13,'2026-11-01','Día de Todos los Santos','Civil'),
 (14,'2026-12-08','Inmaculada Concepción','Civil'),
 (15,'2026-12-25','Navidad','Civil');
-/*!40000 ALTER TABLE `sup_feriados` ENABLE KEYS */;
+/*!40000 ALTER TABLE `trd_soporte_feriados` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
 
@@ -297,7 +297,7 @@ INSERT INTO `trd_acceso_roles` VALUES
 ('1.2.4.3','OIRS - Tipos de Atención','Funcionarios/sisadmin/mantenedores/oirs/oirs_tipo_atencion.php','Pagina','user-check',0,'2026-02-16 15:03:29','2026-02-16 15:03:29'),
 ('1.2.4.4','OIRS - Condiciones Especiales','Funcionarios/sisadmin/mantenedores/oirs/oirs_condiciones.php','Pagina','award',0,'2026-02-16 15:03:29','2026-02-16 15:03:29'),
 ('10','OIRS',NULL,'categoria','command',0,'2026-02-10 16:23:11','2026-02-11 15:22:19'),
-('10.1','Bandeja OIRS','funcionarios/oirs/oirs_bandeja.php','Pagina','list',0,'2026-02-10 16:23:11','2026-02-12 14:56:08'),
+('10.1','Bandeja OIRS','funcionarios/oirs/index.php','Pagina','list',0,'2026-02-10 16:23:11','2026-02-12 14:56:08'),
 ('10.2','Ingresar OIRS','funcionarios/oirs/oirs_ingresar.php','Pagina','plus',0,'2026-02-10 16:23:11','2026-02-12 14:56:08'),
 ('10.3','Listar OIRS','funcionarios/oirs/oirs_listar.php','Pagina','map',0,'2026-02-10 16:23:11','2026-02-12 14:56:08'),
 ('10.4','Consulta OIRS','funcionarios/oirs/oirs_consulta.php','Pagina','search',0,'2026-02-10 16:23:11','2026-02-12 14:56:08'),
@@ -324,7 +324,7 @@ INSERT INTO `trd_acceso_roles` VALUES
 ('3.2.2','Consulta Masiva de Postulaciones','Funcionarios/NO_Asignadas/postulaciones_consulta_masiva.html',NULL,'menu',0,'2026-01-30 13:37:13','2026-02-11 15:16:37'),
 ('4','DESVE',NULL,'categoria','command',0,'2026-01-30 13:45:50','2026-02-11 15:22:19'),
 ('4.1','Nuevo Ingreso ','funcionarios/desve/desve_nuevo.html','Pagina','plus',0,'2026-01-30 13:45:50','2026-02-12 14:56:08'),
-('4.2','Listado ','funcionarios/desve/desve_listado_ingresos.html','Pagina','list',0,'2026-01-30 13:45:50','2026-02-12 14:56:08'),
+('4.2','Listado ','funcionarios/desve/index.php.html','Pagina','list',0,'2026-01-30 13:45:50','2026-02-12 14:56:08'),
 ('4.3','Historial ','funcionarios/desve/desve_historial.html','Pagina','archive',0,'2026-01-30 13:45:50','2026-02-12 14:56:08'),
 ('4.4','Edicion ','funcionarios/desve/desve_modificar.html','Pagina','edit',0,'2026-01-30 13:45:50','2026-02-12 14:56:08'),
 ('4.5','Responder ','funcionarios/desve/desve_responder.html','Pagina','message-square',0,'2026-01-30 13:45:50','2026-02-12 14:56:08'),

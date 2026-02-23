@@ -15,7 +15,7 @@ class OIRS_TipoAtencion
 
     public function getAll()
     {
-        $query = "SELECT tat_id, tat_nombre FROM " . $this->table_name . " ORDER BY tat_nombre ASC";
+        $query = "SELECT tat_id, tat_nombre FROM " . $this->table_name . " WHERE tat_borrado = 0 ORDER BY tat_nombre ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -23,7 +23,7 @@ class OIRS_TipoAtencion
 
     public function getById($id)
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE tat_id = ? LIMIT 0,1";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE tat_id = ? AND tat_borrado = 0 LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $id);
         $stmt->execute();
@@ -59,7 +59,7 @@ class OIRS_TipoAtencion
 
     public function delete($id)
     {
-        $query = "DELETE FROM " . $this->table_name . " WHERE tat_id = :tat_id";
+        $query = "UPDATE " . $this->table_name . " SET tat_borrado = 1 WHERE tat_id = :tat_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":tat_id", $id);
 

@@ -21,6 +21,7 @@
 
     // Event Listeners
     document.getElementById('ID_Organizacion').addEventListener('change', handleTipoOrgChange);
+    document.getElementById('orgc_rut').addEventListener('blur', function () { this.value = formatRut(this.value) });
     //document.getElementById('FechaUltimaRecepcion').addEventListener('change', handleTipoOrgChange);
 
     // btn_nuevo_origen onclick is set dynamically in handleTipoOrgChange
@@ -48,6 +49,32 @@
     fileInput.onchange = (e) => handleFiles(e.target.files);
 
     if (window.feather) feather.replace();
+
+    // Geolocation checkbox toggle
+    const chkGeoloc = document.getElementById('chk_geoloc');
+    if (chkGeoloc) {
+        chkGeoloc.addEventListener('change', function () {
+            const area = document.getElementById('geolocalizacion_area');
+            if (this.checked) {
+                area.style.display = 'block';
+                // Trigger map resize/re-center with a small delay to ensure the div is rendered
+                setTimeout(() => {
+                    if (map) {
+                        google.maps.event.trigger(map, 'resize');
+                        map.setCenter(marker ? marker.getPosition() : defaultLocation);
+                    }
+                }, 200);
+            } else {
+                area.style.display = 'none';
+            }
+        });
+    }
+
+    // Geolocation search button
+    const btnBuscarGeo = document.getElementById('btn_buscar_geo');
+    if (btnBuscarGeo) {
+        btnBuscarGeo.addEventListener('click', buscarDireccion);
+    }
 });
 
 let organizaciones = [];
@@ -65,15 +92,58 @@ let OrigenEspecial = 0; // Changed from boolean to integer (0, 1, 2)
 let destinos = []; // Array for multiple destinations
 let modalBusqueda = null;
 
-function formatRut(rut) {
-    if (!rut) return '';
-    let value = rut.replace(/[^0-9kK]/g, '');
-    if (value.length <= 1) return value;
-    const dv = value.slice(-1).toUpperCase();
-    let body = value.slice(0, -1);
-    body = body.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    return `${body}-${dv}`;
+// Map variables
+let map, marker, geocoder;
+const defaultLocation = { lat: -33.0248, lng: -71.5570 }; // Viña del Mar
+
+window.initMap = function () {
+    geocoder = new google.maps.Geocoder();
+    map = new google.maps.Map(document.getElementById("map_desve"), {
+        zoom: 15,
+        center: defaultLocation,
+        mapTypeControl: false,
+        streetViewControl: false,
+    });
+
+    marker = new google.maps.Marker({
+        map: map,
+        draggable: true,
+        position: defaultLocation,
+    });
+
+    // Update coordinates when marker is dragged
+    marker.addListener("dragend", function (event) {
+        updateCoordinates(event.latLng);
+    });
+
+    // Move marker when map is clicked
+    map.addListener("click", function (event) {
+        marker.setPosition(event.latLng);
+        updateCoordinates(event.latLng);
+    });
+};
+
+function updateCoordinates(latLng) {
+    document.getElementById("Latitud").value = latLng.lat().toFixed(6);
+    document.getElementById("Longitud").value = latLng.lng().toFixed(6);
 }
+
+function buscarDireccion() {
+    const address = document.getElementById("Geo_dir").value;
+    if (!address) return;
+
+    geocoder.geocode({ address: address + ", Viña del Mar, Chile" }, function (results, status) {
+        if (status === "OK") {
+            const pos = results[0].geometry.location;
+            map.setCenter(pos);
+            marker.setPosition(pos);
+            updateCoordinates(pos);
+        } else {
+            Swal.fire('Error', 'No se pudo encontrar la dirección: ' + status, 'error');
+        }
+    });
+}
+
 
 async function loadInitialData() {
     try {
@@ -180,69 +250,65 @@ function handleTipoOrgChange() {
     const idOrgId = document.getElementById('ID_Organizacion').value;
     if (!idOrgId) return;
 
-    const orgSelect = document.getElementById('OrigenSolicitud');
-    const btnNuevoOrigen = document.getElementById('btn_nuevo_origen');
-    orgSelect.innerHTML = '<option value="" selected disabled>Seleccione organización...</option>';
+    const orgDisplay = document.getElementById('OrigenSolicitudDisplay');
+    const orgHidden = document.getElementById('OrigenSolicitud');
+    const btnBuscarOrigen = document.getElementById('btn_buscar_origen');
+    //const btnNuevoOrigen = document.getElementById('btn_nuevo_origen');
+
+    // Reset current selection
+    orgDisplay.value = '';
+    orgHidden.value = '';
 
     // Determine priority
     const selectedTipo = tiposOrganizacion.find(t => t.tor_id == idOrgId);
     const ORG_PRIO = selectedTipo ? selectedTipo.tor_prioridad_id : "";
 
-    // Conditional logic based on organization type
+    // Show/Hide buttons and set handlers
     if (idOrgId == "1" || idOrgId == "2") {
-        // Territorial (1) or Funcional (2) -> Use Organizaciones Comunitarias
-        OrigenEspecial = 0; // Normal
-        btnNuevoOrigen.disabled = true;
-        btnNuevoOrigen.onclick = null;
-        orgSelect.disabled = false; // Enable dropdown
+        // Territorial (1) or Funcional (2) -> Search Organizations
+        OrigenEspecial = 0;
+        btnBuscarOrigen.style.display = 'block';
+        //btnNuevoOrigen.style.display = 'none';
+        btnBuscarOrigen.disabled = false;
+        //btnNuevoOrigen.disabled = false;
 
-        organizacionesComunitarias.forEach(o => {
-            if (o.orgc_tipo_organizacion == idOrgId) {
-                const option = document.createElement('option');
-                option.value = `OC_${o.orgc_id}`; // Prefix to identify source
-                option.innerText = o.orgc_nombre;
-                orgSelect.appendChild(option);
-            }
-        });
+        btnBuscarOrigen.onclick = () => abrirModalBuscarOrganizacion();
+        //btnNuevoOrigen.onclick = () => abrirModalNuevaOrganizacion();
+
     } else if (idOrgId == "3" || idOrgId == "5") {
         // Particular (3) or Ley Transparencia (5) -> Use Contributor Search
-        OrigenEspecial = 1; // Special/Transparency
-        btnNuevoOrigen.disabled = false;
-        btnNuevoOrigen.onclick = () => abrirModalBuscarContribuyente();
-        orgSelect.disabled = true; // Disable dropdown, use search instead
-    } else if (["4", "6", "7"].includes(idOrgId)) {
+        OrigenEspecial = 1;
+        btnBuscarOrigen.style.display = 'block';
+        //btnNuevoOrigen.style.display = 'none';
+        btnBuscarOrigen.disabled = false;
+
+        btnBuscarOrigen.onclick = () => abrirModalBuscarContribuyente();
+
+    } else if (["4"].includes(idOrgId)) {
         // Special Origins (Concejales, Contraloría, Congreso)
-        OrigenEspecial = 2; // Super Special
-        btnNuevoOrigen.disabled = false;
-        btnNuevoOrigen.onclick = () => {
-            const modal = new bootstrap.Modal(document.getElementById('modalNuevoOrigenEspecial'));
-            modal.show();
-        };
-        orgSelect.disabled = false;
+        OrigenEspecial = 2;
+        btnBuscarOrigen.style.display = 'block';
+        //btnNuevoOrigen.style.display = 'none';
+        btnBuscarOrigen.disabled = false;
 
-        organizacionesDESVE.forEach(o => {
-            if (o.org_tipo_id == idOrgId) {
-                const option = document.createElement('option');
-                option.value = o.org_id;
-                option.innerText = o.org_nombre;
-                orgSelect.appendChild(option);
-            }
-        });
+        btnBuscarOrigen.onclick = () => abrirModalBuscarOrganizacion();
+
+    } else if (["6", "7"].includes(idOrgId)) {
+        // Special Origins (Concejales, Contraloría, Congreso)
+        OrigenEspecial = 2;
+        btnBuscarOrigen.style.display = 'none';
+
+        const matchingDESVE = organizacionesDESVE.filter(o => o.org_tipo_id == idOrgId);
+        if (matchingDESVE.length > 0) {
+            OrigenSolicitudDisplay.value = matchingDESVE[0].org_nombre;
+            OrigenSolicitud.value = matchingDESVE[0].org_id;
+        }
+
     } else {
-        // Default: Use general organizations
+        // Default
         OrigenEspecial = 0;
-        btnNuevoOrigen.disabled = true;
-        btnNuevoOrigen.onclick = null;
-        orgSelect.disabled = false;
-
-        organizaciones.forEach(o => {
-            if (o.org_tipo_id == idOrgId) {
-                const option = document.createElement('option');
-                option.value = o.org_id;
-                option.innerText = o.org_nombre;
-                orgSelect.appendChild(option);
-            }
-        });
+        btnBuscarOrigen.style.display = 'none';
+        //btnNuevoOrigen.style.display = 'none';
     }
 
     // Set priority and calculate expiration
@@ -359,6 +425,9 @@ async function guardarSolicitud() {
         sol_observaciones: document.getElementById('Observaciones').value,
         sol_responsable: document.getElementById('Responsable')?.getAttribute('data-user-id') || null,
         sol_origen_esp: OrigenEspecial,
+        sol_latitud: document.getElementById('chk_geoloc').checked ? document.getElementById('Latitud').value : null,
+        sol_longitud: document.getElementById('chk_geoloc').checked ? document.getElementById('Longitud').value : null,
+        sol_direccion: document.getElementById('chk_geoloc').checked ? document.getElementById('Geo_dir').value : null,
         destinos: destinos, // Multiple destinations
         documentos: selectedFiles,
         ACCION: "CREAR"
@@ -377,7 +446,7 @@ async function guardarSolicitud() {
 
         if (result.status === 'success') {
             await Swal.fire('Éxito', "Solicitud creada con éxito", 'success');
-            window.location.href = 'desve_listado_ingresos.php';
+            window.location.href = 'index.php.php';
         } else {
             Swal.fire('Error', result.message || "Error al guardar solicitud", 'error');
         }
@@ -598,9 +667,8 @@ window.abrirModalBuscarContribuyente = function () {
 window.seleccionarContribuyente = function (id) {
     const c = contribuyentes.find(x => x.tgc_id == id);
     if (c) {
-        const orgSelect = document.getElementById('OrigenSolicitud');
-        orgSelect.disabled = false;
-        orgSelect.innerHTML = `<option value="CONTRIB_${c.tgc_id}" selected>${c.tgc_nombre} ${c.tgc_apellido_paterno} ${c.tgc_apellido_materno} (${c.tgc_rut})</option>`;
+        document.getElementById('OrigenSolicitudDisplay').value = `${c.tgc_nombre} ${c.tgc_apellido_paterno} ${c.tgc_apellido_materno} (${c.tgc_rut})`;
+        document.getElementById('OrigenSolicitud').value = `CONTRIB_${c.tgc_id}`;
     }
     bootstrap.Modal.getInstance(document.getElementById('modalBuscarContribuyente')).hide();
 };
@@ -665,6 +733,144 @@ window.guardarNuevoContribuyente = async function () {
 
             // Reopen search modal
             setTimeout(() => abrirModalBuscarContribuyente(), 300);
+        } else {
+            Swal.fire('Error', result.message || 'Error al guardar', 'error');
+        }
+    } catch (e) {
+        console.error(e);
+        Swal.fire('Error', 'Error de conexión.', 'error');
+    }
+};
+
+// Organization Search and Creation Functions
+window.abrirModalBuscarOrganizacion = function () {
+    const tbody = document.getElementById('lista_busqueda_org');
+    tbody.innerHTML = '';
+    const idOrgId = document.getElementById('ID_Organizacion').value;
+
+    // Filter organizations by type
+    const matchingComunitarias = organizacionesComunitarias.filter(o => o.orgc_tipo_organizacion == idOrgId);
+    const matchingDESVE = organizacionesDESVE.filter(o => o.org_tipo_id == idOrgId);
+    const matchingGeneral = organizaciones.filter(o => o.org_tipo_id == idOrgId);
+
+    // Populate table
+    matchingComunitarias.forEach(o => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${o.orgc_rut || '-'}</td>
+            <td>${o.orgc_nombre}</td>
+            <td><span class="badge bg-info text-dark">Comunitaria</span></td>
+            <td class="text-end">
+                <button type="button" class="btn btn-sm btn-primary" onclick="seleccionarOrganizacion('OC_${o.orgc_id}', '${o.orgc_nombre}')">Seleccionar</button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    matchingDESVE.forEach(o => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>-</td>
+            <td>${o.org_nombre}</td>
+            <td><span class="badge bg-secondary">DESVE</span></td>
+            <td class="text-end">
+                <button type="button" class="btn btn-sm btn-primary" onclick="seleccionarOrganizacion('${o.org_id}', '${o.org_nombre}')">Seleccionar</button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    matchingGeneral.forEach(o => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>-</td>
+            <td>${o.org_nombre}</td>
+            <td><span class="badge bg-light text-dark">General</span></td>
+            <td class="text-end">
+                <button type="button" class="btn btn-sm btn-primary" onclick="seleccionarOrganizacion('${o.org_id}', '${o.org_nombre}')">Seleccionar</button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    document.getElementById('filtroOrganizacion').onkeyup = function () {
+        const val = this.value.toLowerCase();
+        Array.from(tbody.querySelectorAll('tr')).forEach(tr => {
+            tr.style.display = tr.innerText.toLowerCase().includes(val) ? '' : 'none';
+        });
+    };
+
+    const modal = new bootstrap.Modal(document.getElementById('modalBuscarOrganizacion'));
+    modal.show();
+};
+
+window.seleccionarOrganizacion = function (id, nombre) {
+    document.getElementById('OrigenSolicitudDisplay').value = nombre;
+    document.getElementById('OrigenSolicitud').value = id;
+    const modalEl = document.getElementById('modalBuscarOrganizacion');
+    const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+    modal.hide();
+};
+
+window.abrirModalNuevaOrganizacion = function () {
+    const searchModalEl = document.getElementById('modalBuscarOrganizacion');
+    const searchModal = bootstrap.Modal.getInstance(searchModalEl);
+    if (searchModal) searchModal.hide();
+
+    document.getElementById('form_nueva_organizacion').reset();
+    const modal = new bootstrap.Modal(document.getElementById('modalNuevaOrganizacion'));
+    modal.show();
+};
+
+window.guardarNuevaOrganizacion = async function () {
+    const form = document.getElementById('form_nueva_organizacion');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+
+    const idTipo = document.getElementById('ID_Organizacion').value;
+    const payload = {
+        ACCION: 'CREAR',
+        orgc_nombre: document.getElementById('orgc_nombre').value,
+        orgc_rut: document.getElementById('orgc_rut').value,
+        orgc_codigo: document.getElementById('orgc_codigo').value,
+        orgc_rpj: document.getElementById('orgc_rpj').value,
+        orgc_tipo_organizacion: ID_Organizacion.value
+    };
+
+    try {
+        Swal.fire({ title: 'Guardando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+        const response = await fetch(`${window.API_BASE_URL}/organizaciones_comunitarias_general.php`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            // Reload organizations
+            const orgRes = await fetch(`${window.API_BASE_URL}/organizaciones_comunitarias_general.php`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ACCION: 'CONSULTAM' })
+            }).then(r => r.json());
+
+            organizacionesComunitarias = extractData(orgRes);
+
+            bootstrap.Modal.getInstance(document.getElementById('modalNuevaOrganizacion')).hide();
+            Swal.fire('Éxito', 'Organización creada correctamente.', 'success');
+
+            // Automatically select it
+            if (result.id) {
+                seleccionarOrganizacion(`OC_${result.id}`, payload.orgc_nombre);
+            } else {
+                const newOrg = organizacionesComunitarias.find(o => o.orgc_nombre === payload.orgc_nombre);
+                if (newOrg) seleccionarOrganizacion(`OC_${newOrg.orgc_id}`, newOrg.orgc_nombre);
+            }
         } else {
             Swal.fire('Error', result.message || 'Error al guardar', 'error');
         }

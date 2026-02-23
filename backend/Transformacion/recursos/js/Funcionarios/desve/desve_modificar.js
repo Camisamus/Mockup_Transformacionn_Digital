@@ -45,6 +45,33 @@
         modal.show();
     };
 
+    // Geolocation Toggle Logic
+    const chkGeoloc = document.getElementById('chk_geoloc');
+    chkGeoloc.addEventListener('change', function () {
+        const area = document.getElementById('geolocalizacion_area');
+        if (this.checked) {
+            area.style.display = 'block';
+            // Trigger map resize/re-center with a small delay to ensure the div is rendered
+            setTimeout(() => {
+                if (map) {
+                    google.maps.event.trigger(map, 'resize');
+                    map.setCenter(marker ? marker.getPosition() : defaultLocation);
+                }
+            }, 200);
+        } else {
+            area.style.display = 'none';
+        }
+    });
+
+    document.getElementById('btn_buscar_geo').onclick = function () {
+        const address = document.getElementById('Geo_dir').value;
+        if (address) {
+            geocodeAddress(address);
+        } else {
+            Swal.fire('Atención', 'Ingrese una dirección para buscar.', 'warning');
+        }
+    };
+
     document.getElementById('form_modificar_desve').onsubmit = (e) => {
         e.preventDefault();
         actualizarSolicitud();
@@ -117,7 +144,7 @@ let funcionarios = [];
 let sectores = [];
 let currentSolRegistroId = null;
 let selectedFiles = []; // New files to add
-let OrigenEspecial = false;
+let OrigenEspecial = 0;
 let destinos = []; // Array for multiple destinations
 let modalBusqueda = null;
 let contribuyentes = [];
@@ -209,7 +236,7 @@ async function loadSolicitationDetails(id, currentUser) {
                     icon: 'error',
                     confirmButtonText: 'Volver a Bandeja'
                 });
-                window.location.href = 'desve_listado_ingresos.php';
+                window.location.href = 'index.php.php';
                 return;
             }
 
@@ -264,102 +291,103 @@ async function loadSolicitationDetails(id, currentUser) {
                 document.getElementById('ID_Organizacion').value = orgTipoId;
                 OrigenEspecial = parseInt(sol.sol_origen_esp);
 
-                // Populate OrigenSolicitud based on Type
-                handleTipoOrgChange();
+                if (sol.sol_origen_id) {
+                    // Populate the hidden input and the display input
+                    document.getElementById('OrigenSolicitud').value = sol.sol_origen_id;
+                    document.getElementById('OrigenSolicitudDisplay').value = sol.sol_origen_texto || '';
+                }
 
-                // Set the origin value with proper prefix for organizaciones comunitarias
-                if (parseInt(sol.sol_origen_esp) === 0 && (orgTipoId == "1" || orgTipoId == "2")) {
-                    // Organizaciones Comunitarias need OC_ prefix
-                    document.getElementById('OrigenSolicitud').value = `OC_${sol.sol_origen_id}`;
+                document.getElementById('FechaUltimaRecepcion').value = sol.sol_fecha_recepcion?.split(' ')[0] || '';
+                document.getElementById('Sector').value = sol.sol_sector_id || '';
+
+                document.getElementById('DetalleIngreso').value = sol.sol_detalle || '';
+                document.getElementById('Observaciones').value = sol.sol_observaciones || '';
+
+                // Status
+                if (sol.sol_estado_entrega == 1) {
+                    document.getElementById('estadoRespondido').checked = true;
                 } else {
-                    if (parseInt(sol.sol_origen_esp) === 1 && (orgTipoId == "3" || orgTipoId == "5")) {
-                        // Organizaciones Comunitarias need OC_ prefix
-                        const c = contribuyentes.find(x => x.tgc_id == sol.sol_origen_id);
-                        if (c) {
-                            const orgSelect = document.getElementById('OrigenSolicitud');
-                            orgSelect.disabled = false;
-                            orgSelect.innerHTML = `<option value="${c.tgc_id}" selected>${c.tgc_nombre} ${c.tgc_apellido_paterno} ${c.tgc_apellido_materno} (${c.tgc_rut})</option>`;
-                        }
-                    } else {
-                        document.getElementById('OrigenSolicitud').value = sol.sol_origen_id;
+                    document.getElementById('estadoPendiente').checked = true;
+                }
+
+                document.getElementById('Codigo_DESVE').value = sol.sol_ingreso_desve || '';
+                document.getElementById('NombreExpediente').value = sol.sol_nombre_expediente || '';
+                document.getElementById('DetalleIngreso').value = sol.sol_detalle || '';
+                document.getElementById('Observaciones').value = sol.sol_observaciones || '';
+                document.getElementById('FechaUltimaRecepcion').value = sol.sol_fecha_recepcion ? sol.sol_fecha_recepcion.split(' ')[0] : '';
+                document.getElementById('Reingreso').value = sol.sol_reingreso_id || '';
+
+                // Map Population
+                if (sol.sol_latitud && sol.sol_longitud) {
+                    document.getElementById('chk_geoloc').checked = true;
+                    document.getElementById('geolocalizacion_area').style.display = 'block';
+                    document.getElementById('Latitud').value = sol.sol_latitud;
+                    document.getElementById('Longitud').value = sol.sol_longitud;
+                    document.getElementById('Geo_dir').value = sol.sol_direccion || '';
+
+                    // If map is already initialized, update it. If not, initMap will handle it using these values.
+                    if (map && marker) {
+                        const pos = { lat: parseFloat(sol.sol_latitud), lng: parseFloat(sol.sol_longitud) };
+                        marker.setPosition(pos);
+                        map.setCenter(pos);
                     }
                 }
-            }
 
-            document.getElementById('FechaUltimaRecepcion').value = sol.sol_fecha_recepcion?.split(' ')[0] || '';
-            document.getElementById('Sector').value = sol.sol_sector_id || '';
-
-            document.getElementById('DetalleIngreso').value = sol.sol_detalle || '';
-            document.getElementById('Observaciones').value = sol.sol_observaciones || '';
-
-            // Status
-            if (sol.sol_estado_entrega == 1) {
-                document.getElementById('estadoRespondido').checked = true;
-            } else {
-                document.getElementById('estadoPendiente').checked = true;
-            }
-
-            document.getElementById('Codigo_DESVE').value = sol.sol_ingreso_desve || '';
-            document.getElementById('NombreExpediente').value = sol.sol_nombre_expediente || '';
-            document.getElementById('DetalleIngreso').value = sol.sol_detalle || '';
-            document.getElementById('Observaciones').value = sol.sol_observaciones || '';
-            document.getElementById('FechaUltimaRecepcion').value = sol.sol_fecha_recepcion ? sol.sol_fecha_recepcion.split(' ')[0] : '';
-            document.getElementById('Reingreso').value = sol.sol_reingreso_id || '';
-
-            // Populate ReingresoDisplay if there's a reingreso_id
-            if (sol.sol_reingreso_id) {
-                const reingresoSol = Solicitudes.find(s => s.sol_id == sol.sol_reingreso_id);
-                if (reingresoSol) {
-                    document.getElementById('ReingresoDisplay').value = `${reingresoSol.sol_ingreso_desve} - ${reingresoSol.sol_nombre_expediente}`;
+                // Populate ReingresoDisplay if there's a reingreso_id
+                if (sol.sol_reingreso_id) {
+                    const reingresoSol = Solicitudes.find(s => s.sol_id == sol.sol_reingreso_id);
+                    if (reingresoSol) {
+                        document.getElementById('ReingresoDisplay').value = `${reingresoSol.sol_ingreso_desve} - ${reingresoSol.sol_nombre_expediente}`;
+                    }
                 }
+                // 1. Lógica para Días Transcurridos (desde la recepción hasta hoy)
+                const calcularTranscurridos = () => {
+                    if (!sol.sol_fecha_recepcion) return 0;
+                    const fecha_recep = new Date(sol.sol_fecha_recepcion.replace(/-/g, '/')); // replace para mejor compatibilidad
+                    const hoy = new Date();
+                    // Normalizamos a medianoche para comparar solo días
+                    const inicio = new Date(fecha_recep.getFullYear(), fecha_recep.getMonth(), fecha_recep.getDate());
+                    const fin = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+
+                    const diff = fin - inicio;
+                    return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+                };
+
+                // 2. Lógica para Días de Vencimiento (desde hoy hasta el vencimiento)
+                const calcularVencimiento = () => {
+                    if (!sol.sol_fecha_vencimiento) return 0;
+                    const fecha_vence = new Date(sol.sol_fecha_vencimiento.replace(/-/g, '/'));
+                    const hoy = new Date();
+
+                    const fin = new Date(fecha_vence.getFullYear(), fecha_vence.getMonth(), fecha_vence.getDate());
+                    const inicio = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+
+                    const diff = fin - inicio;
+                    // Aquí no usamos Math.max porque si es negativo significa que YA ESTÁ VENCIDO
+                    return Math.floor(diff / (1000 * 60 * 60 * 24));
+                };
+
+                // 3. Asignación al DOM
+                // Usamos el cálculo solo si el valor del JSON es "0" o null
+                document.getElementById('info_dias_ingreso').value =
+                    (sol.sol_dias_transcurridos && sol.sol_dias_transcurridos !== "0")
+                        ? sol.sol_dias_transcurridos
+                        : calcularTranscurridos();
+
+                document.getElementById('info_dias_vencimiento').value =
+                    (sol.sol_dias_vencimiento && sol.sol_dias_vencimiento !== "0")
+                        ? sol.sol_dias_vencimiento
+                        : calcularVencimiento();
+                document.getElementById('Prioridad').value = sol.sol_prioridad_id;
+                document.getElementById('FechaVecimiento').value = sol.sol_fecha_vencimiento;
+                document.getElementById('Responsable').value = sol.sol_responsable;
+                document.getElementById('Reingresado').value = sol.sol_reingreso_id;
+                destinos = sol.destinos || [];
+                renderDestinos();
+                renderResponseBitacora(sol.respuestas || []);
+                loadExistingDocuments();
+
             }
-            // 1. Lógica para Días Transcurridos (desde la recepción hasta hoy)
-            const calcularTranscurridos = () => {
-                if (!sol.sol_fecha_recepcion) return 0;
-                const fecha_recep = new Date(sol.sol_fecha_recepcion.replace(/-/g, '/')); // replace para mejor compatibilidad
-                const hoy = new Date();
-                // Normalizamos a medianoche para comparar solo días
-                const inicio = new Date(fecha_recep.getFullYear(), fecha_recep.getMonth(), fecha_recep.getDate());
-                const fin = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
-
-                const diff = fin - inicio;
-                return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
-            };
-
-            // 2. Lógica para Días de Vencimiento (desde hoy hasta el vencimiento)
-            const calcularVencimiento = () => {
-                if (!sol.sol_fecha_vencimiento) return 0;
-                const fecha_vence = new Date(sol.sol_fecha_vencimiento.replace(/-/g, '/'));
-                const hoy = new Date();
-
-                const fin = new Date(fecha_vence.getFullYear(), fecha_vence.getMonth(), fecha_vence.getDate());
-                const inicio = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
-
-                const diff = fin - inicio;
-                // Aquí no usamos Math.max porque si es negativo significa que YA ESTÁ VENCIDO
-                return Math.floor(diff / (1000 * 60 * 60 * 24));
-            };
-
-            // 3. Asignación al DOM
-            // Usamos el cálculo solo si el valor del JSON es "0" o null
-            document.getElementById('info_dias_ingreso').value =
-                (sol.sol_dias_transcurridos && sol.sol_dias_transcurridos !== "0")
-                    ? sol.sol_dias_transcurridos
-                    : calcularTranscurridos();
-
-            document.getElementById('info_dias_vencimiento').value =
-                (sol.sol_dias_vencimiento && sol.sol_dias_vencimiento !== "0")
-                    ? sol.sol_dias_vencimiento
-                    : calcularVencimiento();
-            document.getElementById('Prioridad').value = sol.sol_prioridad_id;
-            document.getElementById('FechaVecimiento').value = sol.sol_fecha_vencimiento;
-            document.getElementById('Responsable').value = sol.sol_responsable;
-            document.getElementById('Reingresado').value = sol.sol_reingreso_id;
-            destinos = sol.destinos || [];
-            renderDestinos();
-            renderResponseBitacora(sol.respuestas || []);
-            loadExistingDocuments();
-
         }
     } catch (e) {
         console.error("Load Details Error:", e);
@@ -371,88 +399,56 @@ function handleTipoOrgChange() {
     const idOrgId = document.getElementById('ID_Organizacion').value;
     if (!idOrgId) return;
 
-    const orgSelect = document.getElementById('OrigenSolicitud');
+    const orgDisplay = document.getElementById('OrigenSolicitudDisplay');
+    const orgHidden = document.getElementById('OrigenSolicitud');
+    const btnBuscarOrigen = document.getElementById('btn_buscar_origen');
     const btnNuevoOrigen = document.getElementById('btn_nuevo_origen');
-    orgSelect.innerHTML = '<option value="" selected disabled>Seleccione organización...</option>';
+
+    // Show/Hide buttons and set handlers
+    if (idOrgId == "1" || idOrgId == "2") {
+        // Territorial (1) or Funcional (2) -> Search Organizations
+        OrigenEspecial = 0;
+        btnBuscarOrigen.style.display = 'block';
+        btnNuevoOrigen.style.display = 'block';
+        btnBuscarOrigen.disabled = false;
+        btnNuevoOrigen.disabled = false;
+
+        btnBuscarOrigen.onclick = () => abrirModalBuscarOrganizacion();
+        btnNuevoOrigen.onclick = () => abrirModalNuevaOrganizacion();
+
+    } else if (idOrgId == "3" || idOrgId == "5") {
+        // Particular (3) or Ley Transparencia (5) -> Use Contributor Search
+        OrigenEspecial = 1;
+        btnBuscarOrigen.style.display = 'block';
+        btnNuevoOrigen.style.display = 'none';
+        btnBuscarOrigen.disabled = false;
+
+        btnBuscarOrigen.onclick = () => abrirModalBuscarContribuyente();
+
+    } else if (["4", "6", "7"].includes(idOrgId)) {
+        // Special Origins (Concejales, Contraloría, Congreso)
+        OrigenEspecial = 2;
+        btnBuscarOrigen.style.display = 'block';
+        btnNuevoOrigen.style.display = 'none';
+        btnBuscarOrigen.disabled = false;
+
+        btnBuscarOrigen.onclick = () => abrirModalBuscarOrganizacion();
+
+    } else {
+        // Default
+        OrigenEspecial = 0;
+        btnBuscarOrigen.style.display = 'none';
+        btnNuevoOrigen.style.display = 'none';
+    }
 
     // Determine priority
     const selectedTipo = tiposOrganizacion.find(t => t.tor_id == idOrgId);
-    const ORG_PRIO = selectedTipo ? selectedTipo.tor_prioridad_id : "";
-
-    // Conditional logic based on organization type
-    if (idOrgId == "1" || idOrgId == "2") {
-        // Territorial (1) or Funcional (2) -> Use Organizaciones Comunitarias
-        OrigenEspecial = 0; // Normal
-        btnNuevoOrigen.disabled = true;
-        btnNuevoOrigen.onclick = null;
-        orgSelect.disabled = false; // Enable dropdown
-
-        organizacionesComunitarias.forEach(o => {
-            if (o.orgc_tipo_organizacion == idOrgId) {
-                const option = document.createElement('option');
-                option.value = `OC_${o.orgc_id}`; // Prefix to identify source
-                option.innerText = o.orgc_nombre;
-                orgSelect.appendChild(option);
-            }
-        });
-    } else if (idOrgId == "3" || idOrgId == "5") {
-        // Particular (3) or Ley Transparencia (5) -> Use Contributor Search
-        OrigenEspecial = 1; // Special/Transparency
-        btnNuevoOrigen.disabled = false;
-        btnNuevoOrigen.onclick = () => abrirModalBuscarContribuyente();
-        orgSelect.disabled = true; // Disable dropdown, use search instead
-    } else if (["4", "6", "7"].includes(idOrgId)) {
-        // Special Origins (Concejales, Contraloría, Congreso)
-        OrigenEspecial = 2; // Super Special
-        btnNuevoOrigen.disabled = false;
-        btnNuevoOrigen.onclick = () => {
-            const modal = new bootstrap.Modal(document.getElementById('modalNuevoOrigenEspecial'));
-            modal.show();
-        };
-        orgSelect.disabled = false;
-
-        organizacionesDESVE.forEach(o => {
-            if (o.org_tipo_id == idOrgId) {
-                const option = document.createElement('option');
-                option.value = o.org_id;
-                option.innerText = o.org_nombre;
-                orgSelect.appendChild(option);
-            }
-        });
-    } else {
-        // Default: Use general organizations
-        OrigenEspecial = 0;
-        btnNuevoOrigen.disabled = true;
-        btnNuevoOrigen.onclick = null;
-        orgSelect.disabled = false;
-
-        organizaciones.forEach(o => {
-            if (o.org_tipo_id == idOrgId) {
-                const option = document.createElement('option');
-                option.value = o.org_id;
-                option.innerText = o.org_nombre;
-                orgSelect.appendChild(option);
-            }
-        });
-    }
-
-    // Set priority and calculate expiration
-    const prio = prioridades.find(p => p.pri_id == ORG_PRIO);
-    if (prio) {
-        document.getElementById('Prioridad').value = prio.pri_id;
-        calculateVencimiento(parseInt(prio.pri_tiempo_establecido) || 0);
-    }
-}
-
-// Update Priority based on Tipo
-const selectedTipo = tiposOrganizacion.find(t => t.tor_id == idOrgId);
-if (selectedTipo) {
-    const prio = prioridades.find(p => p.pri_id == selectedTipo.tor_prioridad_id);
-    if (prio) {
-        document.getElementById('Prioridad').value = prio.pri_id;
-        // Note: Recalculating vencimiento on edit might or might not be desired. 
-        // In DESVE it seems we allow it if date or org changes.
-        if (prio.pri_tiempo_establecido) calculateVencimiento(parseInt(prio.pri_tiempo_establecido));
+    if (selectedTipo) {
+        const prio = prioridades.find(p => p.pri_id == selectedTipo.tor_prioridad_id);
+        if (prio) {
+            document.getElementById('Prioridad').value = prio.pri_id;
+            if (prio.pri_tiempo_establecido) calculateVencimiento(parseInt(prio.pri_tiempo_establecido));
+        }
     }
 }
 
@@ -550,12 +546,32 @@ function renderResponseBitacora(respuestas) {
 }
 
 async function actualizarSolicitud() {
+    // Parse origin value to extract actual ID
+    let origenValue = document.getElementById('OrigenSolicitud').value;
+    let origenTexto = '';
+
+    // Handle different origin formats
+    if (origenValue.startsWith('OC_')) {
+        // Organizacion Comunitaria
+        const ocId = origenValue.replace('OC_', '');
+        const oc = organizacionesComunitarias.find(o => o.orgc_id == ocId);
+        origenTexto = oc ? oc.orgc_nombre : '';
+        origenValue = ocId; // Use the actual ID
+    } else if (origenValue.startsWith('CONTRIB_')) {
+        // Contributor
+        const contribId = origenValue.replace('CONTRIB_', '');
+        const contrib = contribuyentes.find(c => c.tgc_id == contribId);
+        origenTexto = contrib ? `${contrib.tgc_nombre} ${contrib.tgc_apellido_paterno} ${contrib.tgc_apellido_materno}`.trim() : '';
+        origenValue = contribId; // Use the actual ID
+    }
+
     const body = {
         sol_id: document.getElementById('idIngreso').value,
         sol_ingreso_desve: document.getElementById('Codigo_DESVE').value,
         sol_reingreso_id: document.getElementById('Reingreso').value,
         sol_nombre_expediente: document.getElementById('NombreExpediente').value,
-        sol_origen_id: document.getElementById('OrigenSolicitud').value,
+        sol_origen_id: origenValue,
+        sol_origen_texto: origenTexto,
         sol_detalle: document.getElementById('DetalleIngreso').value,
         sol_fecha_recepcion: document.getElementById('FechaUltimaRecepcion').value + ' 00:00:00',
         sol_prioridad_id: document.getElementById('Prioridad').value,
@@ -564,6 +580,9 @@ async function actualizarSolicitud() {
         sol_estado_entrega: document.getElementById('estadoRespondido').checked,
         sol_observaciones: document.getElementById('Observaciones').value,
         sol_responsable: document.getElementById('Responsable').value || null,
+        sol_latitud: document.getElementById('chk_geoloc').checked ? document.getElementById('Latitud').value : null,
+        sol_longitud: document.getElementById('chk_geoloc').checked ? document.getElementById('Longitud').value : null,
+        sol_direccion: document.getElementById('chk_geoloc').checked ? document.getElementById('Geo_dir').value : null,
         destinos: destinos,
         sol_origen_esp: OrigenEspecial,
         documentos: selectedFiles,
@@ -654,7 +673,7 @@ async function solicitarID() {
     });
 
     if (!formValues) {
-        window.location.href = 'desve_listado_ingresos.php';
+        window.location.href = 'index.php.php';
         return;
     }
 
@@ -867,80 +886,282 @@ window.abrirModalBuscarContribuyente = function () {
 
 window.seleccionarContribuyente = function (id) {
     const c = contribuyentes.find(x => x.tgc_id == id);
-    if (c) {
-        const orgSelect = document.getElementById('OrigenSolicitud');
-        orgSelect.disabled = false;
-        orgSelect.innerHTML = `<option value="${c.tgc_id}" selected>${c.tgc_nombre} ${c.tgc_apellido_paterno} ${c.tgc_apellido_materno} (${c.tgc_rut})</option>`;
-    }
-    bootstrap.Modal.getInstance(document.getElementById('modalBuscarContribuyente')).hide();
-};
-
-window.abrirModalNuevoContribuyente = function () {
-    // Close search modal first
-    const searchModal = bootstrap.Modal.getInstance(document.getElementById('modalBuscarContribuyente'));
-    if (searchModal) searchModal.hide();
-
-    // Reset form
-    document.getElementById('form_nuevo_contribuyente').reset();
-
-    // Add RUT formatting
-    const rutInput = document.getElementById('nc_rut');
-    rutInput.onchange = function () {
-        this.value = formatRut(this.value);
+    window.seleccionarContribuyente = function (id) {
+        const c = contribuyentes.find(x => x.tgc_id == id);
+        if (c) {
+            document.getElementById('OrigenSolicitudDisplay').value = `${c.tgc_nombre} ${c.tgc_apellido_paterno} ${c.tgc_apellido_materno} (${c.tgc_rut})`;
+            document.getElementById('OrigenSolicitud').value = `CONTRIB_${c.tgc_id}`;
+        }
+        bootstrap.Modal.getInstance(document.getElementById('modalBuscarContribuyente')).hide();
     };
 
-    const modal = new bootstrap.Modal(document.getElementById('modalNuevoContribuyente'));
-    modal.show();
-};
+    window.abrirModalNuevoContribuyente = function () {
+        // Close search modal first
+        const searchModal = bootstrap.Modal.getInstance(document.getElementById('modalBuscarContribuyente'));
+        if (searchModal) searchModal.hide();
 
-window.guardarNuevoContribuyente = async function () {
-    const form = document.getElementById('form_nuevo_contribuyente');
-    if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-    }
+        // Reset form
+        document.getElementById('form_nuevo_contribuyente').reset();
 
-    const payload = {
-        ACCION: 'CREAR',
-        tgc_rut: document.getElementById('nc_rut').value,
-        tgc_nombre: document.getElementById('nc_nombre').value,
-        tgc_apellido_paterno: document.getElementById('nc_paterno').value,
-        tgc_apellido_materno: document.getElementById('nc_materno').value
+        // Add RUT formatting
+        const rutInput = document.getElementById('nc_rut');
+        rutInput.onchange = function () {
+            this.value = formatRut(this.value);
+        };
+
+        const modal = new bootstrap.Modal(document.getElementById('modalNuevoContribuyente'));
+        modal.show();
     };
 
-    try {
-        Swal.fire({ title: 'Guardando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+    window.guardarNuevoContribuyente = async function () {
+        const form = document.getElementById('form_nuevo_contribuyente');
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
 
-        const response = await fetch(`${window.API_BASE_URL}/contribuyentes_general.php`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-        const result = await response.json();
+        const payload = {
+            ACCION: 'CREAR',
+            tgc_rut: document.getElementById('nc_rut').value,
+            tgc_nombre: document.getElementById('nc_nombre').value,
+            tgc_apellido_paterno: document.getElementById('nc_paterno').value,
+            tgc_apellido_materno: document.getElementById('nc_materno').value
+        };
 
-        if (result.status === 'success') {
-            // Reload contributors
-            const contribRes = await fetch(`${window.API_BASE_URL}/contribuyentes_general.php`, {
+        try {
+            Swal.fire({ title: 'Guardando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+            const response = await fetch(`${window.API_BASE_URL}/contribuyentes_general.php`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ACCION: 'CONSULTAM' })
-            }).then(r => r.json());
+                body: JSON.stringify(payload)
+            });
+            const result = await response.json();
 
-            contribuyentes = extractData(contribRes);
+            if (result.status === 'success') {
+                // Reload contributors
+                const contribRes = await fetch(`${window.API_BASE_URL}/contribuyentes_general.php`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ACCION: 'CONSULTAM' })
+                }).then(r => r.json());
 
-            bootstrap.Modal.getInstance(document.getElementById('modalNuevoContribuyente')).hide();
-            Swal.fire('Éxito', 'Contribuyente creado correctamente.', 'success');
+                contribuyentes = extractData(contribRes);
 
-            // Reopen search modal
-            setTimeout(() => abrirModalBuscarContribuyente(), 300);
-        } else {
-            Swal.fire('Error', result.message || 'Error al guardar', 'error');
+                bootstrap.Modal.getInstance(document.getElementById('modalNuevoContribuyente')).hide();
+                Swal.fire('Éxito', 'Contribuyente creado correctamente.', 'success');
+
+                // Reopen search modal
+                setTimeout(() => abrirModalBuscarContribuyente(), 300);
+            } else {
+                Swal.fire('Error', result.message || 'Error al guardar', 'error');
+            }
+        } catch (e) {
+            console.error(e);
+            Swal.fire('Error', 'Error de conexión.', 'error');
         }
-    } catch (e) {
-        console.error(e);
-        Swal.fire('Error', 'Error de conexión.', 'error');
-    }
-};
+    };
 
+
+
+    // --- Geolocation Functions ---
+    let map, marker, geocoder;
+    const defaultLocation = { lat: -33.0248997, lng: -71.5570399 }; // Viña del Mar
+
+    window.initMap = function () {
+        const latInput = document.getElementById('Latitud').value;
+        const lngInput = document.getElementById('Longitud').value;
+
+        const initialPos = (latInput && lngInput)
+            ? { lat: parseFloat(latInput), lng: parseFloat(lngInput) }
+            : defaultLocation;
+
+        map = new google.maps.Map(document.getElementById("map_desve"), {
+            center: initialPos,
+            zoom: 15,
+        });
+
+        marker = new google.maps.Marker({
+            position: initialPos,
+            map: map,
+            draggable: true,
+        });
+
+        geocoder = new google.maps.Geocoder();
+
+        marker.addListener("dragend", function (event) {
+            updateCoordinates(event.latLng);
+        });
+
+        map.addListener("click", function (event) {
+            marker.setPosition(event.latLng);
+            updateCoordinates(event.latLng);
+        });
+    };
+
+    function updateCoordinates(latLng) {
+        document.getElementById("Latitud").value = latLng.lat().toFixed(7);
+        document.getElementById("Longitud").value = latLng.lng().toFixed(7);
+    }
+
+    function geocodeAddress(address) {
+        if (!geocoder) {
+            geocoder = new google.maps.Geocoder();
+        }
+        geocoder.geocode({ address: address + ", Viña del Mar, Chile" }, function (results, status) {
+            if (status === "OK") {
+                const pos = results[0].geometry.location;
+                map.setCenter(pos);
+                marker.setPosition(pos);
+                updateCoordinates(pos);
+            } else {
+                Swal.fire("Error", "No se pudo geocodificar la dirección: " + status, "error");
+            }
+        });
+    }
+
+    // --- Organization Search and Creation Functions ---
+    window.abrirModalBuscarOrganizacion = function () {
+        const tbody = document.getElementById('lista_busqueda_org');
+        tbody.innerHTML = '';
+        const idOrgId = document.getElementById('ID_Organizacion').value;
+
+        const matchingComunitarias = organizacionesComunitarias.filter(o => o.orgc_tipo_organizacion == idOrgId);
+        const matchingDESVE = organizacionesDESVE.filter(o => o.org_tipo_id == idOrgId);
+        const matchingGeneral = organizaciones.filter(o => o.org_tipo_id == idOrgId);
+
+        matchingComunitarias.forEach(o => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${o.orgc_rut || '-'}</td>
+                <td>${o.orgc_nombre}</td>
+                <td><span class="badge bg-info text-dark">Comunitaria</span></td>
+                <td class="text-end">
+                    <button type="button" class="btn btn-sm btn-primary" onclick="seleccionarOrganizacion('OC_${o.orgc_id}', '${o.orgc_nombre}')">Seleccionar</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+
+        matchingDESVE.forEach(o => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>-</td>
+                <td>${o.org_nombre}</td>
+                <td><span class="badge bg-secondary">DESVE</span></td>
+                <td class="text-end">
+                    <button type="button" class="btn btn-sm btn-primary" onclick="seleccionarOrganizacion('${o.org_id}', '${o.org_nombre}')">Seleccionar</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+
+        matchingGeneral.forEach(o => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>-</td>
+                <td>${o.org_nombre}</td>
+                <td><span class="badge bg-light text-dark">General</span></td>
+                <td class="text-end">
+                    <button type="button" class="btn btn-sm btn-primary" onclick="seleccionarOrganizacion('${o.org_id}', '${o.org_nombre}')">Seleccionar</button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+
+        document.getElementById('filtroOrganizacion').onkeyup = function () {
+            const val = this.value.toLowerCase();
+            Array.from(tbody.querySelectorAll('tr')).forEach(tr => {
+                tr.style.display = tr.innerText.toLowerCase().includes(val) ? '' : 'none';
+            });
+        };
+
+        const modal = new bootstrap.Modal(document.getElementById('modalBuscarOrganizacion'));
+        modal.show();
+    };
+
+    window.seleccionarOrganizacion = function (id, nombre) {
+        document.getElementById('OrigenSolicitudDisplay').value = nombre;
+        document.getElementById('OrigenSolicitud').value = id;
+        const modalEl = document.getElementById('modalBuscarOrganizacion');
+        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+        modal.hide();
+    };
+
+    window.abrirModalNuevaOrganizacion = function () {
+        const searchModalEl = document.getElementById('modalBuscarOrganizacion');
+        const searchModal = bootstrap.Modal.getInstance(searchModalEl);
+        if (searchModal) searchModal.hide();
+
+        document.getElementById('form_nueva_organizacion').reset();
+        const modal = new bootstrap.Modal(document.getElementById('modalNuevaOrganizacion'));
+        modal.show();
+    };
+
+    window.guardarNuevaOrganizacion = async function () {
+        const form = document.getElementById('form_nueva_organizacion');
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        const idTipo = document.getElementById('ID_Organizacion').value;
+        const payload = {
+            ACCION: 'CREAR',
+            orgc_nombre: document.getElementById('orgc_nombre').value,
+            orgc_rut: document.getElementById('orgc_rut').value,
+            orgc_codigo: document.getElementById('orgc_codigo').value,
+            orgc_rpj: document.getElementById('orgc_rpj').value,
+            orgc_tipo_organizacion: idTipo
+        };
+
+        try {
+            Swal.fire({ title: 'Guardando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+            const response = await fetch(`${window.API_BASE_URL}/organizaciones_comunitarias_general.php`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const result = await response.json();
+
+            if (result.status === 'success') {
+                const orgRes = await fetch(`${window.API_BASE_URL}/organizaciones_comunitarias_general.php`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ACCION: 'CONSULTAM' })
+                }).then(r => r.json());
+
+                organizacionesComunitarias = extractData(orgRes);
+
+                bootstrap.Modal.getInstance(document.getElementById('modalNuevaOrganizacion')).hide();
+                Swal.fire('Éxito', 'Organización creada correctamente.', 'success');
+
+                if (result.id) {
+                    seleccionarOrganizacion(`OC_${result.id}`, payload.orgc_nombre);
+                } else {
+                    const newOrg = organizacionesComunitarias.find(o => o.orgc_nombre === payload.orgc_nombre);
+                    if (newOrg) seleccionarOrganizacion(`OC_${newOrg.orgc_id}`, newOrg.orgc_nombre);
+                }
+            } else {
+                Swal.fire('Error', result.message || 'Error al guardar', 'error');
+            }
+        } catch (e) {
+            console.error(e);
+            Swal.fire('Error', 'Error de conexión.', 'error');
+        }
+    };
+
+    window.seleccionarContribuyente = function (id) {
+        const c = contribuyentes.find(x => x.tgc_id == id);
+        if (c) {
+            document.getElementById('OrigenSolicitudDisplay').value = `${c.tgc_nombre} ${c.tgc_apellido_paterno} ${c.tgc_apellido_materno} (${c.tgc_rut})`;
+            document.getElementById('OrigenSolicitud').value = `CONTRIB_${c.tgc_id}`;
+        }
+        bootstrap.Modal.getInstance(document.getElementById('modalBuscarContribuyente')).hide();
+    };
+}

@@ -6,7 +6,7 @@ use PDO;
 class PerfilAcceso
 {
     private $conn;
-    private $table_name = "trd_acceso_perfiles";
+    private $table_name = "trd_acceso_roles";
 
     public function __construct($db)
     {

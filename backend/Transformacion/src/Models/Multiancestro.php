@@ -49,7 +49,7 @@ class Multiancestro
     {
         $query = "SELECT b.* 
                   FROM " . $this->table_name . " b
-                  WHERE b.gma_padre = :padre 
+                  WHERE b.gma_padre = :padre AND b.gma_borrado = 0
                   ORDER BY b.gma_hijo ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':padre', $padre);
@@ -61,7 +61,7 @@ class Multiancestro
     {
         $query = "SELECT b.* 
                   FROM " . $this->table_name . " b
-                  WHERE b.gma_hijo = :hijo 
+                  WHERE b.gma_hijo = :hijo AND b.gma_borrado = 0
                   ORDER BY b.gma_padre ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':hijo', $hijo);
@@ -73,7 +73,7 @@ class Multiancestro
     {
         $query = "SELECT b.* 
                   FROM " . $this->table_name . " b
-                  WHERE b.gma_id = :id ";
+                  WHERE b.gma_id = :id AND b.gma_borrado = 0";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
@@ -94,7 +94,7 @@ class Multiancestro
     }
     public function obtenerAbolFamiliar2($id, &$acumulador)
     {// 1. Buscamos registros donde el ID sea el HIJO (para subir a los padres)
-        $queryPadres = "SELECT * FROM " . $this->table_name . " WHERE gma_hijo = :id";
+        $queryPadres = "SELECT * FROM " . $this->table_name . " WHERE gma_hijo = :id AND gma_borrado = 0";
         $stmtP = $this->conn->prepare($queryPadres);
         $stmtP->bindParam(':id', $id);
         $stmtP->execute();
@@ -111,7 +111,7 @@ class Multiancestro
         }
 
         // 2. Buscamos registros donde el ID sea el PADRE (para bajar a los hijos)
-        $queryHijos = "SELECT * FROM " . $this->table_name . " WHERE gma_padre = :id";
+        $queryHijos = "SELECT * FROM " . $this->table_name . " WHERE gma_padre = :id AND gma_borrado = 0";
         $stmtH = $this->conn->prepare($queryHijos);
         $stmtH->bindParam(':id', $id);
         $stmtH->execute();
@@ -128,8 +128,7 @@ class Multiancestro
     }
     public function borrar($id)
     {
-        $query = "DELETE FROM " . $this->table_name . " 
-                  WHERE gma_id = :id ";
+        $query = "UPDATE " . $this->table_name . " SET gma_borrado = 1 WHERE gma_id = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
@@ -137,8 +136,7 @@ class Multiancestro
 
     public function borrarVinculo($padre, $hijo)
     {
-        $query = "DELETE FROM " . $this->table_name . " 
-                  WHERE gma_padre = :padre AND gma_hijo = :hijo";
+        $query = "UPDATE " . $this->table_name . " SET gma_borrado = 1 WHERE gma_padre = :padre AND gma_hijo = :hijo";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':padre', $padre);
         $stmt->bindParam(':hijo', $hijo);

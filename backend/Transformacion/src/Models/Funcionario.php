@@ -44,7 +44,7 @@ class Funcionario
                     UPPER(usr_apellido) as fnc_apellido,
                     NULL as fnc_cargo 
                   FROM " . $this->table_name . " 
-                  WHERE usr_id = ? LIMIT 0,1";
+                  WHERE usr_id = ? AND usr_borrado = 0 LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $id);
         $stmt->execute();

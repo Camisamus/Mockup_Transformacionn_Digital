@@ -18,8 +18,9 @@ class AreaUsuarioGeneral
         $query = "SELECT au.*, u.usr_nombre as usuario_nombre, u.usr_apellido as usuario_apellido, 
                          a.tga_nombre as area_nombre
                   FROM " . $this->table_name . " au
-                  JOIN trd_acceso_usuarios u ON au.tgau_usuario = u.usr_id
-                  JOIN trd_general_areas a ON au.tgau_area = a.tga_id
+                  JOIN trd_acceso_usuarios u ON au.tau_usuario_id = u.usr_id
+                  JOIN trd_general_areas a ON au.tau_area_id = a.tga_id
+                  WHERE au.tau_borrado = 0 AND a.tga_borrado = 0
                   ORDER BY u.usr_apellido ASC, a.tga_nombre ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
@@ -29,15 +30,14 @@ class AreaUsuarioGeneral
     public function create($data)
     {
         $query = "INSERT INTO " . $this->table_name . " SET
-            tgau_usuario=:tgau_usuario,
-            tgau_area=:tgau_area,
-            tgau_estado=:tgau_estado";
+            tau_usuario_id=:tau_usuario_id,
+            tau_area_id=:tau_area_id,
+            tau_borrado=0";
 
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bindParam(":tgau_usuario", $data['tgau_usuario']);
-        $stmt->bindParam(":tgau_area", $data['tgau_area']);
-        $stmt->bindParam(":tgau_estado", $data['tgau_estado']);
+        $stmt->bindParam(":tau_usuario_id", $data['tau_usuario_id']);
+        $stmt->bindParam(":tau_area_id", $data['tau_area_id']);
 
         if ($stmt->execute()) {
             return true;
@@ -48,17 +48,15 @@ class AreaUsuarioGeneral
     public function update($id, $data)
     {
         $query = "UPDATE " . $this->table_name . " SET
-            tgau_usuario=:tgau_usuario,
-            tgau_area=:tgau_area,
-            tgau_estado=:tgau_estado
-            WHERE tgau_id=:tgau_id";
+            tau_usuario_id=:tau_usuario_id,
+            tau_area_id=:tau_area_id
+            WHERE tau_id=:tau_id";
 
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bindParam(":tgau_id", $id);
-        $stmt->bindParam(":tgau_usuario", $data['tgau_usuario']);
-        $stmt->bindParam(":tgau_area", $data['tgau_area']);
-        $stmt->bindParam(":tgau_estado", $data['tgau_estado']);
+        $stmt->bindParam(":tau_id", $id);
+        $stmt->bindParam(":tau_usuario_id", $data['tau_usuario_id']);
+        $stmt->bindParam(":tau_area_id", $data['tau_area_id']);
 
         if ($stmt->execute()) {
             return true;
@@ -68,13 +66,9 @@ class AreaUsuarioGeneral
 
     public function delete($id)
     {
-        $query = "DELETE FROM " . $this->table_name . " WHERE tgau_id = :tgau_id";
+        $query = "UPDATE " . $this->table_name . " SET tau_borrado = 1 WHERE tau_id = :tau_id";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":tgau_id", $id);
-
-        if ($stmt->execute()) {
-            return true;
-        }
-        return false;
+        $stmt->bindParam(":tau_id", $id);
+        return $stmt->execute();
     }
 }

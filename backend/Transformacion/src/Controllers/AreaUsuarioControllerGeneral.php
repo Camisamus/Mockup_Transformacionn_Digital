@@ -22,7 +22,7 @@ class AreaUsuarioControllerGeneral
 
     public function create($data)
     {
-        if (empty($data['tgau_usuario']) || empty($data['tgau_area'])) {
+        if (empty($data['tau_usuario_id']) || empty($data['tau_area_id'])) {
             return ["status" => "error", "message" => "Usuario y Área son obligatorios"];
         }
 

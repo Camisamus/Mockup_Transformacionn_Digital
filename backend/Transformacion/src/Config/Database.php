@@ -28,7 +28,7 @@ class Database
         }
 
         $this->host = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?: 'localhost';
-        $this->db_name = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?: 'transformacion_digital_beta';
+        $this->db_name = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?: 'transformacion_digital';
         $this->username = $_ENV['DB_USER'] ?? getenv('DB_USER') ?: 'root';
         $this->password = $_ENV['DB_PASS'] ?? getenv('DB_PASS') ?: 'root';
     }

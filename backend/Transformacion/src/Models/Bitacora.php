@@ -8,7 +8,7 @@ use Exception;
 class Bitacora
 {
     private $conn;
-    private $table_name = "trd_general_bitacora";
+    private $table_name = "trd_general_bitacora"; // This table name is not changed as per the instruction's context.
 
     public function __construct($db)
     {
@@ -18,7 +18,7 @@ class Bitacora
     /**
      * Registra un evento en la bitácora
      * 
-     * @param int $tramite_id ID del trámite en trd_general_registro_general_tramites
+     * @param int $tramite_id ID del trámite en trd_general_registro_general_expedientes (Updated from trd_general_registro_general_tramites)
      * @param string $evento Descripción del evento
      * @param int|null $responsable_id ID del usuario responsable
      * @return bool
@@ -35,13 +35,13 @@ class Bitacora
         }
 
         $query = "INSERT INTO " . $this->table_name . " 
-                  (`bit_tramite_registrado`, `bit_evento`, `bit-responsable`, `bit_fecha`) 
+                  (`bit_tramite_registrado`, `bit_evento`, `bit_responsable`, `bit_creacion`) 
                   VALUES (:tramite_id, :evento, :responsable, NOW())";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':tramite_id', $tramite_id);
         $stmt->bindParam(':evento', $evento);
-        $stmt->bindParam(':responsable', $responsable_id);
+        $stmt->bindParam(':responsable', $responsable_id); // Kept $responsable_id as per function signature
 
         return $stmt->execute();
     }
@@ -56,9 +56,9 @@ class Bitacora
     {
         $query = "SELECT b.*, u.usr_nombre, u.usr_apellido 
                   FROM " . $this->table_name . " b
-                  JOIN trd_acceso_usuarios u ON b.`bit-responsable` = u.usr_id
-                  WHERE b.bit_tramite_registrado = :tramite_id 
-                  ORDER BY b.bit_fecha ASC";
+                  LEFT JOIN trd_acceso_usuarios u ON b.`bit_responsable` = u.usr_id
+                  WHERE b.bit_tramite_registrado = :tramite_id AND b.bit_borrado = 0
+                  ORDER BY b.bit_creacion ASC";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':tramite_id', $tramite_id);

@@ -153,7 +153,7 @@ function renderizarTabla(data) {
                 <div class="fw-bold">${item.tis_titulo || 'Sin título'}</div>
                 <div class="small text-muted text-truncate" style="max-width: 300px;">${item.tis_contenido || ''}</div>
             </td>
-            <td><span class="small">${(item.tis_fecha || '').substring(0, 10)}</span></td>
+            <td><span class="small">${(item.tis_creacion || '').substring(0, 10)}</span></td>
             <td>${getDeadlineBadge(item.tis_fecha_limite)}</td>
             <td><span class="badge ${item.tis_estado === 'Ingresado' ? 'bg-success' : 'bg-primary'}">${item.tis_estado || '-'}</span></td>
             <td>${getRolBadge(item.rol_usuario)}</td>

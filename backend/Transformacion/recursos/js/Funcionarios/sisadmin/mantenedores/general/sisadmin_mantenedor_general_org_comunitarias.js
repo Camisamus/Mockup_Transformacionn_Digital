@@ -326,21 +326,3 @@ async function saveData() {
     }
 }
 
-
-function formatRut(rut) {
-    if (!rut) return '';
-
-    // Clean data, remove non-numeric or k
-    let value = rut.replace(/[^0-9kK]/g, '');
-
-    if (value.length <= 1) return value;
-
-    // Split body and dv
-    const dv = value.slice(-1).toUpperCase();
-    let body = value.slice(0, -1);
-
-    // Format body with dots
-    body = body.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
-    return `${body}-${dv}`;
-}

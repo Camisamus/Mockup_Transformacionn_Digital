@@ -15,7 +15,7 @@ class Escolaridad
 
     public function getAll()
     {
-        $query = "SELECT esc_id, esc_nombre FROM " . $this->table_name . " ORDER BY esc_id ASC";
+        $query = "SELECT esc_id, esc_nombre FROM " . $this->table_name . " WHERE esc_borrado = 0 ORDER BY esc_id ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -23,7 +23,7 @@ class Escolaridad
 
     public function getById($id)
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE esc_id = ? LIMIT 0,1";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE esc_id = ? AND esc_borrado = 0 LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $id);
         $stmt->execute();
@@ -62,13 +62,9 @@ class Escolaridad
 
     public function delete($id)
     {
-        $query = "DELETE FROM " . $this->table_name . " WHERE esc_id = :esc_id";
+        $query = "UPDATE " . $this->table_name . " SET esc_borrado = 1 WHERE esc_id = :esc_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":esc_id", $id);
-
-        if ($stmt->execute()) {
-            return true;
-        }
-        return false;
+        return $stmt->execute();
     }
 }

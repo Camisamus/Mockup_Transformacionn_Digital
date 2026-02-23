@@ -106,7 +106,7 @@ ORDER BY tds.sol_id DESC;";
             $id_para_respuestas = $solicitud['sol_reingreso_id'] ?: $id;
 
             // Obtener respuestas relacionadas
-            $query_respuestas = "SELECT * FROM trd_desve_respuestas WHERE res_solicitud_id = ? AND res_borrado = 0 ORDER BY res_fecha ASC";
+            $query_respuestas = "SELECT * FROM trd_desve_respuestas WHERE res_solicitud_id = ? AND res_borrado = 0 ORDER BY res_creacion ASC";
             $stmt_respuestas = $this->conn->prepare($query_respuestas);
             $stmt_respuestas->bindParam(1, $id_para_respuestas);
             $stmt_respuestas->execute();
@@ -134,7 +134,7 @@ ORDER BY tds.sol_id DESC;";
         $query = "SELECT d.*, UPPER(u.usr_nombre) as usr_nombre, UPPER(u.usr_apellido) as usr_apellido, u.usr_email, UPPER(CONCAT(u.usr_nombre, ' ', u.usr_apellido)) as usr_nombre_completo 
                   FROM trd_desve_destinos d
                   LEFT JOIN trd_acceso_usuarios u ON d.tid_destino = u.usr_id
-                  WHERE d.tid_desve_solicitud = ?";
+                  WHERE d.tid_desve_solicitud = ? AND d.tid_borrado = 0";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $solId);
         $stmt->execute();
@@ -166,7 +166,7 @@ ORDER BY tds.sol_id DESC;";
 
     public function deleteDestinosBySolicitud($solId)
     {
-        $query = "DELETE FROM trd_desve_destinos WHERE tid_desve_solicitud = ?";
+        $query = "UPDATE trd_desve_destinos SET tid_borrado = 1 WHERE tid_desve_solicitud = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $solId);
         $stmt->execute();
@@ -185,7 +185,7 @@ ORDER BY tds.sol_id DESC;";
             $fecha_yymmdd = date('ymd-Hi');
             $id_publica = $fecha_yymmdd . "-" . $this->sysname . "-" . $random_str;
 
-            $query_rgt = "INSERT INTO trd_general_registro_general_tramites 
+            $query_rgt = "INSERT INTO trd_general_registro_general_expedientes 
                           (rgt_id_publica, rgt_tramite, rgt_creador) 
                           VALUES (:id_publica, '{$this->sysname}', :creador)";
             $stmt_rgt = $this->conn->prepare($query_rgt);
@@ -218,7 +218,8 @@ ORDER BY tds.sol_id DESC;";
                 sol_longitud=:sol_longitud,
                 sol_responsable=:sol_responsable,
                 sol_registro_tramite=:sol_registro_tramite,
-                sol_origen_esp=:sol_origen_esp";
+                sol_origen_esp=:sol_origen_esp,
+                sol_direccion_completa=:sol_direccion_completa";
 
             $stmt = $this->conn->prepare($query);
 
@@ -251,6 +252,7 @@ ORDER BY tds.sol_id DESC;";
             $stmt->bindValue(":sol_registro_tramite", $rgt_id);
             // Cast to int directly to preserve 0, 1, 2 values
             $stmt->bindValue(":sol_origen_esp", (int) ($data['sol_origen_esp'] ?? 0), PDO::PARAM_INT);
+            $stmt->bindValue(":sol_direccion_completa", $data['sol_direccion'] ?? null);
 
             if ($stmt->execute()) {
                 $data_id = $this->conn->lastInsertId();
@@ -339,7 +341,8 @@ ORDER BY tds.sol_id DESC;";
             sol_latitud=:sol_latitud,
             sol_longitud=:sol_longitud,
             sol_responsable=:sol_responsable,
-            sol_origen_esp=:sol_origen_esp
+            sol_origen_esp=:sol_origen_esp,
+            sol_direccion_completa=:sol_direccion_completa
             WHERE sol_id = :id";
 
         $stmt = $this->conn->prepare($query);
@@ -370,7 +373,8 @@ ORDER BY tds.sol_id DESC;";
         $stmt->bindValue(":sol_longitud", $data['sol_longitud'] ?? null);
         $stmt->bindValue(":sol_responsable", $data['sol_responsable'] ?? null);
         $stmt->bindValue(":sol_origen_esp", (int) ($data['sol_origen_esp'] ?? 0), PDO::PARAM_INT);
-        $stmt->bindValue(":id", $id);
+        $stmt->bindValue(":sol_id", $id);
+        $stmt->bindValue(":sol_direccion_completa", $data['sol_direccion'] ?? null);
 
         try {
             if ($stmt->execute()) {

@@ -24,7 +24,7 @@ class OirsAsignacion
         $query = "SELECT a.*, f.usr_nombre, f.usr_apellido 
                           FROM " . $this->table_name . " a
                   LEFT JOIN trd_acceso_usuarios f ON a.oia_asignacion = f.usr_id
-                  WHERE a.oia_solicitud = :id";
+                  WHERE a.oia_solicitud = :id AND a.oia_borrado = 0";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(":id", $id);
@@ -72,7 +72,7 @@ class OirsAsignacion
     public function checkDuplicate($solicitudId, $funcionarioId)
     {
         $query = "SELECT COUNT(*) as count FROM " . $this->table_name . " 
-                  WHERE oia_solicitud = :solicitud AND oia_asignacion = :funcionario";
+                  WHERE oia_solicitud = :solicitud AND oia_asignacion = :funcionario AND oia_borrado = 0";
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(":solicitud", $solicitudId);
         $stmt->bindValue(":funcionario", $funcionarioId);

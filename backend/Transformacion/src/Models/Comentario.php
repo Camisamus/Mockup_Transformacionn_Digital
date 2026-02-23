@@ -20,8 +20,8 @@ class Comentario
         $query = "SELECT c.*, u.usr_nombre, u.usr_apellido 
                   FROM " . $this->table_name . " c
                   LEFT JOIN trd_acceso_usuarios u ON c.gco_comentador = u.usr_id
-                  WHERE c.gco_tramite = :rgt_id 
-                  ORDER BY c.gco_fecha DESC";
+                  WHERE c.gco_tramite = :rgt_id AND c.gco_borrado = 0
+                  ORDER BY c.gco_creacion DESC";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(":rgt_id", $rgt_id);
@@ -35,13 +35,13 @@ class Comentario
                   gco_tramite = :rgt_id,
                   gco_comentario = :gco_texto,
                   gco_comentador = :gco_usuario,
-                  gco_fecha = :gco_fecha";
+                  gco_creacion = :gco_creacion";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(":rgt_id", $data['rgt_id']);
         $stmt->bindValue(":gco_texto", $data['gco_texto']);
         $stmt->bindValue(":gco_usuario", $data['gco_usuario']);
-        $stmt->bindValue(":gco_fecha", date('Y-m-d H:i:s'));
+        $stmt->bindValue(":gco_creacion", date('Y-m-d H:i:s'));
 
         if ($stmt->execute()) {
             // Registrar en bitácora

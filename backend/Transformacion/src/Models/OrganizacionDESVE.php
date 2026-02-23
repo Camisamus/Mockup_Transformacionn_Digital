@@ -37,7 +37,8 @@ class OrganizacionDESVE
             org_tipo_id=:org_tipo_id,
             org_direccion=:org_direccion,
             org_latitud=:org_latitud,
-            org_longitud=:org_longitud";
+            org_longitud=:org_longitud,
+            org_direccion_completa=:org_direccion_completa";
 
         $stmt = $this->conn->prepare($query);
 
@@ -49,8 +50,9 @@ class OrganizacionDESVE
         $lon = $data['org_longitud'] ?? null;
 
         $stmt->bindParam(":org_direccion", $direccion);
-        $stmt->bindParam(":org_latitud", $lat);
-        $stmt->bindParam(":org_longitud", $lon);
+        $stmt->bindValue(":org_latitud", $lat);
+        $stmt->bindValue(":org_longitud", $lon);
+        $stmt->bindValue(":org_direccion_completa", $data['org_direccion'] ?? null);
 
         if ($stmt->execute()) {
             return true;
@@ -62,7 +64,8 @@ class OrganizacionDESVE
     {
         $query = "UPDATE " . $this->table_name . " SET
             org_nombre=:org_nombre,
-            org_tipo_id=:org_tipo_id";
+            org_tipo_id=:org_tipo_id,
+            org_direccion_completa=:org_direccion_completa";
 
         // Add optional fields if provided
         if (isset($data['org_direccion'])) {
@@ -82,6 +85,7 @@ class OrganizacionDESVE
         $stmt->bindParam(":org_id", $id);
         $stmt->bindParam(":org_nombre", $data['org_nombre']);
         $stmt->bindParam(":org_tipo_id", $data['org_tipo_id']);
+        $stmt->bindValue(":org_direccion_completa", $data['org_direccion'] ?? null);
 
         // Bind optional fields if provided
         if (isset($data['org_direccion'])) {

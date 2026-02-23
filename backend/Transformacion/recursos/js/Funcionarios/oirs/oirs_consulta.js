@@ -116,7 +116,7 @@ function renderizarDatos(d) {
     // Datos Principales (Some pre-filled by PHP, others need JS processing)
     $('#oirs_folio').html(`Folio: <strong class="text-white">${d.rgt_id_publica || d.oirs_id || 'N/A'}</strong>`);
 
-    const fechaHora = d.oirs_fecha_hora ? d.oirs_fecha_hora.split(' ') : ['', ''];
+    const fechaHora = d.oirs_creacion ? d.oirs_creacion.split(' ') : ['', ''];
     $('#oirs_fecha').val(fechaHora[0]);
     $('#oirs_hora').val(fechaHora[1] ? fechaHora[1].substring(0, 5) : '');
 
@@ -253,7 +253,7 @@ function renderHistorial(historial) {
     container.empty();
 
     historial.forEach(h => {
-        const fecha = new Date(h.bit_fecha).toLocaleString('es-CL');
+        const fecha = new Date(h.bit_creacion).toLocaleString('es-CL');
         const item = `
             <div class="timeline-item">
                 <span class="d-block font-weight-bold text-dark">${h.bit_evento}</span>
@@ -281,7 +281,7 @@ function renderAdjuntos(adjuntos) {
                         <div class="card-body text-center d-flex flex-column align-items-center justify-content-center p-3">
                             <span class="material-symbols-outlined text-primary mb-2" style="font-size: 32px;">description</span>
                             <small class="text-dark font-weight-bold text-truncate w-100" title="${a.doc_nombre_documento}">${a.doc_nombre_documento}</small>
-                            <span class="badge badge-light mt-2">${a.version_fecha || a.doc_fecha}</span>
+                            <span class="badge badge-light mt-2">${a.version_fecha || a.doc_creacion}</span>
                         </div>
                     </div>
                 </div>
@@ -315,7 +315,7 @@ function renderAdjuntosMuni(adjuntos) {
             <tr>
                 <td><span class="material-symbols-outlined align-middle mr-1 text-danger">picture_as_pdf</span> ${a.doc_nombre_documento}</td>
                 <td>${a.usr_nombre || 'Sistema'}</td> <!-- usr_nombre might need to be joined in backend or available in 'a' -->
-                <td>${a.version_fecha || a.doc_fecha}</td>
+                <td>${a.version_fecha || a.doc_creacion}</td>
                 <td class="text-right"><a href="#" class="text-primary" onclick="descargarDocumento(${a.doc_id}, '${a.doc_nombre_documento}'); return false;">Descargar</a></td>
             </tr>
         `;
@@ -422,6 +422,106 @@ function guardarAsignacion() {
 
     ejecutarActualizacion(data);
 }
+
+// ============================================================
+// MODAL BUSCAR FUNCIONARIO
+// Lee la lista desde window.oirsData.listas.funcionarios,
+// que fue inyectada desde PHP en el script al final de la página.
+//
+// *** PUNTO DE FILTRO FUTURO ***
+// Cuando se deba restringir la lista de funcionarios según el
+// usuario que trabaja la solicitud (ej: solo su área, o solo
+// funcionarios con acceso OIRS), se debe aplicar el filtro
+// en el array $funcionarios ANTES de json_encode() en el PHP,
+// o bien aquí en tiempo de ejecución sobre this.funcionariosOIRS.
+// ============================================================
+
+let _funcionariosOIRS = null; // caché local
+
+function _getFuncionariosOIRS() {
+    if (!_funcionariosOIRS) {
+        _funcionariosOIRS = (window.oirsData && window.oirsData.listas && window.oirsData.listas.funcionarios)
+            ? window.oirsData.listas.funcionarios
+            : [];
+    }
+    return _funcionariosOIRS;
+}
+
+function abrirModalBuscarFuncionario() {
+    const buscarInput = document.getElementById('buscar_fnc_input');
+    const filtroArea = document.getElementById('filtro_area_fnc_oirs');
+    if (buscarInput) buscarInput.value = '';
+    if (filtroArea) filtroArea.value = '';
+    renderizarBusquedaFuncionariosOIRS(_getFuncionariosOIRS());
+}
+
+function filtrarBusquedaFuncionariosOIRS() {
+    const term = $('#buscar_fnc_input').val().toLowerCase();
+    const areaId = $('#filtro_area_fnc_oirs').val();
+
+    const filtrados = _getFuncionariosOIRS().filter(f => {
+        const matchesTerm =
+            (f.fnc_nombre && f.fnc_nombre.toLowerCase().includes(term)) ||
+            (f.fnc_apellido && f.fnc_apellido.toLowerCase().includes(term)) ||
+            (f.fnc_email && f.fnc_email.toLowerCase().includes(term));
+
+        let matchesArea = true;
+        if (areaId === 'SIN_AREA') {
+            matchesArea = !f.fnc_area_id;
+        } else if (areaId) {
+            matchesArea = f.fnc_area_id == areaId;
+        }
+
+        return matchesTerm && matchesArea;
+    });
+
+    renderizarBusquedaFuncionariosOIRS(filtrados);
+}
+
+function renderizarBusquedaFuncionariosOIRS(lista) {
+    const tbody = document.getElementById('lista_busqueda_fnc_oirs');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    if (lista.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-3">No se encontraron funcionarios.</td></tr>';
+        return;
+    }
+
+    lista.forEach(f => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="small">${f.fnc_id || '-'}</td>
+            <td class="small">${f.fnc_email || '-'}</td>
+            <td class="small">
+                <div>${f.fnc_nombre || '-'}</div>
+                <div class="text-muted" style="font-size:11px">${f.fnc_area_nombre || 'Sin Área'}</div>
+            </td>
+            <td class="small">${f.fnc_apellido || '-'}</td>
+            <td class="text-right">
+                <button class="btn btn-sm btn-outline-primary"
+                    onclick="seleccionarFuncionarioOIRS(${f.fnc_id}, '${(f.fnc_nombre || '')} ${(f.fnc_apellido || '')}')">
+                    Seleccionar
+                </button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function seleccionarFuncionarioOIRS(id, nombre) {
+    const hiddenInput = document.getElementById('oig_asignacion');
+    const displayInput = document.getElementById('oig_asignacion_display');
+    if (hiddenInput) hiddenInput.value = id;
+    if (displayInput) displayInput.value = nombre.trim();
+
+    // Cerrar el modal simulando el clic en el botón de cerrar nativo de Bootstrap
+    const btnCerrar = document.querySelector('#modalBuscarFuncionario .close[data-dismiss="modal"]');
+    if (btnCerrar) {
+        btnCerrar.click();
+    }
+}
+
 
 function guardarGestion(fields) {
     const data = {
@@ -686,7 +786,7 @@ async function solicitarID() {
     });
 
     if (!formValues) {
-        window.location.href = 'oirs_bandeja.php';
+        window.location.href = 'index.php';
         return;
     }
 

@@ -15,7 +15,7 @@ class Ingresos_TiposDeIngresos
 
     public function getAll()
     {
-        $query = "SELECT * FROM " . $this->table_name . " ORDER BY titi_nombre ASC";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE titi_borrado = 0 ORDER BY titi_nombre ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -59,5 +59,12 @@ class Ingresos_TiposDeIngresos
             return $stmt->rowCount() > 0;
         }
         return false;
+    }
+    public function delete($id)
+    {
+        $query = "UPDATE " . $this->table_name . " SET titi_borrado = 1 WHERE titi_id = :titi_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":titi_id", $id);
+        return $stmt->execute();
     }
 }

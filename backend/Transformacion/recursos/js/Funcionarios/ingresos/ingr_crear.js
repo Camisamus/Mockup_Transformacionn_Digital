@@ -161,7 +161,7 @@ function setupEventListeners() {
     };
 
     document.getElementById('btn_cancelar').onclick = () => {
-        window.location.href = 'ingr_bandeja.php';
+        window.location.href = 'index.php';
     };
 }
 
@@ -354,7 +354,7 @@ async function guardarIngreso() {
                 text: 'El ingreso ha sido creado correctamente.',
                 confirmButtonText: 'Ir a la Bandeja'
             }).then(() => {
-                window.location.href = 'ingr_bandeja.php';
+                window.location.href = 'index.php';
             });
         } else {
             Swal.fire('Error', result.message || 'No se pudo crear el ingreso', 'error');

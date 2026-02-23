@@ -18,6 +18,7 @@ require_once '../../api/auth_check.php';
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+    <script src="<?php echo $pathPrefix; ?>recursos/js/helpers.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -472,7 +473,7 @@ require_once '../../api/auth_check.php';
                         </h2>
                         <p class="text-primary font-weight-bold text-uppercase mb-0"
                             style="font-size: 9px; letter-spacing: 0.15em; margin-top: 2px; color: #006FB3 !important;">
-                            Sistema Unificado de Gestión Municipal de Cuidados</p>
+                            Sistema Unificado de Gestión Municipal</p>
                     </div>
                 </div>
                 <!-- Notifications/Widgets as per mockup -->

@@ -13,7 +13,7 @@ class Fechas
      * Suma días hábiles (Lunes a Viernes) a una fecha, considerando feriados si se provee conexión.
      * @param string $fecha Fecha inicial (Y-m-d)
      * @param int $dias Cantidad de días hábiles a sumar
-     * @param \PDO|null $conn Conexión a BD para consultar sup_feriados
+     * @param \PDO|null $conn Conexión a BD para consultar trd_soporte_feriados
      * @return string Fecha resultante (Y-m-d)
      */
     public static function sumarDiasHabiles($fecha, $dias, $conn = null)
@@ -28,7 +28,7 @@ class Fechas
                 $fecha_fin_estimada = clone $fecha_dt;
                 $fecha_fin_estimada->modify('+' . ($dias * 2) . ' days'); // Estimación generosa
 
-                $query = "SELECT fer_fecha FROM sup_feriados 
+                $query = "SELECT fer_fecha FROM trd_soporte_feriados 
                           WHERE fer_fecha BETWEEN :inicio AND :fin";
                 $stmt = $conn->prepare($query);
                 $stmt->execute([

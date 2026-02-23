@@ -230,7 +230,7 @@ function setupEventListeners() {
     };
 
     document.getElementById('btn_cancelar').onclick = () => {
-        window.location.href = 'ingr_bandeja.php';
+        window.location.href = 'index.php';
     };
 }
 
@@ -513,7 +513,7 @@ function renderizarComentarios(array) {
         div.innerHTML = `
             <div class="d-flex justify-content-between mb-1">
                 <span class="fw-bold small text-primary">${com.usr_nombre} ${com.usr_apellido}</span>
-                <span class="text-muted" style="font-size: 0.7rem;">${com.gco_fecha.substring(0, 10)}</span>
+                <span class="text-muted" style="font-size: 0.7rem;">${com.gco_fecha ? com.gco_fecha.substring(0, 10) : '-'}</span>
             </div>
             <div class="small text-dark">${com.gco_comentario}</div>
         `;
@@ -591,7 +591,7 @@ async function checkAndRequestID() {
     });
 
     if (!formValues) {
-        window.location.href = 'ingr_bandeja.php';
+        window.location.href = 'index.php';
         return;
     }
 

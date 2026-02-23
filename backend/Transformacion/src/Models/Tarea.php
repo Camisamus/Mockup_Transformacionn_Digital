@@ -19,7 +19,7 @@ class Tarea
     {
         $query = "SELECT c.*
                   FROM trd_tareas c
-                  WHERE c.tar_asignador = :usr_id
+                  WHERE c.tar_asignador = :usr_id AND c.tar_borrado = 0
                   AND (
                       (c.tar_estado = 1 AND c.tar_plazo >= NOW()) 
                       OR 
@@ -37,8 +37,8 @@ class Tarea
     {
         $query = "SELECT c.*
                   FROM " . $this->table_name . " c
-                  WHERE c.tar_asignado = :usr_id AND c.tar_estado = 0
-                  ORDER BY c.tar_fecha DESC";
+                  WHERE c.tar_asignado = :usr_id AND c.tar_estado = 0 AND c.tar_borrado = 0
+                  ORDER BY c.tar_creacion DESC";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(":usr_id", $usr_id);
@@ -75,6 +75,14 @@ class Tarea
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(":tar_id", $data['tar_id']);
 
+        return $stmt->execute();
+    }
+
+    public function delete($id)
+    {
+        $query = "UPDATE " . $this->table_name . " SET tar_borrado = 1 WHERE tar_id = :tar_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(":tar_id", $id);
         return $stmt->execute();
     }
 }

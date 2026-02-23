@@ -73,7 +73,8 @@ function buildMenuHierarchy($flatItems)
     return $roots;
 }
 
-function renderSidebar($flatPermissions, $pathPrefix, $currentScript) {
+function renderSidebar($flatPermissions, $pathPrefix, $currentScript)
+{
     // 1. Detectar módulo actual basado en la ruta
     $currentPath = $_SERVER['SCRIPT_NAME'];
     $module = 'principal'; // Módulo por defecto
@@ -81,11 +82,26 @@ function renderSidebar($flatPermissions, $pathPrefix, $currentScript) {
     // Determinamos el módulo según la carpeta en la que estamos
     if (stripos($currentPath, '/oirs/') !== false) {
         $module = 'oirs';
-    } 
+    }
+
+    if (stripos($currentPath, '/desve/') !== false) {
+        $module = 'desve';
+    }
+
+    if (stripos($currentPath, '/sisadmin/') !== false) {
+        $module = 'sisadmin';
+    }
+
+    if (stripos($currentPath, '/ingresos/') !== false) {
+        $module = 'ingresos';
+    }
+
     // Aquí se pueden agregar más módulos en el futuro (e.g., /transparencia/, /permisos/, etc.)
 
     // 2. Filtrar los permisos (roles) por el módulo detectado
-    $filteredPermissions = array_filter($flatPermissions, function($item) use ($module) {
+    $flatPermissions = is_array($flatPermissions) ? $flatPermissions : [];
+
+    $filteredPermissions = array_filter($flatPermissions, function ($item) use ($module) {
         return isset($item['rol_modulo']) && $item['rol_modulo'] === $module;
     });
 
@@ -93,9 +109,10 @@ function renderSidebar($flatPermissions, $pathPrefix, $currentScript) {
     return renderSidebarPrincipal($filteredPermissions, $currentScript, $pathPrefix, $module);
 }
 
-function renderSidebarPrincipal($permissions, $currentScript, $pathPrefix, $currentModule = 'principal') {
+function renderSidebarPrincipal($permissions, $currentScript, $pathPrefix, $currentModule = 'principal')
+{
     $html = '<aside id="sidebar" class="d-flex flex-column w-100 h-100 bg-white border-end shadow-sm">';
-    
+
     // Botón Volver al Panel Principal si estamos en un submódulo
     if ($currentModule !== 'principal') {
         $html .= '
@@ -122,12 +139,12 @@ function renderSidebarPrincipal($permissions, $currentScript, $pathPrefix, $curr
             // Diseño para los botones con link (Categorías o Páginas)
             $enlace = $item['rol_enlace'] ?: '#';
             $href = ($enlace !== '#') ? $pathPrefix . $enlace : '#';
-            
+
             // Estado activo: verificamos si el script actual contiene el enlace del menú
             $currentPath = $_SERVER['SCRIPT_NAME'];
             $isActive = ($enlace !== '#' && strpos(strtolower($currentPath), strtolower($enlace)) !== false) ? 'active-main' : '';
             $icon = !empty($item['rol_simbolo']) ? $item['rol_simbolo'] : 'grid';
-            
+
             $html .= '
             <li class="nav-item">
                 <a class="nav-link d-flex align-items-center px-3 py-2 ' . $isActive . '" 
@@ -144,11 +161,12 @@ function renderSidebarPrincipal($permissions, $currentScript, $pathPrefix, $curr
     return $html;
 }
 
-function renderMenuItem($item, $class = "", $isRoot = false) {
+function renderMenuItem($item, $class = "", $isRoot = false)
+{
     $icon = $item['rol_simbolo'] ?? 'file';
     $chevron = $isRoot ? '<i data-feather="chevron-right" class="ms-auto opacity-50" style="width:14px"></i>' : '';
     // Si es categoría raíz, su enlace es el de su primera página para "entrar"
-    $href = $item['rol_enlace'] ?: '#'; 
+    $href = $item['rol_enlace'] ?: '#';
 
     return "
     <li class='nav-item'>

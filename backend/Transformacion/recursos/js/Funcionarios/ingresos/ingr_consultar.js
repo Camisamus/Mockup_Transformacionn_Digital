@@ -107,7 +107,7 @@ async function cargarDatosIngreso(params) {
                         allowEscapeKey: false,
                         confirmButtonText: 'Volver a Bandeja'
                     }).then(() => {
-                        window.location.href = 'ingr_bandeja.php';
+                        window.location.href = 'index.php';
                     });
                     return;
                 }
@@ -165,7 +165,7 @@ function renderizarIngreso(data) {
     document.getElementById('info_titulo').innerText = data.tis_titulo || '-';
     document.getElementById('info_rgt_id').innerText = data.rgt_id || '-';
     document.getElementById('info_id_publica').innerText = data.rgt_id_publica || '-';
-    document.getElementById('info_fecha').innerText = data.tis_fecha.substring(0, 10) || '-';
+    document.getElementById('info_fecha').innerText = (data.tis_creacion && data.tis_creacion.length >= 10) ? data.tis_creacion.substring(0, 10) : '-';
     const responsable = data.resp_nombre ? `${data.resp_nombre} ${data.resp_apellido}` : `ID: ${data.tis_responsable}`;
     document.getElementById('info_responsable').innerText = responsable;
     document.getElementById('info_fecha_limite').innerText = data.tis_fecha_limite ? data.tis_fecha_limite.substring(0, 10) : 'Sin fecha límite';
@@ -214,17 +214,21 @@ function renderizarIngreso(data) {
 
     // Bitácora
     const listaBitacora = document.getElementById('lista_bitacora');
+    if (!listaBitacora) {
+        console.warn('Elemento lista_bitacora no encontrado');
+        return;
+    }
     listaBitacora.innerHTML = '';
-    if (data.bitacora && data.bitacora.length > 0) {
+    if (data.bitacora && Array.isArray(data.bitacora) && data.bitacora.length > 0) {
         data.bitacora.forEach(entry => {
             const item = document.createElement('div');
             item.className = 'mb-3 pb-2 border-bottom';
             item.innerHTML = `
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="fw-bold small">${entry.bit_evento}</div>
-                    <div class="text-muted" style="font-size: 0.75rem;">${entry.bit_fecha.substring(0, 10)}</div>
+                    <div class="text-muted" style="font-size: 0.75rem;">${entry.bit_creacion ? entry.bit_creacion.substring(0, 10) : '-'}</div>
                 </div>
-                <div class="small text-secondary">Por: ${entry.usr_nombre} ${entry.usr_apellido}</div>
+                <div class="small text-secondary">Por: ${(entry.usr_nombre || 'Sistema')} ${(entry.usr_apellido || '')}</div>
             `;
             listaBitacora.appendChild(item);
         });
@@ -283,7 +287,7 @@ function renderizarIngreso(data) {
             div.innerHTML = `
                 <div class="d-flex justify-content-between mb-1">
                     <span class="fw-bold small text-primary">${com.usr_nombre} ${com.usr_apellido}</span>
-                    <span class="text-muted" style="font-size: 0.7rem;">${com.gco_fecha.substring(0, 10)}</span>
+                    <span class="text-muted" style="font-size: 0.7rem;">${com.gco_creacion.substring(0, 10)}</span>
                 </div>
                 <div class="small text-dark">${com.gco_comentario}</div>
             `;
@@ -667,7 +671,7 @@ async function checkAndRequestID() {
     });
 
     if (!formValues) {
-        window.location.href = 'ingr_bandeja.php';
+        window.location.href = 'index.php';
         return;
     }
 

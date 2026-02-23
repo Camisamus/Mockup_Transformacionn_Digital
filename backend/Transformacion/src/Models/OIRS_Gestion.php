@@ -8,6 +8,7 @@ class OIRS_Gestion
 {
     private $conn;
     private $table_name = "trd_oirs_gestion";
+    private $table_name_parent = "trd_general_registro_general_expedientes";
     private $bitacora;
 
     public function __construct($db)
@@ -142,19 +143,19 @@ class OIRS_Gestion
     {
         // Base Query - Updated to join with parent table (tramite) and contributor
         $query = "SELECT s.*, 
-                         s.oirs_fecha_hora as oirs_fecha_ingreso,
+                         s.oirs_creacion as oirs_fecha_ingreso,
                          r.rgt_creador, r.rgt_id_publica as folio,
                          t.oig_asignacion, t.oig_solicitud_ejecutada,
                          CONCAT(tgc.tgc_nombre, ' ', tgc.tgc_apellido_paterno, ' ', tgc.tgc_apellido_materno) as nombre_contribuyente,
                          tgc.tgc_rut as rut_contribuyente,
                          tem.tem_nombre as oirs_tematica_nombre
                   FROM trd_oirs_solicitud s
-                  JOIN trd_general_registro_general_tramites r ON s.oirs_registro_tramite = r.rgt_id
-                  LEFT JOIN trd_oirs_gestion t ON s.oirs_id = t.oig_solicitud
-                  LEFT JOIN trd_general_contribuyentes tgc ON r.rgt_contribuyente = tgc.tgc_id
-                  LEFT JOIN trd_oirs_tematicas tem ON s.oirs_tematica = tem.tem_id
-                  LEFT JOIN trd_oirs_asignaciones a ON s.oirs_id = a.oia_solicitud AND a.oia_asignacion = :userId
-                  WHERE 1=1";
+                  JOIN " . $this->table_name_parent . " r ON s.oirs_registro_tramite = r.rgt_id
+                  LEFT JOIN trd_oirs_gestion t ON s.oirs_id = t.oig_solicitud AND t.oig_borrado = 0
+                  LEFT JOIN trd_general_contribuyentes tgc ON r.rgt_contribuyente = tgc.tgc_id AND tgc.tgc_borrado = 0
+                  LEFT JOIN trd_oirs_tematicas tem ON s.oirs_tematica = tem.tem_id AND tem.tem_borrado = 0
+                  LEFT JOIN trd_oirs_asignaciones a ON s.oirs_id = a.oia_solicitud AND a.oia_asignacion = :userId AND a.oia_borrado = 0
+                  WHERE s.oirs_borrado = 0 AND r.rgt_borrado = 0";
 
         $params = [':userId' => $userId];
 
@@ -195,7 +196,7 @@ class OIRS_Gestion
                 return [];
         }
 
-        $query .= " ORDER BY s.oirs_fecha_hora DESC";
+        $query .= " ORDER BY s.oirs_creacion DESC";
 
         try {
             $stmt = $this->conn->prepare($query);

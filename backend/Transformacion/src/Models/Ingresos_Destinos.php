@@ -16,7 +16,7 @@ class Ingresos_Destinos
 
     public function getAll()
     {
-        $query = "SELECT * FROM " . $this->table_name . " ORDER BY tid_id ASC";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE tid_borrado = 0 ORDER BY tid_id ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -36,7 +36,7 @@ join
 on 
 ins.tid_destino = us.usr_id 
 WHERE 
-ins.tid_ingreso_solicitud = :id;";
+ins.tid_ingreso_solicitud = :id AND ins.tid_borrado = 0;";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
@@ -85,7 +85,7 @@ ins.tid_ingreso_solicitud = :id;";
     }
     public function borrarPorIngresoId($id)
     {
-        $query = "DELETE FROM " . $this->table_name . " WHERE tid_ingreso_solicitud = :id";
+        $query = "UPDATE " . $this->table_name . " SET tid_borrado = 1 WHERE tid_ingreso_solicitud = :id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
         return $stmt->execute();

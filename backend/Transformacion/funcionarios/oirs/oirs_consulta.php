@@ -511,176 +511,126 @@ if (isset($_GET['id'])) {
                 <div class="row">
                     <div class="col-md-6 border-right">
                         <h6 class="font-weight-bold mb-3 text-primary">Nueva Asignación</h6>
+
                         <div class="form-group">
                             <label class="filter-label">Asignar a Funcionario / Departamento</label>
-                            <select class="form-control form-control-cool" id="oig_asignacion">
-                                <option selected disabled>Seleccionar...</option>
-                                <?php foreach ($funcionarios as $f): ?>
-                                    <option value="<?= $f['fnc_id'] ?>">
-                                        <?= $f['fnc_nombre'] . " (" . ($f['fnc_area_nombre'] ?? 'N/A') . ")" ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                            <!-- ============================================================
+                                 PUNTO DE FILTRO DE FUNCIONARIOS
+                                 A futuro, aquí se aplicarán filtros según:
+                                 - El usuario que está trabajando la solicitud (session)
+                                 - El área/departamento al que pertenece
+                                 - Permisos de asignación configurados por rol
+                                 El array $funcionarios ya viene desde PHP (server-side),
+                                 por lo que el filtrado preferentemente debería ocurrir
+                                 antes de window.oirsData en el script al final de la página.
+                                 ============================================================ -->
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-cool" id="oig_asignacion_display"
+                                    placeholder="Haga clic en buscar para seleccionar..." readonly>
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                                        data-target="#modalBuscarFuncionario" onclick="abrirModalBuscarFuncionario()"
+                                        title="Buscar funcionario">
+                                        <span class="material-symbols-outlined"
+                                            style="font-size:18px;vertical-align:middle">search</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- ID real del funcionario seleccionado, se envía al guardar -->
+                            <input type="hidden" id="oig_asignacion">
                         </div>
+
                         <div class="form-group">
                             <label class="filter-label">Mensaje / Instrucción</label>
                             <textarea class="form-control form-control-cool" id="oig_instruccion_asignacion" rows="4"
                                 placeholder="Escriba una instrucción para el funcionario..."></textarea>
                         </div>
                         <div class="form-group text-right">
-                            <button class="btn btn-primary" id="btn_asignar"><span
-                                    class="material-symbols-outlined align-middle mr-1"
-                                    style="font-size: 18px;">send</span> Asignar y Notificar</button>
+                            <button class="btn btn-primary" id="btn_asignar">
+                                <span class="material-symbols-outlined align-middle mr-1"
+                                    style="font-size: 18px;">send</span>
+                                Asignar y Notificar
+                            </button>
                         </div>
                     </div>
                     <div class="col-md-6 pl-4">
                         <h6 class="font-weight-bold mb-3 text-dark">Asignaciones Actuales</h6>
                         <div class="accordion" id="accordionAsignaciones">
-                            <!-- Asignación 1 -->
-                            <div class="card border mb-2 shadow-sm">
-                                <div class="card-header bg-white p-3" id="headingOne" data-toggle="collapse"
-                                    data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"
-                                    style="cursor: pointer;">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="d-flex align-items-center">
-                                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mr-3"
-                                                style="width: 32px; height: 32px;">
-                                                <span class="material-symbols-outlined text-primary"
-                                                    style="font-size: 18px;">person</span>
-                                            </div>
-                                            <div>
-                                                <span class="font-weight-bold d-block text-dark"
-                                                    style="font-size: 13px;">Juan Pérez (Operaciones)</span>
-                                                <small class="text-muted">Asignado el 07/02/2024</small>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <span class="badge badge-warning mr-2">Pendiente Revisión</span>
-                                            <span class="material-symbols-outlined text-muted">expand_more</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                    data-parent="#accordionAsignaciones">
-                                    <div class="card-body bg-light p-3">
-                                        <!-- Hilo de conversación -->
-                                        <div class="mb-3">
-                                            <div class="d-flex mb-2">
-                                                <div class="mr-2"><span class="badge badge-primary">Tú</span></div>
-                                                <div class="bg-white p-2 rounded shadow-sm w-100 border">
-                                                    <p class="mb-0 small text-muted">Favor evaluar factibilidad técnica
-                                                        de retiro de microbasural.</p>
-                                                    <small class="text-muted" style="font-size: 10px;">07/02/2024 10:00
-                                                        AM</small>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex mb-2">
-                                                <div class="mr-2"><span class="badge badge-secondary">J. Pérez</span>
-                                                </div>
-                                                <div class="bg-white p-2 rounded shadow-sm w-100 border">
-                                                    <p class="mb-0 small text-dark">Se realizó visita a terreno.
-                                                        Efectivamente existe acopio de basura no convencional. Se
-                                                        requiere camión tolva.</p>
-                                                    <div class="mt-2 text-right">
-                                                        <a href="#" class="badge badge-light border"><span
-                                                                class="material-symbols-outlined align-middle"
-                                                                style="font-size: 12px;">attachment</span>
-                                                            evidencia_visita.jpg</a>
-                                                    </div>
-                                                    <small class="text-muted" style="font-size: 10px;">08/02/2024 14:30
-                                                        PM</small>
-                                                </div>
-                                            </div>
-                                        </div>
+                            <!-- Renderizado dinámico por JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                                        <!-- Acciones -->
-                                        <div class="border-top pt-2 mt-2">
-                                            <label class="filter-label mb-2">Tu Gestión</label>
-                                            <div class="d-flex" style="gap: 5px;">
-                                                <button class="btn btn-sm btn-success flex-grow-1 font-weight-bold"
-                                                    onclick="Swal.fire('Aprobado', 'La respuesta ha sido validada.', 'success')">
-                                                    <span class="material-symbols-outlined align-middle mr-1"
-                                                        style="font-size: 16px;">check</span> Aprobar Respuesta
-                                                </button>
-                                                <button class="btn btn-sm btn-danger flex-grow-1 font-weight-bold"
-                                                    onclick="Swal.fire('Solicitud de Rectificación', 'Se ha notificado al funcionario.', 'warning')">
-                                                    <span class="material-symbols-outlined align-middle mr-1"
-                                                        style="font-size: 16px;">replay</span> Solicitar Corrección
-                                                </button>
-                                            </div>
-                                            <div class="mt-2">
-                                                <input type="text" class="form-control form-control-sm"
-                                                    placeholder="Escribe un comentario o nueva instrucción...">
-                                                <div class="text-right mt-1">
-                                                    <button class="btn btn-link btn-sm p-0 text-primary">Enviar
-                                                        Comentario</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+            <!-- ============================================================
+                 MODAL BUSCAR FUNCIONARIO
+                 Mismo patrón que en ingresos (ingr_crear / ingr_modificar).
+                 A futuro: el array de funcionarios inyectado en window.oirsData.listas.funcionarios
+                 deberá ser pre-filtrado en PHP según el usuario en sesión y sus permisos
+                 antes de ser serializado con json_encode().
+                 ============================================================ -->
+            <div class="modal fade" id="modalBuscarFuncionario" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title font-weight-bold">
+                                <span class="material-symbols-outlined align-middle mr-1">manage_accounts</span>
+                                Buscar Funcionario
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row mb-3">
+                                <div class="col-md-7">
+                                    <input type="text" class="form-control form-control-sm" id="buscar_fnc_input"
+                                        placeholder="Buscar por nombre, apellido o correo..."
+                                        oninput="filtrarBusquedaFuncionariosOIRS()">
+                                </div>
+                                <div class="col-md-5">
+                                    <select class="form-control form-control-sm" id="filtro_area_fnc_oirs"
+                                        onchange="filtrarBusquedaFuncionariosOIRS()">
+                                        <option value="">Todas las Áreas</option>
+                                        <option value="SIN_AREA">Sin Área Asignada</option>
+                                        <?php
+                                        // Obtener áreas únicas desde los funcionarios ya cargados
+                                        $areasUnicas = [];
+                                        foreach ($funcionarios as $f) {
+                                            if (!empty($f['fnc_area_id']) && !isset($areasUnicas[$f['fnc_area_id']])) {
+                                                $areasUnicas[$f['fnc_area_id']] = $f['fnc_area_nombre'] ?? 'Área ' . $f['fnc_area_id'];
+                                            }
+                                        }
+                                        asort($areasUnicas);
+                                        foreach ($areasUnicas as $areaId => $areaNombre): ?>
+                                            <option value="<?= $areaId ?>"><?= htmlspecialchars($areaNombre) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
                             </div>
-
-                            <!-- Asignación 2 -->
-                            <div class="card border mb-2 shadow-sm">
-                                <div class="card-header bg-white p-3" id="headingTwo" data-toggle="collapse"
-                                    data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"
-                                    style="cursor: pointer;">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="d-flex align-items-center">
-                                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mr-3"
-                                                style="width: 32px; height: 32px;">
-                                                <span class="material-symbols-outlined text-primary"
-                                                    style="font-size: 18px;">person</span>
-                                            </div>
-                                            <div>
-                                                <span class="font-weight-bold d-block text-dark"
-                                                    style="font-size: 13px;">María Gómez (Tránsito)</span>
-                                                <small class="text-muted">Asignado el 07/02/2024</small>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex align-items-center">
-                                            <span class="badge badge-success mr-2">Finalizada</span>
-                                            <span class="material-symbols-outlined text-muted">expand_more</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-                                    data-parent="#accordionAsignaciones">
-                                    <div class="card-body bg-light p-3">
-                                        <div class="mb-3">
-                                            <div class="d-flex mb-2">
-                                                <div class="mr-2"><span class="badge badge-primary">Tú</span></div>
-                                                <div class="bg-white p-2 rounded shadow-sm w-100 border">
-                                                    <p class="mb-0 small text-muted">Verificar si corresponde
-                                                        demarcación en la zona.</p>
-                                                    <small class="text-muted" style="font-size: 10px;">07/02/2024 10:05
-                                                        AM</small>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex mb-2">
-                                                <div class="mr-2"><span class="badge badge-secondary">M. Gómez</span>
-                                                </div>
-                                                <div class="bg-white p-2 rounded shadow-sm w-100 border">
-                                                    <p class="mb-0 small text-dark">No corresponde demarcación, es vía
-                                                        servidumbre.</p>
-                                                    <small class="text-muted" style="font-size: 10px;">07/02/2024 11:00
-                                                        AM</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="alert alert-success py-2 font-weight-bold" style="font-size: 12px;">
-                                            <span class="material-symbols-outlined align-middle mr-1"
-                                                style="font-size: 16px;">check_circle</span> Gestionado y Cerrado
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="table-responsive" style="max-height: 350px; overflow-y: auto;">
+                                <table class="table table-sm table-hover">
+                                    <thead class="bg-light sticky-top">
+                                        <tr>
+                                            <th style="font-size:11px">ID</th>
+                                            <th style="font-size:11px">Correo</th>
+                                            <th style="font-size:11px">Nombre</th>
+                                            <th style="font-size:11px">Apellido</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lista_busqueda_fnc_oirs">
+                                        <!-- Dinámico por JS -->
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
+
 
         <!-- ADJUNTOS MUNICIPIO -->
         <div class="tab-pane fade" id="tab-adjuntos-muni">

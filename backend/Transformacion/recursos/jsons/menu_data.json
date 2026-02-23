@@ -253,7 +253,7 @@
                 "id": "7.2",
                 "tipo": "Pagina",
                 "nombre": "Listado de Ingresos",
-                "Enlace": "Funcionarios/DESVE/desve_listado_ingresos.php"
+                "Enlace": "Funcionarios/DESVE/index.php.php"
             },
             {
                 "id": "7.3",
@@ -287,7 +287,7 @@
                 "id": "10.1",
                 "tipo": "Pagina",
                 "nombre": "Bandeja OIRS",
-                "Enlace": "Funcionarios/OIRS/oirs_bandeja.php"
+                "Enlace": "Funcionarios/OIRS/index.php"
             },
             {
                 "id": "10.2",

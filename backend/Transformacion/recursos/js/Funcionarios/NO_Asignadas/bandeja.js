@@ -1,8 +1,8 @@
-﻿
-let funcionarios = [];
+﻿let funcionarios = [];
 let allItems = [];
 let tareasQueAsigne = [];
-let currentPage = 1;
+let currentPageBandeja = 1;
+let currentPageAsigne = 1;
 const itemsPerPage = 5; // Mostrar 5 items por página
 // Modals
 let modalBusqueda = null;
@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     try {
         // Fetch Inbox
-        // Use relative path which is robust in this structure (Funcionarios/ -> api/)
         const fetchUrl = '../api/bandeja.php';
 
         const response = await fetch(fetchUrl, {
@@ -32,11 +31,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
 
         if (response.status === 401) {
-            // Redirect or handle unauth
             window.logout();
-            //window.location.href = 'index.php';
             return;
         }
+
         // Cargar Funcionarios para búsqueda
         const respFunc = await fetch(`${window.API_BASE_URL}/funcionarios.php`, {
             method: 'POST',
@@ -56,8 +54,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         } else {
             tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error: ${result.message}</td></tr>`;
         }
-        const fetchUrl2 = '../api/tareas.php';
 
+        const fetchUrl2 = '../api/tareas.php';
         const response2 = await fetch(fetchUrl2, {
             method: 'POST',
             credentials: 'include',
@@ -71,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             tareasQueAsigne = result2.data;
             renderPageTareasqueasigne(1);
         } else {
-            tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error: ${result.message}</td></tr>`;
+            console.error("Error loading assigned tasks:", result2.message);
         }
 
     } catch (e) {
@@ -81,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 function renderPage(page) {
-    currentPage = page;
+    currentPageBandeja = page;
     const tbody = document.querySelector('#tablaBandeja tbody');
 
     // Calculate slice
@@ -91,8 +89,16 @@ function renderPage(page) {
 
     renderTable(paginatedItems, tbody);
     renderPagination(allItems.length, page);
+
     document.getElementById('totalTareas').innerText = allItems.length;
-    document.getElementById('totalTareasAtrasadas').innerText = allItems.filter(item => new Date(item.fecha.split('-').reverse().join('-')) < new Date(Date.now() - 3 * 24 * 60 * 60 * 1000)).length;
+
+    // Improved atrasadas logic to avoid split issues if format varies
+    const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000);
+    document.getElementById('totalTareasAtrasadas').innerText = allItems.filter(item => {
+        if (!item.fecha_original) return false;
+        return new Date(item.fecha_original) < threeDaysAgo;
+    }).length;
+
     // Update info text
     const infoDiv = document.querySelector('.pagination-info');
     if (infoDiv) {
@@ -101,7 +107,7 @@ function renderPage(page) {
 }
 
 function renderPageTareasqueasigne(page) {
-    currentPage = page;
+    currentPageAsigne = page;
     const tbody = document.querySelector('#tablaTareasQueAsigne tbody');
 
     // Calculate slice
@@ -111,6 +117,7 @@ function renderPageTareasqueasigne(page) {
 
     renderTableTareasqueasigne(paginatedItems, tbody);
     renderPaginationTareasqueasigne(tareasQueAsigne.length, page);
+
     // Update info text
     const infoDiv = document.querySelector('#paginationInfoTareasQueAsigne');
     if (infoDiv) {
@@ -248,7 +255,7 @@ function renderTableTareasqueasigne(items, tbody) {
             rowContent = `
             <td>${item.tar_titulo}</td>
             <td>${nombrefuncionario(item.tar_asignado)}</td>
-            <td>${fechaformato(item.tar_fecha_creacion)}</td>
+            <td>${fechaformato(item.tar_creacion)}</td>
             <td>${fechaformato(item.tar_plazo)}</td>
             <td><span class="badge bg-warning text-dark">Pendiente</span></td>
         `;
@@ -256,7 +263,7 @@ function renderTableTareasqueasigne(items, tbody) {
             rowContent = `
             <td>${item.tar_titulo}</td>
             <td>${nombrefuncionario(item.tar_asignado)}</td>
-            <td>${fechaformato(item.tar_fecha_creacion)}</td>
+            <td>${fechaformato(item.tar_creacion)}</td>
             <td>${fechaformato(item.tar_plazo)}</td>
             <td><span class="badge bg-success text-dark">Terminado</span></td>
         `;
@@ -293,39 +300,66 @@ function renderTableTareasqueasigne(items, tbody) {
 
 function renderPaginationTareasqueasigne(totalItems, currentPage) {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
-    // Simplified pagination for the new UI buttons
-    const container = document.querySelector('.pagination-controls');
 
-    if (!container) return; // Should allow this gracefully
+    const btnAnt = document.getElementById('btnAnteriorAsigne');
+    const btnSig = document.getElementById('btnSiguienteAsigne');
 
-    container.innerHTML = '';
+    if (btnAnt) {
+        btnAnt.disabled = currentPage === 1;
+        btnAnt.onclick = (e) => {
+            e.preventDefault();
+            renderPageTareasqueasigne(currentPage - 1);
+        };
+    }
+    if (btnSig) {
+        btnSig.disabled = (currentPage === totalPages || totalPages === 0);
+        btnSig.onclick = (e) => {
+            e.preventDefault();
+            renderPageTareasqueasigne(currentPage + 1);
+        };
+    }
+
+    // Handle dynamic container if present
+    const container = document.querySelector('#tablaTareasQueAsigne .pagination-controls');
+    if (container) {
+        container.innerHTML = '';
+        // (Optional: add numbered page buttons here)
+    }
+}
+
+function renderPagination(totalItems, currentPage) {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+
     const btnAnt = document.getElementById('btnAnterior');
     const btnSig = document.getElementById('btnSiguiente');
 
     if (btnAnt) {
         btnAnt.disabled = currentPage === 1;
-        btnAnt.onclick = () => renderPageTareasqueasigne(currentPage - 1);
+        btnAnt.onclick = (e) => {
+            e.preventDefault();
+            renderPage(currentPage - 1);
+        };
     }
     if (btnSig) {
-        btnSig.disabled = currentPage === totalPages;
-        btnSig.onclick = () => renderPageTareasqueasigne(currentPage + 1);
+        btnSig.disabled = (currentPage === totalPages || totalPages === 0);
+        btnSig.onclick = (e) => {
+            e.preventDefault();
+            renderPage(currentPage + 1);
+        };
     }
 
-    // Page Numbers (simplified: just current of total)
-    /* 
-    // If we wanted numbered buttons:
-    for (let i = 1; i <= totalPages; i++) {
-        // ...
-    } 
-    */
-
-    // Previous Button
-
+    // Handle dynamic container if present
+    const container = document.querySelector('#tablaBandeja .pagination-controls');
+    if (container) {
+        container.innerHTML = '';
+        // (Optional: add numbered page buttons here)
+    }
 }
 
 function toggleRow(rowId, event) {
     event.stopPropagation();
     const row = document.getElementById(rowId);
+    if (!row) return;
     if (row.style.display === 'none') {
         row.style.display = 'table-row';
         event.currentTarget.innerHTML = '<i data-feather="minus-circle"></i>';
@@ -336,54 +370,7 @@ function toggleRow(rowId, event) {
     if (window.feather) feather.replace();
 }
 
-// Global scope for toggleRow
 window.toggleRow = toggleRow;
-
-function renderPagination(totalItems, currentPage) {
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-    // Simplified pagination for the new UI buttons
-    const container = document.querySelector('.pagination-controls');
-
-    if (!container) return; // Should allow this gracefully
-
-    container.innerHTML = '';
-    const btnAnt = document.getElementById('btnAnterior');
-    const btnSig = document.getElementById('btnSiguiente');
-
-    if (btnAnt) {
-        btnAnt.disabled = currentPage === 1;
-        btnAnt.onclick = () => renderPage(currentPage - 1);
-    }
-    if (btnSig) {
-        btnSig.disabled = currentPage === totalPages;
-        btnSig.onclick = () => renderPage(currentPage + 1);
-    }
-
-    // Page Numbers (simplified: just current of total)
-    /* 
-    // If we wanted numbered buttons:
-    for (let i = 1; i <= totalPages; i++) {
-        // ...
-    } 
-    */
-
-    // Previous Button
-    const prevBtn = document.createElement('button');
-    prevBtn.className = 'btn btn-sm btn-outline-secondary px-3';
-    prevBtn.innerText = 'Anterior';
-    prevBtn.disabled = currentPage === 1;
-    prevBtn.onclick = () => renderPage(currentPage - 1);
-    container.appendChild(prevBtn);
-
-
-    // Next Button
-    const nextBtn = document.createElement('button');
-    nextBtn.className = 'btn btn-sm btn-outline-secondary px-3';
-    nextBtn.innerText = 'Siguiente';
-    nextBtn.disabled = currentPage === totalPages;
-    nextBtn.onclick = () => renderPage(currentPage + 1);
-    container.appendChild(nextBtn);
-}
 
 
 function abrirModalCrearTarea() {

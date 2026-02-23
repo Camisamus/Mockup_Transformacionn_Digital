@@ -43,16 +43,16 @@ class SystemLog
         }
 
         if (!empty($filtros['fecha_desde'])) {
-            $query .= " AND l.log_fecha >= :fecha_desde";
+            $query .= " AND l.log_creacion >= :fecha_desde";
             $params[':fecha_desde'] = $filtros['fecha_desde'];
         }
 
         if (!empty($filtros['fecha_hasta'])) {
-            $query .= " AND l.log_fecha <= :fecha_hasta";
+            $query .= " AND l.log_creacion <= :fecha_hasta";
             $params[':fecha_hasta'] = $filtros['fecha_hasta'];
         }
 
-        $query .= " ORDER BY l.log_fecha DESC LIMIT 500"; // Limit to prevent overload
+        $query .= " ORDER BY l.log_creacion DESC LIMIT 500"; // Limit to prevent overload
 
         $stmt = $this->conn->prepare($query);
 
@@ -87,7 +87,7 @@ class SystemLog
     public function crear($datos)
     {
         $query = "INSERT INTO " . $this->table_name . " 
-                  (log_evento_codigo, log_tipo, log_severidad, log_modulo, log_usuario_id, log_accion, log_descripcion, log_detalles, log_ip, log_resultado, log_fecha)
+                  (log_evento_codigo, log_tipo, log_severidad, log_modulo, log_usuario_id, log_accion, log_descripcion, log_detalles, log_ip, log_resultado, log_creacion)
                   VALUES 
                   (:evento, :tipo, :severidad, :modulo, :usuario_id, :accion, :descripcion, :detalles, :ip, :resultado, NOW())";
 

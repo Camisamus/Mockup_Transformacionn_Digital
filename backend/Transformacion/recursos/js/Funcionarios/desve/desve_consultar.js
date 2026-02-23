@@ -121,7 +121,7 @@ async function loadSolicitationDetails(id) {
                     icon: 'error',
                     confirmButtonText: 'Volver a Bandeja'
                 });
-                window.location.href = 'desve_listado_ingresos.php';
+                window.location.href = 'index.php.php';
                 return;
             }
             currentSolRegistroId = sol.sol_registro_tramite;
@@ -472,7 +472,7 @@ async function solicitarID() {
     });
 
     if (!formValues) {
-        window.location.href = 'desve_listado_ingresos.php';
+        window.location.href = 'index.php.php';
         return;
     }
 

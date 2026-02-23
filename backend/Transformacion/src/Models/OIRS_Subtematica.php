@@ -16,9 +16,10 @@ class OIRS_Subtematica
     public function getAll()
     {
         $query = "SELECT s.sub_id, s.tem_id, s.sub_nombre, t.tem_nombre as tematica_nombre 
-                  FROM " . $this->table_name . " s
-                  JOIN trd_oirs_tematicas t ON s.tem_id = t.tem_id
-                  ORDER BY s.sub_nombre ASC";
+                   FROM " . $this->table_name . " s
+                   JOIN trd_oirs_tematicas t ON s.tem_id = t.tem_id
+                   WHERE s.sub_borrado = 0 AND t.tem_borrado = 0
+                   ORDER BY s.sub_nombre ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -26,7 +27,7 @@ class OIRS_Subtematica
 
     public function getById($id)
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE sub_id = ? LIMIT 0,1";
+        $query = "SELECT * FROM " . $this->table_name . " WHERE sub_id = ? AND sub_borrado = 0 LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $id);
         $stmt->execute();
@@ -69,7 +70,7 @@ class OIRS_Subtematica
 
     public function delete($id)
     {
-        $query = "DELETE FROM " . $this->table_name . " WHERE sub_id = :sub_id";
+        $query = "UPDATE " . $this->table_name . " SET sub_borrado = 1 WHERE sub_id = :sub_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":sub_id", $id);
 
