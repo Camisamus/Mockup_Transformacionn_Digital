@@ -1,5 +1,5 @@
 <?php
-include("../include/header-funcionarios.php");
+include("../include/header-general/funcionarios.php");
 ?>
 <!-- Cabecera de Página -->
 <header class="bg-white border-bottom shadow-sm px-4 d-flex align-items-center justify-content-between"
@@ -226,4 +226,4 @@ include("../include/header-funcionarios.php");
     }
 </style>
 
-<?php include("../include/footer-funcionarios.php"); ?>
+<?php include("../include/footer-general/funcionarios.php"); ?>

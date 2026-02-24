@@ -18,10 +18,10 @@ class SystemLogController
 
     public function handleRequest($method)
     {
-        // Use global $data from cors.php
+        // Use global $data from general/cors.php
         global $data;
 
-        // $data should be populated by cors.php from php://input or $_POST
+        // $data should be populated by general/cors.php from php://input or $_POST
         $action = $data['ACCION'] ?? 'LIST';
 
         switch ($method) {

@@ -1,7 +1,7 @@
 <?php
 $pageTitle = "Bandeja Ingresos";
-require_once '../../api/auth_check.php';
-include 'header.php';
+require_once '../../api/general/auth_check.php';
+include '../../api/general/header.php';
 ?>
 
 <div class="container-fluid py-4">
@@ -106,4 +106,4 @@ include 'header.php';
 
 <script src="../../recursos/js/funcionarios/ingresos/ingr_bandeja.js"></script>
 
-<?php include '../../api/footer.php'; ?>
+<?php include '../../api/general/footer.php'; ?>

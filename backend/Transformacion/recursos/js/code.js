@@ -33,7 +33,7 @@ if (loginForm) {
             //formData.append('usuario', user);
             //formData.append('password', pass);
 
-            const response = await fetch(`${API_BASE_URL}/login.php`, {
+            const response = await fetch(`${API_BASE_URL}/general/login.php`, {
                 method: 'POST',
                 //body: formData
                 body: JSON.stringify({
@@ -88,7 +88,7 @@ function login() {
 window.logout = async function () {
     // Attempt backend logout
     try {
-        await fetch(`${API_BASE_URL}/logout.php`);
+        await fetch(`${API_BASE_URL}/general/logout.php`);
     } catch (e) {
         console.error('Logout failed on server', e);
     }

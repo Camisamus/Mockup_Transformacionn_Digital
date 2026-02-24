@@ -49,7 +49,7 @@ window.loadData = async function () {
     }
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/contribuyentes_general.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/contribuyentes_general.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -164,7 +164,7 @@ window.deleteItem = async function (id) {
 
     if (result.isConfirmed) {
         try {
-            const response = await fetch(`${window.API_BASE_URL}/contribuyentes_general.php`, {
+            const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/contribuyentes_general.php`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
@@ -208,7 +208,7 @@ async function saveData() {
     if (currentMode === 'edit') payload.tgc_id = parseInt(id);
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/contribuyentes_general.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/contribuyentes_general.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },

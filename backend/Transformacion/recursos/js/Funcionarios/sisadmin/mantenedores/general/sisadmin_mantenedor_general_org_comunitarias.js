@@ -86,7 +86,7 @@ async function loadTypes() {
 
 async function loadContribuyentes() {
     try {
-        const response = await fetch(`${window.API_BASE_URL}/contribuyentes_general.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/contribuyentes_general.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },

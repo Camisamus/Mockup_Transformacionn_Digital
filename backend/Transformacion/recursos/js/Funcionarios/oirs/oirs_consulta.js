@@ -375,7 +375,7 @@ function renderAsignaciones(asignaciones) {
 
 async function descargarDocumento(Id, nombre) {
     try {
-        const response = await fetch(`${apiBase}/gesdoc_general.php`, {
+        const response = await fetch(`${apiBase}/gesdoc/general.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: 'Bajar', doc_id: Id }),
@@ -534,7 +534,7 @@ function guardarGestion(fields) {
 }
 
 function ejecutarActualizacion(data) {
-    fetch(`${apiBase}/oirs_gestion.php`, {
+    fetch(`${apiBase}/oirs/gestion.php`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -666,7 +666,7 @@ async function guardarAdjuntosMuni() {
             formData.append(`archivos[]`, item.file);
         });
 
-        const response = await fetch(`${apiBase}/gesdoc_general.php`, {
+        const response = await fetch(`${apiBase}/gesdoc/general.php`, {
             method: 'POST',
             body: formData
         });
@@ -798,7 +798,7 @@ async function solicitarID() {
         const payload = { ACCION: 'BUSCAR' };
         payload[type] = value;
 
-        const response = await fetch(`${apiBase}/oirs_solicitudes.php`, {
+        const response = await fetch(`${apiBase}/oirs/solicitudes.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

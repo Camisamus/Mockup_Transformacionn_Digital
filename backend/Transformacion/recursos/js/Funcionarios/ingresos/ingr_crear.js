@@ -23,7 +23,7 @@ let modalConfig = null;
 async function cargarListas() {
     try {
         // Cargar Tipos de Ingreso desde DB
-        const respTipos = await fetch(`${window.API_BASE_URL}/ingresos_tipos_ingreso.php`, {
+        const respTipos = await fetch(`${window.API_BASE_URL}/ingresos/tipos_ingreso.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: 'CONSULTAM' })
@@ -43,7 +43,7 @@ async function cargarListas() {
         }
 
         // Cargar Funcionarios para búsqueda
-        const respFunc = await fetch(`${window.API_BASE_URL}/funcionarios.php`, {
+        const respFunc = await fetch(`${window.API_BASE_URL}/general/funcionarios.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: 'CONSULTAM' })
@@ -54,7 +54,7 @@ async function cargarListas() {
         }
 
         // Cargar Áreas
-        const respAreas = await fetch(`${window.API_BASE_URL}/areas_general.php`, {
+        const respAreas = await fetch(`${window.API_BASE_URL}/sisadmin\mantenedores\general\areas_general.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: 'CONSULTAM' })
@@ -339,7 +339,7 @@ async function guardarIngreso() {
             didOpen: () => Swal.showLoading()
         });
 
-        const response = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

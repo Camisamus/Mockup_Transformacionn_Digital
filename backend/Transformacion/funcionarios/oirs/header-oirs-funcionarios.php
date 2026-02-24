@@ -1,6 +1,6 @@
 <?php
 $current_page = basename($_SERVER['PHP_SELF']);
-require_once '../../api/auth_check.php';
+require_once '../../api/general/auth_check.php';
 ?>
 <!DOCTYPE html>
 <html class="light" lang="es">
@@ -448,7 +448,7 @@ require_once '../../api/auth_check.php';
                             style="font-size: 9px; color: #006FB3 !important;">Funcionario</p>
                     </div>
                     <button class="btn btn-link p-0 ml-auto text-muted shadow-none"
-                        onclick="localStorage.removeItem('isLoggedIn'); localStorage.removeItem('user_data'); window.location.href='<?php echo $pathPrefix; ?>api/logout.php'">
+                        onclick="localStorage.removeItem('isLoggedIn'); localStorage.removeItem('user_data'); window.location.href='<?php echo $pathPrefix; ?>api/general/logout.php'">
                         <?php echo getIcon('log-out', '', ['width' => '18', 'height' => '18']); ?>
                     </button>
                 </div>

@@ -1,7 +1,7 @@
 <?php
 $pageTitle = "Consulta de Postulación";
-require_once '../../api/auth_check.php';
-include 'header.php';
+require_once '../../api/general/auth_check.php';
+include '../../api/general/header.php';
 ?>
 
 
@@ -243,4 +243,4 @@ include 'header.php';
 <script src="../../recursos/js/funcionarios/NO_Asignadas/postulaciones_consulta_postulacion.js"></script>
 
 
-<?php include '../../api/footer.php'; ?>
+<?php include '../../api/general/footer.php'; ?>

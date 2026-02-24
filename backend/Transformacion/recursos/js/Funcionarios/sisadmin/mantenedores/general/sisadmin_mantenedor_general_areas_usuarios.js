@@ -53,7 +53,7 @@ async function loadDependencies() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ACCION: 'CONSULTAM' })
             }),
-            fetch(`${window.API_BASE_URL}/areas_general.php`, {
+            fetch(`${window.API_BASE_URL}/sisadmin\mantenedores\general\areas_general.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ACCION: 'CONSULTAM' })
@@ -91,7 +91,7 @@ window.loadData = async function () {
     }
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/areas_usuarios_general.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin\mantenedores\general\areas_usuarios_general.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -204,7 +204,7 @@ window.deleteItem = async function (id) {
 
     if (result.isConfirmed) {
         try {
-            const response = await fetch(`${window.API_BASE_URL}/areas_usuarios_general.php`, {
+            const response = await fetch(`${window.API_BASE_URL}/sisadmin\mantenedores\general\areas_usuarios_general.php`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
@@ -247,7 +247,7 @@ async function saveData() {
     };
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/areas_usuarios_general.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin\mantenedores\general\areas_usuarios_general.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },

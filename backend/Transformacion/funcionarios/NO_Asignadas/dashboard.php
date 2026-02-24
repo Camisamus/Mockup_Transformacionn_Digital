@@ -1,7 +1,7 @@
 <?php
 $pageTitle = "Tablero de Control";
-require_once '../../api/auth_check.php';
-include 'header.php';
+require_once '../../api/general/auth_check.php';
+include '../../api/general/header.php';
 ?>
 
 
@@ -171,4 +171,4 @@ include 'header.php';
     feather.replace();
 </script>
 
-<?php include '../../api/footer.php'; ?>
+<?php include '../../api/general/footer.php'; ?>

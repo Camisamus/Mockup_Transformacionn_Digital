@@ -1,7 +1,7 @@
 <?php
 $pageTitle = "Bandeja SISADMIN";
-require_once '../../api/auth_check.php';
-include 'header.php';
+require_once '../../api/general/auth_check.php';
+include '../../api/general/header.php';
 ?>
 
 <div class="container-fluid py-4">
@@ -34,7 +34,7 @@ include 'header.php';
                 </svg>
                 PDF
             </button>
-            <button type="button" class="btn btn-toolbar btn-dark" onclick="location.href='desve_nuevo.php'">
+            <button type="button" class="btn btn-toolbar btn-dark" onclick="location.href='nuevo.php'">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -144,4 +144,4 @@ include 'header.php';
 
 <script src="../../recursos/js/funcionarios/desve/index.php.js"></script>
 
-<?php include '../../api/footer.php'; ?>
+<?php include '../../api/general/footer.php'; ?>

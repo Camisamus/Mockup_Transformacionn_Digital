@@ -118,7 +118,8 @@ class AuthController
                     r.rol_enlace, 
                     r.rol_simbolo, 
                     r.rol_tipo,
-                    r.rol_modulo
+                    r.rol_modulo,
+                    r.rol_orden
                 FROM trd_acceso_permisos r
                 JOIN trd_acceso_permiso_rol pr ON r.rol_id = pr.pfr_rol_id
                 JOIN trd_acceso_rol_usuario up ON pr.pfr_perfil_id = up.usp_perfil_id
@@ -127,7 +128,7 @@ class AuthController
                   AND up.usp_borrado = 0
                   AND (up.usp_fecha_inicio IS NULL OR up.usp_fecha_inicio <= CURRENT_DATE())
                   AND (up.usp_fecha_termino IS NULL OR up.usp_fecha_termino >= CURRENT_DATE())
-                  order by r.rol_id ASC";
+                  order by r.rol_orden ASC";
 
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':usuario_id', $_SESSION['user_id']);

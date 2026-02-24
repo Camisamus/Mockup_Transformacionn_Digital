@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once '../src/Config/Database.php';
 require_once '../src/Models/Tarea.php';
-require_once '../api/cors.php'; // Decodes $data automatically
+require_once '../api/general/cors.php'; // Decodes $data automatically
 
 use App\Config\Database;
 use App\Models\Tarea;

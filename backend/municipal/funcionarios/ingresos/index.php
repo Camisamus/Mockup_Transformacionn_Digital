@@ -1,4 +1,4 @@
-<?php include '../../include/header-ingresos-funcionarios.php'; ?>
+<?php include '../../include/header-ingresos-general/funcionarios.php'; ?>
 
 <!-- Header de la página -->
 <div class="bg-white border-bottom px-4 py-3">
@@ -9,15 +9,18 @@
             </button>
             <div class="d-flex flex-column">
                 <h2 class="h6 font-serif font-bold text-dark mb-0">Dashboard de Gestión Documental</h2>
-                <p class="text-primary font-weight-bold text-uppercase mb-0" 
-                style="font-size: 9px; letter-spacing: 0.15em; margin-top: 2px;">Sistema de Ingresos Administrativos</p>
+                <p class="text-primary font-weight-bold text-uppercase mb-0"
+                    style="font-size: 9px; letter-spacing: 0.15em; margin-top: 2px;">Sistema de Ingresos Administrativos
+                </p>
             </div>
         </div>
         <div class="d-flex align-items-center" style="gap: 1rem;">
-            <div class="badge badge-success px-3 py-2 text-uppercase d-none d-md-inline-block" style="font-size: 10px; letter-spacing: 0.05em;">
+            <div class="badge badge-success px-3 py-2 text-uppercase d-none d-md-inline-block"
+                style="font-size: 10px; letter-spacing: 0.05em;">
                 Servicio Operativo
             </div>
-            <button class="btn btn-light btn-sm border shadow-none d-flex align-items-center" style="gap: 0.5rem; font-size: 11px; font-weight: 600;">
+            <button class="btn btn-light btn-sm border shadow-none d-flex align-items-center"
+                style="gap: 0.5rem; font-size: 11px; font-weight: 600;">
                 <span class="material-symbols-outlined" style="font-size: 18px;">notifications</span>
                 <span class="d-none d-sm-inline">Notificaciones</span>
             </button>
@@ -27,13 +30,15 @@
 
 <!-- Contenido Principal -->
 <div class="container-fluid p-4">
-    
+
     <!-- Tarjetas de Indicadores Rápidos -->
     <div class="row mb-4">
         <div class="col-md-3 mb-3 mb-md-0">
-            <div class="card border-0 shadow-sm" style="border-radius: 8px; border-left: 4px solid var(--gob-primary) !important;">
+            <div class="card border-0 shadow-sm"
+                style="border-radius: 8px; border-left: 4px solid var(--gob-primary) !important;">
                 <div class="card-body p-4">
-                    <p class="text-muted text-uppercase font-weight-bold mb-1" style="font-size: 10px; letter-spacing: 0.05em;">Total Solicitudes</p>
+                    <p class="text-muted text-uppercase font-weight-bold mb-1"
+                        style="font-size: 10px; letter-spacing: 0.05em;">Total Solicitudes</p>
                     <div class="d-flex align-items-end justify-content-between">
                         <h3 class="h2 font-weight-bold mb-0">1.284</h3>
                         <span class="text-success font-weight-bold" style="font-size: 11px;">+12% mes</span>
@@ -42,9 +47,11 @@
             </div>
         </div>
         <div class="col-md-3 mb-3 mb-md-0">
-            <div class="card border-0 shadow-sm" style="border-radius: 8px; border-left: 4px solid var(--gob-warning) !important;">
+            <div class="card border-0 shadow-sm"
+                style="border-radius: 8px; border-left: 4px solid var(--gob-warning) !important;">
                 <div class="card-body p-4">
-                    <p class="text-muted text-uppercase font-weight-bold mb-1" style="font-size: 10px; letter-spacing: 0.05em;">Pendientes</p>
+                    <p class="text-muted text-uppercase font-weight-bold mb-1"
+                        style="font-size: 10px; letter-spacing: 0.05em;">Pendientes</p>
                     <div class="d-flex align-items-end justify-content-between">
                         <h3 class="h2 font-weight-bold mb-0">42</h3>
                         <span class="text-warning font-weight-bold" style="font-size: 11px;">Crítico</span>
@@ -55,7 +62,8 @@
         <div class="col-md-3 mb-3 mb-md-0">
             <div class="card border-0 shadow-sm" style="border-radius: 8px; border-left: 4px solid #6c757d !important;">
                 <div class="card-body p-4">
-                    <p class="text-muted text-uppercase font-weight-bold mb-1" style="font-size: 10px; letter-spacing: 0.05em;">Tiempo Promedio</p>
+                    <p class="text-muted text-uppercase font-weight-bold mb-1"
+                        style="font-size: 10px; letter-spacing: 0.05em;">Tiempo Promedio</p>
                     <div class="d-flex align-items-end justify-content-between">
                         <h3 class="h2 font-weight-bold mb-0">3.2d</h3>
                         <span class="text-muted font-weight-bold" style="font-size: 11px;">Días hábiles</span>
@@ -64,9 +72,11 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card border-0 shadow-sm" style="border-radius: 8px; border-left: 4px solid var(--gob-success) !important;">
+            <div class="card border-0 shadow-sm"
+                style="border-radius: 8px; border-left: 4px solid var(--gob-success) !important;">
                 <div class="card-body p-4">
-                    <p class="text-muted text-uppercase font-weight-bold mb-1" style="font-size: 10px; letter-spacing: 0.05em;">Resueltas (Mes)</p>
+                    <p class="text-muted text-uppercase font-weight-bold mb-1"
+                        style="font-size: 10px; letter-spacing: 0.05em;">Resueltas (Mes)</p>
                     <div class="d-flex align-items-end justify-content-between">
                         <h3 class="h2 font-weight-bold mb-0">156</h3>
                         <span class="text-success font-weight-bold" style="font-size: 11px;">94% tasa</span>
@@ -86,10 +96,13 @@
                         Solicitudes por Estado (Últimos 30 días)
                     </h3>
                 </div>
-                <div class="card-body p-4 d-flex align-items-center justify-content-center bg-light-soft" style="min-height: 300px;">
+                <div class="card-body p-4 d-flex align-items-center justify-content-center bg-light-soft"
+                    style="min-height: 300px;">
                     <div class="text-center">
-                        <span class="material-symbols-outlined text-muted" style="font-size: 48px; opacity: 0.3;">monitoring</span>
-                        <p class="text-muted mt-2" style="font-size: 13px;">[Gráfico de barras: Distribución de estados]</p>
+                        <span class="material-symbols-outlined text-muted"
+                            style="font-size: 48px; opacity: 0.3;">monitoring</span>
+                        <p class="text-muted mt-2" style="font-size: 13px;">[Gráfico de barras: Distribución de estados]
+                        </p>
                     </div>
                 </div>
             </div>
@@ -105,8 +118,10 @@
                 </div>
                 <div class="card-body p-4 d-flex align-items-center justify-content-center" style="min-height: 300px;">
                     <div class="text-center">
-                        <span class="material-symbols-outlined text-muted" style="font-size: 48px; opacity: 0.3;">donut_large</span>
-                        <p class="text-muted mt-2" style="font-size: 13px;">[Gráfico circular: Reclamos vs Consultas]</p>
+                        <span class="material-symbols-outlined text-muted"
+                            style="font-size: 48px; opacity: 0.3;">donut_large</span>
+                        <p class="text-muted mt-2" style="font-size: 13px;">[Gráfico circular: Reclamos vs Consultas]
+                        </p>
                     </div>
                 </div>
             </div>
@@ -123,7 +138,8 @@
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-hover mb-0">
-                            <thead class="bg-light text-muted text-uppercase" style="font-size: 10px; letter-spacing: 0.05em;">
+                            <thead class="bg-light text-muted text-uppercase"
+                                style="font-size: 10px; letter-spacing: 0.05em;">
                                 <tr>
                                     <th class="px-4 py-3 border-0">ID</th>
                                     <th class="px-4 py-3 border-0">Asunto</th>
@@ -141,7 +157,8 @@
                                         <span class="badge badge-danger px-2 py-1">ALTA</span>
                                     </td>
                                     <td class="px-4 py-3 align-middle text-right">
-                                        <button class="btn btn-link text-primary font-weight-bold p-0 shadow-none">Gestionar</button>
+                                        <button
+                                            class="btn btn-link text-primary font-weight-bold p-0 shadow-none">Gestionar</button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -152,7 +169,8 @@
                                         <span class="badge badge-warning px-2 py-1">MEDIA</span>
                                     </td>
                                     <td class="px-4 py-3 align-middle text-right">
-                                        <button class="btn btn-link text-primary font-weight-bold p-0 shadow-none">Gestionar</button>
+                                        <button
+                                            class="btn btn-link text-primary font-weight-bold p-0 shadow-none">Gestionar</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -164,4 +182,4 @@
     </div>
 </div>
 
-<?php include '../../include/footer-funcionarios.php'; ?>
+<?php include '../../include/footer-general/funcionarios.php'; ?>

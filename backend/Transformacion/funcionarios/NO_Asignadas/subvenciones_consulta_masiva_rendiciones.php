@@ -1,7 +1,7 @@
 <?php
 $pageTitle = "Consulta Masiva de Rendiciones";
-require_once '../../api/auth_check.php';
-include 'header.php';
+require_once '../../api/general/auth_check.php';
+include '../../api/general/header.php';
 ?>
 
 
@@ -132,4 +132,4 @@ include 'header.php';
 <script src="../../recursos/js/funcionarios/NO_Asignadas/subvenciones_consulta_masiva_rendiciones.js"></script>
 
 
-<?php include '../../api/footer.php'; ?>
+<?php include '../../api/general/footer.php'; ?>

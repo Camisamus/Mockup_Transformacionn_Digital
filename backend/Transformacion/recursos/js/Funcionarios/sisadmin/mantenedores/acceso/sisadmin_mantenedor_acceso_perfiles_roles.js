@@ -53,6 +53,40 @@ function attachEventListeners() {
     if (selectCategoria) {
         $(selectCategoria).on('change', renderRoleCheckboxes);
     }
+
+    const btnDeleteSelected = document.getElementById('btn-delete-selected');
+    if (btnDeleteSelected) {
+        btnDeleteSelected.addEventListener('click', deleteSelectedItems);
+    }
+
+    const checkAllRows = document.getElementById('check-all-rows');
+    if (checkAllRows) {
+        checkAllRows.addEventListener('change', (e) => {
+            const isChecked = e.target.checked;
+            document.querySelectorAll('.row-checkbox').forEach(cb => {
+                cb.checked = isChecked;
+            });
+            updateDeleteButtonState();
+        });
+    }
+}
+
+function updateDeleteButtonState() {
+    const checkedCount = document.querySelectorAll('.row-checkbox:checked').length;
+    const btnDeleteSelected = document.getElementById('btn-delete-selected');
+    if (btnDeleteSelected) {
+        btnDeleteSelected.disabled = checkedCount === 0;
+    }
+
+    const checkAllRows = document.getElementById('check-all-rows');
+    const totalRows = document.querySelectorAll('.row-checkbox').length;
+    if (checkAllRows && totalRows > 0) {
+        checkAllRows.checked = (checkedCount === totalRows);
+        checkAllRows.indeterminate = (checkedCount > 0 && checkedCount < totalRows);
+    } else if (checkAllRows) {
+        checkAllRows.checked = false;
+        checkAllRows.indeterminate = false;
+    }
 }
 
 async function loadDependencies() {
@@ -111,7 +145,7 @@ async function loadDependencies() {
 window.loadData = async function () {
     const tbody = document.getElementById('table-body');
     if (tbody) {
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-5"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Cargando datos...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-5"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Cargando datos...</td></tr>';
     }
 
     try {
@@ -139,6 +173,13 @@ function renderTable(dataItems) {
     const tbody = document.getElementById('table-body');
     if (!tbody) return;
 
+    const checkAllRows = document.getElementById('check-all-rows');
+    if (checkAllRows) {
+        checkAllRows.checked = false;
+        checkAllRows.indeterminate = false;
+    }
+    updateDeleteButtonState();
+
     if (!dataItems || dataItems.length === 0) {
         renderEmptyState('No se encontraron registros.');
         return;
@@ -148,6 +189,9 @@ function renderTable(dataItems) {
     dataItems.forEach(item => {
         const row = document.createElement('tr');
         row.innerHTML = `
+            <td class="text-center">
+                <input class="form-check-input row-checkbox" type="checkbox" value="${item.pfr_perfil_id}|${item.pfr_rol_id}">
+            </td>
             <td><span class="fw-bold">${item.prf_nombre}</span></td>
             <td>${item.rol_nombre}</td>
             <td><code>${item.pfr_rol_id}</code></td>
@@ -160,13 +204,17 @@ function renderTable(dataItems) {
         tbody.appendChild(row);
     });
 
+    document.querySelectorAll('.row-checkbox').forEach(cb => {
+        cb.addEventListener('change', updateDeleteButtonState);
+    });
+
     if (window.feather) feather.replace();
 }
 
 function renderEmptyState(message) {
     const tbody = document.getElementById('table-body');
     if (tbody) {
-        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-5 text-muted small">${message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center py-5 text-muted small">${message}</td></tr>`;
     }
 }
 
@@ -217,6 +265,69 @@ window.deleteItem = async function (perfil_id, rol_id) {
             }
         } catch (error) {
             Swal.fire('Error', 'Error de conexión.', 'error');
+        }
+    }
+}
+
+window.deleteSelectedItems = async function () {
+    const selectedCheckboxes = document.querySelectorAll('.row-checkbox:checked');
+    if (selectedCheckboxes.length === 0) return;
+
+    const result = await Swal.fire({
+        title: '¿Eliminar seleccionados?',
+        text: `Se eliminarán ${selectedCheckboxes.length} vínculos seleccionados.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    });
+
+    if (result.isConfirmed) {
+        Swal.fire({
+            title: 'Procesando...',
+            text: 'Eliminando vínculos...',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        try {
+            let successCount = 0;
+            let errorCount = 0;
+
+            for (const cb of selectedCheckboxes) {
+                const [perfil_id, rol_id] = cb.value.split('|');
+
+                const response = await fetch(`${window.API_BASE_URL}/perfiles_roles_acceso.php`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ACCION: 'BORRAR',
+                        pfr_perfil_id: parseInt(perfil_id),
+                        pfr_rol_id: rol_id
+                    })
+                });
+
+                const data = await response.json();
+                if (data.status === 'success') {
+                    successCount++;
+                } else {
+                    errorCount++;
+                }
+            }
+
+            if (successCount > 0) {
+                await Swal.fire('Éxito', `Se eliminaron ${successCount} vínculos.${errorCount > 0 ? ` (${errorCount} fallaron)` : ''}`, 'success');
+                loadData();
+            } else {
+                Swal.fire('Error', 'No se pudieron eliminar los vínculos.', 'error');
+            }
+        } catch (error) {
+            console.error('Delete error:', error);
+            Swal.fire('Error', 'Error de conexión al eliminar.', 'error');
         }
     }
 }

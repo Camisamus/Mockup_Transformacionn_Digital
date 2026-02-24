@@ -45,7 +45,7 @@
                             style="font-size: 9px; color: #006FB3 !important;">Funcionario</p>
                     </div>
                     <button class="btn btn-link p-0 ml-auto text-muted shadow-none"
-                        onclick="localStorage.removeItem('isLoggedIn'); localStorage.removeItem('user_data'); window.location.href='<?php echo $pathPrefix; ?>api/logout.php'">
+                        onclick="localStorage.removeItem('isLoggedIn'); localStorage.removeItem('user_data'); window.location.href='<?php echo $pathPrefix; ?>api/general/logout.php'">
                         <span data-feather="log-out" style="width: 18px; height: 18px;"></span>
                     </button>
                 </div>

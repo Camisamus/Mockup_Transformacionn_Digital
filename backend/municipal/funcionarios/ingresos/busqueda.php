@@ -1,10 +1,11 @@
-<?php include '../../include/header-ingresos-funcionarios.php'; ?>
+<?php include '../../include/header-ingresos-general/funcionarios.php'; ?>
 
 <div class="bg-white border-bottom px-4 py-3 sticky-top z-index-100">
     <div class="d-flex align-items-center justify-content-between">
         <div class="d-flex flex-column">
             <h2 class="h6 font-serif font-bold text-dark mb-0">Búsqueda Avanzada</h2>
-            <p class="text-primary font-weight-bold text-uppercase mb-0" style="font-size: 9px; letter-spacing: 0.15em;">Localización de Gestión Documental</p>
+            <p class="text-primary font-weight-bold text-uppercase mb-0"
+                style="font-size: 9px; letter-spacing: 0.15em;">Localización de Gestión Documental</p>
         </div>
     </div>
 </div>
@@ -34,7 +35,7 @@
                                 <input type="date" class="form-control form-control-sm">
                             </div>
                         </div>
-                         <div class="form-group">
+                        <div class="form-group">
                             <label class="small font-weight-bold text-muted text-uppercase">Tipo Documento</label>
                             <select class="form-control">
                                 <option value="">Todos</option>
@@ -58,7 +59,8 @@
                                 <label class="custom-control-label small" for="estado3">Archivados</label>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary btn-block font-weight-bold mt-4" onclick="buscarDocumentos()">
+                        <button type="button" class="btn btn-primary btn-block font-weight-bold mt-4"
+                            onclick="buscarDocumentos()">
                             <span class="material-symbols-outlined align-middle mr-1">search</span> Buscar Documentos
                         </button>
                     </form>
@@ -74,16 +76,22 @@
             </div>
 
             <div class="card border-0 shadow-sm" id="resultadosContainer">
-                 <div class="table-responsive">
+                <div class="table-responsive">
                     <table class="table table-hover mb-0" style="font-size: 13px;">
                         <thead class="bg-light">
                             <tr>
-                                <th class="border-0 font-weight-bold text-muted text-uppercase py-3 pl-4" style="font-size: 11px;">Folio</th>
-                                <th class="border-0 font-weight-bold text-muted text-uppercase py-3" style="font-size: 11px;">Asunto</th>
-                                <th class="border-0 font-weight-bold text-muted text-uppercase py-3" style="font-size: 11px;">Tipo</th>
-                                <th class="border-0 font-weight-bold text-muted text-uppercase py-3" style="font-size: 11px;">Fecha</th>
-                                <th class="border-0 font-weight-bold text-muted text-uppercase py-3" style="font-size: 11px;">Estado</th>
-                                <th class="border-0 font-weight-bold text-muted text-uppercase py-3 text-right pr-4" style="font-size: 11px;">Ver</th>
+                                <th class="border-0 font-weight-bold text-muted text-uppercase py-3 pl-4"
+                                    style="font-size: 11px;">Folio</th>
+                                <th class="border-0 font-weight-bold text-muted text-uppercase py-3"
+                                    style="font-size: 11px;">Asunto</th>
+                                <th class="border-0 font-weight-bold text-muted text-uppercase py-3"
+                                    style="font-size: 11px;">Tipo</th>
+                                <th class="border-0 font-weight-bold text-muted text-uppercase py-3"
+                                    style="font-size: 11px;">Fecha</th>
+                                <th class="border-0 font-weight-bold text-muted text-uppercase py-3"
+                                    style="font-size: 11px;">Estado</th>
+                                <th class="border-0 font-weight-bold text-muted text-uppercase py-3 text-right pr-4"
+                                    style="font-size: 11px;">Ver</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -95,31 +103,36 @@
                                 <td class="align-middle">10/02/2026</td>
                                 <td class="align-middle"><span class="badge badge-warning">En Visación</span></td>
                                 <td class="align-middle text-right pr-4">
-                                     <a href="ver.php" class="btn btn-sm btn-light border"><span class="material-symbols-outlined align-middle" style="font-size: 16px;">visibility</span></a>
+                                    <a href="ver.php" class="btn btn-sm btn-light border"><span
+                                            class="material-symbols-outlined align-middle"
+                                            style="font-size: 16px;">visibility</span></a>
                                 </td>
                             </tr>
                             <!-- Resultado 2 -->
-                             <tr>
+                            <tr>
                                 <td class="align-middle pl-4 font-weight-bold">#2023-5520</td>
                                 <td class="align-middle">Compra Insumos Computacionales (Anterior)</td>
                                 <td class="align-middle text-muted">Memorándum</td>
                                 <td class="align-middle">15/06/2023</td>
                                 <td class="align-middle"><span class="badge badge-success">Completado</span></td>
                                 <td class="align-middle text-right pr-4">
-                                     <a href="ver.php" class="btn btn-sm btn-light border"><span class="material-symbols-outlined align-middle" style="font-size: 16px;">visibility</span></a>
+                                    <a href="ver.php" class="btn btn-sm btn-light border"><span
+                                            class="material-symbols-outlined align-middle"
+                                            style="font-size: 16px;">visibility</span></a>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                 </div>
-                 <div class="card-footer bg-white text-center py-3">
-                     <button class="btn btn-link btn-sm text-muted">Cargar más resultados...</button>
-                 </div>
+                </div>
+                <div class="card-footer bg-white text-center py-3">
+                    <button class="btn btn-link btn-sm text-muted">Cargar más resultados...</button>
+                </div>
             </div>
-            
+
             <!-- Estado Vacío (Oculto por defecto) -->
             <div class="text-center py-5 d-none" id="emptyState">
-                <span class="material-symbols-outlined text-muted mb-3" style="font-size: 48px; opacity: 0.3;">search_off</span>
+                <span class="material-symbols-outlined text-muted mb-3"
+                    style="font-size: 48px; opacity: 0.3;">search_off</span>
                 <h5 class="font-weight-bold text-muted">No se encontraron documentos</h5>
                 <p class="text-muted small">Intenta ajustar los filtros de búsqueda.</p>
             </div>
@@ -132,10 +145,10 @@
     function buscarDocumentos() {
         let btn = document.querySelector('button[onclick="buscarDocumentos()"]');
         let originalText = btn.innerHTML;
-        
+
         btn.disabled = true;
         btn.innerHTML = '<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span> Buscando...';
-        
+
         // Simulación de búsqueda
         setTimeout(() => {
             btn.disabled = false;
@@ -152,4 +165,4 @@
     }
 </script>
 
-<?php include '../../include/footer-funcionarios.php'; ?>
+<?php include '../../include/footer-general/funcionarios.php'; ?>

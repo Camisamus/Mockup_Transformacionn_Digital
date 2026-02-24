@@ -1,5 +1,5 @@
 <?php
-require_once 'cors.php';
+require_once 'general/cors.php';
 
 // API Endpoint: Solicitudes
 require_once __DIR__ . '/../vendor/autoload.php';

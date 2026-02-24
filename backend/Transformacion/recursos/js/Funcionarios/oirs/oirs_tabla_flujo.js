@@ -13,7 +13,7 @@ const OirsTable = {
         const $container = $(this.containerId);
         $container.html('<div class="text-center p-5"><div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando...</span></div></div>');
 
-        fetch(`../../api/oirs_search.php?view=${this.view}`)
+        fetch(`../../api/oirs/search.php?view=${this.view}`)
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {

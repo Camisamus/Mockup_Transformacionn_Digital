@@ -1,12 +1,13 @@
-<?php include '../../include/header-oirs-funcionarios.php'; ?>
+<?php include '../../include/header-oirs-general/funcionarios.php'; ?>
 
 <style>
     .search-card {
         background: white;
         border-radius: 12px;
         border: none;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
+
     .filter-label {
         font-size: 10px;
         text-transform: uppercase;
@@ -16,6 +17,7 @@
         margin-bottom: 0.5rem;
         display: block;
     }
+
     .form-control-cool {
         border-radius: 8px;
         border: 1px solid #e9ecef;
@@ -24,11 +26,13 @@
         transition: all 0.2s;
         background-color: #f8f9fa;
     }
+
     .form-control-cool:focus {
         border-color: var(--gob-primary);
         background-color: white;
         box-shadow: 0 0 0 3px rgba(0, 111, 179, 0.1);
     }
+
     .status-badge {
         font-size: 10px;
         font-weight: 700;
@@ -37,15 +41,32 @@
         text-transform: uppercase;
         letter-spacing: 0.05em;
     }
-    .badge-ingresada { background: #e3f2fd; color: #007bff; }
-    .badge-proceso { background: #fff3e0; color: #ef6c00; }
-    .badge-resuelta { background: #e8f5e9; color: #2e7d32; }
-    .badge-vencida { background: #ffebee; color: #c62828; }
-    
+
+    .badge-ingresada {
+        background: #e3f2fd;
+        color: #007bff;
+    }
+
+    .badge-proceso {
+        background: #fff3e0;
+        color: #ef6c00;
+    }
+
+    .badge-resuelta {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .badge-vencida {
+        background: #ffebee;
+        color: #c62828;
+    }
+
     .oirs-row:hover {
         background-color: rgba(0, 111, 179, 0.02) !important;
         cursor: pointer;
     }
+
     .action-btn {
         width: 32px;
         height: 32px;
@@ -56,15 +77,18 @@
         border-radius: 8px;
         transition: all 0.2s;
     }
+
     .action-btn:hover {
         background-color: #f1f3f5;
         transform: translateY(-2px);
     }
+
     .advanced-filters {
         height: 0;
         overflow: hidden;
         transition: height 0.3s ease-out;
     }
+
     .advanced-filters.show {
         height: auto;
         padding-top: 1rem;
@@ -81,12 +105,14 @@
             </button>
             <div class="d-flex flex-column">
                 <h2 class="h6 font-serif font-bold text-dark mb-0">Visación de Solicitudes</h2>
-                <p class="text-primary font-weight-bold text-uppercase mb-0" 
-                style="font-size: 9px; letter-spacing: 0.15em; margin-top: 2px;">Solicitudes Pendientes de Aprobación</p>
+                <p class="text-primary font-weight-bold text-uppercase mb-0"
+                    style="font-size: 9px; letter-spacing: 0.15em; margin-top: 2px;">Solicitudes Pendientes de
+                    Aprobación</p>
             </div>
         </div>
         <div class="d-flex align-items-center" style="gap: 1rem;">
-            <button class="btn btn-primary d-flex align-items-center rounded-pill px-4 shadow-sm" style="gap: 0.5rem; font-size: 12px; font-weight: bold;">
+            <button class="btn btn-primary d-flex align-items-center rounded-pill px-4 shadow-sm"
+                style="gap: 0.5rem; font-size: 12px; font-weight: bold;">
                 <span class="material-symbols-outlined" style="font-size: 18px;">download</span>
                 <span>Exportar Resultados</span>
             </button>
@@ -95,7 +121,7 @@
 </div>
 
 <div class="container-fluid p-4">
-    
+
     <!-- Filtros de Búsqueda -->
     <div class="card search-card mb-4 border-0">
         <div class="card-body p-4">
@@ -108,7 +134,8 @@
                                 <span class="material-symbols-outlined" style="font-size: 18px;">search</span>
                             </span>
                         </div>
-                        <input type="text" class="form-control form-control-cool pl-0 border-left-0" style="background-color: #f8f9fa;" placeholder="Escribe para buscar...">
+                        <input type="text" class="form-control form-control-cool pl-0 border-left-0"
+                            style="background-color: #f8f9fa;" placeholder="Escribe para buscar...">
                     </div>
                 </div>
                 <div class="col-md-3 mb-3 mb-md-0">
@@ -126,7 +153,8 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn btn-outline-primary btn-block font-weight-bold" id="btnAdvanced" style="font-size: 11px; height: 38px;">
+                    <button class="btn btn-outline-primary btn-block font-weight-bold" id="btnAdvanced"
+                        style="font-size: 11px; height: 38px;">
                         MÁS FILTROS
                     </button>
                 </div>
@@ -174,8 +202,10 @@
                     </div>
                 </div>
                 <div class="text-right mt-2">
-                    <button class="btn btn-link text-muted small font-weight-bold shadow-none" id="btnReset">Limpiar todo</button>
-                    <button class="btn btn-primary px-4 font-weight-bold ml-2" style="font-size: 12px;">APLICAR FILTROS</button>
+                    <button class="btn btn-link text-muted small font-weight-bold shadow-none" id="btnReset">Limpiar
+                        todo</button>
+                    <button class="btn btn-primary px-4 font-weight-bold ml-2" style="font-size: 12px;">APLICAR
+                        FILTROS</button>
                 </div>
             </div>
         </div>
@@ -184,16 +214,19 @@
     <!-- Resultados -->
     <div class="card search-card border-0 mb-4 overflow-hidden">
         <div class="card-header bg-white p-4 border-0 d-flex justify-content-between align-items-center">
-            <h3 class="h6 font-weight-bold text-dark mb-0">Resultados encontrados <span class="badge badge-light border ml-2">12 Solicitudes</span></h3>
+            <h3 class="h6 font-weight-bold text-dark mb-0">Resultados encontrados <span
+                    class="badge badge-light border ml-2">12 Solicitudes</span></h3>
             <div class="d-flex align-items-center" style="gap: 15px;">
-                <span class="small text-muted">Ordenar por: <span class="text-dark font-weight-bold">Más recientes</span></span>
+                <span class="small text-muted">Ordenar por: <span class="text-dark font-weight-bold">Más
+                        recientes</span></span>
                 <span class="material-symbols-outlined text-muted" style="font-size: 20px;">sort</span>
             </div>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
-                    <thead class="bg-light text-muted" style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em;">
+                    <thead class="bg-light text-muted"
+                        style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em;">
                         <tr>
                             <th class="px-4 py-3 border-0">FOLIO / FECHA</th>
                             <th class="px-4 py-3 border-0">CONTRIBUYENTE</th>
@@ -213,7 +246,9 @@
                             </td>
                             <td class="px-4 py-4 align-middle">
                                 <div class="d-flex align-items-center">
-                                    <div class="bg-primary-soft text-primary rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 32px; height: 32px; font-weight: bold; font-size: 11px; background: #e7f1ff;">RC</div>
+                                    <div class="bg-primary-soft text-primary rounded-circle d-flex align-items-center justify-content-center mr-3"
+                                        style="width: 32px; height: 32px; font-weight: bold; font-size: 11px; background: #e7f1ff;">
+                                        RC</div>
                                     <div class="d-flex flex-column">
                                         <span class="font-weight-bold">Rodrigo Canales</span>
                                         <span class="text-muted x-small" style="font-size: 11px;">15.441.229-K</span>
@@ -223,7 +258,8 @@
                             <td class="px-4 py-4 align-middle">
                                 <div class="d-flex flex-column">
                                     <span class="text-dark mb-1">Aseo y Ornato</span>
-                                    <span class="badge badge-light border text-muted x-small align-self-start" style="font-size: 9px;">Microbasural</span>
+                                    <span class="badge badge-light border text-muted x-small align-self-start"
+                                        style="font-size: 9px;">Microbasural</span>
                                 </div>
                             </td>
                             <td class="px-4 py-4 align-middle">
@@ -252,7 +288,8 @@
                             </td>
                             <td class="px-4 py-4 align-middle">
                                 <div class="d-flex align-items-center">
-                                    <div class="bg-light text-muted rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 32px; height: 32px; font-weight: bold; font-size: 11px;">MM</div>
+                                    <div class="bg-light text-muted rounded-circle d-flex align-items-center justify-content-center mr-3"
+                                        style="width: 32px; height: 32px; font-weight: bold; font-size: 11px;">MM</div>
                                     <div class="d-flex flex-column">
                                         <span class="font-weight-bold">María Mejías</span>
                                         <span class="text-muted x-small" style="font-size: 11px;">10.122.990-2</span>
@@ -262,16 +299,21 @@
                             <td class="px-4 py-4 align-middle">
                                 <div class="d-flex flex-column">
                                     <span class="text-dark mb-1">Obras Públicas</span>
-                                    <span class="badge badge-light border text-muted x-small align-self-start" style="font-size: 9px;">Bacheo Calle</span>
+                                    <span class="badge badge-light border text-muted x-small align-self-start"
+                                        style="font-size: 9px;">Bacheo Calle</span>
                                 </div>
                             </td>
                             <td class="px-4 py-4 align-middle">
                                 <span class="status-badge badge-proceso">Asignada</span>
                             </td>
                             <td class="px-4 py-4 align-middle text-right">
-                                <button class="btn btn-link action-btn text-muted p-0"><span class="material-symbols-outlined" style="font-size: 20px;">visibility</span></button>
-                                <button class="btn btn-link action-btn text-muted p-0"><span class="material-symbols-outlined" style="font-size: 20px;">edit</span></button>
-                                <button class="btn btn-link action-btn text-primary p-0"><span class="material-symbols-outlined" style="font-size: 20px;">reply</span></button>
+                                <button class="btn btn-link action-btn text-muted p-0"><span
+                                        class="material-symbols-outlined"
+                                        style="font-size: 20px;">visibility</span></button>
+                                <button class="btn btn-link action-btn text-muted p-0"><span
+                                        class="material-symbols-outlined" style="font-size: 20px;">edit</span></button>
+                                <button class="btn btn-link action-btn text-primary p-0"><span
+                                        class="material-symbols-outlined" style="font-size: 20px;">reply</span></button>
                             </td>
                         </tr>
 
@@ -285,7 +327,9 @@
                             </td>
                             <td class="px-4 py-4 align-middle">
                                 <div class="d-flex align-items-center">
-                                    <div class="bg-danger-soft text-danger rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 32px; height: 32px; font-weight: bold; font-size: 11px; background: #fff5f5;">JS</div>
+                                    <div class="bg-danger-soft text-danger rounded-circle d-flex align-items-center justify-content-center mr-3"
+                                        style="width: 32px; height: 32px; font-weight: bold; font-size: 11px; background: #fff5f5;">
+                                        JS</div>
                                     <div class="d-flex flex-column">
                                         <span class="font-weight-bold">Juan Salazar</span>
                                         <span class="text-muted x-small" style="font-size: 11px;">8.332.110-3</span>
@@ -295,16 +339,21 @@
                             <td class="px-4 py-4 align-middle">
                                 <div class="d-flex flex-column">
                                     <span class="text-dark mb-1">Seguridad Pública</span>
-                                    <span class="badge badge-light border text-muted x-small align-self-start" style="font-size: 9px;">Ruidos Molestos</span>
+                                    <span class="badge badge-light border text-muted x-small align-self-start"
+                                        style="font-size: 9px;">Ruidos Molestos</span>
                                 </div>
                             </td>
                             <td class="px-4 py-4 align-middle">
                                 <span class="status-badge badge-vencida">Fuera de Plazo</span>
                             </td>
                             <td class="px-4 py-4 align-middle text-right">
-                                <button class="btn btn-link action-btn text-muted p-0"><span class="material-symbols-outlined" style="font-size: 20px;">visibility</span></button>
-                                <button class="btn btn-link action-btn text-muted p-0"><span class="material-symbols-outlined" style="font-size: 20px;">edit</span></button>
-                                <button class="btn btn-link action-btn text-primary p-0"><span class="material-symbols-outlined" style="font-size: 20px;">reply</span></button>
+                                <button class="btn btn-link action-btn text-muted p-0"><span
+                                        class="material-symbols-outlined"
+                                        style="font-size: 20px;">visibility</span></button>
+                                <button class="btn btn-link action-btn text-muted p-0"><span
+                                        class="material-symbols-outlined" style="font-size: 20px;">edit</span></button>
+                                <button class="btn btn-link action-btn text-primary p-0"><span
+                                        class="material-symbols-outlined" style="font-size: 20px;">reply</span></button>
                             </td>
                         </tr>
                     </tbody>
@@ -315,11 +364,19 @@
             <nav class="d-flex justify-content-between align-items-center">
                 <span class="small text-muted font-weight-bold">Mostrando 1 a 3 de 12 registros</span>
                 <ul class="pagination pagination-sm mb-0">
-                    <li class="page-item disabled"><a class="page-link border-0 bg-transparent" href="#"><span class="material-symbols-outlined" style="font-size: 18px;">chevron_left</span></a></li>
-                    <li class="page-item active"><a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center text-dark" style="width: 28px; height: 28px;" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center text-dark" style="width: 28px; height: 28px;" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link border-0 bg-transparent text-primary" href="#"><span class="material-symbols-outlined" style="font-size: 18px;">chevron_right</span></a></li>
+                    <li class="page-item disabled"><a class="page-link border-0 bg-transparent" href="#"><span
+                                class="material-symbols-outlined" style="font-size: 18px;">chevron_left</span></a></li>
+                    <li class="page-item active"><a
+                            class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center"
+                            style="width: 28px; height: 28px;" href="#">1</a></li>
+                    <li class="page-item"><a
+                            class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center text-dark"
+                            style="width: 28px; height: 28px;" href="#">2</a></li>
+                    <li class="page-item"><a
+                            class="page-link border-0 rounded-circle mx-1 d-flex align-items-center justify-content-center text-dark"
+                            style="width: 28px; height: 28px;" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link border-0 bg-transparent text-primary" href="#"><span
+                                class="material-symbols-outlined" style="font-size: 18px;">chevron_right</span></a></li>
                 </ul>
             </nav>
         </div>
@@ -328,45 +385,45 @@
 </div>
 
 <script>
-$(document).ready(function() {
-    // Toggle filtros avanzados con animación fluida
-    $('#btnAdvanced').click(function() {
-        $('#advancedPanel').toggleClass('show');
-        $(this).toggleClass('active btn-primary btn-outline-primary');
-        if($(this).hasClass('active')) {
-            $(this).text('MENOS FILTROS');
-        } else {
-            $(this).text('MÁS FILTROS');
-        }
-    });
+    $(document).ready(function () {
+        // Toggle filtros avanzados con animación fluida
+        $('#btnAdvanced').click(function () {
+            $('#advancedPanel').toggleClass('show');
+            $(this).toggleClass('active btn-primary btn-outline-primary');
+            if ($(this).hasClass('active')) {
+                $(this).text('MENOS FILTROS');
+            } else {
+                $(this).text('MÁS FILTROS');
+            }
+        });
 
-    // Hover effect en filas
-    $('.oirs-row').hover(
-        function() { $(this).css('transition', 'transform 0.1s ease').css('transform', 'scale(1.002)'); },
-        function() { $(this).css('transform', 'scale(1)'); }
-    );
+        // Hover effect en filas
+        $('.oirs-row').hover(
+            function () { $(this).css('transition', 'transform 0.1s ease').css('transform', 'scale(1.002)'); },
+            function () { $(this).css('transform', 'scale(1)'); }
+        );
 
-    // Placeholder para acciones
-    $('.action-btn').click(function(e) {
-        e.stopPropagation();
-        Swal.fire({
-            title: 'Vista previa',
-            text: 'Aquí se abrirá la gestión de la solicitud seleccionada.',
-            icon: 'info',
-            confirmButtonColor: '#006FB3'
+        // Placeholder para acciones
+        $('.action-btn').click(function (e) {
+            e.stopPropagation();
+            Swal.fire({
+                title: 'Vista previa',
+                text: 'Aquí se abrirá la gestión de la solicitud seleccionada.',
+                icon: 'info',
+                confirmButtonColor: '#006FB3'
+            });
+        });
+
+        $('.oirs-row').click(function () {
+            let folio = $(this).find('.font-weight-bold.text-dark').text();
+            Swal.fire({
+                title: 'Detalle de ' + folio,
+                html: '<div class="text-left small"><p class="mb-1"><b>Estado:</b> Recibida</p><p class="mb-1"><b>Prioridad:</b> Normal</p><p class="mb-1"><b>Asignado a:</b> Dpto. Operaciones</p></div>',
+                icon: 'info',
+                confirmButtonColor: '#006FB3'
+            });
         });
     });
-
-    $('.oirs-row').click(function() {
-        let folio = $(this).find('.font-weight-bold.text-dark').text();
-        Swal.fire({
-            title: 'Detalle de ' + folio,
-            html: '<div class="text-left small"><p class="mb-1"><b>Estado:</b> Recibida</p><p class="mb-1"><b>Prioridad:</b> Normal</p><p class="mb-1"><b>Asignado a:</b> Dpto. Operaciones</p></div>',
-            icon: 'info',
-            confirmButtonColor: '#006FB3'
-        });
-    });
-});
 </script>
 
-<?php include '../../include/footer-funcionarios.php'; ?>
+<?php include '../../include/footer-general/funcionarios.php'; ?>

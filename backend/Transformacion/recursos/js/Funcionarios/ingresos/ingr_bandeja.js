@@ -45,7 +45,7 @@ async function cargarBandeja(filters = {}) {
     }
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

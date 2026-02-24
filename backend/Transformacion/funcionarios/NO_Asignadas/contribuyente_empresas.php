@@ -1,7 +1,7 @@
 <?php
 $pageTitle = "Gestión de Empresas";
-require_once '../../api/auth_check.php';
-include 'header.php';
+require_once '../../api/general/auth_check.php';
+include '../../api/general/header.php';
 ?>
 
 
@@ -109,4 +109,4 @@ include 'header.php';
 
 <script src="../../recursos/js/funcionarios/NO_Asignadas/contribuyente_empresas.js"></script>
 
-<?php include '../../api/footer.php'; ?>
+<?php include '../../api/general/footer.php'; ?>

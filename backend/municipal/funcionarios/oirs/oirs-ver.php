@@ -1,4 +1,4 @@
-<?php include '../../include/header-oirs-funcionarios.php'; ?>
+<?php include '../../include/header-oirs-general/funcionarios.php'; ?>
 
 <?php
 $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
@@ -10,8 +10,9 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
         background: white;
         border-radius: 12px;
         border: none;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
+
     .filter-label {
         font-size: 10px;
         text-transform: uppercase;
@@ -21,6 +22,7 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
         margin-bottom: 0.5rem;
         display: block;
     }
+
     .form-control-cool {
         border-radius: 8px;
         border: 1px solid #e9ecef;
@@ -28,22 +30,26 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
         transition: all 0.2s;
         background-color: #f8f9fa;
     }
+
     .form-control-cool:focus {
         border-color: var(--gob-primary);
         background-color: white;
         box-shadow: 0 0 0 3px rgba(0, 111, 179, 0.1);
     }
+
     .form-control-plaintext-cool {
         font-weight: 500;
         color: #333;
         padding-left: 0;
     }
+
     .timeline-item {
         padding-left: 30px;
         position: relative;
         border-left: 2px solid #e9ecef;
         padding-bottom: 20px;
     }
+
     .timeline-item::before {
         content: '';
         position: absolute;
@@ -54,6 +60,7 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
         border-radius: 50%;
         background: var(--gob-primary);
     }
+
     .map-placeholder {
         background: #e9ecef;
         height: 150px;
@@ -74,7 +81,7 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
                 OIRS Nº <?= htmlspecialchars($folio) ?>
             </h2>
             <p class="text-primary font-weight-bold text-uppercase mb-0"
-               style="font-size: 9px; letter-spacing: 0.15em;">
+                style="font-size: 9px; letter-spacing: 0.15em;">
                 Detalle de Solicitud
             </p>
         </div>
@@ -99,19 +106,24 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
     <!-- Tabs -->
     <ul class="nav nav-tabs mb-4 border-bottom-0" id="oirsTabs" role="tablist" style="gap: 5px;">
         <li class="nav-item">
-            <a class="nav-link active border-0 rounded-pill bg-white shadow-sm font-weight-bold px-4" style="font-size: 13px;" data-toggle="tab" href="#tab-detalle">Detalle de la OIRS</a>
+            <a class="nav-link active border-0 rounded-pill bg-white shadow-sm font-weight-bold px-4"
+                style="font-size: 13px;" data-toggle="tab" href="#tab-detalle">Detalle de la OIRS</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link border-0 rounded-pill bg-white shadow-sm font-weight-bold px-4" style="font-size: 13px;" data-toggle="tab" href="#tab-contribuyente">Datos del Contribuyente</a>
+            <a class="nav-link border-0 rounded-pill bg-white shadow-sm font-weight-bold px-4" style="font-size: 13px;"
+                data-toggle="tab" href="#tab-contribuyente">Datos del Contribuyente</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link border-0 rounded-pill bg-white shadow-sm font-weight-bold px-4" style="font-size: 13px;" data-toggle="tab" href="#tab-asignacion">Asignación</a>
+            <a class="nav-link border-0 rounded-pill bg-white shadow-sm font-weight-bold px-4" style="font-size: 13px;"
+                data-toggle="tab" href="#tab-asignacion">Asignación</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link border-0 rounded-pill bg-white shadow-sm font-weight-bold px-4" style="font-size: 13px;" data-toggle="tab" href="#tab-adjuntos-muni">Adjuntos Municipio</a>
+            <a class="nav-link border-0 rounded-pill bg-white shadow-sm font-weight-bold px-4" style="font-size: 13px;"
+                data-toggle="tab" href="#tab-adjuntos-muni">Adjuntos Municipio</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link border-0 rounded-pill bg-white shadow-sm font-weight-bold px-4" style="font-size: 13px;" data-toggle="tab" href="#tab-historial">Historial</a>
+            <a class="nav-link border-0 rounded-pill bg-white shadow-sm font-weight-bold px-4" style="font-size: 13px;"
+                data-toggle="tab" href="#tab-historial">Historial</a>
         </li>
     </ul>
 
@@ -120,8 +132,10 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
         <!-- DETALLE DE LA OIRS -->
         <div class="tab-pane fade show active" id="tab-detalle">
             <div class="card search-card p-4 mb-4">
-                <h6 class="text-uppercase text-primary font-weight-bold mb-4" style="font-size: 11px; letter-spacing: 0.1em; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">Información General</h6>
-                
+                <h6 class="text-uppercase text-primary font-weight-bold mb-4"
+                    style="font-size: 11px; letter-spacing: 0.1em; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">
+                    Información General</h6>
+
                 <div class="row">
                     <div class="col-md-3 mb-3">
                         <label class="filter-label">Tipo Atención</label>
@@ -200,7 +214,9 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
                         <div class="input-group">
                             <input type="text" class="form-control form-control-cool" value="Calle Valparaíso 123">
                             <div class="input-group-append">
-                                <span class="input-group-text bg-white border-left-0"><span class="material-symbols-outlined text-primary" style="font-size: 18px;">location_on</span></span>
+                                <span class="input-group-text bg-white border-left-0"><span
+                                        class="material-symbols-outlined text-primary"
+                                        style="font-size: 18px;">location_on</span></span>
                             </div>
                         </div>
                         <div class="map-placeholder mt-2">
@@ -220,16 +236,19 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
                 <div class="row">
                     <div class="col-12 mb-3">
                         <label class="filter-label">Descripción de la Solicitud</label>
-                        <textarea class="form-control form-control-cool" rows="4">Se requiere retiro de microbasural acumulado en la esquina, generando malos olores y presencia de roedores.</textarea>
+                        <textarea class="form-control form-control-cool"
+                            rows="4">Se requiere retiro de microbasural acumulado en la esquina, generando malos olores y presencia de roedores.</textarea>
                     </div>
                 </div>
 
-                <h6 class="text-uppercase text-secondary font-weight-bold mb-3" style="font-size: 11px; letter-spacing: 0.1em;">Archivos Adjuntos (Usuario)</h6>
+                <h6 class="text-uppercase text-secondary font-weight-bold mb-3"
+                    style="font-size: 11px; letter-spacing: 0.1em;">Archivos Adjuntos (Usuario)</h6>
                 <div class="row">
                     <div class="col-md-3">
                         <div class="card p-2 border shadow-sm">
                             <div class="d-flex align-items-center">
-                                <span class="material-symbols-outlined text-danger mr-2" style="font-size: 32px;">image</span>
+                                <span class="material-symbols-outlined text-danger mr-2"
+                                    style="font-size: 32px;">image</span>
                                 <div class="d-flex flex-column overflow-hidden">
                                     <span class="small font-weight-bold text-truncate">foto_evidencia_1.jpg</span>
                                     <small class="text-muted">2.4 MB</small>
@@ -240,7 +259,8 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
                     <div class="col-md-3">
                         <div class="card p-2 border shadow-sm">
                             <div class="d-flex align-items-center">
-                                <span class="material-symbols-outlined text-danger mr-2" style="font-size: 32px;">picture_as_pdf</span>
+                                <span class="material-symbols-outlined text-danger mr-2"
+                                    style="font-size: 32px;">picture_as_pdf</span>
                                 <div class="d-flex flex-column overflow-hidden">
                                     <span class="small font-weight-bold text-truncate">carta_vecinos.pdf</span>
                                     <small class="text-muted">1.1 MB</small>
@@ -253,16 +273,16 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
 
                 <hr class="my-4">
 
-                <h6 class="text-uppercase text-primary font-weight-bold mb-4" style="font-size: 11px; letter-spacing: 0.1em; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">Información al Contribuyente</h6>
+                <h6 class="text-uppercase text-primary font-weight-bold mb-4"
+                    style="font-size: 11px; letter-spacing: 0.1em; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">
+                    Información al Contribuyente</h6>
 
                 <div class="row">
 
                     <!-- Respuesta preliminar -->
                     <div class="col-12 mb-3">
                         <label class="filter-label">Respuesta Preliminar</label>
-                        <textarea 
-                            class="form-control form-control-cool" 
-                            rows="4" 
+                        <textarea class="form-control form-control-cool" rows="4"
                             placeholder="Escriba la respuesta oficial para el contribuyente..."></textarea>
                     </div>
 
@@ -298,12 +318,13 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
                 <div class="row">
                     <div class="col-12 mb-3">
                         <label class="filter-label">Respuesta por Unidad Técnica</label>
-                        <textarea class="form-control form-control-cool" rows="4" placeholder="Escriba la respuesta oficial para el contribuyente..."></textarea>
+                        <textarea class="form-control form-control-cool" rows="4"
+                            placeholder="Escriba la respuesta oficial para el contribuyente..."></textarea>
                     </div>
 
                     <!-- Fila acciones -->
                     <div class="row col-12">
-                    
+
                         <div class="col-md-3 mb-3">
                             <label class="filter-label">¿La solicitud será ejecutada?</label>
                             <select class="form-control form-control-cool">
@@ -330,18 +351,19 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
                         </div>
                     </div>
 
-                </div>                
+                </div>
 
                 <hr class="my-4">
 
                 <div class="row">
                     <div class="col-12 mb-3">
                         <label class="filter-label">Notificación de Ejecución</label>
-                        <textarea class="form-control form-control-cool" rows="4" placeholder="Notifica al contribuyente que su OIRS fue ejecutada..."></textarea>
+                        <textarea class="form-control form-control-cool" rows="4"
+                            placeholder="Notifica al contribuyente que su OIRS fue ejecutada..."></textarea>
                     </div>
 
                     <div class="row col-12">
-                    
+
                         <div class="col-md-3 mb-3">
                             <label class="filter-label">¿Fue realizada en los plazos planificados?</label>
                             <select class="form-control form-control-cool">
@@ -362,27 +384,32 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
 
                 <hr class="my-4">
 
-                <h6 class="text-uppercase text-primary font-weight-bold mb-4" style="font-size: 11px; letter-spacing: 0.1em; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">Aclaratoria del Contribuyente</h6>
+                <h6 class="text-uppercase text-primary font-weight-bold mb-4"
+                    style="font-size: 11px; letter-spacing: 0.1em; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px;">
+                    Aclaratoria del Contribuyente</h6>
 
                 <div class="row">
                     <div class="col-12 mb-3">
                         <label class="filter-label text-warning">Aclaratoria Contribuyente</label>
-                        <textarea class="form-control form-control-cool bg-light border-warning" rows="3" readonly>El contribuyente indica que la dirección exacta es frente al número 125, no 123.</textarea>
+                        <textarea class="form-control form-control-cool bg-light border-warning" rows="3"
+                            readonly>El contribuyente indica que la dirección exacta es frente al número 125, no 123.</textarea>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-12 mb-3">
                         <label class="filter-label">Respuesta Aclaratoria</label>
-                        <textarea class="form-control form-control-cool" rows="3" placeholder="Respuesta a la aclaratoria..."></textarea>
+                        <textarea class="form-control form-control-cool" rows="3"
+                            placeholder="Respuesta a la aclaratoria..."></textarea>
                     </div>
                 </div>
-                
+
                 <hr class="my-4">
-                
-                
+
+
                 <div class="text-right mt-4">
-                    <button class="btn btn-success px-4 font-weight-bold"><span class="material-symbols-outlined align-middle mr-1">save</span> Guardar Cambios</button>
+                    <button class="btn btn-success px-4 font-weight-bold"><span
+                            class="material-symbols-outlined align-middle mr-1">save</span> Guardar Cambios</button>
                 </div>
 
             </div>
@@ -397,7 +424,8 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
                         <div class="input-group">
                             <input type="text" class="form-control form-control-cool" value="15.441.229-K">
                             <div class="input-group-append">
-                                <button class="btn btn-outline-primary btn-sm"><span class="material-symbols-outlined" style="font-size: 16px;">search</span></button>
+                                <button class="btn btn-outline-primary btn-sm"><span class="material-symbols-outlined"
+                                        style="font-size: 16px;">search</span></button>
                             </div>
                         </div>
                     </div>
@@ -501,7 +529,9 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
                         <div class="input-group">
                             <input type="text" class="form-control form-control-cool" value="Calle Uno 456">
                             <div class="input-group-append">
-                                <span class="input-group-text bg-white border-left-0"><span class="material-symbols-outlined text-primary" style="font-size: 18px;">location_on</span></span>
+                                <span class="input-group-text bg-white border-left-0"><span
+                                        class="material-symbols-outlined text-primary"
+                                        style="font-size: 18px;">location_on</span></span>
                             </div>
                         </div>
                         <div class="map-placeholder mt-2">
@@ -540,10 +570,12 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
                         </div>
                         <div class="form-group">
                             <label class="filter-label">Mensaje / Instrucción</label>
-                            <textarea class="form-control form-control-cool" rows="4" placeholder="Escriba una instrucción para el funcionario..."></textarea>
+                            <textarea class="form-control form-control-cool" rows="4"
+                                placeholder="Escriba una instrucción para el funcionario..."></textarea>
                         </div>
                         <div class="form-group text-right">
-                            <button class="btn btn-primary"><span class="material-symbols-outlined align-middle mr-1" style="font-size: 18px;">send</span> Asignar y Notificar</button>
+                            <button class="btn btn-primary"><span class="material-symbols-outlined align-middle mr-1"
+                                    style="font-size: 18px;">send</span> Asignar y Notificar</button>
                         </div>
                     </div>
                     <div class="col-md-6 pl-4">
@@ -551,14 +583,19 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
                         <div class="accordion" id="accordionAsignaciones">
                             <!-- Asignación 1 -->
                             <div class="card border mb-2 shadow-sm">
-                                <div class="card-header bg-white p-3" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="cursor: pointer;">
+                                <div class="card-header bg-white p-3" id="headingOne" data-toggle="collapse"
+                                    data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"
+                                    style="cursor: pointer;">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="d-flex align-items-center">
-                                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 32px; height: 32px;">
-                                                <span class="material-symbols-outlined text-primary" style="font-size: 18px;">person</span>
+                                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mr-3"
+                                                style="width: 32px; height: 32px;">
+                                                <span class="material-symbols-outlined text-primary"
+                                                    style="font-size: 18px;">person</span>
                                             </div>
                                             <div>
-                                                <span class="font-weight-bold d-block text-dark" style="font-size: 13px;">Juan Pérez (Operaciones)</span>
+                                                <span class="font-weight-bold d-block text-dark"
+                                                    style="font-size: 13px;">Juan Pérez (Operaciones)</span>
                                                 <small class="text-muted">Asignado el 07/02/2024</small>
                                             </div>
                                         </div>
@@ -568,44 +605,60 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
                                         </div>
                                     </div>
                                 </div>
-                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionAsignaciones">
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                    data-parent="#accordionAsignaciones">
                                     <div class="card-body bg-light p-3">
                                         <!-- Hilo de conversación -->
                                         <div class="mb-3">
                                             <div class="d-flex mb-2">
                                                 <div class="mr-2"><span class="badge badge-primary">Tú</span></div>
                                                 <div class="bg-white p-2 rounded shadow-sm w-100 border">
-                                                    <p class="mb-0 small text-muted">Favor evaluar factibilidad técnica de retiro de microbasural.</p>
-                                                    <small class="text-muted" style="font-size: 10px;">07/02/2024 10:00 AM</small>
+                                                    <p class="mb-0 small text-muted">Favor evaluar factibilidad técnica
+                                                        de retiro de microbasural.</p>
+                                                    <small class="text-muted" style="font-size: 10px;">07/02/2024 10:00
+                                                        AM</small>
                                                 </div>
                                             </div>
                                             <div class="d-flex mb-2">
-                                                <div class="mr-2"><span class="badge badge-secondary">J. Pérez</span></div>
+                                                <div class="mr-2"><span class="badge badge-secondary">J. Pérez</span>
+                                                </div>
                                                 <div class="bg-white p-2 rounded shadow-sm w-100 border">
-                                                    <p class="mb-0 small text-dark">Se realizó visita a terreno. Efectivamente existe acopio de basura no convencional. Se requiere camión tolva.</p>
+                                                    <p class="mb-0 small text-dark">Se realizó visita a terreno.
+                                                        Efectivamente existe acopio de basura no convencional. Se
+                                                        requiere camión tolva.</p>
                                                     <div class="mt-2 text-right">
-                                                        <a href="#" class="badge badge-light border"><span class="material-symbols-outlined align-middle" style="font-size: 12px;">attachment</span> evidencia_visita.jpg</a>
+                                                        <a href="#" class="badge badge-light border"><span
+                                                                class="material-symbols-outlined align-middle"
+                                                                style="font-size: 12px;">attachment</span>
+                                                            evidencia_visita.jpg</a>
                                                     </div>
-                                                    <small class="text-muted" style="font-size: 10px;">08/02/2024 14:30 PM</small>
+                                                    <small class="text-muted" style="font-size: 10px;">08/02/2024 14:30
+                                                        PM</small>
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Acciones -->
                                         <div class="border-top pt-2 mt-2">
                                             <label class="filter-label mb-2">Tu Gestión</label>
                                             <div class="d-flex" style="gap: 5px;">
-                                                <button class="btn btn-sm btn-success flex-grow-1 font-weight-bold" onclick="Swal.fire('Aprobado', 'La respuesta ha sido validada.', 'success')">
-                                                    <span class="material-symbols-outlined align-middle mr-1" style="font-size: 16px;">check</span> Aprobar Respuesta
+                                                <button class="btn btn-sm btn-success flex-grow-1 font-weight-bold"
+                                                    onclick="Swal.fire('Aprobado', 'La respuesta ha sido validada.', 'success')">
+                                                    <span class="material-symbols-outlined align-middle mr-1"
+                                                        style="font-size: 16px;">check</span> Aprobar Respuesta
                                                 </button>
-                                                <button class="btn btn-sm btn-danger flex-grow-1 font-weight-bold" onclick="Swal.fire('Solicitud de Rectificación', 'Se ha notificado al funcionario.', 'warning')">
-                                                    <span class="material-symbols-outlined align-middle mr-1" style="font-size: 16px;">replay</span> Solicitar Corrección
+                                                <button class="btn btn-sm btn-danger flex-grow-1 font-weight-bold"
+                                                    onclick="Swal.fire('Solicitud de Rectificación', 'Se ha notificado al funcionario.', 'warning')">
+                                                    <span class="material-symbols-outlined align-middle mr-1"
+                                                        style="font-size: 16px;">replay</span> Solicitar Corrección
                                                 </button>
                                             </div>
                                             <div class="mt-2">
-                                                <input type="text" class="form-control form-control-sm" placeholder="Escribe un comentario o nueva instrucción...">
+                                                <input type="text" class="form-control form-control-sm"
+                                                    placeholder="Escribe un comentario o nueva instrucción...">
                                                 <div class="text-right mt-1">
-                                                    <button class="btn btn-link btn-sm p-0 text-primary">Enviar Comentario</button>
+                                                    <button class="btn btn-link btn-sm p-0 text-primary">Enviar
+                                                        Comentario</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -615,14 +668,19 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
 
                             <!-- Asignación 2 -->
                             <div class="card border mb-2 shadow-sm">
-                                <div class="card-header bg-white p-3" id="headingTwo" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="cursor: pointer;">
+                                <div class="card-header bg-white p-3" id="headingTwo" data-toggle="collapse"
+                                    data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"
+                                    style="cursor: pointer;">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="d-flex align-items-center">
-                                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 32px; height: 32px;">
-                                                <span class="material-symbols-outlined text-primary" style="font-size: 18px;">person</span>
+                                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mr-3"
+                                                style="width: 32px; height: 32px;">
+                                                <span class="material-symbols-outlined text-primary"
+                                                    style="font-size: 18px;">person</span>
                                             </div>
                                             <div>
-                                                <span class="font-weight-bold d-block text-dark" style="font-size: 13px;">María Gómez (Tránsito)</span>
+                                                <span class="font-weight-bold d-block text-dark"
+                                                    style="font-size: 13px;">María Gómez (Tránsito)</span>
                                                 <small class="text-muted">Asignado el 07/02/2024</small>
                                             </div>
                                         </div>
@@ -632,26 +690,33 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
                                         </div>
                                     </div>
                                 </div>
-                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionAsignaciones">
+                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                                    data-parent="#accordionAsignaciones">
                                     <div class="card-body bg-light p-3">
                                         <div class="mb-3">
                                             <div class="d-flex mb-2">
                                                 <div class="mr-2"><span class="badge badge-primary">Tú</span></div>
                                                 <div class="bg-white p-2 rounded shadow-sm w-100 border">
-                                                    <p class="mb-0 small text-muted">Verificar si corresponde demarcación en la zona.</p>
-                                                    <small class="text-muted" style="font-size: 10px;">07/02/2024 10:05 AM</small>
+                                                    <p class="mb-0 small text-muted">Verificar si corresponde
+                                                        demarcación en la zona.</p>
+                                                    <small class="text-muted" style="font-size: 10px;">07/02/2024 10:05
+                                                        AM</small>
                                                 </div>
                                             </div>
                                             <div class="d-flex mb-2">
-                                                <div class="mr-2"><span class="badge badge-secondary">M. Gómez</span></div>
+                                                <div class="mr-2"><span class="badge badge-secondary">M. Gómez</span>
+                                                </div>
                                                 <div class="bg-white p-2 rounded shadow-sm w-100 border">
-                                                    <p class="mb-0 small text-dark">No corresponde demarcación, es vía servidumbre.</p>
-                                                    <small class="text-muted" style="font-size: 10px;">07/02/2024 11:00 AM</small>
+                                                    <p class="mb-0 small text-dark">No corresponde demarcación, es vía
+                                                        servidumbre.</p>
+                                                    <small class="text-muted" style="font-size: 10px;">07/02/2024 11:00
+                                                        AM</small>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="alert alert-success py-2 font-weight-bold" style="font-size: 12px;">
-                                            <span class="material-symbols-outlined align-middle mr-1" style="font-size: 16px;">check_circle</span> Gestionado y Cerrado
+                                            <span class="material-symbols-outlined align-middle mr-1"
+                                                style="font-size: 16px;">check_circle</span> Gestionado y Cerrado
                                         </div>
                                     </div>
                                 </div>
@@ -669,11 +734,12 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
                     <div class="col-12">
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="customFileMuni" multiple>
-                            <label class="custom-file-label" for="customFileMuni">Seleccionar archivos internos (Actas, Fotos Visita, etc)...</label>
+                            <label class="custom-file-label" for="customFileMuni">Seleccionar archivos internos (Actas,
+                                Fotos Visita, etc)...</label>
                         </div>
                     </div>
                 </div>
-                
+
                 <h6 class="filter-label mb-3">Documentos Internos Cargados</h6>
                 <div class="table-responsive">
                     <table class="table table-sm table-hover">
@@ -687,7 +753,9 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
                         </thead>
                         <tbody>
                             <tr>
-                                <td><span class="material-symbols-outlined align-middle mr-1 text-danger">picture_as_pdf</span> Informe_Visita_Tecnica.pdf</td>
+                                <td><span
+                                        class="material-symbols-outlined align-middle mr-1 text-danger">picture_as_pdf</span>
+                                    Informe_Visita_Tecnica.pdf</td>
                                 <td>Juan Pérez</td>
                                 <td>08/02/2024</td>
                                 <td class="text-right"><a href="#" class="text-primary">Descargar</a></td>
@@ -724,8 +792,8 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
 </div>
 
 <script>
-    document.getElementById('tipoContribuyenteSwitch').addEventListener('change', function() {
-        if(this.value === 'juridica') {
+    document.getElementById('tipoContribuyenteSwitch').addEventListener('change', function () {
+        if (this.value === 'juridica') {
             document.getElementById('infoNatural').classList.add('d-none');
             document.getElementById('infoJuridica').classList.remove('d-none');
         } else {
@@ -735,10 +803,10 @@ $folio = $_GET['folio'] ?? 'OIRS-2024-8851';
     });
 
     // Custom File Input Label
-    $('.custom-file-input').on('change', function() {
+    $('.custom-file-input').on('change', function () {
         let fileName = $(this).val().split('\\').pop();
         $(this).next('.custom-file-label').addClass("selected").html(fileName);
     });
 </script>
 
-<?php include '../../include/footer-funcionarios.php'; ?>
+<?php include '../../include/footer-general/funcionarios.php'; ?>

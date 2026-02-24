@@ -49,11 +49,12 @@ class OrganizacionComunitariaGeneral
             orgc_nombre=:orgc_nombre,
             orgc_codigo=:orgc_codigo,
             orgc_rpj=:orgc_rpj,
-            ogc_inscripcion=:ogc_inscripcion,
             orgc_vigencia=:orgc_vigencia,
-            ogc_rep_legal=:ogc_rep_legal,
+            orgc_rep_legal=:orgc_rep_legal,
             orgc_unidad_vecinal=:orgc_unidad_vecinal,
-            orgc_tipo_organizacion=:orgc_tipo_organizacion";
+            orgc_tipo_organizacion=:orgc_tipo_organizacion,
+            orgc_inscripcion= current_timestamp(),
+            orgc_borrado= 0";
 
         $stmt = $this->conn->prepare($query);
 
@@ -61,9 +62,8 @@ class OrganizacionComunitariaGeneral
         $stmt->bindParam(":orgc_nombre", $data['orgc_nombre']);
         $stmt->bindParam(":orgc_codigo", $data['orgc_codigo']);
         $stmt->bindParam(":orgc_rpj", $data['orgc_rpj']);
-        $stmt->bindParam(":ogc_inscripcion", $data['ogc_inscripcion']);
         $stmt->bindParam(":orgc_vigencia", $data['orgc_vigencia']);
-        $stmt->bindParam(":ogc_rep_legal", $data['ogc_rep_legal']);
+        $stmt->bindParam(":orgc_rep_legal", $data['orgc_rep_legal']);
         $stmt->bindParam(":orgc_unidad_vecinal", $data['orgc_unidad_vecinal']);
         $stmt->bindParam(":orgc_tipo_organizacion", $data['orgc_tipo_organizacion']);
 
@@ -80,11 +80,12 @@ class OrganizacionComunitariaGeneral
             orgc_nombre=:orgc_nombre,
             orgc_codigo=:orgc_codigo,
             orgc_rpj=:orgc_rpj,
-            ogc_inscripcion=:ogc_inscripcion,
             orgc_vigencia=:orgc_vigencia,
-            ogc_rep_legal=:ogc_rep_legal,
+            orgc_rep_legal=:orgc_rep_legal,
             orgc_unidad_vecinal=:orgc_unidad_vecinal,
-            orgc_tipo_organizacion=:orgc_tipo_organizacion
+            orgc_tipo_organizacion=:orgc_tipo_organizacion,
+            orgc_inscripcion= current_timestamp(),
+            orgc_borrado= 0
             WHERE orgc_id=:orgc_id";
 
         $stmt = $this->conn->prepare($query);
@@ -94,9 +95,8 @@ class OrganizacionComunitariaGeneral
         $stmt->bindParam(":orgc_nombre", $data['orgc_nombre']);
         $stmt->bindParam(":orgc_codigo", $data['orgc_codigo']);
         $stmt->bindParam(":orgc_rpj", $data['orgc_rpj']);
-        $stmt->bindParam(":ogc_inscripcion", $data['ogc_inscripcion']);
         $stmt->bindParam(":orgc_vigencia", $data['orgc_vigencia']);
-        $stmt->bindParam(":ogc_rep_legal", $data['ogc_rep_legal']);
+        $stmt->bindParam(":orgc_rep_legal", $data['orgc_rep_legal']);
         $stmt->bindParam(":orgc_unidad_vecinal", $data['orgc_unidad_vecinal']);
         $stmt->bindParam(":orgc_tipo_organizacion", $data['orgc_tipo_organizacion']);
 

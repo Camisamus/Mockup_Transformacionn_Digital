@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     try {
         // Fetch Inbox
-        const fetchUrl = '../api/bandeja.php';
+        const fetchUrl = `${window.API_BASE_URL}/general/bandeja.php`;
 
         const response = await fetch(fetchUrl, {
             method: 'POST',
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
 
         // Cargar Funcionarios para búsqueda
-        const respFunc = await fetch(`${window.API_BASE_URL}/funcionarios.php`, {
+        const respFunc = await fetch(`${window.API_BASE_URL}/general/funcionarios.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: 'CONSULTAM' })
@@ -177,7 +177,7 @@ function renderTable(items, tbody) {
             if (e.target.closest('button')) return; // Ignore if clicked toggle
 
             if (item.origen === 'DESVE') {
-                window.location.href = `desve/desve_consultar.php?id=${item.id}`;
+                window.location.href = `desve/consultar.php?id=${item.id}`;
             } else if (item.origen === 'Ingresos') {
                 window.location.href = `ingresos/ingr_consultar.php?id=${item.id}`;
             } else if (item.origen === 'Patentes') {
@@ -220,7 +220,7 @@ function renderTable(items, tbody) {
                     <p><strong>Proyecto/Sector:</strong> ${item.origen}</p>
                     <p><strong>Entrega:</strong> ${item.fecha}</p>
                     <button class="btn btn-sm btn-primary mt-2" onclick="
-                        if('${item.origen}' === 'DESVE') window.location.href = 'desve/desve_consultar.php?id=${item.id}';
+                        if('${item.origen}' === 'DESVE') window.location.href = 'desve/consultar.php?id=${item.id}';
                         else if ('${item.origen}' === 'Ingresos') window.location.href = 'ingresos/ingr_consultar.php?id=${item.id}';
                         else Swal.fire('Info', 'Módulo en construcción', 'info');
                     ">Ver Detalle</button>

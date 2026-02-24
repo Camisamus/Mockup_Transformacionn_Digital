@@ -40,7 +40,7 @@
 
 async function buscarYConsultar(filters) {
     try {
-        const response = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -81,7 +81,7 @@ async function cargarDatosIngreso(params) {
     try {
         const body = { ACCION: 'CONSULTAM', ...params };
 
-        const response = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)
@@ -351,7 +351,7 @@ function renderizarIngreso(data) {
             }
 
             try {
-                const respDetalles = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+                const respDetalles = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ ACCION: 'DETALLES_ARBOL', rgt_ids: Array.from(rgtIds) })
@@ -551,7 +551,7 @@ function renderizarMapaRelaciones(multiancestro, currentId) {
 
 async function descargarDocumento(Id, nombre) {
     try {
-        const response = await fetch(`${window.API_BASE_URL}/gesdoc_general.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/gesdoc/general.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: 'Bajar', doc_id: Id }),
@@ -599,7 +599,7 @@ async function guardarComentario() {
     }
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/comentarios.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/general/comentarios.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -687,7 +687,7 @@ async function checkAndRequestID() {
         else if (type === 'rgt_id_publica') payload.rgt_id_publica = value;
         else if (type === 'rgt_id') payload.rgt_id = value;
 
-        const response = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -718,7 +718,7 @@ async function checkAndRequestID() {
 
 async function checkSession() {
     try {
-        const response = await fetch(`${window.API_BASE_URL}/verify_session.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/general/verify_session.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },

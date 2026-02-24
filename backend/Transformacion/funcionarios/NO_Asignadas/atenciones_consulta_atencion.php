@@ -1,7 +1,7 @@
 <?php
 $pageTitle = "Consulta de Atención";
-require_once '../../api/auth_check.php';
-include 'header.php';
+require_once '../../api/general/auth_check.php';
+include '../../api/general/header.php';
 ?>
 
 
@@ -184,4 +184,4 @@ include 'header.php';
 <script src="../../recursos/js/funcionarios/NO_Asignadas/atenciones_consulta_atencion.js"></script>
 
 
-<?php include '../../api/footer.php'; ?>
+<?php include '../../api/general/footer.php'; ?>

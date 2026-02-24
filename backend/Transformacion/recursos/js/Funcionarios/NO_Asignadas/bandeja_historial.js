@@ -67,7 +67,7 @@ async function cargarHistorial(inicio = null, fin = null) {
     tbody.innerHTML = '<tr><td colspan="6" class="text-center">Cargando historial...</td></tr>';
 
     try {
-        const fetchUrl = '../api/bandeja_historial.php';
+        const fetchUrl = `${window.API_BASE_URL}/general/bandeja_historial.php`;
 
         const requestBody = {
             ACCION: "LISTAR_HISTORIAL"
@@ -164,7 +164,7 @@ function renderTable(items, tbody) {
 
         row.addEventListener('click', () => {
             if (item.origen === 'DESVE') {
-                window.location.href = `desve/desve_consultar.php?id=${item.id}`;
+                window.location.href = `desve/consultar.php?id=${item.id}`;
             } else if (item.origen === 'Ingresos') {
                 window.location.href = `ingresos/ingr_consultar.php?id=${item.id}`;
             } else if (item.origen === 'TAREAS') {

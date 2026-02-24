@@ -1,4 +1,4 @@
-<?php include '../../include/header-oirs-funcionarios.php'; ?>
+<?php include '../../include/header-oirs-general/funcionarios.php'; ?>
 <div class="bg-white border-bottom px-4 py-3">
     <h2 class="h6 font-serif font-bold text-dark mb-0">Ajustes de Plataforma OIRS</h2>
 </div>
@@ -11,4 +11,4 @@
         </div>
     </div>
 </div>
-<?php include '../../include/footer-funcionarios.php'; ?>
+<?php include '../../include/footer-general/funcionarios.php'; ?>

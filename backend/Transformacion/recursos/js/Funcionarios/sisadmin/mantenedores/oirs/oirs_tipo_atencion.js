@@ -42,7 +42,7 @@ window.loadData = async function () {
     }
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/trd_oirs_tipo_atencion.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/oirs/tipo_atencion.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -149,7 +149,7 @@ window.deleteItem = async function (id) {
 
     if (result.isConfirmed) {
         try {
-            const response = await fetch(`${window.API_BASE_URL}/trd_oirs_tipo_atencion.php`, {
+            const response = await fetch(`${window.API_BASE_URL}/oirs/tipo_atencion.php`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
@@ -187,7 +187,7 @@ async function saveData() {
     if (currentMode === 'edit') payload.tat_id = parseInt(id);
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/trd_oirs_tipo_atencion.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/oirs/tipo_atencion.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },

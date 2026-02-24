@@ -23,7 +23,7 @@ let currentRgtId = null;
 
 async function cargarTipos() {
     try {
-        const resp = await fetch(`${window.API_BASE_URL}/ingresos_tipos_ingreso.php`, {
+        const resp = await fetch(`${window.API_BASE_URL}/ingresos/tipos_ingreso.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: 'CONSULTAM' })
@@ -46,7 +46,7 @@ async function cargarTipos() {
 
 async function cargarDatosPreparar(id) {
     try {
-        const response = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: 'CONSULTAM', ing_id: id })
@@ -91,7 +91,7 @@ async function cargarDatosPreparar(id) {
                 });
             }
 
-            const respDetalles = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+            const respDetalles = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ACCION: 'DETALLES_ARBOL', rgt_ids: Array.from(rgtIds) })
@@ -100,7 +100,7 @@ async function cargarDatosPreparar(id) {
 
             let sessionUser = null;
             try {
-                const respSession = await fetch(`${window.API_BASE_URL}/verify_session.php`, {
+                const respSession = await fetch(`${window.API_BASE_URL}/general/verify_session.php`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ ACCION: 'VERIFICAR' })
@@ -178,7 +178,7 @@ async function crearSolicitudHija(parentId, modalInstance) {
 
         Swal.fire({ title: 'Creando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
-        const respCrear = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+        const respCrear = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -187,7 +187,7 @@ async function crearSolicitudHija(parentId, modalInstance) {
 
         if (resCrear.status === 'success') {
             const childRequestId = resCrear.id;
-            const respChild = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+            const respChild = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ACCION: 'CONSULTAM', ing_id: childRequestId })
@@ -195,7 +195,7 @@ async function crearSolicitudHija(parentId, modalInstance) {
             const resChild = await respChild.json();
             const childRgtId = resChild.data.tis_registro_tramite;
 
-            const respLink = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+            const respLink = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -225,7 +225,7 @@ async function cargarSolicitudesParaDependencia() {
         const tbody = document.getElementById('lista_solicitudes_padre');
         tbody.innerHTML = '<tr><td colspan="4" class="text-center p-3">Cargando...</td></tr>';
 
-        const respSession = await fetch(`${window.API_BASE_URL}/verify_session.php`, {
+        const respSession = await fetch(`${window.API_BASE_URL}/general/verify_session.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: 'VERIFICAR' })
@@ -238,7 +238,7 @@ async function cargarSolicitudesParaDependencia() {
             return;
         }
 
-        const resp = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+        const resp = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: 'CONSULTAM' })
@@ -289,7 +289,7 @@ window.vincularComoPadre = async function (parentRgtId, parentTitle) {
 
     try {
         Swal.fire({ title: 'Vinculando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-        const respLink = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+        const respLink = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: 'VINCULAR_HIJO', padre_id: parentRgtId, hijo_id: currentRgtId })
@@ -458,7 +458,7 @@ function renderizarMapa(relaciones, detalles = [], userId = null) {
         if (confirm.isConfirmed) {
             try {
                 Swal.fire({ title: 'Eliminando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-                const resp = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+                const resp = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ ACCION: 'ELIMINAR_VINCULO', padre_id: parentRgtId, hijo_id: childRgtId })
@@ -531,7 +531,7 @@ async function checkAndRequestID() {
         else if (type === 'rgt_id_publica') payload.rgt_id_publica = value;
         else if (type === 'rgt_id') payload.rgt_id = value;
 
-        const response = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

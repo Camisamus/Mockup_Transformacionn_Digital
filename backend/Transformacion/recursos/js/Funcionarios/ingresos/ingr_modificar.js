@@ -26,7 +26,7 @@ let currentRgtId = null;
 
 async function cargarListas() {
     try {
-        const respTipos = await fetch(`${window.API_BASE_URL}/ingresos_tipos_ingreso.php`, {
+        const respTipos = await fetch(`${window.API_BASE_URL}/ingresos/tipos_ingreso.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: 'CONSULTAM' })
@@ -45,7 +45,7 @@ async function cargarListas() {
             });
         }
 
-        const respFunc = await fetch(`${window.API_BASE_URL}/funcionarios.php`, {
+        const respFunc = await fetch(`${window.API_BASE_URL}/general/funcionarios.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: 'CONSULTAM' })
@@ -62,7 +62,7 @@ async function cargarListas() {
 
 async function cargarDatosExistentes(id) {
     try {
-        const response = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: 'CONSULTAM', ing_id: id })
@@ -412,7 +412,7 @@ function eliminarDocumentoNuevo(index) { documentosNuevos.splice(index, 1); rend
 
 async function descargarDocumento(Id, nombre) {
     try {
-        const response = await fetch(`${window.API_BASE_URL}/gesdoc_general.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/gesdoc/general.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: 'Bajar', doc_id: Id }),
@@ -470,7 +470,7 @@ async function actualizarIngreso() {
             didOpen: () => Swal.showLoading()
         });
 
-        const response = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -529,7 +529,7 @@ async function guardarComentario() {
     }
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/comentarios.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/general/comentarios.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -608,7 +608,7 @@ async function checkAndRequestID() {
         else if (type === 'rgt_id_publica') payload.rgt_id_publica = value;
         else if (type === 'rgt_id') payload.rgt_id = value;
 
-        const response = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

@@ -22,8 +22,8 @@ class OrganizacionComunitariaControllerGeneral
 
     public function create($data)
     {
-        if (empty($data['orgc_rut']) || empty($data['orgc_nombre']) || empty($data['ogc_rep_legal']) || empty($data['orgc_tipo_organizacion'])) {
-            return ["status" => "error", "message" => "Datos obligatorios faltantes (RUT, Nombre, Rep. Legal, Tipo)"];
+        if (empty($data['orgc_rut']) || empty($data['orgc_nombre']) || empty($data['orgc_tipo_organizacion'])) {
+            return ["status" => "error", "message" => "Datos obligatorios faltantes (RUT, Nombre, Tipo)"];
         }
 
         if ($this->org->create($data)) {

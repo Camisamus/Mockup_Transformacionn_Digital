@@ -247,19 +247,19 @@
                 "id": "7.1",
                 "tipo": "Pagina",
                 "nombre": "Nuevo Ingreso",
-                "Enlace": "Funcionarios/DESVE/desve_nuevo_ingreso.php"
+                "Enlace": "Funcionarios/DESVE/nuevo_ingreso.php"
             },
             {
                 "id": "7.2",
                 "tipo": "Pagina",
                 "nombre": "Listado de Ingresos",
-                "Enlace": "Funcionarios/DESVE/index.php.php"
+                "Enlace": "Funcionarios/DESVE/index.php"
             },
             {
                 "id": "7.3",
                 "tipo": "Pagina",
                 "nombre": "Historial DESVE",
-                "Enlace": "Funcionarios/DESVE/desve_historial.php"
+                "Enlace": "Funcionarios/DESVE/historial.php"
             }
         ]
     },

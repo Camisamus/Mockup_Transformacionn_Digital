@@ -1,7 +1,7 @@
 <?php
 $pageTitle = "DESVE";
-require_once '../../api/auth_check.php';
-include 'header.php';
+require_once '../../api/general/auth_check.php';
+include '../../api/general/header.php';
 ?>
 
 <div class="container-fluid py-4">
@@ -17,37 +17,20 @@ include 'header.php';
                         avanzar en su gestion desde la lista.</p>
                 </div>
                 <div class="header-action">
-                    <button type="button" class="btn btn-toolbar btn-dark" id="btn_exportar_excel">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                            <polyline points="10 9 9 9 8 9"></polyline>
-                        </svg>
-                        Excel
-                    </button>
-                    <button type="button" class="btn btn-toolbar btn-dark" id="btn_exportar_pdf">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                            <polyline points="10 9 9 9 8 9"></polyline>
-                        </svg>
-                        PDF
-                    </button>
-                    <button type="button" class="btn btn-toolbar btn-dark" onclick="location.href='desve_nuevo.php'">
+                    <button type="button" class="btn btn-toolbar btn-dark" onclick="location.href='nuevo.php'">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="12" y1="5" x2="12" y2="19"></line>
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                         </svg>
-                        Nuevo DESVE
+                        NUEVO DESVE
                     </button>
                 </div>
+                <!--<div class="flex items-center gap-4">
+                    <button class="flex items-center justify-center gap-2 rounded-lg h-12 px-8 bg-primary hover:bg-primary/90 text-white text-xs font-bold uppercase tracking-wider shadow-lg shadow-primary/20">
+                        NUEVO DESVE
+                    </button>
+                </div>-->
             </div>
         </div>
     </div>
@@ -148,6 +131,6 @@ include 'header.php';
     feather.replace();
 </script>
 
-<script src="../../recursos/js/funcionarios/desve/desve_listado_ingresos.js"></script>
+<script src="../../recursos/js/funcionarios/desve/index.js"></script>
 
-<?php include '../../api/footer.php'; ?>
+<?php include '../../api/general/footer.php'; ?>

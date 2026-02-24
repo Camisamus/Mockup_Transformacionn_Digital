@@ -21,7 +21,7 @@ let modalComentario = null;
 
 async function checkSession() {
     try {
-        const response = await fetch(`${window.API_BASE_URL}/verify_session.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/general/verify_session.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -43,7 +43,7 @@ async function checkSession() {
 async function cargarDatos(id, userId) {
     try {
         currentUserId = userId;
-        const response = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: 'CONSULTAM', ing_id: id })
@@ -337,7 +337,7 @@ async function iniciarFirma(estado, accionLabel, respuesta) {
     try {
         Swal.fire({ title: 'Enviando código...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
-        const response = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -424,7 +424,7 @@ async function procesarRespuesta(estado, accionLabel, respuesta, otp) {
             formData.append('doc_nombre_documento', renamedFile.name);
 
             try {
-                const uploadResp = await fetch(`${window.API_BASE_URL}/gesdoc_general.php`, {
+                const uploadResp = await fetch(`${window.API_BASE_URL}/gesdoc/general.php`, {
                     method: 'POST',
                     body: formData
                 });
@@ -453,7 +453,7 @@ async function procesarRespuesta(estado, accionLabel, respuesta, otp) {
         };
         if (otp) payload.otp = otp;
 
-        const response = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -482,7 +482,7 @@ async function guardarComentario() {
     }
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/comentarios.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/general/comentarios.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -569,7 +569,7 @@ async function checkAndRequestID() {
         else if (type === 'rgt_id_publica') payload.rgt_id_publica = value;
         else if (type === 'rgt_id') payload.rgt_id = value;
 
-        const response = await fetch(`${window.API_BASE_URL}/ingresos_ingresos.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

@@ -1,7 +1,7 @@
 <?php
 $pageTitle = "Bandeja OIRS";
-require_once '../../api/auth_check.php';
-include 'header-oirs-funcionarios.php';
+require_once '../../api/general/auth_check.php';
+include '../../api/general/header.php';
 ?>
 
 <div class="container-fluid p-4">
@@ -123,4 +123,4 @@ include 'header-oirs-funcionarios.php';
         // ... existing event handlers if any ...
     });
 </script>
-<?php include 'footer-funcionarios.php'; ?>
+<?php include '../../api/general/footer.php'; ?>

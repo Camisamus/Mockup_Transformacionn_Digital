@@ -1,14 +1,14 @@
 <?php
 $pageTitle = "Tablero de Control - Municipalidad";
-require_once '../../api/auth_check.php';
-include 'header.php';
+require_once '../../api/general/auth_check.php';
+include '../../api/general/header.php';
 ?>
 
 <script type="text/javascript">
     // Force check login on load
     document.addEventListener('DOMContentLoaded', () => {
         try {
-            fetch(`${window.API_BASE_URL}/logout.php`, {
+            fetch(`${window.API_BASE_URL}/general/logout.php`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
@@ -32,4 +32,4 @@ include 'header.php';
     });
 </script>
 
-<?php include '../../api/footer.php'; ?>
+<?php include '../../api/general/footer.php'; ?>

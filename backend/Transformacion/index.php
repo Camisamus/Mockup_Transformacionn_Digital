@@ -207,7 +207,7 @@
             loadingSpinner.classList.remove('d-none');
             loginError.classList.add('d-none');
 
-            fetch('api/login.php', {
+            fetch('api/general/login.php', {
                 method: 'POST',
                 credentials: 'include', // Important for session cookie
                 headers: {

@@ -1,7 +1,7 @@
 <?php
 $pageTitle = "Consulta de Solicitud";
-require_once '../../api/auth_check.php';
-include 'header.php';
+require_once '../../api/general/auth_check.php';
+include '../../api/general/header.php';
 ?>
 
 <div class="container-fluid py-4">
@@ -163,4 +163,4 @@ include 'header.php';
 <script>feather.replace()</script>
 <script src="../../recursos/js/funcionarios/NO_Asignadas/patentes_consulta_solicitud.js"></script>
 
-<?php include '../../api/footer.php'; ?>
+<?php include '../../api/general/footer.php'; ?>

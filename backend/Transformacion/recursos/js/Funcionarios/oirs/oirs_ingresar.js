@@ -70,7 +70,7 @@ $(document).ready(function () {
         $('#rutStatus').text('Buscando...').fadeIn();
 
         try {
-            const response = await fetch('../../api/contribuyentes_general.php', {
+            const response = await fetch('../../api/sisadmin/mantenedores/general/contribuyentes_general.php', {
                 method: 'POST',
                 body: JSON.stringify({
                     ACCION: 'BUSCAR_RUT',
@@ -258,7 +258,7 @@ $(document).ready(function () {
 
         // 5. Enviar a API
         try {
-            const response = await fetch('../../api/oirs_solicitudes.php', {
+            const response = await fetch('../../api/oirs/solicitudes.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -341,7 +341,7 @@ async function cargarListas() {
 
     try {
         // Tipos de Atención
-        fetch(`${apiBase}/trd_oirs_tipo_atencion.php`, {
+        fetch(`${apiBase}/oirs/tipo_atencion.php`, {
             method: 'POST',
             body: JSON.stringify(payload)
         }).then(r => r.json()).then(res => {
@@ -353,7 +353,7 @@ async function cargarListas() {
         });
 
         // Condiciones
-        fetch(`${apiBase}/trd_oirs_condiciones.php`, {
+        fetch(`${apiBase}/oirs/condiciones.php`, {
             method: 'POST',
             body: JSON.stringify(payload)
         }).then(r => r.json()).then(res => {
@@ -365,7 +365,7 @@ async function cargarListas() {
         });
 
         // Temáticas
-        fetch(`${apiBase}/trd_oirs_tematicas.php`, {
+        fetch(`${apiBase}/oirs/tematicas.php`, {
             method: 'POST',
             body: JSON.stringify(payload)
         }).then(r => r.json()).then(res => {
@@ -377,7 +377,7 @@ async function cargarListas() {
         });
 
         // Subtemáticas (para filtro posterior)
-        fetch(`${apiBase}/trd_oirs_subtematicas.php`, {
+        fetch(`${apiBase}/oirs/subtematicas.php`, {
             method: 'POST',
             body: JSON.stringify(payload)
         }).then(r => r.json()).then(res => {

@@ -1,2 +1,0 @@
-# Los headers CORS se manejan ahora vía PHP en api/cors.php
-# para evitar duplicados y conflictos con el preflight.

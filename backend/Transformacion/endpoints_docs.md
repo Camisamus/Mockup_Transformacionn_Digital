@@ -10,7 +10,7 @@ Esta es la lista de endpoints disponibles en el backend, sus métodos y las estr
 ## 1. Autenticación
 
 ### Login
-- **URL**: `login.php`
+- **URL**: `general/login.php`
 - **Método**: `POST`
 - **Body**:
 ```json
@@ -21,11 +21,11 @@ Esta es la lista de endpoints disponibles en el backend, sus métodos y las estr
 ```
 
 ### Logout
-- **URL**: `logout.php`
+- **URL**: `general/logout.php`
 - **Método**: `GET`
 
 ### Verificar Sesión
-- **URL**: `verify_session.php`
+- **URL**: `general/verify_session.php`
 - **Método**: `GET`
 - **Descripción**: Retorna el estado de la sesión, datos del usuario y sus permisos.
 
@@ -118,11 +118,11 @@ Esta es la lista de endpoints disponibles en el backend, sus métodos y las estr
 ## 4. Funcionarios
 
 ### Listar Funcionarios
-- **URL**: `funcionarios.php`
+- **URL**: `general/funcionarios.php`
 - **Método**: `GET`
 
 ### Crear Funcionario
-- **URL**: `funcionarios.php`
+- **URL**: `general/funcionarios.php`
 - **Método**: `POST`
 - **Body**:
 ```json

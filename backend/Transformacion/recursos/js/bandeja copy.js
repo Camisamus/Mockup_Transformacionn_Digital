@@ -118,7 +118,7 @@ function renderTable(items, tbody) {
             if (e.target.closest('button')) return; // Ignore if clicked toggle
 
             if (item.origen === 'DESVE') {
-                window.location.href = `desve_responder.php?id=${item.id}`;
+                window.location.href = `responder.php?id=${item.id}`;
             } else if (item.origen === 'Ingresos') {
                 window.location.href = `ingr_responder.php?id=${item.id}`;
             } else if (item.origen === 'Patentes') {
@@ -145,7 +145,7 @@ function renderTable(items, tbody) {
                     <p><strong>Proyecto/Sector:</strong> ${item.origen}</p>
                     <p><strong>Entrega:</strong> ${new Date(item.fecha).toLocaleDateString()}</p>
                     <button class="btn btn-sm btn-primary mt-2" onclick="
-                        if('${item.origen}' === 'DESVE') window.location.href = 'desve_responder.php?id=${item.id}';
+                        if('${item.origen}' === 'DESVE') window.location.href = 'responder.php?id=${item.id}';
                         else if ('${item.origen}' === 'Ingresos') window.location.href = 'ingr_responder.php?id=${item.id}';
                         else Swal.fire('Info', 'Módulo en construcción', 'info');
                     ">Ver Detalle</button>

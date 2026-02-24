@@ -100,7 +100,7 @@ function renderRepresentationSelector() {
 // Global Logout Function
 window.logout = async function () {
     try {
-        await fetch(`${window.API_BASE_URL}/logout.php`, {
+        await fetch(`${window.API_BASE_URL}/general/logout.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
