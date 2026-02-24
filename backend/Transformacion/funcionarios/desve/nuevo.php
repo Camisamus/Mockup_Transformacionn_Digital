@@ -162,8 +162,7 @@ include '../../api/general/header.php';
 
                             <div class="md:col-span-2">
                                 <label
-                                    class="block text-[10px] font-bold label-custom uppercase mb-2 tracking-wider">Origen
-                                    de Solicitud</label>
+                                    class="block text-[10px] font-bold label-custom uppercase mb-2 tracking-wider">Nombre de la entidad/Vecino/consejal</label>
                                 <div class="flex shadow-sm h-[38px]">
                                     <input
                                         class="flex-grow border-gray-300 rounded-l-md focus:ring-primary-blue focus:border-primary-blue text-sm input-readonly-dashed"

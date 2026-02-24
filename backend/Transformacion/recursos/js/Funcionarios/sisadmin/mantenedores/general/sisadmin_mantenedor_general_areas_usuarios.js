@@ -48,7 +48,7 @@ function attachEventListeners() {
 async function loadDependencies() {
     try {
         const [resU, resA] = await Promise.all([
-            fetch(`${window.API_BASE_URL}/usuarios_acceso.php`, {
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/usuarios.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ACCION: 'CONSULTAM' })

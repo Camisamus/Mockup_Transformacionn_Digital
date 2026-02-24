@@ -154,15 +154,15 @@ async function loadInitialData() {
             body: JSON.stringify({ ACCION: "CONSULTAM" })
         };
         const [orgRes, orgResDESVE, contribRes, tipoRes, prioRes, funcRes, secRes, solRes, orgComRes, areasRes] = await Promise.all([
-            fetch(`${window.API_BASE_URL}/organizaciones.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/organizaciones_desve.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}sisadmin/organizaciones/organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/desve/organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/contribuyentes_general.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/prioridades.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}sisadmin/organizaciones/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/desve/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/general/funcionarios.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sectores.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/solicitudes_desve.php`, { ...fetchOptions, body: JSON.stringify({ ACCION: "CONSULTAM", S: "REINGRESO" }) }).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/organizaciones_comunitarias_general.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/desve/solicitudes.php`, { ...fetchOptions, body: JSON.stringify({ ACCION: "CONSULTAM", S: "REINGRESO" }) }).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/organizaciones_comunitarias_general.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sisadmin\mantenedores\general\areas_general.php`, fetchOptions).then(r => r.json())
         ]);
 
@@ -436,7 +436,7 @@ async function guardarSolicitud() {
     try {
         Swal.fire({ title: 'Guardando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
-        const response = await fetch(`${window.API_BASE_URL}/solicitudes_desve.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/desve/solicitudes.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body),
@@ -606,7 +606,7 @@ window.guardarOrigenEspecial = async function () {
     if (!texto) return Swal.fire('Atención', 'Ingrese un nombre.', 'warning');
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/organizaciones_desve.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/desve/organizaciones.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -619,7 +619,7 @@ window.guardarOrigenEspecial = async function () {
             bootstrap.Modal.getInstance(document.getElementById('modalNuevoOrigenEspecial')).hide();
 
             // Reload organizations
-            const orgResDESVE = await fetch(`${window.API_BASE_URL}/organizaciones_desve.php`, {
+            const orgResDESVE = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/desve/organizaciones.php`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
@@ -842,7 +842,7 @@ window.guardarNuevaOrganizacion = async function () {
     try {
         Swal.fire({ title: 'Guardando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
-        const response = await fetch(`${window.API_BASE_URL}/organizaciones_comunitarias_general.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/organizaciones_comunitarias_general.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -852,7 +852,7 @@ window.guardarNuevaOrganizacion = async function () {
 
         if (result.status === 'success') {
             // Reload organizations
-            const orgRes = await fetch(`${window.API_BASE_URL}/organizaciones_comunitarias_general.php`, {
+            const orgRes = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/organizaciones_comunitarias_general.php`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },

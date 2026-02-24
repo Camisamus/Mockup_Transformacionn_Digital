@@ -1,17 +1,17 @@
 <?php
-require_once 'general/cors.php';
+require_once '../../../general/cors.php';
 
-// API Endpoint: Prioridades
-require_once __DIR__ . '/../vendor/autoload.php';
+// API Endpoint: Tipos de Organización
+require_once __DIR__ . '/../../../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\PrioridadController;
+use App\Controllers\TipoOrganizacionController;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new PrioridadController($db);
+$controller = new TipoOrganizacionController($db);
 
 switch ($data['ACCION']) {
     case 'CONSULTAM':

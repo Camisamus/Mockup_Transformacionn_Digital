@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         await loadLookups();
 
         // 2. Load Solicitud Data
-        const response = await fetch(`${window.API_BASE_URL}/solicitudes_desve.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/desve/solicitudes.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -124,10 +124,10 @@ async function loadLookups() {
     };
     try {
         const [orgRes, orgResDESVE, tipoRes, prioRes, funcRes, secRes] = await Promise.all([
-            fetch(`${window.API_BASE_URL}/organizaciones.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/organizaciones_desve.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/prioridades.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}sisadmin/organizaciones/organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/desve/organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}sisadmin/organizaciones/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/desve/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/general/funcionarios.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sectores.php`, fetchOptions).then(r => r.json())
         ]);
@@ -334,7 +334,7 @@ async function saveResponse() {
             documentos: responseFiles
         };
 
-        const response = await fetch(`${window.API_BASE_URL}/respuestas_desve.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/desve/respuestas.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -427,7 +427,7 @@ async function solicitarID() {
         else if (type === 'rgt_id_publica') payload.rgt_id_publica = value;
         else if (type === 'rgt_id') payload.rgt_id = value;
 
-        const response = await fetch(`${window.API_BASE_URL}/solicitudes_desve.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/desve/solicitudes.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

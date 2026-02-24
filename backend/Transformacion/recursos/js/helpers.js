@@ -46,3 +46,54 @@ function validateRut(rut) {
 
     return dv === expectedDv;
 }
+
+/**
+ * Calcula los días hábiles restantes desde hoy hasta una fecha dada (excluyendo fines de semana).
+ * @param {string} fechaStr - Fecha en formato DD-MM-YYYY
+ * @returns {number|string} Cantidad de días hábiles restantes (puede ser negativo si ya venció), o '-' si es inválida.
+ */
+function calcularDiasHabilesRestantes(fechaStr) {
+    if (!fechaStr || fechaStr === 'N/A' || fechaStr === '-') return '-';
+
+    const partes = fechaStr.split('-');
+    if (partes.length !== 3) return '-';
+
+    const dia = parseInt(partes[2], 10);
+    const mes = parseInt(partes[1], 10) - 1; // Meses en JS son 0-11
+    const anio = parseInt(partes[0], 10);
+
+    const fechaVencimiento = new Date(anio, mes, dia);
+    fechaVencimiento.setHours(23, 59, 59, 999); // Fin del día de vencimiento
+
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0); // Inicio del día de hoy
+
+    if (isNaN(fechaVencimiento.getTime())) return '-';
+
+    let diasHabiles = 0;
+    let fechaIteracion = new Date(hoy);
+
+    if (fechaIteracion > fechaVencimiento) {
+        // La fecha ya pasó, contamos días hábiles de atraso (negativos)
+        while (fechaIteracion > fechaVencimiento) {
+            fechaIteracion.setDate(fechaIteracion.getDate() - 1);
+            const diaSemana = fechaIteracion.getDay();
+            // 0 = Domingo, 6 = Sábado
+            if (diaSemana !== 0 && diaSemana !== 6) {
+                diasHabiles--;
+            }
+        }
+    } else {
+        // La fecha es futura, contamos días hábiles a favor
+        while (fechaIteracion < fechaVencimiento) {
+            const diaSemana = fechaIteracion.getDay();
+            // 0 = Domingo, 6 = Sábado
+            if (diaSemana !== 0 && diaSemana !== 6) {
+                diasHabiles++;
+            }
+            fechaIteracion.setDate(fechaIteracion.getDate() + 1);
+        }
+    }
+
+    return diasHabiles;
+}

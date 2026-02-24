@@ -92,12 +92,12 @@ function updateDeleteButtonState() {
 async function loadDependencies() {
     try {
         const [resP, resR] = await Promise.all([
-            fetch(`${window.API_BASE_URL}/perfiles_acceso.php`, {
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/roles.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ACCION: 'CONSULTAM' })
             }),
-            fetch(`${window.API_BASE_URL}/roles_acceso.php`, {
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/permisos.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ACCION: 'CONSULTAM' })
@@ -149,7 +149,7 @@ window.loadData = async function () {
     }
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/perfiles_roles_acceso.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/permisos_roles.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -245,7 +245,7 @@ window.deleteItem = async function (perfil_id, rol_id) {
 
     if (result.isConfirmed) {
         try {
-            const response = await fetch(`${window.API_BASE_URL}/perfiles_roles_acceso.php`, {
+            const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/permisos_roles.php`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
@@ -300,7 +300,7 @@ window.deleteSelectedItems = async function () {
             for (const cb of selectedCheckboxes) {
                 const [perfil_id, rol_id] = cb.value.split('|');
 
-                const response = await fetch(`${window.API_BASE_URL}/perfiles_roles_acceso.php`, {
+                const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/permisos_roles.php`, {
                     method: 'POST',
                     credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },
@@ -418,7 +418,7 @@ async function saveData() {
                 pfr_rol_id: rol_id
             };
 
-            const response = await fetch(`${window.API_BASE_URL}/perfiles_roles_acceso.php`, {
+            const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/permisos_roles.php`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },

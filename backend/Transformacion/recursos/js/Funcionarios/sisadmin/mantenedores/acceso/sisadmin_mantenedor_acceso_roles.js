@@ -42,7 +42,7 @@ window.loadData = async function () {
     }
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/roles_acceso.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/permisos.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -157,7 +157,7 @@ window.deleteItem = async function (id) {
 
     if (result.isConfirmed) {
         try {
-            const response = await fetch(`${window.API_BASE_URL}/roles_acceso.php`, {
+            const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/permisos.php`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
@@ -198,7 +198,7 @@ async function saveData() {
     };
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/roles_acceso.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/permisos.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },

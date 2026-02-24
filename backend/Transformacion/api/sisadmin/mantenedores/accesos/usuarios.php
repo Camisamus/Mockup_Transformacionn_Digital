@@ -1,15 +1,15 @@
 <?php
-require_once 'general/cors.php';
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once '../../../general/cors.php';
+require_once __DIR__ . '../../../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\PerfilControllerAcceso;
+use App\Controllers\UsuarioControllerAcceso;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new PerfilControllerAcceso($db);
+$controller = new UsuarioControllerAcceso($db);
 
 $data = json_decode(file_get_contents("php://input"), true);
 
@@ -30,19 +30,19 @@ switch ($data['ACCION']) {
         break;
 
     case 'ACTUALIZAR':
-        if (isset($data['prf_id'])) {
-            $response = $controller->update($data['prf_id'], $data);
+        if (isset($data['usr_id'])) {
+            $response = $controller->update($data['usr_id'], $data);
         } else {
-            $response = ["status" => "error", "message" => "ID de perfil requerido"];
+            $response = ["status" => "error", "message" => "ID de usuario requerido"];
         }
         echo json_encode($response);
         break;
 
     case 'BORRAR':
-        if (isset($data['prf_id'])) {
-            $response = $controller->delete($data['prf_id']);
+        if (isset($data['usr_id'])) {
+            $response = $controller->delete($data['usr_id']);
         } else {
-            $response = ["status" => "error", "message" => "ID de perfil requerido"];
+            $response = ["status" => "error", "message" => "ID de usuario requerido"];
         }
         echo json_encode($response);
         break;

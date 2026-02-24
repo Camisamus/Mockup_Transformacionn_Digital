@@ -1,15 +1,15 @@
 <?php
-require_once 'general/cors.php';
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once '../../../general/cors.php';
+require_once __DIR__ . '../../../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\UsuarioControllerAcceso;
+use App\Controllers\RolControllerAcceso;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new UsuarioControllerAcceso($db);
+$controller = new RolControllerAcceso($db);
 
 $data = json_decode(file_get_contents("php://input"), true);
 
@@ -30,19 +30,19 @@ switch ($data['ACCION']) {
         break;
 
     case 'ACTUALIZAR':
-        if (isset($data['usr_id'])) {
-            $response = $controller->update($data['usr_id'], $data);
+        if (isset($data['rol_id'])) {
+            $response = $controller->update($data['rol_id'], $data);
         } else {
-            $response = ["status" => "error", "message" => "ID de usuario requerido"];
+            $response = ["status" => "error", "message" => "ID de rol requerido"];
         }
         echo json_encode($response);
         break;
 
     case 'BORRAR':
-        if (isset($data['usr_id'])) {
-            $response = $controller->delete($data['usr_id']);
+        if (isset($data['rol_id'])) {
+            $response = $controller->delete($data['rol_id']);
         } else {
-            $response = ["status" => "error", "message" => "ID de usuario requerido"];
+            $response = ["status" => "error", "message" => "ID de rol requerido"];
         }
         echo json_encode($response);
         break;

@@ -44,7 +44,7 @@ function attachEventListeners() {
 
 async function loadTypes() {
     try {
-        const response = await fetch(`${window.API_BASE_URL}/tipo_organizaciones.php`, {
+        const response = await fetch(`${window.API_BASE_URL}sisadmin/organizaciones/tipo_organizaciones.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -93,7 +93,7 @@ window.loadData = async function () {
     }
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/organizaciones_desve.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/desve/organizaciones.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -206,7 +206,7 @@ window.deleteOrganization = async function (id) {
 
     if (result.isConfirmed) {
         try {
-            const response = await fetch(`${window.API_BASE_URL}/organizaciones_desve.php`, {
+            const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/desve/organizaciones.php`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
@@ -246,7 +246,7 @@ async function saveData() {
     if (currentMode === 'edit') payload.org_id = parseInt(id);
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/organizaciones_desve.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/desve/organizaciones.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },

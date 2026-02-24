@@ -1,15 +1,15 @@
 <?php
-require_once 'general/cors.php';
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once '../../../general/cors.php';
+require_once __DIR__ . '../../../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\PerfilRolControllerAcceso;
+use App\Controllers\UsuarioPerfilControllerAcceso;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new PerfilRolControllerAcceso($db);
+$controller = new UsuarioPerfilControllerAcceso($db);
 
 $data = json_decode(file_get_contents("php://input"), true);
 
@@ -29,11 +29,20 @@ switch ($data['ACCION']) {
         echo json_encode($response);
         break;
 
-    case 'BORRAR':
-        if (isset($data['pfr_perfil_id']) && isset($data['pfr_rol_id'])) {
-            $response = $controller->delete($data['pfr_perfil_id'], $data['pfr_rol_id']);
+    case 'ACTUALIZAR':
+        if (isset($data['usp_usuario_id']) && isset($data['usp_perfil_id'])) {
+            $response = $controller->update($data['usp_usuario_id'], $data['usp_perfil_id'], $data);
         } else {
-            $response = ["status" => "error", "message" => "IDs de perfil y rol requeridos"];
+            $response = ["status" => "error", "message" => "IDs de usuario y perfil requeridos"];
+        }
+        echo json_encode($response);
+        break;
+
+    case 'BORRAR':
+        if (isset($data['usp_usuario_id']) && isset($data['usp_perfil_id'])) {
+            $response = $controller->delete($data['usp_usuario_id'], $data['usp_perfil_id']);
+        } else {
+            $response = ["status" => "error", "message" => "IDs de usuario y perfil requeridos"];
         }
         echo json_encode($response);
         break;

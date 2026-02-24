@@ -15,47 +15,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Auth handled by PHP
     renderTable(allSolicitudes);
 
-    document.getElementById('btn_buscar').addEventListener('click', buscarAtenciones);
-    document.getElementById('btn_limpiar').addEventListener('click', limpiarFiltros);
-
-    // Export Listeners
-    document.getElementById('btn_exportar_excel').addEventListener('click', () => {
-        const dataToExport = allSolicitudes.map(item => {
-            const org = organizaciones.find(o => o.org_id == item.sol_origen_id) || {};
-            const tipoOrg = tiposOrganizacion.find(t => t.tor_id == org.org_tipo_id) || {};
-            const prio = prioridades.find(p => p.pri_id == item.sol_prioridad_id) || {};
-            const func = funcionarios.find(f => f.fnc_id == item.sol_funcionario_id) || {};
-            const sec = sectores.find(s => s.sec_id == item.sol_sector_id) || {};
-
-            return {
-                "ID": item.sol_id,
-                "RGT": item.sol_ingreso_desve,
-                "Expediente": item.sol_nombre_expediente,
-                "Tipo Organización": tipoOrg.tor_nombre || 'N/A',
-                "Origen": item.sol_origen_texto || org.org_nombre || 'N/A',
-                "Fecha Recepción": formatDate(item.sol_fecha_recepcion),
-                "Prioridad": prio.pri_nombre || 'N/A',
-                "Funcionario": func.fnc_nombre || 'N/A',
-                "Sector": sec.sec_nombre || 'N/A',
-                "Vencimiento": formatDate(item.sol_fecha_vencimiento),
-                "Estado Entrega": (item.sol_estado_entrega == 1 || item.sol_estado_entrega === true) ? 'Entregado' : 'Pendiente',
-                "Entrega Coordinador": (item.sol_entrego_coordinador == 1) ? 'Sí (' + (formatDate(item.sol_fecha_respuesta_coordinador) || '') + ')' : 'No',
-                "Días Vencimiento": item.sol_dias_vencimiento || 0,
-                "Días Transcurridos": item.sol_dias_transcurridos || 0,
-                "Cant. Mails": item.sol_mails_count || 0,
-                "Último Mail": formatDate(item.sol_mail_enviado_fecha),
-                "Observaciones": item.sol_observaciones || '',
-                "Reingreso ID": item.sol_reingreso_id || '-'
-            };
-        });
-        exportJsonToExcel(dataToExport, 'Listado_Ingresos_DESVE');
-    });
-    document.getElementById('btn_exportar_pdf').addEventListener('click', () => {
-        // Hide elements we don't want in PDF temporarily if needed, or just export body/container
-        // For simplicity, exporting the results card
-        const card = document.querySelector('.card.shadow-sm.border-0:last-child'); // The table card
-        exportElementToPDF(card.id || 'tablaAtenciones', 'Listado_Ingresos_DESVE');
-    });
 });
 
 async function loadInitialData() {
@@ -69,10 +28,10 @@ async function loadInitialData() {
             body: JSON.stringify({ ACCION: "CONSULTAM" })
         };
         const [solRes, orgRes, tipoRes, prioRes, funcRes, secRes] = await Promise.all([
-            fetch(`${window.API_BASE_URL}/solicitudes_desve.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/organizaciones_desve.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/prioridades.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/desve/solicitudes.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/desve/organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}sisadmin/organizaciones/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/desve/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/general/funcionarios.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sectores.php`, fetchOptions).then(r => r.json())
         ]);
@@ -97,14 +56,9 @@ function extractData(response) {
 
 /* renderTable replacement */
 function renderTable(data) {
-    const tbody = document.querySelector('#tablaAtenciones tbody');
-    const resultsCount = document.getElementById('resultados_count');
+    const tbody = document.getElementById('tbody_desve');
     tbody.innerHTML = '';
-
-    const filteredData = aplicarFiltros(data);
-    resultsCount.innerText = filteredData.length;
-
-    filteredData.forEach(item => {
+    data.forEach(item => {
         // Find related data using new API field names
         const org = organizaciones.find(o => o.org_id == item.sol_origen_id) || {};
         const tipoOrg = tiposOrganizacion.find(t => t.tor_id == org.org_tipo_id) || {};
@@ -114,57 +68,28 @@ function renderTable(data) {
 
         const mailsCount = item.sol_mails_count || 0;
         const lastMailDate = formatDate(item.sol_mail_enviado_fecha) || 'N/A';
-
+        const diasRestantes = calcularDiasHabilesRestantes(item.sol_fecha_vencimiento);
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>
-                <button class="btn btn-sm btn-dark" onclick="verMantenedor(${item.sol_id})" title="Ver Registro">
-                    <i data-feather="eye" style="width: 14px;"></i>
-                </button>
-            </td>
-            <td class="d-none d-md-table-cell">${item.sol_id}</td>
-            <td class="d-none d-sm-table-cell">${item.sol_ingreso_desve || '-'}</td>
-            <td class="d-none d-md-table-cell">${org.org_nombre || item.sol_origen_texto || '-'}</td>
-            <td class="d-none d-sm-table-cell">${formatDate(item.sol_fecha_recepcion) || ''}</td>
-            <td class="d-none d-sm-table-cell">${formatDate(item.sol_fecha_vencimiento) || ''}</td>
-            <td class="d-none d-md-table-cell"><span class="badge bg-info text-dark">${prio.pri_nombre || 'N/A'}</span></td>
-            <td class="d-none d-md-table-cell text-center">${(item.sol_estado_entrega == 1 || item.sol_estado_entrega === true) ? '<span class="badge bg-success">Entregado</span>' : '<span class="badge bg-warning text-dark">Pendiente</span>'}</td>
-            <td class="text-center">
-                <button class="btn btn-sm btn-outline-secondary" onclick="toggleDetails(${item.sol_id})">
-                    <i data-feather="plus" id="icon-details-${item.sol_id}" style="width: 14px;"></i>
-                </button>
-            </td>
+
+                        <td class="px-6 py-4 font-bold text-slate-700">${item.sol_id}</td>
+                        <td class="px-6 py-4 text-slate-600 font-medium">${org.org_nombre || item.sol_origen_texto || '-'}</td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-2 text-rose-500 font-bold text-sm">
+                                <span class="material-symbols-outlined text-sm">schedule</span>${diasRestantes} Días
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="badge-alta">${prio.pri_nombre || 'N/A'}</span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <button
+                                class="text-primary-blue font-bold hover:text-blue-800 transition-all text-sm"  onclick="verMantenedor(${item.sol_id})" >Gestionar</button>
+                        </td>
+
+
         `;
         tbody.appendChild(row);
-
-        // Add the collapsible details row
-        const detailRow = document.createElement('tr');
-        detailRow.id = `details-${item.sol_id}`;
-        detailRow.className = 'd-none row-details';
-        detailRow.innerHTML = `
-            <td colspan="7">
-                <div class="p-3">
-                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="detail-item"><span class="detail-label">RGT/Expediente:</span> ${item.sol_ingreso_desve || '-'} / ${item.sol_nombre_expediente || '-'}</div>
-                            <div class="detail-item"><span class="detail-label">Organización:</span> ${tipoOrg.tor_nombre || 'N/A'}</div>
-                            <div class="detail-item"><span class="detail-label">Origen:</span> ${org.org_nombre || item.sol_origen_texto || '-'}</div>
-                            <div class="detail-item"><span class="detail-label">Funcionario:</span> ${func.fnc_nombre || 'N/A'}</div>
-                            <div class="detail-item"><span class="detail-label">Sector:</span> ${sec.sec_nombre || 'N/A'}</div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="detail-item"><span class="detail-label">Cant. Mails:</span> ${mailsCount} (Último: ${lastMailDate})</div>
-                             <div class="detail-item"><span class="detail-label">Entrega Coordinador:</span> ${(item.sol_entrego_coordinador == 1) ? 'Sí (' + (formatDate(item.sol_fecha_respuesta_coordinador) || '') + ')' : 'No'}</div>
-                            <div class="detail-item"><span class="detail-label">Días Vencimiento:</span> ${item.sol_dias_vencimiento || 0}</div>
-                            <div class="detail-item"><span class="detail-label">Días Transcurridos:</span> ${item.sol_dias_transcurridos || 0}</div>
-                             <div class="detail-item"><span class="detail-label">Observaciones:</span> ${item.sol_observaciones || ''}</div>
-                             <div class="detail-item"><span class="detail-label">Reingreso ID:</span> ${item.sol_reingreso_id || '-'}</div>
-                        </div>
-                     </div>
-                </div>
-            </td>
-        `;
-        tbody.appendChild(detailRow);
     });
 
     if (window.feather) window.feather.replace();
@@ -204,21 +129,6 @@ function toggleDetails(id) {
     }
 
     if (window.feather) window.feather.replace();
-}
-
-function aplicarFiltros(data) {
-    const hideReingresos = document.getElementById('filtro_ocultar_reingresos').checked;
-    const fechaDesde = document.getElementById('filtro_fecha_desde').value;
-    const fechaHasta = document.getElementById('filtro_fecha_hasta').value;
-
-    return data.filter(item => {
-        if (hideReingresos && item.sol_reingreso_id) return false;
-
-        if (fechaDesde && item.sol_fecha_recepcion < fechaDesde) return false;
-        if (fechaHasta && item.sol_fecha_recepcion > fechaHasta) return false;
-
-        return true;
-    });
 }
 
 function buscarAtenciones() {

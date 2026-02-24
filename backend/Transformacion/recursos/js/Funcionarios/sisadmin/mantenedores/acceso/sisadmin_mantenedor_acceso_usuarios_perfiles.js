@@ -48,12 +48,12 @@ function attachEventListeners() {
 async function loadDependencies() {
     try {
         const [resU, resP] = await Promise.all([
-            fetch(`${window.API_BASE_URL}/usuarios_acceso.php`, {
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/usuarios.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ACCION: 'CONSULTAM' })
             }),
-            fetch(`${window.API_BASE_URL}/perfiles_acceso.php`, {
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/roles.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ACCION: 'CONSULTAM' })
@@ -101,7 +101,7 @@ window.loadData = async function () {
     }
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/usuarios_perfiles_acceso.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/usuarios_roles.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -217,7 +217,7 @@ window.deleteItem = async function (usr_id, prf_id) {
 
     if (result.isConfirmed) {
         try {
-            const response = await fetch(`${window.API_BASE_URL}/usuarios_perfiles_acceso.php`, {
+            const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/usuarios_roles.php`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
@@ -263,7 +263,7 @@ async function saveData() {
     };
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/usuarios_perfiles_acceso.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/usuarios_roles.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
