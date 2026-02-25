@@ -5,8 +5,11 @@ include '../../api/general/header.php';
 ?>
 
 <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+<link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet" />
 
 <script id="tailwind-config">
     tailwind.config = {
@@ -16,8 +19,7 @@ include '../../api/general/header.php';
                     "primary-blue": "#1a5f9c",
                     "gob-warning": "#f59e0b",
                     "gob-success": "#10b981",
-                    "soft-cyan": "#F0FFFF",
-                    "cyan-border": "#E0FFFF"
+                    "cyan-border": "#E0FFFF",
                     "gray-info": "#D3D3D3",
                 },
                 fontFamily: { "sans": ["Inter", "sans-serif"] }
@@ -27,131 +29,175 @@ include '../../api/general/header.php';
 </script>
 
 <style>
-    body { background-color: #f8f9fa; font-family: 'Inter', sans-serif; }
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Inter', sans-serif;
+    }
+
     .material-symbols-outlined {
         font-family: 'Material Symbols Outlined' !important;
-        vertical-align: middle; line-height: 1;
+        vertical-align: middle;
+        line-height: 1;
     }
-    .gob-card { border: 1px solid rgba(226, 232, 240, 0.6); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
-    
-    #lista_comentarios::-webkit-scrollbar { width: 5px; }
-    #lista_comentarios::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+    .gob-card {
+        border: 1px solid rgba(226, 232, 240, 0.6);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    #lista_comentarios::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    #lista_comentarios::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+    }
 </style>
 
 <div class="max-w-[1400px] mx-auto p-4 lg:p-8 space-y-6">
 
-    <div class="bg-white border border-slate-100 rounded-3xl p-6 lg:p-10 flex flex-col lg:flex-row justify-between items-start lg:items-center shadow-sm gap-6">
-        <div class="space-y-1 w-full text-left"> 
-            <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight" id="header_public_id">Consulta DESVE</h1>
-            <p class="text-slate-400 text-sm lg:text-[15px] font-medium" id="header_expediente">Visualizando detalles de la solicitud</p>
+    <div
+        class="bg-white border border-slate-100 rounded-3xl p-6 lg:p-10 flex flex-col lg:flex-row justify-between items-start lg:items-center shadow-sm gap-6">
+        <div class="space-y-1 w-full text-left">
+            <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight" id="header_public_id">Consulta
+                DESVE</h1>
+            <p class="text-slate-400 text-sm lg:text-[15px] font-medium" id="header_expediente">Visualizando detalles de
+                la solicitud</p>
         </div>
-        
+
         <div class="flex flex-wrap gap-2 w-full lg:w-auto">
             <div id="col_ir_responder">
-                <button type="button" id="btn_ir_responder" class="flex items-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-2 px-5 rounded-xl shadow-sm transition-all text-[13px] uppercase tracking-wider">
+                <button type="button" id="btn_ir_responder"
+                    class="flex items-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-2 px-5 rounded-xl shadow-sm transition-all text-[13px] uppercase tracking-wider">
                     <span class="material-symbols-outlined text-[20px] text-primary-blue">chat_bubble</span> Responder
                 </button>
             </div>
             <div id="col_ir_modificar">
-                <button type="button" id="btn_ir_modificar" class="flex items-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-2 px-5 rounded-xl shadow-sm transition-all text-[13px] uppercase tracking-wider">
+                <button type="button" id="btn_ir_modificar"
+                    class="flex items-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-2 px-5 rounded-xl shadow-sm transition-all text-[13px] uppercase tracking-wider">
                     <span class="material-symbols-outlined text-[20px] text-primary-blue">edit_note</span> Modificar
                 </button>
             </div>
-            <button type="button" onclick="location.href='index.php'" class="flex items-center gap-2 bg-slate-800 hover:bg-black text-white font-bold py-2 px-5 rounded-xl shadow-lg transition-all text-[13px] uppercase tracking-wider">
+            <button type="button" onclick="location.href='index.php'"
+                class="flex items-center gap-2 bg-slate-800 hover:bg-black text-white font-bold py-2 px-5 rounded-xl shadow-lg transition-all text-[13px] uppercase tracking-wider">
                 <span class="material-symbols-outlined text-[20px]">grid_view</span> Bandeja
             </button>
         </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
+
         <div class="lg:col-span-8 space-y-6">
             <div class="bg-white gob-card rounded-2xl overflow-hidden">
                 <div class="p-5 border-b border-slate-50 flex justify-between items-center bg-white">
                     <div class="flex items-center gap-2">
                         <span class="material-symbols-outlined text-primary-blue">description</span>
-                        <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">1. Información de la Solicitud</h3>
+                        <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">1. Información de la
+                            Solicitud</h3>
                     </div>
-                    <span id="badge_estado" class="px-4 py-1.5 rounded-lg bg-slate-100 text-slate-600 text-[11px] font-bold border border-slate-200 uppercase tracking-widest">Cargando...</span>
+                    <span id="badge_estado"
+                        class="px-4 py-1.5 rounded-lg bg-slate-100 text-slate-600 text-[11px] font-bold border border-slate-200 uppercase tracking-widest">Cargando...</span>
                 </div>
-        
+
                 <div class="p-6 lg:p-10 space-y-8">
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div class="md:col-span-3 space-y-2">
-                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Nombre del Expediente</label>
-                    <div class="text-xl font-extrabold text-slate-800 p-3 bg-slate-50/50 rounded-xl border border-slate-100" id="info_expediente">-</div>
-                </div>
-                <div class="space-y-2">
-                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest text-right block">Código DESVE</label>
-                    <div class="text-center font-mono text-lg text-primary-blue bg-blue-50 py-3 rounded-xl border border-blue-100 font-bold" id="info_desve">-</div>
-                </div>
-            </div>
-
-            <div class="space-y-2">
-                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest text-center block">Reingreso Vinculado</label>
-                <div class="flex items-center justify-center gap-3 p-3 bg-slate-50 border border-slate-100 rounded-xl text-slate-600 italic font-medium" id="info_reingreso">
-                    <span class="material-symbols-outlined text-slate-400">search</span> -
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-2">
-                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Tipo de Solicitante (Origen)</label>
-                    <div class="text-slate-700 font-medium p-3 bg-white border border-slate-200 rounded-xl text-[15px]" id="info_origen">-</div>
-                </div>
-                <div class="space-y-2">
-                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Nombre de Entidad / Vecino</label>
-                    <div class="text-slate-700 font-medium p-3 bg-white border border-slate-200 rounded-xl text-[15px]" id="info_tipo_org">-</div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-2">
-                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Fecha de Recepción</label>
-                    <div class="flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-xl text-slate-700 text-[15px] font-medium">
-                        <span class="material-symbols-outlined text-slate-400">calendar_month</span>
-                        <span id="info_fecha_recepcion">-</span>
+                        <div class="md:col-span-3 space-y-2">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Nombre del
+                                Expediente</label>
+                            <div class="text-xl font-extrabold text-slate-800 p-3 bg-slate-50/50 rounded-xl border border-slate-100"
+                                id="info_expediente">-</div>
+                        </div>
+                        <div class="space-y-2">
+                            <label
+                                class="text-[11px] font-bold text-slate-400 uppercase tracking-widest text-right block">Código
+                                DESVE</label>
+                            <div class="text-center font-mono text-lg text-primary-blue bg-blue-50 py-3 rounded-xl border border-blue-100 font-bold"
+                                id="info_desve">-</div>
+                        </div>
                     </div>
-                </div>
-                <div class="space-y-2">
-                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Sector</label>
-                    <div class="text-slate-700 font-medium p-3 bg-white border border-slate-200 rounded-xl text-[15px]" id="info_sector">-</div>
-                </div>
-            </div>
 
-            <div class="pt-6 border-t border-slate-100 space-y-6">
-                <div class="flex items-center gap-2">
-                    <span class="material-symbols-outlined text-primary-blue">location_on</span>
-                    <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">2. Geolocalización</h3>
-                </div>
-
-                <div class="space-y-2">
-                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Dirección del Suceso</label>
-                    <div class="text-slate-700 font-medium p-3 bg-soft-cyan border border-cyan-border rounded-xl text-[15px] flex items-center gap-3">
-                        <span class="material-symbols-outlined text-slate-400 text-lg">home_pin</span>
-                        <span id="info_direccion">-</span>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
-                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Latitud</label>
-                        <div class="text-slate-700 font-mono p-3 bg-soft-cyan border border-cyan-border rounded-xl text-sm" id="info_latitud">-</div>
+                        <label
+                            class="text-[11px] font-bold text-slate-400 uppercase tracking-widest text-center block">Reingreso
+                            Vinculado</label>
+                        <div class="flex items-center justify-center gap-3 p-3 bg-slate-50 border border-slate-100 rounded-xl text-slate-600 italic font-medium"
+                            id="info_reingreso">
+                            <span class="material-symbols-outlined text-slate-400">search</span> -
+                        </div>
                     </div>
-                    <div class="space-y-2">
-                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Longitud</label>
-                        <div class="text-slate-700 font-mono p-3 bg-soft-cyan border border-cyan-border rounded-xl text-sm" id="info_longitud">-</div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Tipo de
+                                Solicitante (Origen)</label>
+                            <div class="text-slate-700 font-medium p-3 bg-white border border-slate-200 rounded-xl text-[15px]"
+                                id="info_origen">-</div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Nombre de
+                                Entidad / Vecino</label>
+                            <div class="text-slate-700 font-medium p-3 bg-white border border-slate-200 rounded-xl text-[15px]"
+                                id="info_tipo_org">-</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Fecha de
+                                Recepción</label>
+                            <div
+                                class="flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-xl text-slate-700 text-[15px] font-medium">
+                                <span class="material-symbols-outlined text-slate-400">calendar_month</span>
+                                <span id="info_fecha_recepcion">-</span>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Sector</label>
+                            <div class="text-slate-700 font-medium p-3 bg-white border border-slate-200 rounded-xl text-[15px]"
+                                id="info_sector">-</div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-slate-100 space-y-6">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary-blue">location_on</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">2. Geolocalización</h3>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Dirección del
+                                Suceso</label>
+                            <div
+                                class="text-slate-700 font-medium p-3 bg-soft-cyan border border-cyan-border rounded-xl text-[15px] flex items-center gap-3">
+                                <span class="material-symbols-outlined text-slate-400 text-lg">home_pin</span>
+                                <span id="info_direccion">-</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label
+                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Latitud</label>
+                                <div class="text-slate-700 font-mono p-3 bg-soft-cyan border border-cyan-border rounded-xl text-sm"
+                                    id="info_latitud">-</div>
+                            </div>
+                            <div class="space-y-2">
+                                <label
+                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Longitud</label>
+                                <div class="text-slate-700 font-mono p-3 bg-soft-cyan border border-cyan-border rounded-xl text-sm"
+                                    id="info_longitud">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-slate-100 space-y-6">
                     </div>
                 </div>
             </div>
-
-            <div class="pt-6 border-t border-slate-100 space-y-6">
-                </div>
         </div>
-    </div>
-</div>
 
-<div class="lg:col-span-4 space-y-6">
+        <div class="lg:col-span-4 space-y-6">
             <div class="bg-soft-cyan border border-cyan-border rounded-2xl overflow-hidden shadow-sm">
                 <div class="p-5 border-b border-cyan-border flex items-center gap-2">
                     <span class="material-symbols-outlined text-primary-blue">attach_file</span>
@@ -166,11 +212,13 @@ include '../../api/general/header.php';
                         <span class="material-symbols-outlined text-amber-500">sticky_note_2</span>
                         <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest">Comentarios</h3>
                     </div>
-                    <button type="button" id="btn_abrir_comentario" class="p-2 bg-white border border-cyan-border hover:bg-slate-50 rounded-lg text-primary-blue shadow-sm">
+                    <button type="button" id="btn_abrir_comentario"
+                        class="p-2 bg-white border border-cyan-border hover:bg-slate-50 rounded-lg text-primary-blue shadow-sm">
                         <span class="material-symbols-outlined text-[20px]">add_comment</span>
                     </button>
                 </div>
-                <div id="lista_comentarios" class="p-5 max-h-[400px] overflow-y-auto space-y-4 text-[14px] italic"></div>
+                <div id="lista_comentarios" class="p-5 max-h-[400px] overflow-y-auto space-y-4 text-[14px] italic">
+                </div>
             </div>
 
             <div class="bg-soft-cyan border border-cyan-border rounded-2xl overflow-hidden shadow-sm">
@@ -181,7 +229,10 @@ include '../../api/general/header.php';
                 <div class="p-2 overflow-x-auto">
                     <table class="w-full text-left text-[13px]" id="tabla_reingresos">
                         <thead class="bg-cyan-100/50 text-slate-500 font-bold uppercase text-[10px]">
-                            <tr><th class="px-4 py-3">ID</th><th class="px-4 py-3 text-end">Acción</th></tr>
+                            <tr>
+                                <th class="px-4 py-3">ID</th>
+                                <th class="px-4 py-3 text-end">Acción</th>
+                            </tr>
                         </thead>
                         <tbody id="tbody_reingresos" class="divide-y divide-cyan-100"></tbody>
                     </table>
@@ -238,8 +289,8 @@ include '../../api/general/header.php';
         </div>
     </div>-->
 
-    <!-- Actions Card -->
-    <!--<div class="card shadow-sm border-0 mb-4 bg-white">
+<!-- Actions Card -->
+<!--<div class="card shadow-sm border-0 mb-4 bg-white">
         <div class="card-body p-3">
             <div class="row g-2 justify-content-md-end">
                 <div class="col-12 col-md-auto" id="col_ir_responder">
@@ -281,10 +332,10 @@ include '../../api/general/header.php';
     </div>
 
     <div class="row g-4">-->
-        <!-- Left Column: Main Info -->
-        <!--<div class="col-lg-8">-->
-            <!-- Info Card -->
-            <!--<div class="card shadow-sm border-0 border-start border-4 border-primary mb-4">
+<!-- Left Column: Main Info -->
+<!--<div class="col-lg-8">-->
+<!-- Info Card -->
+<!--<div class="card shadow-sm border-0 border-start border-4 border-primary mb-4">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h5 class="fw-bold fs-6 mb-0">Detalles de la Solicitud</h5>
@@ -349,8 +400,8 @@ include '../../api/general/header.php';
                                         </tr>
                                     </thead>
                                     <tbody id="tbody_destinos" class="small">-->
-                                        <!-- Dynamic -->
-                                    <!--</tbody>
+<!-- Dynamic -->
+<!--</tbody>
                                 </table>
                             </div>
                         </div>
@@ -375,8 +426,8 @@ include '../../api/general/header.php';
                 </div>
             </div>-->
 
-            <!-- Bitácora de Respuestas -->
-            <!--<div class="card shadow-sm border-0 mb-4">
+<!-- Bitácora de Respuestas -->
+<!--<div class="card shadow-sm border-0 mb-4">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="fw-bold fs-6 mb-0">Bitácora de Respuestas</h5>
@@ -403,16 +454,16 @@ include '../../api/general/header.php';
                                     </tr>
                                 </thead>
                                 <tbody id="tbody_respuestas" class="small">-->
-                                    <!-- Dynamic -->
-                                <!--</tbody>
+<!-- Dynamic -->
+<!--</tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>-->
 
-            <!-- Bitácora de Auditoría -->
-            <!--<div class="card shadow-sm border-0 mb-4">
+<!-- Bitácora de Auditoría -->
+<!--<div class="card shadow-sm border-0 mb-4">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="fw-bold fs-6 mb-0">Bitácora de Auditoría</h5>
@@ -437,8 +488,8 @@ include '../../api/general/header.php';
                                     </tr>
                                 </thead>
                                 <tbody id="tbody_audit" class="small">-->
-                                    <!-- Dynamic -->
-                                <!--</tbody>
+<!-- Dynamic -->
+<!--</tbody>
                             </table>
                         </div>
                     </div>
@@ -446,20 +497,20 @@ include '../../api/general/header.php';
             </div>
         </div>-->
 
-        <!-- Right Column: Sidebar -->
-        <!--<div class="col-lg-4">-->
-            <!-- Documentos -->
-            <!--<div class="card shadow-sm border-0 mb-4">
+<!-- Right Column: Sidebar -->
+<!--<div class="col-lg-4">-->
+<!-- Documentos -->
+<!--<div class="card shadow-sm border-0 mb-4">
                 <div class="card-body p-4">
                     <h5 class="fw-bold fs-6 mb-3">Documentos Adjuntos</h5>
                     <div id="lista_documentos" class="list-group list-group-flush">-->
-                        <!-- Dynamic -->
-                    <!--</div>
+<!-- Dynamic -->
+<!--</div>
                 </div>
             </div>-->
 
-            <!-- Comentarios -->
-            <!--<div class="card shadow-sm border-0 mb-4">
+<!-- Comentarios -->
+<!--<div class="card shadow-sm border-0 mb-4">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="fw-bold fs-6 mb-0">Comentarios</h5>
@@ -474,13 +525,13 @@ include '../../api/general/header.php';
                     </div>
                     <div id="lista_comentarios" class="list-group list-group-flush"
                         style="max-height: 300px; overflow-y: auto;">-->
-                        <!-- Dynamic -->
-                    <!--</div>
+<!-- Dynamic -->
+<!--</div>
                 </div>
             </div>-->
 
-            <!-- Reingresos -->
-            <!--<div class="card shadow-sm border-0 mb-4">
+<!-- Reingresos -->
+<!--<div class="card shadow-sm border-0 mb-4">
                 <div class="card-body p-4">
                     <h5 class="fw-bold fs-6 mb-3">Reingresos Vinculados</h5>
                     <div class="table-responsive">
@@ -493,15 +544,15 @@ include '../../api/general/header.php';
                                 </tr>
                             </thead>
                             <tbody id="tbody_reingresos" class="small">-->
-                                <!-- Dynamic -->
-                            <!--</tbody>
+<!-- Dynamic -->
+<!--</tbody>
                         </table>
                     </div>
                 </div>
             </div>-->
 
-            <!-- Metrics Card -->
-            <!--<div class="card shadow-sm border-0 mb-4 bg-light">
+<!-- Metrics Card -->
+<!--<div class="card shadow-sm border-0 mb-4 bg-light">
                 <div class="card-body p-4">
                     <h5 class="fw-bold fs-6 mb-3">Estadísticas del Trámite</h5>
                     <div class="d-flex justify-content-between mb-2">

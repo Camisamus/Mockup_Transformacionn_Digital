@@ -13,31 +13,39 @@ include '../../api/general/header.php';
     <title>Crear Nueva Solicitud DESVE</title>
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-blue": "#1a5f9c",
+                        "gob-warning": "#f59e0b",
+                        "gob-success": "#10b981",
+                        "cyan-border": "#E0FFFF",
+                        "gray-info": "#D3D3D3",
+                        "soft-cyan": "#F0FFFF"
+                    },
+                    fontFamily: { "sans": ["Inter", "sans-serif"] }
+                }
+            }
+        }
+    </script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-        :root {
-            --primary-blue: #0071bc;
-            --custom-text: #857F7E;
+        body { background-color: #f8f9fa; font-family: 'Inter', sans-serif; }
+    
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined' !important;
+            vertical-align: middle;
+            line-height: 1;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-
-        .bg-primary-blue {
-            background-color: var(--primary-blue);
-        }
-
-        .text-primary-blue {
-            color: var(--primary-blue);
-        }
-
-        .label-custom {
-            color: var(--custom-text) !important;
-            font-weight: 700;
+        .gob-card {
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
         .input-readonly-dashed {
@@ -46,38 +54,20 @@ include '../../api/general/header.php';
             border-width: 1.5px !important;
         }
 
-        .update-flash {
-            animation: pulse-blue 0.8s ease-in-out;
-        }
-
-        @keyframes pulse-blue {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.05);
-                color: #0071bc;
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        /* Estilos para el dropzone */
+        /* Estilo para el dropzone unificado */
         .drop-zone {
-            border: 2px dashed #e2e8f0;
-            border-radius: 0.5rem;
+            border: 2px dashed #E0FFFF;
+            border-radius: 1rem;
             padding: 2rem;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
+            background-color: #F0FFFF;
         }
 
         .drop-zone:hover {
-            border-color: var(--primary-blue);
-            background-color: #f0f9ff;
+            border-color: #1a5f9c;
+            background-color: #e0f2fe;
         }
     </style>
 </head>

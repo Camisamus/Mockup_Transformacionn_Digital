@@ -4,13 +4,9 @@ require_once '../../api/general/auth_check.php';
 include '../../api/general/header.php';
 ?>
 
-<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet" />
-<link
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-    rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
 
 <script id="tailwind-config">
     tailwind.config = {
@@ -20,6 +16,9 @@ include '../../api/general/header.php';
                     "primary-blue": "#1a5f9c",
                     "gob-warning": "#f59e0b",
                     "gob-success": "#10b981",
+                    "cyan-border": "#E0FFFF",
+                    "gray-info": "#D3D3D3",
+                    "soft-cyan": "#F0FFFF"
                 },
                 fontFamily: { "sans": ["Inter", "sans-serif"] }
             }
@@ -28,199 +27,185 @@ include '../../api/general/header.php';
 </script>
 
 <style>
-    /* Reset y corrección de fuentes */
-    body {
-        background-color: #f8f9fa;
-        font-family: 'Inter', sans-serif;
-    }
-
-    /* Forzar renderizado de iconos Material Symbols */
-    .material-symbols-outlined {
-        font-family: 'Material Symbols Outlined' !important;
-        font-weight: normal;
-        font-style: normal;
-        line-height: 1;
-        display: inline-block;
-        white-space: nowrap;
-        word-wrap: normal;
-        direction: ltr;
-        -webkit-font-smoothing: antialiased;
-        vertical-align: middle;
-    }
-
-    /* Estilos personalizados para estados */
-    .badge-alta {
-        background-color: #fee2e2;
-        color: #b91c1c;
-        font-weight: 700;
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 11px;
-    }
-
-    .badge-media {
-        background-color: #eff6ff;
-        color: #1d4ed8;
-        font-weight: 700;
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 11px;
-    }
-
-    /* Sombras suaves */
-    .gob-card {
-        border: 1px solid rgba(226, 232, 240, 0.6);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    }
+    body { background-color: #f8f9fa; font-family: 'Inter', sans-serif; }
+    .material-symbols-outlined { font-family: 'Material Symbols Outlined' !important; vertical-align: middle; line-height: 1; }
+    .gob-card { border: 1px solid rgba(226, 232, 240, 0.6); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+    .input-readonly-dashed { background-color: #f9fafb !important; border-style: dashed !important; border-width: 1.5px !important; }
+    .drop-zone { border: 2px dashed #E0FFFF; border-radius: 1rem; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s; background-color: #F0FFFF; }
+    .drop-zone:hover { border-color: #1a5f9c; background-color: #e0f2fe; }
 </style>
 
 <div class="max-w-[1400px] mx-auto p-4 lg:p-8 space-y-6">
+    <form id="form_nuevo_desve">
 
-    <div
-        class="bg-white border border-slate-100 rounded-3xl p-6 lg:p-10 flex flex-col sm:flex-row justify-between items-center shadow-sm gap-6">
-        <div class="space-y-1 w-full text-left">
-            <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Bienvenido </h1>
-            <p class="text-slate-400 text-sm lg:text-[15px] font-medium">Aquí podrás encontrar un resumen de los estados
-                de las solicitudes ingresadas a DESVE.</p>
-        </div>
-        <div class="flex-shrink-0">
-            <button type="button" onclick="location.href='nuevo.php'"
-                class="bg-primary-blue hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-sm uppercase tracking-wider">
-                NUEVO DESVE
-            </button>
-        </div>
-    </div>
+        <div class="bg-white border border-slate-100 rounded-3xl p-6 lg:p-10 flex flex-col lg:flex-row justify-between items-start lg:items-center shadow-sm gap-6 sticky top-4 z-20">
+            <div class="space-y-1 w-full text-left">
+                <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Crear Nueva Solicitud</h1>
+                <p class="text-slate-400 text-sm lg:text-[15px] font-medium">Complete los campos para ingresar un nuevo requerimiento.</p>
+            </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-primary-blue">
-            <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Total Solicitudes</p>
-            <div class="flex items-end justify-between">
-                <h3 class="text-3xl font-extrabold text-slate-800 mb-0">1.284</h3>
-                <span class="text-emerald-500 font-bold text-xs">+12% mes</span>
-            </div>
-        </div>
-        <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-gob-warning">
-            <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Pendientes</p>
-            <div class="flex items-end justify-between">
-                <h3 class="text-3xl font-extrabold text-slate-800 mb-0">42</h3>
-                <span class="text-amber-500 font-bold text-xs uppercase">Crítico</span>
-            </div>
-        </div>
-        <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-slate-400">
-            <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Tiempo Promedio</p>
-            <div class="flex items-end justify-between">
-                <h3 class="text-3xl font-extrabold text-slate-800 mb-0">3.2d</h3>
-                <span class="text-slate-400 font-bold text-xs">Días hábiles</span>
-            </div>
-        </div>
-        <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-gob-success">
-            <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Resueltas (Mes)</p>
-            <div class="flex items-end justify-between">
-                <h3 class="text-3xl font-extrabold text-slate-800 mb-0">156</h3>
-                <span class="text-emerald-500 font-bold text-xs">94% tasa</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
-            <div class="p-4 border-b border-slate-50 flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary-blue">bar_chart</span>
-                <h3 class="font-bold text-slate-700">Solicitudes por Estado (Últimos 30 días)</h3>
-            </div>
-            <div class="p-6">
-                <canvas id="chartBarras" style="max-height: 300px;"></canvas>
+            <div class="flex items-center gap-4 w-full lg:w-auto justify-end">
+                <a class="text-slate-400 font-bold hover:text-slate-600 transition-all text-[13px] uppercase tracking-wider" href="index.php">Cancelar</a>
+                <button type="submit"
+                    class="flex-1 lg:flex-none flex items-center justify-center gap-2 bg-primary-blue hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-[13px] uppercase tracking-wider">
+                    <span class="material-symbols-outlined text-[20px]">save</span> GUARDAR SOLICITUD
+                </button>
             </div>
         </div>
 
-        <div class="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
-            <div class="p-4 border-b border-slate-50 flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary-blue">pie_chart</span>
-                <h3 class="font-bold text-slate-700">Tipos de Solicitud</h3>
-            </div>
-            <div class="p-6">
-                <canvas id="chartDona" style="max-height: 300px;"></canvas>
-            </div>
-        </div>
-    </div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-4">
 
-    <div class="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
-        <div class="p-4 border-b border-slate-50 bg-white flex justify-between items-center">
-            <h3 class="font-bold text-slate-700">Solicitudes Urgentes / Próximas a Vencer</h3>
-            <span class="text-xs font-semibold text-slate-400">Mostrando top 5</span>
-        </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-left">
-                <thead>
-                    <tr
-                        class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
-                        <th class="px-6 py-4">ID</th>
-                        <th class="px-6 py-4">Asunto</th>
-                        <th class="px-6 py-4">Días Restantes</th>
-                        <th class="px-6 py-4 text-center">Prioridad</th>
-                        <th class="px-6 py-4 text-right">Acción</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100">
-                    <tr class="hover:bg-slate-50/80 transition-colors">
-                        <td class="px-6 py-4 font-bold text-slate-700">#1284</td>
-                        <td class="px-6 py-4 text-slate-600 font-medium">Revisión de luminaria Calle 5</td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-2 text-rose-500 font-bold text-sm">
-                                <span class="material-symbols-outlined text-sm">schedule</span> 1 día
+            <div class="lg:col-span-8 space-y-6">
+                
+                <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
+                        <span class="material-symbols-outlined text-primary-blue">edit_document</span>
+                        <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">1. Información de la Solicitud</h3>
+                    </div>
+
+                    <div class="p-6 lg:p-10 space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            <div class="md:col-span-3 space-y-2">
+                                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Nombre del Expediente</label>
+                                <input type="text" id="NombreExpediente" placeholder="Ej: Consulta por Luminaria" 
+                                    class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3 bg-[#D3D3D3]/20" required />
                             </div>
-                        </td>
-                        <td class="px-6 py-4 text-center">
-                            <span class="badge-alta">ALTA</span>
-                        </td>
-                        <td class="px-6 py-4 text-right">
-                            <button
-                                class="text-primary-blue font-bold hover:text-blue-800 transition-all text-sm">Gestionar</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            <div class="space-y-2">
+                                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest text-right block">Código DESVE</label>
+                                <input type="text" id="Codigo_DESVE" placeholder="123"
+                                    class="w-full text-center font-mono text-lg text-primary-blue bg-blue-50 py-3 rounded-xl border border-blue-100 font-bold" />
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest text-center block">Reingreso</label>
+                            <div class="flex shadow-sm h-[48px]">
+                                <input type="text" id="ReingresoDisplay" readonly placeholder="Seleccione solicitud previa..."
+                                    class="flex-grow border-slate-200 rounded-l-xl text-[15px] italic input-readonly-dashed px-4" />
+                                <input type="hidden" id="Reingreso" value="">
+                                <button type="button" onclick="abrirModalReingreso()" class="bg-slate-800 text-white px-6 rounded-r-xl transition-colors"><span class="material-symbols-outlined">search</span></button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Tipo de Solicitante</label>
+                                <select id="ID_Organizacion" required class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3 bg-[#D3D3D3]/20">
+                                    <option value="" disabled selected>Seleccione tipo...</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Nombre de la entidad/Vecino</label>
+                                <div class="flex shadow-sm h-[48px]">
+                                    <input type="text" id="OrigenSolicitudDisplay" readonly placeholder="Seleccione organización..." class="flex-grow border-slate-200 rounded-l-xl text-[15px] input-readonly-dashed px-4" />
+                                    <input type="hidden" id="OrigenSolicitud" required>
+                                    <button type="button" onclick="abrirModalBuscarOrganizacion()" id="btn_buscar_origen" class="bg-slate-100 px-4 border-y border-slate-200 flex items-center text-slate-600"><span class="material-symbols-outlined">search</span></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Fecha de Recepción</label>
+                                <input type="date" id="FechaUltimaRecepcion" required class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3 bg-[#D3D3D3]/20" />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Sector</label>
+                                <select id="Sector" required class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3 bg-[#D3D3D3]/20"></select>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Detalle del Ingreso</label>
+                            <textarea id="DetalleIngreso" rows="4" class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-4 bg-[#D3D3D3]/30 italic" placeholder="Escriba el detalle aquí..."></textarea>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Observaciones</label>
+                            <textarea id="Observaciones" rows="2" class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-4 bg-[#D3D3D3]/30" placeholder="Comentarios adicionales..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-50 flex items-center justify-between bg-white">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary-blue">location_on</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">2. Geolocalización</h3>
+                        </div>
+                        <div class="flex items-center bg-slate-100 px-4 py-2 rounded-xl">
+                            <input type="checkbox" id="chk_geoloc" class="w-4 h-4 text-primary-blue border-slate-300 rounded focus:ring-primary-blue cursor-pointer">
+                            <label for="chk_geoloc" class="ml-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest cursor-pointer">Activar Mapa</label>
+                        </div>
+                    </div>
+                    <div id="geolocalizacion_area" class="p-6 lg:p-10 space-y-6 hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div class="md:col-span-2 space-y-2">
+                                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Dirección</label>
+                                <div class="flex shadow-sm h-[48px]"><input type="text" id="Geo_dir" placeholder="Calle, número" class="flex-grow border-slate-200 rounded-l-xl px-4" /><button type="button" id="btn_buscar_geo" class="bg-slate-800 text-white px-6 rounded-r-xl"><span class="material-symbols-outlined">search</span></button></div>
+                            </div>
+                            <div class="space-y-2"><label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Latitud</label><input type="text" id="Latitud" readonly class="w-full border-slate-200 rounded-xl text-sm bg-slate-50 p-3" /></div>
+                            <div class="space-y-2"><label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Longitud</label><input type="text" id="Longitud" readonly class="w-full border-slate-200 rounded-xl text-sm bg-slate-50 p-3" /></div>
+                        </div>
+                        <div id="map_desve" style="height: 400px;" class="w-full border border-slate-100 rounded-2xl"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-50 flex items-center justify-between bg-white">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary-blue">group_add</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">3. Destinatarios</h3>
+                        </div>
+                        <button type="button" onclick="abrirModalBuscarFuncionario()" class="flex items-center gap-2 bg-slate-800 hover:bg-black text-white font-bold py-2 px-5 rounded-xl text-[11px] uppercase tracking-wider transition-all">
+                            <span class="material-symbols-outlined text-sm">person_add</span> Buscar Funcionario
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-[14px]" id="tabla_destinos">
+                            <thead class="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] tracking-widest border-b border-slate-100">
+                                <tr><th class="px-6 py-4">Funcionario</th><th class="px-6 py-4 text-right">Acción</th></tr>
+                            </thead>
+                            <tbody id="tbody_destinos" class="divide-y divide-slate-50 text-slate-600 italic">
+                                <tr id="placeholder_destinos"><td colspan="2" class="px-6 py-10 text-center text-slate-400">No hay destinatarios agregados.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-4 space-y-6">
+                <div class="bg-[#D3D3D3] border border-slate-300 rounded-3xl p-8 shadow-sm space-y-6">
+                    <h2 class="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2"><span class="material-symbols-outlined text-sm">analytics</span> Información Automática</h2>
+                    <div class="space-y-2"><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Prioridad Estimada</label><input type="text" id="Prioridad" readonly value="Calculando..." class="w-full bg-white/50 border border-slate-200 rounded-xl text-xl font-black text-gob-warning text-center py-4 focus:ring-0" /></div>
+                    <div class="space-y-2 border-t border-slate-300 pt-6"><label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Vencimiento Proyectado</label><input type="text" id="FechaVecimiento" readonly value="Pendiente" class="w-full bg-white/50 border border-slate-200 rounded-xl text-xl font-black text-slate-700 text-center py-4 focus:ring-0" /></div>
+                </div>
+
+                <div class="bg-soft-cyan border border-cyan-border rounded-2xl overflow-hidden shadow-sm">
+                    <div class="p-5 border-b border-cyan-border flex items-center gap-2"><span class="material-symbols-outlined text-primary-blue text-[20px]">attach_file</span><h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest">Documentos Adjuntos</h3></div>
+                    <div class="p-6 space-y-4">
+                        <div class="drop-zone" id="drop_zone">
+                            <input type="file" id="inputArchivosSolicitud" hidden multiple><span class="material-symbols-outlined text-slate-300 text-4xl mb-2">cloud_upload</span><p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Arrastre o haga clic aquí</p>
+                        </div>
+                        <div id="listaArchivosSolicitud" class="space-y-2"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
 
 <script src="../../recursos/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<script src="../../recursos/js/funcionarios/desve/nuevo.js"></script>
 <script>
-    // Inicialización de Gráficos Reales
-    document.addEventListener('DOMContentLoaded', function () {
-        // Gráfico de Barras
-        const ctxBarras = document.getElementById('chartBarras').getContext('2d');
-        new Chart(ctxBarras, {
-            type: 'bar',
-            data: {
-                labels: ['Pendiente', 'En Revisión', 'Asignado', 'Completado'],
-                datasets: [{
-                    label: 'Solicitudes',
-                    data: [42, 85, 63, 156],
-                    backgroundColor: ['#f59e0b', '#1a5f9c', '#6366f1', '#10b981'],
-                    borderRadius: 8
-                }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-        });
-
-        // Gráfico de Dona
-        const ctxDona = document.getElementById('chartDona').getContext('2d');
-        new Chart(ctxDona, {
-            type: 'doughnut',
-            data: {
-                labels: ['Reclamos', 'Consultas'],
-                datasets: [{
-                    data: [70, 30],
-                    backgroundColor: ['#1a5f9c', '#e2e8f0'],
-                    borderWidth: 0
-                }]
-            },
-            options: { cutout: '70%', plugins: { legend: { position: 'bottom' } } }
-        });
+    document.getElementById('chk_geoloc').addEventListener('change', function () {
+        const area = document.getElementById('geolocalizacion_area');
+        area.classList.toggle('hidden', !this.checked);
+        if (this.checked && typeof initMap === 'function') { setTimeout(() => { if (window.map) google.maps.event.trigger(window.map, 'resize'); }, 100); }
     });
 </script>
 
+<?php use App\Config\AppConfig; $googleMapsKey = AppConfig::getGoogleMapsKey(); ?>
+<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $googleMapsKey; ?>&libraries=places&callback=initMap" async defer></script>
 <?php include '../../api/general/footer.php'; ?>

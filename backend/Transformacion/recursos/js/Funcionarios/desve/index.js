@@ -25,12 +25,12 @@ async function loadInitialData() {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ACCION: "CONSULTAM" })
+            body: JSON.stringify({ S: 'NL', ACCION: "CONSULTAM" })
         };
         const [solRes, orgRes, tipoRes, prioRes, funcRes, secRes] = await Promise.all([
             fetch(`${window.API_BASE_URL}/desve/solicitudes.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/desve/organizaciones.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}sisadmin/organizaciones/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/desve/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/general/funcionarios.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/general/sectores.php`, fetchOptions).then(r => r.json())
@@ -73,7 +73,7 @@ function renderTable(data) {
         row.innerHTML = `
 
                         <td class="px-6 py-4 font-bold text-slate-700">${item.sol_id}</td>
-                        <td class="px-6 py-4 text-slate-600 font-medium">${org.org_nombre || item.sol_origen_texto || '-'}</td>
+                        <td class="px-6 py-4 text-slate-600 font-medium">${item.sol_nombre_expediente || '-'}</td>
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-2 text-rose-500 font-bold text-sm">
                                 <span class="material-symbols-outlined text-sm">schedule</span>${diasRestantes} Días
