@@ -55,7 +55,7 @@ function validateRut(rut) {
 function calcularDiasHabilesRestantes(fechaStr) {
     if (!fechaStr || fechaStr === 'N/A' || fechaStr === '-') return '-';
 
-    const partes = fechaStr.split('-');
+    const partes = fechaStr.split(' ')[0].split('-');
     if (partes.length !== 3) return '-';
 
     const dia = parseInt(partes[2], 10);

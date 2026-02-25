@@ -293,31 +293,31 @@
                 "id": "10.2",
                 "tipo": "Pagina",
                 "nombre": "Ingresar OIRS",
-                "Enlace": "Funcionarios/OIRS/oirs_ingresar.php"
+                "Enlace": "Funcionarios/OIRS/ingresar.php"
             },
             {
                 "id": "10.3",
                 "tipo": "Pagina",
                 "nombre": "Listar OIRS",
-                "Enlace": "Funcionarios/OIRS/oirs_listar.php"
+                "Enlace": "Funcionarios/OIRS/listar.php"
             },
             {
                 "id": "10.4",
                 "tipo": "Pagina",
                 "nombre": "Consulta OIRS",
-                "Enlace": "Funcionarios/OIRS/oirs_consulta.php"
+                "Enlace": "Funcionarios/OIRS/consulta.php"
             },
             {
                 "id": "10.5",
                 "tipo": "Pagina",
                 "nombre": "Solicitudes por Revisar",
-                "Enlace": "Funcionarios/OIRS/oirs_revisar.php"
+                "Enlace": "Funcionarios/OIRS/revisar.php"
             },
             {
                 "id": "10.6",
                 "tipo": "Pagina",
                 "nombre": "Visación de Solicitudes",
-                "Enlace": "Funcionarios/OIRS/oirs_visacion.php"
+                "Enlace": "Funcionarios/OIRS/visacion.php"
             }
         ]
     },

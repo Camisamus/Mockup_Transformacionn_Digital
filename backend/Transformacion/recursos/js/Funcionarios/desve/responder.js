@@ -124,9 +124,9 @@ async function loadLookups() {
     };
     try {
         const [orgRes, orgResDESVE, tipoRes, prioRes, funcRes, secRes] = await Promise.all([
-            fetch(`${window.API_BASE_URL}sisadmin/organizaciones/organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/desve/organizaciones.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}sisadmin/organizaciones/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/desve/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/general/funcionarios.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/general/sectores.php`, fetchOptions).then(r => r.json())
@@ -293,8 +293,8 @@ function renderComments(comments) {
         const item = `
             <div class="list-group-item px-0 border-0 border-bottom">
                 <div class="d-flex justify-content-between x-small text-muted mb-1">
-                    <strong>${c.usr_nombre} ${c.usr_apellido}</strong>
-                    <span>${c.gco_fecha.substring(0, 10)}</span>
+                    <strong>${c.usr_nombre + ' ' + c.usr_apellido}</strong>
+                    <span>${c.gco_creacion.substring(0, 10)}</span>
                 </div>
                 <div class="small">${c.gco_comentario}</div>
             </div>

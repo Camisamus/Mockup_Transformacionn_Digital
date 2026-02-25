@@ -68,7 +68,7 @@ async function loadInitialData() {
         const [solRes, orgRes, tipoRes, prioRes, funcRes, secRes] = await Promise.all([
             fetch(`${window.API_BASE_URL}/desve/solicitudes.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/desve/organizaciones.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}sisadmin/organizaciones/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/desve/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/general/funcionarios.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/general/sectores.php`, fetchOptions).then(r => r.json())
@@ -94,72 +94,44 @@ function extractData(response) {
 
 /* renderTable replacement */
 function renderTable(data) {
-    const tbody = document.querySelector('#tablaAtenciones tbody');
+    const tbody = document.getElementById('tbody_desve');
     const resultsCount = document.getElementById('resultados_count');
+    if (!tbody) return;
     tbody.innerHTML = '';
 
     const filteredData = aplicarFiltros(data);
     resultsCount.innerText = filteredData.length;
 
+    if (filteredData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-10 text-center text-slate-400">No se encontraron solicitudes con los filtros aplicados.</td></tr>';
+        return;
+    }
+
     filteredData.forEach(item => {
-        // Find related data using new API field names
-        const org = organizaciones.find(o => o.org_id == item.sol_origen_id) || {};
-        const tipoOrg = tiposOrganizacion.find(t => t.tor_id == org.org_tipo_id) || {};
-        const prio = prioridades.find(p => p.pri_id == item.sol_prioridad_id) || {};
-        const func = funcionarios.find(f => f.fnc_id == item.sol_funcionario_id) || {};
-        const sec = sectores.find(s => s.sec_id == item.sol_sector_id) || {};
-
-        const mailsCount = item.sol_mails_count || 0;
-        const lastMailDate = formatDate(item.sol_mail_enviado_fecha) || 'N/A';
-
         const row = document.createElement('tr');
+        row.className = "hover:bg-slate-50/50 transition-colors border-b border-slate-50 last:border-0";
         row.innerHTML = `
-            <td>
-                <button class="btn btn-sm btn-dark" onclick="consultar(${item.sol_id})" title="Consultar Registro">
-                    <i data-feather="eye" style="width: 14px;"></i>
+            <td class="px-6 py-4 text-center">
+                <button class="flex items-center justify-center w-8 h-8 mx-auto rounded-lg text-slate-400 hover:text-primary-blue hover:bg-blue-50 transition-all font-bold" 
+                    onclick="consultar(${item.sol_id})" title="Consultar Registro">
+                    <span class="material-symbols-outlined text-xl">visibility</span>
                 </button>
             </td>
-            <td>${item.sol_id}</td>
-            <td class="d-none d-md-table-cell">${formatDate(item.sol_fecha_recepcion) || ''}</td>
-            <td class="d-none d-md-table-cell">${formatDate(item.sol_fecha_vencimiento) || ''}</td>
-            <td class="d-none d-md-table-cell"><span class="badge bg-info text-dark">${prio.pri_nombre || 'N/A'}</span></td>
-            <td class="d-none d-md-table-cell text-center">${(item.sol_estado_entrega == 1 || item.sol_estado_entrega === true) ? '<span class="badge bg-success">Entregado</span>' : '<span class="badge bg-warning text-dark">Pendiente</span>'}</td>
-            <td class="text-center">
-                <button class="btn btn-sm btn-outline-secondary" onclick="toggleDetails(${item.sol_id})">
-                    <i data-feather="plus" id="icon-details-${item.sol_id}" style="width: 14px;"></i>
-                </button>
+            <td class="px-6 py-4 font-bold text-slate-700">#${item.sol_id}</td>
+            <td class="px-6 py-4 text-slate-500">${formatDate(item.sol_mail_enviado_fecha) || 'N/A'}</td>
+            <td class="px-6 py-4">
+                <div class="flex flex-col">
+                    <span class="font-semibold text-slate-700 text-sm line-clamp-1">${item.sol_nombre_expediente || 'Sin Nombre'}</span>
+                    <span class="text-[10px] text-slate-400 uppercase tracking-wider font-medium">${item.sol_ingreso_desve || '-'}</span>
+                </div>
+            </td>
+            <td class="px-6 py-4 text-center">
+                ${(item.sol_estado_entrega == 1 || item.sol_estado_entrega === true)
+                ? '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 uppercase tracking-wider">Entregado</span>'
+                : '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 uppercase tracking-wider">Pendiente</span>'}
             </td>
         `;
         tbody.appendChild(row);
-
-        // Add the collapsible details row
-        const detailRow = document.createElement('tr');
-        detailRow.id = `details-${item.sol_id}`;
-        detailRow.className = 'd-none row-details';
-        detailRow.innerHTML = `
-            <td colspan="7">
-                <div class="p-3">
-                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="detail-item"><span class="detail-label">RGT/Expediente:</span> ${item.sol_ingreso_desve || '-'} / ${item.sol_nombre_expediente || '-'}</div>
-                            <div class="detail-item"><span class="detail-label">Organización:</span> ${tipoOrg.tor_nombre || 'N/A'}</div>
-                            <div class="detail-item"><span class="detail-label">Origen:</span> ${org.org_nombre || item.sol_origen_texto || '-'}</div>
-                            <div class="detail-item"><span class="detail-label">Funcionario:</span> ${func.fnc_nombre || 'N/A'}</div>
-                            <div class="detail-item"><span class="detail-label">Sector:</span> ${sec.sec_nombre || 'N/A'}</div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="detail-item"><span class="detail-label">Cant. Mails:</span> ${mailsCount} (Último: ${lastMailDate})</div>
-                             <div class="detail-item"><span class="detail-label">Entrega Coordinador:</span> ${(item.sol_entrego_coordinador == 1) ? 'Sí (' + (formatDate(item.sol_fecha_respuesta_coordinador) || '') + ')' : 'No'}</div>
-                            <div class="detail-item"><span class="detail-label">Días Vencimiento:</span> ${item.sol_dias_vencimiento || 0}</div>
-                            <div class="detail-item"><span class="detail-label">Días Transcurridos:</span> ${item.sol_dias_transcurridos || 0}</div>
-                             <div class="detail-item"><span class="detail-label">Observaciones:</span> ${item.sol_observaciones || ''}</div>
-                             <div class="detail-item"><span class="detail-label">Reingreso ID:</span> ${item.sol_reingreso_id || '-'}</div>
-                        </div>
-                     </div>
-                </div>
-            </td>
-        `;
-        tbody.appendChild(detailRow);
     });
 
     if (window.feather) window.feather.replace();
@@ -207,10 +179,14 @@ function aplicarFiltros(data) {
     const fechaHasta = document.getElementById('filtro_fecha_hasta').value;
 
     return data.filter(item => {
+        // Filtro de reingresos
         if (hideReingresos && item.sol_reingreso_id) return false;
 
-        if (fechaDesde && item.sol_fecha_recepcion < fechaDesde) return false;
-        if (fechaHasta && item.sol_fecha_recepcion > fechaHasta) return false;
+        // Limpiar fechas para comparación (solo YYYY-MM-DD)
+        const itemFecha = (item.sol_fecha_recepcion || '').substring(0, 10);
+
+        if (fechaDesde && itemFecha < fechaDesde) return false;
+        if (fechaHasta && itemFecha > fechaHasta) return false;
 
         return true;
     });

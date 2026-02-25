@@ -1,6 +1,30 @@
-﻿document.addEventListener('DOMContentLoaded', async function () {
+﻿// Global Variables
+let solicitationId = null;
+let currentUser = {};
+let organizaciones = [];
+let contribuyentes = [];
+let prioridades = [];
+let funcionarios = [];
+let areas = [];
+let organizacionesComunitarias = [];
+let organizacionesDESVE = [];
+let Solicitudes = [];
+let currentSolRegistroId = null;
+let destinos = [];
+let selectedFiles = [];
+let OrigenEspecial = 0; // 0: Normal, 1: Contribuyente, 2: Especial
+let modalBusqueda;
+let auditData = [];
+let currentAuditPage = 1;
+let itemsPerPage = 10;
+let tiposOrganizacion = [];
+let sectores = [];
+let map, marker, geocoder;
+const defaultLocation = { lat: -33.0248997, lng: -71.5570399 }; // Viña del Mar
+
+document.addEventListener('DOMContentLoaded', async function () {
     const params = new URLSearchParams(window.location.search);
-    const solicitationId = params.get('id');
+    solicitationId = params.get('id');
 
     if (!solicitationId) {
         solicitarID();
@@ -45,6 +69,13 @@
     // Event Listeners
     document.getElementById('ID_Organizacion').addEventListener('change', handleTipoOrgChange);
     document.getElementById('FechaUltimaRecepcion').addEventListener('change', handleTipoOrgChange);
+    document.getElementById('Prioridad').addEventListener('change', function () {
+        const prioId = this.value;
+        const prio = prioridades.find(p => p.pri_id == prioId);
+        if (prio && prio.pri_tiempo_establecido) {
+            calculateVencimiento(parseInt(prio.pri_tiempo_establecido));
+        }
+    });
 
     document.getElementById('btn_nuevo_origen').onclick = () => {
         const modal = new bootstrap.Modal(document.getElementById('modalNuevoOrigenEspecial'));
@@ -107,6 +138,7 @@
 window.abrirModalReingreso = function () {
     console.log('abrirModalReingreso llamado. Solicitudes:', Solicitudes.length, Solicitudes);
     const tbody = document.getElementById('lista_busqueda_reingreso');
+    if (!tbody) return;
     tbody.innerHTML = '';
 
     Solicitudes.forEach(s => {
@@ -122,41 +154,130 @@ window.abrirModalReingreso = function () {
         tbody.appendChild(row);
     });
 
-    document.getElementById('filtroReingreso').onkeyup = function () {
-        const val = this.value.toLowerCase();
-        Array.from(tbody.querySelectorAll('tr')).forEach(tr => {
-            tr.style.display = tr.innerText.toLowerCase().includes(val) ? '' : 'none';
-        });
-    };
+    const filtro = document.getElementById('filtroReingreso');
+    if (filtro) {
+        filtro.onkeyup = function () {
+            const val = this.value.toLowerCase();
+            Array.from(tbody.querySelectorAll('tr')).forEach(tr => {
+                tr.style.display = tr.innerText.toLowerCase().includes(val) ? '' : 'none';
+            });
+        };
+    }
 
-    const modal = new bootstrap.Modal(document.getElementById('modalReingreso'));
-    modal.show();
+    const modalElem = document.getElementById('modalReingreso');
+    if (modalElem) {
+        const modal = new bootstrap.Modal(modalElem);
+        modal.show();
+    }
 };
 
 window.seleccionarReingreso = function (id) {
     const s = Solicitudes.find(x => x.sol_id == id);
     if (s) {
-        document.getElementById('ReingresoDisplay').value = `${s.sol_ingreso_desve} - ${s.sol_nombre_expediente}`;
-        document.getElementById('Reingreso').value = s.sol_id;
+        if (document.getElementById('ReingresoDisplay')) document.getElementById('ReingresoDisplay').value = `${s.sol_ingreso_desve} - ${s.sol_nombre_expediente}`;
+        if (document.getElementById('Reingreso')) document.getElementById('Reingreso').value = s.sol_id;
     }
-    bootstrap.Modal.getInstance(document.getElementById('modalReingreso')).hide();
+    const modalElem = document.getElementById('modalReingreso');
+    if (modalElem) {
+        const instance = bootstrap.Modal.getInstance(modalElem);
+        if (instance) instance.hide();
+    }
 };
 
-let organizaciones = [];
-let organizacionesDESVE = [];
-let tiposOrganizacion = [];
-let prioridades = [];
-let funcionarios = [];
-let sectores = [];
-let currentSolRegistroId = null;
-let selectedFiles = []; // New files to add
-let OrigenEspecial = 0;
-let destinos = []; // Array for multiple destinations
-let modalBusqueda = null;
-let contribuyentes = [];
-let Solicitudes = [];
-let organizacionesComunitarias = [];
-let areas = [];
+// --- Geolocation Functions (Global) ---
+window.initMap = function () {
+    const latInput = document.getElementById('Latitud') ? document.getElementById('Latitud').value : null;
+    const lngInput = document.getElementById('Longitud') ? document.getElementById('Longitud').value : null;
+
+    const initialPos = (latInput && lngInput)
+        ? { lat: parseFloat(latInput), lng: parseFloat(lngInput) }
+        : defaultLocation;
+
+    const mapElement = document.getElementById("map_desve");
+    if (!mapElement) return;
+
+    map = new google.maps.Map(mapElement, {
+        center: initialPos,
+        zoom: 15,
+    });
+
+    marker = new google.maps.Marker({
+        position: initialPos,
+        map: map,
+        draggable: true,
+    });
+
+    geocoder = new google.maps.Geocoder();
+
+    marker.addListener("dragend", function (event) {
+        updateCoordinates(event.latLng);
+    });
+
+    map.addListener("click", function (event) {
+        marker.setPosition(event.latLng);
+        updateCoordinates(event.latLng);
+    });
+};
+
+function updateCoordinates(latLng) {
+    if (document.getElementById("Latitud")) document.getElementById("Latitud").value = latLng.lat().toFixed(7);
+    if (document.getElementById("Longitud")) document.getElementById("Longitud").value = latLng.lng().toFixed(7);
+}
+
+function geocodeAddress(address) {
+    if (!geocoder) {
+        geocoder = new google.maps.Geocoder();
+    }
+    geocoder.geocode({ address: address + ", Viña del Mar, Chile" }, function (results, status) {
+        if (status === "OK") {
+            const pos = results[0].geometry.location;
+            if (map) map.setCenter(pos);
+            if (marker) marker.setPosition(pos);
+            updateCoordinates(pos);
+        } else {
+            Swal.fire("Error", "No se pudo geocodificar la dirección: " + status, "error");
+        }
+    });
+}
+
+function abrirModalNuevoComentario() {
+    const modal = new bootstrap.Modal(document.getElementById('modalNuevoComentario'));
+    modal.show();
+}
+
+async function guardarComentario() {
+    const texto = document.getElementById('textoNuevoComentario').value.trim();
+    if (!texto) return;
+
+    try {
+        Swal.fire({ title: 'Guardando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        const response = await fetch(`${window.API_BASE_URL}/desve/comentarios.php`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                ACCION: "CREAR",
+                com_solicitud_id: solicitationId,
+                com_texto: texto
+            })
+        });
+        const result = await response.json();
+        if (result.status === 'success') {
+            document.getElementById('textoNuevoComentario').value = '';
+            bootstrap.Modal.getInstance(document.getElementById('modalNuevoComentario')).hide();
+            Swal.fire('Éxito', "Comentario guardado", 'success');
+            // Refresh details to show new comment
+            loadSolicitationDetails(solicitationId, currentUser);
+        } else {
+            Swal.fire('Error', result.message || "Error al guardar", 'error');
+        }
+    } catch (e) {
+        console.error(e);
+        Swal.fire('Error', "Error de conexión", 'error');
+    }
+}
+
+
 
 async function loadInitialData() {
     try {
@@ -218,6 +339,28 @@ function populateSelects() {
         option.innerText = s.sec_nombre;
         secSelect.appendChild(option);
     });
+
+    const prioSelect = document.getElementById('Prioridad');
+    if (prioSelect) {
+        prioSelect.innerHTML = '<option value="" selected disabled>Seleccione prioridad...</option>';
+        prioridades.forEach(p => {
+            const option = document.createElement('option');
+            option.value = p.pri_id;
+            option.innerText = p.pri_nombre;
+            prioSelect.appendChild(option);
+        });
+    }
+
+    const respSelect = document.getElementById('Responsable');
+    if (respSelect) {
+        respSelect.innerHTML = '<option value="" selected disabled>Seleccione responsable...</option>';
+        funcionarios.forEach(f => {
+            const option = document.createElement('option');
+            option.value = f.fnc_id;
+            option.innerText = `${f.fnc_nombre} ${f.fnc_apellido}`;
+            respSelect.appendChild(option);
+        });
+    }
 }
 
 async function loadSolicitationDetails(id, currentUser) {
@@ -269,24 +412,36 @@ async function loadSolicitationDetails(id, currentUser) {
 
             // Resolve Organization Type and Origen
             let orgTipoId = null;
+            let resolvedOrigenTexto = sol.sol_origen_texto || '';
+            const solOrigenId = sol.sol_origen_id;
+
             switch (parseInt(sol.sol_origen_esp)) {
                 case 0:
-                    let org = organizacionesComunitarias.find(o => o.orgc_id == sol.sol_origen_id) || organizaciones.find(o => o.org_id == sol.sol_origen_id);
-                    if (org) orgTipoId = org.orgc_tipo_organizacion || org.org_tipo_id;
+                    let org = organizacionesComunitarias.find(o => o.orgc_id == solOrigenId) || organizaciones.find(o => o.org_id == solOrigenId);
+                    if (org) {
+                        orgTipoId = org.orgc_tipo_organizacion || org.org_tipo_id;
+                        if (!resolvedOrigenTexto) resolvedOrigenTexto = org.orgc_nombre || org.org_nombre;
+                    }
                     break;
                 case 1:
-                    let contrib = contribuyentes.find(o => o.tgc_id == sol.sol_origen_id);
-                    if (contrib) orgTipoId = "3"; // Particular
+                    let contrib = contribuyentes.find(o => o.tgc_id == solOrigenId);
+                    if (contrib) {
+                        orgTipoId = "3"; // Particular
+                        if (!resolvedOrigenTexto) resolvedOrigenTexto = `${contrib.tgc_nombre} ${contrib.tgc_apellido_paterno} ${contrib.tgc_apellido_materno} (${contrib.tgc_rut})`.trim();
+                    }
                     break;
                 case 2:
-                    let orgD = organizacionesDESVE.find(o => o.org_id == sol.sol_origen_id);
-                    if (orgD) orgTipoId = orgD.org_tipo_id;
+                    let orgD = organizacionesDESVE.find(o => o.org_id == solOrigenId);
+                    if (orgD) {
+                        orgTipoId = orgD.org_tipo_id;
+                        if (!resolvedOrigenTexto) resolvedOrigenTexto = orgD.org_nombre;
+                    }
                     break;
             }
 
             if (orgTipoId) document.getElementById('ID_Organizacion').value = orgTipoId;
-            document.getElementById('OrigenSolicitud').value = sol.sol_origen_id || '';
-            document.getElementById('OrigenSolicitudDisplay').value = sol.sol_origen_texto || '';
+            document.getElementById('OrigenSolicitud').value = solOrigenId || '';
+            document.getElementById('OrigenSolicitudDisplay').value = resolvedOrigenTexto || '';
             OrigenEspecial = parseInt(sol.sol_origen_esp) || 0;
 
             // Status
@@ -298,8 +453,12 @@ async function loadSolicitationDetails(id, currentUser) {
 
             // Map Population
             if (sol.sol_latitud && sol.sol_longitud) {
-                document.getElementById('chk_geoloc').checked = true;
-                document.getElementById('geolocalizacion_area').style.display = 'block';
+                const chkGeo = document.getElementById('chk_geoloc');
+                if (!chkGeo.checked) {
+                    chkGeo.checked = true;
+                    // Trigger the change event to show the area
+                    chkGeo.dispatchEvent(new Event('change'));
+                }
                 document.getElementById('Latitud').value = sol.sol_latitud;
                 document.getElementById('Longitud').value = sol.sol_longitud;
                 document.getElementById('Geo_dir').value = sol.sol_direccion || '';
@@ -323,13 +482,36 @@ async function loadSolicitationDetails(id, currentUser) {
             document.getElementById('info_dias_ingreso').value = calcularDiasTranscurridos(sol.sol_fecha_recepcion);
             document.getElementById('info_dias_vencimiento').value = calcularDiasHabilesRestantes(sol.sol_fecha_vencimiento);
             document.getElementById('Prioridad').value = sol.sol_prioridad_id;
-            document.getElementById('FechaVecimiento').value = sol.sol_fecha_vencimiento;
+
+            const fechaVenc = (sol.sol_fecha_vencimiento || '').split(' ')[0] || '';
+            document.getElementById('FechaVecimiento').value = fechaVenc;
+
             document.getElementById('Responsable').value = sol.sol_responsable;
             document.getElementById('Reingresado').value = sol.sol_reingreso_id;
+
+            if (document.getElementById('idIngresoVisible')) document.getElementById('idIngresoVisible').value = sol.sol_id;
+            if (document.getElementById('Codigo_RGT')) document.getElementById('Codigo_RGT').value = sol.rgt_id_publica || '';
+
+            currentSolRegistroId = sol.sol_registro_tramite;
             destinos = sol.destinos || [];
             renderDestinos();
             renderResponseBitacora(sol.respuestas || []);
-            loadExistingDocuments();
+
+            if (currentSolRegistroId) {
+                loadExistingDocuments(currentSolRegistroId);
+            } else {
+                console.warn("No hay ID de trámite para cargar documentos.");
+            }
+
+            // Render additional sections for parity with consultar.js
+            auditData = (sol.bitacora || []).sort((a, b) => {
+                const dateA = a.bit_creacion || a.bit_fecha || '';
+                const dateB = b.bit_creacion || b.bit_fecha || '';
+                return new Date(dateB) - new Date(dateA);
+            });
+            renderAuditPage(1);
+            renderComentarios(sol.comentarios || []);
+            renderReingresosVinculados(sol.reingresos || []);
         }
     } catch (e) {
         console.error("Load Details Error:", e);
@@ -442,46 +624,115 @@ function removeFile(index) {
     renderFileList();
 }
 
-async function loadExistingDocuments() {
+async function loadExistingDocuments(tramiteId = null) {
+    const idToUse = tramiteId || currentSolRegistroId;
+    if (!idToUse) return;
+
     try {
+        const container = document.getElementById('lista_documentos_guardados');
+        container.innerHTML = `
+            <div class="flex flex-col items-center justify-center py-8 text-slate-400">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-blue mb-2"></div>
+                <span class="text-xs font-medium uppercase tracking-widest">Buscando...</span>
+            </div>
+        `;
         const response = await fetch(`${window.API_BASE_URL}/gesdoc/general.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ACCION: "BuscarporTramite", tramite_id: currentSolRegistroId }),
+            body: JSON.stringify({ ACCION: "BuscarporTramite", tramite_id: idToUse }),
             credentials: 'include'
         });
         const result = await response.json();
-        const container = document.getElementById('lista_documentos_guardados');
-        container.innerHTML = '';
-        if (result.status === 'success' && result.documentos) {
+        container.innerHTML = '<div class="text-center py-2"><span class="small text-muted">Buscando documentos...</span></div>';
+        if (result.status === 'success' && result.documentos && result.documentos.length > 0) {
+            container.innerHTML = '';
+            const grid = document.createElement('div');
+            grid.className = 'grid grid-cols-1 gap-2';
+
             result.documentos.forEach(doc => {
-                const item = `
-                    <div class="list-group-item d-flex justify-content-between align-items-center bg-light mb-1 border rounded">
-                        <span class="small text-truncate" style="max-width: 80%;">${doc.doc_nombre_documento}</span>
-                        <span class="badge bg-secondary">En server</span>
+                const item = document.createElement('div');
+                item.className = 'group flex items-center justify-between p-3 bg-white border border-cyan-100 rounded-xl hover:border-primary-blue hover:shadow-md transition-all duration-200';
+                item.innerHTML = `
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <div class="p-2 bg-blue-50 text-primary-blue rounded-lg">
+                            <span class="material-symbols-outlined text-[20px]">description</span>
+                        </div>
+                        <div class="flex flex-col overflow-hidden">
+                            <span class="text-[13px] font-bold text-slate-700 text-truncate" title="${doc.doc_nombre_documento}">${doc.doc_nombre_documento}</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-medium leading-none">${doc.doc_privado == 1 ? 'Privado' : 'Público'}</span>
+                        </div>
                     </div>
+                    <button type="button" onclick="descargarDocumento('${doc.doc_id}', '${doc.doc_nombre_documento}')" 
+                            class="p-2 text-slate-400 hover:text-primary-blue hover:bg-blue-50 rounded-lg transition-colors"
+                            title="Descargar">
+                        <span class="material-symbols-outlined text-[20px]">download</span>
+                    </button>
                 `;
-                container.insertAdjacentHTML('beforeend', item);
+                grid.appendChild(item);
             });
+            container.appendChild(grid);
+        } else {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-10 text-slate-300 border-2 border-dashed border-cyan-50 rounded-2xl">
+                    <span class="material-symbols-outlined text-[40px] mb-2">folder_off</span>
+                    <span class="text-[11px] font-bold uppercase tracking-widest">Sin documentos adjuntos</span>
+                </div>
+            `;
         }
+
     } catch (e) {
         console.error(e);
     }
 }
 
+
+window.descargarDocumento = async function (id, nombre) {
+    try {
+        const response = await fetch(`${window.API_BASE_URL}/gesdoc/general.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ACCION: 'Bajar', doc_id: id }),
+            credentials: 'include'
+        });
+        if (!response.ok) throw new Error('Error en descarga');
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = nombre;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    } catch (e) {
+        Swal.fire('Error', 'No se pudo descargar el archivo.', 'error');
+    }
+}
+
+
 function renderResponseBitacora(respuestas) {
     const tbody = document.getElementById('tbody_respuestas');
+    if (!tbody) return;
     tbody.innerHTML = '';
+
+    if (!respuestas || respuestas.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-slate-400 italic font-medium bg-slate-50/30">No hay respuestas registradas</td></tr>';
+        return;
+    }
+
     respuestas.forEach(r => {
         const func = funcionarios.find(f => f.fnc_id == r.res_funcionario || f.usr_id == r.res_funcionario);
         const name = func ? `${func.fnc_nombre} ${func.fnc_apellido}` : (r.res_funcionario || 'N/A');
         const fecha = (r.res_creacion || r.res_fecha || '').substring(0, 10) || '-';
         const row = `
-            <tr>
-                <td>${fecha}</td>
-                <td>${name}</td>
-                <td><span class="badge ${r.res_tipo === 'Respuesta Final' ? 'bg-success' : 'bg-info'}">${r.res_tipo}</span></td>
-                <td class="small">${r.res_texto}</td>
+            <tr class="hover:bg-slate-50/50 transition-colors">
+                <td class="px-6 py-4 font-mono text-[11px] text-slate-400">#${r.res_id}</td>
+                <td class="px-6 py-4 font-medium text-slate-700">${name}</td>
+                <td class="px-6 py-4 text-slate-500">${fecha}</td>
+                <td class="px-6 py-4">
+                    <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${r.res_tipo === 'Respuesta Final' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-blue-50 text-blue-600 border border-blue-100'}">
+                        ${r.res_tipo}
+                    </span>
+                </td>
+                <td class="px-6 py-4 text-slate-600 italic leading-relaxed text-[12px]">${r.res_texto}</td>
             </tr>
         `;
         tbody.insertAdjacentHTML('beforeend', row);
@@ -671,16 +922,16 @@ function renderDestinos() {
 
     destinos.forEach(d => {
         const name = d.usr_nombre_completo || 'Desconocido';
-        const area = d.usr_area_nombre || '-';
+        const area = d.usr_area_nombre || d.fnc_area_nombre || '-';
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${name}</td>
-            <td>${area}</td>
-            <td>${d.usr_email || '-'}</td>
-            <td class="text-end">
-                <button type="button" class="btn btn-sm btn-danger" onclick="removeDestino(${d.tid_destino})">
-                   <i data-feather="trash-2" style="width:14px"></i>
+            <td class="px-6 py-4">${name}</td>
+            <td class="px-6 py-4 text-slate-500">${area}</td>
+            <td class="px-6 py-4 text-slate-400 font-mono text-xs">${d.usr_email || d.fnc_email || '-'}</td>
+            <td class="px-6 py-4 text-right">
+                <button type="button" class="text-red-400 hover:text-red-600 transition-colors" onclick="removeDestino(${d.tid_destino || d.fnc_id})">
+                   <span class="material-symbols-outlined text-[18px]">delete</span>
                 </button>
             </td>
         `;
@@ -819,155 +1070,106 @@ window.abrirModalBuscarContribuyente = function () {
 
 window.seleccionarContribuyente = function (id) {
     const c = contribuyentes.find(x => x.tgc_id == id);
-    window.seleccionarContribuyente = function (id) {
-        const c = contribuyentes.find(x => x.tgc_id == id);
-        if (c) {
-            document.getElementById('OrigenSolicitudDisplay').value = `${c.tgc_nombre} ${c.tgc_apellido_paterno} ${c.tgc_apellido_materno} (${c.tgc_rut})`;
-            document.getElementById('OrigenSolicitud').value = `CONTRIB_${c.tgc_id}`;
-        }
-        bootstrap.Modal.getInstance(document.getElementById('modalBuscarContribuyente')).hide();
+    if (c) {
+        document.getElementById('OrigenSolicitudDisplay').value = `${c.tgc_nombre} ${c.tgc_apellido_paterno} ${c.tgc_apellido_materno} (${c.tgc_rut})`;
+        document.getElementById('OrigenSolicitud').value = `CONTRIB_${c.tgc_id}`;
+        OrigenEspecial = 1;
+    }
+    const modalElem = document.getElementById('modalBuscarContribuyente');
+    if (modalElem) {
+        const instance = bootstrap.Modal.getInstance(modalElem);
+        if (instance) instance.hide();
+    }
+};
+
+window.abrirModalNuevoContribuyente = function () {
+    // Close search modal first
+    const searchModal = bootstrap.Modal.getInstance(document.getElementById('modalBuscarContribuyente'));
+    if (searchModal) searchModal.hide();
+
+    // Reset form
+    document.getElementById('form_nuevo_contribuyente').reset();
+
+    // Add RUT formatting
+    const rutInput = document.getElementById('nc_rut');
+    rutInput.onchange = function () {
+        this.value = formatRut(this.value);
     };
 
-    window.abrirModalNuevoContribuyente = function () {
-        // Close search modal first
-        const searchModal = bootstrap.Modal.getInstance(document.getElementById('modalBuscarContribuyente'));
-        if (searchModal) searchModal.hide();
+    const modal = new bootstrap.Modal(document.getElementById('modalNuevoContribuyente'));
+    modal.show();
+};
 
-        // Reset form
-        document.getElementById('form_nuevo_contribuyente').reset();
+window.guardarNuevoContribuyente = async function () {
+    const form = document.getElementById('form_nuevo_contribuyente');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
 
-        // Add RUT formatting
-        const rutInput = document.getElementById('nc_rut');
-        rutInput.onchange = function () {
-            this.value = formatRut(this.value);
-        };
-
-        const modal = new bootstrap.Modal(document.getElementById('modalNuevoContribuyente'));
-        modal.show();
+    const payload = {
+        ACCION: 'CREAR',
+        tgc_rut: document.getElementById('nc_rut').value,
+        tgc_nombre: document.getElementById('nc_nombre').value,
+        tgc_apellido_paterno: document.getElementById('nc_paterno').value,
+        tgc_apellido_materno: document.getElementById('nc_materno').value
     };
 
-    window.guardarNuevoContribuyente = async function () {
-        const form = document.getElementById('form_nuevo_contribuyente');
-        if (!form.checkValidity()) {
-            form.reportValidity();
-            return;
-        }
+    try {
+        Swal.fire({ title: 'Guardando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
-        const payload = {
-            ACCION: 'CREAR',
-            tgc_rut: document.getElementById('nc_rut').value,
-            tgc_nombre: document.getElementById('nc_nombre').value,
-            tgc_apellido_paterno: document.getElementById('nc_paterno').value,
-            tgc_apellido_materno: document.getElementById('nc_materno').value
-        };
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/contribuyentes_general.php`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const result = await response.json();
 
-        try {
-            Swal.fire({ title: 'Guardando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-
-            const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/contribuyentes_general.php`, {
+        if (result.status === 'success') {
+            // Reload contributors
+            const contribRes = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/contribuyentes_general.php`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            const result = await response.json();
+                body: JSON.stringify({ ACCION: 'CONSULTAM' })
+            }).then(r => r.json());
 
-            if (result.status === 'success') {
-                // Reload contributors
-                const contribRes = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/contribuyentes_general.php`, {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ACCION: 'CONSULTAM' })
-                }).then(r => r.json());
+            contribuyentes = extractData(contribRes);
 
-                contribuyentes = extractData(contribRes);
+            bootstrap.Modal.getInstance(document.getElementById('modalNuevoContribuyente')).hide();
+            Swal.fire('Éxito', 'Contribuyente creado correctamente.', 'success');
 
-                bootstrap.Modal.getInstance(document.getElementById('modalNuevoContribuyente')).hide();
-                Swal.fire('Éxito', 'Contribuyente creado correctamente.', 'success');
-
-                // Reopen search modal
-                setTimeout(() => abrirModalBuscarContribuyente(), 300);
-            } else {
-                Swal.fire('Error', result.message || 'Error al guardar', 'error');
-            }
-        } catch (e) {
-            console.error(e);
-            Swal.fire('Error', 'Error de conexión.', 'error');
+            // Reopen search modal
+            setTimeout(() => abrirModalBuscarContribuyente(), 300);
+        } else {
+            Swal.fire('Error', result.message || 'Error al guardar', 'error');
         }
-    };
-
-
-
-    // --- Geolocation Functions ---
-    let map, marker, geocoder;
-    const defaultLocation = { lat: -33.0248997, lng: -71.5570399 }; // Viña del Mar
-
-    window.initMap = function () {
-        const latInput = document.getElementById('Latitud').value;
-        const lngInput = document.getElementById('Longitud').value;
-
-        const initialPos = (latInput && lngInput)
-            ? { lat: parseFloat(latInput), lng: parseFloat(lngInput) }
-            : defaultLocation;
-
-        map = new google.maps.Map(document.getElementById("map_desve"), {
-            center: initialPos,
-            zoom: 15,
-        });
-
-        marker = new google.maps.Marker({
-            position: initialPos,
-            map: map,
-            draggable: true,
-        });
-
-        geocoder = new google.maps.Geocoder();
-
-        marker.addListener("dragend", function (event) {
-            updateCoordinates(event.latLng);
-        });
-
-        map.addListener("click", function (event) {
-            marker.setPosition(event.latLng);
-            updateCoordinates(event.latLng);
-        });
-    };
-
-    function updateCoordinates(latLng) {
-        document.getElementById("Latitud").value = latLng.lat().toFixed(7);
-        document.getElementById("Longitud").value = latLng.lng().toFixed(7);
+    } catch (e) {
+        console.error(e);
+        Swal.fire('Error', 'Error de conexión.', 'error');
     }
+};
 
-    function geocodeAddress(address) {
-        if (!geocoder) {
-            geocoder = new google.maps.Geocoder();
-        }
-        geocoder.geocode({ address: address + ", Viña del Mar, Chile" }, function (results, status) {
-            if (status === "OK") {
-                const pos = results[0].geometry.location;
-                map.setCenter(pos);
-                marker.setPosition(pos);
-                updateCoordinates(pos);
-            } else {
-                Swal.fire("Error", "No se pudo geocodificar la dirección: " + status, "error");
-            }
-        });
-    }
 
-    // --- Organization Search and Creation Functions ---
-    window.abrirModalBuscarOrganizacion = function () {
-        const tbody = document.getElementById('lista_busqueda_org');
-        tbody.innerHTML = '';
-        const idOrgId = document.getElementById('ID_Organizacion').value;
 
-        const matchingComunitarias = organizacionesComunitarias.filter(o => o.orgc_tipo_organizacion == idOrgId);
-        const matchingDESVE = organizacionesDESVE.filter(o => o.org_tipo_id == idOrgId);
-        const matchingGeneral = organizaciones.filter(o => o.org_tipo_id == idOrgId);
+// --- Geolocation Functions ---
 
-        matchingComunitarias.forEach(o => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
+
+
+// --- Organization Search and Creation Functions ---
+window.abrirModalBuscarOrganizacion = function () {
+    const tbody = document.getElementById('lista_busqueda_org');
+    tbody.innerHTML = '';
+    const idOrgId = document.getElementById('ID_Organizacion').value;
+
+    const matchingComunitarias = organizacionesComunitarias.filter(o => o.orgc_tipo_organizacion == idOrgId);
+    const matchingDESVE = organizacionesDESVE.filter(o => o.org_tipo_id == idOrgId);
+    const matchingGeneral = organizaciones.filter(o => o.org_tipo_id == idOrgId);
+
+    matchingComunitarias.forEach(o => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
                 <td>${o.orgc_rut || '-'}</td>
                 <td>${o.orgc_nombre}</td>
                 <td><span class="badge bg-info text-dark">Comunitaria</span></td>
@@ -975,12 +1177,12 @@ window.seleccionarContribuyente = function (id) {
                     <button type="button" class="btn btn-sm btn-primary" onclick="seleccionarOrganizacion('OC_${o.orgc_id}', '${o.orgc_nombre}')">Seleccionar</button>
                 </td>
             `;
-            tbody.appendChild(row);
-        });
+        tbody.appendChild(row);
+    });
 
-        matchingDESVE.forEach(o => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
+    matchingDESVE.forEach(o => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
                 <td>-</td>
                 <td>${o.org_nombre}</td>
                 <td><span class="badge bg-secondary">DESVE</span></td>
@@ -988,12 +1190,12 @@ window.seleccionarContribuyente = function (id) {
                     <button type="button" class="btn btn-sm btn-primary" onclick="seleccionarOrganizacion('${o.org_id}', '${o.org_nombre}')">Seleccionar</button>
                 </td>
             `;
-            tbody.appendChild(row);
-        });
+        tbody.appendChild(row);
+    });
 
-        matchingGeneral.forEach(o => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
+    matchingGeneral.forEach(o => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
                 <td>-</td>
                 <td>${o.org_nombre}</td>
                 <td><span class="badge bg-light text-dark">General</span></td>
@@ -1001,100 +1203,245 @@ window.seleccionarContribuyente = function (id) {
                     <button type="button" class="btn btn-sm btn-primary" onclick="seleccionarOrganizacion('${o.org_id}', '${o.org_nombre}')">Seleccionar</button>
                 </td>
             `;
-            tbody.appendChild(row);
+        tbody.appendChild(row);
+    });
+
+    document.getElementById('filtroOrganizacion').onkeyup = function () {
+        const val = this.value.toLowerCase();
+        Array.from(tbody.querySelectorAll('tr')).forEach(tr => {
+            tr.style.display = tr.innerText.toLowerCase().includes(val) ? '' : 'none';
         });
-
-        document.getElementById('filtroOrganizacion').onkeyup = function () {
-            const val = this.value.toLowerCase();
-            Array.from(tbody.querySelectorAll('tr')).forEach(tr => {
-                tr.style.display = tr.innerText.toLowerCase().includes(val) ? '' : 'none';
-            });
-        };
-
-        const modal = new bootstrap.Modal(document.getElementById('modalBuscarOrganizacion'));
-        modal.show();
     };
 
-    window.seleccionarOrganizacion = function (id, nombre) {
-        document.getElementById('OrigenSolicitudDisplay').value = nombre;
-        document.getElementById('OrigenSolicitud').value = id;
-        const modalEl = document.getElementById('modalBuscarOrganizacion');
-        const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
-        modal.hide();
+    const modal = new bootstrap.Modal(document.getElementById('modalBuscarOrganizacion'));
+    modal.show();
+};
+
+window.seleccionarOrganizacion = function (id, nombre) {
+    document.getElementById('OrigenSolicitudDisplay').value = nombre;
+    document.getElementById('OrigenSolicitud').value = id;
+    const modalEl = document.getElementById('modalBuscarOrganizacion');
+    const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+    modal.hide();
+};
+
+window.abrirModalNuevaOrganizacion = function () {
+    const searchModalEl = document.getElementById('modalBuscarOrganizacion');
+    const searchModal = bootstrap.Modal.getInstance(searchModalEl);
+    if (searchModal) searchModal.hide();
+
+    document.getElementById('form_nueva_organizacion').reset();
+    const modal = new bootstrap.Modal(document.getElementById('modalNuevaOrganizacion'));
+    modal.show();
+};
+
+window.guardarNuevaOrganizacion = async function () {
+    const form = document.getElementById('form_nueva_organizacion');
+    if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+    }
+
+    const idTipo = document.getElementById('ID_Organizacion').value;
+    const payload = {
+        ACCION: 'CREAR',
+        orgc_nombre: document.getElementById('orgc_nombre').value,
+        orgc_rut: document.getElementById('orgc_rut').value,
+        orgc_codigo: document.getElementById('orgc_codigo').value,
+        orgc_rpj: document.getElementById('orgc_rpj').value,
+        orgc_tipo_organizacion: idTipo
     };
 
-    window.abrirModalNuevaOrganizacion = function () {
-        const searchModalEl = document.getElementById('modalBuscarOrganizacion');
-        const searchModal = bootstrap.Modal.getInstance(searchModalEl);
-        if (searchModal) searchModal.hide();
+    try {
+        Swal.fire({ title: 'Guardando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
-        document.getElementById('form_nueva_organizacion').reset();
-        const modal = new bootstrap.Modal(document.getElementById('modalNuevaOrganizacion'));
-        modal.show();
-    };
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/organizaciones_comunitarias_general.php`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const result = await response.json();
 
-    window.guardarNuevaOrganizacion = async function () {
-        const form = document.getElementById('form_nueva_organizacion');
-        if (!form.checkValidity()) {
-            form.reportValidity();
-            return;
-        }
-
-        const idTipo = document.getElementById('ID_Organizacion').value;
-        const payload = {
-            ACCION: 'CREAR',
-            orgc_nombre: document.getElementById('orgc_nombre').value,
-            orgc_rut: document.getElementById('orgc_rut').value,
-            orgc_codigo: document.getElementById('orgc_codigo').value,
-            orgc_rpj: document.getElementById('orgc_rpj').value,
-            orgc_tipo_organizacion: idTipo
-        };
-
-        try {
-            Swal.fire({ title: 'Guardando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-
-            const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/organizaciones_comunitarias_general.php`, {
+        if (result.status === 'success') {
+            const orgRes = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/organizaciones_comunitarias_general.php`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            const result = await response.json();
+                body: JSON.stringify({ ACCION: 'CONSULTAM' })
+            }).then(r => r.json());
 
-            if (result.status === 'success') {
-                const orgRes = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/organizaciones_comunitarias_general.php`, {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ACCION: 'CONSULTAM' })
-                }).then(r => r.json());
+            organizacionesComunitarias = extractData(orgRes);
 
-                organizacionesComunitarias = extractData(orgRes);
+            bootstrap.Modal.getInstance(document.getElementById('modalNuevaOrganizacion')).hide();
+            Swal.fire('Éxito', 'Organización creada correctamente.', 'success');
 
-                bootstrap.Modal.getInstance(document.getElementById('modalNuevaOrganizacion')).hide();
-                Swal.fire('Éxito', 'Organización creada correctamente.', 'success');
-
-                if (result.id) {
-                    seleccionarOrganizacion(`OC_${result.id}`, payload.orgc_nombre);
-                } else {
-                    const newOrg = organizacionesComunitarias.find(o => o.orgc_nombre === payload.orgc_nombre);
-                    if (newOrg) seleccionarOrganizacion(`OC_${newOrg.orgc_id}`, newOrg.orgc_nombre);
-                }
+            if (result.id) {
+                seleccionarOrganizacion(`OC_${result.id}`, payload.orgc_nombre);
             } else {
-                Swal.fire('Error', result.message || 'Error al guardar', 'error');
+                const newOrg = organizacionesComunitarias.find(o => o.orgc_nombre === payload.orgc_nombre);
+                if (newOrg) seleccionarOrganizacion(`OC_${newOrg.orgc_id}`, newOrg.orgc_nombre);
             }
-        } catch (e) {
-            console.error(e);
-            Swal.fire('Error', 'Error de conexión.', 'error');
+        } else {
+            Swal.fire('Error', result.message || 'Error al guardar', 'error');
         }
-    };
+    } catch (e) {
+        console.error(e);
+        Swal.fire('Error', 'Error de conexión.', 'error');
+    }
+};
 
-    window.seleccionarContribuyente = function (id) {
-        const c = contribuyentes.find(x => x.tgc_id == id);
-        if (c) {
-            document.getElementById('OrigenSolicitudDisplay').value = `${c.tgc_nombre} ${c.tgc_apellido_paterno} ${c.tgc_apellido_materno} (${c.tgc_rut})`;
-            document.getElementById('OrigenSolicitud').value = `CONTRIB_${c.tgc_id}`;
+
+
+// Additional rendering functions for parity with consultar.js
+
+function renderAuditPage(page) {
+    const tbody = document.getElementById('tbody_audit');
+    const pagination = document.getElementById('pagination_audit');
+    if (!tbody || !pagination) return;
+
+    currentAuditPage = page;
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const pageData = auditData.slice(start, end);
+
+    tbody.innerHTML = '';
+    if (pageData.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-slate-400">No hay registros de auditoría</td></tr>';
+        pagination.innerHTML = '';
+        return;
+    }
+
+    pageData.forEach(item => {
+        const row = `
+            <tr class="hover:bg-slate-50/50 transition-colors">
+                <td class="px-6 py-4 text-slate-500 whitespace-nowrap">${item.bit_fecha || item.bit_creacion || '-'}</td>
+                <td class="px-6 py-4 font-medium text-slate-700">${item.bit_usuario || item.usr_nombre || 'Sistema'}</td>
+                <td class="px-6 py-4 text-slate-600">${item.bit_evento || item.bit_accion || '-'}</td>
+            </tr>
+        `;
+        tbody.insertAdjacentHTML('beforeend', row);
+    });
+
+    renderAuditPagination();
+}
+
+function renderAuditPagination() {
+    const pagination = document.getElementById('pagination_audit');
+    const totalPages = Math.ceil(auditData.length / itemsPerPage);
+    pagination.innerHTML = '';
+
+    if (totalPages <= 1) return;
+
+    for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.innerText = i;
+        btn.className = `w-8 h-8 rounded-lg text-xs font-bold transition-all ${i === currentAuditPage ? 'bg-primary-blue text-white shadow-md' : 'bg-white text-slate-400 hover:bg-slate-100 border border-slate-200'}`;
+        btn.onclick = () => renderAuditPage(i);
+        pagination.appendChild(btn);
+    }
+}
+
+function toggleAuditoria() {
+    const collapse = document.getElementById('collapse_audit');
+    const btn = document.getElementById('btn_toggle_audit');
+    if (!collapse || !btn) return;
+
+    if (collapse.classList.contains('hidden')) {
+        collapse.classList.remove('hidden');
+        btn.style.transform = 'rotate(180deg)';
+    } else {
+        collapse.classList.add('hidden');
+        btn.style.transform = 'rotate(0deg)';
+    }
+}
+
+function renderComentarios(comentarios) {
+    const container = document.getElementById('lista_comentarios');
+    if (!container) return;
+
+    container.innerHTML = '';
+    if (!comentarios || comentarios.length === 0) {
+        container.innerHTML = '<div class="text-center py-8 text-slate-400 italic">No hay comentarios</div>';
+        return;
+    }
+
+    comentarios.forEach(c => {
+        const item = `
+            <div class="bg-white p-4 rounded-xl border border-cyan-100 shadow-sm space-y-2">
+                <div class="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-primary-blue">
+                    <span>${c.usr_nombre + " " + c.usr_apellido || 'Usuario'}</span>
+                    <span class="text-slate-400">${c.gco_creacion.substring(0, 10) || ''}</span>
+                </div>
+                <p class="text-slate-600 leading-relaxed">${c.gco_comentario}</p>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', item);
+    });
+}
+
+function renderReingresosVinculados(reingresos) {
+    const tbody = document.getElementById('tbody_reingresos_vinculados');
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+    if (!reingresos || reingresos.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="2" class="px-4 py-6 text-center text-slate-400 italic">Sin reingresos</td></tr>';
+        return;
+    }
+
+    reingresos.forEach(r => {
+        const row = `
+            <tr>
+                <td class="px-4 py-3 font-mono text-primary-blue font-bold tracking-wider">#${r.rei_codigo_reingreso || r.rei_id}</td>
+                <td class="px-4 py-3 text-end">
+                    <button type="button" onclick="location.href='consultar.php?id=${r.rei_id}'" class="p-1.5 hover:bg-cyan-50 rounded-lg text-primary-blue transition-colors">
+                        <span class="material-symbols-outlined text-lg">visibility</span>
+                    </button>
+                </td>
+            </tr>
+        `;
+        tbody.insertAdjacentHTML('beforeend', row);
+    });
+}
+
+function abrirModalNuevoComentario() {
+    const modal = new bootstrap.Modal(document.getElementById('modalNuevoComentario'));
+    modal.show();
+}
+
+async function guardarComentario() {
+    const texto = document.getElementById('textoNuevoComentario').value.trim();
+    if (!texto) return;
+
+    const params = new URLSearchParams(window.location.search);
+    const solicitationId = params.get('id');
+
+    try {
+        Swal.fire({ title: 'Guardando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        const response = await fetch(`${window.API_BASE_URL}/desve/comentarios.php`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                ACCION: "CREAR",
+                com_solicitud_id: solicitationId,
+                com_texto: texto
+            })
+        });
+        const result = await response.json();
+        if (result.status === 'success') {
+            document.getElementById('textoNuevoComentario').value = '';
+            bootstrap.Modal.getInstance(document.getElementById('modalNuevoComentario')).hide();
+            Swal.fire('Éxito', "Comentario guardado", 'success');
+            // Refresh details to show new comment
+            loadSolicitationDetails(solicitationId, currentUser);
+        } else {
+            Swal.fire('Error', result.message || "Error al guardar", 'error');
         }
-        bootstrap.Modal.getInstance(document.getElementById('modalBuscarContribuyente')).hide();
-    };
+    } catch (e) {
+        console.error(e);
+        Swal.fire('Error', "Error de conexión", 'error');
+    }
 }

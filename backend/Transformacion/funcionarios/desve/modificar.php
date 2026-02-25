@@ -119,6 +119,23 @@ include '../../api/general/header.php';
                             </div>
                         </div>
 
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label
+                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest text-start block">ID
+                                    Interno</label>
+                                <input type="text" id="idIngresoVisible" readonly
+                                    class="w-full font-mono text-sm text-slate-500 bg-slate-50 py-3 rounded-xl border border-slate-100 italic" />
+                            </div>
+                            <div class="space-y-2">
+                                <label
+                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest text-start block">Código
+                                    RGT</label>
+                                <input type="text" id="Codigo_RGT" readonly
+                                    class="w-full font-mono text-sm text-slate-500 bg-slate-50 py-3 rounded-xl border border-slate-100 italic" />
+                            </div>
+                        </div>
+
                         <div class="space-y-2">
                             <label
                                 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest text-center block">Reingreso</label>
@@ -150,7 +167,7 @@ include '../../api/general/header.php';
                                         placeholder="Seleccione organización..."
                                         class="flex-grow border-slate-200 rounded-l-xl text-[15px] input-readonly-dashed px-4" />
                                     <input type="hidden" id="OrigenSolicitud" required>
-                                    <button type="button" onclick="abrirModalBuscarOrganizacion()"
+                                    <button type="button" id="btn_nuevo_origen" onclick="abrirModalBuscarOrganizacion()"
                                         id="btn_buscar_origen"
                                         class="bg-slate-100 px-4 border-y border-slate-200 flex items-center text-slate-600"><span
                                             class="material-symbols-outlined">search</span></button>
@@ -170,6 +187,24 @@ include '../../api/general/header.php';
                                     class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Sector</label>
                                 <select id="Sector" required
                                     class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3 bg-[#D3D3D3]/20"></select>
+                            </div>
+                            <div class="space-y-2">
+                                <label
+                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Prioridad</label>
+                                <select id="Prioridad" required
+                                    class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3 bg-[#D3D3D3]/20"></select>
+                            </div>
+                            <div class="space-y-2">
+                                <label
+                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Responsable</label>
+                                <select id="Responsable" required
+                                    class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3 bg-[#D3D3D3]/20"></select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Fecha
+                                    Vencimiento</label>
+                                <input type="date" id="FechaVecimiento" required
+                                    class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3 bg-[#D3D3D3]/20" />
                             </div>
                         </div>
 
@@ -247,6 +282,7 @@ include '../../api/general/header.php';
                                 class="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] tracking-widest border-b border-slate-100">
                                 <tr>
                                     <th class="px-6 py-3">Funcionario</th>
+                                    <th class="px-6 py-3">Área</th>
                                     <th class="px-6 py-3">Email</th>
                                     <th class="px-6 py-3 text-right">Acción</th>
                                 </tr>
@@ -274,15 +310,52 @@ include '../../api/general/header.php';
                             <thead
                                 class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
                                 <tr>
-                                    <th class="px-6 py-4">Fecha</th>
+                                    <th class="px-6 py-4">ID</th>
                                     <th class="px-6 py-4">Funcionario</th>
-                                    <th class="px-6 py-4">Acción</th>
-                                    <th class="px-6 py-4">Contenido</th>
+                                    <th class="px-6 py-4">Fecha</th>
+                                    <th class="px-6 py-4">Tipo</th>
+                                    <th class="px-6 py-4">Respuesta</th>
                                 </tr>
                             </thead>
                             <tbody id="tbody_respuestas" class="divide-y divide-slate-50 text-[13px] text-slate-600">
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <!-- Bitácora de Auditoría -->
+                <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-50 flex items-center justify-between cursor-pointer group"
+                        onclick="toggleAuditoria()">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary-blue">visibility</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">4. Bitácora de
+                                Auditoría</h3>
+                        </div>
+                        <span id="btn_toggle_audit"
+                            class="material-symbols-outlined text-slate-400 group-hover:text-primary-blue transition-all">expand_more</span>
+                    </div>
+                    <div id="collapse_audit" class="hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-[13px]">
+                                <thead
+                                    class="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] tracking-widest border-b border-slate-100">
+                                    <tr>
+                                        <th class="px-6 py-4">Fecha</th>
+                                        <th class="px-6 py-4">Usuario</th>
+                                        <th class="px-6 py-4">Evento</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_audit" class="divide-y divide-slate-50 text-slate-600">
+                                    <!-- JS Populated -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Paginación -->
+                        <div id="pagination_audit"
+                            class="p-4 border-t border-slate-50 bg-slate-50/30 flex justify-center gap-2">
+                            <!-- JS Populated -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -291,7 +364,7 @@ include '../../api/general/header.php';
 
                 <div class="bg-[#D3D3D3] border border-slate-300 rounded-3xl p-8 shadow-sm space-y-6">
                     <h2 class="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-sm">settings_suggest</span> Estado y Tiempos
+                        <span class="material-symbols-outlined text-sm">analytics</span> Estadísticas
                     </h2>
 
                     <div class="space-y-3">
@@ -327,6 +400,22 @@ include '../../api/general/header.php';
                 </div>
 
                 <div class="bg-soft-cyan border border-cyan-border rounded-2xl overflow-hidden shadow-sm">
+                    <div class="p-5 border-b border-cyan-border flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-amber-500">sticky_note_2</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest">Comentarios</h3>
+                        </div>
+                        <button type="button" onclick="abrirModalNuevoComentario()"
+                            class="p-2 bg-white border border-cyan-border hover:bg-slate-50 rounded-lg text-primary-blue shadow-sm">
+                            <span class="material-symbols-outlined text-[20px]">add_comment</span>
+                        </button>
+                    </div>
+                    <div id="lista_comentarios" class="p-5 max-h-[400px] overflow-y-auto space-y-4 text-[13px] italic">
+                    </div>
+                </div>
+
+
+                <div class="bg-soft-cyan border border-cyan-border rounded-2xl overflow-hidden shadow-sm">
                     <div class="p-5 border-b border-cyan-border flex items-center gap-2"><span
                             class="material-symbols-outlined text-primary-blue text-[20px]">attach_file</span>
                         <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest">Documentos</h3>
@@ -347,10 +436,7 @@ include '../../api/general/header.php';
 
         <input type="hidden" id="idIngreso">
         <input type="hidden" id="IngresoDesve">
-        <input type="hidden" id="Prioridad">
-        <input type="hidden" id="FechaVecimiento">
         <input type="hidden" id="Reingresado">
-        <input type="hidden" id="Responsable">
     </form>
 </div>
 
@@ -387,6 +473,30 @@ include '../../api/general/header.php';
     </div>
 </div>
 
+<!-- Modal Nuevo Comentario -->
+<div class="modal fade" id="modalNuevoComentario" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold fs-6">Agregar Comentario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="mb-0">
+                    <label for="textoNuevoComentario" class="form-label small fw-bold">Su Comentario</label>
+                    <textarea class="form-control form-control-sm" id="textoNuevoComentario" rows="4"
+                        placeholder="Escriba aquí su comentario u observación..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer bg-light border-0">
+                <button type="button" class="btn btn-link text-muted text-decoration-none small"
+                    data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-dark btn-sm px-4" onclick="guardarComentario()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="modalReingreso" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden">
@@ -415,6 +525,7 @@ include '../../api/general/header.php';
     </div>
 </div>
 
+<script src="https://unpkg.com/feather-icons"></script>
 <script src="../../recursos/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../../recursos/js/helpers.js"></script>

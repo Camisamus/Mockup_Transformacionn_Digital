@@ -91,36 +91,59 @@ include '../../api/general/header.php';
 
     <div class="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
 
-        <div class="p-4 border-b border-slate-50 flex justify-between items-center bg-white">
-            <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary-blue">history</span>
-                <h3 class="font-bold text-slate-700">Historial de Solicitudes</h3>
+        <div class="p-6 border-b border-slate-50 flex flex-col md:flex-row justify-between items-start bg-white gap-6">
+            <!-- Lado Izquierdo: Título y Checkbox -->
+            <div class="flex flex-col gap-3 md:pt-1">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary-blue text-2xl">history</span>
+                    <h3 class="font-bold text-slate-800 text-lg whitespace-nowrap">Historial de Solicitudes</h3>
+                </div>
+                <div class="flex items-center gap-3 pl-8">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="filtro_ocultar_reingresos" 
+                            class="w-4 h-4 text-primary-blue rounded border-slate-300 focus:ring-blue-500/20 cursor-pointer">
+                        <label for="filtro_ocultar_reingresos" class="text-[11px] font-bold text-slate-500 uppercase tracking-tight cursor-pointer">
+                            ¿Es un reingreso?
+                        </label>
+                    </div>
+                </div>
             </div>
 
-            <div class="flex items-center gap-3">
-                <select
-                    class="rounded-lg border-slate-200 text-xs font-semibold text-slate-400 focus:ring-primary-blue py-1.5"
-                    id="filtro_rango">
-                    <option value="30">Últimos 30 días</option>
-                    <option value="60">Últimos 60 días</option>
-                </select>
+            <!-- Lado Derecho: Buscador de Fechas y Botones -->
+            <div class="flex flex-col gap-4 w-full md:w-auto">
+                <div class="flex flex-wrap items-end gap-4">
+                    <div class="flex flex-col gap-1.5 flex-1 min-w-[150px]">
+                        <label class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Fecha Desde</label>
+                        <input type="date" id="filtro_fecha_desde" 
+                            class="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-slate-600">
+                    </div>
+                    <div class="flex flex-col gap-1.5 flex-1 min-w-[150px]">
+                        <label class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Fecha Hasta</label>
+                        <input type="date" id="filtro_fecha_hasta" 
+                            class="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all text-slate-600">
+                    </div>
+                </div>
+                <div class="flex items-center justify-end gap-4">
+                    <button id="btn_limpiar" class="text-slate-400 hover:text-slate-600 text-[11px] font-bold transition-all uppercase tracking-wider">
+                        Limpiar
+                    </button>
+                    <button id="btn_buscar" class="bg-slate-800 hover:bg-slate-900 text-white text-[11px] font-bold py-2.5 px-6 rounded-xl shadow-sm transition-all flex items-center gap-2">
+                        <span class="material-symbols-outlined text-base">search</span>
+                        BUSCAR
+                    </button>
+                </div>
             </div>
         </div>
-
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse" id="tablaAtenciones">
                 <thead>
                     <tr
                         class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
-                        <th class="px-6 py-4 text-center">Acción</th>
-                        <th class="px-6 py-4">ID</th>
-                        <th class="px-6 py-4">Fecha Rec.</th>
-                        <th class="px-6 py-4">Vencimiento</th>
-                        <th class="px-6 py-4 text-center">Prioridad</th>
+                        <th class="px-6 py-4 text-center w-[80px]">Acción</th>
+                        <th class="px-6 py-4 w-[100px]">ID</th>
+                        <th class="px-6 py-4">Fecha de Respuesta</th>
+                        <th class="px-6 py-4">Nombre del Expediente</th>
                         <th class="px-6 py-4 text-center">Estado</th>
-                        <th class="px-6 py-4 text-center">
-                            <span class="material-symbols-outlined text-[18px]">add_circle</span>
-                        </th>
                     </tr>
                 </thead>
                 <tbody id="tbody_desve" class="divide-y divide-slate-100 text-[13px] text-slate-600">
@@ -241,8 +264,8 @@ include '../../api/general/header.php';
                 <label class="form-label small fw-bold">Sector</label>
                 <select class="form-select form-select-sm" id="filtro_sector">
                     <option value="">Todos</option>-->
-                    <!-- Dynamic -->
-                <!--</select>
+<!-- Dynamic -->
+<!--</select>
             </div>
 
             <div class="col-md-6 d-flex align-items-center">
@@ -292,8 +315,8 @@ include '../../api/general/header.php';
                     </tr>
                 </thead>
                 <tbody id="tbody_desve" class="small">-->
-                    <!-- Populated via JS -->
-                <!--</tbody>
+<!-- Populated via JS -->
+<!--</tbody>
             </table>
         </div>
     </div>

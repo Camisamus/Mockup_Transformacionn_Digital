@@ -164,7 +164,6 @@ ORDER BY tds.sol_id DESC;";
         foreach ($destinos as $d) {
             $destinoId = is_array($d) ? ($d['usr_id'] ?? null) : $d;
             if (!$destinoId) {
-                echo ("entro :(");
                 continue;
             }
 
@@ -351,6 +350,7 @@ ORDER BY tds.sol_id DESC;";
             sol_latitud=:sol_latitud,
             sol_longitud=:sol_longitud,
             sol_responsable=:sol_responsable,
+            sol_funcionario_id=:sol_funcionario_id,
             sol_origen_esp=:sol_origen_esp,
             sol_direccion_completa=:sol_direccion_completa
             WHERE sol_id = :id";
@@ -362,29 +362,30 @@ ORDER BY tds.sol_id DESC;";
             return ($val === '' || $val === null) ? null : $val;
         };
 
-        $stmt->bindValue(":sol_ingreso_desve", $data['sol_ingreso_desve'] ?? null);
-        $stmt->bindValue(":sol_nombre_expediente", $data['sol_nombre_expediente'] ?? null);
-        $stmt->bindValue(":sol_origen_id", $toNull($data['sol_origen_id'] ?? null));
-        $stmt->bindValue(":sol_origen_texto", $data['sol_origen_texto'] ?? null);
-        $stmt->bindValue(":sol_detalle", $data['sol_detalle'] ?? null);
-        $stmt->bindValue(":sol_fecha_recepcion", $toNull($data['sol_fecha_recepcion'] ?? null));
-        $stmt->bindValue(":sol_prioridad_id", $toNull($data['sol_prioridad_id'] ?? null));
-        $stmt->bindValue(":sol_sector_id", $toNull($data['sol_sector_id'] ?? null));
-        $stmt->bindValue(":sol_fecha_vencimiento", $toNull($data['sol_fecha_vencimiento'] ?? null));
-        $stmt->bindValue(":sol_entrego_coordinador", (bool) ($data['sol_entrego_coordinador'] ?? false), PDO::PARAM_BOOL);
-        $stmt->bindValue(":sol_fecha_respuesta_coordinador", $toNull($data['sol_fecha_respuesta_coordinador'] ?? null));
-        $stmt->bindValue(":sol_estado_entrega", (bool) ($data['sol_estado_entrega'] ?? false), PDO::PARAM_BOOL);
-        $stmt->bindValue(":sol_dias_vencimiento", $data['sol_dias_vencimiento'] ?? null);
-        $stmt->bindValue(":sol_observaciones", $data['sol_observaciones'] ?? null);
-        $stmt->bindValue(":sol_dias_transcurridos", $data['sol_dias_transcurridos'] ?? null);
-        $stmt->bindValue(":sol_reingreso_id", $toNull($data['sol_reingreso_id'] ?? null));
-        $stmt->bindValue(":sol_direccion", $data['sol_direccion'] ?? null);
-        $stmt->bindValue(":sol_latitud", $data['sol_latitud'] ?? null);
-        $stmt->bindValue(":sol_longitud", $data['sol_longitud'] ?? null);
-        $stmt->bindValue(":sol_responsable", $data['sol_responsable'] ?? null);
-        $stmt->bindValue(":sol_origen_esp", (int) ($data['sol_origen_esp'] ?? 0), PDO::PARAM_INT);
-        $stmt->bindValue(":sol_id", $id);
-        $stmt->bindValue(":sol_direccion_completa", $data['sol_direccion'] ?? null);
+        $stmt->bindValue(":sol_ingreso_desve", $data['sol_ingreso_desve'] ?? $current['sol_ingreso_desve']);
+        $stmt->bindValue(":sol_nombre_expediente", $data['sol_nombre_expediente'] ?? $current['sol_nombre_expediente']);
+        $stmt->bindValue(":sol_origen_id", $toNull($data['sol_origen_id'] ?? $current['sol_origen_id']));
+        $stmt->bindValue(":sol_origen_texto", $data['sol_origen_texto'] ?? $current['sol_origen_texto']);
+        $stmt->bindValue(":sol_detalle", $data['sol_detalle'] ?? $current['sol_detalle']);
+        $stmt->bindValue(":sol_fecha_recepcion", $toNull($data['sol_fecha_recepcion'] ?? $current['sol_fecha_recepcion']));
+        $stmt->bindValue(":sol_prioridad_id", $toNull($data['sol_prioridad_id'] ?? $current['sol_prioridad_id']));
+        $stmt->bindValue(":sol_sector_id", $toNull($data['sol_sector_id'] ?? $current['sol_sector_id']));
+        $stmt->bindValue(":sol_fecha_vencimiento", $toNull($data['sol_fecha_vencimiento'] ?? $current['sol_fecha_vencimiento']));
+        $stmt->bindValue(":sol_entrego_coordinador", (bool) ($data['sol_entrego_coordinador'] ?? $current['sol_entrego_coordinador']), PDO::PARAM_BOOL);
+        $stmt->bindValue(":sol_fecha_respuesta_coordinador", $toNull($data['sol_fecha_respuesta_coordinador'] ?? $current['sol_fecha_respuesta_coordinador']));
+        $stmt->bindValue(":sol_estado_entrega", (bool) ($data['sol_estado_entrega'] ?? $current['sol_estado_entrega']), PDO::PARAM_BOOL);
+        $stmt->bindValue(":sol_dias_vencimiento", $data['sol_dias_vencimiento'] ?? $current['sol_dias_vencimiento']);
+        $stmt->bindValue(":sol_observaciones", $data['sol_observaciones'] ?? $current['sol_observaciones']);
+        $stmt->bindValue(":sol_dias_transcurridos", $data['sol_dias_transcurridos'] ?? $current['sol_dias_transcurridos']);
+        $stmt->bindValue(":sol_reingreso_id", $toNull($data['sol_reingreso_id'] ?? $current['sol_reingreso_id']));
+        $stmt->bindValue(":sol_direccion", $data['sol_direccion'] ?? $current['sol_direccion']);
+        $stmt->bindValue(":sol_latitud", $data['sol_latitud'] ?? $current['sol_latitud']);
+        $stmt->bindValue(":sol_longitud", $data['sol_longitud'] ?? $current['sol_longitud']);
+        $stmt->bindValue(":sol_responsable", $data['sol_responsable'] ?? $current['sol_responsable']);
+        $stmt->bindValue(":sol_funcionario_id", $toNull($data['sol_funcionario_id'] ?? $current['sol_funcionario_id']));
+        $stmt->bindValue(":sol_origen_esp", (int) ($data['sol_origen_esp'] ?? $current['sol_origen_esp']), PDO::PARAM_INT);
+        $stmt->bindValue(":id", $id);
+        $stmt->bindValue(":sol_direccion_completa", $data['sol_direccion'] ?? $current['sol_direccion']);
 
         try {
             if ($stmt->execute()) {
