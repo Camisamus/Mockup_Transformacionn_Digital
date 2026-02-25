@@ -95,7 +95,10 @@ ORDER BY tds.sol_id DESC;";
 
     public function getById(int $id): array|null
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE sol_id = :id AND sol_borrado = 0 LIMIT 1";
+        $query = "SELECT tds.*, rgt.rgt_id_publica 
+                  FROM " . $this->table_name . " tds
+                  LEFT JOIN trd_general_registro_general_expedientes rgt ON tds.sol_registro_tramite = rgt.rgt_id
+                  WHERE tds.sol_id = :id AND tds.sol_borrado = 0 LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();

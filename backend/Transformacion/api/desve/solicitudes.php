@@ -40,7 +40,7 @@ switch ($data['ACCION']) {
 
             // Log CREAR
             if (($response['status'] ?? '') === 'success') {
-                require_once '../src/Models/SystemLog.php';
+                require_once __DIR__ . '/../../src/Models/SystemLog.php';
                 $logModel = new \App\Models\SystemLog($db);
                 $tempData = $data;
                 if (isset($tempData['sol_documentos']) && is_array($tempData['sol_documentos'])) {

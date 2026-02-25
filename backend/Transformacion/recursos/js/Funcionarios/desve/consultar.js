@@ -34,6 +34,37 @@ let organizacionesComunitarias = [];
 let contribuyentes = [];
 let currentSolRegistroId = null;
 
+// Map variables
+let map, marker;
+const defaultLocation = { lat: -33.0248, lng: -71.5570 }; // Viña del Mar
+
+window.initMap = function () {
+    const mapElement = document.getElementById("map_desve");
+    if (!mapElement) return;
+
+    map = new google.maps.Map(mapElement, {
+        zoom: 15,
+        center: defaultLocation,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: true,
+        styles: [
+            {
+                "featureType": "poi",
+                "elementType": "labels",
+                "stylers": [{ "visibility": "off" }]
+            }
+        ]
+    });
+
+    marker = new google.maps.Marker({
+        map: map,
+        position: defaultLocation,
+        visible: false,
+        animation: google.maps.Animation.DROP
+    });
+};
+
 async function loadInitialData() {
     try {
         const fetchOptions = {
@@ -194,9 +225,30 @@ async function loadSolicitationDetails(id) {
 
             if (tiporg) {
                 document.getElementById('info_tipo_org').innerText = tiporg.tor_nombre;
-            } else if (!document.getElementById('info_tipo_org').innerText) {
-                // Try to guess or leave empty
-                // document.getElementById('info_tipo_org').innerText = '-';
+            }
+
+            document.getElementById('info_latitud').innerText = sol.sol_latitud || '-';
+            document.getElementById('info_longitud').innerText = sol.sol_longitud || '-';
+            document.getElementById('info_direccion').innerText = sol.sol_direccion || '-';
+
+            if (sol.sol_latitud && sol.sol_longitud) {
+                const pos = { lat: parseFloat(sol.sol_latitud), lng: parseFloat(sol.sol_longitud) };
+                const sectionMap = document.getElementById('section_map');
+                if (sectionMap) sectionMap.classList.remove('hidden');
+
+                // Esperar a que el mapa esté inicializado (usando las variables locales del módulo)
+                const checkMap = setInterval(() => {
+                    if (map && marker) {
+                        clearInterval(checkMap);
+                        map.setCenter(pos);
+                        marker.setPosition(pos);
+                        marker.setVisible(true);
+                        google.maps.event.trigger(map, 'resize');
+                    }
+                }, 200);
+            } else {
+                const sectionMap = document.getElementById('section_map');
+                if (sectionMap) sectionMap.classList.add('hidden');
             }
 
             const sector = sectores.find(s => s.sec_id == sol.sol_sector_id);
@@ -277,12 +329,13 @@ function renderResponseBitacora(respuestas) {
     respuestas.forEach(r => {
         const func = funcionarios.find(f => f.fnc_id == r.res_funcionario || f.usr_id == r.res_funcionario);
         const name = func ? `${func.fnc_nombre} ${func.fnc_apellido}` : (r.res_funcionario || 'N/A');
+        const fecha = r.res_creacion ? r.res_creacion.substring(0, 10) : '-';
 
         const row = `
             <tr>
                 <td>${r.res_id}</td>
                 <td>${name}</td>
-                <td>${r.res_fecha.substring(0, 10)}</td>
+                <td>${fecha}</td>
                 <td><span class="badge ${r.res_tipo === 'Respuesta Final' ? 'bg-success' : 'bg-info'}">${r.res_tipo}</span></td>
                 <td>${r.res_texto}</td>
             </tr>
@@ -295,9 +348,10 @@ function renderAuditBitacora(bitacora) {
     const tbody = document.getElementById('tbody_audit');
     tbody.innerHTML = '';
     bitacora.forEach(entry => {
+        const fecha = entry.bit_creacion ? entry.bit_creacion.substring(0, 10) : '-';
         const row = `
             <tr>
-                <td>${entry.bit_fecha.substring(0, 10)}</td>
+                <td>${fecha}</td>
                 <td>${entry.usr_nombre} ${entry.usr_apellido}</td>
                 <td>${entry.bit_evento}</td>
             </tr>
@@ -314,11 +368,12 @@ function renderComments(comments) {
         return;
     }
     comments.forEach(c => {
+        const fecha = c.gco_creacion ? c.gco_creacion.substring(0, 10) : '-';
         const item = `
             <div class="list-group-item px-0 border-0 border-bottom">
                 <div class="d-flex justify-content-between small text-muted mb-1">
                     <strong>${c.usr_nombre} ${c.usr_apellido}</strong>
-                    <span>${c.gco_fecha.substring(0, 10)}</span>
+                    <span>${fecha}</span>
                 </div>
                 <div class="small">${c.gco_comentario}</div>
             </div>
@@ -362,6 +417,14 @@ function renderDestinos(destinos) {
 
 async function loadDocuments() {
     try {
+        const container = document.getElementById('lista_documentos');
+        container.innerHTML = `
+            <div class="flex flex-col items-center justify-center py-8 text-slate-400">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-blue mb-2"></div>
+                <span class="text-xs font-medium uppercase tracking-widest">Buscando...</span>
+            </div>
+        `;
+
         const response = await fetch(`${window.API_BASE_URL}/gesdoc/general.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -369,29 +432,50 @@ async function loadDocuments() {
             credentials: 'include'
         });
         const result = await response.json();
-        const container = document.getElementById('lista_documentos');
         container.innerHTML = '';
 
-        if (result.status === 'success' && result.documentos) {
+        if (result.status === 'success' && result.documentos && result.documentos.length > 0) {
+            const grid = document.createElement('div');
+            grid.className = 'grid grid-cols-1 gap-2';
+
             result.documentos.forEach(doc => {
                 const item = document.createElement('div');
-                item.className = 'list-group-item list-group-item-action d-flex justify-content-between align-items-center bg-light mb-1 border rounded';
+                item.className = 'group flex items-center justify-between p-3 bg-white border border-cyan-100 rounded-xl hover:border-primary-blue hover:shadow-md transition-all duration-200';
                 item.innerHTML = `
-                    <div class="text-truncate" style="max-width: 80%;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file me-2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-                        <span class="small">${doc.doc_nombre_documento}</span>
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <div class="p-2 bg-blue-50 text-primary-blue rounded-lg">
+                            <span class="material-symbols-outlined text-[20px]">description</span>
+                        </div>
+                        <div class="flex flex-col overflow-hidden">
+                            <span class="text-[13px] font-bold text-slate-700 text-truncate" title="${doc.doc_nombre_documento}">${doc.doc_nombre_documento}</span>
+                            <span class="text-[10px] text-slate-400 uppercase font-medium leading-none">${doc.doc_privado == 1 ? 'Privado' : 'Público'}</span>
+                        </div>
                     </div>
-                    <button class="btn btn-sm btn-link p-0" onclick="descargarDocumento('${doc.doc_id}', '${doc.doc_nombre_documento}')">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <button onclick="descargarDocumento('${doc.doc_id}', '${doc.doc_nombre_documento}')" 
+                            class="p-2 text-slate-400 hover:text-primary-blue hover:bg-blue-50 rounded-lg transition-colors"
+                            title="Descargar">
+                        <span class="material-symbols-outlined text-[20px]">download</span>
                     </button>
                 `;
-                container.appendChild(item);
+                grid.appendChild(item);
             });
+            container.appendChild(grid);
         } else {
-            container.innerHTML = '<div class="text-muted small">Sin documentos adjuntos.</div>';
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-10 text-slate-300 border-2 border-dashed border-cyan-50 rounded-2xl">
+                    <span class="material-symbols-outlined text-[40px] mb-2">folder_off</span>
+                    <span class="text-[11px] font-bold uppercase tracking-widest">Sin documentos adjuntos</span>
+                </div>
+            `;
         }
     } catch (e) {
         console.error("Load Documents Error:", e);
+        document.getElementById('lista_documentos').innerHTML = `
+            <div class="p-4 bg-red-50 text-red-600 rounded-xl border border-red-100 flex items-center gap-3">
+                <span class="material-symbols-outlined">error</span>
+                <span class="text-xs font-bold uppercase tracking-wide">Error al conectar con la gestor documental</span>
+            </div>
+        `;
     }
 }
 

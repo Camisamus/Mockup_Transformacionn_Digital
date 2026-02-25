@@ -195,6 +195,141 @@ include '../../api/general/header.php';
     </form>
 </div>
 
+    <!-- Modales -->
+
+
+    <!-- Si no están en un archivo aparte, incluirlos directamente del original -->
+    <div class="modal fade" id="modalFuncionarios" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold fs-6">Buscar Funcionario Interno</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="row g-2 p-3">
+                    <div class="col-md-7">
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" id="buscar_fnc_input"
+                                placeholder="Buscar por nombre o apellido...">
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <select class="form-select form-select-sm" id="filtro_area_fnc">
+                            <option value="">Todas las Áreas</option>
+                            <option value="SIN_AREA">Sin Área Asignada</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-responsive p-3" style="max-height: 400px;">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light text-uppercase small">
+                            <tr>
+                                <th>ID</th>
+                                <th>Email</th>
+                                <th>Nombre</th>
+                                <th>Apellido</th>
+                                <th class="text-end">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista_busqueda_fnc" class="small"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalReingreso" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold fs-6">Buscar Solicitud para Reingreso</h5><button type="button"
+                        class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <input type="text" class="form-control form-control-sm mb-3" id="filtroReingreso"
+                        placeholder="Buscar por código DESVE o nombre de expediente...">
+                    <div class="table-responsive" style="max-height: 400px;">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light text-uppercase small">
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Expediente</th>
+                                    <th>Fecha</th>
+                                    <th class="text-end">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista_busqueda_reingreso" class="small"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalBuscarOrganizacion" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold fs-6">Buscar Organización</h5><button type="button" class="btn-close"
+                        data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="d-flex mb-3"><input type="text" class="form-control form-control-sm me-2"
+                            id="filtroOrganizacion" placeholder="Filtrar por nombre o RUT..."><button type="button"
+                            class="btn btn-sm btn-dark" onclick="abrirModalNuevaOrganizacion()">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </button></div>
+                    <div class="table-responsive" style="max-height: 400px;">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light text-uppercase small">
+                                <tr>
+                                    <th>RUT</th>
+                                    <th>Nombre</th>
+                                    <th>Tipo</th>
+                                    <th class="text-end">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista_busqueda_org" class="small"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Nueva Organización -->
+    <div class="modal fade" id="modalNuevaOrganizacion" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold fs-6">Nueva Organización</h5><button type="button" class="btn-close"
+                        data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="form_nueva_organizacion">
+                        <div class="row g-3">
+                            <div class="col-12"><label class="form-label small fw-bold">RUT *</label><input type="text"
+                                    class="form-control" id="orgc_rut" required></div>
+                            <div class="col-12"><label class="form-label small fw-bold">Nombre *</label><input
+                                    type="text" class="form-control" id="orgc_nombre" required></div>
+                            <div class="col-6"><label class="form-label small fw-bold">Código</label><input type="text"
+                                    class="form-control" id="orgc_codigo"></div>
+                            <div class="col-6"><label class="form-label small fw-bold">RPJ</label><input type="text"
+                                    class="form-control" id="orgc_rpj"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-0"><button type="button" class="btn btn-dark btn-sm px-4"
+                        onclick="guardarNuevaOrganizacion()">Guardar</button></div>
+            </div>
+        </div>
+    </div>
+
 <script src="../../recursos/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../../recursos/js/funcionarios/desve/nuevo.js"></script>

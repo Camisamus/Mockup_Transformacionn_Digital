@@ -154,16 +154,16 @@ async function loadInitialData() {
             body: JSON.stringify({ ACCION: "CONSULTAM" })
         };
         const [orgRes, orgResDESVE, contribRes, tipoRes, prioRes, funcRes, secRes, solRes, orgComRes, areasRes] = await Promise.all([
-            fetch(`${window.API_BASE_URL}sisadmin/organizaciones/organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/desve/organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/contribuyentes_general.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}sisadmin/organizaciones/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/desve/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/general/funcionarios.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/general/sectores.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/desve/solicitudes.php`, { ...fetchOptions, body: JSON.stringify({ ACCION: "CONSULTAM", S: "REINGRESO" }) }).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/organizaciones_comunitarias_general.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/sisadmin\mantenedores\general\areas_general.php`, fetchOptions).then(r => r.json())
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/areas_general.php`, fetchOptions).then(r => r.json())
         ]);
 
         organizaciones = extractData(orgRes);
@@ -511,15 +511,14 @@ function abrirModalBuscarFuncionario() {
         const row = document.createElement('tr');
         row.setAttribute('data-area-id', f.fnc_area_id || 'SIN_AREA');
         row.innerHTML = `
-            <td>${f.fnc_id || '-'}</td>
-            <td>${f.fnc_email || '-'}</td>
             <td>
-                <div>${f.fnc_nombre || '-'}</div>
-                <div class="x-small text-muted">${f.fnc_area_nombre || 'Sin Área'}</div>
+                <div class="fw-bold text-slate-800">${f.fnc_nombre || ''} ${f.fnc_apellido || ''}</div>
+                <div class="text-slate-400 small" style="font-size: 11px;">${f.fnc_email || '-'} | ${f.fnc_area_nombre || 'Sin Área'}</div>
             </td>
-            <td>${f.fnc_apellido || '-'}</td>
             <td class="text-end">
-                <button type="button" class="btn btn-sm btn-primary" onclick="seleccionarFuncionario('${f.fnc_id}')">Seleccionar</button>
+                <button type="button" class="btn btn-sm bg-primary-blue text-white px-3 font-bold uppercase tracking-wider" 
+                    style="font-size: 10px; min-width: 100px;"
+                    onclick="seleccionarFuncionario('${f.fnc_id}')">Seleccionar</button>
             </td>
         `;
         tbody.appendChild(row);
@@ -582,10 +581,12 @@ function renderizarDestinos() {
     destinos.forEach((d, index) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td class="small">${d.usr_nombre_completo}</td>
-            <td class="text-end">
-                <button type="button" class="btn btn-sm btn-link text-danger p-0" onclick="eliminarDestino(${index})">
-                    <i data-feather="trash-2" style="width:14px"></i>
+            <td class="px-6 py-4">
+                <div class="font-bold text-slate-700">${d.usr_nombre_completo}</div>
+            </td>
+            <td class="px-6 py-4 text-end">
+                <button type="button" class="text-rose-500 hover:text-rose-700 transition-colors p-2" onclick="eliminarDestino(${index})">
+                    <span class="material-symbols-outlined text-[20px]">delete</span>
                 </button>
             </td>
         `;
