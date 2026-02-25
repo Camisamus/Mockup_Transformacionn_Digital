@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error: ${result.message}</td></tr>`;
         }
 
-        const fetchUrl2 = '../api/tareas.php';
+        const fetchUrl2 = '../api/general/tareas.php';
         const response2 = await fetch(fetchUrl2, {
             method: 'POST',
             credentials: 'include',
@@ -451,7 +451,7 @@ function guardarTarea() {
     // Aquí harás tu fetch a la API
 
     // Use relative path which is robust in this structure (Funcionarios/ -> api/)
-    const fetchUrl = '../api/tareas.php';
+    const fetchUrl = '../api/general/tareas.php';
     fetch(fetchUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -477,7 +477,7 @@ function ejecutarTerminarTarea(id) {
     const data = {};
     data['ACCION'] = 'TERMINAR';
     data['tar_id'] = id;
-    const fetchUrl = '../api/tareas.php';
+    const fetchUrl = '../api/general/tareas.php';
     fetch(fetchUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

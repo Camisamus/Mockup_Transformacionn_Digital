@@ -167,7 +167,7 @@ async function loadInitialData() {
             fetch(`${window.API_BASE_URL}sisadmin/organizaciones/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/desve/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/general/funcionarios.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/sectores.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/general/sectores.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/desve/solicitudes.php`, { ...fetchOptions, body: JSON.stringify({ ACCION: "CONSULTAM", S: "REINGRESO" }) }).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/organizaciones_comunitarias_general.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sisadmin\mantenedores\general\areas_general.php`, fetchOptions).then(r => r.json())

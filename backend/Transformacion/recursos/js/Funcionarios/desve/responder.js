@@ -129,7 +129,7 @@ async function loadLookups() {
             fetch(`${window.API_BASE_URL}sisadmin/organizaciones/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/desve/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/general/funcionarios.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/sectores.php`, fetchOptions).then(r => r.json())
+            fetch(`${window.API_BASE_URL}/general/sectores.php`, fetchOptions).then(r => r.json())
         ]);
 
         organizaciones = extractData(orgRes);

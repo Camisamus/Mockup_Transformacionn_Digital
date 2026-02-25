@@ -385,7 +385,7 @@ async function cargarListas() {
         });
 
         // Sectores
-        fetch(`${apiBase}/sectores.php`, {
+        fetch(`${apiBase}/general/sectores.php`, {
             method: 'POST',
             body: JSON.stringify(payload)
         }).then(r => r.json()).then(res => {
@@ -397,7 +397,7 @@ async function cargarListas() {
         });
 
         // Escolaridad
-        fetch(`${apiBase}/trd_cont_escolaridad.php`, {
+        fetch(`${apiBase}/general/escolaridad.php`, {
             method: 'POST',
             body: JSON.stringify(payload)
         }).then(r => r.json()).then(res => {

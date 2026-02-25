@@ -157,7 +157,7 @@ Esta es la lista de endpoints disponibles en el backend, sus métodos y las estr
 - **Método**: `GET`
 
 ### Sectores
-- **URL**: `sectores.php`
+- **URL**: `general/sectores.php`
 - **Método**: `GET`
 
 ### Prioridades

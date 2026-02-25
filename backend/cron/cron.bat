@@ -6,7 +6,7 @@ echo Abrir pagina web: %date% %time%
 echo ---------------------------------------
 
 :: 1. Abre la URL (cambia la dirección por la que necesites)
-start "" "http://localhost/Transformacion/api/notificacionesEmail.php"
+start "" "http://localhost/Transformacion/api/externo/notificacionesEmail.php"
 
 echo La pagina se ha abierto. 
 echo Esperando 24 horas para la proxima ejecucion...
