@@ -4,320 +4,347 @@ require_once '../../api/general/auth_check.php';
 include '../../api/general/header.php';
 ?>
 
-<div class="container-fluid py-4">
-    <div class="main-header mb-4">
-        <div class="header-title">
-            <h2 class="fw-bold fs-4" id="header_public_id">Modificar DESVE</h2>
-            <p class="text-muted mb-0" id="header_expediente">Actualice los campos de la solicitud</p>
-        </div>
-    </div>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+<link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet" />
 
-    <!-- Actions Card -->
-    <div class="card shadow-sm border-0 mb-4 bg-white">
-        <div class="card-body p-3">
-            <div class="row g-2 justify-content-md-end">
-                <div class="col-12 col-md-auto">
-                    <button type="submit" form="form_modificar_desve"
-                        class="btn btn-toolbar btn-dark w-100 shadow-sm d-flex align-items-center justify-content-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                            <polyline points="7 3 7 8 15 8"></polyline>
-                        </svg>
-                        Guardar Cambios
-                    </button>
-                </div>
-                <div class="col-12 col-md-auto">
-                    <button type="button" id="btn_cancelar_toolbar"
-                        class="btn btn-toolbar btn-outline-secondary w-100 shadow-sm d-flex align-items-center justify-content-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="15" y1="9" x2="9" y2="15"></line>
-                            <line x1="9" y1="9" x2="15" y2="15"></line>
-                        </svg>
-                        Cancelar
-                    </button>
-                </div>
-                <div class="col-12 col-md-auto">
-                    <button type="button" class="btn btn-toolbar btn-dark w-100 shadow-sm"
-                        onclick="location.href='index.php'">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="3" width="7" height="7"></rect>
-                            <rect x="14" y="3" width="7" height="7"></rect>
-                            <rect x="14" y="14" width="7" height="7"></rect>
-                            <rect x="3" y="14" width="7" height="7"></rect>
-                        </svg>
-                        Bandeja DESVE
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+<script id="tailwind-config">
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    "primary-blue": "#1a5f9c",
+                    "gob-warning": "#f59e0b",
+                    "gob-success": "#10b981",
+                    "cyan-border": "#E0FFFF",
+                    "gray-info": "#D3D3D3",
+                    "soft-cyan": "#F0FFFF"
+                },
+                fontFamily: { "sans": ["Inter", "sans-serif"] }
+            }
+        }
+    }
+</script>
 
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .material-symbols-outlined {
+        font-family: 'Material Symbols Outlined' !important;
+        vertical-align: middle;
+        line-height: 1;
+    }
+
+    .gob-card {
+        border: 1px solid rgba(226, 232, 240, 0.6);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .input-readonly-dashed {
+        background-color: #f9fafb !important;
+        border-style: dashed !important;
+        border-width: 1.5px !important;
+    }
+
+    .drop-zone {
+        border: 2px dashed #E0FFFF;
+        border-radius: 1rem;
+        padding: 2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        background-color: #F0FFFF;
+    }
+
+    .drop-zone:hover {
+        border-color: #1a5f9c;
+        background-color: #e0f2fe;
+    }
+</style>
+
+<div class="max-w-[1400px] mx-auto p-4 lg:p-8 space-y-6">
     <form id="form_modificar_desve">
-        <div class="row g-4">
-            <!-- Left Column: Main Form -->
-            <div class="col-lg-8">
-                <!-- General Info -->
-                <div class="card shadow-sm border-0 border-start border-4 border-primary mb-4">
-                    <div class="card-body p-4">
-                        <h5 class="fw-bold fs-6 mb-4">Información de la Solicitud</h5>
-                        <div class="row g-3">
-                            <div class="col-12">
-                                <label for="NombreExpediente" class="form-label small fw-bold">Nombre del
-                                    Expediente</label>
-                                <input type="text" class="form-control form-control-sm" id="NombreExpediente" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="Codigo_DESVE" class="form-label small fw-bold">Codigo DESVE</label>
-                                <input type="text" class="form-control form-control-sm" id="Codigo_DESVE"
-                                    placeholder="Ej: Consulta por Luminaria">
-                            </div>
 
-                            <div class="col-md-6">
-                                <label for="ReingresoDisplay" class="form-label small fw-bold">Reingreso</label>
-                                <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control" id="ReingresoDisplay" readonly
-                                        placeholder="Seleccione solicitud...">
-                                    <button class="btn btn-outline-secondary" type="button"
-                                        onclick="abrirModalReingreso()">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <circle cx="11" cy="11" r="8"></circle>
-                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <input type="hidden" id="Reingreso">
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="ID_Organizacion" class="form-label small fw-bold">Tipo de
-                                    Organización</label>
-                                <select class="form-select form-select-sm" id="ID_Organizacion" required>
-                                    <option value="" selected disabled>Seleccione tipo...</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="OrigenSolicitudDisplay" class="form-label small fw-bold">Origen de
-                                    Solicitud</label>
-                                <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control" id="OrigenSolicitudDisplay" readonly
-                                        placeholder="Seleccione organización...">
-                                    <input type="hidden" id="OrigenSolicitud" required>
-                                    <button class="btn btn-outline-secondary" type="button" id="btn_buscar_origen"
-                                        onclick="abrirModalBuscarOrganizacion()">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <circle cx="11" cy="11" r="8"></circle>
-                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                        </svg>
-                                    </button>
-                                    <button class="btn btn-outline-secondary" type="button" id="btn_nuevo_origen">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round">
-                                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="FechaUltimaRecepcion" class="form-label small fw-bold">Fecha de
-                                    Recepción</label>
-                                <input type="date" class="form-control form-control-sm" id="FechaUltimaRecepcion"
-                                    required>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="Sector" class="form-label small fw-bold">Sector</label>
-                                <select class="form-select form-select-sm" id="Sector" required>
-                                    <!-- Populated via JS -->
-                                </select>
-                            </div>
-
-                            <div class="col-12">
-                                <label for="DetalleIngreso" class="form-label small fw-bold">Detalle de
-                                    Ingreso</label>
-                                <textarea class="form-control form-control-sm" id="DetalleIngreso" rows="4"></textarea>
-                            </div>
-
-                            <div class="col-12">
-                                <label for="Observaciones" class="form-label small fw-bold">Observaciones</label>
-                                <textarea class="form-control form-control-sm" id="Observaciones" rows="3"></textarea>
-                            </div>
-
-                            <div class="col-12">
-                                <label for="Geoloc" class="form-label small fw-bold">Agregar Geolocalizacion</label>
-                                <input type="checkbox" id="chk_geoloc">
-                            </div>
-
-                            <div id="geolocalizacion_area" class="col-12" style="display: none;">
-                                <div class="row g-3 px-3">
-                                    <div class="col-md-6">
-                                        <label for="Geo_dir" class="form-label small fw-bold">Dirección</label>
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control" id="Geo_dir"
-                                                placeholder="Calle, número">
-                                            <button class="btn btn-outline-secondary" type="button" id="btn_buscar_geo">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <circle cx="11" cy="11" r="8"></circle>
-                                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label for="Latitud" class="form-label small fw-bold">Latitud</label>
-                                        <input type="text" class="form-control form-control-sm" id="Latitud"
-                                            placeholder="-33.024..." readonly>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label for="Longitud" class="form-label small fw-bold">Longitud</label>
-                                        <input type="text" class="form-control form-control-sm" id="Longitud"
-                                            placeholder="-71.557..." readonly>
-                                    </div>
-                                    <div class="col-12 pt-2">
-                                        <div id="map_desve"
-                                            style="height: 350px; width: 100%; border-radius: 8px; border: 1px solid #dee2e6;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Destinatarios -->
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="fw-bold fs-6 mb-0">Destinatarios</h5>
-                            <button type="button" class="btn btn-toolbar btn-dark"
-                                onclick="abrirModalBuscarFuncionario()">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <circle cx="11" cy="11" r="8"></circle>
-                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                </svg>
-                                Buscar Funcionario
-                            </button>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0" id="tabla_destinos">
-                                <thead class="table-light text-uppercase small">
-                                    <tr>
-                                        <th>Funcionario</th>
-                                        <th>Email</th>
-                                        <th class="text-end">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tbody_destinos" class="small">
-                                    <tr id="placeholder_destinos">
-                                        <td colspan="2" class="text-center text-muted py-4">No hay destinatarios
-                                            agregados.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Bitácora de Respuestas -->
-                <div class="card shadow-sm border-0 mb-4 bg-light">
-                    <div class="card-body p-4">
-                        <h5 class="fw-bold fs-6 mb-3">Respuestas del Trámite</h5>
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0" id="tabla_respuestas">
-                                <thead class="table-light text-uppercase small">
-                                    <tr>
-                                        <th>Fecha</th>
-                                        <th>Funcionario</th>
-                                        <th>Acción</th>
-                                        <th>Contenido</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tbody_respuestas" class="small">
-                                    <!-- Dynamic -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+        <div
+            class="bg-white border border-slate-100 rounded-3xl p-6 lg:p-10 flex flex-col lg:flex-row justify-between items-start lg:items-center shadow-sm gap-6 sticky top-4 z-20">
+            <div class="space-y-1 w-full text-left">
+                <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight" id="header_public_id">
+                    Modificar Solicitud</h1>
+                <p class="text-slate-400 text-sm lg:text-[15px] font-medium" id="header_expediente">Actualice los campos
+                    requeridos de la solicitud.</p>
             </div>
 
-            <!-- Right Column: Sidebar -->
-            <div class="col-lg-4">
-                <!-- Status Card -->
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-body p-4">
-                        <h5 class="fw-bold fs-6 mb-3">Estado y Tiempos</h5>
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold d-block">Estado de Entrega</label>
-                            <div class="btn-group w-100" role="group">
-                                <input type="radio" class="btn-check" name="EstadoEntrega" id="estadoPendiente"
-                                    value="0">
-                                <label class="btn btn-outline-warning btn-sm" for="estadoPendiente">Pendiente</label>
-
-                                <input type="radio" class="btn-check" name="EstadoEntrega" id="estadoRespondido"
-                                    value="1">
-                                <label class="btn btn-outline-success btn-sm" for="estadoRespondido">Respondido</label>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold">Días Transcurridos</label>
-                            <input type="text" class="form-control form-control-sm bg-light" id="info_dias_ingreso"
-                                readonly>
-                        </div>
-                        <div class="mb-0">
-                            <label class="form-label small fw-bold">Días para Vencimiento</label>
-                            <input type="text" class="form-control form-control-sm bg-light" id="info_dias_vencimiento"
-                                readonly>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Documentos -->
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-body p-4">
-                        <h5 class="fw-bold fs-6 mb-3">Documentos Adjuntos</h5>
-                        <div id="lista_documentos_guardados" class="list-group list-group-flush small mb-3">
-                            <!-- Existing -->
-                        </div>
-
-                        <label class="form-label small fw-bold">Añadir Nuevos Archivos</label>
-                        <div class="drop-zone mb-3" id="drop_zone">
-                            <input type="file" id="inputArchivosSolicitud" hidden multiple>
-                            <div class="small text-muted">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="mb-1">
-                                    <path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 4.16"></path>
-                                    <polyline points="16 10 12 6 8 10"></polyline>
-                                    <line x1="12" y1="6" x2="12" y2="18"></line>
-                                </svg>
-                                <br>Haga clic para adjuntar
-                            </div>
-                        </div>
-                        <div id="listaArchivosSolicitud" class="list-group list-group-flush small">
-                            <!-- Selected -->
-                        </div>
-                    </div>
-                </div>
-
+            <div class="flex items-center gap-4 w-full lg:w-auto justify-end">
+                <button type="button" id="btn_cancelar_toolbar"
+                    class="text-slate-400 font-bold hover:text-slate-600 transition-all text-[13px] uppercase tracking-wider">Cancelar</button>
+                <button type="submit"
+                    class="flex-1 lg:flex-none flex items-center justify-center gap-2 bg-primary-blue hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-[13px] uppercase tracking-wider">
+                    <span class="material-symbols-outlined text-[20px]">save</span> GUARDAR CAMBIOS
+                </button>
             </div>
         </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-4">
+
+            <div class="lg:col-span-8 space-y-6">
+
+                <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
+                        <span class="material-symbols-outlined text-primary-blue">edit_document</span>
+                        <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">1. Información de la
+                            Solicitud</h3>
+                    </div>
+
+                    <div class="p-6 lg:p-10 space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            <div class="md:col-span-3 space-y-2">
+                                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Nombre del
+                                    Expediente</label>
+                                <input type="text" id="NombreExpediente" placeholder="Ej: Consulta por Luminaria"
+                                    class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3 bg-[#D3D3D3]/20"
+                                    required />
+                            </div>
+                            <div class="space-y-2">
+                                <label
+                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest text-right block">Código
+                                    DESVE</label>
+                                <input type="text" id="Codigo_DESVE" placeholder="123"
+                                    class="w-full text-center font-mono text-lg text-primary-blue bg-blue-50 py-3 rounded-xl border border-blue-100 font-bold" />
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label
+                                class="text-[11px] font-bold text-slate-400 uppercase tracking-widest text-center block">Reingreso</label>
+                            <div class="flex shadow-sm h-[48px]">
+                                <input type="text" id="ReingresoDisplay" readonly
+                                    placeholder="Seleccione solicitud previa..."
+                                    class="flex-grow border-slate-200 rounded-l-xl text-[15px] italic input-readonly-dashed px-4" />
+                                <input type="hidden" id="Reingreso" value="">
+                                <button type="button" onclick="abrirModalReingreso()"
+                                    class="bg-slate-800 text-white px-6 rounded-r-xl transition-colors"><span
+                                        class="material-symbols-outlined">search</span></button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Tipo de
+                                    Solicitante</label>
+                                <select id="ID_Organizacion" required
+                                    class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3 bg-[#D3D3D3]/20">
+                                    <option value="" disabled selected>Seleccione tipo...</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Nombre de
+                                    la entidad/Vecino</label>
+                                <div class="flex shadow-sm h-[48px]">
+                                    <input type="text" id="OrigenSolicitudDisplay" readonly
+                                        placeholder="Seleccione organización..."
+                                        class="flex-grow border-slate-200 rounded-l-xl text-[15px] input-readonly-dashed px-4" />
+                                    <input type="hidden" id="OrigenSolicitud" required>
+                                    <button type="button" onclick="abrirModalBuscarOrganizacion()"
+                                        id="btn_buscar_origen"
+                                        class="bg-slate-100 px-4 border-y border-slate-200 flex items-center text-slate-600"><span
+                                            class="material-symbols-outlined">search</span></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Fecha de
+                                    Recepción</label>
+                                <input type="date" id="FechaUltimaRecepcion" required
+                                    class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3 bg-[#D3D3D3]/20" />
+                            </div>
+                            <div class="space-y-2">
+                                <label
+                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Sector</label>
+                                <select id="Sector" required
+                                    class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3 bg-[#D3D3D3]/20"></select>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Detalle de
+                                Ingreso</label>
+                            <textarea id="DetalleIngreso" name="DetalleIngreso" rows="4"
+                                class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-4 bg-[#D3D3D3]/30 italic"
+                                placeholder="Escriba el detalle aquí..." required></textarea>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label
+                                class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Observaciones</label>
+                            <textarea id="Observaciones" rows="2"
+                                class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-4 bg-[#D3D3D3]/30"
+                                placeholder="Comentarios adicionales..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-50 flex items-center justify-between bg-white">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary-blue">location_on</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">2. Geolocalización</h3>
+                        </div>
+                        <div class="flex items-center bg-slate-100 px-4 py-2 rounded-xl">
+                            <input type="checkbox" id="chk_geoloc"
+                                class="w-4 h-4 text-primary-blue border-slate-300 rounded focus:ring-primary-blue cursor-pointer">
+                            <label for="chk_geoloc"
+                                class="ml-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest cursor-pointer">Activar
+                                Mapa</label>
+                        </div>
+                    </div>
+                    <div id="geolocalizacion_area" class="p-6 lg:p-10 space-y-6 hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div class="md:col-span-2 space-y-2">
+                                <label
+                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Dirección</label>
+                                <div class="flex shadow-sm h-[48px]"><input type="text" id="Geo_dir"
+                                        placeholder="Calle, número"
+                                        class="flex-grow border-slate-200 rounded-l-xl px-4" /><button type="button"
+                                        id="btn_buscar_geo" class="bg-slate-800 text-white px-6 rounded-r-xl"><span
+                                            class="material-symbols-outlined">search</span></button></div>
+                            </div>
+                            <div class="space-y-2"><label
+                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Latitud</label><input
+                                    type="text" id="Latitud" readonly
+                                    class="w-full border-slate-200 rounded-xl text-sm bg-slate-50 p-3" /></div>
+                            <div class="space-y-2"><label
+                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Longitud</label><input
+                                    type="text" id="Longitud" readonly
+                                    class="w-full border-slate-200 rounded-xl text-sm bg-slate-50 p-3" /></div>
+                        </div>
+                        <div id="map_desve" style="height: 400px;"
+                            class="w-full border border-slate-100 rounded-2xl shadow-inner"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-50 flex items-center justify-between bg-white">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary-blue">group_add</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">3. Destinatarios</h3>
+                        </div>
+                        <button type="button" onclick="abrirModalBuscarFuncionario()"
+                            class="flex items-center gap-2 bg-slate-800 hover:bg-black text-white font-bold py-1.5 px-4 rounded-lg text-[10px] uppercase tracking-wider transition-all">
+                            <span class="material-symbols-outlined text-sm">person_add</span> Agregar
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-[14px]" id="tabla_destinos">
+                            <thead
+                                class="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] tracking-widest border-b border-slate-100">
+                                <tr>
+                                    <th class="px-6 py-3">Funcionario</th>
+                                    <th class="px-6 py-3">Email</th>
+                                    <th class="px-6 py-3 text-right">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_destinos" class="divide-y divide-slate-50 text-slate-600 italic">
+                                <tr id="placeholder_destinos">
+                                    <td colspan="3" class="px-6 py-8 text-center text-slate-400">Cargando
+                                        destinatarios...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-50 bg-slate-50/50">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-gob-success">forum</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Bitácora de Respuestas
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left" id="tabla_respuestas">
+                            <thead
+                                class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
+                                <tr>
+                                    <th class="px-6 py-4">Fecha</th>
+                                    <th class="px-6 py-4">Funcionario</th>
+                                    <th class="px-6 py-4">Acción</th>
+                                    <th class="px-6 py-4">Contenido</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_respuestas" class="divide-y divide-slate-50 text-[13px] text-slate-600">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-4 space-y-6">
+
+                <div class="bg-[#D3D3D3] border border-slate-300 rounded-3xl p-8 shadow-sm space-y-6">
+                    <h2 class="text-xs font-bold uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">settings_suggest</span> Estado y Tiempos
+                    </h2>
+
+                    <div class="space-y-3">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Estado de
+                            Entrega</label>
+                        <div class="flex p-1 bg-white/50 rounded-xl border border-slate-200 shadow-inner">
+                            <input type="radio" name="EstadoEntrega" id="estadoPendiente" value="0"
+                                class="hidden peer/p">
+                            <label for="estadoPendiente"
+                                class="flex-1 text-center py-2 text-[11px] font-bold rounded-lg cursor-pointer peer-checked/p:bg-gob-warning peer-checked/p:text-white text-slate-500 transition-all uppercase">Pendiente</label>
+
+                            <input type="radio" name="EstadoEntrega" id="estadoRespondido" value="1"
+                                class="hidden peer/r">
+                            <label for="estadoRespondido"
+                                class="flex-1 text-center py-2 text-[11px] font-bold rounded-lg cursor-pointer peer-checked/r:bg-gob-success peer-checked/r:text-white text-slate-500 transition-all uppercase">Respondido</label>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 border-t border-slate-300 pt-6">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Días
+                                Transcurridos</label>
+                            <input type="text" id="info_dias_ingreso" readonly
+                                class="w-full bg-white/40 border-none rounded-xl text-lg font-black text-slate-700 text-center focus:ring-0" />
+                        </div>
+                        <div class="space-y-1">
+                            <label
+                                class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Restantes</label>
+                            <input type="text" id="info_dias_vencimiento" readonly
+                                class="w-full bg-white/40 border-none rounded-xl text-lg font-black text-slate-700 text-center focus:ring-0" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-soft-cyan border border-cyan-border rounded-2xl overflow-hidden shadow-sm">
+                    <div class="p-5 border-b border-cyan-border flex items-center gap-2"><span
+                            class="material-symbols-outlined text-primary-blue text-[20px]">attach_file</span>
+                        <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest">Documentos</h3>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div id="lista_documentos_guardados" class="space-y-2 mb-4"></div>
+                        <div class="drop-zone" id="drop_zone">
+                            <input type="file" id="inputArchivosSolicitud" hidden multiple><span
+                                class="material-symbols-outlined text-slate-300 text-3xl mb-1">cloud_upload</span>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Subir nuevos
+                                archivos</p>
+                        </div>
+                        <div id="listaArchivosSolicitud" class="space-y-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <input type="hidden" id="idIngreso">
         <input type="hidden" id="IngresoDesve">
         <input type="hidden" id="Prioridad">
@@ -327,228 +354,32 @@ include '../../api/general/header.php';
     </form>
 </div>
 
-<!-- Modal Nuevo Origen Especial -->
-<div class="modal fade" id="modalNuevoOrigenEspecial" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-light">
-                <h5 class="modal-title fw-bold fs-6">Agregar Origen Especial</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body p-4">
-                <div class="mb-0">
-                    <label for="textoNuevoOrigenEspecial" class="form-label small fw-bold">Nuevo Origen
-                        Especial</label>
-                    <input type="text" class="form-control form-control-sm" id="textoNuevoOrigenEspecial"
-                        placeholder="Escriba aquí el origen especial...">
-                </div>
-            </div>
-            <div class="modal-footer border-0 bg-light">
-                <button type="button" class="btn btn-link text-muted text-decoration-none small"
-                    data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-dark btn-sm px-4"
-                    onclick="guardarOrigenEspecial()">Guardar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Funcionarios -->
 <div class="modal fade" id="modalFuncionarios" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-light">
-                <h5 class="modal-title fw-bold fs-6">Buscar Funcionario Interno</h5>
+        <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden">
+            <div class="modal-header bg-slate-50 border-b p-6">
+                <h5 class="modal-title font-extrabold text-slate-800 text-sm uppercase tracking-widest">Buscar
+                    Funcionario</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="row g-2 mb-4">
-                <div class="col-md-7">
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-text bg-white border-end-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                            </svg>
-                        </span>
-                        <input type="text" class="form-control border-start-0" id="buscar_fnc_input"
-                            placeholder="Buscar por nombre o apellido...">
-                    </div>
-                </div>
-                <div class="col-md-5">
-                    <select class="form-select form-select-sm" id="filtro_area_fnc">
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <input type="text" class="rounded-xl border-slate-200 text-sm" id="buscar_fnc_input"
+                        placeholder="Nombre o apellido...">
+                    <select class="rounded-xl border-slate-200 text-sm" id="filtro_area_fnc">
                         <option value="">Todas las Áreas</option>
-                        <option value="SIN_AREA">Sin Área Asignada</option>
-                        <!-- Dynamic -->
                     </select>
                 </div>
-            </div>
-            <div class="table-responsive" style="max-height: 400px;">
-                <table class="table table-hover align-middle">
-                    <thead class="table-light text-uppercase small">
-                        <tr>
-                            <th>ID</th>
-                            <th>Email</th>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th class="text-end">Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody id="lista_busqueda_fnc" class="small">
-                        <!-- Populated dynamically -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-
-<!-- Modal Nuevo Origen Especial -->
-<div class="modal fade" id="modalNuevoOrigenEspecial" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-light">
-                <h5 class="modal-title fw-bold fs-6">Agregar Origen Especial</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body p-4">
-                <div class="mb-0">
-                    <label for="textoNuevoOrigenEspecial" class="form-label small fw-bold">Nuevo Origen
-                        Especial</label>
-                    <input type="text" class="form-control form-control-sm" id="textoNuevoOrigenEspecial"
-                        placeholder="Escriba aquí el origen especial...">
-                </div>
-            </div>
-            <div class="modal-footer border-0 bg-light">
-                <button type="button" class="btn btn-link text-muted text-decoration-none small"
-                    data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-dark btn-sm px-4"
-                    onclick="guardarOrigenEspecial()">Guardar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Buscar Contribuyente -->
-<div class="modal fade" id="modalBuscarContribuyente" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-light">
-                <h5 class="modal-title fw-bold fs-6">Buscar Contribuyente</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body p-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <input type="text" class="form-control form-control-sm me-2" id="filtroContribuyente"
-                        placeholder="Filtrar por RUT o nombre...">
-                    <button type="button" class="btn btn-sm btn-dark" onclick="abrirModalNuevoContribuyente()">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Nuevo
-                    </button>
-                </div>
-                <div class="table-responsive" style="max-height: 400px;">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light text-uppercase small">
+                <div class="table-responsive max-h-[400px] rounded-xl border border-slate-100">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-slate-50 text-[10px] font-bold text-slate-400 uppercase border-b">
                             <tr>
-                                <th>RUT</th>
-                                <th>Nombre Completo</th>
-                                <th class="text-end">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="lista_busqueda_contrib" class="small">
-                            <!-- Populated dynamically -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Nuevo Contribuyente -->
-<div class="modal fade" id="modalNuevoContribuyente" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-light">
-                <h5 class="modal-title fw-bold fs-6">Nuevo Contribuyente</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body p-4">
-                <form id="form_nuevo_contribuyente">
-                    <div class="row g-3">
-                        <div class="col-12">
-                            <label for="nc_rut" class="form-label small fw-bold">RUT <span
-                                    class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-sm" id="nc_rut" required
-                                placeholder="12345678-9">
-                        </div>
-                        <div class="col-12">
-                            <label for="nc_nombre" class="form-label small fw-bold">Nombre <span
-                                    class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-sm" id="nc_nombre" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="nc_paterno" class="form-label small fw-bold">Apellido Paterno</label>
-                            <input type="text" class="form-control form-control-sm" id="nc_paterno">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="nc_materno" class="form-label small fw-bold">Apellido Materno <span
-                                    class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-sm" id="nc_materno" required>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer border-0 bg-light">
-                <button type="button" class="btn btn-link text-muted text-decoration-none small"
-                    data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-dark btn-sm px-4"
-                    onclick="guardarNuevoContribuyente()">Guardar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Buscar Organización -->
-<div class="modal fade" id="modalBuscarOrganizacion" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-light">
-                <h5 class="modal-title fw-bold fs-6">Buscar Organización</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body p-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <input type="text" class="form-control form-control-sm me-2" id="filtroOrganizacion"
-                        placeholder="Filtrar por nombre o RUT...">
-                    <button type="button" class="btn btn-sm btn-dark" onclick="abrirModalNuevaOrganizacion()">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Nuevo
-                    </button>
-                </div>
-                <div class="table-responsive" style="max-height: 400px;">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light text-uppercase small">
-                            <tr>
-                                <th>RUT</th>
+                                <th>Email</th>
                                 <th>Nombre</th>
-                                <th>Tipo</th>
                                 <th class="text-end">Acción</th>
                             </tr>
                         </thead>
-                        <tbody id="lista_busqueda_org" class="small">
-                            <!-- Populated dynamically -->
-                        </tbody>
+                        <tbody id="lista_busqueda_fnc" class="text-[13px] text-slate-600"></tbody>
                     </table>
                 </div>
             </div>
@@ -556,74 +387,27 @@ include '../../api/general/header.php';
     </div>
 </div>
 
-<!-- Modal Nueva Organización (Comunitaria) -->
-<div class="modal fade" id="modalNuevaOrganizacion" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-light">
-                <h5 class="modal-title fw-bold fs-6">Nueva Organización</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body p-4">
-                <form id="form_nueva_organizacion">
-                    <div class="row g-3">
-                        <div class="col-12">
-                            <label for="orgc_rut" class="form-label small fw-bold">RUT</label>
-                            <input type="text" class="form-control form-control-sm" id="orgc_rut"
-                                placeholder="12.345.678-9">
-                        </div>
-                        <div class="col-12">
-                            <label for="orgc_nombre" class="form-label small fw-bold">Nombre <span
-                                    class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-sm" id="orgc_nombre" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="orgc_codigo" class="form-label small fw-bold">Código</label>
-                            <input type="text" class="form-control form-control-sm" id="orgc_codigo">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="orgc_rpj" class="form-label small fw-bold">RPJ</label>
-                            <input type="text" class="form-control form-control-sm" id="orgc_rpj">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer border-0 bg-light">
-                <button type="button" class="btn btn-link text-muted text-decoration-none small"
-                    data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-dark btn-sm px-4"
-                    onclick="guardarNuevaOrganizacion()">Guardar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Reingreso -->
 <div class="modal fade" id="modalReingreso" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-light">
-                <h5 class="modal-title fw-bold fs-6">Buscar Solicitud para Reingreso</h5>
+        <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden">
+            <div class="modal-header bg-slate-50 border-b p-6">
+                <h5 class="modal-title font-extrabold text-slate-800 text-sm uppercase tracking-widest">Buscar Solicitud
+                    Previa</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body p-4">
-                <div class="mb-3">
-                    <input type="text" class="form-control form-control-sm" id="filtroReingreso"
-                        placeholder="Buscar por código DESVE o nombre de expediente...">
-                </div>
-                <div class="table-responsive" style="max-height: 400px;">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light text-uppercase small">
+            <div class="p-6">
+                <input type="text" class="w-full rounded-xl border-slate-200 text-sm mb-4" id="filtroReingreso"
+                    placeholder="Código DESVE o nombre...">
+                <div class="table-responsive max-h-[400px] rounded-xl border border-slate-100">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-slate-50 text-[10px] font-bold text-slate-400 uppercase border-b">
                             <tr>
-                                <th>Código DESVE</th>
+                                <th>Código</th>
                                 <th>Expediente</th>
-                                <th>Fecha</th>
                                 <th class="text-end">Acción</th>
                             </tr>
                         </thead>
-                        <tbody id="lista_busqueda_reingreso" class="small">
-                            <!-- Populated dynamically -->
-                        </tbody>
+                        <tbody id="lista_busqueda_reingreso" class="text-[13px] text-slate-600"></tbody>
                     </table>
                 </div>
             </div>
@@ -632,20 +416,23 @@ include '../../api/general/header.php';
 </div>
 
 <script src="../../recursos/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/feather-icons"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    if (window.feather) feather.replace();
-</script>
-
+<script src="../../recursos/js/helpers.js"></script>
 <script src="../../recursos/js/funcionarios/desve/modificar.js"></script>
 
-<?php
-use App\Config\AppConfig;
-$googleMapsKey = AppConfig::getGoogleMapsKey();
-?>
+<script>
+    document.getElementById('chk_geoloc').addEventListener('change', function () {
+        const area = document.getElementById('geolocalizacion_area');
+        area.classList.toggle('hidden', !this.checked);
+        if (this.checked && typeof initMap === 'function') {
+            setTimeout(() => { if (window.map) google.maps.event.trigger(window.map, 'resize'); }, 100);
+        }
+    });
+    console.log("Modificar.php: Injected script check.");
+</script>
+<?php use App\Config\AppConfig;
+$googleMapsKey = AppConfig::getGoogleMapsKey(); ?>
 <script
     src="https://maps.googleapis.com/maps/api/js?key=<?php echo $googleMapsKey; ?>&libraries=places&callback=initMap"
     async defer></script>
-
 <?php include '../../api/general/footer.php'; ?>

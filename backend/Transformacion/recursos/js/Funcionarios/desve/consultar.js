@@ -33,6 +33,12 @@ let sectores = [];
 let organizacionesComunitarias = [];
 let contribuyentes = [];
 let currentSolRegistroId = null;
+let currentUser = null;
+
+// Paginación Auditoría
+let auditData = [];
+let currentAuditPage = 1;
+const itemsPerPage = 10;
 
 // Map variables
 let map, marker;
@@ -307,8 +313,16 @@ async function loadSolicitationDetails(id) {
                     : calcularVencimiento();
             // Render Bitacoras & Destinations
             renderResponseBitacora(sol.respuestas || []);
-            renderAuditBitacora(sol.bitacora || []);
-            renderComments(sol.comentarios || []);
+
+            // Auditoría con paginación (Orden descendente)
+            auditData = (sol.bitacora || []).sort((a, b) => {
+                const dateA = a.bit_creacion || a.bit_fecha || '';
+                const dateB = b.bit_creacion || b.bit_fecha || '';
+                return new Date(dateB) - new Date(dateA);
+            });
+            renderAuditPage(1);
+
+            renderComentarios(sol.comentarios || []);
             renderReingresos(sol.reingresos || []);
             renderDestinos(sol.destinos || []);
 
@@ -332,35 +346,120 @@ function renderResponseBitacora(respuestas) {
         const fecha = r.res_creacion ? r.res_creacion.substring(0, 10) : '-';
 
         const row = `
-            <tr>
-                <td>${r.res_id}</td>
-                <td>${name}</td>
-                <td>${fecha}</td>
-                <td><span class="badge ${r.res_tipo === 'Respuesta Final' ? 'bg-success' : 'bg-info'}">${r.res_tipo}</span></td>
-                <td>${r.res_texto}</td>
+            <tr class="hover:bg-slate-50/50 transition-colors">
+                <td class="px-6 py-4 font-mono text-xs text-slate-400">${r.res_id}</td>
+                <td class="px-6 py-4 font-bold text-slate-700">${name}</td>
+                <td class="px-6 py-4 text-slate-500">${fecha}</td>
+                <td class="px-6 py-4">
+                    <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${r.res_tipo === 'Respuesta Final' ? 'bg-gob-success/10 text-gob-success border border-gob-success/20' : 'bg-primary-blue/10 text-primary-blue border border-primary-blue/20'}">
+                        ${r.res_tipo}
+                    </span>
+                </td>
+                <td class="px-6 py-4 text-slate-600 italic leading-relaxed">${r.res_texto}</td>
             </tr>
         `;
         tbody.insertAdjacentHTML('beforeend', row);
     });
 }
 
-function renderAuditBitacora(bitacora) {
+function toggleAuditoria() {
+    const collapse = document.getElementById('collapse_audit');
+    const btn = document.getElementById('btn_toggle_audit');
+    const isHidden = collapse.classList.contains('hidden');
+
+    if (isHidden) {
+        collapse.classList.remove('hidden');
+        btn.style.transform = 'rotate(180deg)';
+    } else {
+        collapse.classList.add('hidden');
+        btn.style.transform = 'rotate(0deg)';
+    }
+}
+
+window.renderAuditPage = function (page) {
+    currentAuditPage = page;
     const tbody = document.getElementById('tbody_audit');
     tbody.innerHTML = '';
-    bitacora.forEach(entry => {
-        const fecha = entry.bit_creacion ? entry.bit_creacion.substring(0, 10) : '-';
+
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const pageItems = auditData.slice(start, end);
+
+    if (pageItems.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-10 text-center text-slate-400">No hay registros de auditoría.</td></tr>';
+        document.getElementById('pagination_audit').innerHTML = '';
+        return;
+    }
+
+    pageItems.forEach(entry => {
+        const fechaFull = entry.bit_creacion || entry.bit_fecha || '';
+        const fecha = fechaFull.substring(0, 10) || '-';
+        const hora = fechaFull.substring(11, 16) || '';
+
         const row = `
-            <tr>
-                <td>${fecha}</td>
-                <td>${entry.usr_nombre} ${entry.usr_apellido}</td>
-                <td>${entry.bit_evento}</td>
+            <tr class="hover:bg-slate-50/50 transition-colors">
+                <td class="px-6 py-4">
+                    <div class="text-slate-700 font-medium">${fecha}</div>
+                    <div class="text-slate-400 text-[10px]">${hora}</div>
+                </td>
+                <td class="px-6 py-4 font-bold text-slate-700">${entry.usr_nombre} ${entry.usr_apellido}</td>
+                <td class="px-6 py-4">
+                    <div class="text-slate-600 text-[13px]">${entry.bit_evento}</div>
+                </td>
             </tr>
         `;
         tbody.insertAdjacentHTML('beforeend', row);
     });
+
+    renderAuditPagination();
+};
+
+function renderAuditPagination() {
+    const container = document.getElementById('pagination_audit');
+    const totalPages = Math.ceil(auditData.length / itemsPerPage);
+    if (totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+    }
+
+    let html = '';
+
+    // Botón Anterior
+    html += `
+        <button onclick="renderAuditPage(${currentAuditPage - 1})" 
+            ${currentAuditPage === 1 ? 'disabled' : ''}
+            class="p-2 rounded-lg border border-slate-200 text-slate-500 hover:bg-white hover:text-primary-blue disabled:opacity-30 disabled:hover:bg-transparent transition-all">
+            <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+        </button>
+    `;
+
+    // Páginas
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || (i >= currentAuditPage - 1 && i <= currentAuditPage + 1)) {
+            html += `
+                <button onclick="renderAuditPage(${i})" 
+                    class="min-w-[32px] h-[32px] rounded-lg text-xs font-bold transition-all ${currentAuditPage === i ? 'bg-primary-blue text-white shadow-md' : 'text-slate-500 hover:bg-white hover:text-primary-blue border border-transparent hover:border-slate-200'}">
+                    ${i}
+                </button>
+            `;
+        } else if (i === currentAuditPage - 2 || i === currentAuditPage + 2) {
+            html += `<span class="text-slate-300 px-1">...</span>`;
+        }
+    }
+
+    // Botón Siguiente
+    html += `
+        <button onclick="renderAuditPage(${currentAuditPage + 1})" 
+            ${currentAuditPage === totalPages ? 'disabled' : ''}
+            class="p-2 rounded-lg border border-slate-200 text-slate-500 hover:bg-white hover:text-primary-blue disabled:opacity-30 disabled:hover:bg-transparent transition-all">
+            <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+        </button>
+    `;
+
+    container.innerHTML = html;
 }
 
-function renderComments(comments) {
+function renderComentarios(comments) {
     const container = document.getElementById('lista_comentarios');
     container.innerHTML = '';
     if (comments.length === 0) {
@@ -397,19 +496,20 @@ function renderDestinos(destinos) {
     tbody.innerHTML = '';
 
     if (!destinos || destinos.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="2" class="text-center text-muted small">Sin destinatarios.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-10 text-center text-slate-400">Sin destinatarios.</td></tr>';
         return;
     }
 
     destinos.forEach(d => {
-        // Fallback if joined fields are missing (should be present from backend query)
         const name = d.usr_nombre_completo || 'Desconocido';
-        // const email = d.usr_email || '-'; // Assuming email might be available in future or via join
+        const area = d.usr_area_nombre || '-';
 
         const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50/50 transition-colors";
         tr.innerHTML = `
-            <td>${name}</td>
-            <td>${d.usr_email || '-'}</td>
+            <td class="px-6 py-4 font-bold text-slate-700">${name}</td>
+            <td class="px-6 py-4 text-slate-500">${area}</td>
+            <td class="px-6 py-4 text-slate-400 text-[12px] italic">${d.usr_email || '-'}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -599,4 +699,3 @@ async function solicitarID() {
         Swal.fire('Error', 'Error de conexión', 'error');
     }
 }
-

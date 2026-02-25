@@ -97,3 +97,26 @@ function calcularDiasHabilesRestantes(fechaStr) {
 
     return diasHabiles;
 }
+
+/**
+ * Calcula los días transcurridos desde una fecha dada hasta hoy (incluyendo fines de semana).
+ * @param {string} fechaStr - Fecha en formato YYYY-MM-DD
+ * @returns {number|string} Cantidad de días transcurridos, o '-' si es inválida.
+ */
+function calcularDiasTranscurridos(fechaStr) {
+    if (!fechaStr || fechaStr === 'N/A' || fechaStr === '-') return '-';
+
+    const partes = fechaStr.split(' ')[0].split('-');
+    if (partes.length !== 3) return '-';
+
+    const dia = parseInt(partes[2], 10);
+    const mes = parseInt(partes[1], 10) - 1;
+    const anio = parseInt(partes[0], 10);
+
+    const fechaInicio = new Date(anio, mes, dia);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+
+    const diff = hoy - fechaInicio;
+    return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+}

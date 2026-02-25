@@ -7,7 +7,11 @@
         return;
     }
 
-    if (!window.API_BASE_URL) window.API_BASE_URL = 'http://127.0.0.1/Transformacion/api';
+    if (!window.API_BASE_URL) {
+        const currentPath = window.location.pathname;
+        const basePath = currentPath.substring(0, currentPath.lastIndexOf('/funcionarios/'));
+        window.API_BASE_URL = window.location.origin + basePath + '/api';
+    }
     // 1. Verify Session
     const sessionRes = await fetch(`${window.API_BASE_URL}/general/verify_session.php`, {
         method: 'POST',
@@ -27,8 +31,10 @@
         window.location.href = 'index.php'; // Assuming index is login
         return;
     }
-    currentUser = sessionData.user;
-
+    currentUser = sessionData.user || {};
+    if (!currentUser.id) {
+        console.warn("User ID not found in session, some features might be limited.");
+    }
 
     await loadInitialData();
     populateSelects();
@@ -161,16 +167,16 @@ async function loadInitialData() {
             body: JSON.stringify({ ACCION: "CONSULTAM" })
         };
         const [orgRes, orgResDESVE, contribRes, tipoRes, prioRes, funcRes, secRes, solRes, orgComRes, areasRes] = await Promise.all([
-            fetch(`${window.API_BASE_URL}sisadmin/organizaciones/organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/desve/organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/contribuyentes_general.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}sisadmin/organizaciones/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/desve/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/general/funcionarios.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/general/sectores.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/desve/solicitudes.php`, { ...fetchOptions, body: JSON.stringify({ ACCION: "CONSULTAM", S: "REINGRESO" }) }).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/organizaciones_comunitarias_general.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/sisadmin\mantenedores\general\areas_general.php`, fetchOptions).then(r => r.json())
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/areas_general.php`, fetchOptions).then(r => r.json())
         ]);
 
         organizaciones = extractData(orgRes);
@@ -225,19 +231,19 @@ async function loadSolicitationDetails(id, currentUser) {
         const result = await response.json();
 
         if (result.status === 'success' && result.data) {
-            const sol = result.data;
-            currentSolRegistroId = sol.sol_registro_tramite;
-            let aux = sol.sol_responsable != String(currentUser.id) || sol.sol_responsable == null;
-
-            if (aux) {
-                await Swal.fire({
-                    title: 'Acceso Denegado',
-                    text: `Usted no es el funcionario responsable de esta solicitud.`,
-                    icon: 'error',
-                    confirmButtonText: 'Volver a Bandeja'
-                });
-                window.location.href = 'index.php';
+            const sol = Array.isArray(result.data) ? result.data[0] : result.data;
+            if (!sol) {
+                Swal.fire("Error", "No se encontraron datos de la solicitud.", "error");
                 return;
+            }
+            currentSolRegistroId = sol.sol_registro_tramite;
+
+            // Debug Security Check
+            if (sol.sol_responsable && currentUser.id && sol.sol_responsable != String(currentUser.id)) {
+                console.warn(`Aviso: Usted no es el funcionario responsable (${sol.sol_responsable}) de esta solicitud (CurrentUser: ${currentUser.id}).`);
+            }
+            if (!sol.sol_responsable) {
+                console.warn("Aviso: Esta solicitud no tiene un funcionario responsable asignado.");
             }
 
 
@@ -245,149 +251,85 @@ async function loadSolicitationDetails(id, currentUser) {
             document.getElementById('header_expediente').innerText = sol.sol_nombre_expediente || '';
 
             // Map Fields
+            // Mapping IDs to Form
             document.getElementById('idIngreso').value = sol.sol_id;
             document.getElementById('Codigo_DESVE').value = sol.sol_ingreso_desve || '';
             document.getElementById('Reingreso').value = sol.sol_reingreso_id || '';
-            //document.getElementById('IngresoDesve').value = sol.sol_ingreso_desve || '';
             document.getElementById('NombreExpediente').value = sol.sol_nombre_expediente || '';
+            document.getElementById('DetalleIngreso').value = sol.sol_detalle || '';
+            document.getElementById('Observaciones').value = sol.sol_observaciones || '';
+
+            const fechaRecepcion = (sol.sol_fecha_recepcion || '').split(' ')[0] || '';
+            document.getElementById('FechaUltimaRecepcion').value = fechaRecepcion;
+            document.getElementById('Sector').value = sol.sol_sector_id || '';
+            document.getElementById('Prioridad').value = sol.sol_prioridad_id || '';
+            document.getElementById('FechaVecimiento').value = sol.sol_fecha_vencimiento || '';
+            document.getElementById('Responsable').value = sol.sol_responsable || '';
+            document.getElementById('Reingresado').value = sol.sol_reingreso_id || '';
 
             // Resolve Organization Type and Origen
-            let orgList = [];
-            let org = {};
             let orgTipoId = null;
-
             switch (parseInt(sol.sol_origen_esp)) {
                 case 0:
-                    // Check if it's from organizaciones or organizacionesComunitarias
-                    org = organizaciones.find(o => o.org_id == sol.sol_origen_id);
-                    if (!org) {
-                        // Try organizacionesComunitarias
-                        org = organizacionesComunitarias.find(o => o.orgc_id == sol.sol_origen_id);
-                        if (org) {
-                            orgTipoId = org.orgc_tipo_organizacion;
-                        }
-                    } else {
-                        orgTipoId = org.org_tipo_id;
-                    }
+                    let org = organizacionesComunitarias.find(o => o.orgc_id == sol.sol_origen_id) || organizaciones.find(o => o.org_id == sol.sol_origen_id);
+                    if (org) orgTipoId = org.orgc_tipo_organizacion || org.org_tipo_id;
                     break;
                 case 1:
-                    org = contribuyentes.find(o => o.tgc_id == sol.sol_origen_id);
-                    if (org) {
-                        orgTipoId = org.tgc_tipo_organizacion || "3"; // Particular default
-                    }
+                    let contrib = contribuyentes.find(o => o.tgc_id == sol.sol_origen_id);
+                    if (contrib) orgTipoId = "3"; // Particular
                     break;
                 case 2:
-                    org = organizacionesDESVE.find(o => o.org_id == sol.sol_origen_id);
-                    if (org) {
-                        orgTipoId = org.org_tipo_id;
-                    }
+                    let orgD = organizacionesDESVE.find(o => o.org_id == sol.sol_origen_id);
+                    if (orgD) orgTipoId = orgD.org_tipo_id;
                     break;
-                default:
-                    OrigenEspecial = false;
             }
 
-            if (org && orgTipoId) {
-                // Set the organization type using VALUE, not selectedIndex
-                document.getElementById('ID_Organizacion').value = orgTipoId;
-                OrigenEspecial = parseInt(sol.sol_origen_esp);
+            if (orgTipoId) document.getElementById('ID_Organizacion').value = orgTipoId;
+            document.getElementById('OrigenSolicitud').value = sol.sol_origen_id || '';
+            document.getElementById('OrigenSolicitudDisplay').value = sol.sol_origen_texto || '';
+            OrigenEspecial = parseInt(sol.sol_origen_esp) || 0;
 
-                if (sol.sol_origen_id) {
-                    // Populate the hidden input and the display input
-                    document.getElementById('OrigenSolicitud').value = sol.sol_origen_id;
-                    document.getElementById('OrigenSolicitudDisplay').value = sol.sol_origen_texto || '';
-                }
-
-                document.getElementById('FechaUltimaRecepcion').value = sol.sol_fecha_recepcion?.split(' ')[0] || '';
-                document.getElementById('Sector').value = sol.sol_sector_id || '';
-
-                document.getElementById('DetalleIngreso').value = sol.sol_detalle || '';
-                document.getElementById('Observaciones').value = sol.sol_observaciones || '';
-
-                // Status
-                if (sol.sol_estado_entrega == 1) {
-                    document.getElementById('estadoRespondido').checked = true;
-                } else {
-                    document.getElementById('estadoPendiente').checked = true;
-                }
-
-                document.getElementById('Codigo_DESVE').value = sol.sol_ingreso_desve || '';
-                document.getElementById('NombreExpediente').value = sol.sol_nombre_expediente || '';
-                document.getElementById('DetalleIngreso').value = sol.sol_detalle || '';
-                document.getElementById('Observaciones').value = sol.sol_observaciones || '';
-                document.getElementById('FechaUltimaRecepcion').value = sol.sol_fecha_recepcion ? sol.sol_fecha_recepcion.split(' ')[0] : '';
-                document.getElementById('Reingreso').value = sol.sol_reingreso_id || '';
-
-                // Map Population
-                if (sol.sol_latitud && sol.sol_longitud) {
-                    document.getElementById('chk_geoloc').checked = true;
-                    document.getElementById('geolocalizacion_area').style.display = 'block';
-                    document.getElementById('Latitud').value = sol.sol_latitud;
-                    document.getElementById('Longitud').value = sol.sol_longitud;
-                    document.getElementById('Geo_dir').value = sol.sol_direccion || '';
-
-                    // If map is already initialized, update it. If not, initMap will handle it using these values.
-                    if (map && marker) {
-                        const pos = { lat: parseFloat(sol.sol_latitud), lng: parseFloat(sol.sol_longitud) };
-                        marker.setPosition(pos);
-                        map.setCenter(pos);
-                    }
-                }
-
-                // Populate ReingresoDisplay if there's a reingreso_id
-                if (sol.sol_reingreso_id) {
-                    const reingresoSol = Solicitudes.find(s => s.sol_id == sol.sol_reingreso_id);
-                    if (reingresoSol) {
-                        document.getElementById('ReingresoDisplay').value = `${reingresoSol.sol_ingreso_desve} - ${reingresoSol.sol_nombre_expediente}`;
-                    }
-                }
-                // 1. Lógica para Días Transcurridos (desde la recepción hasta hoy)
-                const calcularTranscurridos = () => {
-                    if (!sol.sol_fecha_recepcion) return 0;
-                    const fecha_recep = new Date(sol.sol_fecha_recepcion.replace(/-/g, '/')); // replace para mejor compatibilidad
-                    const hoy = new Date();
-                    // Normalizamos a medianoche para comparar solo días
-                    const inicio = new Date(fecha_recep.getFullYear(), fecha_recep.getMonth(), fecha_recep.getDate());
-                    const fin = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
-
-                    const diff = fin - inicio;
-                    return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
-                };
-
-                // 2. Lógica para Días de Vencimiento (desde hoy hasta el vencimiento)
-                const calcularVencimiento = () => {
-                    if (!sol.sol_fecha_vencimiento) return 0;
-                    const fecha_vence = new Date(sol.sol_fecha_vencimiento.replace(/-/g, '/'));
-                    const hoy = new Date();
-
-                    const fin = new Date(fecha_vence.getFullYear(), fecha_vence.getMonth(), fecha_vence.getDate());
-                    const inicio = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
-
-                    const diff = fin - inicio;
-                    // Aquí no usamos Math.max porque si es negativo significa que YA ESTÁ VENCIDO
-                    return Math.floor(diff / (1000 * 60 * 60 * 24));
-                };
-
-                // 3. Asignación al DOM
-                // Usamos el cálculo solo si el valor del JSON es "0" o null
-                document.getElementById('info_dias_ingreso').value =
-                    (sol.sol_dias_transcurridos && sol.sol_dias_transcurridos !== "0")
-                        ? sol.sol_dias_transcurridos
-                        : calcularTranscurridos();
-
-                document.getElementById('info_dias_vencimiento').value =
-                    (sol.sol_dias_vencimiento && sol.sol_dias_vencimiento !== "0")
-                        ? sol.sol_dias_vencimiento
-                        : calcularVencimiento();
-                document.getElementById('Prioridad').value = sol.sol_prioridad_id;
-                document.getElementById('FechaVecimiento').value = sol.sol_fecha_vencimiento;
-                document.getElementById('Responsable').value = sol.sol_responsable;
-                document.getElementById('Reingresado').value = sol.sol_reingreso_id;
-                destinos = sol.destinos || [];
-                renderDestinos();
-                renderResponseBitacora(sol.respuestas || []);
-                loadExistingDocuments();
-
+            // Status
+            if (sol.sol_estado_entrega == 1) {
+                document.getElementById('estadoRespondido').checked = true;
+            } else {
+                document.getElementById('estadoPendiente').checked = true;
             }
+
+            // Map Population
+            if (sol.sol_latitud && sol.sol_longitud) {
+                document.getElementById('chk_geoloc').checked = true;
+                document.getElementById('geolocalizacion_area').style.display = 'block';
+                document.getElementById('Latitud').value = sol.sol_latitud;
+                document.getElementById('Longitud').value = sol.sol_longitud;
+                document.getElementById('Geo_dir').value = sol.sol_direccion || '';
+
+                // If map is already initialized, update it. If not, initMap will handle it using these values.
+                if (map && marker) {
+                    const pos = { lat: parseFloat(sol.sol_latitud), lng: parseFloat(sol.sol_longitud) };
+                    marker.setPosition(pos);
+                    map.setCenter(pos);
+                }
+            }
+
+            // Populate ReingresoDisplay if there's a reingreso_id
+            if (sol.sol_reingreso_id) {
+                const reingresoSol = Solicitudes.find(s => s.sol_id == sol.sol_reingreso_id);
+                if (reingresoSol) {
+                    document.getElementById('ReingresoDisplay').value = `${reingresoSol.sol_ingreso_desve} - ${reingresoSol.sol_nombre_expediente}`;
+                }
+            }
+            // Metrics using helpers
+            document.getElementById('info_dias_ingreso').value = calcularDiasTranscurridos(sol.sol_fecha_recepcion);
+            document.getElementById('info_dias_vencimiento').value = calcularDiasHabilesRestantes(sol.sol_fecha_vencimiento);
+            document.getElementById('Prioridad').value = sol.sol_prioridad_id;
+            document.getElementById('FechaVecimiento').value = sol.sol_fecha_vencimiento;
+            document.getElementById('Responsable').value = sol.sol_responsable;
+            document.getElementById('Reingresado').value = sol.sol_reingreso_id;
+            destinos = sol.destinos || [];
+            renderDestinos();
+            renderResponseBitacora(sol.respuestas || []);
+            loadExistingDocuments();
         }
     } catch (e) {
         console.error("Load Details Error:", e);
@@ -533,9 +475,10 @@ function renderResponseBitacora(respuestas) {
     respuestas.forEach(r => {
         const func = funcionarios.find(f => f.fnc_id == r.res_funcionario || f.usr_id == r.res_funcionario);
         const name = func ? `${func.fnc_nombre} ${func.fnc_apellido}` : (r.res_funcionario || 'N/A');
+        const fecha = (r.res_creacion || r.res_fecha || '').substring(0, 10) || '-';
         const row = `
             <tr>
-                <td>${r.res_fecha.substring(0, 10)}</td>
+                <td>${fecha}</td>
                 <td>${name}</td>
                 <td><span class="badge ${r.res_tipo === 'Respuesta Final' ? 'bg-success' : 'bg-info'}">${r.res_tipo}</span></td>
                 <td class="small">${r.res_texto}</td>
@@ -727,33 +670,23 @@ function renderDestinos() {
     }
 
     destinos.forEach(d => {
-
-        // Fallback if joined fields are missing (should be present from backend query)
         const name = d.usr_nombre_completo || 'Desconocido';
-        // const email = d.usr_email || '-'; // Assuming email might be available in future or via join
+        const area = d.usr_area_nombre || '-';
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${name}</td>
+            <td>${area}</td>
             <td>${d.usr_email || '-'}</td>
             <td class="text-end">
                 <button type="button" class="btn btn-sm btn-danger" onclick="removeDestino(${d.tid_destino})">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" 
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather 
-                    feather-trash-2" style="width:14px">
-                    <polyline points="3 6 5 6 21 6"></polyline>
-                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                    <line x1="10" y1="11" x2="10" y2="17"></line>
-                    <line x1="14" y1="11" x2="14" y2="17"></line>
-                    </svg>
+                   <i data-feather="trash-2" style="width:14px"></i>
                 </button>
             </td>
         `;
         tbody.appendChild(tr);
-        if (!d.usr_id) {
-            d.usr_id = d.tid_destino;
-        }
     });
+    if (window.feather) feather.replace();
 }
 async function removeDestino(id) {
     aux = [];

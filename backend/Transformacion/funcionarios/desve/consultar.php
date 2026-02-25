@@ -278,6 +278,7 @@ include '../../api/general/header.php';
                                 class="bg-slate-50 text-slate-500 font-bold uppercase text-[9px] tracking-widest border-b border-slate-100">
                                 <tr>
                                     <th class="px-6 py-4">Funcionario</th>
+                                    <th class="px-6 py-4">Área</th>
                                     <th class="px-6 py-4">Email</th>
                                 </tr>
                             </thead>
@@ -316,25 +317,34 @@ include '../../api/general/header.php';
 
                 <!-- Bitácora de Auditoría -->
                 <div class="bg-white gob-card rounded-2xl overflow-hidden">
-                    <div class="p-5 border-b border-slate-50 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-primary-blue">visibility</span>
-                        <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest">5. Bitácora de Auditoría
-                        </h3>
+                    <div class="p-5 border-b border-slate-50 flex items-center justify-between cursor-pointer group" onclick="toggleAuditoria()">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary-blue">visibility</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest">5. Bitácora de Auditoría
+                            </h3>
+                        </div>
+                        <span id="btn_toggle_audit" class="material-symbols-outlined text-slate-400 group-hover:text-primary-blue transition-all">expand_more</span>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-[13px]">
-                            <thead
-                                class="bg-slate-50 text-slate-500 font-bold uppercase text-[9px] tracking-widest border-b border-slate-100">
-                                <tr>
-                                    <th class="px-6 py-4">Fecha</th>
-                                    <th class="px-6 py-4">Usuario</th>
-                                    <th class="px-6 py-4">Evento</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbody_audit" class="divide-y divide-slate-50 text-slate-600">
-                                <!-- JS Populated -->
-                            </tbody>
-                        </table>
+                    <div id="collapse_audit" class="hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-[13px]">
+                                <thead
+                                    class="bg-slate-50 text-slate-500 font-bold uppercase text-[9px] tracking-widest border-b border-slate-100">
+                                    <tr>
+                                        <th class="px-6 py-4">Fecha</th>
+                                        <th class="px-6 py-4">Usuario</th>
+                                        <th class="px-6 py-4">Evento</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_audit" class="divide-y divide-slate-50 text-slate-600">
+                                    <!-- JS Populated -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Paginación -->
+                        <div id="pagination_audit" class="p-4 border-t border-slate-50 bg-slate-50/30 flex justify-center gap-2">
+                            <!-- JS Populated -->
+                        </div>
                     </div>
                 </div>
             </div>
