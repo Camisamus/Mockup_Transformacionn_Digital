@@ -116,19 +116,32 @@ include '../../api/general/header.php';
     </div>
 
     <div class="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
-        <div class="p-4 border-b border-slate-50 bg-white">
-            <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary-blue">table_view</span> Listado de Resultados
-            </h3>
+        <div class="p-4 border-b border-slate-50 bg-white flex justify-between items-center">
+            <h3 class="font-bold text-slate-700">Solicitudes Urgentes / Próximas a Vencer</h3>
+            <span class="text-xs font-semibold text-slate-400">Mostrando top 5</span>
         </div>
-        <div id="tabla-resultados-oirs" class="p-0">
-            </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead>
+                    <tr
+                        class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
+                        <th class="px-6 py-4">ID</th>
+                        <th class="px-6 py-4">Asunto</th>
+                        <th class="px-6 py-4">Días Restantes</th>
+                        <th class="px-6 py-4 text-center">Prioridad</th>
+                        <th class="px-6 py-4 text-right">Acción</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100" id="tbody_desve">
+                </tbody>
+            </table>
+        </div>
     </div>
+
 
 </div>
 
-<script src="../../recursos/js/funcionarios/oirs/oirs_bandeja.js"></script>
-<script src="../../recursos/js/funcionarios/oirs/oirs_tabla_flujo.js"></script>
+
 <script>
     $(document).ready(function () {
         // Mantiene la funcionalidad original de inicialización

@@ -1,7 +1,7 @@
-// Mantenedor de Asignación Perfiles/Roles
+// Mantenedor de Asignación Roles/Permisos
 let allData = [];
-let perfiles = [];
-let roles = [];
+let rolesData = [];
+let permisosData = [];
 let categorias = [];
 let currentModal = null;
 
@@ -21,7 +21,7 @@ function initializeModal() {
 }
 
 function initializeSelect2() {
-    $('#entry-perfil, #entry-categoria').select2({
+    $('#entry-rol, #entry-categoria').select2({
         dropdownParent: $('#modal-form')
     });
 }
@@ -32,8 +32,8 @@ function attachEventListeners() {
         btnNew.addEventListener('click', () => {
             if (currentModal) {
                 document.getElementById('main-form').reset();
-                $('#entry-perfil, #entry-categoria').val(null).trigger('change');
-                document.getElementById('roles-checkbox-container').innerHTML = '<p class="text-muted small mb-0">Seleccione una categoría para ver los roles.</p>';
+                $('#entry-rol, #entry-categoria').val(null).trigger('change');
+                document.getElementById('permisos-checkbox-container').innerHTML = '<p class="text-muted small mb-0">Seleccione una categoría para ver los permisos.</p>';
                 currentModal.show();
             }
         });
@@ -51,7 +51,7 @@ function attachEventListeners() {
 
     const selectCategoria = document.getElementById('entry-categoria');
     if (selectCategoria) {
-        $(selectCategoria).on('change', renderRoleCheckboxes);
+        $(selectCategoria).on('change', renderPermisoCheckboxes);
     }
 
     const btnDeleteSelected = document.getElementById('btn-delete-selected');
@@ -92,12 +92,12 @@ function updateDeleteButtonState() {
 async function loadDependencies() {
     try {
         const [resP, resR] = await Promise.all([
-            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/roles.php`, {
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/accesos/roles.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ACCION: 'CONSULTAM' })
             }),
-            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/permisos.php`, {
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/accesos/permisos.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ACCION: 'CONSULTAM' })
@@ -108,20 +108,20 @@ async function loadDependencies() {
         const dataR = await resR.json();
 
         if (dataP.status === 'success') {
-            perfiles = dataP.data;
-            const select = document.getElementById('entry-perfil');
-            select.innerHTML = '<option value="">Seleccione Perfil</option>';
-            perfiles.forEach(p => {
+            rolesData = dataP.data;
+            const select = document.getElementById('entry-rol');
+            select.innerHTML = '<option value="">Seleccione Rol</option>';
+            rolesData.forEach(p => {
                 const opt = new Option(p.prf_nombre, p.prf_id);
                 select.add(opt);
             });
         }
 
         if (dataR.status === 'success') {
-            roles = dataR.data;
+            permisosData = dataR.data;
             // Identify categories based on rol_tipo or dot notation
             // Fix: Filter by unique rol_id to avoid duplicate categories in dropdown
-            const rawCategorias = roles.filter(r => r.rol_tipo === 'categoria' || !r.rol_id.includes('.'));
+            const rawCategorias = permisosData.filter(r => r.rol_tipo === 'categoria' || !r.rol_id.includes('.'));
             const categoryMap = new Map();
             rawCategorias.forEach(c => {
                 if (!categoryMap.has(c.rol_id)) {
@@ -149,7 +149,7 @@ window.loadData = async function () {
     }
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/permisos_roles.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/accesos/permisos_roles.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -235,7 +235,7 @@ function filterData() {
 window.deleteItem = async function (perfil_id, rol_id) {
     const result = await Swal.fire({
         title: '¿Eliminar vínculo?',
-        text: 'Se eliminará el acceso de este perfil a este rol.',
+        text: 'Se eliminará el acceso de este rol a este permiso.',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#dc3545',
@@ -245,7 +245,7 @@ window.deleteItem = async function (perfil_id, rol_id) {
 
     if (result.isConfirmed) {
         try {
-            const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/permisos_roles.php`, {
+            const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/accesos/permisos_roles.php`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
@@ -300,7 +300,7 @@ window.deleteSelectedItems = async function () {
             for (const cb of selectedCheckboxes) {
                 const [perfil_id, rol_id] = cb.value.split('|');
 
-                const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/permisos_roles.php`, {
+                const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/accesos/permisos_roles.php`, {
                     method: 'POST',
                     credentials: 'include',
                     headers: { 'Content-Type': 'application/json' },
@@ -332,19 +332,19 @@ window.deleteSelectedItems = async function () {
     }
 }
 
-function renderRoleCheckboxes() {
+function renderPermisoCheckboxes() {
     const categoriaId = document.getElementById('entry-categoria').value;
-    const container = document.getElementById('roles-checkbox-container');
+    const container = document.getElementById('permisos-checkbox-container');
 
     if (!categoriaId) {
-        container.innerHTML = '<p class="text-muted small mb-0">Seleccione una categoría para ver los roles.</p>';
+        container.innerHTML = '<p class="text-muted small mb-0">Seleccione una categoría para ver los permisos.</p>';
         return;
     }
 
     // Filter roles that belong to this category (start with categoriaId + ".")
-    const filteredRoles = roles.filter(r => r.rol_id.startsWith(categoriaId + '.') && r.rol_tipo !== 'categoria');
+    const filteredPermisos = permisosData.filter(r => r.rol_id.startsWith(categoriaId + '.') && r.rol_tipo !== 'categoria');
 
-    if (filteredRoles.length === 0) {
+    if (filteredPermisos.length === 0) {
         if (categoriaId === '0') {
             container.innerHTML = `
                 <div class="alert alert-info py-2 px-3 small mb-0">
@@ -353,7 +353,7 @@ function renderRoleCheckboxes() {
                 </div>
             `;
         } else {
-            container.innerHTML = '<p class="text-muted small mb-0">No hay roles definidos para esta categoría.</p>';
+            container.innerHTML = '<p class="text-muted small mb-0">No hay permisos definidos para esta categoría.</p>';
         }
         return;
     }
@@ -361,48 +361,48 @@ function renderRoleCheckboxes() {
     container.innerHTML = `
         <div class="mb-2 border-bottom pb-2">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="check-all-roles">
-                <label class="form-check-label fw-bold" for="check-all-roles">Seleccionar Todos</label>
+                <input class="form-check-input" type="checkbox" id="check-all-permisos">
+                <label class="form-check-label fw-bold" for="check-all-permisos">Seleccionar Todos</label>
             </div>
         </div>
         <div class="role-list">
-            ${filteredRoles.map(r => `
+            ${filteredPermisos.map(r => `
                 <div class="form-check">
-                    <input class="form-check-input role-checkbox" type="checkbox" value="${r.rol_id}" id="role-${r.rol_id}">
-                    <label class="form-check-label" for="role-${r.rol_id}">${r.rol_nombre} <small class="text-muted">(${r.rol_id})</small></label>
+                    <input class="form-check-input permiso-checkbox" type="checkbox" value="${r.rol_id}" id="permiso-${r.rol_id}">
+                    <label class="form-check-label" for="permiso-${r.rol_id}">${r.rol_nombre} <small class="text-muted">(${r.rol_id})</small></label>
                 </div>
             `).join('')}
         </div>
     `;
 
-    document.getElementById('check-all-roles').addEventListener('change', (e) => {
+    document.getElementById('check-all-permisos').addEventListener('change', (e) => {
         const checked = e.target.checked;
-        container.querySelectorAll('.role-checkbox').forEach(cb => cb.checked = checked);
+        container.querySelectorAll('.permiso-checkbox').forEach(cb => cb.checked = checked);
     });
 }
 
 async function saveData() {
-    const perfil = document.getElementById('entry-perfil').value;
+    const rol_id_val = document.getElementById('entry-rol').value;
     const categoriaId = document.getElementById('entry-categoria').value;
-    const selectedRoles = Array.from(document.querySelectorAll('.role-checkbox:checked')).map(cb => cb.value);
+    const selectedPermisos = Array.from(document.querySelectorAll('.permiso-checkbox:checked')).map(cb => cb.value);
 
-    if (!perfil) {
-        Swal.fire('Atención', 'Seleccione un perfil', 'warning');
+    if (!rol_id_val) {
+        Swal.fire('Atención', 'Seleccione un rol', 'warning');
         return;
     }
 
-    if (selectedRoles.length === 0 && categoriaId !== '0') {
-        Swal.fire('Atención', 'Seleccione al menos un rol', 'warning');
+    if (selectedPermisos.length === 0 && categoriaId !== '0') {
+        Swal.fire('Atención', 'Seleccione al menos un permiso', 'warning');
         return;
     }
 
     // Include the category ID itself in the assignment list
     // Special case for '0' (Bandeja): it always gets included if selected
-    const rolesToAssign = [...new Set([categoriaId, ...selectedRoles])].filter(Boolean);
+    const permisosToAssign = [...new Set([categoriaId, ...selectedPermisos])].filter(Boolean);
 
     Swal.fire({
         title: 'Procesando...',
-        text: `Asignando ${rolesToAssign.length} items (categoría y roles) al perfil.`,
+        text: `Asignando ${permisosToAssign.length} items (categoría y permisos) al rol.`,
         allowOutsideClick: false,
         didOpen: () => {
             Swal.showLoading();
@@ -411,14 +411,14 @@ async function saveData() {
 
     try {
         let results = [];
-        for (const rol_id of rolesToAssign) {
+        for (const permiso_id of permisosToAssign) {
             const payload = {
                 ACCION: 'CREAR',
-                pfr_perfil_id: parseInt(perfil),
-                pfr_rol_id: rol_id
+                pfr_perfil_id: parseInt(rol_id_val),
+                pfr_rol_id: permiso_id
             };
 
-            const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/permisos_roles.php`, {
+            const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/accesos/permisos_roles.php`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },

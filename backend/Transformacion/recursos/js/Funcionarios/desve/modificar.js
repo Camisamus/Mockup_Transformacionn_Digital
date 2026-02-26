@@ -20,6 +20,7 @@ let itemsPerPage = 10;
 let tiposOrganizacion = [];
 let sectores = [];
 let map, marker, geocoder;
+let sessionData;
 const defaultLocation = { lat: -33.0248997, lng: -71.5570399 }; // Viña del Mar
 
 document.addEventListener('DOMContentLoaded', async function () {
@@ -43,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ACCION: "" })
     });
-    const sessionData = await sessionRes.json();
+    sessionData = await sessionRes.json();
 
     if (!sessionData.isAuthenticated || !sessionData.user) {
         await Swal.fire({
@@ -77,10 +78,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     });
 
-    document.getElementById('btn_nuevo_origen').onclick = () => {
-        const modal = new bootstrap.Modal(document.getElementById('modalNuevoOrigenEspecial'));
-        modal.show();
-    };
+    const btnNuevoOrigen = document.getElementById('btn_nuevo_origen');
+    if (btnNuevoOrigen) {
+        btnNuevoOrigen.onclick = () => {
+            const modal = new bootstrap.Modal(document.getElementById('modalNuevoOrigenEspecial'));
+            modal.show();
+        };
+    }
 
     // Geolocation Toggle Logic
     const chkGeoloc = document.getElementById('chk_geoloc');
@@ -365,6 +369,7 @@ function populateSelects() {
 
 async function loadSolicitationDetails(id, currentUser) {
     try {
+        currentUser = sessionData.user;
         const response = await fetch(`${window.API_BASE_URL}/desve/solicitudes.php`, {
             method: 'POST',
             credentials: 'include',
@@ -377,6 +382,18 @@ async function loadSolicitationDetails(id, currentUser) {
             const sol = Array.isArray(result.data) ? result.data[0] : result.data;
             if (!sol) {
                 Swal.fire("Error", "No se encontraron datos de la solicitud.", "error");
+                return;
+            }
+            let aux = sol.sol_responsable === currentUser.id;
+            // 3. Security Check (Only assigned official can respond)
+            if (!aux) {
+                await Swal.fire({
+                    title: 'Acceso Denegado',
+                    text: `Esta solicitud pertenece a otro funcionario.`,
+                    icon: 'error',
+                    confirmButtonText: 'Volver a Bandeja'
+                });
+                window.location.href = 'index.php';
                 return;
             }
             currentSolRegistroId = sol.sol_registro_tramite;
@@ -532,8 +549,8 @@ function handleTipoOrgChange() {
     if (idOrgId == "1" || idOrgId == "2") {
         // Territorial (1) or Funcional (2) -> Search Organizations
         OrigenEspecial = 0;
-        btnBuscarOrigen.style.display = 'block';
-        btnNuevoOrigen.style.display = 'block';
+        btnBuscarOrigen.classList.remove('hidden');
+        btnNuevoOrigen.classList.remove('hidden');
         btnBuscarOrigen.disabled = false;
         btnNuevoOrigen.disabled = false;
 
@@ -543,8 +560,8 @@ function handleTipoOrgChange() {
     } else if (idOrgId == "3" || idOrgId == "5") {
         // Particular (3) or Ley Transparencia (5) -> Use Contributor Search
         OrigenEspecial = 1;
-        btnBuscarOrigen.style.display = 'block';
-        btnNuevoOrigen.style.display = 'none';
+        btnBuscarOrigen.classList.remove('hidden');
+        btnNuevoOrigen.classList.add('hidden');
         btnBuscarOrigen.disabled = false;
 
         btnBuscarOrigen.onclick = () => abrirModalBuscarContribuyente();
@@ -552,8 +569,8 @@ function handleTipoOrgChange() {
     } else if (["4", "6", "7"].includes(idOrgId)) {
         // Special Origins (Concejales, Contraloría, Congreso)
         OrigenEspecial = 2;
-        btnBuscarOrigen.style.display = 'block';
-        btnNuevoOrigen.style.display = 'none';
+        btnBuscarOrigen.classList.remove('hidden');
+        btnNuevoOrigen.classList.add('hidden');
         btnBuscarOrigen.disabled = false;
 
         btnBuscarOrigen.onclick = () => abrirModalBuscarOrganizacion();
@@ -561,8 +578,8 @@ function handleTipoOrgChange() {
     } else {
         // Default
         OrigenEspecial = 0;
-        btnBuscarOrigen.style.display = 'none';
-        btnNuevoOrigen.style.display = 'none';
+        btnBuscarOrigen.classList.add('hidden');
+        btnNuevoOrigen.classList.add('hidden');
     }
 
     // Determine priority
@@ -719,8 +736,9 @@ function renderResponseBitacora(respuestas) {
     }
 
     respuestas.forEach(r => {
-        const func = funcionarios.find(f => f.fnc_id == r.res_funcionario || f.usr_id == r.res_funcionario);
-        const name = func ? `${func.fnc_nombre} ${func.fnc_apellido}` : (r.res_funcionario || 'N/A');
+        const resFuncId = r.res_funcionario || r.res_funcionaio;
+        const func = resFuncId ? funcionarios.find(f => f.fnc_id == resFuncId || f.usr_id == resFuncId) : null;
+        const name = func ? `${func.fnc_nombre} ${func.fnc_apellido}` : (resFuncId || 'N/A');
         const fecha = (r.res_creacion || r.res_fecha || '').substring(0, 10) || '-';
         const row = `
             <tr class="hover:bg-slate-50/50 transition-colors">
@@ -949,8 +967,6 @@ async function removeDestino(id) {
     destinos = aux;
     renderDestinos();
 }
-
-
 // Modal & Officials logic
 function abrirModalBuscarFuncionario() {
     const tbody = document.getElementById('lista_busqueda_fnc');

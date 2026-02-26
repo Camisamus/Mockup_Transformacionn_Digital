@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Asignación Permisos/Roles";
+$pageTitle = "Asignación Roles/Permisos";
 require_once '../../../../api/general/auth_check.php';
 include '../../../../api/general/header.php';
 ?>
@@ -9,8 +9,8 @@ include '../../../../api/general/header.php';
     <!-- Header -->
     <div class="main-header mb-4">
         <div class="header-title">
-            <h2 class="fw-bold fs-4">Asignación Perfiles / Roles</h2>
-            <p class="text-muted mb-0">Gestión de vónculos entre perfiles de usuario y roles del sistema</p>
+            <h2 class="fw-bold fs-4">Asignación Roles / Permisos</h2>
+            <p class="text-muted mb-0">Gestión de vínculos entre roles de usuario y permisos del sistema</p>
         </div>
     </div>
 
@@ -45,7 +45,7 @@ include '../../../../api/general/header.php';
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
             <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
-            <p class="text-muted small mb-4">Filtrar por nombre de Perfil o Rol</p>
+            <p class="text-muted small mb-4">Filtrar por nombre de rol o permiso</p>
 
             <div class="row g-3">
                 <div class="col-md-6">
@@ -71,9 +71,9 @@ include '../../../../api/general/header.php';
                             <th style="width: 40px;" class="text-center">
                                 <input class="form-check-input" type="checkbox" id="check-all-rows">
                             </th>
-                            <th>Perfil</th>
                             <th>Rol</th>
-                            <th>Rol ID</th>
+                            <th>Permiso</th>
+                            <th>Permiso ID</th>
                             <th class="text-end">Acciones</th>
                         </tr>
                     </thead>
@@ -103,9 +103,9 @@ include '../../../../api/general/header.php';
                 <form id="main-form">
                     <div class="row g-3">
                         <div class="col-md-12">
-                            <label class="form-label small fw-bold">Perfil <span class="text-danger">*</span></label>
-                            <select class="form-select" id="entry-perfil" style="width: 100%;" required>
-                                <option value="">Seleccione Perfil</option>
+                            <label class="form-label small fw-bold">Rol <span class="text-danger">*</span></label>
+                            <select class="form-select" id="entry-rol" style="width: 100%;" required>
+                                <option value="">Seleccione Rol</option>
                             </select>
                         </div>
                         <div class="col-md-12">
@@ -115,10 +115,10 @@ include '../../../../api/general/header.php';
                             </select>
                         </div>
                         <div class="col-md-12">
-                            <label class="form-label small fw-bold">Roles <span class="text-danger">*</span></label>
-                            <div id="roles-checkbox-container" class="border rounded p-3 bg-white"
+                            <label class="form-label small fw-bold">Permisos <span class="text-danger">*</span></label>
+                            <div id="permisos-checkbox-container" class="border rounded p-3 bg-white"
                                 style="max-height: 200px; overflow-y: auto;">
-                                <p class="text-muted small mb-0">Seleccione una categor¿a para ver los roles.</p>
+                                <p class="text-muted small mb-0">Seleccione una categoría para ver los permisos.</p>
                             </div>
                         </div>
                     </div>
@@ -143,7 +143,6 @@ include '../../../../api/general/header.php';
     feather.replace();
 </script>
 
-<script
-    src="../../../../recursos/js/funcionarios/sisadmin/mantenedores/acceso/sisadmin_mantenedor_acceso_perfiles_roles.js"></script>
+<script src="../../../../recursos/js/funcionarios/sisadmin/mantenedores/acceso/permisos_roles.js"></script>
 
 <?php include '../../../../api/general/footer.php'; ?>

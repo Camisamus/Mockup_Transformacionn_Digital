@@ -3,6 +3,8 @@ let currentUser = null;
 
 let organizaciones = [];
 let organizacionesDESVE = [];
+let organizacionesComunitarias = [];
+let contribuyentes = [];
 let tiposOrganizacion = [];
 let prioridades = [];
 let funcionarios = [];
@@ -123,13 +125,15 @@ async function loadLookups() {
         body: JSON.stringify({ ACCION: "CONSULTAM" })
     };
     try {
-        const [orgRes, orgResDESVE, tipoRes, prioRes, funcRes, secRes] = await Promise.all([
+        const [orgRes, orgResDESVE, tipoRes, prioRes, funcRes, secRes, orgComRes, contribRes] = await Promise.all([
             fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/desve/organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/desve/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/general/funcionarios.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/general/sectores.php`, fetchOptions).then(r => r.json())
+            fetch(`${window.API_BASE_URL}/general/sectores.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/organizaciones_comunitarias_general.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/contribuyentes_general.php`, fetchOptions).then(r => r.json())
         ]);
 
         organizaciones = extractData(orgRes);
@@ -138,6 +142,8 @@ async function loadLookups() {
         prioridades = extractData(prioRes);
         funcionarios = extractData(funcRes);
         sectores = extractData(secRes);
+        organizacionesComunitarias = extractData(orgComRes);
+        contribuyentes = extractData(contribRes);
     } catch (e) { console.error(e); }
 }
 
@@ -160,29 +166,46 @@ function renderSolicitationInfo() {
     document.getElementById('display-detalle').innerText = currentSol.sol_detalle || 'Sin detalle';
 
     // Resolve Organization Type and Origen
-    let orgList = [];
-    let org = {};
+    let org = null;
+    let tiporg = null;
+
     switch (parseInt(currentSol.sol_origen_esp)) {
         case 0:
-            orgList = organizaciones;
-            org = orgList.find(o => o.org_id == currentSol.sol_origen_id);
+            // Try Community Orgs first
+            org = organizacionesComunitarias.find(o => o.orgc_id == currentSol.sol_origen_id);
+            if (org) {
+                tiporg = tiposOrganizacion.find(t => t.tor_id == org.orgc_tipo_organizacion);
+                document.getElementById('display-org-nombre').innerText = org.orgc_nombre;
+            } else {
+                // Fallback to General Orgs
+                org = organizaciones.find(o => o.org_id == currentSol.sol_origen_id);
+                if (org) {
+                    tiporg = tiposOrganizacion.find(t => t.tor_id == org.org_tipo_id);
+                    document.getElementById('display-org-nombre').innerText = org.org_nombre;
+                }
+            }
+            if (!org) document.getElementById('display-org-nombre').innerText = currentSol.sol_origen_texto || 'Desconocido/Texto Manual';
             break;
         case 1:
-            orgList = organizacionesDESVE;
-            org = orgList.find(o => o.org_id == currentSol.sol_origen_id);
+            org = contribuyentes.find(o => o.tgc_id == currentSol.sol_origen_id);
+            if (org) {
+                document.getElementById('display-org-nombre').innerText = `${org.tgc_nombre} ${org.tgc_apellido_paterno}`;
+                document.getElementById('display-org-tipo').innerText = "Particular / Contribuyente";
+            }
             break;
         case 2:
-            orgList = organizacionesDESVE;
-            org = orgList.find(o => o.org_id == currentSol.sol_origen_id);
+            org = organizacionesDESVE.find(o => o.org_id == currentSol.sol_origen_id);
+            if (org) {
+                tiporg = tiposOrganizacion.find(t => t.tor_id == org.org_tipo_id);
+                document.getElementById('display-org-nombre').innerText = org.org_nombre;
+            }
             break;
         default:
-            OrigenEspecial = false;
+            document.getElementById('display-org-nombre').innerText = currentSol.sol_origen_texto || '-';
     }
-    let tiporg = tiposOrganizacion.find(t => t.tor_id == org.org_tipo_id);
-    if (org) {
+
+    if (tiporg) {
         document.getElementById('display-org-tipo').innerText = tiporg.tor_nombre;
-        //handleTipoOrgChange(); // Populate OrigenSolicitud based on Type
-        document.getElementById('display-org-nombre').innerText = org.org_nombre;
     }
 
     const prio = prioridades.find(p => p.pri_id == currentSol.sol_prioridad_id);

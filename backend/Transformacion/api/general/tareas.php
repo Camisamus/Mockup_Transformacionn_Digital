@@ -1,18 +1,8 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit;
-}
-
-require_once __DIR__ . '/../vendor/autoload.php';
-require_once '../src/Config/Database.php';
-require_once '../src/Models/Tarea.php';
-require_once '../api/general/cors.php'; // Decodes $data automatically
+require_once 'cors.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../../src/Config/Database.php';
+require_once __DIR__ . '/../../src/Models/Tarea.php';
 
 use App\Config\Database;
 use App\Models\Tarea;

@@ -339,8 +339,8 @@ function renderAsignaciones(asignaciones) {
 
         const item = `
             <div class="card border mb-2 shadow-sm">
-                <div class="card-header bg-white p-3" id="${headingId}" data-toggle="collapse"
-                    data-target="#${collapseId}" aria-expanded="${isFirst}" aria-controls="${collapseId}"
+                <div class="card-header bg-white p-3" id="${headingId}" data-bs-toggle="collapse"
+                    data-bs-target="#${collapseId}" aria-expanded="${isFirst}" aria-controls="${collapseId}"
                     style="cursor: pointer;">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex align-items-center">
@@ -359,7 +359,7 @@ function renderAsignaciones(asignaciones) {
                 </div>
 
                 <div id="${collapseId}" class="collapse ${isFirst ? 'show' : ''}" aria-labelledby="${headingId}"
-                    data-parent="#accordionAsignaciones">
+                    data-bs-parent="#accordionAsignaciones">
                     <div class="card-body bg-light border-top">
                         <h6 class="font-weight-bold" style="font-size: 13px;">Instrucción / Mensaje:</h6>
                         <p class="mb-0 text-dark small">
@@ -516,7 +516,7 @@ function seleccionarFuncionarioOIRS(id, nombre) {
     if (displayInput) displayInput.value = nombre.trim();
 
     // Cerrar el modal simulando el clic en el botón de cerrar nativo de Bootstrap
-    const btnCerrar = document.querySelector('#modalBuscarFuncionario .close[data-dismiss="modal"]');
+    const btnCerrar = document.querySelector('#modalBuscarFuncionario .close[data-bs-dismiss="modal"]');
     if (btnCerrar) {
         btnCerrar.click();
     }

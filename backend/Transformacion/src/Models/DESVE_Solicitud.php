@@ -37,11 +37,13 @@ class DESVE_Solicitud
     }
     public function getAllNL()
     {
-        $query = "SELECT tds.*, tdd.* FROM " . $this->table_name . " tds 
+        $query = "SELECT DISTINCT tds.* FROM " . $this->table_name . " tds 
 INNER JOIN trd_desve_destinos tdd ON tds.sol_id = tdd.tid_desve_solicitud 
 WHERE tds.sol_borrado = 0 
+AND tdd.tid_borrado = 0
 AND tds.sol_estado_entrega = 0
 AND tdd.tid_destino = :usu
+OR tds.sol_responsable = :usu
 ORDER BY tds.sol_id DESC;";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':usu', $_SESSION['user_id']);
@@ -55,8 +57,10 @@ ORDER BY tds.sol_id DESC;";
         $query = "SELECT DISTINCT tds.* FROM " . $this->table_name . " tds 
 LEFT JOIN trd_desve_destinos tdd ON tds.sol_id = tdd.tid_desve_solicitud AND tdd.tid_destino = :usu
 WHERE tds.sol_borrado = 0 
+AND tdd.tid_borrado = 0
 AND tds.sol_estado_entrega = 1
 AND (tdd.tid_destino IS NOT NULL OR tds.sol_responsable = :usu)
+OR tds.sol_responsable = :usu
 ORDER BY tds.sol_id DESC;";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':usu', $_SESSION['user_id']);
@@ -137,6 +141,7 @@ ORDER BY tds.sol_id DESC;";
         $query = "SELECT d.*, 
                          UPPER(u.usr_nombre) as usr_nombre, 
                          UPPER(u.usr_apellido) as usr_apellido, 
+                         u.usr_id, 
                          u.usr_email, 
                          UPPER(CONCAT(u.usr_nombre, ' ', u.usr_apellido)) as usr_nombre_completo,
                          ga.tga_nombre as usr_area_nombre
@@ -268,6 +273,7 @@ ORDER BY tds.sol_id DESC;";
 
                 // 3. Crear destinos
                 if (isset($data['destinos'])) {
+                    //print_r($data['destinos']);
                     $this->createDestinos($data_id, $data['destinos']);
                 }
 

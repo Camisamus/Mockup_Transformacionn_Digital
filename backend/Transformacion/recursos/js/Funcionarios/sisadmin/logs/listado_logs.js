@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
 async function cargarLogs() {
     try {
         // Fetch from the new API
-        const response = await fetch(`${window.API_BASE_URL}\sisadmin\logs\logs.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/logs/logs.php`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -96,6 +96,6 @@ window.limpiarFiltros = function () {
 }
 
 window.verDetalle = function (logId) {
-    window.location.href = `logs_consulta_log.php?id=${logId}`;
+    window.location.href = `consulta_log.php?id=${logId}`;
 }
 

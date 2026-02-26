@@ -32,7 +32,7 @@ async function solicitarID() {
 
 async function cargarLog(id) {
     try {
-        const response = await fetch(`${window.API_BASE_URL}\sisadmin\logs\logs.php`,
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/logs/logs.php`,
             {
                 method: 'POST',
                 headers: {

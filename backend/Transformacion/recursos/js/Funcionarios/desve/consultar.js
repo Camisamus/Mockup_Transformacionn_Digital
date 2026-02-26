@@ -323,7 +323,7 @@ async function loadSolicitationDetails(id) {
             renderAuditPage(1);
 
             renderComentarios(sol.comentarios || []);
-            renderReingresos(sol.reingresos || []);
+            renderReingresoVinculado(sol.sol_reingreso_id);
             renderDestinos(sol.destinos || []);
 
             // Load Documents
@@ -341,8 +341,9 @@ function renderResponseBitacora(respuestas) {
     const tbody = document.getElementById('tbody_respuestas');
     tbody.innerHTML = '';
     respuestas.forEach(r => {
-        const func = funcionarios.find(f => f.fnc_id == r.res_funcionario || f.usr_id == r.res_funcionario);
-        const name = func ? `${func.fnc_nombre} ${func.fnc_apellido}` : (r.res_funcionario || 'N/A');
+        const resFuncId = r.res_funcionario || r.res_funcionaio;
+        const func = resFuncId ? funcionarios.find(f => f.fnc_id == resFuncId || f.usr_id == resFuncId) : null;
+        const name = func ? `${func.fnc_nombre} ${func.fnc_apellido}` : (resFuncId || 'N/A');
         const fecha = r.res_creacion ? r.res_creacion.substring(0, 10) : '-';
 
         const row = `
@@ -481,14 +482,36 @@ function renderComentarios(comments) {
     });
 }
 
-function renderReingresos(reingresos) {
-    const tbody = document.getElementById('tbody_reingresos');
-    tbody.innerHTML = '';
-    if (!reingresos || reingresos.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted small">Sin reingresos vinculados.</td></tr>';
+function renderReingresoVinculado(reingresoId) {
+    const card = document.getElementById('card_reingreso');
+    const container = document.getElementById('contenedor_reingreso');
+    if (!container || !card) return;
+
+    if (!reingresoId) {
+        card.classList.add('hidden');
         return;
     }
-    // Note: This matches the previous logic for tabulating reingresos if available in the result.
+
+    card.classList.remove('hidden');
+    container.innerHTML = '';
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'w-full flex items-center justify-between p-3.5 bg-white border border-cyan-100 rounded-xl hover:border-primary-blue hover:shadow-md transition-all duration-200 group';
+    btn.onclick = () => window.location.href = `consultar.php?id=${reingresoId}`;
+    btn.innerHTML = `
+        <div class="flex items-center gap-3">
+            <div class="p-2 bg-blue-50 text-primary-blue rounded-lg group-hover:bg-primary-blue group-hover:text-white transition-colors">
+                <span class="material-symbols-outlined text-[20px]">link</span>
+            </div>
+            <div class="flex flex-col text-left">
+                <span class="text-[11px] font-bold text-slate-700">SOLICITUD PREVIA</span>
+                <span class="text-[10px] text-slate-400 font-mono">ID: ${reingresoId}</span>
+            </div>
+        </div>
+        <span class="material-symbols-outlined text-slate-300 group-hover:text-primary-blue transition-colors">arrow_forward</span>
+    `;
+    container.appendChild(btn);
 }
 
 function renderDestinos(destinos) {

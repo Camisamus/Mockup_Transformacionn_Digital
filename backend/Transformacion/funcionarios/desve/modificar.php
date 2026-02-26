@@ -167,10 +167,13 @@ include '../../api/general/header.php';
                                         placeholder="Seleccione organización..."
                                         class="flex-grow border-slate-200 rounded-l-xl text-[15px] input-readonly-dashed px-4" />
                                     <input type="hidden" id="OrigenSolicitud" required>
-                                    <button type="button" id="btn_nuevo_origen" onclick="abrirModalBuscarOrganizacion()"
-                                        id="btn_buscar_origen"
-                                        class="bg-slate-100 px-4 border-y border-slate-200 flex items-center text-slate-600"><span
+                                    <button type="button" id="btn_buscar_origen"
+                                        onclick="abrirModalBuscarOrganizacion()"
+                                        class="bg-slate-100 px-4 border-y border-slate-200 flex items-center text-slate-600 border-r rounded-r-xl border-r-slate-200"><span
                                             class="material-symbols-outlined">search</span></button>
+                                    <button type="button" id="btn_nuevo_origen"
+                                        class="bg-slate-800 text-white px-4 rounded-r-xl transition-colors hidden"><span
+                                            class="material-symbols-outlined">add</span></button>
                                 </div>
                             </div>
                         </div>
@@ -520,6 +523,193 @@ include '../../api/general/header.php';
                         <tbody id="lista_busqueda_reingreso" class="text-[13px] text-slate-600"></tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalBuscarOrganizacion" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden">
+            <div class="modal-header bg-slate-50 border-b p-6">
+                <h5 class="modal-title font-extrabold text-slate-800 text-sm uppercase tracking-widest">Buscar
+                    Organización</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="p-6">
+                <div class="d-flex mb-4 gap-2">
+                    <input type="text" class="form-control rounded-xl border-slate-200 text-sm" id="filtroOrganizacion"
+                        placeholder="Filtrar por nombre o RUT...">
+                    <button type="button" class="btn btn-dark rounded-xl px-4" onclick="abrirModalNuevaOrganizacion()">+
+                        NUEVO</button>
+                </div>
+                <div class="table-responsive max-h-[400px] rounded-xl border border-slate-100">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-slate-50 text-[10px] font-bold text-slate-400 uppercase border-b">
+                            <tr>
+                                <th>RUT</th>
+                                <th>Nombre</th>
+                                <th>Tipo</th>
+                                <th class="text-end">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista_busqueda_org" class="text-[13px] text-slate-600"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalNuevaOrganizacion" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden">
+            <div class="modal-header bg-slate-50 border-b p-6">
+                <h5 class="modal-title font-extrabold text-slate-800 text-sm uppercase tracking-widest">Nueva
+                    Organización</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="p-6">
+                <form id="form_nueva_organizacion" class="space-y-4">
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">RUT
+                                *</label>
+                            <input type="text" class="w-full rounded-xl border-slate-200 text-sm" id="orgc_rut"
+                                required>
+                        </div>
+                        <div>
+                            <label
+                                class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Nombre
+                                *</label>
+                            <input type="text" class="w-full rounded-xl border-slate-200 text-sm" id="orgc_nombre"
+                                required>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label
+                                    class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Código</label>
+                                <input type="text" class="w-full rounded-xl border-slate-200 text-sm" id="orgc_codigo">
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">RPJ</label>
+                                <input type="text" class="w-full rounded-xl border-slate-200 text-sm" id="orgc_rpj">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer bg-slate-50 border-t p-4">
+                <button type="button" class="btn btn-dark rounded-xl px-6 w-full py-3"
+                    onclick="guardarNuevaOrganizacion()">GUARDAR ORGANIZACIÓN</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalBuscarContribuyente" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden">
+            <div class="modal-header bg-slate-50 border-b p-6">
+                <h5 class="modal-title font-extrabold text-slate-800 text-sm uppercase tracking-widest">Buscar
+                    Contribuyente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="p-6">
+                <div class="d-flex mb-4 gap-2">
+                    <input type="text" class="form-control rounded-xl border-slate-200 text-sm" id="filtroContribuyente"
+                        placeholder="Buscar por nombre o RUT...">
+                    <button type="button" class="btn btn-dark rounded-xl px-4"
+                        onclick="abrirModalNuevoContribuyente()">+ NUEVO</button>
+                </div>
+                <div class="table-responsive max-h-[400px] rounded-xl border border-slate-100">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-slate-50 text-[10px] font-bold text-slate-400 uppercase border-b">
+                            <tr>
+                                <th>RUT</th>
+                                <th>Nombre Completo</th>
+                                <th class="text-end">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista_busqueda_contrib" class="text-[13px] text-slate-600"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalNuevoContribuyente" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden">
+            <div class="modal-header bg-slate-50 border-b p-6">
+                <h5 class="modal-title font-extrabold text-slate-800 text-sm uppercase tracking-widest">Nuevo
+                    Contribuyente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="p-6">
+                <form id="form_nuevo_contribuyente" class="space-y-4">
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">RUT
+                                *</label>
+                            <input type="text" class="w-full rounded-xl border-slate-200 text-sm" id="nc_rut" required>
+                        </div>
+                        <div>
+                            <label
+                                class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Nombres
+                                *</label>
+                            <input type="text" class="w-full rounded-xl border-slate-200 text-sm" id="nc_nombre"
+                                required>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label
+                                    class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Apellido
+                                    Paterno *</label>
+                                <input type="text" class="w-full rounded-xl border-slate-200 text-sm" id="nc_paterno"
+                                    required>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Apellido
+                                    Materno</label>
+                                <input type="text" class="w-full rounded-xl border-slate-200 text-sm" id="nc_materno">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer bg-slate-50 border-t p-4">
+                <button type="button" class="btn btn-dark rounded-xl px-6 w-full py-3"
+                    onclick="guardarNuevoContribuyente()">GUARDAR CONTRIBUYENTE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalNuevoOrigenEspecial" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden">
+            <div class="modal-header bg-slate-50 border-b p-6">
+                <h5 class="modal-title font-extrabold text-slate-800 text-sm uppercase tracking-widest">Nuevo Origen
+                    Especial</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Nombre
+                            del Origen</label>
+                        <input type="text" class="w-full rounded-xl border-slate-200 text-sm"
+                            id="textoNuevoOrigenEspecial" placeholder="Ej: Concejal Juan Pérez">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer bg-slate-50 border-t p-4">
+                <button type="button" class="btn btn-dark rounded-xl px-6 w-full py-3"
+                    onclick="guardarOrigenEspecial()">GUARDAR ORIGEN</button>
             </div>
         </div>
     </div>

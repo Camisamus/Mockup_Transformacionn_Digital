@@ -28,7 +28,7 @@ class DESVE_Respuesta
             res_solicitud_id=:res_solicitud_id,
             res_texto=:res_texto,
             res_tipo=:res_tipo,
-            res_funcionaio=:res_funcionario";
+            res_funcionario=:res_funcionario";
 
         $stmt = $this->conn->prepare($query);
 

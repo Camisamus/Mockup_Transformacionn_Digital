@@ -127,7 +127,7 @@ function renderSidebarPrincipal($permissions, $currentScript, $pathPrefix, $curr
     $html .= '<nav class="flex-grow-1 mt-2 px-2"><ul class="nav flex-column">';
 
     foreach ($permissions as $item) {
-        if ($item['rol_tipo'] === 'separador') {
+        if ($item['rol_formato'] === 'separador') {
             // Diseño para "GESTIÓN", "CONFIGURACIÓN", etc.
             $html .= '
             <li class="nav-item mt-4 mb-2 ps-3">
@@ -135,7 +135,8 @@ function renderSidebarPrincipal($permissions, $currentScript, $pathPrefix, $curr
                     ' . htmlspecialchars($item['rol_nombre']) . '
                 </small>
             </li>';
-        } else {
+        } else if ($item['rol_formato'] === 'menu') {
+
             // Diseño para los botones con link (Categorías o Páginas)
             $enlace = $item['rol_enlace'] ?: '#';
             $href = ($enlace !== '#') ? $pathPrefix . $enlace : '#';
@@ -146,14 +147,17 @@ function renderSidebarPrincipal($permissions, $currentScript, $pathPrefix, $curr
             $icon = !empty($item['rol_simbolo']) ? $item['rol_simbolo'] : 'grid';
             //echo ($icon);
             $html .= '
-            <li class="nav-item">
-                <a class="nav-link d-flex align-items-center px-3 py-2 ' . $isActive . '" 
-                   href="' . $href . '" 
-                   style="color: #444; font-weight: 500; transition: 0.2s; border-radius: 6px; margin-bottom: 2px;">
-                    <i class="me-3" style="width:20px; height:20px; display: inline-flex; align-items: center; justify-content: center;">' . getIcon($icon) . '</i>
-                    <span>' . htmlspecialchars($item['rol_nombre']) . '</span>
-                </a>
-            </li>';
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center px-3 py-2 ' . $isActive . '" 
+                    href="' . $href . '" 
+                    style="color: #444; font-weight: 500; transition: 0.2s; border-radius: 6px; margin-bottom: 2px;">
+                        <i class="me-3" style="width:20px; height:20px; display: inline-flex; align-items: center; justify-content: center;">' . getIcon($icon) . '</i>
+                        <span>' . htmlspecialchars($item['rol_nombre']) . '</span>
+                    </a>
+                </li>';
+
+
+
         }
     }
 

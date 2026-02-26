@@ -317,13 +317,16 @@ include '../../api/general/header.php';
 
                 <!-- Bitácora de Auditoría -->
                 <div class="bg-white gob-card rounded-2xl overflow-hidden">
-                    <div class="p-5 border-b border-slate-50 flex items-center justify-between cursor-pointer group" onclick="toggleAuditoria()">
+                    <div class="p-5 border-b border-slate-50 flex items-center justify-between cursor-pointer group"
+                        onclick="toggleAuditoria()">
                         <div class="flex items-center gap-2">
                             <span class="material-symbols-outlined text-primary-blue">visibility</span>
-                            <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest">5. Bitácora de Auditoría
+                            <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest">5. Bitácora de
+                                Auditoría
                             </h3>
                         </div>
-                        <span id="btn_toggle_audit" class="material-symbols-outlined text-slate-400 group-hover:text-primary-blue transition-all">expand_more</span>
+                        <span id="btn_toggle_audit"
+                            class="material-symbols-outlined text-slate-400 group-hover:text-primary-blue transition-all">expand_more</span>
                     </div>
                     <div id="collapse_audit" class="hidden">
                         <div class="overflow-x-auto">
@@ -342,7 +345,8 @@ include '../../api/general/header.php';
                             </table>
                         </div>
                         <!-- Paginación -->
-                        <div id="pagination_audit" class="p-4 border-t border-slate-50 bg-slate-50/30 flex justify-center gap-2">
+                        <div id="pagination_audit"
+                            class="p-4 border-t border-slate-50 bg-slate-50/30 flex justify-center gap-2">
                             <!-- JS Populated -->
                         </div>
                     </div>
@@ -375,21 +379,15 @@ include '../../api/general/header.php';
                 </div>
             </div>
 
-            <div class="bg-soft-cyan border border-cyan-border rounded-2xl overflow-hidden shadow-sm">
+            <div id="card_reingreso" class="bg-soft-cyan border border-cyan-border rounded-2xl overflow-hidden shadow-sm">
                 <div class="p-5 border-b border-cyan-border flex items-center gap-2">
                     <span class="material-symbols-outlined text-slate-500">link</span>
                     <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest">Reingresos Vinculados</h3>
                 </div>
-                <div class="p-2 overflow-x-auto">
-                    <table class="w-full text-left text-[12px]" id="tabla_reingresos">
-                        <thead class="bg-cyan-100/50 text-slate-500 font-bold uppercase text-[9px]">
-                            <tr>
-                                <th class="px-4 py-3">ID</th>
-                                <th class="px-4 py-3 text-end">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody_reingresos" class="divide-y divide-cyan-100"></tbody>
-                    </table>
+                <div class="p-5" id="contenedor_reingreso">
+                    <div class="flex flex-col items-center justify-center py-4 text-slate-400 italic text-xs">
+                        Sin reingresos vinculados
+                    </div>
                 </div>
             </div>
 

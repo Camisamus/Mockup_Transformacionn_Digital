@@ -17,7 +17,7 @@
     renderLayoutScripts($pathPrefix); ?>
 
 <script>
-    feather.replace();
+    if (window.feather) feather.replace();
 
     // Sidebar Toggle Logic
     document.addEventListener('DOMContentLoaded', () => {

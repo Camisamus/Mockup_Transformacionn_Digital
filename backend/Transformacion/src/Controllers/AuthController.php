@@ -118,6 +118,7 @@ class AuthController
                     r.rol_enlace, 
                     r.rol_simbolo, 
                     r.rol_tipo,
+                    r.rol_formato,
                     r.rol_modulo,
                     r.rol_orden
                 FROM trd_acceso_permisos r

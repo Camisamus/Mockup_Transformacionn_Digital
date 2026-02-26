@@ -414,7 +414,7 @@ async function cargarListas() {
 }
 
 // Google Maps Logic
-window.initMap = function () {
+window.initMap = async function () {
     const defaultLoc = { lat: -33.0245, lng: -71.5518 }; // Viña del Mar
     geocoder = new google.maps.Geocoder();
 
@@ -455,7 +455,7 @@ window.initMap = function () {
     });
 };
 
-function updateMap(type, lat, lng, centerMap = true) {
+async function updateMap(type, lat, lng, centerMap = true) {
     const pos = { lat: lat, lng: lng };
     if (type === 'cont') {
         if (!markerCont) return;
@@ -472,7 +472,7 @@ function updateMap(type, lat, lng, centerMap = true) {
     }
 }
 
-function geocodeAddress(type, address) {
+async function geocodeAddress(type, address) {
     if (!geocoder) return;
 
     let fullAddress = address;
@@ -490,7 +490,7 @@ function geocodeAddress(type, address) {
     });
 }
 
-function reverseGeocode(type, lat, lng) {
+async function reverseGeocode(type, lat, lng) {
     if (!geocoder) return;
     const latlng = { lat: parseFloat(lat), lng: parseFloat(lng) };
     geocoder.geocode({ location: latlng }, (results, status) => {

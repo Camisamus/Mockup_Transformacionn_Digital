@@ -39,7 +39,7 @@ switch ($data['ACCION']) {
 
         // Audit log (SystemLog)
         if (($response['status'] ?? '') === 'success') {
-            require_once '../src/Models/SystemLog.php';
+            require_once __DIR__ . '/../../src/Models/SystemLog.php';
             $logModel = new \App\Models\SystemLog($db);
 
             // Clean data for logging (remove base64)
