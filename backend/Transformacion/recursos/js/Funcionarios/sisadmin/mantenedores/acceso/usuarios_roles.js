@@ -7,7 +7,6 @@ let currentMode = 'create';
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeModal();
-    initializeSelect2();
     loadDependencies();
     loadData();
     attachEventListeners();
@@ -18,12 +17,6 @@ function initializeModal() {
     if (modalElement) {
         currentModal = new bootstrap.Modal(modalElement);
     }
-}
-
-function initializeSelect2() {
-    $('#entry-usuario, #entry-perfil, #entry-subrogante').select2({
-        dropdownParent: $('#modal-form')
-    });
 }
 
 function attachEventListeners() {
@@ -43,17 +36,21 @@ function attachEventListeners() {
     if (filterText) {
         filterText.addEventListener('input', filterData);
     }
+
+    // Modal filters
+    document.getElementById('input-buscar-usuario-modal').addEventListener('input', filterModalUsuarios);
+    document.getElementById('input-buscar-perfil-modal').addEventListener('input', filterModalPerfiles);
 }
 
 async function loadDependencies() {
     try {
         const [resU, resP] = await Promise.all([
-            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/usuarios.php`, {
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/accesos/usuarios.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ACCION: 'CONSULTAM' })
             }),
-            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/roles.php`, {
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/accesos/roles.php`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ACCION: 'CONSULTAM' })
@@ -64,7 +61,6 @@ async function loadDependencies() {
         const dataP = await resP.json();
 
         if (dataU.status === 'success') {
-            // Fix: Filter by unique usr_id to avoid duplicate users in dropdowns
             const userMap = new Map();
             dataU.data.forEach(u => {
                 if (!userMap.has(u.usr_id)) {
@@ -72,22 +68,10 @@ async function loadDependencies() {
                 }
             });
             usuarios = Array.from(userMap.values());
-
-            const selectU = document.getElementById('entry-usuario');
-            const selectS = document.getElementById('entry-subrogante');
-            usuarios.forEach(u => {
-                const label = `${u.usr_nombre} ${u.usr_apellido} (${u.usr_rut})`;
-                selectU.add(new Option(label, u.usr_id));
-                selectS.add(new Option(label, u.usr_id));
-            });
         }
 
         if (dataP.status === 'success') {
             perfiles = dataP.data;
-            const selectP = document.getElementById('entry-perfil');
-            perfiles.forEach(p => {
-                selectP.add(new Option(p.prf_nombre, p.prf_id));
-            });
         }
     } catch (error) {
         console.error('Error loading dependencies:', error);
@@ -101,7 +85,7 @@ window.loadData = async function () {
     }
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/usuarios_roles.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/accesos/usuarios_roles.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -181,19 +165,42 @@ window.openModal = function (mode, data = null) {
     const form = document.getElementById('main-form');
 
     if (form) form.reset();
-    $('#entry-usuario, #entry-perfil, #entry-subrogante').val(null).trigger('change');
+
+    // Reset labels and hidden inputs
+    document.getElementById('entry-usuario').value = '';
+    document.getElementById('entry-usuario-label').value = '';
+    document.getElementById('entry-perfil').value = '';
+    document.getElementById('entry-perfil-label').value = '';
+    document.getElementById('entry-subrogante').value = '';
+    document.getElementById('entry-subrogante-label').value = '';
 
     if (mode === 'create') {
         if (modalTitle) modalTitle.textContent = 'Nueva Asignación';
-        $('#entry-usuario, #entry-perfil').prop('disabled', false);
+        // Enable search buttons if they were disabled
+        document.querySelectorAll('#main-form button').forEach(b => b.disabled = false);
     } else if (mode === 'edit' && data) {
         if (modalTitle) modalTitle.textContent = 'Editar Asignación';
-        $('#entry-usuario').val(data.usp_usuario_id).trigger('change').prop('disabled', true);
-        $('#entry-perfil').val(data.usp_perfil_id).trigger('change').prop('disabled', true);
+
+        document.getElementById('entry-usuario').value = data.usp_usuario_id;
+        document.getElementById('entry-usuario-label').value = `${data.usuario_nombre} ${data.usuario_apellido}`;
+        document.getElementById('entry-perfil').value = data.usp_perfil_id;
+        document.getElementById('entry-perfil-label').value = data.perfil_nombre;
+
+        // Disable search for user and profile in edit mode (as they are part of composite primary key usually)
+        // or as per the previous logic that disabled them
+        // Let's find the specific buttons to disable
+        const userBtn = document.querySelector('button[onclick*="entry-usuario"]');
+        const perfilBtn = document.querySelector('button[onclick*="entry-perfil"]');
+        if (userBtn) userBtn.disabled = true;
+        if (perfilBtn) perfilBtn.disabled = true;
 
         if (data.usp_fecha_inicio) document.getElementById('entry-inicio').value = data.usp_fecha_inicio.replace(' ', 'T').slice(0, 16);
         if (data.usp_fecha_termino) document.getElementById('entry-termino').value = data.usp_fecha_termino.replace(' ', 'T').slice(0, 16);
-        if (data.usp_usuario_subrogante_id) $('#entry-subrogante').val(data.usp_usuario_subrogante_id).trigger('change');
+
+        if (data.usp_usuario_subrogante_id) {
+            document.getElementById('entry-subrogante').value = data.usp_usuario_subrogante_id;
+            document.getElementById('entry-subrogante-label').value = `${data.subrogante_nombre || ''} ${data.subrogante_apellido || ''}`.trim();
+        }
     }
 
     if (currentModal) currentModal.show();
@@ -217,7 +224,7 @@ window.deleteItem = async function (usr_id, prf_id) {
 
     if (result.isConfirmed) {
         try {
-            const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/usuarios_roles.php`, {
+            const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/accesos/usuarios_roles.php`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
@@ -263,7 +270,7 @@ async function saveData() {
     };
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/usuarios_roles.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/accesos/usuarios_roles.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -281,4 +288,79 @@ async function saveData() {
     } catch (error) {
         Swal.fire('Error', 'Error de conexión.', 'error');
     }
+}
+
+// Modal Selection Logic
+let currentTargetId = '';
+let modalUsuario = null;
+let modalPerfil = null;
+
+window.abrirModalSeleccion = function (tipo, targetId) {
+    currentTargetId = targetId;
+    if (tipo === 'usuario') {
+        renderModalUsuarios(usuarios);
+        if (!modalUsuario) modalUsuario = new bootstrap.Modal(document.getElementById('modal-buscar-usuario'));
+        modalUsuario.show();
+    } else if (tipo === 'perfil') {
+        renderModalPerfiles(perfiles);
+        if (!modalPerfil) modalPerfil = new bootstrap.Modal(document.getElementById('modal-buscar-perfil'));
+        modalPerfil.show();
+    }
+}
+
+function renderModalUsuarios(data) {
+    const tbody = document.getElementById('lista-usuarios-modal');
+    tbody.innerHTML = '';
+    data.forEach(u => {
+        const tr = document.createElement('tr');
+        tr.className = 'modal-list-item';
+        const label = `${u.usr_nombre} ${u.usr_apellido} (${u.usr_rut})`;
+        tr.innerHTML = `<td class="p-2 small">${label}</td>`;
+        tr.onclick = () => seleccionarElemento('usuario', u.usr_id, `${u.usr_nombre} ${u.usr_apellido}`);
+        tbody.appendChild(tr);
+    });
+}
+
+function renderModalPerfiles(data) {
+    const tbody = document.getElementById('lista-perfiles-modal');
+    tbody.innerHTML = '';
+    data.forEach(p => {
+        const tr = document.createElement('tr');
+        tr.className = 'modal-list-item';
+        tr.innerHTML = `<td class="p-2 small">${p.prf_nombre}</td>`;
+        tr.onclick = () => seleccionarElemento('perfil', p.prf_id, p.prf_nombre);
+        tbody.appendChild(tr);
+    });
+}
+
+function seleccionarElemento(tipo, id, nombre) {
+    document.getElementById(currentTargetId).value = id;
+    document.getElementById(currentTargetId + '-label').value = nombre;
+
+    if (tipo === 'usuario') {
+        if (modalUsuario) modalUsuario.hide();
+    } else {
+        if (modalPerfil) modalPerfil.hide();
+    }
+}
+
+window.limpiarSeleccion = function (targetId) {
+    document.getElementById(targetId).value = '';
+    document.getElementById(targetId + '-label').value = '';
+}
+
+function filterModalUsuarios() {
+    const val = document.getElementById('input-buscar-usuario-modal').value.toLowerCase();
+    const filtered = usuarios.filter(u =>
+        u.usr_nombre.toLowerCase().includes(val) ||
+        u.usr_apellido.toLowerCase().includes(val) ||
+        u.usr_rut.toLowerCase().includes(val)
+    );
+    renderModalUsuarios(filtered);
+}
+
+function filterModalPerfiles() {
+    const val = document.getElementById('input-buscar-perfil-modal').value.toLowerCase();
+    const filtered = perfiles.filter(p => p.prf_nombre.toLowerCase().includes(val));
+    renderModalPerfiles(filtered);
 }

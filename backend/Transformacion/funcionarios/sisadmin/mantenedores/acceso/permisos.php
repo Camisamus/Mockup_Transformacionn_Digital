@@ -1,9 +1,8 @@
 <?php
-$pageTitle = "Mantenedor Permisos de Acceso";
-require_once '../../../../api/auth_check.php';
-include '../../header.php';
+$pageTitle = "Asignación Permisos";
+require_once '../../../../api/general/auth_check.php';
+include '../../../../api/general/header.php';
 ?>
-
 
 <div class="container-fluid py-4">
     <!-- Header -->
@@ -135,7 +134,6 @@ include '../../header.php';
     feather.replace();
 </script>
 
-<script
-    src="../../../../recursos/js/funcionarios/sisadmin/mantenedores/acceso/sisadmin_mantenedor_acceso_roles.js"></script>
+<script src="../../../../recursos/js/funcionarios/sisadmin/mantenedores/acceso/permisos.js"></script>
 
-<?php include '../../../../api/footer.php'; ?>
+<?php include '../../../../api/general/footer.php'; ?>

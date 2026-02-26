@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "Asignación Usuarios/Roles";
+$pageTitle = "Asignación Roles/Usuaios";
 require_once '../../../../api/general/auth_check.php';
 include '../../../../api/general/header.php';
 ?>
@@ -95,29 +95,51 @@ include '../../../../api/general/header.php';
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label small fw-bold">Usuario <span class="text-danger">*</span></label>
-                            <select class="form-select" id="entry-usuario" style="width: 100%;" required>
-                                <option value="">Seleccione Usuario</option>
-                            </select>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control bg-light" id="entry-usuario-label" readonly
+                                    placeholder="Seleccione Usuario...">
+                                <input type="hidden" id="entry-usuario" required>
+                                <button class="btn btn-outline-secondary" type="button"
+                                    onclick="abrirModalSeleccion('usuario', 'entry-usuario')">
+                                    <i data-feather="search"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label small fw-bold">Perfil <span class="text-danger">*</span></label>
-                            <select class="form-select" id="entry-perfil" style="width: 100%;" required>
-                                <option value="">Seleccione Perfil</option>
-                            </select>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control bg-light" id="entry-perfil-label" readonly
+                                    placeholder="Seleccione Perfil...">
+                                <input type="hidden" id="entry-perfil" required>
+                                <button class="btn btn-outline-secondary" type="button"
+                                    onclick="abrirModalSeleccion('perfil', 'entry-perfil')">
+                                    <i data-feather="search"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label small fw-bold">Fecha Inicio</label>
                             <input type="datetime-local" class="form-control" id="entry-inicio">
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label small fw-bold">Fecha T¿rmino</label>
+                            <label class="form-label small fw-bold">Fecha Término</label>
                             <input type="datetime-local" class="form-control" id="entry-termino">
                         </div>
                         <div class="col-md-12">
                             <label class="form-label small fw-bold">Usuario Subrogante</label>
-                            <select class="form-select" id="entry-subrogante" style="width: 100%;">
-                                <option value="">Sin Subrogante</option>
-                            </select>
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control bg-light" id="entry-subrogante-label" readonly
+                                    placeholder="Sin Subrogante">
+                                <input type="hidden" id="entry-subrogante">
+                                <button class="btn btn-outline-secondary" type="button"
+                                    onclick="abrirModalSeleccion('usuario', 'entry-subrogante')">
+                                    <i data-feather="search"></i>
+                                </button>
+                                <button class="btn btn-outline-danger" type="button"
+                                    onclick="limpiarSeleccion('entry-subrogante')">
+                                    <i data-feather="x"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -126,6 +148,64 @@ include '../../../../api/general/header.php';
                 <button type="button" class="btn btn-link text-decoration-none text-muted small"
                     data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-dark px-4 shadow-sm" id="btn-save">Guardar Asignación</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .modal-list-container {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    .modal-list-item {
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    .modal-list-item:hover {
+        background-color: #f8f9fa;
+    }
+</style>
+
+<!-- Modal Buscar Usuario -->
+<div class="modal fade" id="modal-buscar-usuario" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold fs-6">Buscar Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-3">
+                <input type="text" class="form-control form-control-sm mb-3" id="input-buscar-usuario-modal" placeholder="Filtrar por nombre o RUT...">
+                <div class="modal-list-container border rounded">
+                    <table class="table table-sm table-hover mb-0">
+                        <tbody id="lista-usuarios-modal">
+                            <!-- Se llena por JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Buscar Perfil -->
+<div class="modal fade" id="modal-buscar-perfil" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold fs-6">Buscar Perfil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-3">
+                <input type="text" class="form-control form-control-sm mb-3" id="input-buscar-perfil-modal" placeholder="Filtrar por nombre de perfil...">
+                <div class="modal-list-container border rounded">
+                    <table class="table table-sm table-hover mb-0">
+                        <tbody id="lista-perfiles-modal">
+                            <!-- Se llena por JS -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -141,7 +221,6 @@ include '../../../../api/general/header.php';
     feather.replace();
 </script>
 
-<script
-    src="../../../../recursos/js/funcionarios/sisadmin/mantenedores/acceso/sisadmin_mantenedor_acceso_usuarios_perfiles.js"></script>
+<script src="../../../../recursos/js/funcionarios/sisadmin/mantenedores/acceso/usuarios_roles.js"></script>
 
 <?php include '../../../../api/general/footer.php'; ?>

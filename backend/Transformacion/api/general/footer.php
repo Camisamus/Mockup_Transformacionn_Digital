@@ -1,16 +1,14 @@
-<footer class="text-center py-3 text-muted small border-top bg-white mt-auto">
-    Sistema Municipal Unificado 2026
+</div> <footer class="footer mt-auto py-2 bg-light border-top">
+    <div class="container-fluid text-center">
+        <span class="text-muted" style="font-size: 0.75rem; letter-spacing: 0.5px;">
+            Sistema Municipal Unificado &copy; 2026
+        </span>
+    </div>
 </footer>
-</div> <!-- End container-fluid -->
-</main> <!-- End Main -->
 
-<!-- Sidebar Overlay for Mobile -->
-<div id="sidebar-overlay"></div>
+</main> <div id="sidebar-overlay"></div>
 
-</div> <!-- End Wrapper -->
-
-<!-- Scripts -->
-<script src="<?php echo $pathPrefix; ?>recursos/js/bootstrap.bundle.min.js"></script>
+</div> <script src="<?php echo $pathPrefix; ?>recursos/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <?php if (function_exists('renderLayoutScripts'))
@@ -45,5 +43,4 @@
     });
 </script>
 </body>
-
 </html>

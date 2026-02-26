@@ -1,4 +1,4 @@
-// Mantenedor de Perfiles de Acceso
+// Mantenedor de Roles de Acceso
 let allData = [];
 let currentModal = null;
 let currentMode = 'create';
@@ -38,11 +38,11 @@ function attachEventListeners() {
 window.loadData = async function () {
     const tbody = document.getElementById('table-body');
     if (tbody) {
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-5"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Cargando datos...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center py-5"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Cargando datos...</td></tr>';
     }
 
     try {
-        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/roles.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/accesos/permisos.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -74,16 +74,16 @@ function renderTable(dataItems) {
     tbody.innerHTML = '';
     dataItems.forEach(item => {
         const row = document.createElement('tr');
-        const creationDate = item.prf_creacion ? new Date(item.prf_creacion).toLocaleDateString() : 'N/A';
         row.innerHTML = `
-            <td class="fw-bold text-muted">${item.prf_id}</td>
-            <td>${item.prf_nombre}</td>
-            <td><small>${creationDate}</small></td>
+            <td class="fw-bold fs-6"><code>${item.rol_id}</code></td>
+            <td>${item.rol_nombre}</td>
+            <td><small class="text-muted">${item.rol_enlace || '-'}</small></td>
+            <td><span class="badge bg-light text-dark border fw-normal">${item.rol_tipo || 'N/A'}</span></td>
             <td class="text-end">
-                <button class="btn btn-sm btn-outline-secondary me-1" onclick="editItem(${item.prf_id})">
+                <button class="btn btn-sm btn-outline-secondary me-1" onclick="editItem('${item.rol_id}')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                 </button>
-                <button class="btn btn-sm btn-outline-danger" onclick="deleteItem(${item.prf_id})">
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteItem('${item.rol_id}')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                 </button>
             </td>
@@ -97,7 +97,7 @@ function renderTable(dataItems) {
 function renderEmptyState(message) {
     const tbody = document.getElementById('table-body');
     if (tbody) {
-        tbody.innerHTML = `<tr><td colspan="4" class="text-center py-5 text-muted small">${message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center py-5 text-muted small">${message}</td></tr>`;
     }
 }
 
@@ -106,7 +106,8 @@ function filterData() {
 
     const filtered = allData.filter(item => {
         const textMatch = !filterVal ||
-            (item.prf_nombre && item.prf_nombre.toLowerCase().includes(filterVal));
+            (item.rol_id && item.rol_id.toLowerCase().includes(filterVal)) ||
+            (item.rol_nombre && item.rol_nombre.toLowerCase().includes(filterVal));
         return textMatch;
     });
 
@@ -120,27 +121,32 @@ window.openModal = function (mode, data = null) {
     const idInput = document.getElementById('entry-id');
 
     if (form) form.reset();
-    if (idInput) idInput.value = '';
 
     if (mode === 'create') {
-        if (modalTitle) modalTitle.textContent = 'Nuevo Perfil';
+        if (modalTitle) modalTitle.textContent = 'Nuevo Rol';
+        if (idInput) idInput.disabled = false;
     } else if (mode === 'edit' && data) {
-        if (modalTitle) modalTitle.textContent = 'Editar Perfil';
-        if (idInput) idInput.value = data.prf_id;
-        document.getElementById('entry-nombre').value = data.prf_nombre;
+        if (modalTitle) modalTitle.textContent = 'Editar Rol';
+        if (idInput) {
+            idInput.value = data.rol_id;
+            idInput.disabled = true; // ID normally immutable for roles
+        }
+        document.getElementById('entry-nombre').value = data.rol_nombre;
+        document.getElementById('entry-enlace').value = data.rol_enlace || '';
+        document.getElementById('entry-tipo').value = data.rol_tipo || 'Pagina';
     }
 
     if (currentModal) currentModal.show();
 }
 
 window.editItem = function (id) {
-    const item = allData.find(o => o.prf_id == id);
+    const item = allData.find(o => o.rol_id == id);
     if (item) openModal('edit', item);
 }
 
 window.deleteItem = async function (id) {
     const result = await Swal.fire({
-        title: '¿Eliminar perfil?',
+        title: '¿Eliminar rol?',
         text: 'Esta acción mandará el registro a la papelera.',
         icon: 'warning',
         showCancelButton: true,
@@ -151,16 +157,16 @@ window.deleteItem = async function (id) {
 
     if (result.isConfirmed) {
         try {
-            const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/roles.php`, {
+            const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/accesos/permisos.php`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ACCION: 'BORRAR', prf_id: id })
+                body: JSON.stringify({ ACCION: 'BORRAR', rol_id: id })
             });
 
             const data = await response.json();
             if (data.status === 'success') {
-                Swal.fire('Éxito', 'Perfil eliminado correctamente.', 'success');
+                Swal.fire('Éxito', 'Rol eliminado correctamente.', 'success');
                 loadData();
             } else {
                 Swal.fire('Error', data.message, 'error');
@@ -180,16 +186,19 @@ async function saveData() {
 
     const id = document.getElementById('entry-id').value;
     const nombre = document.getElementById('entry-nombre').value;
+    const enlace = document.getElementById('entry-enlace').value;
+    const tipo = document.getElementById('entry-tipo').value;
 
     const payload = {
         ACCION: currentMode === 'create' ? 'CREAR' : 'ACTUALIZAR',
-        prf_nombre: nombre
+        rol_id: id,
+        rol_nombre: nombre,
+        rol_enlace: enlace,
+        rol_tipo: tipo
     };
 
-    if (currentMode === 'edit') payload.prf_id = parseInt(id);
-
     try {
-        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/acceso/roles.php`, {
+        const response = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/accesos/permisos.php`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },

@@ -1,7 +1,7 @@
 <?php
-$pageTitle = "Mantenedor Roles de Acceso";
-require_once '../../../../api/auth_check.php';
-include '../../header.php';
+$pageTitle = "Asignación Roles";
+require_once '../../../../api/general/auth_check.php';
+include '../../../../api/general/header.php';
 ?>
 
 
@@ -110,7 +110,6 @@ include '../../header.php';
     </div>
 </div>
 
-<script
-    src="../../../../recursos/js/funcionarios/sisadmin/mantenedores/acceso/sisadmin_mantenedor_acceso_perfiles.js"></script>
+<script src="../../../../recursos/js/funcionarios/sisadmin/mantenedores/acceso/roles.js"></script>
 
-<?php include '../../../../api/footer.php'; ?>
+<?php include '../../../../api/general/footer.php'; ?>

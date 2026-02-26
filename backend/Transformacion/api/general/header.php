@@ -94,7 +94,7 @@
                 </div>
             </header>
 
-            <div class="container-fluid pb-5 px-4 pt-4" id="main-content-container">
+            <div class="container-fluid pb-0 px-4 pt-4" id="main-content-container">
                 <!-- Page Content Starts Here -->
 
                 <script>

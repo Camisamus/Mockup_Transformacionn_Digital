@@ -1,8 +1,7 @@
 <?php
-
-$pageTitle = "Mantenedor Usuarios de Acceso";
-require_once '../../../../Transformacion/api/general/auth_check.php';
-include '../../../..//Transformacion/api/general/header.php';
+$pageTitle = "Asignación Usuaios";
+require_once '../../../../api/general/auth_check.php';
+include '../../../../api/general/header.php';
 ?>
 
 
