@@ -677,4 +677,83 @@ class Ingresos_ingreso
             return false;
         }
     }
+
+    public function getMetrics()
+    {
+        $metrics = [
+            'total' => 0,
+            'pendientes' => 0,
+            'resueltas_mes' => 0,
+            'tiempo_promedio' => '0d'
+        ];
+
+        try {
+            // Totales
+            $stmt = $this->conn->prepare("SELECT COUNT(*) FROM " . $this->table_name . " WHERE tis_borrado = 0");
+            $stmt->execute();
+            $metrics['total'] = $stmt->fetchColumn();
+
+            // Pendientes
+            $stmt = $this->conn->prepare("SELECT COUNT(*) FROM " . $this->table_name . " WHERE tis_borrado = 0 AND tis_estado NOT LIKE 'Resuelto%'");
+            $stmt->execute();
+            $metrics['pendientes'] = $stmt->fetchColumn();
+
+            // Resueltas este mes
+            $stmt = $this->conn->prepare("SELECT COUNT(*) FROM " . $this->table_name . " WHERE tis_borrado = 0 AND tis_estado LIKE 'Resuelto%' AND MONTH(tis_creacion) = MONTH(CURRENT_DATE()) AND YEAR(tis_creacion) = YEAR(CURRENT_DATE())");
+            $stmt->execute();
+            $metrics['resueltas_mes'] = $stmt->fetchColumn();
+
+            // Tiempo Promedio
+            $stmt = $this->conn->prepare("
+                SELECT AVG(DATEDIFF(b.bit_fecha, s.tis_creacion)) as promedio
+                FROM " . $this->table_name . " s
+                JOIN trd_general_bitacora b ON s.tis_registro_tramite = b.bit_registro
+                WHERE s.tis_estado LIKE 'Resuelto%' 
+                AND b.bit_descripcion LIKE '%finalizada%'
+            ");
+            $stmt->execute();
+            $avg = $stmt->fetchColumn();
+            $metrics['tiempo_promedio'] = ($avg ? round($avg, 1) : '0') . 'd';
+
+        } catch (PDOException $e) {
+            error_log("Error getting Ingresos metrics: " . $e->getMessage());
+        }
+
+        return $metrics;
+    }
+
+    public function getChartData()
+    {
+        $data = [
+            'estados' => [],
+            'tipos' => []
+        ];
+
+        try {
+            // Estados últimos 30 días
+            $stmt = $this->conn->prepare("
+                SELECT tis_estado as label, COUNT(*) as value 
+                FROM " . $this->table_name . " 
+                WHERE tis_borrado = 0 AND tis_creacion >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+                GROUP BY tis_estado
+            ");
+            $stmt->execute();
+            $data['estados'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Tipos de Ingreso 
+            $stmt = $this->conn->prepare("
+                SELECT tis_tipo as label, COUNT(*) as value 
+                FROM " . $this->table_name . " 
+                WHERE tis_borrado = 0 
+                GROUP BY tis_tipo
+            ");
+            $stmt->execute();
+            $data['tipos'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $e) {
+            error_log("Error getting Ingresos chart data: " . $e->getMessage());
+        }
+
+        return $data;
+    }
 }

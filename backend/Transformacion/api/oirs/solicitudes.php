@@ -3,6 +3,7 @@ require_once '../general/cors.php';
 
 // API Endpoint: OIRS Solicitudes
 require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../general/app_autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
@@ -69,6 +70,16 @@ switch ($data['ACCION']) {
 
     case 'BUSCAR':
         $response = $controller->search($data);
+        echo json_encode($response);
+        break;
+
+    case 'METRICAS':
+        $response = $controller->getMetrics();
+        echo json_encode($response);
+        break;
+
+    case 'GRAFICOS':
+        $response = $controller->getChartData();
         echo json_encode($response);
         break;
 

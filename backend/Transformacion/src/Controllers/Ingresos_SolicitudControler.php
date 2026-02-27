@@ -166,4 +166,14 @@ class Ingresos_SolicitudControler
             return ["status" => "error", "message" => "No se pudo enviar el correo de verificación"];
         }
     }
+
+    public function getMetrics()
+    {
+        return ["status" => "success", "data" => $this->solicitud->getMetrics()];
+    }
+
+    public function getChartData()
+    {
+        return ["status" => "success", "data" => $this->solicitud->getChartData()];
+    }
 }

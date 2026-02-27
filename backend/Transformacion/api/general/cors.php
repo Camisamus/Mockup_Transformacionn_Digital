@@ -3,6 +3,7 @@
 ob_start();
 
 require_once 'session_start.php';
+require_once 'app_autoload.php';
 
 // Error handler to ensure we always return JSON even on PHP errors
 set_error_handler(function ($errno, $errstr, $errfile, $errline) {

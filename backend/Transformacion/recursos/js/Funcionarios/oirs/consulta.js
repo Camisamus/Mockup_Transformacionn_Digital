@@ -10,10 +10,10 @@ $(document).ready(function () {
     const urlParams = new URLSearchParams(window.location.search);
     currentOirsId = urlParams.get('id');
 
-    if (!currentOirsId) {
+    /* if (!currentOirsId) {
         solicitarID();
         return;
-    }
+    } */
 
     // --- ID Fixes for oirs_consulta.php (if missing) ---
     // Fix: oig_respuesta_preliminar textarea

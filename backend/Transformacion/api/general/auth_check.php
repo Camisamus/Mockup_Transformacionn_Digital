@@ -13,6 +13,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once __DIR__ . '/session_start.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/app_autoload.php';
 require_once __DIR__ . '/layout_functions.php';
 
 use App\Config\Database;

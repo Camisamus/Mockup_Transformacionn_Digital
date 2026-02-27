@@ -18,36 +18,46 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById('btn_limpiar').addEventListener('click', limpiarFiltros);
 
     // Export Listeners
-    document.getElementById('btn_exportar_excel').addEventListener('click', () => {
-        const dataToExport = allSolicitudes.map(item => {
-            const org = organizaciones.find(o => o.org_id == item.sol_origen_id) || {};
-            const tipoOrg = tiposOrganizacion.find(t => t.tor_id == org.org_tipo_id) || {};
-            const prio = prioridades.find(p => p.pri_id == item.sol_prioridad_id) || {};
-            const func = funcionarios.find(f => f.fnc_id == item.sol_funcionario_id) || {};
-            const sec = sectores.find(s => s.sec_id == item.sol_sector_id) || {};
+    document.getElementById('btn_exportar_excel').addEventListener('click', async () => {
+        try {
+            // Recopilar filtros activos del frontend
+            const filtros = { ACCION: 'REPORTE' };
 
-            return {
-                "ID": item.sol_id,
-                "RGT": item.sol_ingreso_desve,
-                "Expediente": item.sol_nombre_expediente,
-                "Tipo Organización": tipoOrg.tor_nombre || 'N/A',
-                "Origen": item.sol_origen_texto || org.org_nombre || 'N/A',
-                "Fecha Recepción": formatDate(item.sol_fecha_recepcion),
-                "Prioridad": prio.pri_nombre || 'N/A',
-                "Funcionario": func.fnc_nombre || 'N/A',
-                "Sector": sec.sec_nombre || 'N/A',
-                "Vencimiento": formatDate(item.sol_fecha_vencimiento),
-                "Estado Entrega": (item.sol_estado_entrega == 1 || item.sol_estado_entrega === true) ? 'Entregado' : 'Pendiente',
-                "Entrega Coordinador": (item.sol_entrego_coordinador == 1) ? 'Sí (' + (formatDate(item.sol_fecha_respuesta_coordinador) || '') + ')' : 'No',
-                "Días Vencimiento": item.sol_dias_vencimiento || 0,
-                "Días Transcurridos": item.sol_dias_transcurridos || 0,
-                "Cant. Mails": item.sol_mails_count || 0,
-                "Último Mail": formatDate(item.sol_mail_enviado_fecha),
-                "Observaciones": item.sol_observaciones || '',
-                "Reingreso ID": item.sol_reingreso_id || '-'
-            };
-        });
-        exportJsonToExcel(dataToExport, 'Listado_Ingresos_DESVE');
+            const elEstado = document.getElementById('filtro_estado');
+            const elFechaDesde = document.getElementById('filtro_fecha_desde');
+            const elFechaHasta = document.getElementById('filtro_fecha_hasta');
+            const elReingresos = document.getElementById('filtro_ocultar_reingresos');
+            const elFuncionario = document.getElementById('filtro_funcionario');
+
+            if (elEstado && elEstado.value !== '') filtros.ESTADO = elEstado.value;
+            if (elFechaDesde && elFechaDesde.value) filtros.FECHA_INICIO = elFechaDesde.value;
+            if (elFechaHasta && elFechaHasta.value) filtros.FECHA_FIN = elFechaHasta.value;
+            if (elReingresos && elReingresos.checked) filtros.REINGRESOS = 'NO';
+            if (elFuncionario && elFuncionario.value) filtros.FUNCIONARIO_ID = elFuncionario.value;
+
+            const response = await fetch(`${window.API_BASE_URL}/reportes/historial_desve.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(filtros),
+                credentials: 'include'
+            });
+
+            if (!response.ok) throw new Error('Error en descarga');
+
+            const hexStr = await response.text();
+            // Convertir hex a blob
+            const bytes = new Uint8Array(hexStr.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+            const blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Historial_DESVE_' + Date.now() + '.xlsx';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        } catch (e) {
+            console.error('Error exportando Excel:', e);
+            Swal.fire('Error', 'No se pudo descargar el archivo.', 'error');
+        }
     });
     document.getElementById('btn_exportar_pdf').addEventListener('click', () => {
         // Hide elements we don't want in PDF temporarily if needed, or just export body/container

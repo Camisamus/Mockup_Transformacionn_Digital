@@ -64,7 +64,7 @@
         </div>
 
         <!-- Main Content -->
-        <main class="main-portal flex-grow-1 watermark-bg">
+        <main class="main-portal flex-grow-1 watermark-bg d-flex flex-column">
 
             <header class="bg-white border-bottom shadow-sm px-4 d-flex align-items-center justify-content-between"
                 style="height: 70px; border-bottom: 3px solid #006FB3 !important; flex-shrink: 0; z-index: 10;">

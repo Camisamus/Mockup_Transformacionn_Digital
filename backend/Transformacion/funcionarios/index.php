@@ -50,12 +50,12 @@ include '../api/general/header.php';
         
         <div class="flex flex-row gap-3 w-full lg:w-auto justify-center lg:justify-end">
             <button type="button" onclick="abrirModalCrearTarea()"
-                class="flex-1 lg:flex-none whitespace-nowrap bg-primary-blue hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-xs uppercase tracking-wider flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined text-[18px]">add</span> NUEVA TAREA
+                class="flex-1 lg:flex-none whitespace-nowrap bg-primary-blue hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-sm uppercase tracking-wider flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-[20px]">add_circle</span> NUEVA TAREA
             </button>
             <button type="button" onclick="window.location.href = 'bandeja_historial.php'"
-                class="flex-1 lg:flex-none whitespace-nowrap bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all text-xs uppercase tracking-wider flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined text-[18px]">history</span> HISTORIAL
+                class="flex-1 lg:flex-none whitespace-nowrap bg-slate-700 hover:bg-slate-800 text-white font-bold py-3.5 px-8 rounded-xl shadow-lg transition-all text-sm uppercase tracking-wider flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-[20px]">history</span> HISTORIAL
             </button>
         </div>
     </div>
@@ -104,7 +104,7 @@ include '../api/general/header.php';
                 </thead>
                 <tbody class="divide-y divide-slate-100 text-[15px] text-slate-700" id="table-body">
                     <tr>
-                        <td colspan="6" class="text-center py-10 text-slate-400 italic">Cargando tareas...</td>
+                        <td colspan="6" class="px-6 py-10 text-center text-slate-400 italic">Cargando tareas...</td>
                     </tr>
                 </tbody>
             </table>

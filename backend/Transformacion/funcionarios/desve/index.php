@@ -76,7 +76,7 @@ include '../../api/general/header.php';
     <div
         class="bg-white border border-slate-100 rounded-3xl p-6 lg:p-10 flex flex-col sm:flex-row justify-between items-center shadow-sm gap-6">
         <div class="space-y-1 w-full text-left">
-            <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Bienvenido </h1>
+            <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Bienvenido al sistema DESVE </h1>
             <p class="text-slate-400 text-sm lg:text-[15px] font-medium">Aquí podrás encontrar un resumen de los estados
                 de las solicitudes ingresadas a DESVE.</p>
         </div>

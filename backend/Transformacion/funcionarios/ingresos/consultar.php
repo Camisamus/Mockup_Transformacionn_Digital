@@ -328,7 +328,7 @@ include '../../api/general/header.php';
 </script>
 
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-<script src="../../recursos/js/funcionarios/ingresos/ingr_permissions.js"></script>
-<script src="../../recursos/js/funcionarios/ingresos/ingr_consultar.js"></script>
+<script src="../../recursos/js/funcionarios/ingresos/permisos.js"></script>
+<script src="../../recursos/js/funcionarios/ingresos/consultar.js"></script>
 
 <?php include '../../api/general/footer.php'; ?>

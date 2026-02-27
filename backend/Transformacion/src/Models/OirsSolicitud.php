@@ -222,4 +222,94 @@ class OirsSolicitud
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getMetrics()
+    {
+        try {
+            // 1. Total de solicitudes (no borradas)
+            $queryTotal = "SELECT COUNT(*) FROM " . $this->table_name . " WHERE oirs_borrado = 0";
+            $total = $this->conn->query($queryTotal)->fetchColumn();
+
+            // 2. Pendientes (Estado < 4: Recibida, En Revisión, Visación, En Gestión)
+            $queryPending = "SELECT COUNT(*) FROM " . $this->table_name . " WHERE oirs_borrado = 0 AND oirs_estado < 4";
+            $pending = $this->conn->query($queryPending)->fetchColumn();
+
+            // 3. Resueltas este mes (Estado >= 4, dentro del mes actual)
+            $queryResolvedMonth = "SELECT COUNT(*) FROM " . $this->table_name . " 
+                                   WHERE oirs_borrado = 0 AND oirs_estado >= 4 
+                                   AND MONTH(oirs_creacion) = MONTH(CURRENT_DATE()) 
+                                   AND YEAR(oirs_creacion) = YEAR(CURRENT_DATE())";
+            $resolvedMonth = $this->conn->query($queryResolvedMonth)->fetchColumn();
+
+            // 4. Tiempo Promedio de Resolución (Días)
+            // Calculamos la diferencia entre creación y el último evento de bitácora para los casos cerrados/terminados
+            $queryAvgTime = "SELECT AVG(DATEDIFF(last_event, oirs_creacion)) as avg_days
+                             FROM (
+                                SELECT o.oirs_creacion, MAX(b.bit_creacion) as last_event
+                                FROM trd_oirs_solicitud o
+                                JOIN trd_general_bitacora b ON o.oirs_registro_tramite = b.bit_tramite_registrado
+                                WHERE o.oirs_borrado = 0 AND o.oirs_estado >= 4
+                                GROUP BY o.oirs_id
+                             ) as resolution_times";
+            $avgTime = $this->conn->query($queryAvgTime)->fetchColumn();
+
+            return [
+                "total" => (int)$total,
+                "pending" => (int)$pending,
+                "resolvedMonth" => (int)$resolvedMonth,
+                "avgTime" => round((float)$avgTime, 1)
+            ];
+        } catch (PDOException $e) {
+            error_log("Error in OirsSolicitud::getMetrics: " . $e->getMessage());
+            return ["error" => $e->getMessage()];
+        }
+    }
+
+    public function getChartData()
+    {
+        try {
+            // 1. Datos por Estado (Últimos 30 días)
+            $queryEstado = "SELECT oirs_estado, COUNT(*) as count 
+                            FROM " . $this->table_name . " 
+                            WHERE oirs_borrado = 0 
+                            AND oirs_creacion >= DATE_SUB(NOW(), INTERVAL 30 DAY) 
+                            GROUP BY oirs_estado";
+            $resEstado = $this->conn->query($queryEstado)->fetchAll(PDO::FETCH_ASSOC);
+
+            // Mapping states to labels
+            $stateLabels = [
+                0 => 'Creada',
+                1 => 'Visada',
+                2 => 'Resp. Ejecutar',
+                3 => 'Respondida',
+                4 => 'Ejecutada',
+                5 => 'Notificada'
+            ];
+
+            $dataEstado = [];
+            foreach ($resEstado as $row) {
+                $label = $stateLabels[$row['oirs_estado']] ?? 'Otro';
+                $dataEstado[] = [
+                    "label" => $label,
+                    "value" => (int)$row['count']
+                ];
+            }
+
+            // 2. Datos por Tipo de Solicitud (Atención)
+            $queryTipo = "SELECT t.tat_nombre as label, COUNT(s.oirs_id) as value 
+                          FROM trd_oirs_tipo_atencion t 
+                          LEFT JOIN " . $this->table_name . " s ON t.tat_id = s.oirs_tipo_atencion AND s.oirs_borrado = 0 
+                          WHERE t.tat_borrado = 0 
+                          GROUP BY t.tat_id";
+            $dataTipo = $this->conn->query($queryTipo)->fetchAll(PDO::FETCH_ASSOC);
+
+            return [
+                "estados" => $dataEstado,
+                "tipos" => $dataTipo
+            ];
+        } catch (PDOException $e) {
+            error_log("Error in OirsSolicitud::getChartData: " . $e->getMessage());
+            return ["error" => $e->getMessage()];
+        }
+    }
 }

@@ -162,4 +162,16 @@ class OirsSolicitudController
 
         return ["status" => "success", "data" => $result];
     }
+
+    public function getMetrics()
+    {
+        $metrics = $this->oirsModel->getMetrics();
+        return ["status" => "success", "data" => $metrics];
+    }
+
+    public function getChartData()
+    {
+        $data = $this->oirsModel->getChartData();
+        return ["status" => "success", "data" => $data];
+    }
 }

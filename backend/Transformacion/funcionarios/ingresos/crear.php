@@ -4,177 +4,162 @@ require_once '../../api/general/auth_check.php';
 include '../../api/general/header.php';
 ?>
 
-<div class="container-fluid py-4">
-    <div class="card shadow-sm border-0 border-start border-4 border-primary">
-        <div class="toolbar">
-            <div class="main-header mb-4">
-                <div class="header-title">
-                    <h2 class="fw-bold fs-4">Crear Nuevo Ingreso</h2>
-                    <p class="text-muted mb-0">Complete el formulario para registrar un nuevo trámite</p>
-                </div>
-            </div>
-            <button type="button" class="btn btn-toolbar btn-dark " onclick="location.href='index.php'">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="3" width="7" height="7"></rect>
-                    <rect x="14" y="14" width="7" height="7"></rect>
-                    <rect x="3" y="14" width="7" height="7"></rect>
-                </svg>
-                Bandeja
-            </button>
-        </div>
-    </div>
-</div>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
 
-<form id="form_crear_ingreso">
-    <div class="row g-4">
-        <!-- Left Column: Main Form -->
-        <div class="col-lg-8">
-            <!-- General Info -->
-            <div class="card shadow-sm border-0 border-start border-4 border-primary mb-4">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold fs-6 mb-4">Información General</h5>
-                    <div class="row g-3">
-                        <div class="col-12">
-                            <label for="tis_titulo" class="form-label small fw-bold">Título del Ingreso</label>
-                            <input type="text" class="form-control form-control-sm" id="tis_titulo" required
-                                placeholder="Ej: Solicitud de Permiso de Edificación">
+<script id="tailwind-config">
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    "primary-blue": "#1a5f9c",
+                    "gob-warning": "#f59e0b",
+                    "gob-success": "#10b981",
+                    "soft-cyan": "#F0FFFF",
+                    "cyan-border": "#E0FFFF"
+                },
+                fontFamily: { "sans": ["Inter", "sans-serif"] }
+            }
+        }
+    }
+</script>
+
+<style>
+    body { background-color: #f8f9fa; font-family: 'Inter', sans-serif; }
+    .material-symbols-outlined { font-family: 'Material Symbols Outlined' !important; vertical-align: middle; line-height: 1; }
+    .gob-card { border: 1px solid rgba(226, 232, 240, 0.6); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+    .drop-zone { border: 2px dashed #E0FFFF; border-radius: 1rem; padding: 2rem; text-align: center; cursor: pointer; transition: all 0.3s; background-color: #F0FFFF; }
+    .drop-zone:hover { border-color: #1a5f9c; background-color: #e0f2fe; }
+</style>
+
+<div class="max-w-[1400px] mx-auto p-4 lg:p-8 space-y-6">
+    <form id="form_crear_ingreso">
+        
+        <div class="bg-white border border-slate-100 rounded-3xl p-6 lg:p-10 flex flex-col lg:flex-row justify-between items-start lg:items-center shadow-sm gap-6 sticky top-4 z-20">
+            <div class="space-y-1 w-full text-left">
+                <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Crear Nuevo Ingreso</h1>
+                <p class="text-slate-400 text-sm lg:text-[15px] font-medium">Complete el formulario para registrar un nuevo trámite en el sistema.</p>
+            </div>
+
+            <div class="flex items-center gap-4 w-full lg:w-auto justify-end">
+                <button type="button" onclick="location.href='index.php'" class="text-slate-400 font-bold hover:text-slate-600 transition-all text-[13px] uppercase tracking-wider">Cancelar</button>
+                <button type="submit"
+                    class="flex-1 lg:flex-none flex items-center justify-center gap-2 bg-primary-blue hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-[13px] uppercase tracking-wider">
+                    <span class="material-symbols-outlined text-[20px]">save</span> GUARDAR INGRESO
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-4">
+
+            <div class="lg:col-span-8 space-y-6">
+                
+                <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
+                        <span class="material-symbols-outlined text-primary-blue">info</span>
+                        <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Información General</h3>
+                    </div>
+
+                    <div class="p-6 lg:p-10 space-y-6">
+                        <div class="space-y-2">
+                            <label for="tis_titulo" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Título del Ingreso</label>
+                            <input type="text" id="tis_titulo" placeholder="Ej: Solicitud de Permiso de Edificación" 
+                                class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3" required />
                         </div>
-                        <div class="col-md-12">
-                            <label for="tis_tipo" class="form-label small fw-bold">Tipo de Ingreso</label>
-                            <select class="form-select form-select-sm" id="tis_tipo" required>
-                                <option value="" selected disabled>Cargando tipos...</option>
-                                <!-- Dynamic -->
-                            </select>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label for="tis_tipo" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Tipo de Ingreso</label>
+                                <select id="tis_tipo" required class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3">
+                                    <option value="" selected disabled>Cargando tipos...</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label for="tis_fecha_limite" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Fecha Límite</label>
+                                <input type="date" id="tis_fecha_limite" class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3" />
+                                <p class="text-[10px] text-slate-400 italic">Si se deja vacío, se calcularán 20 días hábiles automáticamente.</p>
+                            </div>
                         </div>
-                        <div class="col-md-12">
-                            <label for="tis_fecha_limite" class="form-label small fw-bold">Fecha Límite</label>
-                            <input type="date" class="form-control form-control-sm" id="tis_fecha_limite"
-                                placeholder="Seleccione fecha límite (opcional)">
-                            <div class="form-text small">Si se deja vacío, se calcularán 20 días hábiles.</div>
-                        </div>
-                        <div class="col-12">
-                            <label for="tis_contenido" class="form-label small fw-bold">Contenido /
-                                Descripción</label>
-                            <textarea class="form-control form-control-sm" id="tis_contenido" rows="8"
-                                placeholder="Detalle aquí la solicitud..."></textarea>
+
+                        <div class="space-y-2">
+                            <label for="tis_contenido" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Contenido / Descripción</label>
+                            <textarea id="tis_contenido" rows="8" placeholder="Detalle aquí la solicitud..."
+                                class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-4 bg-slate-50 italic focus:bg-white transition-all"></textarea>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Destinos -->
-            <div class="card shadow-sm border-0 mb-4">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h5 class="fw-bold fs-6 mb-0">Destinatarios</h5>
-                        <button type="button" class="btn btn-toolbar btn-dark " onclick="abrirModalBuscarFuncionario()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                            </svg>
-                            Buscar Funcionario
+                <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-50 flex items-center justify-between bg-white">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary-blue">group_add</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Destinatarios</h3>
+                        </div>
+                        <button type="button" onclick="abrirModalBuscarFuncionario()" 
+                            class="flex items-center gap-2 bg-slate-800 hover:bg-black text-white font-bold py-2 px-5 rounded-xl text-[11px] uppercase tracking-wider transition-all">
+                            <span class="material-symbols-outlined text-sm">person_search</span> Buscar Funcionario
                         </button>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0" id="tabla_destinos">
-                            <thead class="table-light text-uppercase small">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-[14px]" id="tabla_destinos">
+                            <thead class="bg-slate-50 text-slate-500 font-bold uppercase text-[10px] tracking-widest border-b border-slate-100">
                                 <tr>
-                                    <th>Funcionario</th>
-                                    <th>Tipo</th>
-                                    <th>Facultad</th>
-                                    <th class="text-center">Req.</th>
-                                    <th class="text-end">Acciones</th>
+                                    <th class="px-6 py-4">Funcionario</th>
+                                    <th class="px-6 py-4 text-center">Tipo</th>
+                                    <th class="px-6 py-4 text-center">Facultad</th>
+                                    <th class="px-6 py-4 text-center">Req.</th>
+                                    <th class="px-6 py-4 text-right">Acción</th>
                                 </tr>
                             </thead>
-                            <tbody id="tbody_destinos" class="small">
+                            <tbody id="tbody_destinos" class="divide-y divide-slate-50 text-slate-600">
                                 <tr id="placeholder_destinos">
-                                    <td colspan="5" class="text-center text-muted py-4">No hay destinatarios
-                                        agregados.</td>
+                                    <td colspan="5" class="px-6 py-10 text-center text-slate-400 italic">No hay destinatarios agregados.</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Right Column: Attachments and Links -->
-        <div class="col-lg-4">
-            <!-- Enlaces -->
-            <div class="card shadow-sm border-0 mb-4">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold fs-6 mb-3">Enlaces Externos</h5>
-                    <div class="input-group input-group-sm mb-3">
-                        <input type="text" class="form-control" id="input_enlace" placeholder="https://...">
-                        <button class="btn btn-dark" type="button" id="btn_agregar_enlace">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                        </button>
+            <div class="lg:col-span-4 space-y-6">
+                
+                <div class="bg-white gob-card rounded-2xl overflow-hidden shadow-sm">
+                    <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
+                        <span class="material-symbols-outlined text-primary-blue">link</span>
+                        <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest">Enlaces Externos</h3>
                     </div>
-                    <div id="lista_enlaces" class="list-group list-group-flush small">
-                        <!-- Dynamic -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Documentos (Base64) -->
-            <div class="card shadow-sm border-0 mb-4">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold fs-6 mb-3">Documentos Adjuntos</h5>
-                    <div class="drop-zone mb-3" id="drop_zone">
-                        <input type="file" id="input_archivo" hidden multiple>
-                        <div class="small text-muted">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="mb-2">
-                                <path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 4.16"></path>
-                                <polyline points="16 10 12 6 8 10"></polyline>
-                                <line x1="12" y1="6" x2="12" y2="18"></line>
-                            </svg>
-                            <br>Haga clic para adjuntar
+                    <div class="p-6 space-y-4">
+                        <div class="flex gap-2 h-10">
+                            <input type="text" id="input_enlace" placeholder="https://..." 
+                                class="flex-1 rounded-xl border-slate-200 text-sm focus:ring-primary-blue">
+                            <button type="button" id="btn_agregar_enlace" class="bg-slate-800 text-white px-4 rounded-xl flex items-center">
+                                <span class="material-symbols-outlined">add</span>
+                            </button>
                         </div>
+                        <div id="lista_enlaces" class="space-y-2 max-h-[200px] overflow-y-auto">
+                            </div>
                     </div>
-                    <div id="lista_documentos" class="list-group list-group-flush small">
-                        <!-- Dynamic -->
+                </div>
+
+                <div class="bg-soft-cyan border border-cyan-border rounded-2xl overflow-hidden shadow-sm">
+                    <div class="p-5 border-b border-cyan-border flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary-blue text-[20px]">attach_file</span>
+                        <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest">Documentos Adjuntos</h3>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="drop-zone" id="drop_zone">
+                            <input type="file" id="input_archivo" hidden multiple>
+                            <span class="material-symbols-outlined text-slate-300 text-4xl mb-2">cloud_upload</span>
+                            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider uppercase">Haga clic para adjuntar</p>
+                        </div>
+                        <div id="lista_documentos" class="space-y-2">
+                            </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Buttons -->
-            <div class="d-grid gap-2">
-                <button type="submit"
-                    class="btn btn-dark shadow-sm d-flex align-items-center justify-content-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                        <polyline points="7 3 7 8 15 8"></polyline>
-                    </svg>
-                    Guardar Ingreso
-                </button>
-                <button type="button"
-                    class="btn btn-outline-secondary d-flex align-items-center justify-content-center gap-2"
-                    id="btn_cancelar">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="15" y1="9" x2="9" y2="15"></line>
-                        <line x1="9" y1="9" x2="15" y2="15"></line>
-                    </svg>
-                    Cancelar
-                </button>
-            </div>
         </div>
-    </div>
-</form>
+    </form>
 </div>
 
 <!-- Modal Buscar Funcionario -->
@@ -289,10 +274,185 @@ include '../../api/general/header.php';
 <script src="../../recursos/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/feather-icons"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     feather.replace();
 </script>
 
-<script src="../../recursos/js/funcionarios/ingresos/ingr_crear.js"></script>
+<script src="../../recursos/js/funcionarios/ingresos/crear.js"></script>
 
 <?php include '../../api/general/footer.php'; ?>
+
+<!--<div class="container-fluid py-4">
+    <div class="card shadow-sm border-0 border-start border-4 border-primary">
+        <div class="toolbar">
+            <div class="main-header mb-4">
+                <div class="header-title">
+                    <h2 class="fw-bold fs-4">Crear Nuevo Ingreso</h2>
+                    <p class="text-muted mb-0">Complete el formulario para registrar un nuevo trámite</p>
+                </div>
+            </div>
+            <button type="button" class="btn btn-toolbar btn-dark " onclick="location.href='index.php'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                Bandeja
+            </button>
+        </div>
+    </div>
+</div>-->
+
+<!--<form id="form_crear_ingreso">
+    <div class="row g-4">-->
+        <!-- Left Column: Main Form -->
+        <!--<div class="col-lg-8">-->
+            <!-- General Info -->
+            <!--<div class="card shadow-sm border-0 border-start border-4 border-primary mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold fs-6 mb-4">Información General</h5>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label for="tis_titulo" class="form-label small fw-bold">Título del Ingreso</label>
+                            <input type="text" class="form-control form-control-sm" id="tis_titulo" required
+                                placeholder="Ej: Solicitud de Permiso de Edificación">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="tis_tipo" class="form-label small fw-bold">Tipo de Ingreso</label>
+                            <select class="form-select form-select-sm" id="tis_tipo" required>
+                                <option value="" selected disabled>Cargando tipos...</option>-->
+                                <!-- Dynamic -->
+                            <!--</select>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="tis_fecha_limite" class="form-label small fw-bold">Fecha Límite</label>
+                            <input type="date" class="form-control form-control-sm" id="tis_fecha_limite"
+                                placeholder="Seleccione fecha límite (opcional)">
+                            <div class="form-text small">Si se deja vacío, se calcularán 20 días hábiles.</div>
+                        </div>
+                        <div class="col-12">
+                            <label for="tis_contenido" class="form-label small fw-bold">Contenido /
+                                Descripción</label>
+                            <textarea class="form-control form-control-sm" id="tis_contenido" rows="8"
+                                placeholder="Detalle aquí la solicitud..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+
+            <!-- Destinos -->
+            <!--<div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold fs-6 mb-0">Destinatarios</h5>
+                        <button type="button" class="btn btn-toolbar btn-dark " onclick="abrirModalBuscarFuncionario()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            Buscar Funcionario
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0" id="tabla_destinos">
+                            <thead class="table-light text-uppercase small">
+                                <tr>
+                                    <th>Funcionario</th>
+                                    <th>Tipo</th>
+                                    <th>Facultad</th>
+                                    <th class="text-center">Req.</th>
+                                    <th class="text-end">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody_destinos" class="small">
+                                <tr id="placeholder_destinos">
+                                    <td colspan="5" class="text-center text-muted py-4">No hay destinatarios
+                                        agregados.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+
+        <!-- Right Column: Attachments and Links -->
+        <!--<div class="col-lg-4">-->
+            <!-- Enlaces -->
+            <!--<div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold fs-6 mb-3">Enlaces Externos</h5>
+                    <div class="input-group input-group-sm mb-3">
+                        <input type="text" class="form-control" id="input_enlace" placeholder="https://...">
+                        <button class="btn btn-dark" type="button" id="btn_agregar_enlace">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="lista_enlaces" class="list-group list-group-flush small">-->
+                        <!-- Dynamic -->
+                    <!--</div>
+                </div>
+            </div>-->
+
+            <!-- Documentos (Base64) -->
+            <!--<div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold fs-6 mb-3">Documentos Adjuntos</h5>
+                    <div class="drop-zone mb-3" id="drop_zone">
+                        <input type="file" id="input_archivo" hidden multiple>
+                        <div class="small text-muted">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="mb-2">
+                                <path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 4.16"></path>
+                                <polyline points="16 10 12 6 8 10"></polyline>
+                                <line x1="12" y1="6" x2="12" y2="18"></line>
+                            </svg>
+                            <br>Haga clic para adjuntar
+                        </div>
+                    </div>
+                    <div id="lista_documentos" class="list-group list-group-flush small">-->
+                        <!-- Dynamic -->
+                    <!--</div>
+                </div>
+            </div>-->
+
+            <!-- Buttons -->
+            <!--<div class="d-grid gap-2">
+                <button type="submit"
+                    class="btn btn-dark shadow-sm d-flex align-items-center justify-content-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    Guardar Ingreso
+                </button>
+                <button type="button"
+                    class="btn btn-outline-secondary d-flex align-items-center justify-content-center gap-2"
+                    id="btn_cancelar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+</div>-->
+

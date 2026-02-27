@@ -1,4 +1,4 @@
-</div> <footer class="footer mt-auto py-2 bg-light border-top">
+</div> <footer class="footer mt-auto py-1 bg-light border-top">
     <div class="container-fluid text-center">
         <span class="text-muted" style="font-size: 0.75rem; letter-spacing: 0.5px;">
             Sistema Municipal Unificado &copy; 2026

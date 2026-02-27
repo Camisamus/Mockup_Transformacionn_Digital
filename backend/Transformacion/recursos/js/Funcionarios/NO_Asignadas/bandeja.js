@@ -127,7 +127,7 @@ function renderPageTareasqueasigne(page) {
 
 function renderTable(items, tbody) {
     if (!items || items.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="text-center">No hay tareas pendientes.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-10 text-center text-slate-400 italic">No hay tareas pendientes.</td></tr>';
         return;
     }
 
@@ -135,47 +135,56 @@ function renderTable(items, tbody) {
 
     items.forEach(item => {
         const row = document.createElement('tr');
-        row.style.cursor = 'pointer';
+        row.className = 'hover:bg-slate-50/80 transition-all cursor-pointer group';
 
-        // Add ID for expansion mapping
-        const rowId = `row-${Math.random().toString(36).substr(2, 9)}`;
-        row.dataset.bsTarget = `#${rowId}`;
+        // Status Color Mapping
+        let statusClass = 'bg-slate-50 text-slate-600 border-slate-100';
+        if (item.estado === 'Atrasada') statusClass = 'bg-rose-50 text-rose-600 border-rose-100';
+        else if (item.estado === 'Completada') statusClass = 'bg-emerald-50 text-emerald-600 border-emerald-100';
+        else if (item.estado === 'En Progreso') statusClass = 'bg-blue-50 text-blue-600 border-blue-100';
+        else if (item.estado === 'Pendiente') statusClass = 'bg-amber-50 text-amber-600 border-amber-100';
 
-        // Status Badge Logic
-        let statusClass = 'status-pendiente';
-        if (item.estado === 'Atrasada') statusClass = 'status-atrasada';
-        else if (item.estado === 'Completada') statusClass = 'status-completada';
-        else if (item.estado === 'En Progreso') statusClass = 'status-en-progreso';
+        // Responsible Avatar logic
+        const initials = 'YO'; // Static as per original code
 
-        // Responsible
-        const respHTML = `
-            <div class="responsible-cell">
-                <div class="user-avatar avatar-blue">YO</div>
-                <span>Mí mismo</span>
-            </div>`;
-
-        // Main Row Content
-        // We ensure "d-none d-md-table-cell" for columns we want to hide on mobile
         row.innerHTML = `
-            <td class="task-title fw-bold text-primary">
-                ${item.asunto || 'Sin Asunto'}
-            </td>
-            <td>${item.origen}</td> 
-            <td>
-                <div class="d-flex align-items-center gap-2">
-                    <div class="bg-primary  rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px; font-size: 10px;">YO</div>
-                    <span>Yo mismo</span>
+            <td class="px-6 py-4">
+                <div class="flex flex-col">
+                    <span class="font-black text-slate-800 tracking-tight group-hover:text-primary-blue transition-colors">
+                        ${item.asunto || 'Sin Asunto'}
+                    </span>
+                    <span class="text-slate-400 text-[10px] uppercase font-bold tracking-widest mt-1">ID: #${item.id}</span>
                 </div>
             </td>
-            <td>${item.fecha}</td>
-            <td>${item.fecha_limite || '-'}</td>
-            <td><span class="badge ${item.estado === 'Atrasada' ? 'bg-danger' : (item.estado === 'Completada' ? 'bg-success' : 'bg-warning text-dark')} fw-normal">${item.estado}</span></td>
+            <td class="px-6 py-4">
+                <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 text-[10px] font-black uppercase tracking-wider">
+                    ${item.origen}
+                </span>
+            </td>
+            <td class="px-6 py-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 bg-primary-blue text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-sm">
+                        ${initials}
+                    </div>
+                    <span class="text-sm font-semibold text-slate-600">Yo mismo</span>
+                </div>
+            </td>
+            <td class="px-6 py-4 text-center">
+                <span class="text-sm font-medium text-slate-500">${item.fecha}</span>
+            </td>
+            <td class="px-6 py-4 text-center">
+                <span class="text-sm font-bold ${item.estado === 'Atrasada' ? 'text-rose-500' : 'text-slate-600'}">
+                    ${item.fecha_limite || '-'}
+                </span>
+            </td>
+            <td class="px-6 py-4 text-center">
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${statusClass}">
+                    ${item.estado}
+                </span>
+            </td>
         `;
 
-        // Navigation on row click (excluding the toggle button)
-        row.addEventListener('click', (e) => {
-            if (e.target.closest('button')) return; // Ignore if clicked toggle
-
+        row.addEventListener('click', () => {
             if (item.origen === 'DESVE') {
                 window.location.href = `desve/consultar.php?id=${item.id}`;
             } else if (item.origen === 'Ingresos') {
@@ -185,57 +194,29 @@ function renderTable(items, tbody) {
             } else if (item.origen === 'TAREAS') {
                 Swal.fire({
                     title: item.asunto,
-                    text: item.detalle, // Aquí muestras el detalle que mencionabas
+                    text: item.detalle,
                     icon: 'info',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
+                    confirmButtonColor: '#1a5f9c',
+                    cancelButtonColor: '#64748b',
                     confirmButtonText: 'Terminar',
                     cancelButtonText: 'Cerrar',
-                    reverseButtons: true // Opcional: pone el botón de confirmar a la derecha
+                    reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
                         ejecutarTerminarTarea(item.id);
                     }
                 });
-            } else {
-                Swal.fire('Info', `Navegación para ${item.origen} no definida.`, 'info');
             }
         });
 
         tbody.appendChild(row);
-
-        // Expanded Row (Hidden by default)
-        const expandedRow = document.createElement('tr');
-        expandedRow.id = rowId;
-        expandedRow.classList.add('d-md-none'); // Only for mobile
-        expandedRow.style.display = 'none';
-        expandedRow.style.backgroundColor = '#f8f9fa';
-
-        expandedRow.innerHTML = `
-            <td colspan="6">
-                <div class="p-3">
-                    <p><strong>Rol en tarea:</strong> ${item.origen}</p>
-                    <p><strong>Responsable:</strong> Mí mismo</p>
-                    <p><strong>Proyecto/Sector:</strong> ${item.origen}</p>
-                    <p><strong>Entrega:</strong> ${item.fecha}</p>
-                    <button class="btn btn-sm btn-primary mt-2" onclick="
-                        if('${item.origen}' === 'DESVE') window.location.href = 'desve/consultar.php?id=${item.id}';
-                        else if ('${item.origen}' === 'Ingresos') window.location.href = 'ingresos/ingr_consultar.php?id=${item.id}';
-                        else Swal.fire('Info', 'Módulo en construcción', 'info');
-                    ">Ver Detalle</button>
-                </div>
-            </td>
-        `;
-        tbody.appendChild(expandedRow);
     });
-
-    if (window.feather) feather.replace();
 }
 
 function renderTableTareasqueasigne(items, tbody) {
     if (!items || items.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="text-center">No hay tareas pendientes.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-10 text-center text-slate-400 italic">No hay tareas asignadas.</td></tr>';
         return;
     }
 
@@ -243,47 +224,56 @@ function renderTableTareasqueasigne(items, tbody) {
 
     items.forEach(item => {
         const row = document.createElement('tr');
-        row.style.cursor = 'pointer';
+        row.className = 'hover:bg-slate-50/80 transition-all cursor-pointer group';
 
-        // Add ID for expansion mapping
-        const rowId = `row-${Math.random().toString(36).substr(2, 9)}`;
-        row.dataset.bsTarget = `#${rowId}`;
+        const isTerminado = item.tar_estado != 0;
+        const statusClass = isTerminado
+            ? 'bg-emerald-50 text-emerald-600 border-emerald-100'
+            : 'bg-amber-50 text-amber-600 border-amber-100';
+        const statusLabel = isTerminado ? 'Terminado' : 'Pendiente';
 
-        // Main Row Content
-        let rowContent = ``;
-        if (item.tar_estado == 0) {
-            rowContent = `
-            <td>${item.tar_titulo}</td>
-            <td>${nombrefuncionario(item.tar_asignado)}</td>
-            <td>${fechaformato(item.tar_creacion)}</td>
-            <td>${fechaformato(item.tar_plazo)}</td>
-            <td><span class="badge bg-warning text-dark">Pendiente</span></td>
+        row.innerHTML = `
+            <td class="px-6 py-4">
+                <div class="flex flex-col">
+                    <span class="font-black text-slate-800 tracking-tight group-hover:text-primary-blue transition-colors">
+                        ${item.tar_titulo}
+                    </span>
+                    <span class="text-slate-400 text-[10px] uppercase font-bold tracking-widest mt-1">ID: #${item.tar_id}</span>
+                </div>
+            </td>
+            <td class="px-6 py-4">
+                <div class="flex items-center gap-2">
+                    <div class="w-7 h-7 bg-slate-700 text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-sm">
+                        ${nombrefuncionario(item.tar_asignado).substring(0, 2).toUpperCase()}
+                    </div>
+                    <span class="text-sm font-semibold text-slate-600">${nombrefuncionario(item.tar_asignado)}</span>
+                </div>
+            </td>
+            <td class="px-6 py-4 text-center">
+                <span class="text-sm font-medium text-slate-500">${fechaformato(item.tar_creacion)}</span>
+            </td>
+            <td class="px-6 py-4 text-center">
+                <span class="text-sm font-bold text-slate-600">${fechaformato(item.tar_plazo)}</span>
+            </td>
+            <td class="px-6 py-4 text-center">
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${statusClass}">
+                    ${statusLabel}
+                </span>
+            </td>
         `;
-        } else {
-            rowContent = `
-            <td>${item.tar_titulo}</td>
-            <td>${nombrefuncionario(item.tar_asignado)}</td>
-            <td>${fechaformato(item.tar_creacion)}</td>
-            <td>${fechaformato(item.tar_plazo)}</td>
-            <td><span class="badge bg-success text-dark">Terminado</span></td>
-        `;
-        }
 
-        row.innerHTML = rowContent;
-
-        // Navigation on row click (excluding the toggle button)
-        row.addEventListener('click', (e) => {
-            if (item.tar_estado == 0) {
+        row.addEventListener('click', () => {
+            if (!isTerminado) {
                 Swal.fire({
                     title: item.tar_titulo,
-                    text: item.tar_detalle, // Aquí muestras el detalle que mencionabas
+                    text: item.tar_detalle,
                     icon: 'info',
                     showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
+                    confirmButtonColor: '#1a5f9c',
+                    cancelButtonColor: '#64748b',
                     confirmButtonText: 'Terminar',
                     cancelButtonText: 'Cerrar',
-                    reverseButtons: true // Opcional: pone el botón de confirmar a la derecha
+                    reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
                         ejecutarTerminarTarea(item.tar_id);
@@ -292,10 +282,7 @@ function renderTableTareasqueasigne(items, tbody) {
             }
         });
         tbody.appendChild(row);
-
     });
-
-    if (window.feather) feather.replace();
 }
 
 function renderPaginationTareasqueasigne(totalItems, currentPage) {

@@ -45,11 +45,11 @@ include '../../api/general/header.php';
 
     <div class="bg-white border border-slate-100 rounded-3xl p-6 lg:p-10 flex flex-col sm:flex-row justify-between items-center shadow-sm gap-6">
         <div class="space-y-1 w-full text-left">
-            <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Bandeja OIRS</h1>
+            <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Bienvenido al sistema OIRS</h1>
             <p class="text-slate-400 text-sm lg:text-[15px] font-medium">Gestión y análisis de solicitudes ciudadanas OIRS.</p>
         </div>
         <div class="flex-shrink-0">
-            <button type="button" onclick="location.href='nuevo_oirs.php'"
+            <button type="button" onclick="location.href='ingresar.php'"
                 class="bg-primary-blue hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-sm uppercase tracking-wider flex items-center gap-2">
                 <span class="material-symbols-outlined text-[20px]">add_circle</span> NUEVA OIRS
             </button>
@@ -60,28 +60,28 @@ include '../../api/general/header.php';
         <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-primary-blue">
             <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Total Solicitudes</p>
             <div class="flex items-end justify-between">
-                <h3 class="text-3xl font-extrabold text-slate-800 mb-0">1.284</h3>
+                <h3 class="text-3xl font-extrabold text-slate-800 mb-0" id="oirs-total-count">...</h3>
                 <span class="text-emerald-500 font-bold text-xs">+12% mes</span>
             </div>
         </div>
         <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-gob-warning">
             <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Pendientes</p>
             <div class="flex items-end justify-between">
-                <h3 class="text-3xl font-extrabold text-slate-800 mb-0">42</h3>
+                <h3 class="text-3xl font-extrabold text-slate-800 mb-0" id="oirs-pending-count">...</h3>
                 <span class="text-amber-500 font-bold text-xs uppercase">Crítico</span>
             </div>
         </div>
         <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-slate-400">
             <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Tiempo Promedio</p>
             <div class="flex items-end justify-between">
-                <h3 class="text-3xl font-extrabold text-slate-800 mb-0">3.2d</h3>
+                <h3 class="text-3xl font-extrabold text-slate-800 mb-0" id="oirs-avg-time">...</h3>
                 <span class="text-slate-400 font-bold text-xs">Días hábiles</span>
             </div>
         </div>
         <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-gob-success">
             <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Resueltas (Mes)</p>
             <div class="flex items-end justify-between">
-                <h3 class="text-3xl font-extrabold text-slate-800 mb-0">156</h3>
+                <h3 class="text-3xl font-extrabold text-slate-800 mb-0" id="oirs-resolved-month">...</h3>
                 <span class="text-emerald-500 font-bold text-xs">94% tasa</span>
             </div>
         </div>
@@ -93,11 +93,8 @@ include '../../api/general/header.php';
                 <span class="material-symbols-outlined text-primary-blue">bar_chart</span>
                 <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest">Solicitudes por Estado (Últimos 30 días)</h3>
             </div>
-            <div class="p-6 min-h-[300px] flex items-center justify-center bg-slate-50/30">
-                <div class="text-center">
-                    <span class="material-symbols-outlined text-slate-200 text-6xl">monitoring</span>
-                    <p class="text-slate-400 text-xs mt-2 font-medium">[Gráfico de barras OIRS]</p>
-                </div>
+            <div class="p-6 h-[300px]">
+                <canvas id="chartEstado"></canvas>
             </div>
         </div>
 
@@ -106,11 +103,8 @@ include '../../api/general/header.php';
                 <span class="material-symbols-outlined text-primary-blue">pie_chart</span>
                 <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest">Tipos de Solicitud</h3>
             </div>
-            <div class="p-6 min-h-[300px] flex items-center justify-center">
-                <div class="text-center">
-                    <span class="material-symbols-outlined text-slate-200 text-6xl">Grain</span>
-                    <p class="text-slate-400 text-xs mt-2 font-medium">[Gráfico Multitud OIRS]</p>
-                </div>
+            <div class="p-6 h-[300px]">
+                <canvas id="chartTipo"></canvas>
             </div>
         </div>
     </div>
@@ -142,6 +136,7 @@ include '../../api/general/header.php';
 </div>
 
 
+<script src="../../recursos/js/funcionarios/oirs/index.js"></script>
 <script>
     $(document).ready(function () {
         // Mantiene la funcionalidad original de inicialización

@@ -1,0 +1,12 @@
+{
+    "require": {
+        "tecnickcom/tcpdf": "*",
+        "phpoffice/phpspreadsheet": "1.28.0",
+        "phpoffice/phpword": "*"
+    },
+    "config": {
+        "audit": {
+            "block-insecure": false
+        }
+    }
+}

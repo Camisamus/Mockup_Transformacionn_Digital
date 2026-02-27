@@ -335,7 +335,7 @@ include '../../api/general/header.php';
     feather.replace();
 </script>
 
-<script src="../../recursos/js/funcionarios/ingresos/ingr_permissions.js"></script>
-<script src="../../recursos/js/funcionarios/ingresos/ingr_modificar.js"></script>
+<script src="../../recursos/js/funcionarios/ingresos/permisos.js"></script>
+<script src="../../recursos/js/funcionarios/ingresos/modificar.js"></script>
 
 <?php include '../../api/general/footer.php'; ?>
