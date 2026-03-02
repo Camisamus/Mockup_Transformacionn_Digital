@@ -230,7 +230,7 @@ function renderizarTabla(data) {
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-slate-50/80 transition-all cursor-pointer group';
         tr.onclick = () => {
-            window.location.href = `consultar.php?id=${item.tis_id}`;
+            window.location.href = `ver.php?id=${item.tis_id}`;
         };
 
         const rgtCode = item.rgt_id_publica || '-';
@@ -314,6 +314,9 @@ function getRolBadge(rol) {
     if (!rol) rol = 'Consultor';
 
     switch (rol) {
+        case 'Propietario':
+            classes = 'bg-blue-50 text-blue-600 border-blue-100';
+            break;
         case 'Responsable':
             classes = 'bg-blue-50 text-blue-600 border-blue-100';
             break;

@@ -109,20 +109,21 @@ include '../../api/general/header.php';
                 <thead>
                     <tr class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
                         <th class="px-6 py-4">ID</th>
-                        <th class="px-6 py-4">Fecha</th>
+                        <th class="px-6 py-4">Ver</th>
+                        <th class="px-6 py-4">Título / Contenido</th>
+                        <th class="px-6 py-4 text-center">Fecha</th>
                         <th class="px-6 py-4 text-center">Estado</th>
                         <th class="px-6 py-4">Tipo Ingreso</th>
                         <th class="px-6 py-4">Responsable</th>
-                        <th class="px-6 py-4 text-right">Acciones</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 text-[15px] text-slate-600 italic">
-                    </tbody>
+                <tbody class="divide-y divide-slate-100 text-[13px] text-slate-600">
+                </tbody>
             </table>
         </div>
 
-        <div id="pagination_container" class="p-6 bg-slate-50/30 border-t border-slate-100 flex justify-end items-center">
-            </div>
+        <div id="pagination_container" class="p-6 bg-white border-t border-slate-50 flex justify-between items-center">
+        </div>
     </div>
 
 </div>

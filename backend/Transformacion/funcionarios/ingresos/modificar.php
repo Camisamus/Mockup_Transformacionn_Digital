@@ -1,247 +1,233 @@
 <?php
-$pageTitle = "Modificar Ingreso";
+$pageTitle = "Actualizar Ingreso";
 require_once '../../api/general/auth_check.php';
 include '../../api/general/header.php';
+
+$id_ingreso = isset($_GET['id']) ? $_GET['id'] : ''; 
 ?>
 
-<div class="container-fluid py-4">
-    <div class="main-header mb-4">
-        <div class="header-title">
-            <h2 class="fw-bold fs-4">Modificar Ingreso</h2>
-            <p class="text-muted mb-0">Edite los campos necesarios para actualizar el trámite</p>
-        </div>
-    </div>
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
 
-    <!-- Actions Card -->
-    <div class="card shadow-sm border-0 mb-4 bg-white">
-        <div class="card-body p-3">
-            <div class="row g-2 justify-content-md-end">
-                <div class="col-12 col-md-auto">
-                    <button type="submit" form="form_modificar_ingreso"
-                        class="btn btn-toolbar btn-dark w-100 d-flex align-items-center justify-content-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                            <polyline points="7 3 7 8 15 8"></polyline>
-                        </svg>
-                        Actualizar Ingreso
-                    </button>
-                </div>
-                <div class="col-12 col-md-auto">
-                    <button type="button"
-                        class="btn btn-toolbar btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2"
-                        id="btn_cancelar">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="15" y1="9" x2="9" y2="15"></line>
-                            <line x1="9" y1="9" x2="15" y2="15"></line>
-                        </svg>
-                        Cancelar
-                    </button>
-                </div>
-                <div class="col-12 col-md-auto">
-                    <button type="button" class="btn btn-toolbar btn-dark w-100 shadow-sm"
-                        onclick="location.href='index.php'">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="3" width="7" height="7"></rect>
-                            <rect x="14" y="3" width="7" height="7"></rect>
-                            <rect x="14" y="14" width="7" height="7"></rect>
-                            <rect x="3" y="14" width="7" height="7"></rect>
-                        </svg>
-                        Bandeja
-                    </button>
-                </div>
+<script id="tailwind-config">
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    "primary-blue": "#1a5f9c",
+                    "gob-warning": "#f59e0b",
+                    "gob-success": "#10b981",
+                    "soft-cyan": "#F0FFFF",
+                    "cyan-border": "#E0FFFF"
+                },
+                fontFamily: { "sans": ["Inter", "sans-serif"] }
+            }
+        }
+    }
+</script>
+
+<style>
+    body { background-color: #f8f9fa; font-family: 'Inter', sans-serif; }
+    .material-symbols-outlined { vertical-align: middle; line-height: 1; }
+    .gob-card { border: 1px solid rgba(226, 232, 240, 0.6); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+    .drop-zone { border: 2px dashed #E0FFFF; border-radius: 1rem; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.3s; background-color: #F0FFFF; }
+    .drop-zone:hover { border-color: #1a5f9c; background-color: #e0f2fe; }
+    .modal-backdrop { z-index: 1040 !important; }
+    .modal { z-index: 1050 !important; }
+</style>
+
+<div class="max-w-[1400px] mx-auto p-4 lg:p-8 space-y-6">
+    <form id="form_modificar_ingreso">
+        
+        <div class="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col lg:flex-row justify-between items-start lg:items-center shadow-sm gap-6 sticky top-4 z-20">
+            <div class="space-y-1">
+                <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Actualizar Ingreso</h1>
+                <p class="text-slate-400 text-sm font-medium">Modifique los campos para actualizar el documento ID: <span class="text-slate-600 font-bold">#<?php echo $id_ingreso; ?></span></p>
+            </div>
+
+            <div class="flex items-center gap-4 w-full lg:w-auto justify-end">
+                <button type="button" onclick="location.href='index.php'" class="text-slate-400 font-bold hover:text-slate-600 transition-all text-[13px] uppercase tracking-wider">Descartar</button>
+                <button type="submit" class="flex items-center gap-2 bg-primary-blue hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-[13px] uppercase tracking-wider">
+                    <span class="material-symbols-outlined text-[20px]">save</span> ACTUALIZAR DATOS
+                </button>
             </div>
         </div>
-    </div>
 
-    <form id="form_modificar_ingreso">
-        <div class="row g-4">
-            <!-- Left Column: Main Form -->
-            <div class="col-lg-8">
-                <!-- General Info -->
-                <div class="card shadow-sm border-0 border-start border-4 border-primary mb-4">
-                    <div class="card-body p-4">
-                        <h5 class="fw-bold fs-6 mb-4">Información General</h5>
-                        <div class="row g-3">
-                            <div class="col-12">
-                                <label for="tis_titulo" class="form-label small fw-bold">Título del Ingreso</label>
-                                <input type="text" class="form-control form-control-sm" id="tis_titulo" required
-                                    placeholder="Ej: Solicitud de Permiso de Edificación">
-                            </div>
-                            <div class="col-md-12">
-                                <label for="tis_tipo" class="form-label small fw-bold">Tipo de Ingreso</label>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-4">
+            
+            <div class="lg:col-span-7 space-y-6">
+                <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
+                        <span class="text-primary-blue font-bold">1.</span>
+                        <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Información del Documento</h3>
+                    </div>
+                    <div class="p-6 space-y-6">
+                        <div class="space-y-2">
+                            <label for="tis_titulo" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Título del Ingreso</label>
+                            <input type="text" id="tis_titulo" class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3" required />
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label for="tis_tipo" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Tipo de Ingreso</label>
+                                <select id="tis_tipo" required class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3">
+                                    <option value="" selected disabled>Cargando tipos...</option>
                                 </select>
                             </div>
-                            <div class="col-md-12">
-                                <label for="tis_fecha_limite" class="form-label small fw-bold">Fecha Límite</label>
-                                <input type="date" class="form-control form-control-sm" id="tis_fecha_limite">
-                                <div class="form-text small">Si se deja vacío, se mantendrá la fecha actual o se
-                                    calcularán 20 días hábiles si es nuevo.</div>
+                            <div class="space-y-2">
+                                <label for="tis_fecha_limite" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Fecha Límite</label>
+                                <input type="date" id="tis_fecha_limite" class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3" />
                             </div>
-                            <div class="col-12">
-                                <label for="tis_contenido" class="form-label small fw-bold">Contenido /
-                                    Descripción</label>
-                                <textarea class="form-control form-control-sm" id="tis_contenido" rows="8"
-                                    placeholder="Detalle aquí la solicitud..."></textarea>
-                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="tis_contenido" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Contenido / Descripción</label>
+                            <textarea id="tis_contenido" rows="8" class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-4 bg-slate-50 italic focus:bg-white transition-all"></textarea>
                         </div>
                     </div>
                 </div>
 
-                <!-- Destinos -->
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="fw-bold fs-6 mb-0">Destinatarios</h5>
-                            <button type="button" class="btn btn-toolbar btn-dark "
-                                onclick="abrirModalBuscarFuncionario()">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <circle cx="11" cy="11" r="8"></circle>
-                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                </svg>
-                                Buscar Funcionario
+                <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
+                        <span class="text-primary-blue font-bold">2.</span>
+                        <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Adjuntos y Enlaces</h3>
+                    </div>
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-4">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Enlaces Externos</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="input_enlace" placeholder="https://..." class="flex-1 rounded-xl border-slate-200 text-sm focus:ring-primary-blue">
+                                <button type="button" id="btn_agregar_enlace" class="bg-slate-800 text-white px-3 rounded-xl hover:bg-black transition-colors">
+                                    <span class="material-symbols-outlined">add</span>
+                                </button>
+                            </div>
+                            <div id="lista_enlaces" class="space-y-2 max-h-[150px] overflow-y-auto"></div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Documentos Adjuntos</label>
+                            <div class="drop-zone" id="drop_zone" onclick="document.getElementById('input_archivo').click()">
+                                <input type="file" id="input_archivo" hidden multiple>
+                                <span class="material-symbols-outlined text-slate-300 text-3xl mb-1">cloud_upload</span>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase">Click para adjuntar documentes adicionales</p>
+                            </div>
+                            <div class="space-y-4">
+                                <div id="lista_documentos_guardados" class="space-y-2"></div>
+                                <div id="lista_documentos_nuevos" class="space-y-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-5">
+                <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-50 flex items-center justify-between bg-white">
+                        <div class="flex items-center gap-2">
+                            <span class="text-primary-blue font-bold">3.</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Distribución y Flujo</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6 space-y-6">
+                        <div class="bg-blue-50 border-l-4 border-blue-400 p-3 flex items-start gap-3 rounded-r-lg">
+                            <span class="material-symbols-outlined text-blue-500 text-xl">info</span>
+                            <p class="text-blue-700 text-[11px] leading-tight">
+                                <strong>Nota:</strong> Los responsables solo recibirán el documento una vez que todos los visadores hayan aprobado.
+                            </p>
+                        </div>
+
+                        <div class="space-y-3">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest block">Seleccionar Destinatario</label>
+                            <button type="button" onclick="abrirModalBuscarFuncionario()" 
+                                class="w-full flex items-center justify-between bg-slate-50 border border-slate-200 hover:border-primary-blue p-3 rounded-xl text-slate-500 transition-all group">
+                                <span class="text-sm">Haga clic para buscar funcionario...</span>
+                                <span class="material-symbols-outlined group-hover:text-primary-blue">person_search</span>
                             </button>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0" id="tabla_destinos">
-                                <thead class="table-light text-uppercase small">
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left" id="tabla_destinos">
+                                <thead class="bg-slate-50 text-slate-400 font-bold uppercase text-[9px] tracking-widest">
                                     <tr>
-                                        <th>Funcionario</th>
-                                        <th>Tipo</th>
-                                        <th>Facultad</th>
-                                        <th class="text-center">Req.</th>
-                                        <th class="text-center">Estado</th>
-                                        <th class="text-end">Acciones</th>
+                                        <th class="px-2 py-3">Funcionario</th>
+                                        <th class="px-2 py-3 text-center">Rol</th>
+                                        <th class="px-2 py-3 text-right">Acción</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tbody_destinos" class="small">
+                                <tbody id="tbody_destinos" class="divide-y divide-slate-50">
                                     <tr id="placeholder_destinos">
-                                        <td colspan="5" class="text-center text-muted py-4">No hay destinatarios
-                                            agregados.</td>
+                                        <td colspan="3" class="px-2 py-10 text-center text-slate-400 italic text-xs">
+                                            No hay destinatarios agregados. Utilice el buscador para añadir personal.
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                    <div class="bg-slate-50 p-4 border-t border-slate-100 flex justify-between items-center text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                        <span>Total Visadores: <strong id="countVisadores" class="text-primary-blue">0</strong></span>
+                        <span>Total Responsables: <strong id="countResponsables" class="text-primary-blue">0</strong></span>
+                    </div>
                 </div>
-
-                <!-- Respuestas de Destinatarios -->
-                <div id="contenedor_respuestas"></div>
-            </div>
-
-            <!-- Right Column: Sidebar -->
-            <div class="col-lg-4">
-                <!-- Comentarios -->
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h5 class="fw-bold fs-6 mb-0">Comentarios</h5>
-                            <button type="button" class="btn btn-sm btn-outline-dark py-0" id="btn_abrir_comentario"
-                                style="font-size: 0.75rem;">
-                                + Comentario
-                            </button>
+                <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-50 flex items-center justify-between bg-white">
+                        <div class="flex items-center gap-2">
+                            <span class="text-primary-blue font-bold">4.</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Comentarios</h3>
                         </div>
-                        <div id="lista_comentarios" class="list-group list-group-flush small overflow-auto"
-                            style="max-height: 300px;">
-                            <div class="text-center py-3 text-muted">Cargando comentarios...</div>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#modalNuevoComentario" 
+                            class="flex items-center gap-1 bg-slate-800 hover:bg-black text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase transition-all">
+                            <span class="material-symbols-outlined text-[16px]">add</span> Comentario
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <div id="lista_comentarios" class="space-y-4 max-h-[300px] overflow-y-auto pr-2">
+                            <p class="text-center text-slate-400 italic text-xs py-4">No hay comentarios registrados.</p>
                         </div>
                     </div>
                 </div>
-
-                <!-- Enlaces -->
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-body p-4">
-                        <h5 class="fw-bold fs-6 mb-3">Enlaces Externos</h5>
-                        <div class="input-group input-group-sm mb-3">
-                            <input type="text" class="form-control" id="input_enlace" placeholder="https://...">
-                            <button class="btn btn-dark" type="button" id="btn_agregar_enlace">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                </svg>
-                            </button>
-                        </div>
-                        <div id="lista_enlaces" class="list-group list-group-flush small">
-                            <!-- Dynamic -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Documentos -->
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-body p-4">
-                        <h5 class="fw-bold fs-6 mb-3">Documentos Guardados</h5>
-                        <div id="lista_documentos_guardados" class="list-group list-group-flush small mb-4">
-                            <!-- Dynamic -->
-                        </div>
-
-                        <h5 class="fw-bold fs-6 mb-2">Adjuntar Nuevos</h5>
-                        <div class="drop-zone mb-3" id="drop_zone">
-                            <input type="file" id="input_archivo" hidden multiple>
-                            <div class="small text-muted">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="mb-2">
-                                    <path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 4.16"></path>
-                                    <polyline points="16 10 12 6 8 10"></polyline>
-                                    <line x1="12" y1="6" x2="12" y2="18"></line>
-                                </svg>
-                                <br>Haga clic para adjuntar
-                            </div>
-                        </div>
-                        <div id="lista_documentos_nuevos" class="list-group list-group-flush small">
-                            <!-- Dynamic -->
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </form>
 </div>
 
-<!-- Modal Buscar Funcionario -->
+<!--Modal funcionario-->
+
 <div class="modal fade" id="modalBusquedaFuncionario" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-light">
-                <h5 class="modal-title fw-bold fs-6">Buscar Funcionario Destino</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden">
+            <div class="modal-header bg-slate-800 border-0 py-4">
+                <h5 class="modal-title text-white fw-bold fs-6">Buscar Funcionario Destino</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body p-4">
-                <div class="input-group input-group-sm mb-4">
-                    <span class="input-group-text bg-white border-end-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                    </span>
-                    <input type="text" class="form-control border-start-0" id="buscar_fnc_input"
-                        placeholder="Buscar por nombre o apellido...">
+            <div class="modal-body p-6">
+                <div class="row g-2 mb-4">
+                    <div class="col-md-7">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0 rounded-start-xl">
+                                <span class="material-symbols-outlined text-slate-400 text-sm">search</span>
+                            </span>
+                            <input type="text" class="form-control border-start-0 rounded-end-xl text-sm" id="buscar_fnc_input" placeholder="Buscar por nombre o apellido...">
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <select class="form-select rounded-xl text-sm" id="filtro_area_fnc">
+                            <option value="">Todas las Áreas</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
                     <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light text-uppercase small sticky-top">
+                        <thead class="table-light text-uppercase text-[10px] tracking-widest sticky-top">
                             <tr>
-                                <th>ID</th>
                                 <th>Email</th>
                                 <th>Nombre</th>
-                                <th>Apellido</th>
                                 <th class="text-end">Acción</th>
                             </tr>
                         </thead>
-                        <tbody id="lista_busqueda_fnc" class="small">
-                            <!-- Dynamic -->
-                        </tbody>
+                        <tbody id="lista_busqueda_fnc" class="text-xs"></tbody>
                     </table>
                 </div>
             </div>
@@ -249,92 +235,101 @@ include '../../api/general/header.php';
     </div>
 </div>
 
-<!-- Modal Configurar Destino -->
+<!--Modal configurar destino-->
 <div class="modal fade" id="modalConfigurarDestino" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-light">
-                <h5 class="modal-title fw-bold fs-6">Configurar Destino: <span id="fnc_nombre_config"
-                        class="text-primary italic"></span></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden">
+            <div class="modal-header bg-primary-blue border-0 py-4">
+                <h5 class="modal-title text-white fw-bold fs-6">Configurar Atribuciones</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body p-4">
-                <input type="hidden" id="fnc_id_config">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label for="m_destino_tipo" class="form-label small fw-bold">Tipo de Destino</label>
-                        <select class="form-select form-select-sm" id="m_destino_tipo">
-                            <option value="Para">Para</option>
-                            <option value="Copia">Copia</option>
+            <div class="modal-body p-6">
+                <div class="mb-4 text-center">
+                    <div class="inline-block p-3 bg-blue-50 rounded-full mb-2">
+                        <span class="material-symbols-outlined text-primary-blue text-3xl">manage_accounts</span>
+                    </div>
+                    <h6 id="fnc_nombre_config" class="font-bold text-slate-800 italic uppercase text-sm tracking-wide"></h6>
+                    <input type="hidden" id="fnc_id_config">
+                </div>
+                <div class="space-y-4">
+                    <div style="display: none;">
+                        <select id="m_destino_tipo"><option value="Para" selected>Para</option></select>
+                    </div>
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Facultad / Rol</label>
+                        <select class="form-select rounded-xl text-sm w-full border-slate-200" id="m_destino_facultad">
+                            <option value="Responsable">Responsable (Acción directa)</option>
+                            <option value="Firmante">Firmante (Firma digital)</option>
+                            <option value="Visador">Visador (Revisión/Aprobación)</option>
+                            <option value="Consultor">Consultor (Solo lectura)</option>
                         </select>
                     </div>
-                    <div class="col-md-6">
-                        <label for="m_destino_facultad" class="form-label small fw-bold">Facultad</label>
-                        <select class="form-select form-select-sm" id="m_destino_facultad">
-                            <option value="Responsable">Responsable</option>
-                            <option value="Firmante">Firmante</option>
-                            <option value="Visador">Visador</option>
-                            <option value="Consultor">Consultor</option>
-                        </select>
-                    </div>
-                    <div class="col-md-12">
-                        <label for="m_destino_tarea" class="form-label small fw-bold">Labor / Tarea</label>
-                        <select class="form-select form-select-sm" id="m_destino_tarea">
+                    <div>
+                        <label class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Labor a Realizar</label>
+                        <select class="form-select rounded-xl text-sm w-full border-slate-200" id="m_destino_tarea">
                             <option value="ejecutar lo requerido">Ejecutar lo requerido</option>
-                            <option value="generar informe">Generar informe</option>
+                            <option value="generar informe">Generar informe técnico</option>
                             <option value="tomar conocimiento">Tomar conocimiento</option>
+                            <option value="responder al remitente">Responder al remitente</option>
                         </select>
                     </div>
-                    <div class="col-12">
-                        <div class="form-check form-switch p-0 ms-4">
-                            <input class="form-check-input" type="checkbox" id="m_destino_requerido" checked
-                                role="switch">
-                            <label class="form-check-label small fw-bold" for="m_destino_requerido">Requiere
-                                Respuesta</label>
+                    <div class="pt-2">
+                        <div class="d-flex align-items-center bg-light p-3 rounded-3 border">
+                            <div class="form-check form-switch m-0 p-0" style="min-width: 50px;">
+                                <input class="form-check-input m-0 cursor-pointer" 
+                                       type="checkbox" 
+                                       id="m_destino_requerido" 
+                                       checked 
+                                       role="switch" 
+                                       style="width: 2.4em; height: 1.2em; float: none; position: relative; cursor: pointer;">
+                            </div>
+                            <label class="form-check-label text-sm font-semibold text-secondary mb-0" 
+                                   for="m_destino_requerido" 
+                                   style="margin-left: 12px; cursor: pointer;">
+                                Requiere Respuesta Formal
+                            </label>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer border-0 bg-light">
-                <button type="button" class="btn btn-link text-muted text-decoration-none small"
-                    data-bs-dismiss="modal">Atrás</button>
-                <button type="button" class="btn btn-dark btn-sm px-4" id="btn_confirmar_destino">Actualizar</button>
+            <div class="modal-footer bg-slate-50 border-0 p-4">
+                <button type="button" class="bg-primary-blue hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl text-[11px] font-bold uppercase shadow-lg transition-all" id="btn_confirmar_destino">
+                    Agregar a la Lista
+                </button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Modal Nuevo Comentario -->
+<!--Modal agregar un comentario-->
 <div class="modal fade" id="modalNuevoComentario" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header bg-light">
-                <h5 class="modal-title fw-bold fs-6">Agregar Comentario</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden">
+            <div class="modal-header bg-slate-50 border-b p-6">
+                <h5 class="modal-title font-extrabold text-slate-800 text-sm uppercase tracking-widest">Agregar
+                    Comentario</h5>
+                <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body p-4">
-                <div class="mb-0">
-                    <label for="textoNuevoComentario" class="form-label small fw-bold">Su Comentario</label>
-                    <textarea class="form-control form-control-sm" id="textoNuevoComentario" rows="4"
-                        placeholder="Escriba aquí su comentario interno..."></textarea>
+            <div class="p-8">
+                <div class="space-y-2">
+                    <label class="label-custom">Su Comentario u Observación</label>
+                    <textarea class="w-full rounded-2xl border-slate-200 text-sm p-4 focus:ring-primary-blue"
+                        id="textoNuevoComentario" rows="4" placeholder="Escriba aquí..."></textarea>
                 </div>
             </div>
-            <div class="modal-footer border-0 bg-light">
-                <button type="button" class="btn btn-link text-muted text-decoration-none small"
+            <div class="p-6 bg-slate-50 border-t flex justify-end gap-3">
+                <button type="button" class="text-slate-400 font-bold text-xs uppercase px-4"
                     data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-dark btn-sm px-4" onclick="guardarComentario()">Guardar</button>
+                <button type="button"
+                    class="bg-primary-blue text-white font-bold py-2.5 px-8 rounded-xl shadow-lg shadow-blue-200/50 text-xs uppercase"
+                    onclick="guardarComentario()">Guardar</button>
             </div>
         </div>
     </div>
 </div>
 
 <script src="../../recursos/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/feather-icons"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    feather.replace();
-</script>
-
 <script src="../../recursos/js/funcionarios/ingresos/permisos.js"></script>
 <script src="../../recursos/js/funcionarios/ingresos/modificar.js"></script>
 

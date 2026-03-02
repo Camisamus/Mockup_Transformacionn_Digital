@@ -54,13 +54,12 @@ class BandejaController
                             'Ingresos' as origen,
                             sol.tis_estado as estado,
                             CASE 
-                                WHEN sol.tis_responsable = :fid_owner THEN 'Responsable'
+                                WHEN sol.tis_propietario = :fid_owner THEN 'Propietario'
                                 WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
-                                ELSE 'Consultor' 
                             END as rol_usuario
                         FROM trd_ingresos_solicitudes sol
                         LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :fid
-                        WHERE (sol.tis_responsable = :fid_owner1 OR dest.tid_destino IS NOT NULL)
+                        WHERE (sol.tis_propietario = :fid_owner1 OR dest.tid_destino IS NOT NULL)
                         AND sol.tis_estado NOT IN ('Resuelto_Favorable', 'Resuelto_NO_Favorable')
                         AND (
                             dest.tid_facultad IN ('Visador', 'Consultor')

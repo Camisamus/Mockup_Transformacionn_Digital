@@ -26,7 +26,7 @@ let currentRgtId = null;
 
 async function cargarListas() {
     try {
-        const respTipos = await fetch(`${window.API_BASE_URL}/ingresos/tipos_ingreso.php`, {
+        const respTipos = await fetch(`${window.API_BASE_URL}/ingresos/tipos_ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ACCION: 'CONSULTAM' })
@@ -155,7 +155,10 @@ function setupEventListeners() {
     modalConfig = new bootstrap.Modal(document.getElementById('modalConfigurarFactores') || document.getElementById('modalConfigurarDestino')); // Compatible with both
     modalComentario = new bootstrap.Modal(document.getElementById('modalNuevoComentario'));
 
-    document.getElementById('btn_abrir_comentario').onclick = () => modalComentario.show();
+    const btnAbrirComentario = document.getElementById('btn_abrir_comentario');
+    if (btnAbrirComentario) {
+        btnAbrirComentario.onclick = () => modalComentario.show();
+    }
 
     document.getElementById('buscar_fnc_input').addEventListener('input', (e) => {
         renderizarBusquedaFuncionarios(e.target.value);
@@ -229,9 +232,12 @@ function setupEventListeners() {
         actualizarIngreso();
     };
 
-    document.getElementById('btn_cancelar').onclick = () => {
-        window.location.href = 'index.php';
-    };
+    const btnCancelar = document.getElementById('btn_cancelar');
+    if (btnCancelar) {
+        btnCancelar.onclick = () => {
+            window.location.href = 'index.php';
+        };
+    }
 }
 
 function renderizarBusquedaFuncionarios(filtro) {
@@ -301,59 +307,57 @@ function renderizarDestinos() {
     const tbody = document.getElementById('tbody_destinos');
     tbody.innerHTML = '';
 
-    // HEADER UPDATE: Add 'Estado' column if not exists
-    const table = tbody.closest('table');
-    const thead = table ? table.querySelector('thead') : null;
-    const theadRow = thead ? thead.firstElementChild : null;
-
-    // Check if header exists by content
-    const headerExists = theadRow ? Array.from(theadRow.children).some(th => th.innerText === 'Estado') : false;
-
-    if (theadRow && !headerExists) {
-        // We know structure: Names, Tipo, Facultad, Requerido, Actions
-        // Let's insert before Actions (last one)
-        const actionsTh = theadRow.lastElementChild;
-        const th = document.createElement('th');
-        th.innerText = 'Estado';
-        //theadRow.insertBefore(th, actionsTh);
-    }
-
     if (destinos.length === 0) {
-        // Adjust colspan based on if we added a header or not (assuming 6 col if status exists)
-        tbody.innerHTML = '<tr id="placeholder_destinos"><td colspan="6" class="text-center text-muted py-3 small">No hay destinatarios agregados.</td></tr>';
+        tbody.innerHTML = '<tr id="placeholder_destinos"><td colspan="3" class="px-2 py-10 text-center text-slate-400 italic text-xs">No hay destinatarios agregados. Utilice el buscador para añadir personal.</td></tr>';
         return;
     }
 
+    let visadores = 0;
+    let responsables = 0;
+
     destinos.forEach((d, index) => {
-        let estadoBadge = '<span class="badge bg-secondary">Pendiente</span>';
-        if (d.tid_responde == 1) {
-            estadoBadge = '<span class="badge bg-success">Aprobado</span>';
-        } else if (d.tid_responde == 0 && d.tid_fecha_respuesta) {
-            estadoBadge = '<span class="badge bg-danger">Rechazado</span>';
-        } else if (d.tid_responde === '0') {
-            estadoBadge = '<span class="badge bg-danger">Rechazado</span>';
+        let estadoBadge = '';
+        // Mostramos el estado (Aprobado/Rechazado/Pendiente) junto al nombre
+        if (d.tid_responde !== undefined) {
+            if (d.tid_responde == 1) {
+                estadoBadge = '<span class="badge bg-emerald-50 text-emerald-600 border border-emerald-100 ms-2 text-[10px] p-1">Aprobado</span>';
+            } else if ((d.tid_responde == 0 || d.tid_responde === '0') && d.tid_fecha_respuesta) {
+                estadoBadge = '<span class="badge bg-rose-50 text-rose-600 border border-rose-100 ms-2 text-[10px] p-1">Rechazado</span>';
+            } else {
+                estadoBadge = '<span class="badge bg-slate-50 text-slate-400 border border-slate-100 ms-2 text-[10px] p-1">Pendiente</span>';
+            }
         }
 
         const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition-colors cursor-default';
         tr.innerHTML = `
-            <td class="small">
-                <div>${d.usr_nombre_completo}</div>
-                <div class="x-small text-muted italic">${d.tid_tarea}</div>
+            <td class="px-2 py-4">
+                <div class="font-bold text-slate-700 text-sm flex items-center">${d.usr_nombre_completo} ${estadoBadge}</div>
+                <div class="text-[10px] text-slate-400 italic mt-1 text-lowercase">${d.tid_tarea}</div>
             </td>
-            <td><span class="badge bg-light text-dark border small">${d.tid_tipo}</span></td>
-            <td class="small">${d.tid_facultad}</td>
-            <td class="text-center">
-                ${d.tid_requeido === '1' || d.tid_requeido === true ? '<i data-feather="check-circle" class="text-success" style="width:14px"></i>' : '<i data-feather="circle" class="text-muted" style="width:14px"></i>'}
+            <td class="px-2 py-4 text-center">
+                <span class="px-2 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-blue-50 text-primary-blue border-blue-100">
+                    ${d.tid_facultad}
+                </span>
             </td>
-            <td>${estadoBadge}</td>
-            <td class="text-end">
-                <button type="button" class="btn btn-sm btn-link text-danger p-0" onclick="eliminarDestino(${index})">
-                    <i data-feather="trash-2" style="width:14px"></i>
+            <td class="px-2 py-4 text-right">
+                <button type="button" class="text-rose-500 hover:text-rose-700 transition-colors p-1" onclick="eliminarDestino(${index})" title="Eliminar destino">
+                    <span class="material-symbols-outlined text-xl">delete</span>
                 </button>
             </td>
         `;
         tbody.appendChild(tr);
+
+        if (d.tid_facultad === 'Visador') visadores++;
+        if (d.tid_facultad === 'Responsable') responsables++;
     });
+
+    // Update counters if elements exist
+    const countV = document.getElementById('countVisadores');
+    const countR = document.getElementById('countResponsables');
+    if (countV) countV.innerText = visadores;
+    if (countR) countR.innerText = responsables;
+
     if (window.feather) window.feather.replace();
 }
 
@@ -452,11 +456,17 @@ async function actualizarIngreso() {
             tis_titulo: document.getElementById('tis_titulo').value,
             tis_tipo: document.getElementById('tis_tipo').value,
             tis_contenido: document.getElementById('tis_contenido').value,
-            tis_fecha_limite: document.getElementById('tis_fecha_limite').value,
             destinos: destinos,
             enlaces: enlaces,
             documentos: documentosNuevos
         };
+
+        const fechaLimite = document.getElementById('tis_fecha_limite').value;
+        if (fechaLimite) {
+            payload.tis_fecha_limite = fechaLimite;
+        } else {
+            payload.tis_fecha_limite = null; // o no enviarlo
+        }
 
         if (destinos.length === 0) {
             Swal.fire('Atención', 'Debe agregar al menos un destinatario', 'warning');

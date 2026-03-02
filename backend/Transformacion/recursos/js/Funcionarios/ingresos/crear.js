@@ -224,7 +224,7 @@ function seleccionarFuncionario(id, nombre) {
     document.getElementById('fnc_nombre_config').textContent = nombre;
     // Reset fields
     document.getElementById('m_destino_tipo').value = 'Para';
-    document.getElementById('m_destino_facultad').value = 'Firmante';
+    document.getElementById('m_destino_facultad').value = 'Responsable';
     document.getElementById('m_destino_tarea').value = 'ejecutar lo requerido';
     const checkReq = document.getElementById('m_destino_requerido');
     checkReq.checked = true;
@@ -258,19 +258,20 @@ function renderizarDestinos() {
 
     destinos.forEach((d, index) => {
         const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition-colors';
         tr.innerHTML = `
-            <td class="small">
-                <div>${d.usr_nombre_completo}</div>
-                <div class="x-small text-muted italic">${d.tid_tarea}</div>
+            <td class="px-2 py-4">
+                <div class="font-bold text-slate-700 text-sm">${d.usr_nombre_completo}</div>
+                <div class="text-[10px] text-slate-400 italic">${d.tid_tarea}</div>
             </td>
-            <td><span class="badge bg-light text-dark border small">${d.tid_tipo}</span></td>
-            <td class="small">${d.tid_facultad}</td>
-            <td class="text-center">
-                ${d.tid_requeido === '1' ? '<i data-feather="check-circle" class="text-success" style="width:14px"></i>' : '<i data-feather="circle" class="text-muted" style="width:14px"></i>'}
+            <td class="px-2 py-4 text-center">
+                <span class="px-2 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-blue-50 text-primary-blue border-blue-100">
+                    ${d.tid_facultad}
+                </span>
             </td>
-            <td class="text-end">
-                <button type="button" class="btn btn-sm btn-link text-danger p-0" onclick="eliminarDestino(${index})">
-                    <i data-feather="trash-2" style="width:14px"></i>
+            <td class="px-2 py-4 text-right">
+                <button type="button" class="text-rose-500 hover:text-rose-700 transition-colors" onclick="eliminarDestino(${index})">
+                    <span class="material-symbols-outlined text-lg">delete</span>
                 </button>
             </td>
         `;

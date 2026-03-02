@@ -11,10 +11,10 @@ const IngrPermissions = {
         return {
             consultar: true, // Everyone with access can see
             editar: ['propietario'].includes(r),
-            preparar: ['responsable', 'propietario', 'visador', 'firmante', 'consultor'].includes(r),
+            preparar: ['responsable', 'visador', 'firmante', 'consultor'].includes(r),
             comentar: ['responsable', 'propietario', 'visador', 'firmante', 'consultor'].includes(r),
             bitacora: ['responsable', 'propietario', 'consultor'].includes(r),
-            visar: ['propietario', 'visador'].includes(r),
+            visar: ['visador'].includes(r),
             firmar: r === 'firmante'
         };
     },
@@ -41,7 +41,7 @@ const IngrPermissions = {
         // Responder Column (Visar/Firmar/Respondar-Resp)
         const colResponder = document.getElementById('col_ir_responder');
         if (colResponder) {
-            colResponder.style.display = (p.visar || p.firmar || p.editar) ? 'block' : 'none';
+            colResponder.style.display = (p.visar || p.firmar) ? 'block' : 'none';
         }
 
         // Preparar Column

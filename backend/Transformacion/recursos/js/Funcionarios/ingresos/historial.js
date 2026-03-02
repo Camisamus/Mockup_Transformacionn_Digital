@@ -55,31 +55,51 @@ function renderizarTabla(datos) {
     tbody.innerHTML = '';
 
     if (datos.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="text-center py-4 text-muted">No se encontraron registros.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" class="px-6 py-10 text-center text-slate-400 italic">No se encontraron registros.</td></tr>';
         document.getElementById('resultados_count').textContent = '0';
         return;
     }
 
     datos.forEach(item => {
         const tr = document.createElement('tr');
-        tr.className = 'cursor-pointer';
-        tr.onclick = () => window.location.href = `ingr_consultar.php?id=${item.tis_id}`;
+        tr.className = 'hover:bg-slate-50/80 transition-all cursor-pointer group';
+        tr.onclick = () => window.location.href = `consultar.php?id=${item.tis_id}`;
 
-        let badgeClass = 'bg-success';
-        if (item.tis_estado === 'Resuelto_Favorable') badgeClass = 'bg-success';
-        if (item.tis_estado === 'Resuelto_NO_Favorable') badgeClass = 'bg-danger';
+        const statusColors = getStatusColors(item.tis_estado);
 
         tr.innerHTML = `
-            <td class="fw-bold">${item.tis_id}</td>
-            <td>${(item.tis_fecha || '').substring(0, 10)}</td>
-            <td><span class="badge ${badgeClass} fw-normal">${item.tis_estado}</span></td>
-            <td>${item.tis_tipo || '-'}</td>
-            <td>${item.resp_nombre || ''} ${item.resp_apellido || ''}</td>
-            <td class="fw-bold">-</td>
-            <td class="text-end">
-                <button class="btn btn-sm btn-outline-dark" onclick="event.stopPropagation(); window.location.href='ingr_consultar.php?id=${item.tis_id}'" title="Ver Detalle">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            <td class="px-6 py-4 text-xs font-black text-slate-400 tracking-tight">#${item.tis_id}</td>
+            <td class="px-6 py-4">
+                <button type="button" class="text-primary-blue hover:text-blue-800 transition-colors">
+                    <span class="material-symbols-outlined text-[18px]">visibility</span>
                 </button>
+            </td>
+            <td class="px-6 py-4">
+                <div class="flex flex-col">
+                    <span class="font-bold text-slate-700 text-sm group-hover:text-primary-blue transition-colors truncate max-w-[250px]">
+                        ${item.tis_titulo || 'Sin título'}
+                    </span>
+                    <span class="text-slate-400 text-[10px] truncate max-w-[250px]">
+                        ${item.tis_contenido || ''}
+                    </span>
+                </div>
+            </td>
+            <td class="px-6 py-4 text-center">
+                <span class="text-xs font-medium text-slate-500">${(item.tis_creacion || '').substring(0, 10)}</span>
+            </td>
+            <td class="px-6 py-4 text-center">
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${statusColors}">
+                    ${item.tis_estado || '-'}
+                </span>
+            </td>
+            <td class="px-6 py-4">
+                <span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-blue-50 text-primary-blue border-blue-100">
+                    ${item.tis_tipo || '-'}
+                </span>
+            </td>
+            <td class="px-6 py-4">
+                <div class="font-bold text-slate-700 text-sm">${item.resp_nombre || ''} ${item.resp_apellido || ''}</div>
+                <div class="text-[10px] text-slate-400 uppercase tracking-widest">ID: ${item.tis_responsable}</div>
             </td>
         `;
 
@@ -87,7 +107,14 @@ function renderizarTabla(datos) {
     });
 
     document.getElementById('resultados_count').textContent = allData.length;
-    if (window.feather) window.feather.replace();
+}
+
+function getStatusColors(estado) {
+    if (!estado) return 'bg-blue-50 text-blue-600 border-blue-100';
+    estado = estado.toLowerCase();
+    if (estado.includes('favorable') && !estado.includes('no_favorable')) return 'bg-emerald-50 text-emerald-600 border-emerald-100';
+    if (estado.includes('rechazado') || estado.includes('no_favorable')) return 'bg-rose-50 text-rose-600 border-rose-100';
+    return 'bg-blue-50 text-blue-600 border-blue-100';
 }
 
 function renderPagination() {
@@ -96,34 +123,39 @@ function renderPagination() {
     if (!paginationContainer) return;
 
     paginationContainer.innerHTML = '';
-
     if (allData.length === 0) return;
 
-    const nav = document.createElement('nav');
-    const ul = document.createElement('ul');
-    ul.className = 'pagination pagination-sm justify-content-center mb-0';
+    // Info text at left
+    const infoText = document.createElement('div');
+    infoText.className = 'pagination-info text-xs font-semibold text-slate-400';
+    infoText.innerText = `Página ${currentPage} de ${totalPages || 1}`;
+    paginationContainer.appendChild(infoText);
+
+    const nav = document.createElement('div');
+    nav.className = 'flex gap-2';
 
     // Anterior
-    ul.innerHTML += `
-        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="event.preventDefault(); changePage(${currentPage - 1})">Anterior</a>
-        </li>
-    `;
-
-    ul.innerHTML += `
-        <li class="page-item disabled">
-            <span class="page-link text-dark">Página ${currentPage} de ${totalPages || 1}</span>
-        </li>
-    `;
+    const btnAnt = document.createElement('button');
+    btnAnt.className = 'flex items-center gap-1 bg-white border border-slate-200 px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-50 disabled:opacity-50 transition-all';
+    btnAnt.disabled = currentPage === 1;
+    btnAnt.innerHTML = '<span class="material-symbols-outlined text-sm">chevron_left</span> Anterior';
+    btnAnt.onclick = (e) => {
+        e.preventDefault();
+        changePage(currentPage - 1);
+    };
 
     // Siguiente
-    ul.innerHTML += `
-        <li class="page-item ${currentPage === totalPages || totalPages === 0 ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="event.preventDefault(); changePage(${currentPage + 1})">Siguiente</a>
-        </li>
-    `;
+    const btnSig = document.createElement('button');
+    btnSig.className = 'flex items-center gap-1 bg-white border border-slate-200 px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-50 disabled:opacity-50 transition-all';
+    btnSig.disabled = currentPage === totalPages || totalPages === 0;
+    btnSig.innerHTML = 'Siguiente <span class="material-symbols-outlined text-sm">chevron_right</span>';
+    btnSig.onclick = (e) => {
+        e.preventDefault();
+        changePage(currentPage + 1);
+    };
 
-    nav.appendChild(ul);
+    nav.appendChild(btnAnt);
+    nav.appendChild(btnSig);
     paginationContainer.appendChild(nav);
 }
 

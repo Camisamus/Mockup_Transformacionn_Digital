@@ -96,6 +96,15 @@ function renderSidebar($flatPermissions, $pathPrefix, $currentScript)
         $module = 'ingresos';
     }
 
+    if (stripos($currentPath, '/licencias/') !== false) {
+        $module = 'licencias';
+    }
+
+    if (stripos($currentPath, '/blanco/') !== false) {
+        $module = 'blanco';
+    }
+
+
     // Aquí se pueden agregar más módulos en el futuro (e.g., /transparencia/, /permisos/, etc.)
 
     // 2. Filtrar los permisos (roles) por el módulo detectado

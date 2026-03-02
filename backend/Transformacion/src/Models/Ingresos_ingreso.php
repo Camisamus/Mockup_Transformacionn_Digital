@@ -34,38 +34,29 @@ class Ingresos_ingreso
 
     public function getAll(array $filters = [], ?int $current_user_id = null)
     {
-        // Base Query with Role Logic
+        // 1. Mantenemos el JOIN para saber si el usuario es destino en esa fila específica
+        // Solo traemos registros donde el usuario es el destino actual
         $query = "SELECT DISTINCT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido,
                   sol.tis_fecha_limite,
                   CASE 
-                    WHEN sol.tis_responsable = :current_user THEN 'Responsable'
+                    WHEN sol.tis_propietario = :current_user THEN 'Propietario'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
-                    ELSE 'Consultor' 
                   END as rol_usuario
                   FROM " . $this->table_name . " sol 
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
-                  LEFT JOIN trd_acceso_usuarios usr ON sol.tis_responsable = usr.usr_id
-                  LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :current_user_join AND dest.tid_borrado = 0
+                  LEFT JOIN trd_acceso_usuarios usr ON sol.tis_propietario = usr.usr_id
+                  LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud 
+                                                       AND dest.tid_destino = :current_user_join 
+                                                       AND dest.tid_borrado = 0
                   WHERE sol.tis_borrado = 0 AND rgt.rgt_borrado = 0";
 
-        // Filter Logic: Show if Responsible OR is a Destination
+        // 2. Filtro estricto: Solo ver si es dueño o si existe un registro en destinos para él
         if ($current_user_id) {
             $query .= " AND (
-                sol.tis_responsable = :current_user_filter 
-                OR (
-                    dest.tid_facultad IN ('Visador', 'Consultor')
-                    OR NOT EXISTS (
-                        SELECT 1 FROM trd_ingresos_destinos d2 
-                        WHERE d2.tid_ingreso_solicitud = sol.tis_id 
-                        AND d2.tid_facultad = 'Visador' 
-                        AND d2.tid_requeido = 1 
-                        AND (d2.tid_responde IS NULL OR d2.tid_responde != 1)
-                        AND d2.tid_borrado = 0
-                    )
-                )
-            )";
+                        sol.tis_propietario = :current_user_filter 
+                        OR dest.tid_id IS NOT NULL
+                    )";
         }
-
         $params = [];
         // Bind parameters logic needs to be careful with named params appearing multiple times
         // PDO might complain if we reuse :current_user for different binds or same bind location logic.
@@ -147,18 +138,18 @@ class Ingresos_ingreso
         $query = "SELECT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido,
                   sol.tis_fecha_limite,
                   CASE 
-                    WHEN sol.tis_responsable = :current_user THEN 'Responsable'
+                    WHEN sol.tis_propietario = :current_user THEN 'Propietario'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
                     ELSE 'Consultor' 
                   END as rol_usuario
                   FROM " . $this->table_name . " sol 
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
-                  LEFT JOIN trd_acceso_usuarios usr ON sol.tis_responsable = usr.usr_id
+                  LEFT JOIN trd_acceso_usuarios usr ON sol.tis_propietario = usr.usr_id
                   LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :current_user_join
                   WHERE sol.tis_id = :id AND sol.tis_borrado = 0 AND rgt.rgt_borrado = 0
                   AND (
                     :ignore_perms = 1
-                    OR sol.tis_responsable = :current_user_filter 
+                    OR sol.tis_propietario = :current_user_filter 
                     OR (
                         dest.tid_destino IS NOT NULL 
                         AND NOT (
@@ -213,17 +204,17 @@ class Ingresos_ingreso
         $query = "SELECT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido,
                   sol.tis_fecha_limite,
                   CASE 
-                    WHEN sol.tis_responsable = :current_user THEN 'Responsable'
+                    WHEN sol.tis_propietario = :current_user THEN 'Propietario'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
                     ELSE 'Consultor' 
                   END as rol_usuario
                   FROM " . $this->table_name . " sol 
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
-                  LEFT JOIN trd_acceso_usuarios usr ON sol.tis_responsable = usr.usr_id
+                  LEFT JOIN trd_acceso_usuarios usr ON sol.tis_propietario = usr.usr_id
                   LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :current_user_join
                   WHERE rgt.rgt_id = :rgtId AND sol.tis_borrado = 0 AND rgt.rgt_borrado = 0
                   AND (
-                    sol.tis_responsable = :current_user_filter 
+                    sol.tis_propietario = :current_user_filter 
                     OR (
                         dest.tid_destino IS NOT NULL 
                         AND NOT (
@@ -294,7 +285,7 @@ class Ingresos_ingreso
             if (session_status() === PHP_SESSION_NONE) {
                 session_start();
             }
-            $creador_id = $data['tis_responsable'] ?? $_SESSION['user_id'] ?? 1;
+            $creador_id = $data['tis_propietario'] ?? $_SESSION['user_id'] ?? 1;
 
             if (isset($data['documentos'])) {
                 error_log("Ingresos_ingreso: Se detectó la clave 'documentos'. Cantidad: " . (is_array($data['documentos']) ? count($data['documentos']) : 'no es array'));
@@ -319,7 +310,7 @@ class Ingresos_ingreso
                 tis_titulo = :tis_titulo,
                 tis_contenido = :tis_contenido,
                 tis_estado = :tis_estado,
-                tis_responsable = :tis_responsable,
+                tis_propietario = :tis_propietario,
                 tis_respuesta = :tis_respuesta,
                 tis_creacion = :tis_creacion,
                 tis_fecha_limite = :tis_fecha_limite,
@@ -331,7 +322,7 @@ class Ingresos_ingreso
             $stmt->bindValue(":tis_titulo", $data['tis_titulo'] ?? null);
             $stmt->bindValue(":tis_contenido", $data['tis_contenido'] ?? null);
             $stmt->bindValue(":tis_estado", $data['tis_estado'] ?? 'Ingresado');
-            $stmt->bindValue(":tis_responsable", $creador_id);
+            $stmt->bindValue(":tis_propietario", $creador_id);
             $stmt->bindValue(":tis_respuesta", $data['tis_respuesta'] ?? null);
             $stmt->bindValue(":tis_creacion", $data['tis_creacion'] ?? date('Y-m-d'));
             $stmt->bindValue(":tis_fecha_limite", $data['tis_fecha_limite']);
@@ -434,7 +425,7 @@ class Ingresos_ingreso
                     tis_titulo = :tis_titulo,
                     tis_contenido = :tis_contenido,
                     tis_estado = :tis_estado,
-                    tis_responsable = :tis_responsable,
+                    tis_propietario = :tis_propietario,
                     tis_respuesta = :tis_respuesta,
                     tis_creacion = :tis_creacion,
                     tis_fecha_limite = :tis_fecha_limite
@@ -446,7 +437,7 @@ class Ingresos_ingreso
             $stmt->bindValue(":tis_titulo", $data['tis_titulo'] ?? $current['tis_titulo']);
             $stmt->bindValue(":tis_contenido", $data['tis_contenido'] ?? $current['tis_contenido']);
             $stmt->bindValue(":tis_estado", $data['tis_estado'] ?? $current['tis_estado']);
-            $stmt->bindValue(":tis_responsable", $data['tis_responsable'] ?? $current['tis_responsable']);
+            $stmt->bindValue(":tis_propietario", $data['tis_propietario'] ?? $current['tis_propietario']);
             $stmt->bindValue(":tis_respuesta", $data['tis_respuesta'] ?? $current['tis_respuesta']);
             $stmt->bindValue(":tis_creacion", $data['tis_creacion'] ?? $current['tis_creacion']);
             $stmt->bindValue(":tis_fecha_limite", $data['tis_fecha_limite'] ?? $current['tis_fecha_limite']);
@@ -486,16 +477,16 @@ class Ingresos_ingreso
             // 3. Manejar Enlaces (Borrar y Re-insertar)
             if (isset($data['enlaces']) && is_array($data['enlaces'])) {
                 $this->Enlace->borrarPorTramiteId($current['tis_registro_tramite']);
-                $responsable_id = $data['tis_responsable'] ?? ($_SESSION['user_id'] ?? 1);
+                $propietario_id = $data['tis_propietario'] ?? ($_SESSION['user_id'] ?? 1);
                 foreach ($data['enlaces'] as $url) {
-                    $this->Enlace->subir($current['tis_registro_tramite'], $url, $responsable_id);
+                    $this->Enlace->subir($current['tis_registro_tramite'], $url, $propietario_id);
                 }
             }
 
             // 4. Manejar Nuevos Documentos
             if (isset($data['documentos']) && is_array($data['documentos'])) {
                 $docController = new \App\Controllers\GesDocController($this->conn);
-                $responsable_id = $data['tis_responsable'] ?? ($_SESSION['user_id'] ?? 1);
+                $propietario_id = $data['tis_propietario'] ?? ($_SESSION['user_id'] ?? 1);
                 foreach ($data['documentos'] as $doc) {
                     try {
                         $fileInfo = $docController->base64ToFileArray($doc['base64'], $doc['nombre']);
@@ -503,7 +494,7 @@ class Ingresos_ingreso
                             [$fileInfo['array']],
                             [
                                 'tramite_id' => $current['tis_registro_tramite'],
-                                'user_id' => $responsable_id
+                                'user_id' => $propietario_id
                             ]
                         );
                         fclose($fileInfo['file']);
@@ -586,7 +577,7 @@ class Ingresos_ingreso
         $query = "SELECT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido, sol.tis_fecha_limite 
                   FROM " . $this->table_name . " sol 
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
-                  LEFT JOIN trd_acceso_usuarios usr ON sol.tis_responsable = usr.usr_id
+                  LEFT JOIN trd_acceso_usuarios usr ON sol.tis_propietario = usr.usr_id
                   WHERE rgt.rgt_id IN ($placeholders) AND sol.tis_borrado = 0 AND rgt.rgt_borrado = 0";
 
         $stmt = $this->conn->prepare($query);
