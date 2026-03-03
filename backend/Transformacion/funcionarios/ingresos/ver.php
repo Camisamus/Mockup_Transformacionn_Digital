@@ -117,12 +117,12 @@ include '../../api/general/header.php';
                     <span class="material-symbols-outlined text-[20px] text-primary-blue">task_alt</span> Responder
                 </button>
             </div>
-            <div id="col_ir_preparar" style="display: none;">
+            <!--<div id="col_ir_preparar" style="display: none;">
                 <button type="button" id="btn_ir_preparar"
                     class="flex items-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-2.5 px-5 rounded-xl shadow-sm transition-all text-[13px] uppercase tracking-wider">
                     <span class="material-symbols-outlined text-[20px] text-primary-blue">share</span> Preparar
                 </button>
-            </div>
+            </div>-->
             <div id="col_ir_modificar" style="display: none;">
                 <button type="button" id="btn_ir_modificar"
                     class="flex items-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-2.5 px-5 rounded-xl shadow-sm transition-all text-[13px] uppercase tracking-wider">
@@ -154,6 +154,14 @@ include '../../api/general/header.php';
             <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-mapa" type="button"
                     role="tab">Mapa</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-visar" type="button"
+                    role="tab">Visar</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-responder" type="button"
+                    role="tab">Responder</button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-historial" type="button"
@@ -329,6 +337,130 @@ include '../../api/general/header.php';
                 <div id="network-container" style="height: 700px;"></div>
             </div>
         </div>
+
+        <!-- PESTAÑA: VISAR -->
+        <div class="tab-pane fade" id="tab-visar" role="tabpanel">
+
+        </div>
+
+        <!-- Modal Nuevo Comentario -->
+        <div class="modal fade" id="modalNuevoComentario" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-light">
+                        <h5 class="modal-title fw-bold fs-6">Agregar Comentario</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <div class="mb-0">
+                            <label for="textoNuevoComentario" class="form-label small fw-bold">Su Comentario</label>
+                            <textarea class="form-control form-control-sm" id="textoNuevoComentario" rows="4"
+                                placeholder="Escriba aquí su comentario u observación..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 bg-light">
+                        <button type="button" class="btn btn-link text-muted text-decoration-none small"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-dark btn-sm px-4" onclick="guardarComentario()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal OTP Firma -->
+        <div class="modal fade" id="modalOTP" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-dark ">
+                        <h5 class="modal-title fw-bold fs-6">Verificación de Firma</h5>
+                    </div>
+                    <div class="modal-body text-center p-5">
+                        <p class="mb-4 small text-muted">Ingrese el código de verificación enviado a su correo electrónico.
+                        </p>
+                        <div class="mb-4 d-flex justify-content-center">
+                            <input type="text" class="form-control text-center fw-bold fs-3 border-dark" id="inp_otp_code"
+                                maxlength="6" style="width: 200px; letter-spacing: 5px;" placeholder="000000">
+                        </div>
+                        <div class="text-danger fw-bold small d-flex align-items-center justify-content-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            Tiempo restante: <span id="otp_timer">04:00</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 bg-light justify-content-center">
+                        <button type="button" class="btn btn-link text-muted text-decoration-none small me-3"
+                            onclick="cerrarOTP(true)">Cancelar</button>
+                        <button type="button" class="btn btn-dark btn-sm px-4" onclick="confirmarFirmaOTP()">Confirmar
+                            Firma</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--PESTAÑA: RESPONDER-->
+        <div class="tab-pane fade" id="tab-responder" role="tabpanel">
+        </div>
+
+        <!-- Modal Nuevo Comentario -->
+        <div class="modal fade" id="modalNuevoComentario" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-light">
+                        <h5 class="modal-title fw-bold fs-6">Agregar Comentario</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <div class="mb-0">
+                            <label for="textoNuevoComentario" class="form-label small fw-bold">Su Comentario</label>
+                            <textarea class="form-control form-control-sm" id="textoNuevoComentario" rows="4"
+                                placeholder="Escriba aquí su comentario u observación..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 bg-light">
+                        <button type="button" class="btn btn-link text-muted text-decoration-none small"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-dark btn-sm px-4" onclick="guardarComentario()">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal OTP Firma -->
+        <div class="modal fade" id="modalOTP" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-dark ">
+                        <h5 class="modal-title fw-bold fs-6">Verificación de Firma</h5>
+                    </div>
+                    <div class="modal-body text-center p-5">
+                        <p class="mb-4 small text-muted">Ingrese el código de verificación enviado a su correo electrónico.
+                        </p>
+                        <div class="mb-4 d-flex justify-content-center">
+                            <input type="text" class="form-control text-center fw-bold fs-3 border-dark" id="inp_otp_code"
+                                maxlength="6" style="width: 200px; letter-spacing: 5px;" placeholder="000000">
+                        </div>
+                        <div class="text-danger fw-bold small d-flex align-items-center justify-content-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            Tiempo restante: <span id="otp_timer">04:00</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 bg-light justify-content-center">
+                        <button type="button" class="btn btn-link text-muted text-decoration-none small me-3"
+                            onclick="cerrarOTP(true)">Cancelar</button>
+                        <button type="button" class="btn btn-dark btn-sm px-4" onclick="confirmarFirmaOTP()">Confirmar
+                            Firma</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         <!-- PESTAÑA: HISTORIAL -->
         <div class="tab-pane fade" id="tab-historial" role="tabpanel">

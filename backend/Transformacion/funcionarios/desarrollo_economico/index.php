@@ -47,15 +47,67 @@ include '../../api/general/header.php';
 
     <div class="bg-white border border-slate-100 rounded-3xl p-6 lg:p-10 flex flex-col sm:flex-row justify-between items-center shadow-sm gap-6">
         <div class="space-y-1 w-full text-left">
-            <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Bienvenido al sistema OIRS</h1>
-            <p class="text-slate-400 text-sm lg:text-[15px] font-medium">Gestión y análisis de solicitudes ciudadanas OIRS.</p>
+            <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Bienvenido a Desarrollo Económico</h1>
+            <p class="text-slate-400 text-sm lg:text-[15px] font-medium tracking-wider">Gestión integral de fomento productivo, emprendimiento y espacios.</p>
         </div>
-        <div class="flex-shrink-0">
-            <button type="button" onclick="location.href='ingresar.php'"
-                class="bg-primary-blue hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-sm uppercase tracking-wider flex items-center gap-2">
-                <span class="material-symbols-outlined text-[20px]">add_circle</span> NUEVA OIRS
+        <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="location.href='postulacion.php'"
+                class="bg-slate-800 hover:bg-black text-white font-bold py-3 px-6 rounded-xl shadow-sm transition-all text-xs uppercase tracking-widest flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">list_alt</span> POSTULACIONES
+            </button>
+            <button type="button" onclick="location.href='emprendedores.php'"
+                class="bg-slate-800 hover:bg-black text-white font-bold py-3 px-6 rounded-xl shadow-sm transition-all text-xs uppercase tracking-widest flex items-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">groups</span> EMPRENDEDORES
             </button>
         </div>
+    </div>
+
+    <!-- Sub-menu de Acceso Rápido -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a href="postulacion.php" class="bg-white p-4 rounded-2xl border border-slate-100 hover:border-primary-blue hover:shadow-md transition-all group">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-50 text-primary-blue flex items-center justify-center group-hover:bg-primary-blue group-hover:text-white transition-all">
+                    <span class="material-symbols-outlined">assignment</span>
+                </div>
+                <div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Módulo</p>
+                    <p class="text-sm font-bold text-slate-700">Postulaciones</p>
+                </div>
+            </div>
+        </a>
+        <a href="emprendedores.php" class="bg-white p-4 rounded-2xl border border-slate-100 hover:border-primary-blue hover:shadow-md transition-all group">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-50 text-primary-blue flex items-center justify-center group-hover:bg-primary-blue group-hover:text-white transition-all">
+                    <span class="material-symbols-outlined">groups</span>
+                </div>
+                <div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Módulo</p>
+                    <p class="text-sm font-bold text-slate-700">Emprendedores</p>
+                </div>
+            </div>
+        </a>
+        <a href="espacios.php" class="bg-white p-4 rounded-2xl border border-slate-100 hover:border-primary-blue hover:shadow-md transition-all group">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-50 text-primary-blue flex items-center justify-center group-hover:bg-primary-blue group-hover:text-white transition-all">
+                    <span class="material-symbols-outlined">meeting_room</span>
+                </div>
+                <div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Módulo</p>
+                    <p class="text-sm font-bold text-slate-700">Espacios</p>
+                </div>
+            </div>
+        </a>
+        <a href="proximas.php" class="bg-white p-4 rounded-2xl border border-slate-100 hover:border-primary-blue hover:shadow-md transition-all group">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-50 text-primary-blue flex items-center justify-center group-hover:bg-primary-blue group-hover:text-white transition-all">
+                    <span class="material-symbols-outlined">calendar_month</span>
+                </div>
+                <div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Módulo</p>
+                    <p class="text-sm font-bold text-slate-700">Próximas</p>
+                </div>
+            </div>
+        </a>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

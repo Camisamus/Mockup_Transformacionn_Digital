@@ -104,6 +104,9 @@ function renderSidebar($flatPermissions, $pathPrefix, $currentScript)
         $module = 'blanco';
     }
 
+    if (stripos($currentPath, '/desarrollo_economico/') !== false) {
+        $module = 'desarrollo_economico';
+    }
 
     // Aquí se pueden agregar más módulos en el futuro (e.g., /transparencia/, /permisos/, etc.)
 
