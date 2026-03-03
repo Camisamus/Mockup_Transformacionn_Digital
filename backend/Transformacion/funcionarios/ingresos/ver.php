@@ -340,8 +340,81 @@ include '../../api/general/header.php';
 
         <!-- PESTAÑA: VISAR -->
         <div class="tab-pane fade" id="tab-visar" role="tabpanel">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-8 space-y-6">
+                    <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                        <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
+                            <span class="material-symbols-outlined text-gob-warning">verified_user</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Estado de Aprobaciones (Circuito de Visación)</h3>
+                        </div>
+                        <div class="p-0">
+                            <div class="table-responsive">
+                                <table class="w-full text-left">
+                                    <thead class="bg-slate-50 text-slate-400 font-bold uppercase text-[10px] tracking-widest">
+                                        <tr>
+                                            <th class="px-6 py-4">Funcionario</th>
+                                            <th class="px-6 py-4">Rol</th>
+                                            <th class="px-6 py-4 text-center">Requerido</th>
+                                            <th class="px-6 py-4 text-right">Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla_destinos_status" class="divide-y divide-slate-50 text-[13px] text-slate-600">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="bg-white gob-card rounded-2xl p-8 border-t-4 border-gob-warning shadow-md text-center">
+                        <h4 class="text-slate-800 font-extrabold text-lg mb-2 tracking-tight">¿Desea visar este documento?</h4>
+                        <p class="text-slate-400 text-sm mb-6 italic">Su aprobación permitirá que el flujo continúe hacia el siguiente responsable.</p>
+                        <div class="flex justify-center gap-4">
+                            <button type="button" onclick="rechazarVisacion()" class="bg-rose-50 text-rose-600 border border-rose-100 px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-rose-100 transition-all">Rechazar</button>
+                            <button type="button" onclick="aprobarVisacion()" class="bg-gob-warning text-white px-8 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-yellow-200/50 hover:bg-amber-600 transition-all">Aprobar y Visar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="bg-amber-50 border border-amber-100 rounded-2xl p-5">
+                        <h5 class="text-amber-800 font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm">info</span> Regla de Negocio
+                        </h5>
+                        <p class="text-[12px] text-amber-700 leading-relaxed">
+                            Usted ha sido asignado como <strong>Visador</strong>. Su rol es técnico/administrativo y es requisito previo para la respuesta final.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
+
+                <!--<div class="lg:col-span-4">
+                    <div class="bg-white gob-card rounded-2xl p-6 border-l-4 border-gob-info">
+                        <h5 class="text-gob-info font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm">info</span> Información del Rol
+                        </h5>
+                        <div class="space-y-4">
+                            <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                                <p class="text-[11px] text-slate-400 font-bold uppercase tracking-widest mb-1">Rol Asignado</p>
+                                <p class="text-slate-700 font-bold text-sm" id="info_rol_visador">Cargando...</p>
+                            </div>
+                            <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                                <p class="text-[11px] text-slate-400 font-bold uppercase tracking-widest mb-1">Facultad</p>
+                                <p class="text-slate-700 font-bold text-sm" id="info_facultad_visador">Cargando...</p>
+                            </div>
+                            <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                                <p class="text-[11px] text-slate-400 font-bold uppercase tracking-widest mb-1">Tipo de Trámite</p>
+                                <p class="text-slate-700 font-bold text-sm" id="info_tipo_tramite_visador">Cargando...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>-->
+
+        
+
 
         <!-- Modal Nuevo Comentario -->
         <div class="modal fade" id="modalNuevoComentario" tabindex="-1">
@@ -402,6 +475,55 @@ include '../../api/general/header.php';
 
         <!--PESTAÑA: RESPONDER-->
         <div class="tab-pane fade" id="tab-responder" role="tabpanel">
+            <!-- Left Column: Details and Response -->
+        <div class="col-lg-8">
+            <!-- Estado de Destinos -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold fs-6 mb-4">Estado de Aprobaciones</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light text-uppercase small">
+                                <tr>
+                                    <th>Funcionario</th>
+                                    <th>Rol</th>
+                                    <th class="text-center">Req.</th>
+                                    <th class="text-end">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla_destinos_status" class="small">
+                                <!-- Dynamic -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario de Respuesta -->
+            <div class="card shadow-sm border-0 mb-4 bg-white">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold fs-6 mb-4">Emitir Respuesta</h5>
+                    <form id="form_responder_ingreso">
+                        <div class="mb-4">
+                            <label for="tis_respuesta" class="form-label small fw-bold">Contenido de la Respuesta
+                                (Opcional)</label>
+                            <textarea class="form-control form-control-sm" id="tis_respuesta" rows="6"
+                                placeholder="Escriba aquí la respuesta final o resolución..."></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label for="inp_archivo_decreto" class="form-label small fw-bold">Incluir Decreto en
+                                respuesta (Opcional)</label>
+                            <input class="form-control form-control-sm" type="file" id="inp_archivo_decreto"
+                                accept=".pdf,.doc,.docx,.jpg,.png">
+                            <div class="form-text x-small text-muted mt-2">Si adjunta un archivo, este se guardará
+                                con el prefijo <strong>"Decreto - "</strong>.</div>
+                        </div>
+                        <div class="row g-3 align-items-center">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         </div>
 
         <!-- Modal Nuevo Comentario -->

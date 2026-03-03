@@ -268,7 +268,7 @@ async function renderWeekRules(w) {
             let content = `<div class="slot-container" onclick="abrirModalRegla(${b}, '${fdb}')">`;
             if (items.length > 0) {
                 items.forEach(it => {
-                    content += `<div class="vuln-line vuln-color-${it.tlh_vulnerable}" data-cupos="${it.tlh_cupo}"></div>`;
+                    content += `<div class="vuln-line vuln-color-${it.tlh_prioidad}" data-cupos="${it.tlh_cupo}"></div>`;
                 });
             } else {
                 content += `<span class="text-muted small">+</span>`;
@@ -346,9 +346,9 @@ async function abrirModalRegla(bloqueId = null, fecha = null) {
                         <tbody id="swal_table_body">`;
 
             itemsBlock.forEach((it, idx) => {
-                const vulnName = vulnerabilidades.find(v => v.tlv_id == it.tlh_vulnerable)?.tlv_nombre || 'Desconocida';
+                const vulnName = vulnerabilidades.find(v => v.tlv_id == it.tlh_prioidad)?.tlv_nombre || 'Desconocida';
                 tableHtml += `
-                    <tr data-id="${it.tlh_id || ''}" data-vuln="${it.tlh_vulnerable}">
+                    <tr data-id="${it.tlh_id || ''}" data-vuln="${it.tlh_prioidad}">
                         <td class="align-middle">${vulnName}</td>
                         <td><input type="number" class="form-control form-control-sm swal-edit-cupo" value="${it.tlh_cupo}"></td>
                         <td class="text-center align-middle">
@@ -411,7 +411,7 @@ async function abrirModalRegla(bloqueId = null, fecha = null) {
                         tlh_bloque_horario: bloqueId,
                         tra_id: tra_id, // Usamos tra_id para la lógica de negocio del componente
                         tlh_tramite: tra_id, // Pero el modelo pide tlh_tramite
-                        tlh_vulnerable: tr.getAttribute('data-vuln'),
+                        tlh_prioidad: tr.getAttribute('data-vuln'),
                         tlh_cupo: tr.querySelector('.swal-edit-cupo').value
                     }));
                 }
@@ -458,7 +458,7 @@ async function abrirModalRegla(bloqueId = null, fecha = null) {
                     </div>
                     <div class="form-group">
                         <label class="small font-weight-bold text-uppercase">Restricción / Vulnerabilidad</label>
-                        <select id="swal_vulnerable" class="form-control form-control-sm">${optionsVuln}</select>
+                        <select id="swal_prioidad" class="form-control form-control-sm">${optionsVuln}</select>
                     </div>
                 </div>`,
             showCancelButton: true,
@@ -476,7 +476,7 @@ async function abrirModalRegla(bloqueId = null, fecha = null) {
                     tlh_bloque_horario: document.getElementById('swal_bloque').value,
                     tra_id: tra_id,
                     tlh_tramite: tra_id,
-                    tlh_vulnerable: document.getElementById('swal_vulnerable').value,
+                    tlh_prioidad: document.getElementById('swal_prioidad').value,
                     tlh_cupo: document.getElementById('swal_cupos').value
                 };
             }

@@ -7,7 +7,7 @@ class LicenciaHoras
 {
     private $conn;
     private $table_disponibles = "trd_licencias_horas_disponibles";
-    private $table_vulnerable = "trd_licencias_vulnerable";
+    private $table_prioidad = "trd_licencias_prioidad";
 
     public function __construct($db)
     {
@@ -16,7 +16,7 @@ class LicenciaHoras
 
     public function getDisponibilidadPorFecha($fecha, $tra_id)
     {
-        $query = "SELECT tlh_id, tlh_bloque_horario, tlh_vulnerable, tlh_cupo 
+        $query = "SELECT tlh_id, tlh_bloque_horario, tlh_prioidad, tlh_cupo 
                   FROM " . $this->table_disponibles . " 
                   WHERE tlh_fecha = :fecha AND tlh_tramite = :tra_id 
                   AND tlh_borrado = 0";
@@ -34,19 +34,19 @@ class LicenciaHoras
      */
     public function getVulnerabilidades()
     {
-        $query = "SELECT * FROM " . $this->table_vulnerable . " where tlv_borrado = 0 ORDER BY tlv_nombre ASC;";
+        $query = "SELECT * FROM " . $this->table_prioidad . " where tlv_borrado = 0 ORDER BY tlv_nombre ASC;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function findRegistro($fecha, $bloque, $tra_id, $vulnerable_id)
+    public function findRegistro($fecha, $bloque, $tra_id, $prioidad_id)
     {
         $query = "SELECT * FROM " . $this->table_disponibles . " 
                   WHERE tlh_fecha = :fecha 
                   AND tlh_bloque_horario = :bloque 
                   AND tlh_tramite = :tra_id 
-                  AND tlh_vulnerable = :vulnerable_id 
+                  AND tlh_prioidad = :prioidad_id 
                   AND tlh_borrado = 0 
                   LIMIT 1";
 
@@ -54,7 +54,7 @@ class LicenciaHoras
         $stmt->bindParam(":fecha", $fecha);
         $stmt->bindParam(":bloque", $bloque);
         $stmt->bindParam(":tra_id", $tra_id);
-        $stmt->bindParam(":vulnerable_id", $vulnerable_id);
+        $stmt->bindParam(":prioidad_id", $prioidad_id);
         $stmt->execute();
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -74,13 +74,13 @@ class LicenciaHoras
             $stmt->bindParam(":id", $data['tlh_id']);
         } else {
             $query = "INSERT INTO " . $this->table_disponibles . " 
-                      (tlh_fecha, tlh_bloque_horario, tlh_tramite, tlh_vulnerable, tlh_cupo) 
-                      VALUES (:fecha, :bloque, :tlh_tramite, :vulnerable, :cupos)";
+                      (tlh_fecha, tlh_bloque_horario, tlh_tramite, tlh_prioidad, tlh_cupo) 
+                      VALUES (:fecha, :bloque, :tlh_tramite, :prioidad, :cupos)";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(":fecha", $data['tlh_fecha']);
             $stmt->bindParam(":bloque", $data['tlh_bloque_horario']);
             $stmt->bindParam(":tlh_tramite", $data['tlh_tramite']);
-            $stmt->bindParam(":vulnerable", $data['tlh_vulnerable']);
+            $stmt->bindParam(":prioidad", $data['tlh_prioidad']);
             $stmt->bindParam(":cupos", $data['tlh_cupo']);
         }
 
