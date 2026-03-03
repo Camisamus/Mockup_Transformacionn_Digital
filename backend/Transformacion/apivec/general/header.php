@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gestión</title>
+    <title>Vecinos - Sistema de Gestión</title>
     <link href="<?php echo $pathPrefix; ?>recursos/css/gob.cl.css" rel="stylesheet">
 
-    <!-- Preload Critical Fonts to minimize FOUT -->
+    <!-- Preload Critical Fonts -->
     <link rel="preload" href="<?php echo $pathPrefix; ?>recursos/fonts/roboto-400.ttf" as="font" type="font/ttf"
         crossorigin>
     <link rel="preload" href="<?php echo $pathPrefix; ?>recursos/fonts/roboto-700.ttf" as="font" type="font/ttf"
@@ -16,11 +16,9 @@
         crossorigin>
 
     <link href="<?php echo $pathPrefix; ?>recursos/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link href="<?php echo $pathPrefix; ?>recursos/css/style.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <!-- Additional CSS can be injected here if needed -->
 </head>
 
 <body style="padding: 0; margin: 0;">
@@ -30,31 +28,28 @@
         <div id="sidebar-container" class="sidebar-portal shadow-sm">
             <div class="p-4 d-flex flex-column h-100" style="gap: 1.5rem;">
                 <div class="d-flex align-items-center mb-4 px-2" style="gap: 0.75rem;">
-
                     <div class="d-flex flex-column overflow-hidden">
-
                         <img src="<?php echo $pathPrefix; ?>recursos/img/logo.png" />
                     </div>
                 </div>
 
                 <div class="flex-grow-1 overflow-auto custom-scrollbar">
-                    <?php echo $sidebarHtml; ?>
+                    <?php echo renderSidebarVecinos($pathPrefix, $_SERVER['SCRIPT_NAME']); ?>
                 </div>
 
                 <div class="mt-auto d-flex align-items-center pt-3 border-top px-2" style="gap: 0.75rem;">
                     <div class="bg-light border rounded-circle d-flex align-items-center justify-content-center font-weight-bold text-primary"
                         style="width: 36px; height: 36px; font-size: 11px; color: #006FB3 !important;">
-                        <?php echo strtoupper(substr($userData['nombre'], 0, 1) . substr($userData['apellido'], 0, 1)); ?>
+                        <?php echo strtoupper(substr($userData['nombre'] ?? 'V', 0, 1) . substr($userData['apellido'] ?? 'E', 0, 1)); ?>
                     </div>
                     <div class="d-flex flex-column overflow-hidden">
                         <p class="font-weight-bold text-dark mb-0 text-truncate" style="font-size: 11px;">
-                            <?php echo $userData['nombre'] . ' ' . $userData['apellido']; ?>
+                            <?php echo ($userData['nombre'] ?? 'Vecino') . ' ' . ($userData['apellido'] ?? ''); ?>
                         </p>
                         <p class="text-primary font-weight-bold text-uppercase mb-0"
-                            style="font-size: 9px; color: #006FB3 !important;">Funcionario</p>
+                            style="font-size: 9px; color: #006FB3 !important;">Vecino</p>
                     </div>
-                    <button class="btn btn-link p-0 ml-auto text-muted shadow-none"
-                        onclick="localStorage.removeItem('isLoggedIn'); localStorage.removeItem('user_data'); window.location.href='<?php echo $pathPrefix; ?>api/general/logout.php'">
+                    <button class="btn btn-link p-0 ml-auto text-muted shadow-none" onclick="window.logout()">
                         <?php echo getIcon('log-out', '', ['width' => '18', 'height' => '18']); ?>
                     </button>
                 </div>
@@ -75,20 +70,14 @@
                     </button>
                     <div class="d-flex flex-column">
                         <h2 class="h6 font-serif font-bold text-dark mb-0" id="page-title">
-                            <?php echo isset($pageTitle) ? $pageTitle : 'Sistema de Gestión'; ?>
+                            <?php echo isset($pageTitle) ? $pageTitle : 'Panel Vecinos'; ?>
                         </h2>
                         <p class="text-primary font-weight-bold text-uppercase mb-0"
                             style="font-size: 9px; letter-spacing: 0.15em; margin-top: 2px; color: #006FB3 !important;">
                             Sistema Unificado de Gestión Municipal</p>
                     </div>
                 </div>
-                <!-- Notifications/Widgets as per mockup -->
                 <div class="d-flex align-items-center" style="gap: 1rem;">
-                    <div class="d-none d-md-flex align-items-center text-muted font-weight-bold mr-3"
-                        style="font-size: 10px; gap: 0.5rem;">
-                        <span class="rounded-circle bg-warning" style="width: 8px; height: 8px;"></span>
-                        <span class="text-uppercase" style="letter-spacing: 0.05em;"></span>
-                    </div>
                     <button class="btn btn-light btn-sm rounded-circle p-2 border-0 shadow-none position-relative">
                         <?php echo getIcon('bell', 'text-muted'); ?>
                     </button>
@@ -96,13 +85,3 @@
             </header>
 
             <div class="container-fluid pb-0 px-4 pt-4" id="main-content-container">
-                <!-- Page Content Starts Here -->
-
-                <script>
-                    $(document).ready(function () {
-                        $('#sidebar-toggle').on('click', function () {
-                            $('#sidebar-container').addClass('show');
-                            $('#sidebar-overlay').addClass('show');
-                        });
-                    });
-                </script>

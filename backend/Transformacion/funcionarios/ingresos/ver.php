@@ -475,80 +475,66 @@ include '../../api/general/header.php';
 
         <!--PESTAÑA: RESPONDER-->
         <div class="tab-pane fade" id="tab-responder" role="tabpanel">
-            <!-- Left Column: Details and Response -->
-        <div class="col-lg-8">
-            <!-- Estado de Destinos -->
-            <div class="card shadow-sm border-0 mb-4">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold fs-6 mb-4">Estado de Aprobaciones</h5>
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-light text-uppercase small">
-                                <tr>
-                                    <th>Funcionario</th>
-                                    <th>Rol</th>
-                                    <th class="text-center">Req.</th>
-                                    <th class="text-end">Estado</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabla_destinos_status" class="small">
-                                <!-- Dynamic -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-8 space-y-6">
+                    <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                        <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
+                            <span class="material-symbols-outlined text-gob-success">maps_ugc</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Emitir Respuesta Final</h3>
+                        </div>
+                
+                        <div class="p-8">
+                            <form id="form_responder_ingreso" class="space-y-6">
+                                <div class="space-y-2">
+                                    <label for="tis_respuesta" class="label-custom">Contenido de la Respuesta (Opcional)</label>
+                                    <textarea id="tis_respuesta" rows="6" 
+                                        class="w-full border-slate-200 rounded-2xl focus:ring-primary-blue text-[15px] p-4 bg-slate-50 italic focus:bg-white transition-all"
+                                        placeholder="Escriba aquí la respuesta final o resolución..."></textarea>
+                                </div>
 
-            <!-- Formulario de Respuesta -->
-            <div class="card shadow-sm border-0 mb-4 bg-white">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold fs-6 mb-4">Emitir Respuesta</h5>
-                    <form id="form_responder_ingreso">
-                        <div class="mb-4">
-                            <label for="tis_respuesta" class="form-label small fw-bold">Contenido de la Respuesta
-                                (Opcional)</label>
-                            <textarea class="form-control form-control-sm" id="tis_respuesta" rows="6"
-                                placeholder="Escriba aquí la respuesta final o resolución..."></textarea>
+                                <div class="space-y-2">
+                                    <label for="inp_archivo_decreto" class="label-custom">Incluir Decreto en respuesta (Opcional)</label>
+                                    <div class="flex items-center gap-4 p-4 bg-soft-cyan border border-cyan-border rounded-2xl">
+                                        <span class="material-symbols-outlined text-primary-blue text-3xl">picture_as_pdf</span>
+                                        <div class="flex-1">
+                                            <input type="file" id="inp_archivo_decreto" accept=".pdf,.doc,.docx,.jpg,.png" 
+                                                class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[11px] file:font-bold file:bg-primary-blue file:text-white hover:file:bg-blue-700 cursor-pointer">
+                                        </div>
+                                    </div>
+                                    <p class="text-[10px] text-slate-400 font-medium italic mt-2">
+                                        * Si adjunta un archivo, este se guardará automáticamente con el prefijo <strong>"Decreto - "</strong>.
+                                    </p>
+                                </div>
+
+                                <div class="pt-6 border-t border-slate-50 flex justify-end gap-3">
+                                    <button type="button" class="text-slate-400 font-bold text-xs uppercase px-4 hover:text-slate-600">Limpiar</button>
+                                    <button type="submit" class="bg-gob-success text-white font-bold py-3 px-10 rounded-xl shadow-lg shadow-emerald-200/50 text-xs uppercase tracking-widest hover:bg-emerald-600 transition-all flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-[18px]">send</span> Enviar Respuesta
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                        <div class="mb-4">
-                            <label for="inp_archivo_decreto" class="form-label small fw-bold">Incluir Decreto en
-                                respuesta (Opcional)</label>
-                            <input class="form-control form-control-sm" type="file" id="inp_archivo_decreto"
-                                accept=".pdf,.doc,.docx,.jpg,.png">
-                            <div class="form-text x-small text-muted mt-2">Si adjunta un archivo, este se guardará
-                                con el prefijo <strong>"Decreto - "</strong>.</div>
-                        </div>
-                        <div class="row g-3 align-items-center">
-                        </div>
-                    </form>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="bg-slate-800 text-white rounded-2xl p-6 shadow-xl">
+                        <h5 class="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-4">Instrucciones de Cierre</h5>
+                        <ul class="space-y-4">
+                            <li class="flex gap-3 items-start text-sm">
+                                <span class="material-symbols-outlined text-gob-success text-lg">check_circle</span>
+                                <span>Al enviar la respuesta, el estado del ingreso cambiará a <strong>"Resuelto"</strong>.</span>
+                            </li>
+                            <li class="flex gap-3 items-start text-sm">
+                                <span class="material-symbols-outlined text-gob-success text-lg">check_circle</span>
+                                <span>El documento dejará de estar pendiente en su bandeja personal.</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
 
-        <!-- Modal Nuevo Comentario -->
-        <div class="modal fade" id="modalNuevoComentario" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow">
-                    <div class="modal-header bg-light">
-                        <h5 class="modal-title fw-bold fs-6">Agregar Comentario</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body p-4">
-                        <div class="mb-0">
-                            <label for="textoNuevoComentario" class="form-label small fw-bold">Su Comentario</label>
-                            <textarea class="form-control form-control-sm" id="textoNuevoComentario" rows="4"
-                                placeholder="Escriba aquí su comentario u observación..."></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer border-0 bg-light">
-                        <button type="button" class="btn btn-link text-muted text-decoration-none small"
-                            data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-dark btn-sm px-4" onclick="guardarComentario()">Guardar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <!-- Modal OTP Firma -->
         <div class="modal fade" id="modalOTP" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -656,5 +642,159 @@ include '../../api/general/header.php';
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 <script src="../../recursos/js/funcionarios/ingresos/permisos.js"></script>
 <script src="../../recursos/js/funcionarios/ingresos/ver.js"></script>
+
+<script>
+    // Lógica adicional para Visación y Respuestas
+    let isRechazando = false;
+
+    // Poblar la tabla de visación cuando los datos estén listos
+    const originalRenderizarIngreso = window.renderizarIngreso;
+    window.renderizarIngreso = function(data) {
+        if (typeof originalRenderizarIngreso === 'function') {
+            originalRenderizarIngreso(data);
+        }
+        renderizarTablaVisacion(data.destinos || []);
+    };
+
+    function renderizarTablaVisacion(destinos) {
+        const tabla = document.getElementById('tabla_destinos_status');
+        if (!tabla) return;
+        tabla.innerHTML = '';
+
+        destinos.forEach(dest => {
+            let estadoColors = 'bg-slate-50 text-slate-400 border-slate-100';
+            let estadoLabel = 'Pendiente';
+
+            if (dest.tid_responde == 1) {
+                estadoColors = 'bg-emerald-50 text-emerald-600 border-emerald-100';
+                estadoLabel = 'Aprobado';
+            } else if ((dest.tid_responde == 0 || dest.tid_responde === '0') && dest.tid_fecha_respuesta) {
+                estadoColors = 'bg-rose-50 text-rose-600 border-rose-100';
+                estadoLabel = 'Rechazado';
+            }
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="px-6 py-4">
+                    <div class="font-bold text-slate-700 text-sm">${dest.usr_nombre} ${dest.usr_apellido}</div>
+                    <div class="text-[10px] text-slate-400">${dest.usr_email}</div>
+                </td>
+                <td class="px-6 py-4">
+                    <span class="px-2 py-1 rounded-lg text-[10px] font-bold uppercase border bg-blue-50 text-primary-blue border-blue-100">${dest.tid_facultad}</span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                    ${dest.tid_requeido == 1 ? '<span class="material-symbols-outlined text-emerald-500">check_circle</span>' : '-'}
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase border ${estadoColors}">${estadoLabel}</span>
+                </td>
+            `;
+            tabla.appendChild(row);
+        });
+    }
+
+    async function aprobarVisacion() {
+        const { isConfirmed } = await Swal.fire({
+            title: '¿Confirmar Visación?',
+            text: "Su aprobación permitirá que el flujo continúe.",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#1a5f9c',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Sí, Aprobar',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (isConfirmed) {
+            Swal.fire({ title: 'Procesando...', didOpen: () => Swal.showLoading() });
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const id = urlParams.get('id');
+
+                // 1. Responder Favorablemente
+                await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ACCION: 'RESPONDER',
+                        ing_id: id,
+                        tis_estado: 'Resuelto_Favorable',
+                        tis_respuesta: 'Visación aprobada por responsable.'
+                    })
+                });
+
+                // 2. Cambiar estado a "Visado" (Como pide el usuario)
+                await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ACCION: 'ACTUALIZAR_ESTADO',
+                        ing_id: id,
+                        ing_estado_entrega: 'Visado'
+                    })
+                });
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Aprobado y Visado',
+                    text: 'La visación ha sido registrada correctamente.',
+                    timer: 2000
+                }).then(() => location.reload());
+
+            } catch (e) {
+                console.error(e);
+                Swal.fire('Error', 'No se pudo procesar la visación', 'error');
+            }
+        }
+    }
+
+    function rechazarVisacion() {
+        isRechazando = true;
+        const modal = new bootstrap.Modal(document.getElementById('modalNuevoComentario'));
+        modal.show();
+    }
+
+    const originalGuardarComentario = window.guardarComentario;
+    window.guardarComentario = async function() {
+        if (!isRechazando) {
+            if (typeof originalGuardarComentario === 'function') originalGuardarComentario();
+            return;
+        }
+
+        const texto = document.getElementById('textoNuevoComentario').value.trim();
+        if (!texto) {
+            Swal.fire('Atención', 'Debe indicar por qué fue rechazada la visación.', 'warning');
+            return;
+        }
+
+        Swal.fire({ title: 'Rechazando...', didOpen: () => Swal.showLoading() });
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+
+            await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ACCION: 'RESPONDER',
+                    ing_id: id,
+                    tis_estado: 'Resuelto_NO_Favorable',
+                    tis_respuesta: 'Visación Rechazada: ' + texto
+                })
+            });
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Visación Rechazada',
+                text: 'Se ha registrado el rechazo y el comentario.',
+                timer: 2000
+            }).then(() => location.reload());
+
+        } catch (e) {
+            console.error(e);
+            Swal.fire('Error', 'No se pudo registrar el rechazo', 'error');
+        }
+    };
+</script>
 
 <?php include '../../api/general/footer.php'; ?>
