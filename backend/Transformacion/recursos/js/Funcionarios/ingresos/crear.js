@@ -91,24 +91,48 @@ function setupEventListeners() {
         filtrarBusquedaFuncionarios();
     });
 
-    // Control de requerido según facultad
+    // Control de requerido y labores según facultad (rol)
     document.getElementById('m_destino_facultad').addEventListener('change', (e) => {
         const checkReq = document.getElementById('m_destino_requerido');
         const tareaSelect = document.getElementById('m_destino_tarea');
-        const tareaContainer = tareaSelect.closest('.col-md-12'); // Assuming it's in a col-md-12
+        const facultad = e.target.value;
 
-        if (e.target.value === 'Consultor') {
-            checkReq.checked = false;
-            checkReq.disabled = true;
-            tareaContainer.style.display = 'none'; // Ensure visible for Consultor
-        } else if (e.target.value === 'Visador') {
+        // Limpiar opciones actuales de labor
+        tareaSelect.innerHTML = '';
+
+        if (facultad === 'Responsable' || facultad === 'Firmante') {
+            // Desplegar las 4 opciones
+            const options = [
+                { val: 'ejecutar lo requerido', text: 'Ejecutar lo requerido' },
+                { val: 'generar informe', text: 'Generar informe técnico' },
+                { val: 'tomar conocimiento', text: 'Tomar conocimiento' },
+                { val: 'responder al remitente', text: 'Responder al remitente' }
+            ];
+            options.forEach(opt => {
+                const el = document.createElement('option');
+                el.value = opt.val;
+                el.textContent = opt.text;
+                tareaSelect.appendChild(el);
+            });
+            checkReq.disabled = false;
+        } else if (facultad === 'Visador') {
+            // Solo desplegar "Ejecutar lo requerido"
+            const el = document.createElement('option');
+            el.value = 'ejecutar lo requerido';
+            el.textContent = 'Ejecutar lo requerido';
+            tareaSelect.appendChild(el);
+
             checkReq.checked = true;
             checkReq.disabled = false;
-            tareaContainer.style.display = 'none'; // Hide for Visador
-            tareaSelect.value = 'tomar conocimiento';
-        } else {
-            checkReq.disabled = false;
-            tareaContainer.style.display = 'block'; // Show for others
+        } else if (facultad === 'Lector') {
+            // Solo desplegar "Tomar conocimiento"
+            const el = document.createElement('option');
+            el.value = 'tomar conocimiento';
+            el.textContent = 'Tomar conocimiento';
+            tareaSelect.appendChild(el);
+
+            checkReq.checked = false;
+            checkReq.disabled = true;
         }
     });
 
@@ -160,9 +184,6 @@ function setupEventListeners() {
         guardarIngreso();
     };
 
-    document.getElementById('btn_cancelar').onclick = () => {
-        window.location.href = 'index.php';
-    };
 }
 
 function abrirModalBuscarFuncionario() {
@@ -231,6 +252,10 @@ function seleccionarFuncionario(id, nombre) {
     checkReq.disabled = false;
 
     modalBusqueda.hide();
+
+    // Disparar evento para inicializar opciones según el rol por defecto (Responsable)
+    document.getElementById('m_destino_facultad').dispatchEvent(new Event('change'));
+
     modalConfig.show();
 }
 
@@ -349,14 +374,47 @@ async function guardarIngreso() {
         const result = await response.json();
 
         if (result.status === 'success') {
-            Swal.fire({
-                icon: 'success',
-                title: '¡Éxito!',
-                text: 'El ingreso ha sido creado correctamente.',
-                confirmButtonText: 'Ir a la Bandeja'
-            }).then(() => {
-                window.location.href = 'index.php';
-            });
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const idPadre = urlParams.get('id_padre');
+            if (idPadre) {
+                const childRequestId = result.id;
+                const respChild = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ACCION: 'CONSULTAM', ing_id: childRequestId })
+                });
+                const resChild = await respChild.json();
+                const childRgtId = resChild.data.tis_registro_tramite;
+
+                const respLink = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ACCION: 'VINCULAR_HIJO',
+                        padre_id: idPadre,
+                        hijo_id: childRgtId
+                    })
+                });
+                const resLink = await respLink.json();
+
+                if (resLink.status === 'success') {
+                    Swal.fire('Éxito', 'Solicitud hija creada y vinculada.', 'success');
+                    modalInstance.hide();
+                    await cargarDatosPreparar(parentId);
+                } else {
+                    Swal.fire('Atención', 'Se creó pero falló el vínculo.', 'warning');
+                }
+            } else {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Éxito!',
+                    text: 'El ingreso ha sido creado correctamente.',
+                    confirmButtonText: 'Ir a la Bandeja'
+                }).then(() => {
+                    window.location.href = 'index.php';
+                });
+            }
         } else {
             Swal.fire('Error', result.message || 'No se pudo crear el ingreso', 'error');
         }

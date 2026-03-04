@@ -127,12 +127,10 @@ function renderChartTipo(datos) {
 }
 
 async function cargarBandeja(filters = {}) {
-    const tabla = document.getElementById('tabla_ingresos');
+    const tablaContainer = document.getElementById('tabla_ingresos');
 
     const searchFilters = { ...filters };
-    if (!searchFilters.tis_id && !searchFilters.rgt_id_publica && !searchFilters.tis_estado) {
-        searchFilters.tis_estado = 'Ingresado';
-    }
+    // Eliminamos el filtro forzado de "Ingresado" para que traiga todos los estados correspondientes (incluyendo los visados para los firmantes)
 
     try {
         const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
@@ -148,67 +146,97 @@ async function cargarBandeja(filters = {}) {
 
         if (result.status === 'success') {
             allData = result.data;
-            currentPage = 1;
-            renderTablaPaginada();
+
+            // 1. Primero renderizamos el HTML de las filas
+            renderizarTabla(allData);
+
+            // 2. Si ya existe un DataTable, lo destruimos para recrearlo con nuevos datos
+            if ($.fn.DataTable.isDataTable('#tablaPrincipal')) {
+                $('#tablaPrincipal').DataTable().destroy();
+            }
+
+            // Dentro de cargarBandeja, cuando inicializas el DataTable:
+            $('#tablaPrincipal').DataTable({
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+                },
+                "pageLength": 5,          // Solo 5 registros por página
+                "lengthChange": false,    // Oculta el selector de cantidad
+                "searching": false,        // Desactivamos búsqueda interna de DT si usas filtros propios
+                "order": [[4, 'asc']],    // Fecha Límite ascendente (más próximos primero)
+                "dom": 'rt<"p-4 border-t flex justify-between items-center"ip>', // 'p' para paginación, 'i' para info
+                "columnDefs": [
+                    { "orderable": false, "targets": [1, 7] }
+                ],
+                "pagingType": "simple_numbers", // Botones elegantes
+                "drawCallback": function () {
+                    // Re-sustituir los iconos de feather si es necesario
+                    if (window.feather) feather.replace();
+                }
+            });
+
+            // 4. Ocultamos tu paginación vieja ya que DT usará la suya
+            const oldPagination = document.getElementById('pagination_container');
+            if (oldPagination) oldPagination.style.display = 'none';
+
         } else {
-            tabla.innerHTML = `<tr><td colspan="8" class="px-6 py-10 text-center text-rose-500 italic">Error: ${result.message}</td></tr>`;
+            tablaContainer.innerHTML = `<tr><td colspan="8" class="px-6 py-10 text-center text-rose-500 italic">Error: ${result.message}</td></tr>`;
         }
     } catch (error) {
         console.error('Error:', error);
-        tabla.innerHTML = `<tr><td colspan="8" class="px-6 py-10 text-center text-rose-500 italic">Error de conexión con el servidor.</td></tr>`;
     }
 }
 
-function renderTablaPaginada() {
-    const start = (currentPage - 1) * pageSize;
-    const end = start + pageSize;
-    const paginatedData = allData.slice(start, end);
+//function renderTablaPaginada() {
+// const start = (currentPage - 1) * pageSize;
+//const end = start + pageSize;
+//const paginatedData = allData.slice(start, end);
 
-    renderizarTabla(paginatedData);
-    renderPagination();
-}
+//renderizarTabla(paginatedData);
+// renderPagination();
+//}
 
-function renderPagination() {
-    const totalPages = Math.ceil(allData.length / pageSize);
-    const paginationContainer = document.getElementById('pagination_container');
-    if (!paginationContainer) return;
+//function renderPagination() {
+//const totalPages = Math.ceil(allData.length / pageSize);
+//const paginationContainer = document.getElementById('pagination_container');
+//if (!paginationContainer) return;
 
-    paginationContainer.innerHTML = '';
-    if (allData.length === 0) return;
+//paginationContainer.innerHTML = '';
+//if (allData.length === 0) return;
 
-    // Info text at left
-    const infoText = document.createElement('div');
-    infoText.className = 'pagination-info text-xs font-semibold text-slate-400';
-    infoText.innerText = `Página ${currentPage} de ${totalPages || 1}`;
-    paginationContainer.appendChild(infoText);
+// Info text at left
+//const infoText = document.createElement('div');
+//infoText.className = 'pagination-info text-xs font-semibold text-slate-400';
+//infoText.innerText = `Página ${currentPage} de ${totalPages || 1}`;
+//paginationContainer.appendChild(infoText);
 
-    const nav = document.createElement('div');
-    nav.className = 'flex gap-2';
+//const nav = document.createElement('div');
+//nav.className = 'flex gap-2';
 
-    // Anterior
-    const btnAnt = document.createElement('button');
-    btnAnt.className = 'flex items-center gap-1 bg-white border border-slate-200 px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-50 disabled:opacity-50 transition-all';
-    btnAnt.disabled = currentPage === 1;
-    btnAnt.innerHTML = '<span class="material-symbols-outlined text-sm">chevron_left</span> Anterior';
-    btnAnt.onclick = (e) => {
-        e.preventDefault();
-        changePage(currentPage - 1);
-    };
+// Anterior
+//const btnAnt = document.createElement('button');
+//btnAnt.className = 'flex items-center gap-1 bg-white border border-slate-200 px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-50 disabled:opacity-50 transition-all';
+//btnAnt.disabled = currentPage === 1;
+//btnAnt.innerHTML = '<span class="material-symbols-outlined text-sm">chevron_left</span> Anterior';
+//btnAnt.onclick = (e) => {
+//   e.preventDefault();
+//   changePage(currentPage - 1);
+//};
 
-    // Siguiente
-    const btnSig = document.createElement('button');
-    btnSig.className = 'flex items-center gap-1 bg-white border border-slate-200 px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-50 disabled:opacity-50 transition-all';
-    btnSig.disabled = currentPage === totalPages || totalPages === 0;
-    btnSig.innerHTML = 'Siguiente <span class="material-symbols-outlined text-sm">chevron_right</span>';
-    btnSig.onclick = (e) => {
-        e.preventDefault();
-        changePage(currentPage + 1);
-    };
+// Siguiente
+//const btnSig = document.createElement('button');
+//btnSig.className = 'flex items-center gap-1 bg-white border border-slate-200 px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-50 disabled:opacity-50 transition-all';
+//btnSig.disabled = currentPage === totalPages || totalPages === 0;
+//btnSig.innerHTML = 'Siguiente <span class="material-symbols-outlined text-sm">chevron_right</span>';
+//btnSig.onclick = (e) => {
+//    e.preventDefault();
+//   changePage(currentPage + 1);
+//};
 
-    nav.appendChild(btnAnt);
-    nav.appendChild(btnSig);
-    paginationContainer.appendChild(nav);
-}
+//nav.appendChild(btnAnt);
+//nav.appendChild(btnSig);
+//paginationContainer.appendChild(nav);
+//}
 
 window.changePage = function (page) {
     const totalPages = Math.ceil(allData.length / pageSize);
@@ -222,7 +250,7 @@ function renderizarTabla(data) {
     tabla.innerHTML = '';
 
     if (data.length === 0) {
-        tabla.innerHTML = '<tr><td colspan="8" class="px-6 py-10 text-center text-slate-400 italic">No se encontraron registros.</td></tr>';
+        // Dejamos el contenido vacío. DataTables mostrará su mensaje inteligente de "Sin registros" automáticamente
         return;
     }
 
@@ -311,7 +339,7 @@ function getStatusColors(estado) {
 
 function getRolBadge(rol) {
     let classes = 'bg-slate-50 text-slate-400 border-slate-100';
-    if (!rol) rol = 'Consultor';
+    if (!rol) rol = 'Lector';
 
     switch (rol) {
         case 'Propietario':

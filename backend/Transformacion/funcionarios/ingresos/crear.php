@@ -5,8 +5,11 @@ include '../../api/general/header.php';
 ?>
 
 <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+<link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet" />
 
 <script id="tailwind-config">
     tailwind.config = {
@@ -26,37 +29,71 @@ include '../../api/general/header.php';
 </script>
 
 <style>
-    body { background-color: #f8f9fa; font-family: 'Inter', sans-serif; }
-    .material-symbols-outlined { vertical-align: middle; line-height: 1; }
-    .gob-card { border: 1px solid rgba(226, 232, 240, 0.6); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
-    .drop-zone { border: 2px dashed #E0FFFF; border-radius: 1rem; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.3s; background-color: #F0FFFF; }
-    .drop-zone:hover { border-color: #1a5f9c; background-color: #e0f2fe; }
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .material-symbols-outlined {
+        vertical-align: middle;
+        line-height: 1;
+    }
+
+    .gob-card {
+        border: 1px solid rgba(226, 232, 240, 0.6);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .drop-zone {
+        border: 2px dashed #E0FFFF;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        background-color: #F0FFFF;
+    }
+
+    .drop-zone:hover {
+        border-color: #1a5f9c;
+        background-color: #e0f2fe;
+    }
+
     /* Estilos para asegurar que los modales de Bootstrap se vean bien con Tailwind */
-    .modal-backdrop { z-index: 1040 !important; }
-    .modal { z-index: 1050 !important; }
+    .modal-backdrop {
+        z-index: 1040 !important;
+    }
+
+    .modal {
+        z-index: 1050 !important;
+    }
 </style>
 
 <div class="max-w-[1400px] mx-auto p-4 lg:p-8 space-y-6">
     <form id="form_crear_ingreso">
-        
-        <div class="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col lg:flex-row justify-between items-start lg:items-center shadow-sm gap-6 sticky top-4 z-20">
+
+        <div
+            class="bg-white border border-slate-100 rounded-3xl p-6 flex flex-col lg:flex-row justify-between items-start lg:items-center shadow-sm gap-6 sticky top-4 z-20">
             <div class="space-y-1">
                 <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Crear Nuevo Ingreso</h1>
-                <p class="text-slate-400 text-sm font-medium">Complete la información para iniciar el flujo documental.</p>
+                <p class="text-slate-400 text-sm font-medium">Complete la información para iniciar el flujo documental.
+                </p>
             </div>
 
             <div class="flex items-center gap-4 w-full lg:w-auto justify-end">
-                <button type="button" onclick="location.href='index.php'" class="text-slate-400 font-bold hover:text-slate-600 transition-all text-[13px] uppercase tracking-wider">Cancelar</button>
-                <button type="submit" class="flex items-center gap-2 bg-primary-blue hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-[13px] uppercase tracking-wider">
+                <button type="button" onclick="location.href='index.php'"
+                    class="text-slate-400 font-bold hover:text-slate-600 transition-all text-[13px] uppercase tracking-wider">Cancelar</button>
+                <button type="submit"
+                    class="flex items-center gap-2 bg-primary-blue hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-[13px] uppercase tracking-wider">
                     <span class="material-symbols-outlined text-[20px]">save</span> GUARDAR INGRESO
                 </button>
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-4">
-            
+
             <div class="lg:col-span-7 space-y-6">
-                
+
                 <div class="bg-white gob-card rounded-2xl overflow-hidden">
                     <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
                         <span class="text-primary-blue font-bold">1.</span>
@@ -64,27 +101,40 @@ include '../../api/general/header.php';
                     </div>
                     <div class="p-6 space-y-6">
                         <div class="space-y-2">
-                            <label for="tis_titulo" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Título del Ingreso</label>
-                            <input type="text" id="tis_titulo" placeholder="Ej: Solicitud de Permiso de Edificación" class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3" required />
+                            <label for="tis_titulo"
+                                class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Título del
+                                Ingreso</label>
+                            <input type="text" id="tis_titulo" placeholder="Ej: Solicitud de Permiso de Edificación"
+                                class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3"
+                                required />
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
-                                <label for="tis_tipo" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Tipo de Ingreso</label>
-                                <select id="tis_tipo" required class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3">
+                                <label for="tis_tipo"
+                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Tipo de
+                                    Ingreso</label>
+                                <select id="tis_tipo" required
+                                    class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3">
                                     <option value="" selected disabled>Cargando tipos...</option>
                                 </select>
                             </div>
                             <div class="space-y-2">
-                                <label for="tis_fecha_limite" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Fecha Límite</label>
-                                <input type="date" id="tis_fecha_limite" class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3" />
+                                <label for="tis_fecha_limite"
+                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Fecha
+                                    Límite</label>
+                                <input type="date" id="tis_fecha_limite"
+                                    class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3" />
                                 <p class="text-[10px] text-slate-400 italic">Por defecto: 20 días hábiles.</p>
                             </div>
                         </div>
 
                         <div class="space-y-2">
-                            <label for="tis_contenido" class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Contenido / Descripción</label>
-                            <textarea id="tis_contenido" rows="8" placeholder="Detalle aquí la solicitud..." class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-4 bg-slate-50 italic focus:bg-white transition-all"></textarea>
+                            <label for="tis_contenido"
+                                class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Contenido /
+                                Descripción</label>
+                            <textarea id="tis_contenido" rows="8" placeholder="Detalle aquí la solicitud..."
+                                class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-4 bg-slate-50 italic focus:bg-white transition-all"></textarea>
                         </div>
                     </div>
                 </div>
@@ -96,10 +146,13 @@ include '../../api/general/header.php';
                     </div>
                     <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-4">
-                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Enlaces Externos</label>
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Enlaces
+                                Externos</label>
                             <div class="flex gap-2">
-                                <input type="text" id="input_enlace" placeholder="https://..." class="flex-1 rounded-xl border-slate-200 text-sm focus:ring-primary-blue">
-                                <button type="button" id="btn_agregar_enlace" class="bg-slate-800 text-white px-3 rounded-xl flex items-center hover:bg-black transition-colors">
+                                <input type="text" id="input_enlace" placeholder="https://..."
+                                    class="flex-1 rounded-xl border-slate-200 text-sm focus:ring-primary-blue">
+                                <button type="button" id="btn_agregar_enlace"
+                                    class="bg-slate-800 text-white px-3 rounded-xl flex items-center hover:bg-black transition-colors">
                                     <span class="material-symbols-outlined">add</span>
                                 </button>
                             </div>
@@ -107,7 +160,8 @@ include '../../api/general/header.php';
                         </div>
 
                         <div class="space-y-4">
-                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Documentos Adjuntos</label>
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Documentos
+                                Adjuntos</label>
                             <div class="drop-zone" id="drop_zone">
                                 <input type="file" id="input_archivo" hidden multiple>
                                 <span class="material-symbols-outlined text-slate-300 text-3xl mb-1">cloud_upload</span>
@@ -124,31 +178,39 @@ include '../../api/general/header.php';
                     <div class="p-5 border-b border-slate-50 flex items-center justify-between bg-white">
                         <div class="flex items-center gap-2">
                             <span class="text-primary-blue font-bold">3.</span>
-                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Distribución y Flujo</h3>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Distribución y Flujo
+                            </h3>
                         </div>
-                        <span class="bg-slate-100 text-slate-500 text-[10px] px-2 py-1 rounded font-bold uppercase border border-slate-200">Simulación DocDigital</span>
+                        <span
+                            class="bg-slate-100 text-slate-500 text-[10px] px-2 py-1 rounded font-bold uppercase border border-slate-200">Simulación
+                            DocDigital</span>
                     </div>
-                    
+
                     <div class="p-6 space-y-6">
                         <div class="bg-blue-50 border-l-4 border-blue-400 p-3 flex items-start gap-3 rounded-r-lg">
                             <span class="material-symbols-outlined text-blue-500 text-xl">info</span>
                             <p class="text-blue-700 text-[11px] leading-tight">
-                                <strong>Nota:</strong> Los responsables solo recibirán el documento una vez que todos los visadores hayan aprobado en cadena.
+                                <strong>Nota:</strong> Los responsables solo recibirán el documento una vez que todos
+                                los visadores hayan aprobado en cadena.
                             </p>
                         </div>
 
                         <div class="space-y-3">
-                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest block">Seleccionar Destinatario</label>
-                            <button type="button" onclick="abrirModalBuscarFuncionario()" 
+                            <label
+                                class="text-[11px] font-bold text-slate-400 uppercase tracking-widest block">Seleccionar
+                                Destinatario</label>
+                            <button type="button" onclick="abrirModalBuscarFuncionario()"
                                 class="w-full flex items-center justify-between bg-slate-50 border border-slate-200 hover:border-primary-blue p-3 rounded-xl text-slate-500 transition-all group">
                                 <span class="text-sm">Haga clic para buscar en la base de datos...</span>
-                                <span class="material-symbols-outlined group-hover:text-primary-blue">person_search</span>
+                                <span
+                                    class="material-symbols-outlined group-hover:text-primary-blue">person_search</span>
                             </button>
                         </div>
 
                         <div class="overflow-x-auto">
                             <table class="w-full text-left" id="tabla_destinos">
-                                <thead class="bg-slate-50 text-slate-400 font-bold uppercase text-[9px] tracking-widest">
+                                <thead
+                                    class="bg-slate-50 text-slate-400 font-bold uppercase text-[9px] tracking-widest">
                                     <tr>
                                         <th class="px-2 py-3">Funcionario</th>
                                         <th class="px-2 py-3 text-center">Rol</th>
@@ -166,9 +228,11 @@ include '../../api/general/header.php';
                         </div>
                     </div>
 
-                    <div class="bg-slate-50 p-4 border-t border-slate-100 flex justify-between items-center text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                    <div
+                        class="bg-slate-50 p-4 border-t border-slate-100 flex justify-between items-center text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                         <span>Total Visadores: <strong id="countVisadores" class="text-primary-blue">0</strong></span>
-                        <span>Total Responsables: <strong id="countResponsables" class="text-primary-blue">0</strong></span>
+                        <span>Total Responsables: <strong id="countResponsables"
+                                class="text-primary-blue">0</strong></span>
                     </div>
                 </div>
             </div>
@@ -190,7 +254,8 @@ include '../../api/general/header.php';
                             <span class="input-group-text bg-white border-end-0 rounded-start-xl">
                                 <span class="material-symbols-outlined text-slate-400 text-sm">search</span>
                             </span>
-                            <input type="text" class="form-control border-start-0 rounded-end-xl text-sm" id="buscar_fnc_input" placeholder="Buscar por nombre o apellido...">
+                            <input type="text" class="form-control border-start-0 rounded-end-xl text-sm"
+                                id="buscar_fnc_input" placeholder="Buscar por nombre o apellido...">
                         </div>
                     </div>
                     <div class="col-md-5">
@@ -212,7 +277,7 @@ include '../../api/general/header.php';
                             </tr>
                         </thead>
                         <tbody id="lista_busqueda_fnc" class="text-xs">
-                            </tbody>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -225,7 +290,8 @@ include '../../api/general/header.php';
         <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden">
             <div class="modal-header bg-primary-blue border-0 py-4">
                 <h5 class="modal-title text-white fw-bold fs-6">Configurar Atribuciones</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
 
             <div class="modal-body p-6">
@@ -233,28 +299,35 @@ include '../../api/general/header.php';
                     <div class="inline-block p-3 bg-blue-50 rounded-full mb-2">
                         <span class="material-symbols-outlined text-primary-blue text-3xl">manage_accounts</span>
                     </div>
-                    <h6 id="fnc_nombre_config" class="font-bold text-slate-800 italic uppercase text-sm tracking-wide"></h6>
+                    <h6 id="fnc_nombre_config" class="font-bold text-slate-800 italic uppercase text-sm tracking-wide">
+                    </h6>
                     <input type="hidden" id="fnc_id_config">
                 </div>
 
                 <div class="space-y-4">
                     <div style="display: none;">
-                        <select id="m_destino_tipo"><option value="Para" selected>Para</option></select>
-                    </div>
-                    
-                    <div>
-                        <label for="m_destino_facultad" class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Facultad / Rol</label>
-                        <select class="form-select rounded-xl text-sm w-full border-slate-200 focus:ring-primary-blue" id="m_destino_facultad">
-                            <option value="Responsable">Responsable (Acción directa)</option>
-                            <option value="Firmante">Firmante (Firma digital)</option>
-                            <option value="Visador">Visador (Revisión/Aprobación)</option>
-                            <option value="Consultor">Consultor (Solo lectura)</option>
+                        <select id="m_destino_tipo">
+                            <option value="Para" selected>Para</option>
                         </select>
                     </div>
 
                     <div>
-                        <label for="m_destino_tarea" class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Labor a Realizar</label>
-                        <select class="form-select rounded-xl text-sm w-full border-slate-200 focus:ring-primary-blue" id="m_destino_tarea">
+                        <label for="m_destino_facultad"
+                            class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Facultad / Rol</label>
+                        <select class="form-select rounded-xl text-sm w-full border-slate-200 focus:ring-primary-blue"
+                            id="m_destino_facultad">
+                            <option value="Responsable">Responsable (Acción directa)</option>
+                            <option value="Firmante">Firmante (Firma digital)</option>
+                            <option value="Visador">Visador (Revisión/Aprobación)</option>
+                            <option value="Lector">Lector (Solo lectura)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="m_destino_tarea"
+                            class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Labor a Realizar</label>
+                        <select class="form-select rounded-xl text-sm w-full border-slate-200 focus:ring-primary-blue"
+                            id="m_destino_tarea">
                             <option value="ejecutar lo requerido">Ejecutar lo requerido</option>
                             <option value="generar informe">Generar informe técnico</option>
                             <option value="tomar conocimiento">Tomar conocimiento</option>
@@ -265,16 +338,12 @@ include '../../api/general/header.php';
                     <div class="pt-2">
                         <div class="d-flex align-items-center bg-light p-3 rounded-3 border">
                             <div class="form-check form-switch m-0 p-0" style="min-width: 50px;">
-                                <input class="form-check-input m-0 cursor-pointer" 
-                                       type="checkbox" 
-                                       id="m_destino_requerido" 
-                                       checked 
-                                       role="switch" 
-                                       style="width: 2.4em; height: 1.2em; float: none; position: relative; cursor: pointer;">
+                                <input class="form-check-input m-0 cursor-pointer" type="checkbox"
+                                    id="m_destino_requerido" checked role="switch"
+                                    style="width: 2.4em; height: 1.2em; float: none; position: relative; cursor: pointer;">
                             </div>
-                            <label class="form-check-label text-sm font-semibold text-secondary mb-0" 
-                                   for="m_destino_requerido" 
-                                   style="margin-left: 12px; cursor: pointer;">
+                            <label class="form-check-label text-sm font-semibold text-secondary mb-0"
+                                for="m_destino_requerido" style="margin-left: 12px; cursor: pointer;">
                                 Requiere Respuesta Formal
                             </label>
                         </div>
@@ -283,10 +352,14 @@ include '../../api/general/header.php';
             </div>
 
             <div class="modal-footer bg-slate-50 border-0 p-4">
-                <button type="button" class="btn btn-link text-slate-400 text-decoration-none text-[11px] uppercase font-bold" data-bs-dismiss="modal">
+                <button type="button"
+                    class="btn btn-link text-slate-400 text-decoration-none text-[11px] uppercase font-bold"
+                    data-bs-dismiss="modal">
                     Cancelar
                 </button>
-                <button type="button" class="bg-primary-blue hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl text-[11px] font-bold uppercase shadow-lg transition-all" id="btn_confirmar_destino">
+                <button type="button"
+                    class="bg-primary-blue hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl text-[11px] font-bold uppercase shadow-lg transition-all"
+                    id="btn_confirmar_destino">
                     Agregar a la Lista
                 </button>
             </div>

@@ -50,6 +50,67 @@ include '../../api/general/header.php';
         border: 1px solid rgba(226, 232, 240, 0.6);
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
+
+    /* Estilo para que la paginación de DataTables combine con tu interfaz */
+    .dataTables_paginate {
+        padding: 15px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0 !important;
+    }
+
+    .paginate_button {
+        border: 1px solid #e2e8f0 !important;
+        background: white !important;
+        color: #1a5f9c !important;
+        /* Azul primario */
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-left: -1px;
+        /* Une los botones */
+        transition: all 0.2s ease;
+        text-decoration: none !important;
+        display: inline-block;
+    }
+
+    /* Botón Anterior */
+    .paginate_button:first-child,
+    .previous.paginate_button {
+        border-radius: 8px 0 0 8px !important;
+        margin-left: 0;
+        background: #f1f5f9 !important;
+        /* Gris de la imagen */
+        color: #64748b !important;
+    }
+
+    /* Botón Siguiente */
+    .paginate_button:last-child,
+    .next.paginate_button {
+        border-radius: 0 8px 8px 0 !important;
+    }
+
+    /* Botón Activo */
+    .paginate_button.current {
+        background: #007bff !important;
+        /* Azul vibrante de la imagen */
+        color: white !important;
+        border-color: #007bff !important;
+        z-index: 3;
+    }
+
+    /* Puntos suspensivos / deshabilitados */
+    .paginate_button.disabled:not(.previous):not(.next),
+    .ellipsis {
+        background: #f1f5f9 !important;
+        color: #64748b !important;
+        cursor: default;
+    }
+
+    .paginate_button:hover:not(.current):not(.disabled) {
+        background: #f8fafc !important;
+        z-index: 2;
+    }
 </style>
 
 <div class="max-w-[1400px] mx-auto p-4 lg:p-8 space-y-6">
@@ -57,7 +118,8 @@ include '../../api/general/header.php';
     <div
         class="bg-white border border-slate-100 rounded-3xl p-6 lg:p-10 flex flex-col sm:flex-row justify-between items-center shadow-sm gap-6">
         <div class="space-y-1 w-full text-left">
-            <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Bienvenido al Sistema de Ingresos
+            <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Bienvenido al Sistema de
+                Ingresos
             </h1>
             <p class="text-slate-400 text-sm lg:text-[15px] font-medium">Gestión y análisis de solicitudes de ingreso al
                 sistema.</p>
@@ -132,15 +194,15 @@ include '../../api/general/header.php';
         </div>
         <div class="p-0">
             <div class="table-responsive">
-                <table class="w-full text-left border-collapse">
+                <table id="tablaPrincipal" class="w-full text-left border-collapse">
                     <thead>
                         <tr
                             class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
                             <th class="px-6 py-4">ID</th>
                             <th class="px-6 py-4">Accion</th>
                             <th class="px-6 py-4">Título / Contenido</th>
-                            <th class="px-6 py-4 text-center">Fecha</th>
-                            <th class="px-6 py-4 text-center">Límite</th>
+                            <th class="px-6 py-4 text-center">Fecha Ingreso</th>
+                            <th class="px-6 py-4 text-center">Fecha Vencimiento</th>
                             <th class="px-6 py-4 text-center">Estado</th>
                             <th class="px-6 py-4">Asignación</th>
                             <th class="px-6 py-4 text-right">Cód. Público</th>
@@ -191,7 +253,7 @@ include '../../api/general/header.php';
             <div class="row g-2 justify-content-md-end">
                 <div class="col-12 col-md-auto">
                     <button type="button" class="btn btn-toolbar btn-dark w-100 shadow-sm"
-                        onclick="location.href='ingr_crear.php'">
+                        onclick="location.href='crear.php'">
                         <i data-feather="plus" class="me-2"></i>
                         Nuevo Ingreso
                     </button>
@@ -276,6 +338,6 @@ include '../../api/general/header.php';
     feather.replace();
 </script>-->
 
-<!--<script src="../../recursos/js/funcionarios/ingresos/ingr_bandeja.js"></script>-->
+<!--<script src="../../recursos/js/funcionarios/ingresos/bandeja.js"></script>-->
 
 <?php include '../../api/general/footer.php'; ?>

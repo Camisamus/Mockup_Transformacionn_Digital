@@ -7,6 +7,7 @@ let fechaInicio = null;
 let fechaFin = null;
 
 document.addEventListener('DOMContentLoaded', async function () {
+    //1. Vinculación del Modal
     modalFiltrar = new bootstrap.Modal(document.getElementById('modalFiltrarFechas'));
 
     // Set default dates (last 30 days)
@@ -166,7 +167,7 @@ function renderTable(items, tbody) {
             if (item.origen === 'DESVE') {
                 window.location.href = `desve/consultar.php?id=${item.id}`;
             } else if (item.origen === 'Ingresos') {
-                window.location.href = `ingresos/ingr_consultar.php?id=${item.id}`;
+                window.location.href = `ingresos/ver.php?id=${item.id}`;
             } else if (item.origen === 'TAREAS') {
                 Swal.fire({
                     title: item.asunto,

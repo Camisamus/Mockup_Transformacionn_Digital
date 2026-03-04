@@ -52,10 +52,44 @@ class Ingresos_ingreso
 
         // 2. Filtro estricto: Solo ver si es dueño o si existe un registro en destinos para él
         if ($current_user_id) {
-            $query .= " AND (
-                        sol.tis_propietario = :current_user_filter 
-                        OR dest.tid_id IS NOT NULL
-                    )";
+            // Si explícitamente están pidiendo "Visado" (o resueltos), no aplicar el filtro de ocultar al Visador
+            $is_history_query = false;
+            if (!empty($filters['tis_estado'])) {
+                $estados_solicitados = is_array($filters['tis_estado']) ? $filters['tis_estado'] : [$filters['tis_estado']];
+                if (in_array('Visado', $estados_solicitados) || in_array('Resuelto_Favorable', $estados_solicitados)) {
+                    $is_history_query = true;
+                }
+            }
+
+            if ($is_history_query) {
+                // Para historial, solo verificar propiedad o destino (sin restricciones adicionales)
+                $query .= " AND (
+                            sol.tis_propietario = :current_user_filter 
+                            OR dest.tid_id IS NOT NULL
+                        )";
+            } else {
+                // Para la bandeja normal (pendientes), ocultar lo que el visador ya respondió
+                $query .= " AND (
+                            sol.tis_propietario = :current_user_filter 
+                            OR (
+                                dest.tid_id IS NOT NULL 
+                                AND NOT (
+                                    dest.tid_facultad = 'Visador' 
+                                    AND dest.tid_responde IS NOT NULL
+                                )
+                                AND NOT (
+                                    (dest.tid_facultad = 'Firmante' OR dest.tid_facultad = 'Responsable') 
+                                    AND EXISTS (
+                                        SELECT 1 FROM trd_ingresos_destinos d2 
+                                        WHERE d2.tid_ingreso_solicitud = sol.tis_id 
+                                        AND d2.tid_facultad = 'Visador' 
+                                        AND d2.tid_requeido = 1 
+                                        AND (d2.tid_responde IS NULL OR d2.tid_responde != 1)
+                                    )
+                                )
+                            )
+                        )";
+            }
         }
         $params = [];
         // Bind parameters logic needs to be careful with named params appearing multiple times
@@ -140,7 +174,7 @@ class Ingresos_ingreso
                   CASE 
                     WHEN sol.tis_propietario = :current_user THEN 'Propietario'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
-                    ELSE 'Consultor' 
+                    ELSE 'Lector' 
                   END as rol_usuario
                   FROM " . $this->table_name . " sol 
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
@@ -153,7 +187,7 @@ class Ingresos_ingreso
                     OR (
                         dest.tid_destino IS NOT NULL 
                         AND NOT (
-                            dest.tid_facultad = 'Firmante' 
+                            (dest.tid_facultad = 'Firmante' OR dest.tid_facultad = 'Responsable')
                             AND EXISTS (
                                 SELECT 1 FROM trd_ingresos_destinos d2 
                                 WHERE d2.tid_ingreso_solicitud = sol.tis_id 
@@ -206,7 +240,7 @@ class Ingresos_ingreso
                   CASE 
                     WHEN sol.tis_propietario = :current_user THEN 'Propietario'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
-                    ELSE 'Consultor' 
+                    ELSE 'Lector' 
                   END as rol_usuario
                   FROM " . $this->table_name . " sol 
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
@@ -218,7 +252,7 @@ class Ingresos_ingreso
                     OR (
                         dest.tid_destino IS NOT NULL 
                         AND NOT (
-                            dest.tid_facultad = 'Firmante' 
+                            (dest.tid_facultad = 'Firmante' OR dest.tid_facultad = 'Responsable')
                             AND EXISTS (
                                 SELECT 1 FROM trd_ingresos_destinos d2 
                                 WHERE d2.tid_ingreso_solicitud = sol.tis_id 
@@ -336,9 +370,9 @@ class Ingresos_ingreso
                 // 4. Registrar destinos
                 if (isset($data['destinos']) && is_array($data['destinos'])) {
                     foreach ($data['destinos'] as $dest) {
-                        // REGLA: Consultores nunca son requeridos
+                        // REGLA: Lectores nunca son requeridos
                         $requerido = $dest['tid_requeido'];
-                        if ($dest['tid_facultad'] === 'Consultor') {
+                        if ($dest['tid_facultad'] === 'Lector') {
                             $requerido = '0';
                         }
                         if ($dest['tid_facultad'] === 'Responsable') {
@@ -454,9 +488,9 @@ class Ingresos_ingreso
             if (isset($data['destinos']) && is_array($data['destinos'])) {
                 $this->Destinos->borrarPorIngresoId($id);
                 foreach ($data['destinos'] as $dest) {
-                    // REGLA: Consultores nunca son requeridos
+                    // REGLA: Lectores nunca son requeridos
                     $requerido = $dest['tid_requeido'];
-                    if ($dest['tid_facultad'] === 'Consultor') {
+                    if ($dest['tid_facultad'] === 'Lector') {
                         $requerido = '0';
                     }
                     if ($dest['tid_facultad'] === 'Responsable') {

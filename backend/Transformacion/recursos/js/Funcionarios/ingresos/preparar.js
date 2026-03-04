@@ -66,7 +66,7 @@ async function cargarDatosPreparar(id) {
                     confirmButtonText: 'Ver Detalle',
                     allowOutsideClick: false
                 }).then(() => {
-                    window.location.href = `ingr_consultar.php?id=${id}`;
+                    window.location.href = `ver.php?id=${id}`;
                 });
                 return;
             }
@@ -410,7 +410,7 @@ function renderizarMapa(relaciones, detalles = [], userId = null) {
                 if (parseInt(det.tis_responsable) === parseInt(userId) && !isResolved) {
                     window.location.href = `ingr_modificar.php?id=${det.tis_id}`;
                 } else {
-                    window.location.href = `ingr_consultar.php?id=${det.tis_id}`;
+                    window.location.href = `ver.php?id=${det.tis_id}`;
                 }
             } else {
                 console.warn("Details missing for node:", sid);

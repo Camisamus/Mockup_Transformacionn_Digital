@@ -74,7 +74,7 @@ $actionPages = [
     'bandeja_historial.php',
     'index.php',
     'logout.php',
-    'ingr_consultar.php',
+    'ver.php',
     'ingr_responder.php',
     'ingr_preparar.php',
     'ingr_modificar.php',

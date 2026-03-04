@@ -42,6 +42,9 @@ if (!$auth->isAuthenticated()) {
     }
 }
 
+// Obtener permisos dinámicos para el menú
+$vecinoPermisos = $auth->getPermissions();
+
 // Datos para el renderizado
 $userData = [
     'nombre' => $_SESSION['vecino_nombre'] ?? '',

@@ -59,18 +59,27 @@ class BandejaController
                             END as rol_usuario
                         FROM trd_ingresos_solicitudes sol
                         LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :fid
-                        WHERE (sol.tis_propietario = :fid_owner1 OR dest.tid_destino IS NOT NULL)
-                        AND sol.tis_estado NOT IN ('Resuelto_Favorable', 'Resuelto_NO_Favorable')
-                        AND (
-                            dest.tid_facultad IN ('Visador', 'Consultor')
-                            OR NOT EXISTS (
-                                SELECT 1 FROM trd_ingresos_destinos d2 
-                                WHERE d2.tid_ingreso_solicitud = sol.tis_id 
-                                AND d2.tid_facultad = 'Visador' 
-                                AND d2.tid_requeido = 1 
-                                AND (d2.tid_responde IS NULL OR d2.tid_responde != 1)
+                        WHERE (
+                            sol.tis_propietario = :fid_owner1 
+                            OR (
+                                dest.tid_destino IS NOT NULL 
+                                AND NOT (
+                                    dest.tid_facultad = 'Visador' 
+                                    AND dest.tid_responde IS NOT NULL
+                                )
+                                AND NOT (
+                                    (dest.tid_facultad = 'Firmante' OR dest.tid_facultad = 'Responsable')
+                                    AND EXISTS (
+                                        SELECT 1 FROM trd_ingresos_destinos d2 
+                                        WHERE d2.tid_ingreso_solicitud = sol.tis_id 
+                                        AND d2.tid_facultad = 'Visador' 
+                                        AND d2.tid_requeido = 1 
+                                        AND (d2.tid_responde IS NULL OR d2.tid_responde != 1)
+                                    )
+                                )
                             )
-                        )";
+                        )
+                        AND sol.tis_estado NOT IN ('Resuelto_Favorable', 'Resuelto_NO_Favorable')";
 
         $stmt2 = $this->db->prepare($ingresosSql);
         $stmt2->bindParam(':fid', $funcionarioId);
@@ -176,14 +185,21 @@ class BandejaController
                 'Ingresos' as origen,
                 sol.tis_estado as estado,
                 CASE 
-                    WHEN sol.tis_responsable = :fid_owner THEN 'Responsable'
+                    WHEN sol.tis_propietario = :fid_owner THEN 'Responsable'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
-                    ELSE 'Consultor' 
+                    ELSE 'Lector' 
                 END as rol_usuario
             FROM trd_ingresos_solicitudes sol
             LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :fid
-            WHERE (sol.tis_responsable = :fid_owner1 OR dest.tid_destino IS NOT NULL)
-            AND sol.tis_estado IN ('Resuelto_Favorable', 'Resuelto_NO_Favorable')
+            WHERE (sol.tis_propietario = :fid_owner1 OR dest.tid_destino IS NOT NULL)
+            AND (
+                sol.tis_estado IN ('Resuelto_Favorable', 'Resuelto_NO_Favorable')
+                OR (
+                    sol.tis_estado NOT IN ('Resuelto_Favorable', 'Resuelto_NO_Favorable')
+                    AND dest.tid_facultad = 'Visador'
+                    AND dest.tid_responde IS NOT NULL
+                )
+            )
             AND DATE(sol.tis_creacion) >= :fecha_inicio_ingr
             AND DATE(sol.tis_creacion) <= :fecha_fin_ingr";
 

@@ -141,8 +141,8 @@ function validarAccesoYRenderizarAcciones(data, userId) {
         return;
     }
 
-    // Sort to prioritize actionable roles over Consultor
-    // Priority: Firmante (1), Visador (2), Responsable (3), others ... Consultor last
+    // Sort to prioritize actionable roles over Lector
+    // Priority: Firmante (1), Visador (2), Responsable (3), others ... Lector last
     const rolePriority = {
         'firmante': 1,
         'firmador': 1,
@@ -150,7 +150,7 @@ function validarAccesoYRenderizarAcciones(data, userId) {
         'visador': 2,
         'responsable': 3,
         'propietario': 3,
-        'consultor': 10
+        'Lector': 10
     };
 
     // Filter out those already responded if possible
@@ -177,15 +177,15 @@ function validarAccesoYRenderizarAcciones(data, userId) {
 
     const facultad = (MiRelacion.tid_facultad || '').toLowerCase();
 
-    if (facultad === 'consultor') {
+    if (facultad === 'Lector') {
         Swal.fire({
             title: 'Modo Consulta',
-            text: 'Usted tiene acceso como Consultor. Redirigiendo a vista de consulta.',
+            text: 'Usted tiene acceso como Lector. Redirigiendo a vista de consulta.',
             icon: 'info',
             timer: 2000,
             showConfirmButton: false
         }).then(() => {
-            window.location.href = `ingr_consultar.php?id=${currentId}`;
+            window.location.href = `ver.php?id=${currentId}`;
         });
         return;
     }
@@ -199,7 +199,7 @@ function validarAccesoYRenderizarAcciones(data, userId) {
             confirmButtonText: 'Ver Detalle',
             allowOutsideClick: false
         }).then(() => {
-            window.location.href = `ingr_consultar.php?id=${currentId}`;
+            window.location.href = `ver.php?id=${currentId}`;
         });
         return;
     }
@@ -432,10 +432,10 @@ async function procesarRespuesta(estado, accionLabel, respuesta, otp) {
 
                 if (uploadResult.status !== 'success') {
                     Swal.fire('Error', `Error al subir el decreto: ${uploadResult.message}`, 'error');
-                    location.href = 'ingr_consultar.php?id=' + currentId;
+                    location.href = 'ver.php?id=' + currentId;
                     return; // Stop process
                 }
-                location.href = 'ingr_consultar.php?id=' + currentId;
+                location.href = 'ver.php?id=' + currentId;
             } catch (uploadErr) {
                 console.error("Upload error:", uploadErr);
                 Swal.fire('Error', 'Error de red al subir el documento.', 'error');
@@ -463,7 +463,7 @@ async function procesarRespuesta(estado, accionLabel, respuesta, otp) {
 
         if (result.status === 'success') {
             Swal.fire('¡Éxito!', `El trámite ha sido procesado (${accionLabel}) correctamente.`, 'success').then(() => {
-                location.href = 'ingr_consultar.php?id=' + currentId;
+                location.href = 'ver.php?id=' + currentId;
             });
         } else {
             Swal.fire('Error', result.message || 'No se pudo procesar la solicitud.', 'error');

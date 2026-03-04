@@ -139,31 +139,27 @@ include '../../api/general/header.php';
     <!-- Barra de Pestañas -->
     <div class="flex justify-start mb-2">
         <ul class="nav nav-tabs border-0" id="ingresosTabs" role="tablist">
-            <li class="nav-item" role="presentation">
+            <li class="nav-item" role="presentation" id="nav-detalle">
                 <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-detalle" type="button"
                     role="tab">Detalle de la consulta</button>
             </li>
-            <li class="nav-item" role="presentation">
+            <li class="nav-item" role="presentation" id="nav-derivacion">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-derivacion" type="button"
                     role="tab">Derivación</button>
             </li>
-            <li class="nav-item" role="presentation">
+            <li class="nav-item" role="presentation" id="nav-dependencia">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-dependencia" type="button"
                     role="tab">Dependencia</button>
             </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-mapa" type="button"
-                    role="tab">Mapa</button>
-            </li>
-            <li class="nav-item" role="presentation">
+            <li class="nav-item" role="presentation" id="nav-visar">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-visar" type="button"
                     role="tab">Visar</button>
             </li>
-            <li class="nav-item" role="presentation">
+            <li class="nav-item" role="presentation" id="nav-responder">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-responder" type="button"
                     role="tab">Responder</button>
             </li>
-            <li class="nav-item" role="presentation">
+            <li class="nav-item" role="presentation" id="nav-historial">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-historial" type="button"
                     role="tab">Historial</button>
             </li>
@@ -208,15 +204,15 @@ include '../../api/general/header.php';
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-slate-50">
                                 <div class="space-y-1">
-                                    <label class="label-custom">Fecha de Ingreso</label>
+                                    <label class="label-custom">Fecha Ingreso</label>
                                     <div class="text-[14px] text-slate-600 font-medium" id="info_fecha">-</div>
                                 </div>
                                 <div class="space-y-1">
-                                    <label class="label-custom">Responsable</label>
+                                    <label class="label-custom">Propietario</label>
                                     <div class="text-[14px] text-slate-600 font-medium" id="info_responsable">-</div>
                                 </div>
                                 <div class="space-y-1">
-                                    <label class="label-custom">Fecha Límite</label>
+                                    <label class="label-custom">Fecha Vencimiento</label>
                                     <div class="text-[14px] text-rose-600 font-black" id="info_fecha_limite">-</div>
                                 </div>
                             </div>
@@ -288,7 +284,7 @@ include '../../api/general/header.php';
                                 <tr
                                     class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
                                     <th class="px-6 py-4">Funcionario</th>
-                                    <th class="px-6 py-4">Tipo</th>
+                                    <!--<th class="px-6 py-4">Tipo</th>-->
                                     <th class="px-6 py-4">Facultad</th>
                                     <th class="px-6 py-4">Tarea</th>
                                     <th class="px-6 py-4 text-center">Requerido</th>
@@ -313,17 +309,22 @@ include '../../api/general/header.php';
                         <span class="material-symbols-outlined text-2xl font-black">account_tree</span> Relaciones
                         Jerárquicas (Árbol RGT)
                     </h5>
+                    <button type="button"
+                        class="flex items-center gap-2 bg-slate-800 hover:bg-black text-white font-bold py-2.5 px-6 rounded-xl shadow-lg transition-all text-[13px] uppercase tracking-wider"
+                        style="display: block;">
+                        + Nueva Dependencia
+                    </button>
+                    <a href="../ingresos/crear.php?rgt_id_padre=<?= $rgt_id ?>" target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center justify-center gap-2 bg-slate-800 hover:bg-black text-white font-bold py-2.5 px-6 rounded-xl shadow-lg transition-all text-[13px] uppercase tracking-wider">
+                        + Crear solicitud hija
+                    </a>
                 </div>
-                <p class="text-sm text-slate-500 font-medium italic">Trámites correlacionados dinámicamente en la
-                    estructura organizacional.</p>
                 <div class="bg-white rounded-2xl p-6 border border-blue-50 shadow-sm">
                     <ul id="lista_multiancestro" class="space-y-3"></ul>
                 </div>
             </div>
-        </div>
 
-        <!-- PESTAÑA: MAPA -->
-        <div class="tab-pane fade" id="tab-mapa" role="tabpanel">
             <div class="bg-white gob-card rounded-3xl overflow-hidden shadow-sm">
                 <div class="p-6 border-b border-slate-50 flex justify-between items-center bg-white">
                     <h5 class="font-bold text-slate-700 uppercase text-sm tracking-widest flex items-center gap-2">
@@ -338,6 +339,7 @@ include '../../api/general/header.php';
             </div>
         </div>
 
+
         <!-- PESTAÑA: VISAR -->
         <div class="tab-pane fade" id="tab-visar" role="tabpanel">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -345,12 +347,14 @@ include '../../api/general/header.php';
                     <div class="bg-white gob-card rounded-2xl overflow-hidden">
                         <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
                             <span class="material-symbols-outlined text-gob-warning">verified_user</span>
-                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Estado de Aprobaciones (Circuito de Visación)</h3>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Estado de Aprobaciones
+                                (Circuito de Visación)</h3>
                         </div>
                         <div class="p-0">
                             <div class="table-responsive">
                                 <table class="w-full text-left">
-                                    <thead class="bg-slate-50 text-slate-400 font-bold uppercase text-[10px] tracking-widest">
+                                    <thead
+                                        class="bg-slate-50 text-slate-400 font-bold uppercase text-[10px] tracking-widest">
                                         <tr>
                                             <th class="px-6 py-4">Funcionario</th>
                                             <th class="px-6 py-4">Rol</th>
@@ -358,7 +362,8 @@ include '../../api/general/header.php';
                                             <th class="px-6 py-4 text-right">Estado</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tabla_destinos_status" class="divide-y divide-slate-50 text-[13px] text-slate-600">
+                                    <tbody id="tabla_destinos_status"
+                                        class="divide-y divide-slate-50 text-[13px] text-slate-600">
                                     </tbody>
                                 </table>
                             </div>
@@ -366,29 +371,36 @@ include '../../api/general/header.php';
                     </div>
 
                     <div class="bg-white gob-card rounded-2xl p-8 border-t-4 border-gob-warning shadow-md text-center">
-                        <h4 class="text-slate-800 font-extrabold text-lg mb-2 tracking-tight">¿Desea visar este documento?</h4>
-                        <p class="text-slate-400 text-sm mb-6 italic">Su aprobación permitirá que el flujo continúe hacia el siguiente responsable.</p>
+                        <h4 class="text-slate-800 font-extrabold text-lg mb-2 tracking-tight">¿Desea visar este
+                            documento?</h4>
+                        <p class="text-slate-400 text-sm mb-6 italic">Su aprobación permitirá que el flujo continúe
+                            hacia el siguiente responsable.</p>
                         <div class="flex justify-center gap-4">
-                            <button type="button" onclick="rechazarVisacion()" class="bg-rose-50 text-rose-600 border border-rose-100 px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-rose-100 transition-all">Rechazar</button>
-                            <button type="button" onclick="aprobarVisacion()" class="bg-gob-warning text-white px-8 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-yellow-200/50 hover:bg-amber-600 transition-all">Aprobar y Visar</button>
+                            <button type="button" onclick="rechazarVisacion()"
+                                class="bg-rose-50 text-rose-600 border border-rose-100 px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-rose-100 transition-all">Rechazar</button>
+                            <button type="button" onclick="aprobarVisacion()"
+                                class="bg-gob-warning text-white px-8 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-yellow-200/50 hover:bg-amber-600 transition-all">Aprobar
+                                y Visar</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="lg:col-span-4 space-y-6">
                     <div class="bg-amber-50 border border-amber-100 rounded-2xl p-5">
-                        <h5 class="text-amber-800 font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
+                        <h5
+                            class="text-amber-800 font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
                             <span class="material-symbols-outlined text-sm">info</span> Regla de Negocio
                         </h5>
                         <p class="text-[12px] text-amber-700 leading-relaxed">
-                            Usted ha sido asignado como <strong>Visador</strong>. Su rol es técnico/administrativo y es requisito previo para la respuesta final.
+                            Usted ha sido asignado como <strong>Visador</strong>. Su rol es técnico/administrativo y es
+                            requisito previo para la respuesta final.
                         </p>
                     </div>
                 </div>
             </div>
         </div>
 
-                <!--<div class="lg:col-span-4">
+        <!--<div class="lg:col-span-4">
                     <div class="bg-white gob-card rounded-2xl p-6 border-l-4 border-gob-info">
                         <h5 class="text-gob-info font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
                             <span class="material-symbols-outlined text-sm">info</span> Información del Rol
@@ -413,7 +425,7 @@ include '../../api/general/header.php';
         </div>
         </div>-->
 
-        
+
 
 
         <!-- Modal Nuevo Comentario -->
@@ -434,7 +446,8 @@ include '../../api/general/header.php';
                     <div class="modal-footer border-0 bg-light">
                         <button type="button" class="btn btn-link text-muted text-decoration-none small"
                             data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-dark btn-sm px-4" onclick="guardarComentario()">Guardar</button>
+                        <button type="button" class="btn btn-dark btn-sm px-4"
+                            onclick="guardarComentario()">Guardar</button>
                     </div>
                 </div>
             </div>
@@ -448,15 +461,18 @@ include '../../api/general/header.php';
                         <h5 class="modal-title fw-bold fs-6">Verificación de Firma</h5>
                     </div>
                     <div class="modal-body text-center p-5">
-                        <p class="mb-4 small text-muted">Ingrese el código de verificación enviado a su correo electrónico.
+                        <p class="mb-4 small text-muted">Ingrese el código de verificación enviado a su correo
+                            electrónico.
                         </p>
                         <div class="mb-4 d-flex justify-content-center">
-                            <input type="text" class="form-control text-center fw-bold fs-3 border-dark" id="inp_otp_code"
-                                maxlength="6" style="width: 200px; letter-spacing: 5px;" placeholder="000000">
+                            <input type="text" class="form-control text-center fw-bold fs-3 border-dark"
+                                id="inp_otp_code" maxlength="6" style="width: 200px; letter-spacing: 5px;"
+                                placeholder="000000">
                         </div>
                         <div class="text-danger fw-bold small d-flex align-items-center justify-content-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
@@ -480,35 +496,44 @@ include '../../api/general/header.php';
                     <div class="bg-white gob-card rounded-2xl overflow-hidden">
                         <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
                             <span class="material-symbols-outlined text-gob-success">maps_ugc</span>
-                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Emitir Respuesta Final</h3>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Emitir Respuesta Final
+                            </h3>
                         </div>
-                
+
                         <div class="p-8">
                             <form id="form_responder_ingreso" class="space-y-6">
                                 <div class="space-y-2">
-                                    <label for="tis_respuesta" class="label-custom">Contenido de la Respuesta (Opcional)</label>
-                                    <textarea id="tis_respuesta" rows="6" 
+                                    <label for="tis_respuesta" class="label-custom">Contenido de la Respuesta
+                                        (Opcional)</label>
+                                    <textarea id="tis_respuesta" rows="6"
                                         class="w-full border-slate-200 rounded-2xl focus:ring-primary-blue text-[15px] p-4 bg-slate-50 italic focus:bg-white transition-all"
                                         placeholder="Escriba aquí la respuesta final o resolución..."></textarea>
                                 </div>
 
                                 <div class="space-y-2">
-                                    <label for="inp_archivo_decreto" class="label-custom">Incluir Decreto en respuesta (Opcional)</label>
-                                    <div class="flex items-center gap-4 p-4 bg-soft-cyan border border-cyan-border rounded-2xl">
-                                        <span class="material-symbols-outlined text-primary-blue text-3xl">picture_as_pdf</span>
+                                    <label for="inp_archivo_decreto" class="label-custom">Incluir Decreto en respuesta
+                                        (Opcional)</label>
+                                    <div
+                                        class="flex items-center gap-4 p-4 bg-soft-cyan border border-cyan-border rounded-2xl">
+                                        <span
+                                            class="material-symbols-outlined text-primary-blue text-3xl">picture_as_pdf</span>
                                         <div class="flex-1">
-                                            <input type="file" id="inp_archivo_decreto" accept=".pdf,.doc,.docx,.jpg,.png" 
+                                            <input type="file" id="inp_archivo_decreto"
+                                                accept=".pdf,.doc,.docx,.jpg,.png"
                                                 class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[11px] file:font-bold file:bg-primary-blue file:text-white hover:file:bg-blue-700 cursor-pointer">
                                         </div>
                                     </div>
                                     <p class="text-[10px] text-slate-400 font-medium italic mt-2">
-                                        * Si adjunta un archivo, este se guardará automáticamente con el prefijo <strong>"Decreto - "</strong>.
+                                        * Si adjunta un archivo, este se guardará automáticamente con el prefijo
+                                        <strong>"Decreto - "</strong>.
                                     </p>
                                 </div>
 
                                 <div class="pt-6 border-t border-slate-50 flex justify-end gap-3">
-                                    <button type="button" class="text-slate-400 font-bold text-xs uppercase px-4 hover:text-slate-600">Limpiar</button>
-                                    <button type="submit" class="bg-gob-success text-white font-bold py-3 px-10 rounded-xl shadow-lg shadow-emerald-200/50 text-xs uppercase tracking-widest hover:bg-emerald-600 transition-all flex items-center gap-2">
+                                    <button type="button"
+                                        class="text-slate-400 font-bold text-xs uppercase px-4 hover:text-slate-600">Limpiar</button>
+                                    <button type="submit"
+                                        class="bg-gob-success text-white font-bold py-3 px-10 rounded-xl shadow-lg shadow-emerald-200/50 text-xs uppercase tracking-widest hover:bg-emerald-600 transition-all flex items-center gap-2">
                                         <span class="material-symbols-outlined text-[18px]">send</span> Enviar Respuesta
                                     </button>
                                 </div>
@@ -519,11 +544,13 @@ include '../../api/general/header.php';
 
                 <div class="lg:col-span-4 space-y-6">
                     <div class="bg-slate-800 text-white rounded-2xl p-6 shadow-xl">
-                        <h5 class="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-4">Instrucciones de Cierre</h5>
+                        <h5 class="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-4">Instrucciones de
+                            Cierre</h5>
                         <ul class="space-y-4">
                             <li class="flex gap-3 items-start text-sm">
                                 <span class="material-symbols-outlined text-gob-success text-lg">check_circle</span>
-                                <span>Al enviar la respuesta, el estado del ingreso cambiará a <strong>"Resuelto"</strong>.</span>
+                                <span>Al enviar la respuesta, el estado del ingreso cambiará a
+                                    <strong>"Resuelto"</strong>.</span>
                             </li>
                             <li class="flex gap-3 items-start text-sm">
                                 <span class="material-symbols-outlined text-gob-success text-lg">check_circle</span>
@@ -544,15 +571,18 @@ include '../../api/general/header.php';
                         <h5 class="modal-title fw-bold fs-6">Verificación de Firma</h5>
                     </div>
                     <div class="modal-body text-center p-5">
-                        <p class="mb-4 small text-muted">Ingrese el código de verificación enviado a su correo electrónico.
+                        <p class="mb-4 small text-muted">Ingrese el código de verificación enviado a su correo
+                            electrónico.
                         </p>
                         <div class="mb-4 d-flex justify-content-center">
-                            <input type="text" class="form-control text-center fw-bold fs-3 border-dark" id="inp_otp_code"
-                                maxlength="6" style="width: 200px; letter-spacing: 5px;" placeholder="000000">
+                            <input type="text" class="form-control text-center fw-bold fs-3 border-dark"
+                                id="inp_otp_code" maxlength="6" style="width: 200px; letter-spacing: 5px;"
+                                placeholder="000000">
                         </div>
                         <div class="text-danger fw-bold small d-flex align-items-center justify-content-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
@@ -649,7 +679,7 @@ include '../../api/general/header.php';
 
     // Poblar la tabla de visación cuando los datos estén listos
     const originalRenderizarIngreso = window.renderizarIngreso;
-    window.renderizarIngreso = function(data) {
+    window.renderizarIngreso = function (data) {
         if (typeof originalRenderizarIngreso === 'function') {
             originalRenderizarIngreso(data);
         }
@@ -755,7 +785,7 @@ include '../../api/general/header.php';
     }
 
     const originalGuardarComentario = window.guardarComentario;
-    window.guardarComentario = async function() {
+    window.guardarComentario = async function () {
         if (!isRechazando) {
             if (typeof originalGuardarComentario === 'function') originalGuardarComentario();
             return;

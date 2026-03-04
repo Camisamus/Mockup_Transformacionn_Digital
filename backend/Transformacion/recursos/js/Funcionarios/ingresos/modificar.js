@@ -83,7 +83,7 @@ async function cargarDatosExistentes(id) {
                     confirmButtonText: 'Ver Detalle',
                     allowOutsideClick: false
                 }).then(() => {
-                    window.location.href = `ingr_consultar.php?id=${id}`;
+                    window.location.href = `ver.php?id=${id}`;
                 });
                 return;
             }
@@ -97,7 +97,7 @@ async function cargarDatosExistentes(id) {
                     confirmButtonText: 'Ir a Consultar',
                     allowOutsideClick: false
                 }).then(() => {
-                    window.location.href = `ingr_consultar.php?id=${id}`;
+                    window.location.href = `ver.php?id=${id}`;
                 });
                 return;
             }
@@ -172,7 +172,7 @@ function setupEventListeners() {
             const tareaSelect = document.getElementById('m_destino_tarea');
             const tareaContainer = tareaSelect.closest('.col-md-12'); // Assuming it's in a col-md-12
 
-            if (e.target.value === 'Consultor') {
+            if (e.target.value === 'Lector') {
                 checkReq.checked = false;
                 checkReq.disabled = true;
                 tareaContainer.style.display = 'block';
@@ -495,7 +495,7 @@ async function actualizarIngreso() {
                 text: 'El ingreso ha sido actualizado correctamente.',
                 confirmButtonText: 'Ver Detalle'
             }).then(() => {
-                window.location.href = `ingr_consultar.php?id=${id}`;
+                window.location.href = `ver.php?id=${id}`;
             });
         } else {
             Swal.fire('Error', result.message || 'No se pudo actualizar el ingreso', 'error');

@@ -27,6 +27,64 @@ include '../../api/general/header.php';
     body { background-color: #f8f9fa; font-family: 'Inter', sans-serif; }
     .material-symbols-outlined { font-family: 'Material Symbols Outlined' !important; vertical-align: middle; line-height: 1; }
     .gob-card { border: 1px solid rgba(226, 232, 240, 0.6); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+
+    /* Estilo para que la paginación de DataTables combine con tu interfaz (Unidos) */
+    .dataTables_paginate {
+        padding: 15px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0 !important;
+    }
+
+    .paginate_button {
+        padding: 8px 16px !important;
+        border: 1px solid #e2e8f0 !important;
+        background: white !important;
+        color: #1a5f9c !important; /* Azul primario */
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-left: -1px; /* Une los botones */
+        transition: all 0.2s ease;
+        text-decoration: none !important;
+        display: inline-block;
+    }
+
+    /* Botón Anterior */
+    .paginate_button:first-child, 
+    .previous.paginate_button {
+        border-radius: 8px 0 0 8px !important;
+        margin-left: 0;
+        background: #f1f5f9 !important; /* Gris de la imagen */
+        color: #64748b !important;
+    }
+
+    /* Botón Siguiente */
+    .paginate_button:last-child,
+    .next.paginate_button {
+        border-radius: 0 8px 8px 0 !important;
+    }
+
+    /* Botón Activo */
+    .paginate_button.current {
+        background: #007bff !important; /* Azul vibrante */
+        color: white !important;
+        border-color: #007bff !important;
+        z-index: 3;
+    }
+
+    /* Puntos suspensivos / deshabilitados */
+    .paginate_button.disabled:not(.previous):not(.next), 
+    .ellipsis {
+        background: #f1f5f9 !important;
+        color: #64748b !important;
+        cursor: default;
+    }
+
+    .paginate_button:hover:not(.current):not(.disabled) {
+        background: #f8fafc !important;
+        z-index: 2;
+    }
 </style>
 
 <div class="max-w-[1400px] mx-auto p-4 lg:p-8 space-y-6">

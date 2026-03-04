@@ -1,18 +1,17 @@
-﻿// ingr_historial.js
-let currentPage = 1;
-const pageSize = 5;
+﻿// historial.js - Migrado a DataTables
 let allData = [];
+let tableInstance = null;
 
 document.addEventListener('DOMContentLoaded', function () {
     cargarDatos();
 });
 
 async function cargarDatos(filters = {}) {
-    const tabla = document.querySelector('#tablaResultados tbody');
+    const tbody = document.querySelector('#tablaResultados tbody');
 
     // History statuses
     const searchFilters = {
-        tis_estado: ['Resuelto_Favorable', 'Resuelto_NO_Favorable'],
+        tis_estado: ['Resuelto_Favorable', 'Resuelto_NO_Favorable', 'Visado'],
         ...filters
     };
 
@@ -30,28 +29,24 @@ async function cargarDatos(filters = {}) {
 
         if (result.status === 'success') {
             allData = result.data;
-            currentPage = 1;
-            renderTablaPaginada();
+            renderizarTabla(allData);
         } else {
-            tabla.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Error: ${result.message}</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Error: ${result.message}</td></tr>`;
         }
     } catch (error) {
         console.error('Error:', error);
-        tabla.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Error de conexión con el servidor.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Error de conexión con el servidor.</td></tr>`;
     }
-}
-
-function renderTablaPaginada() {
-    const start = (currentPage - 1) * pageSize;
-    const end = start + pageSize;
-    const paginatedData = allData.slice(start, end);
-
-    renderizarTabla(paginatedData);
-    renderPagination();
 }
 
 function renderizarTabla(datos) {
     const tbody = document.querySelector('#tablaResultados tbody');
+
+    // 1. Destruir instancia previa si existe
+    if (tableInstance) {
+        tableInstance.destroy();
+    }
+
     tbody.innerHTML = '';
 
     if (datos.length === 0) {
@@ -107,6 +102,28 @@ function renderizarTabla(datos) {
     });
 
     document.getElementById('resultados_count').textContent = allData.length;
+
+    // 2. Inicializar DataTable
+    tableInstance = $('#tablaResultados').DataTable({
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
+        },
+        "pageLength": 5,
+        "lengthChange": false,
+        "order": [[0, 'desc']], // Ordenar por ID descendente (más recientes primero)
+        "dom": 'rt<"p-4 border-t flex justify-between items-center"ip>',
+        "columnDefs": [
+            { "orderable": false, "targets": [1] } // Botón ver no ordenable
+        ],
+        "pagingType": "simple_numbers",
+        "drawCallback": function () {
+            if (window.feather) feather.replace();
+        }
+    });
+
+    // 3. Ocultamos tu paginación vieja ya que DT usará la suya
+    const pagOld = document.getElementById('pagination_container');
+    if (pagOld) pagOld.style.display = 'none';
 }
 
 function getStatusColors(estado) {
@@ -116,55 +133,6 @@ function getStatusColors(estado) {
     if (estado.includes('rechazado') || estado.includes('no_favorable')) return 'bg-rose-50 text-rose-600 border-rose-100';
     return 'bg-blue-50 text-blue-600 border-blue-100';
 }
-
-function renderPagination() {
-    const totalPages = Math.ceil(allData.length / pageSize);
-    const paginationContainer = document.getElementById('pagination_container');
-    if (!paginationContainer) return;
-
-    paginationContainer.innerHTML = '';
-    if (allData.length === 0) return;
-
-    // Info text at left
-    const infoText = document.createElement('div');
-    infoText.className = 'pagination-info text-xs font-semibold text-slate-400';
-    infoText.innerText = `Página ${currentPage} de ${totalPages || 1}`;
-    paginationContainer.appendChild(infoText);
-
-    const nav = document.createElement('div');
-    nav.className = 'flex gap-2';
-
-    // Anterior
-    const btnAnt = document.createElement('button');
-    btnAnt.className = 'flex items-center gap-1 bg-white border border-slate-200 px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-50 disabled:opacity-50 transition-all';
-    btnAnt.disabled = currentPage === 1;
-    btnAnt.innerHTML = '<span class="material-symbols-outlined text-sm">chevron_left</span> Anterior';
-    btnAnt.onclick = (e) => {
-        e.preventDefault();
-        changePage(currentPage - 1);
-    };
-
-    // Siguiente
-    const btnSig = document.createElement('button');
-    btnSig.className = 'flex items-center gap-1 bg-white border border-slate-200 px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:bg-slate-50 disabled:opacity-50 transition-all';
-    btnSig.disabled = currentPage === totalPages || totalPages === 0;
-    btnSig.innerHTML = 'Siguiente <span class="material-symbols-outlined text-sm">chevron_right</span>';
-    btnSig.onclick = (e) => {
-        e.preventDefault();
-        changePage(currentPage + 1);
-    };
-
-    nav.appendChild(btnAnt);
-    nav.appendChild(btnSig);
-    paginationContainer.appendChild(nav);
-}
-
-window.changePage = function (page) {
-    const totalPages = Math.ceil(allData.length / pageSize);
-    if (page < 1 || page > totalPages) return;
-    currentPage = page;
-    renderTablaPaginada();
-};
 
 window.buscarIngresos = function () {
     const filtros = {
@@ -182,4 +150,3 @@ window.limpiarFiltros = function () {
     document.getElementById('formFiltros').reset();
     cargarDatos();
 }
-

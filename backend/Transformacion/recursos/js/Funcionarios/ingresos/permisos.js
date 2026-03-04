@@ -6,16 +6,17 @@
 const IngrPermissions = {
     getPermissions: function (rol) {
         // Normalize role
-        const r = rol ? rol.toLowerCase() : 'consultor';
+        const r = rol ? rol.toLowerCase() : 'lector';
 
         return {
             consultar: true, // Everyone with access can see
             editar: ['propietario'].includes(r),
-            preparar: ['responsable', 'visador', 'firmante', 'consultor'].includes(r),
-            comentar: ['responsable', 'propietario', 'visador', 'firmante', 'consultor'].includes(r),
-            bitacora: ['responsable', 'propietario', 'consultor'].includes(r),
+            preparar: ['responsable', 'visador', 'firmante', 'lector'].includes(r),
+            comentar: ['responsable', 'propietario', 'visador', 'firmante', 'lector'].includes(r),
+            bitacora: ['responsable', 'propietario', 'lector'].includes(r),
             visar: ['visador'].includes(r),
-            firmar: r === 'firmante'
+            firmar: r === 'firmante',
+            responder: ['responsable', 'firmante'].includes(r)
         };
     },
 
@@ -23,6 +24,7 @@ const IngrPermissions = {
      * Helper to apply visibility to UI elements based on role
      */
     applyToUI: function (rol) {
+        const r = rol ? rol.toLowerCase() : 'lector';
         const p = this.getPermissions(rol);
 
         // Editar Column
@@ -49,6 +51,20 @@ const IngrPermissions = {
         if (colPreparar) {
             colPreparar.style.display = p.preparar ? 'block' : 'none';
         }
+
+        // PESTAÑAS (TABS)
+        const tabVisar = document.getElementById('nav-visar');
+        if (tabVisar) tabVisar.style.display = p.visar ? 'block' : 'none';
+
+        const tabResponder = document.getElementById('nav-responder');
+        if (tabResponder) tabResponder.style.display = p.responder ? 'block' : 'none';
+
+        // Pestañas comunes (siempre visibles por ahora según requerimiento)
+        const tabsComunes = ['nav-detalle', 'nav-derivacion', 'nav-dependencia', 'nav-mapa', 'nav-historial'];
+        tabsComunes.forEach(tid => {
+            const el = document.getElementById(tid);
+            if (el) el.style.display = 'block';
+        });
 
         return p;
     }

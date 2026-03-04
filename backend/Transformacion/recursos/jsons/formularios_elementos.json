@@ -598,7 +598,7 @@
     },
     {
         "ID": "DATOSXX001",
-        "NOMBRE": "Consultor (Término Negocio)",
+        "NOMBRE": "Lector (Término Negocio)",
         "TIPO": "text",
         "GRUPO": "Uso Interno"
     },

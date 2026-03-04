@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="flex-grow-1 overflow-auto custom-scrollbar">
-                    <?php echo renderSidebarVecinos($pathPrefix, $_SERVER['SCRIPT_NAME']); ?>
+                    <?php echo renderSidebarVecinos($vecinoPermisos ?? [], $pathPrefix, $_SERVER['SCRIPT_NAME']); ?>
                 </div>
 
                 <div class="mt-auto d-flex align-items-center pt-3 border-top px-2" style="gap: 0.75rem;">

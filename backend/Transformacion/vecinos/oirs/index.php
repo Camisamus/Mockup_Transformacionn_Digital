@@ -1,8 +1,8 @@
 <?php
-$pageTitle = "Dashboard Vecinos";
-require_once '../apivec/general/auth_check_vecinos.php';
-require_once '../apivec/general/layout_functions.php';
-include '../apivec/general/header.php';
+$pageTitle = "oirs Vecinos";
+require_once '../../apivec/general/auth_check_vecinos.php';
+require_once '../../apivec/general/layout_functions.php';
+include '../../apivec/general/header.php';
 ?>
 
 <div class="row">
@@ -31,4 +31,4 @@ include '../apivec/general/header.php';
     feather.replace();
 </script>
 
-<?php include '../apivec/general/footer.php'; ?>
+<?php include '../../apivec/general/footer.php'; ?>

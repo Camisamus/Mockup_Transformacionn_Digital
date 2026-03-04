@@ -256,11 +256,11 @@ function renderizarIngreso(data) {
                     <div class="font-bold text-slate-700 text-sm">${dest.usr_nombre} ${dest.usr_apellido}</div>
                     <div class="text-[10px] text-slate-400 truncate max-w-[180px]">${dest.usr_email}</div>
                 </td>
-                <td class="px-6 py-4">
+                <!--<td class="px-6 py-4">
                     <span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-blue-50 text-primary-blue border-blue-100">
                         ${dest.tid_tipo}
                     </span>
-                </td>
+                </td>-->
                 <td class="px-6 py-4">
                     <span class="text-xs font-medium text-slate-500">${dest.tid_facultad}</span>
                 </td>
@@ -368,85 +368,6 @@ function renderizarIngreso(data) {
     if (listaMulti) {
         listaMulti.style.display = 'none';
     }
-    const graphBtn = document.getElementById('btn_ver_mapa');
-
-    if (listaMulti) {
-        listaMulti.innerHTML = '';
-    }
-    if (data.multiancestro && Object.keys(data.multiancestro).length > 0) {
-        Object.values(data.multiancestro).forEach(rel => {
-            const li = document.createElement('li');
-            li.className = 'list-group-item py-2 bg-transparent border-0 d-flex align-items-center gap-2';
-            li.style.cursor = 'pointer';
-
-            let label = '';
-            let targetId = '';
-            let icon = 'corner-down-right';
-
-            // El ID de comparación para multiancestro es el RGT ID (tis_registro_tramite)
-            if (rel.gma_hijo == data.tis_registro_tramite) {
-                label = `<span class="badge bg-light text-dark me-1">Antecesor</span> ID: ${rel.gma_padre}`;
-                targetId = rel.gma_padre;
-                icon = 'arrow-up-circle';
-            } else if (rel.gma_padre == data.tis_registro_tramite) {
-                label = `<span class="badge bg-light text-primary me-1">Descendiente</span> ID: ${rel.gma_hijo}`;
-                targetId = rel.gma_hijo;
-                icon = 'arrow-down-circle';
-            } else {
-                label = `Relación: ${rel.gma_padre} → ${rel.gma_hijo}`;
-                targetId = rel.gma_hijo;
-            }
-
-            li.innerHTML = `
-                <i data-feather="${icon}" style="width:14px"></i>
-                <span class="small">${label}</span>
-            `;
-            li.onclick = () => window.location.search = `?rgt_id=${targetId}`;
-            if (listaMulti) listaMulti.appendChild(li);
-        });
-
-        if (graphBtn) {
-            graphBtn.disabled = false;
-            graphBtn.onclick = async () => {
-                const modal = new bootstrap.Modal(document.getElementById('modalMapa'));
-                modal.show();
-
-                // Fetch tree details before rendering
-                const rgtIds = new Set();
-                rgtIds.add(parseInt(data.tis_registro_tramite));
-                if (data.multiancestro) {
-                    Object.values(data.multiancestro).forEach(rel => {
-                        rgtIds.add(parseInt(rel.gma_padre));
-                        rgtIds.add(parseInt(rel.gma_hijo));
-                    });
-                }
-
-                try {
-                    const respDetalles = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ ACCION: 'DETALLES_ARBOL', rgt_ids: Array.from(rgtIds) })
-                    });
-                    const resDetalles = await respDetalles.json();
-                    const sessionUser = await checkSession();
-                    const userId = sessionUser ? sessionUser.id : null;
-
-                    setTimeout(() => renderizarMapa(data.multiancestro, resDetalles.data || [], data.tis_registro_tramite, userId), 300);
-                } catch (e) {
-                    console.error("Error loading tree details:", e);
-                    setTimeout(() => renderizarMapaRelaciones(data.multiancestro, data.tis_registro_tramite), 300);
-                }
-            };
-        }
-    } else {
-        if (listaMulti) {
-            listaMulti.innerHTML = '<li class="list-group-item text-muted small">No hay relaciones registradas.</li>';
-        }
-        if (graphBtn) {
-            graphBtn.disabled = true;
-        }
-    }
-
     // Respuestas detalladas
     renderizarRespuestas(data.destinos || []);
 
@@ -642,6 +563,14 @@ function renderizarMapa(relaciones, detalles = [], currentRgtId, userId = null) 
     };
 
     let network = new vis.Network(container, data, options);
+    window.currentNetworkInstance = network;
+    window.currentRgtIdForMap = parseInt(currentRgtId);
+
+    // Ajustar y enfocar cuando carga inicialmente
+    setTimeout(() => {
+        network.fit();
+        network.focus(window.currentRgtIdForMap, { scale: 1.0, animation: { duration: 800, easingFunction: "easeInOutQuad" } });
+    }, 500);
 
     network.on("selectNode", (params) => {
         const sid = parseInt(params.nodes[0]);
@@ -694,6 +623,13 @@ function renderizarMapaRelaciones(multiancestro, currentId) {
     };
 
     const network = new vis.Network(container, networkData, options);
+    window.currentNetworkInstance = network;
+    window.currentRgtIdForMap = parseInt(currentId);
+
+    setTimeout(() => {
+        network.fit();
+        network.focus(window.currentRgtIdForMap, { scale: 1.0, animation: { duration: 800, easingFunction: "easeInOutQuad" } });
+    }, 500);
 
     network.on("doubleClick", (params) => {
         if (params.nodes.length > 0 && params.nodes[0] != currentId) {
@@ -891,3 +827,60 @@ async function checkSession() {
         return null;
     }
 }
+
+// Escuchar el evento cuando se muestra la pestaña "Dependencia"
+document.addEventListener('shown.bs.tab', async function (event) {
+    if (event.target.getAttribute('data-bs-target') === '#tab-dependencia') {
+
+        // Si ya renderizamos el mapa antes, solo reenfocamos
+        if (window.mapRendered && window.currentNetworkInstance && window.currentRgtIdForMap) {
+            window.currentNetworkInstance.fit();
+            setTimeout(() => {
+                window.currentNetworkInstance.focus(window.currentRgtIdForMap, {
+                    scale: 1.0,
+                    animation: { duration: 800, easingFunction: "easeInOutQuad" }
+                });
+            }, 50);
+            return;
+        }
+
+        // Si no está renderizado, preparamos la data
+        if (window.currentDataForMap && window.currentDataForMap.multiancestro && Object.keys(window.currentDataForMap.multiancestro).length > 0) {
+            const dataMap = window.currentDataForMap;
+            const multiancestro = dataMap.multiancestro;
+            const rgtId = dataMap.tis_registro_tramite;
+
+            const rgtIds = new Set();
+            rgtIds.add(parseInt(rgtId));
+            Object.values(multiancestro).forEach(rel => {
+                rgtIds.add(parseInt(rel.gma_padre));
+                rgtIds.add(parseInt(rel.gma_hijo));
+            });
+
+            try {
+                // Fetch tree details for colors / tooltips
+                const respDetalles = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ACCION: 'DETALLES_ARBOL', rgt_ids: Array.from(rgtIds) })
+                });
+                const resDetalles = await respDetalles.json();
+
+                // Llama la función render pre-existente
+                setTimeout(() => renderizarMapa(multiancestro, resDetalles.data || [], rgtId, window.currentUserId), 100);
+            } catch (e) {
+                console.error("Error loading tree details:", e);
+                // Fallback sin detalles
+                setTimeout(() => renderizarMapaRelaciones(multiancestro, rgtId), 100);
+            }
+
+            window.mapRendered = true;
+        } else {
+            // Manejar un caso donde no haya relaciones: mostrar mensaje
+            const container = document.getElementById('network-container');
+            if (container) {
+                container.innerHTML = '<div class="flex items-center justify-center h-full text-slate-400 italic">No hay relaciones registradas para este documento.</div>';
+            }
+        }
+    }
+});
