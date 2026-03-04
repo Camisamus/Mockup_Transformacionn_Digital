@@ -143,7 +143,7 @@ if (isset($_GET['id'])) {
     </div>
 
     <div class="tab-content pt-4">
-
+        <!--Detalle de la OIRS-->
         <div class="tab-pane fade show active" id="tab-detalle">
             <div class="bg-white gob-card rounded-2xl overflow-hidden p-6 lg:p-8 space-y-8">
                 <h6 class="text-primary-blue font-bold text-xs uppercase tracking-widest border-b border-slate-100 pb-3 flex items-center gap-2">
@@ -248,47 +248,113 @@ if (isset($_GET['id'])) {
                     <textarea class="w-full rounded-2xl border-slate-200 text-[15px] bg-slate-50 p-4 italic" id="oirs_descripcion" rows="4" disabled></textarea>
                 </div>
 
-                <div class="bg-[#F0F9FF] border border-blue-100 rounded-3xl p-6 lg:p-8 space-y-6">
+                <div class="bg-blue-50/50 border border-blue-100 rounded-3xl p-6 lg:p-8 space-y-6">
                     <h6 class="text-primary-blue font-bold text-xs uppercase tracking-widest border-b border-blue-200 pb-3">Información al Contribuyente</h6>
                     <div class="space-y-4">
                         <div class="space-y-1">
                             <label class="label-custom text-primary-blue">Respuesta Preliminar</label>
-                            <textarea class="w-full rounded-2xl border-slate-200 text-[15px] p-4 focus:ring-primary-blue" id="oig_respuesta_preliminar" rows="4" placeholder="Escriba la respuesta oficial..."></textarea>
+                            <textarea class="w-full rounded-2xl border-slate-200 text-[15px] p-4 focus:ring-primary-blue shadow-sm" id="oig_respuesta_preliminar" rows="4" placeholder="Escriba la respuesta oficial..."><?= $solicitudData['oig_respuesta_preliminar'] ?? '' ?></textarea>
                         </div>
                         <div class="flex flex-col md:flex-row justify-between items-end gap-4">
                             <div class="w-full md:w-1/3 space-y-1">
                                 <label class="label-custom text-slate-500">¿Requiere respuesta técnica?</label>
                                 <select class="w-full rounded-xl border-slate-200 text-[15px]" id="oig_requiere_respuesta_tecnica">
-                                    <option value="1">Si</option><option value="0">No</option>
+                                    <option value="1" <?= ($solicitudData['oig_requiere_respuesta_tecnica'] == 1) ? 'selected' : '' ?>>Si</option>
+                                    <option value="0" <?= ($solicitudData['oig_requiere_respuesta_tecnica'] == 0) ? 'selected' : '' ?>>No</option>
                                 </select>
                             </div>
-                            <button class="bg-primary-blue text-white font-bold py-2.5 px-8 rounded-xl shadow-lg hover:bg-blue-700 transition-all text-xs uppercase tracking-widest flex items-center gap-2" id="btn_responder_preliminar">
+                            <button class="bg-primary-blue text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-blue-700 transition-all text-xs uppercase tracking-widest flex items-center gap-2" id="btn_responder_preliminar">
                                 <span class="material-symbols-outlined text-sm">send</span> Responder al Vecino
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div id="container_respuesta_tecnica" class="space-y-4 pt-6 border-t border-slate-100 d-none">
-                    <label class="label-custom text-gob-success">Respuesta Técnica</label>
-                    <textarea class="w-full rounded-2xl border-slate-200 text-[15px] p-4" id="oig_respuesta_tecnica" rows="4"></textarea>
-                    <div class="flex flex-wrap gap-4 items-end">
-                        <div class="w-full md:w-1/4 space-y-1">
-                            <label class="label-custom">¿Solicitud Ejecutada?</label>
-                            <select class="w-full rounded-xl border-slate-200 text-sm" id="oig_solicitud_ejecutada"><option value="1">Si</option><option value="0">No</option></select>
+                <div class="bg-emerald-50/50 border border-emerald-100 rounded-3xl p-6 lg:p-8 space-y-6">
+                    <h6 class="text-gob-success font-bold text-xs uppercase tracking-widest border-b border-emerald-200 pb-3 flex items-center gap-2">
+                        <span class="material-symbols-outlined">engineering</span> Respuesta por Unidad Técnica
+                    </h6>
+                    <div class="space-y-4">
+                        <div class="space-y-1">
+                            <label class="label-custom text-gob-success">Respuesta Técnica</label>
+                            <textarea class="w-full rounded-2xl border-slate-200 text-[15px] p-4 shadow-sm" id="oig_respuesta_tecnica" rows="4" placeholder="Escriba la respuesta técnica..."><?= $solicitudData['oig_respuesta_tecnica'] ?? '' ?></textarea>
                         </div>
-                        <div class="w-full md:w-1/3 space-y-1">
-                            <label class="label-custom">Fuente Financiamiento</label>
-                            <select class="w-full rounded-xl border-slate-200 text-sm" id="oig_fuente_financiamiento">
-                                <option value="Recursos Propios">Recursos Propios</option><option value="Fondo Regional">Fondo Regional</option>
-                            </select>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                            <div class="space-y-1">
+                                <label class="label-custom text-slate-500">¿La solicitud será ejecutada?</label>
+                                <select class="w-full rounded-xl border-slate-200 text-[15px]" id="oig_solicitud_ejecutada">
+                                    <option value="1">Si</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="label-custom text-slate-500">Fuente de Financiamiento</label>
+                                <select class="w-full rounded-xl border-slate-200 text-[15px]" id="oig_fuente_financiamiento">
+                                    <option value="Contrato de Licitación">Contrato de Licitación</option>
+                                    <option value="Recursos Propios">Recursos Propios</option>
+                                    <option value="Fondo Regional">Fondo Regional</option>
+                                    <option value="Fondo Nacional">Fondo Nacional</option>
+                                </select>
+                            </div>
+                            <button class="bg-gob-success text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:bg-emerald-700 transition-all text-xs uppercase tracking-widest flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-sm">save</span> Guardar Respuesta
+                            </button>
                         </div>
-                        <button class="bg-gob-success text-white font-bold py-2.5 px-6 rounded-xl shadow-md text-xs uppercase" id="btn_responder_tecnico">Guardar Técnica</button>
                     </div>
+                </div>
+                <div class="bg-slate-50 border border-slate-200 rounded-3xl p-6 lg:p-8 space-y-6">
+                    <h6 class="text-slate-600 font-bold text-xs uppercase tracking-widest border-b border-slate-200 pb-3 flex items-center gap-2">
+                        <span class="material-symbols-outlined">task_alt</span> Notificación de Ejecución
+                    </h6>
+                    <div class="space-y-4">
+                        <div class="space-y-1">
+                            <label class="label-custom">Mensaje de Notificación de Término</label>
+                            <textarea class="w-full rounded-2xl border-slate-200 text-[15px] p-4 shadow-sm" rows="3" placeholder="Notifica al contribuyente que su OIRS fue ejecutada..."></textarea>
+                        </div>
+                        <div class="flex flex-col md:flex-row justify-between items-end gap-4">
+                            <div class="w-full md:w-1/2 space-y-1">
+                                <label class="label-custom">¿Fue realizada en los plazos planificados?</label>
+                                <select class="w-full rounded-xl border-slate-200 text-[15px]">
+                                    <option value="1">Si</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                            <button class="bg-slate-800 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-black transition-all text-xs uppercase tracking-widest flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">check_circle</span> Finalizar OIRS
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <?php if(!empty($solicitudData['oig_aclaratoria'])): ?>
+                <div class="border-2 border-warning/20 bg-warning/5 rounded-3xl p-6 lg:p-8 space-y-6">
+                    <h6 class="text-gob-warning font-bold text-xs uppercase tracking-widest flex items-center gap-2">
+                        <span class="material-symbols-outlined">feedback</span> Aclaratoria del Contribuyente
+                    </h6>
+                    <div class="space-y-4">
+                        <div class="space-y-1">
+                            <label class="label-custom text-gob-warning">Comentario del Vecino</label>
+                            <div class="p-4 bg-white rounded-2xl border border-warning/20 italic text-slate-700 text-[15px]">
+                                <?= htmlspecialchars($solicitudData['oig_aclaratoria']) ?>
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="label-custom">Respuesta a la Aclaratoria</label>
+                            <textarea class="w-full rounded-2xl border-slate-200 text-[15px] p-4 focus:ring-gob-warning" rows="3" placeholder="Escriba la aclaración final..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+                <div class="pt-6 border-t border-slate-100 flex justify-end">
+                    <button class="bg-gob-success text-white font-extrabold py-4 px-10 rounded-2xl shadow-xl hover:scale-105 transition-all text-sm uppercase tracking-widest flex items-center gap-3">
+                        <span class="material-symbols-outlined">save_as</span> Guardar Todos los Cambios
+                    </button>
                 </div>
             </div>
         </div>
 
+        <!--Datos del Contribuyente-->
         <div class="tab-pane fade" id="tab-contribuyente">
             <div class="bg-white gob-card rounded-2xl p-6 lg:p-10 space-y-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">

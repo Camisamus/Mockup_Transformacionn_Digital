@@ -30,8 +30,18 @@ switch ($data['ACCION']) {
             // Support for Bandeja Search Filters
             $filters = $data;
             // Remove non-filter fields if necessary, but the model only uses specific keys.
-            $response = $controller->getAll($filters, $current_user_id);
+            $response = $controller->getAllMine($filters, $current_user_id);
         }
+        echo json_encode($response);
+        break;
+    case 'CONSULTAMALL':
+        if (session_status() === PHP_SESSION_NONE)
+            session_start();
+        $current_user_id = $_SESSION['user_id'] ?? null;
+
+        // Support for Bandeja Search Filters
+        $filters = $data;
+        $response = $controller->getAll($filters, $current_user_id);
         echo json_encode($response);
         break;
 

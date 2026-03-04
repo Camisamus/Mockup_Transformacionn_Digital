@@ -21,10 +21,16 @@ class Ingresos_SolicitudControler
         $this->solicitud = new Ingresos_ingreso($this->db);
     }
 
+    public function getAllMine($filters = [], $current_user_id = null)
+    {
+        $result = $this->solicitud->getAllMine($filters, $current_user_id);
+        return ["status" => "success", "data" => $result];
+    }
+
     public function getAll($filters = [], $current_user_id = null)
     {
         $result = $this->solicitud->getAll($filters, $current_user_id);
-        return ["status" => "success", "data" => $result];
+        return ["status" => "success", "data" => $result[0]];
     }
 
     public function getById($id, $current_user_id = null)

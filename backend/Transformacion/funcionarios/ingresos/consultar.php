@@ -146,8 +146,8 @@ include '../../api/general/header.php';
     <div
         class="bg-white border border-slate-100 rounded-3xl p-6 lg:p-10 flex flex-col sm:flex-row justify-between items-center shadow-sm gap-6">
         <div class="space-y-1 w-full text-left">
-            <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Historial de Ingresos</h1>
-            <p class="text-slate-400 text-sm lg:text-[15px] font-medium uppercase tracking-wider">Consulta y revisión
+            <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Consulta de Ingresos</h1>
+            <p class="text-slate-400 text-sm lg:text-[15px] font-medium uppercase tracking-wider">Consulta de ingresos
                 histórica de registros</p>
         </div>
         <div class="flex flex-row gap-3 w-full lg:w-auto justify-center lg:justify-end">
@@ -205,13 +205,6 @@ include '../../api/general/header.php';
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
-                    <div class="md:col-span-2 space-y-2">
-                        <label for="filtro_responsable"
-                            class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Responsable</label>
-                        <input type="text"
-                            class="w-full px-4 py-2.5 rounded-xl border-slate-200 focus:ring-primary-blue text-sm"
-                            id="filtro_responsable" placeholder="Nombre Responsable">
-                    </div>
                     <div class="md:col-span-2 flex gap-3">
                         <button type="submit"
                             class="flex-1 bg-slate-800 hover:bg-black text-white font-bold py-2.5 rounded-xl shadow-md transition-all text-[11px] uppercase tracking-widest flex items-center justify-center gap-2">
@@ -259,7 +252,6 @@ include '../../api/general/header.php';
         <div id="pagination_container" class="p-6 bg-white border-t border-slate-50 flex justify-between items-center">
         </div>
     </div>
-
 </div>
 
 <script src="../../recursos/js/bootstrap.bundle.min.js"></script>

@@ -320,8 +320,31 @@ include '../../api/general/header.php';
                         + Crear solicitud hija
                     </a>
                 </div>
-                <div class="bg-white rounded-2xl p-6 border border-blue-50 shadow-sm">
-                    <ul id="lista_multiancestro" class="space-y-3"></ul>
+                <div class="bg-white rounded-2xl overflow-hidden border border-blue-50 shadow-sm">
+                    <div class="p-4 bg-slate-50 border-b border-blue-50">
+                        <h6 class="font-bold text-slate-700 uppercase text-xs tracking-widest m-0">Solicitudes Hijas
+                            Directas</h6>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr
+                                    class="bg-white text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
+                                    <th class="px-6 py-4">Cód. Público / ID</th>
+                                    <th class="px-6 py-4">Título</th>
+                                    <th class="px-6 py-4">Estado</th>
+                                    <th class="px-6 py-4 text-right">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla_hijas_directas"
+                                class="divide-y divide-slate-100 text-[13px] text-slate-600">
+                                <tr>
+                                    <td colspan="4" class="text-center py-4 text-slate-400 italic">Cargando hijas...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 

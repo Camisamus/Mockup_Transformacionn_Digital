@@ -46,6 +46,91 @@ class Ingresos_ingreso
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
                   LEFT JOIN trd_acceso_usuarios usr ON sol.tis_propietario = usr.usr_id
                   LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud 
+                                                       AND dest.tid_borrado = 0
+                                                       AND dest.tid_destino = :current_user_join
+                  WHERE sol.tis_borrado = 0 AND rgt.rgt_borrado = 0";
+
+
+        $params = [];
+        $params[':current_user'] = $current_user_id ?? 0;
+        $params[':current_user_join'] = $current_user_id ?? 0;
+
+        if (!empty($filters['tis_titulo'])) {
+            $query .= " AND sol.tis_titulo LIKE :tis_titulo";
+            $params[':tis_titulo'] = '%' . $filters['tis_titulo'] . '%';
+        }
+
+        if (!empty($filters['rgt_id_publica'])) {
+            $query .= " AND rgt.rgt_id_publica LIKE :rgt_id_publica";
+            $params[':rgt_id_publica'] = '%' . $filters['rgt_id_publica'] . '%';
+        }
+
+        if (!empty($filters['tis_id'])) {
+            $query .= " AND sol.tis_id = :tis_id";
+            $params[':tis_id'] = $filters['tis_id'];
+        }
+        if (!empty($filters['fecha_inicio'])) {
+            $query .= " AND sol.tis_creacion >= :fecha_inicio";
+            $params[':fecha_inicio'] = $filters['fecha_inicio'];
+        }
+        if (!empty($filters['fecha_fin'])) {
+            $query .= " AND sol.tis_creacion <= :fecha_fin";
+            $params[':fecha_fin'] = $filters['fecha_fin'];
+        }
+
+        if (!empty($filters['tis_estado'])) {
+            if (is_array($filters['tis_estado'])) {
+                $statusPlaceholders = [];
+                foreach ($filters['tis_estado'] as $i => $status) {
+                    $key = ":tis_estado_" . $i;
+                    $statusPlaceholders[] = $key;
+                    $params[$key] = $status;
+                }
+                $query .= " AND sol.tis_estado IN (" . implode(',', $statusPlaceholders) . ")";
+            } else {
+                $query .= " AND sol.tis_estado = :tis_estado";
+                $params[':tis_estado'] = $filters['tis_estado'];
+            }
+        }
+
+        $query .= " ORDER BY sol.tis_id DESC";
+
+        $stmt = $this->conn->prepare($query);
+        foreach ($params as $key => $val) {
+            $stmt->bindValue($key, $val);
+        }
+
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!class_exists('App\Helpers\Fechas')) {
+            require_once __DIR__ . '/../Helpers/Fechas.php';
+        }
+
+        foreach ($results as &$item) {
+            if (isset($item['tis_creacion']))
+                $item['tis_creacion'] = \App\Helpers\Fechas::formatearFecha($item['tis_creacion']);
+            if (isset($item['tis_fecha_limite']))
+                $item['tis_fecha_limite'] = \App\Helpers\Fechas::formatearFecha($item['tis_fecha_limite']);
+            if (isset($item['rgt_creacion']))
+                $item['rgt_creacion'] = \App\Helpers\Fechas::formatearFecha($item['rgt_creacion']);
+        }
+        return [$results, $query];
+    }
+    public function getAllMine(array $filters = [], ?int $current_user_id = null)
+    {
+        // 1. Mantenemos el JOIN para saber si el usuario es destino en esa fila específica
+        // Solo traemos registros donde el usuario es el destino actual
+        $query = "SELECT DISTINCT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido,
+                  sol.tis_fecha_limite,
+                  CASE 
+                    WHEN sol.tis_propietario = :current_user THEN 'Propietario'
+                    WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
+                  END as rol_usuario
+                  FROM " . $this->table_name . " sol 
+                  JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
+                  LEFT JOIN trd_acceso_usuarios usr ON sol.tis_propietario = usr.usr_id
+                  LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud 
                                                        AND dest.tid_destino = :current_user_join 
                                                        AND dest.tid_borrado = 0
                   WHERE sol.tis_borrado = 0 AND rgt.rgt_borrado = 0";
@@ -54,6 +139,7 @@ class Ingresos_ingreso
         if ($current_user_id) {
             // Si explícitamente están pidiendo "Visado" (o resueltos), no aplicar el filtro de ocultar al Visador
             $is_history_query = false;
+
             if (!empty($filters['tis_estado'])) {
                 $estados_solicitados = is_array($filters['tis_estado']) ? $filters['tis_estado'] : [$filters['tis_estado']];
                 if (in_array('Visado', $estados_solicitados) || in_array('Resuelto_Favorable', $estados_solicitados)) {
@@ -124,6 +210,14 @@ class Ingresos_ingreso
         if (!empty($filters['tis_id'])) {
             $query .= " AND sol.tis_id = :tis_id";
             $params[':tis_id'] = $filters['tis_id'];
+        }
+        if (!empty($filters['fecha_inicio'])) {
+            $query .= " AND sol.tis_creacion >= :fecha_inicio";
+            $params[':fecha_inicio'] = $filters['fecha_inicio'];
+        }
+        if (!empty($filters['fecha_fin'])) {
+            $query .= " AND sol.tis_creacion <= :fecha_fin";
+            $params[':fecha_fin'] = $filters['fecha_fin'];
         }
 
         if (!empty($filters['tis_estado'])) {

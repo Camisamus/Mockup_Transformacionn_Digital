@@ -368,10 +368,7 @@ function renderizarIngreso(data) {
     }
 
     // Multiancestro (Ancestry)
-    const listaMulti = document.getElementById('lista_multiancestro');
-    if (listaMulti) {
-        listaMulti.style.display = 'none';
-    }
+    renderizarTablaHijas(data);
     // Respuestas detalladas
     renderizarRespuestas(data.destinos || []);
 
@@ -595,6 +592,73 @@ function renderizarMapa(relaciones, detalles = [], currentRgtId, userId = null) 
     });
 
     if (window.feather) window.feather.replace();
+}
+
+function renderizarTablaHijas(data) {
+    const tbody = document.getElementById('tabla_hijas_directas');
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+
+    // We need current rgtId
+    const rgtId = parseInt(data.tis_registro_tramite);
+    const relaciones = data.multiancestro || {};
+
+    // Find all direct children
+    const directChildrenRgtIds = [];
+    Object.values(relaciones).forEach(rel => {
+        if (parseInt(rel.gma_padre) === rgtId) {
+            directChildrenRgtIds.push(parseInt(rel.gma_hijo));
+        }
+    });
+
+    if (directChildrenRgtIds.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-slate-400 italic">No hay solicitudes hijas directas.</td></tr>';
+        return;
+    }
+
+    const detallesArbol = (window.currentDataForMap && window.currentDataForMap.detallesArbol) ? window.currentDataForMap.detallesArbol : [];
+    const detallesMap = new Map();
+    detallesArbol.forEach(d => { if (d.rgt_id) detallesMap.set(parseInt(d.rgt_id), d); });
+
+    directChildrenRgtIds.forEach(hijoRgtId => {
+        const det = detallesMap.get(hijoRgtId);
+        if (det) {
+            let badgeClass = 'bg-blue-50 text-primary-blue border-blue-100';
+            if (det.tis_estado === 'Resuelto_Favorable') badgeClass = 'bg-emerald-50 text-emerald-600 border-emerald-100';
+            else if (det.tis_estado === 'Resuelto_NO_Favorable') badgeClass = 'bg-rose-50 text-rose-600 border-rose-100';
+            else if (det.tis_estado === 'Ingresado') badgeClass = 'bg-amber-50 text-amber-600 border-amber-100';
+
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-slate-50/50 transition-colors';
+            tr.innerHTML = `
+                <td class="px-6 py-4 font-bold text-slate-700">${det.rgt_id_publica || det.tis_id}</td>
+                <td class="px-6 py-4 text-slate-600 font-medium">${det.tis_titulo || 'Sin título'}</td>
+                <td class="px-6 py-4">
+                    <span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border ${badgeClass}">
+                        ${det.tis_estado}
+                    </span>
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <a href="ver.php?id=${det.tis_id}" target="_blank" class="inline-flex items-center gap-1 text-primary-blue hover:text-blue-800 font-bold text-xs uppercase tracking-widest bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors">
+                        <span class="material-symbols-outlined text-[16px]">visibility</span> Ver
+                    </a>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        } else {
+            // Unresolved detail
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-slate-50/50 transition-colors';
+            tr.innerHTML = `
+                <td class="px-6 py-4 font-bold text-slate-400">RGT-${hijoRgtId}</td>
+                <td class="px-6 py-4 text-slate-400 italic">Detalles no disponibles</td>
+                <td class="px-6 py-4">-</td>
+                <td class="px-6 py-4 text-right">-</td>
+            `;
+            tbody.appendChild(tr);
+        }
+    });
 }
 
 function renderizarMapaRelaciones(multiancestro, currentId) {
