@@ -85,7 +85,7 @@ async function buscarYConsultar(filters) {
                 if (data.length === 0) {
                     Swal.fire('No encontrado', 'No se encontraron registros con esos criterios.', 'warning');
                 } else {
-                    window.location.href = `consultar.php?id=${data[0].tis_id}`;
+                    window.location.href = `ver.php?id=${data[0].tis_id}`;
                 }
             } else {
                 renderizarIngreso(data);
@@ -138,8 +138,12 @@ async function cargarDatosIngreso(params) {
             }
 
             currentRgtId = data.tis_registro_tramite;
+            const btnHija = document.getElementById('btn_crear_hija');
+            if (btnHija) {
+                btnHija.href = `../ingresos/crear.php?rgt_id_padre=${currentRgtId}`;
+            }
 
-            // Guardamos datos para uso en pestañas (como el mapa)
+            // Mapeamos los campos del formulario con los IDs del DOM
             window.currentDataForMap = {
                 multiancestro: data.multiancestro,
                 tis_registro_tramite: data.tis_registro_tramite,
@@ -542,7 +546,7 @@ function renderizarMapa(relaciones, detalles = [], currentRgtId, userId = null) 
 
         [p, h].forEach(id => {
             if (!addedNodes.has(id)) {
-                nodes.add({ id, label: `RT-${id}`, color: getColorForNode(id), title: getTooltip(id) });
+                nodes.add({ id, label: detallesMap.get(parseInt(id)).tis_titulo, color: getColorForNode(id), title: getTooltip(id) });
                 addedNodes.add(id);
             }
         });
@@ -558,7 +562,16 @@ function renderizarMapa(relaciones, detalles = [], currentRgtId, userId = null) 
     const options = {
         layout: { hierarchical: { direction: 'UD', sortMethod: 'directed' } },
         physics: false,
-        nodes: { shape: 'box', margin: 10 },
+        nodes: {
+            shape: 'box',
+            margin: 10,
+            widthConstraint: {
+                maximum: 92 // Forza al texto a hacer saltos de línea largos
+            },
+            font: {
+                multi: 'html' // Opcional, pero vis soporta multiline automático limitando el wrap
+            }
+        },
         interaction: { hover: true, selectConnectedEdges: false }
     };
 
@@ -577,7 +590,7 @@ function renderizarMapa(relaciones, detalles = [], currentRgtId, userId = null) 
         const det = detallesMap.get(sid);
         if (det && det.tis_id) {
             if (sid === parseInt(currentRgtId)) return;
-            window.location.href = `consultar.php?id=${det.tis_id}`;
+            window.location.href = `ver.php?id=${det.tis_id}`;
         }
     });
 
@@ -884,3 +897,113 @@ document.addEventListener('shown.bs.tab', async function (event) {
         }
     }
 });
+
+window.abrirModalEstablecerDependencia = async function () {
+    const modalEl = document.getElementById('modalEstablecerDependencia');
+    if (modalEl) {
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+        await cargarSolicitudesParaDependencia();
+
+        // Configurar filtro de búsqueda
+        const buscarInput = document.getElementById('buscar_padre');
+        if (buscarInput) {
+            buscarInput.onkeyup = function () {
+                const text = this.value.toLowerCase();
+                const rows = document.querySelectorAll('#lista_solicitudes_padre tr');
+                rows.forEach(row => {
+                    row.style.display = row.innerText.toLowerCase().includes(text) ? '' : 'none';
+                });
+            };
+        }
+    } else {
+        console.error("No se encontró el modal modalEstablecerDependencia");
+    }
+}
+
+async function cargarSolicitudesParaDependencia() {
+    try {
+        const tbody = document.getElementById('lista_solicitudes_padre');
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center p-3">Cargando...</td></tr>';
+
+        const respSession = await fetch(`${window.API_BASE_URL}/general/verify_session.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ACCION: 'VERIFICAR' })
+        });
+        const sessionData = await respSession.json();
+        const currentUserId = sessionData.user?.id;
+
+        if (!currentUserId) {
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center">Error de sesión</td></tr>';
+            return;
+        }
+
+        const resp = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ACCION: 'CONSULTAM' })
+        });
+        const result = await resp.json();
+
+        if (result.status === 'success') {
+            const filtered = result.data.filter(sol =>
+                parseInt(sol.tis_propietario) === parseInt(currentUserId) &&
+                sol.tis_estado !== 'Resuelto_Favorable' &&
+                sol.tis_estado !== 'Resuelto_NO_Favorable' &&
+                parseInt(sol.tis_registro_tramite) !== parseInt(currentRgtId)
+            );
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center">No hay solicitudes elegibles</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = '';
+            filtered.forEach(sol => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="small fw-bold">${sol.tis_id || sol.rgt_id_publica}</td>
+                    <td class="small">${sol.tis_titulo}</td>
+                    <td><span class="badge bg-light text-dark border small">${sol.tis_estado}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-success py-0 px-2" onclick="vincularComoPadre(${sol.tis_registro_tramite}, '${sol.tis_titulo}')">
+                            Vincular
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    } catch (e) { console.error(e); }
+}
+
+window.vincularComoPadre = async function (parentRgtId, parentTitle) {
+    const confirm = await Swal.fire({
+        title: '¿Vincular Dependencia?',
+        text: `¿Vincular "${parentTitle}" como un antecesor?`,
+        icon: 'question',
+        showCancelButton: true
+    });
+
+    if (!confirm.isConfirmed) return;
+
+    try {
+        Swal.fire({ title: 'Vinculando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        const respLink = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ACCION: 'VINCULAR_HIJO', padre_id: parentRgtId, hijo_id: currentRgtId })
+        });
+        const resLink = await respLink.json();
+
+        if (resLink.status === 'success') {
+            Swal.fire('Éxito', 'Dependencia establecida.', 'success');
+            const m = bootstrap.Modal.getInstance(document.getElementById('modalEstablecerDependencia'));
+            if (m) m.hide();
+            location.reload();
+        } else {
+            Swal.fire('Error', resLink.message || 'Fallo al vincular', 'error');
+        }
+    } catch (e) { console.error(e); }
+};

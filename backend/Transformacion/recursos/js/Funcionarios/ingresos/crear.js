@@ -376,7 +376,7 @@ async function guardarIngreso() {
         if (result.status === 'success') {
 
             const urlParams = new URLSearchParams(window.location.search);
-            const idPadre = urlParams.get('id_padre');
+            const idPadre = urlParams.get('rgt_id_padre');
             if (idPadre) {
                 const childRequestId = result.id;
                 const respChild = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
@@ -399,11 +399,17 @@ async function guardarIngreso() {
                 const resLink = await respLink.json();
 
                 if (resLink.status === 'success') {
-                    Swal.fire('Éxito', 'Solicitud hija creada y vinculada.', 'success');
-                    modalInstance.hide();
-                    await cargarDatosPreparar(parentId);
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Éxito!',
+                        text: 'El ingreso ha sido creado correctamente.',
+                        confirmButtonText: 'Ir a la Bandeja'
+                    }).then(() => {
+                        window.location.href = 'index.php';
+                    });
                 } else {
                     Swal.fire('Atención', 'Se creó pero falló el vínculo.', 'warning');
+                    window.location.href = 'index.php';
                 }
             } else {
                 Swal.fire({

@@ -247,7 +247,7 @@ async function cargarSolicitudesParaDependencia() {
 
         if (result.status === 'success') {
             const filtered = result.data.filter(sol =>
-                parseInt(sol.tis_responsable) === parseInt(currentUserId) &&
+                parseInt(sol.tis_propietario) === parseInt(currentUserId) &&
                 sol.tis_estado !== 'Resuelto_Favorable' &&
                 sol.tis_estado !== 'Resuelto_NO_Favorable' &&
                 parseInt(sol.tis_registro_tramite) !== parseInt(currentRgtId)
@@ -327,7 +327,7 @@ function renderizarMapa(relaciones, detalles = [], userId = null) {
             if (det.tis_estado === 'Resuelto_NO_Favorable') return '#000000';
             const hasDest = det.destinos && det.destinos.length > 0;
             if (!hasDest) {
-                return (parseInt(det.tis_responsable) === parseInt(userId)) ? '#dc3545' : '#fd7e14';
+                return (parseInt(det.tis_propietario) === parseInt(userId)) ? '#dc3545' : '#fd7e14';
             }
         }
         return '#97c2fc';
@@ -407,7 +407,7 @@ function renderizarMapa(relaciones, detalles = [], userId = null) {
             if (det && det.tis_id) {
                 console.log("Navigating to id:", det.tis_id);
                 const isResolved = det.tis_estado === 'Resuelto_Favorable' || det.tis_estado === 'Resuelto_NO_Favorable';
-                if (parseInt(det.tis_responsable) === parseInt(userId) && !isResolved) {
+                if (parseInt(det.tis_propietario) === parseInt(userId) && !isResolved) {
                     window.location.href = `ingr_modificar.php?id=${det.tis_id}`;
                 } else {
                     window.location.href = `ver.php?id=${det.tis_id}`;
@@ -438,7 +438,7 @@ function renderizarMapa(relaciones, detalles = [], userId = null) {
             return;
         }
 
-        if (childDet && parseInt(childDet.tis_responsable) !== parseInt(userId)) {
+        if (childDet && parseInt(childDet.tis_propietario) !== parseInt(userId)) {
             Swal.fire('Atención', 'No tienes permisos para eliminar este vínculo (No eres responsable de la solicitud hija).', 'warning');
             network.unselectAll();
             return;

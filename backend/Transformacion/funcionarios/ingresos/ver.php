@@ -311,11 +311,11 @@ include '../../api/general/header.php';
                     </h5>
                     <button type="button"
                         class="flex items-center gap-2 bg-slate-800 hover:bg-black text-white font-bold py-2.5 px-6 rounded-xl shadow-lg transition-all text-[13px] uppercase tracking-wider"
-                        style="display: block;">
+                        onclick="abrirModalEstablecerDependencia()" style="display: block;">
                         + Nueva Dependencia
                     </button>
-                    <a href="../ingresos/crear.php?rgt_id_padre=<?= $rgt_id ?>" target="_blank"
-                        rel="noopener noreferrer"
+
+                    <a href="#" target="_blank" rel="noopener noreferrer" id="btn_crear_hija"
                         class="flex items-center justify-center gap-2 bg-slate-800 hover:bg-black text-white font-bold py-2.5 px-6 rounded-xl shadow-lg transition-all text-[13px] uppercase tracking-wider">
                         + Crear solicitud hija
                     </a>
@@ -661,6 +661,50 @@ include '../../api/general/header.php';
                 <button type="button"
                     class="bg-primary-blue text-white font-bold py-2.5 px-8 rounded-xl shadow-lg shadow-blue-200/50 text-xs uppercase"
                     onclick="guardarComentario()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Establecer Dependencia -->
+<div class="modal fade" id="modalEstablecerDependencia" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold fs-6">Establecer Dependencia (Vincular Padre)</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p class="small text-muted mb-4">Seleccione una de sus solicitudes activas para que sea la
+                    <strong>antecesora</strong> de la solicitud actual.
+                </p>
+                <div class="input-group input-group-sm mb-4">
+                    <span class="input-group-text bg-white border-end-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </span>
+                    <input type="text" class="form-control border-start-0" id="buscar_padre"
+                        placeholder="Filtrar por título o ID...">
+                </div>
+                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-uppercase small sticky-top">
+                            <tr>
+                                <th>ID</th>
+                                <th>Título</th>
+                                <th>Estado</th>
+                                <th class="text-end">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista_solicitudes_padre" class="small">
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-muted">Cargando solicitudes...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

@@ -94,7 +94,7 @@ function renderizarTabla(datos) {
             </td>
             <td class="px-6 py-4">
                 <div class="font-bold text-slate-700 text-sm">${item.resp_nombre || ''} ${item.resp_apellido || ''}</div>
-                <div class="text-[10px] text-slate-400 uppercase tracking-widest">ID: ${item.tis_responsable}</div>
+                <div class="text-[10px] text-slate-400 uppercase tracking-widest">ID: ${item.tis_propietario}</div>
             </td>
         `;
 
