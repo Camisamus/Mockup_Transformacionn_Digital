@@ -339,8 +339,8 @@ function renderAsignaciones(asignaciones) {
 
         const item = `
             <div class="bg-white border border-slate-200 rounded-3xl overflow-hidden mb-4 shadow-sm hover:shadow-md transition-all">
-                <div class="p-5 flex justify-between align-items-center cursor-pointer hover:bg-slate-50 transition-colors" 
-                     id="${headingId}" data-bs-toggle="collapse" data-bs-target="#${collapseId}">
+                <div class="p-5 flex justify-between align-items-center cursor-pointer hover:bg-slate-50 transition-colors asg-header-toggle" 
+                     data-target="#${collapseId}">
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400">
                             <span class="material-symbols-outlined text-2xl">person</span>
@@ -356,8 +356,8 @@ function renderAsignaciones(asignaciones) {
                     </div>
                 </div>
 
-                <div id="${collapseId}" class="collapse ${isFirst ? 'show' : ''}" data-bs-parent="#accordionAsignaciones">
-                    <div class="p-6 bg-slate-50 border-t border-slate-100" style="min-height: 100px;">
+                <div id="${collapseId}" class="asg-content-box" style="display: ${isFirst ? 'block' : 'none'}; border-top: 1px solid #f1f5f9;">
+                    <div class="p-6 bg-slate-50" style="background-color: #f8fafc !important;">
                         <!-- Hilo de Chat -->
                         <div class="mb-6 space-y-3" id="${chatContainerId}" style="min-height: 40px;">
                             <div class="text-center py-4 text-slate-400">
@@ -401,6 +401,19 @@ function renderAsignaciones(asignaciones) {
 
         // Intentar cargar el historial de forma asíncrona
         cargarHistorialAsignacion(asg.oia_id, asg.oia_creacion, instruccion, chatContainerId);
+    });
+
+    // Delegación de evento para el toggle manual (más robusto)
+    $(document).off('click', '.asg-header-toggle').on('click', '.asg-header-toggle', function (e) {
+        e.preventDefault();
+        const targetSelector = $(this).data('target');
+        const contentBox = $(targetSelector);
+
+        console.log('[OIRS] Toggling:', targetSelector);
+        contentBox.slideToggle(300);
+
+        // Rotar icono
+        $(this).find('.dropdown-icon').toggleClass('rotate-180');
     });
 }
 

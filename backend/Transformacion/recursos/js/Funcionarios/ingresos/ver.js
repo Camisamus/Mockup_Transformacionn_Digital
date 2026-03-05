@@ -1,12 +1,20 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-    const rgtId = urlParams.get('rgt_id');
-
-    if (id || rgtId) {
-        cargarDatosIngreso({ ing_id: id, rgt_id: rgtId });
+﻿document.addEventListener('DOMContentLoaded', async () => {
+    // SSR Sync: Si el servidor ya inyectó los datos, los usamos directamente
+    if (window.serverData) {
+        console.log("SSR: Usando datos precargados del servidor");
+        // Nota: window.currentUserId ya viene inyectado desde ver.php
+        inicializarConSSR(window.serverData);
     } else {
-        checkAndRequestID();
+        // Fallback para CSR (aunque en esta versión siempre habrá serverData)
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        const rgtId = urlParams.get('rgt_id');
+
+        if (id || rgtId) {
+            cargarDatosIngreso({ ing_id: id, rgt_id: rgtId });
+        } else {
+            checkAndRequestID();
+        }
     }
 
     // Inicialización de pestañas de Bootstrap
@@ -1085,3 +1093,114 @@ window.vincularComoPadre = async function (parentRgtId, parentTitle) {
         }
     } catch (e) { console.error(e); }
 };
+
+function inicializarConSSR(data) {
+    currentRgtId = data.tis_registro_tramite;
+    window.currentUserId = window.currentUserId || 0;
+
+    // Configurar enlace para solicitud hija
+    const btnHija = document.getElementById('btn_crear_hija');
+    if (btnHija) {
+        btnHija.href = `../ingresos/crear.php?rgt_id_padre=${currentRgtId}`;
+    }
+
+    // Datos para el Mapa
+    window.currentDataForMap = {
+        multiancestro: data.multiancestro,
+        tis_registro_tramite: data.tis_registro_tramite,
+        detallesArbol: []
+    };
+
+    // Cargar detalles del árbol preventivamente
+    preCargarDetallesArbol(data);
+
+    // Inicializar manejadores de botones (ya renderizados por PHP)
+    const id = data.tis_id;
+    const btnResponder = document.getElementById('btn_ir_responder');
+    if (btnResponder && id) {
+        btnResponder.onclick = () => window.location.href = `responder.php?id=${id}`;
+    }
+
+    const btnModificar = document.getElementById('btn_ir_modificar');
+    if (btnModificar && id) {
+        btnModificar.onclick = () => window.location.href = `modificar.php?id=${id}`;
+    }
+
+    // Modal de comentario
+    const btnComent = document.getElementById('btn_abrir_comentario');
+    if (btnComent) {
+        btnComent.onclick = () => {
+            const modal = new bootstrap.Modal(document.getElementById('modalNuevoComentario'));
+            modal.show();
+        };
+    }
+
+    // Cargar componentes secundarios si están visibles
+    if (document.getElementById('lista_bitacora')) {
+        actualizarBitacora(data.tis_id);
+    }
+
+    if (data.destinos && document.getElementById('tabla_destinos')) {
+        renderizarDestinos(data.destinos);
+    }
+}
+
+async function preCargarDetallesArbol(data) {
+    const rgtIds = new Set();
+    rgtIds.add(data.tis_registro_tramite);
+    if (data.multiancestro) {
+        Object.values(data.multiancestro).forEach(rel => {
+            rgtIds.add(rel.gma_padre);
+            rgtIds.add(rel.gma_hijo);
+        });
+    }
+
+    try {
+        const respDetalles = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ACCION: 'DETALLES_ARBOL', rgt_ids: Array.from(rgtIds) })
+        });
+        const resDetalles = await respDetalles.json();
+        window.currentDataForMap.detallesArbol = resDetalles.data || [];
+    } catch (e) {
+        console.error("Error pre-loading tree details:", e);
+    }
+}
+
+function renderizarDestinos(destinos) {
+    const tablaDestinos = document.getElementById('tabla_destinos');
+    if (!tablaDestinos) return;
+    tablaDestinos.innerHTML = '';
+
+    destinos.forEach(dest => {
+        let estadoColors = 'bg-slate-50 text-slate-400 border-slate-100';
+        let estadoLabel = 'Pendiente';
+
+        if (dest.tid_confirmado === 1) {
+            estadoColors = 'bg-emerald-50 text-emerald-600 border-emerald-100';
+            estadoLabel = 'Visado';
+        } else if (dest.tid_confirmado === -1) {
+            estadoColors = 'bg-rose-50 text-rose-600 border-rose-100';
+            estadoLabel = 'Rechazado';
+        }
+
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50/5 transition-colors";
+        tr.innerHTML = `
+            <td class="px-6 py-4 font-bold text-slate-700">${dest.usr_nombre} ${dest.usr_apellido}</td>
+            <td class="px-6 py-4 text-slate-400 font-medium">${dest.tid_rol || 'Destino'}</td>
+            <td class="px-6 py-4 text-center">
+                <span class="inline-flex items-center justify-center h-6 w-6 rounded-full ${dest.tid_obligatorio ? 'bg-amber-100 text-amber-600' : 'bg-slate-100 text-slate-400'}">
+                    <span class="material-symbols-outlined text-[14px]">${dest.tid_obligatorio ? 'priority_high' : 'check'}</span>
+                </span>
+            </td>
+            <td class="px-6 py-4 text-right">
+                <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase border ${estadoColors}">
+                    ${estadoLabel}
+                </span>
+            </td>
+        `;
+        tablaDestinos.appendChild(tr);
+    });
+}

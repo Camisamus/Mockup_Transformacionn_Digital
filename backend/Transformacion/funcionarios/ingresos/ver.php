@@ -1,8 +1,64 @@
 <?php
 $pageTitle = "Ver Ingreso";
 require_once '../../api/general/auth_check.php';
+
+// SSR Logic
+use App\Controllers\Ingresos_SolicitudControler;
+use App\Helpers\Encode;
+
+$encoder = new Encode();
+$controller = new Ingresos_SolicitudControler($db);
+
+$id_cifrado = $_GET['id'] ?? null;
+$id_raw = null;
+
+if ($id_cifrado) {
+    // Intentar descifrar para obtener el ID real
+    // En ver.php aceptamos ID cifrado por seguridad
+    $id_raw = $encoder->descifrar($id_cifrado);
+}
+
+if (!$id_raw) {
+    header("Location: index.php");
+    exit;
+}
+
+$response = $controller->getById($id_raw, $_SESSION['user_id'] ?? null);
+if ($response['status'] !== 'success') {
+    header("Location: index.php");
+    exit;
+}
+
+$solicitud = $response['data'];
+// Normalizar IDs para el frontend
+$solicitud['tis_id_raw'] = $id_raw;
+$solicitud['tis_id'] = $id_cifrado;
+
+// Cargar permisos desde PHP
+// Aquí replicamos la lógica de permisos.js en el servidor
+$r = strtolower($solicitud['rol_usuario'] ?? 'lector');
+$userId = $_SESSION['user_id'] ?? 0;
+
+$p = [
+    'consultar' => true,
+    'editar' => ($r === 'propietario'),
+    'preparar' => in_array($r, ['responsable', 'visador', 'firmante', 'lector']),
+    'comentar' => in_array($r, ['responsable', 'propietario', 'visador', 'firmante', 'lector']),
+    'bitacora' => in_array($r, ['responsable', 'propietario', 'lector']),
+    'visar' => ($r === 'visador'),
+    'firmar' => ($r === 'firmante'),
+    'responder' => in_array($r, ['responsable', 'firmante'])
+];
+
 include '../../api/general/header.php';
 ?>
+
+<script>
+    // Inyectar datos para componentes interactivos (Mapa, Auditoría)
+    window.serverData = <?php echo json_encode($solicitud); ?>;
+    window.userPerms = <?php echo json_encode($p); ?>;
+    window.currentUserId = <?php echo json_encode($_SESSION['user_id'] ?? 0); ?>;
+</script>
 
 <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
@@ -107,28 +163,27 @@ include '../../api/general/header.php';
         <div class="space-y-1 w-full text-left">
             <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Consulta de Ingresos</h1>
             <p class="text-slate-400 text-sm lg:text-[15px] font-medium uppercase tracking-wider italic"
-                id="subtitulo_ingreso">Visualizando detalles de la solicitud</p>
+                id="subtitulo_ingreso"><?php echo htmlspecialchars($solicitud['tis_titulo']); ?></p>
         </div>
 
         <div class="flex flex-wrap gap-2 w-full lg:w-auto justify-end">
-            <div id="col_ir_responder" style="display: none;">
-                <button type="button" id="btn_ir_responder"
-                    class="flex items-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-2.5 px-5 rounded-xl shadow-sm transition-all text-[13px] uppercase tracking-wider">
-                    <span class="material-symbols-outlined text-[20px] text-primary-blue">task_alt</span> Responder
-                </button>
-            </div>
-            <!--<div id="col_ir_preparar" style="display: none;">
-                <button type="button" id="btn_ir_preparar"
-                    class="flex items-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-2.5 px-5 rounded-xl shadow-sm transition-all text-[13px] uppercase tracking-wider">
-                    <span class="material-symbols-outlined text-[20px] text-primary-blue">share</span> Preparar
-                </button>
-            </div>-->
-            <div id="col_ir_modificar" style="display: none;">
-                <button type="button" id="btn_ir_modificar"
-                    class="flex items-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-2.5 px-5 rounded-xl shadow-sm transition-all text-[13px] uppercase tracking-wider">
-                    <span class="material-symbols-outlined text-[20px] text-primary-blue">edit_note</span> Modificar
-                </button>
-            </div>
+            <?php if ($p['visar'] || $p['firmar']): ?>
+                <div id="col_ir_responder">
+                    <button type="button" id="btn_ir_responder"
+                        class="flex items-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-2.5 px-5 rounded-xl shadow-sm transition-all text-[13px] uppercase tracking-wider">
+                        <span class="material-symbols-outlined text-[20px] text-primary-blue">task_alt</span> Responder
+                    </button>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($p['editar']): ?>
+                <div id="col_ir_modificar">
+                    <button type="button" id="btn_ir_modificar"
+                        class="flex items-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold py-2.5 px-5 rounded-xl shadow-sm transition-all text-[13px] uppercase tracking-wider">
+                        <span class="material-symbols-outlined text-[20px] text-primary-blue">edit_note</span> Modificar
+                    </button>
+                </div>
+            <?php endif; ?>
             <button type="button" onclick="location.href='index.php'"
                 class="flex items-center gap-2 bg-slate-800 hover:bg-black text-white font-bold py-2.5 px-6 rounded-xl shadow-lg transition-all text-[13px] uppercase tracking-wider">
                 <span class="material-symbols-outlined text-[20px]">grid_view</span> Bandeja
@@ -151,18 +206,26 @@ include '../../api/general/header.php';
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-dependencia" type="button"
                     role="tab">Dependencia</button>
             </li>
-            <li class="nav-item" role="presentation" id="nav-visar">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-visar" type="button"
-                    role="tab">Visar</button>
-            </li>
-            <li class="nav-item" role="presentation" id="nav-responder">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-responder" type="button"
-                    role="tab">Responder</button>
-            </li>
-            <li class="nav-item" role="presentation" id="nav-historial">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-historial" type="button"
-                    role="tab">Historial</button>
-            </li>
+            <?php if ($p['visar']): ?>
+                <li class="nav-item" role="presentation" id="nav-visar">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-visar" type="button"
+                        role="tab">Visar</button>
+                </li>
+            <?php endif; ?>
+
+            <?php if ($p['responder']): ?>
+                <li class="nav-item" role="presentation" id="nav-responder">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-responder" type="button"
+                        role="tab">Responder</button>
+                </li>
+            <?php endif; ?>
+
+            <?php if ($p['bitacora']): ?>
+                <li class="nav-item" role="presentation" id="nav-historial">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-historial" type="button"
+                        role="tab">Historial</button>
+                </li>
+            <?php endif; ?>
         </ul>
     </div>
 
@@ -170,6 +233,7 @@ include '../../api/general/header.php';
         <!-- PESTAÑA: DETALLE -->
         <div class="tab-pane fade show active" id="tab-detalle" role="tabpanel">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Lado Izquierdo: Detalles -->
                 <div class="lg:col-span-8 space-y-6">
                     <div class="bg-white gob-card rounded-2xl overflow-hidden">
                         <div class="p-5 border-b border-slate-50 flex items-center justify-between bg-white">
@@ -180,91 +244,108 @@ include '../../api/general/header.php';
                             </div>
                             <span
                                 class="px-4 py-1.5 rounded-lg bg-blue-50 text-primary-blue text-[11px] font-bold border border-blue-100 uppercase tracking-widest"
-                                id="badge_estado">Cargando...</span>
+                                id="badge_estado"><?php echo htmlspecialchars($solicitud['tis_estado']); ?></span>
                         </div>
 
                         <div class="p-6 lg:p-10 space-y-8">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div class="space-y-2">
                                     <label class="label-custom text-slate-400">Título</label>
-                                    <div class="text-lg font-extrabold text-slate-800" id="info_titulo">-</div>
+                                    <div class="text-lg font-extrabold text-slate-800" id="info_titulo">
+                                        <?php echo htmlspecialchars($solicitud['tis_titulo']); ?>
+                                    </div>
                                 </div>
                                 <div class="space-y-2">
                                     <label class="label-custom text-slate-400">ID Solicitud</label>
-                                    <div class="text-[15px] font-bold text-slate-700" id="info_tis_id">-</div>
+                                    <div class="text-[15px] font-bold text-slate-700" id="info_tis_id">
+                                        <?php echo htmlspecialchars($solicitud['tis_id_raw']); ?>
+                                    </div>
                                 </div>
                                 <div class="space-y-2">
                                     <label class="label-custom text-slate-400">ID Trámite (RGT)</label>
-                                    <div class="text-[15px] font-bold text-slate-700" id="info_rgt_id">-</div>
+                                    <div class="text-[15px] font-bold text-slate-700" id="info_rgt_id">
+                                        <?php echo htmlspecialchars($solicitud['tis_registro_tramite_raw'] ?? $solicitud['tis_registro_tramite']); ?>
+                                    </div>
                                 </div>
                                 <div class="space-y-2 col-span-2">
                                     <label class="label-custom text-slate-400">ID Público</label>
                                     <div class="inline-block bg-slate-50 border border-slate-100 px-3 py-1 rounded-lg text-xs font-mono text-primary-blue"
-                                        id="info_id_publica">-</div>
+                                        id="info_id_publica">
+                                        <?php echo htmlspecialchars($solicitud['rgt_id_publica'] ?? '-'); ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-slate-50">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-slate-50 p-6">
                             <div class="space-y-1">
                                 <label class="label-custom">Fecha Ingreso</label>
-                                <div class="text-[14px] text-slate-600 font-medium" id="info_fecha">-</div>
+                                <div class="text-[14px] text-slate-600 font-medium" id="info_fecha">
+                                    <?php echo htmlspecialchars($solicitud['tis_creacion'] ?? '-'); ?>
+                                </div>
                             </div>
                             <div class="space-y-1">
                                 <label class="label-custom">Propietario</label>
-                                <div class="text-[14px] text-slate-600 font-medium" id="info_responsable">-</div>
+                                <div class="text-[14px] text-slate-600 font-medium" id="info_responsable">
+                                    <?php echo htmlspecialchars(($solicitud['usr_nombre'] ?? '') . ' ' . ($solicitud['usr_apellido'] ?? '')); ?>
+                                </div>
                             </div>
                             <div class="space-y-1">
                                 <label class="label-custom">Fecha Vencimiento</label>
-                                <div class="text-[14px] text-rose-600 font-black" id="info_fecha_limite">-</div>
+                                <div class="text-[14px] text-rose-600 font-black" id="info_fecha_limite">
+                                    <?php echo htmlspecialchars($solicitud['tis_fecha_limite'] ?? '-'); ?>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="space-y-3 pt-6 border-t border-slate-50">
+                        <div class="space-y-3 pt-6 border-t border-slate-50 p-6">
                             <label class="label-custom">Contenido / Cuerpo</label>
                             <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-[15px] text-slate-700 leading-relaxed italic"
-                                id="info_contenido" style="white-space: pre-wrap; min-height: 150px;">-</div>
+                                id="info_contenido" style="white-space: pre-wrap; min-height: 150px;">
+                                <?php echo htmlspecialchars($solicitud['tis_contenido']); ?>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="lg:col-span-4 space-y-6">
-                <div class="bg-white gob-card rounded-2xl overflow-hidden">
-                    <div class="p-5 border-b border-slate-50 bg-white">
-                        <h5 class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
-                            <span class="material-symbols-outlined text-primary-blue text-lg">link</span> Enlaces
-                            Adjuntos
-                        </h5>
+                <!-- Lado Derecho: Enlaces, Adjuntos, Comentarios -->
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                        <div class="p-5 border-b border-slate-50 bg-white">
+                            <h5 class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary-blue text-lg">link</span> Enlaces
+                                Adjuntos
+                            </h5>
+                        </div>
+                        <div id="lista_enlaces" class="p-4 space-y-2"></div>
                     </div>
-                    <div id="lista_enlaces" class="p-4 space-y-2"></div>
+
+                    <div class="bg-soft-cyan border border-cyan-border rounded-2xl overflow-hidden shadow-sm">
+                        <div class="p-5 border-b border-cyan-border">
+                            <h5 class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary-blue text-lg">attach_file</span>
+                                Documentos Adjuntos
+                            </h5>
+                        </div>
+                        <div id="lista_documentos" class="p-4 space-y-2"></div>
+                    </div>
+
+                    <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                        <div class="p-5 border-b border-slate-50 flex justify-between items-center bg-white">
+                            <h5 class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
+                                <span class="material-symbols-outlined text-primary-blue text-lg">sticky_note_2</span>
+                                Comentarios
+                            </h5>
+                            <button type="button"
+                                class="bg-slate-800 text-white px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-all"
+                                id="btn_abrir_comentario">
+                                + Agregar
+                            </button>
+                        </div>
+                        <div id="lista_comentarios" class="p-4 max-h-[400px] overflow-auto space-y-3"></div>
+                    </div>
                 </div>
 
-                <div class="bg-soft-cyan border border-cyan-border rounded-2xl overflow-hidden shadow-sm">
-                    <div class="p-5 border-b border-cyan-border">
-                        <h5 class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
-                            <span class="material-symbols-outlined text-primary-blue text-lg">attach_file</span>
-                            Documentos Adjuntos
-                        </h5>
-                    </div>
-                    <div id="lista_documentos" class="p-4 space-y-2"></div>
-                </div>
-
-                <div class="bg-white gob-card rounded-2xl overflow-hidden">
-                    <div class="p-5 border-b border-slate-50 flex justify-between items-center bg-white">
-                        <h5 class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
-                            <span class="material-symbols-outlined text-primary-blue text-lg">sticky_note_2</span>
-                            Comentarios
-                        </h5>
-                        <button type="button"
-                            class="bg-slate-800 text-white px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-all"
-                            id="btn_abrir_comentario">
-                            + Agregar
-                        </button>
-                    </div>
-                    <div id="lista_comentarios" class="p-4 max-h-[400px] overflow-auto space-y-3"></div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -364,47 +445,49 @@ include '../../api/general/header.php';
     <!-- PESTAÑA: VISAR -->
     <div class="tab-pane fade" id="tab-visar" role="tabpanel">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <div class="lg:col-span-8 space-y-6">
-                <div class="bg-white gob-card rounded-2xl overflow-hidden">
-                    <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
-                        <span class="material-symbols-outlined text-gob-warning">verified_user</span>
-                        <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Estado de Aprobaciones
-                            (Circuito de Visación)</h3>
+            <?php if ($p['visar']): ?>
+                <div class="lg:col-span-8 space-y-6">
+                    <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                        <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
+                            <span class="material-symbols-outlined text-gob-warning">verified_user</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Estado de Aprobaciones
+                                (Circuito de Visación)</h3>
+                        </div>
+                        <div class="p-0">
+                            <div class="table-responsive">
+                                <table class="w-full text-left">
+                                    <thead
+                                        class="bg-slate-50 text-slate-400 font-bold uppercase text-[10px] tracking-widest">
+                                        <tr>
+                                            <th class="px-6 py-4">Funcionario</th>
+                                            <th class="px-6 py-4">Rol</th>
+                                            <th class="px-6 py-4 text-center">Requerido</th>
+                                            <th class="px-6 py-4 text-right">Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla_destinos_status"
+                                        class="divide-y divide-slate-50 text-[13px] text-slate-600">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-0">
-                        <div class="table-responsive">
-                            <table class="w-full text-left">
-                                <thead
-                                    class="bg-slate-50 text-slate-400 font-bold uppercase text-[10px] tracking-widest">
-                                    <tr>
-                                        <th class="px-6 py-4">Funcionario</th>
-                                        <th class="px-6 py-4">Rol</th>
-                                        <th class="px-6 py-4 text-center">Requerido</th>
-                                        <th class="px-6 py-4 text-right">Estado</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tabla_destinos_status"
-                                    class="divide-y divide-slate-50 text-[13px] text-slate-600">
-                                </tbody>
-                            </table>
+
+                    <div class="bg-white gob-card rounded-2xl p-8 border-t-4 border-gob-warning shadow-md text-center">
+                        <h4 class="text-slate-800 font-extrabold text-lg mb-2 tracking-tight">¿Desea visar este
+                            documento?</h4>
+                        <p class="text-slate-400 text-sm mb-6 italic">Su aprobación permitirá que el flujo continúe
+                            hacia el siguiente responsable.</p>
+                        <div class="flex justify-center gap-4">
+                            <button type="button" onclick="rechazarVisacion()"
+                                class="bg-rose-50 text-rose-600 border border-rose-100 px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-rose-100 transition-all">Rechazar</button>
+                            <button type="button" onclick="aprobarVisacion()"
+                                class="bg-gob-warning text-white px-8 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-yellow-200/50 hover:bg-amber-600 transition-all">Aprobar
+                                y Visar</button>
                         </div>
                     </div>
                 </div>
-
-                <div class="bg-white gob-card rounded-2xl p-8 border-t-4 border-gob-warning shadow-md text-center">
-                    <h4 class="text-slate-800 font-extrabold text-lg mb-2 tracking-tight">¿Desea visar este
-                        documento?</h4>
-                    <p class="text-slate-400 text-sm mb-6 italic">Su aprobación permitirá que el flujo continúe
-                        hacia el siguiente responsable.</p>
-                    <div class="flex justify-center gap-4">
-                        <button type="button" onclick="rechazarVisacion()"
-                            class="bg-rose-50 text-rose-600 border border-rose-100 px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-rose-100 transition-all">Rechazar</button>
-                        <button type="button" onclick="aprobarVisacion()"
-                            class="bg-gob-warning text-white px-8 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-yellow-200/50 hover:bg-amber-600 transition-all">Aprobar
-                            y Visar</button>
-                    </div>
-                </div>
-            </div>
+            <?php endif; ?>
 
             <div class="lg:col-span-4 space-y-6">
                 <div class="bg-amber-50 border border-amber-100 rounded-2xl p-5">
@@ -510,72 +593,74 @@ include '../../api/general/header.php';
     <!--PESTAÑA: RESPONDER-->
     <div class="tab-pane fade" id="tab-responder" role="tabpanel">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <div class="lg:col-span-8 space-y-6">
-                <div class="bg-white gob-card rounded-2xl overflow-hidden">
-                    <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
-                        <span class="material-symbols-outlined text-gob-success">maps_ugc</span>
-                        <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Emitir Respuesta Final
-                        </h3>
-                    </div>
+            <?php if ($p['responder']): ?>
+                <div class="lg:col-span-8 space-y-6">
+                    <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                        <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
+                            <span class="material-symbols-outlined text-gob-success">maps_ugc</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Emitir Respuesta Final
+                            </h3>
+                        </div>
 
-                    <div class="p-8">
-                        <form id="form_responder_ingreso" class="space-y-6">
-                            <div class="space-y-2">
-                                <label for="tis_respuesta" class="label-custom">Contenido de la Respuesta
-                                    (Opcional)</label>
-                                <textarea id="tis_respuesta" rows="6"
-                                    class="w-full border-slate-200 rounded-2xl focus:ring-primary-blue text-[15px] p-4 bg-slate-50 italic focus:bg-white transition-all"
-                                    placeholder="Escriba aquí la respuesta final o resolución..."></textarea>
-                            </div>
-
-                            <div class="space-y-2">
-                                <label for="inp_archivo_decreto" class="label-custom">Incluir Decreto en respuesta
-                                    (Opcional)</label>
-                                <div
-                                    class="flex items-center gap-4 p-4 bg-soft-cyan border border-cyan-border rounded-2xl">
-                                    <span
-                                        class="material-symbols-outlined text-primary-blue text-3xl">picture_as_pdf</span>
-                                    <div class="flex-1">
-                                        <input type="file" id="inp_archivo_decreto" accept=".pdf,.doc,.docx,.jpg,.png"
-                                            class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[11px] file:font-bold file:bg-primary-blue file:text-white hover:file:bg-blue-700 cursor-pointer">
-                                    </div>
+                        <div class="p-8">
+                            <form id="form_responder_ingreso" class="space-y-6">
+                                <div class="space-y-2">
+                                    <label for="tis_respuesta" class="label-custom">Contenido de la Respuesta
+                                        (Opcional)</label>
+                                    <textarea id="tis_respuesta" rows="6"
+                                        class="w-full border-slate-200 rounded-2xl focus:ring-primary-blue text-[15px] p-4 bg-slate-50 italic focus:bg-white transition-all"
+                                        placeholder="Escriba aquí la respuesta final o resolución..."></textarea>
                                 </div>
-                                <p class="text-[10px] text-slate-400 font-medium italic mt-2">
-                                    * Si adjunta un archivo, este se guardará automáticamente con el prefijo
-                                    <strong>"Decreto - "</strong>.
-                                </p>
-                            </div>
 
-                            <div class="pt-6 border-t border-slate-50 flex justify-end gap-3">
-                                <button type="button"
-                                    class="text-slate-400 font-bold text-xs uppercase px-4 hover:text-slate-600">Limpiar</button>
-                                <button type="submit"
-                                    class="bg-gob-success text-white font-bold py-3 px-10 rounded-xl shadow-lg shadow-emerald-200/50 text-xs uppercase tracking-widest hover:bg-emerald-600 transition-all flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-[18px]">send</span> Enviar Respuesta
-                                </button>
-                            </div>
-                        </form>
+                                <div class="space-y-2">
+                                    <label for="inp_archivo_decreto" class="label-custom">Incluir Decreto en respuesta
+                                        (Opcional)</label>
+                                    <div
+                                        class="flex items-center gap-4 p-4 bg-soft-cyan border border-cyan-border rounded-2xl">
+                                        <span
+                                            class="material-symbols-outlined text-primary-blue text-3xl">picture_as_pdf</span>
+                                        <div class="flex-1">
+                                            <input type="file" id="inp_archivo_decreto" accept=".pdf,.doc,.docx,.jpg,.png"
+                                                class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[11px] file:font-bold file:bg-primary-blue file:text-white hover:file:bg-blue-700 cursor-pointer">
+                                        </div>
+                                    </div>
+                                    <p class="text-[10px] text-slate-400 font-medium italic mt-2">
+                                        * Si adjunta un archivo, este se guardará automáticamente con el prefijo
+                                        <strong>"Decreto - "</strong>.
+                                    </p>
+                                </div>
+
+                                <div class="pt-6 border-t border-slate-50 flex justify-end gap-3">
+                                    <button type="button"
+                                        class="text-slate-400 font-bold text-xs uppercase px-4 hover:text-slate-600">Limpiar</button>
+                                    <button type="submit"
+                                        class="bg-gob-success text-white font-bold py-3 px-10 rounded-xl shadow-lg shadow-emerald-200/50 text-xs uppercase tracking-widest hover:bg-emerald-600 transition-all flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-[18px]">send</span> Enviar Respuesta
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="lg:col-span-4 space-y-6">
-                <div class="bg-slate-800 text-white rounded-2xl p-6 shadow-xl">
-                    <h5 class="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-4">Instrucciones de
-                        Cierre</h5>
-                    <ul class="space-y-4">
-                        <li class="flex gap-3 items-start text-sm">
-                            <span class="material-symbols-outlined text-gob-success text-lg">check_circle</span>
-                            <span>Al enviar la respuesta, el estado del ingreso cambiará a
-                                <strong>"Resuelto"</strong>.</span>
-                        </li>
-                        <li class="flex gap-3 items-start text-sm">
-                            <span class="material-symbols-outlined text-gob-success text-lg">check_circle</span>
-                            <span>El documento dejará de estar pendiente en su bandeja personal.</span>
-                        </li>
-                    </ul>
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="bg-slate-800 text-white rounded-2xl p-6 shadow-xl">
+                        <h5 class="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-4">Instrucciones de
+                            Cierre</h5>
+                        <ul class="space-y-4">
+                            <li class="flex gap-3 items-start text-sm">
+                                <span class="material-symbols-outlined text-gob-success text-lg">check_circle</span>
+                                <span>Al enviar la respuesta, el estado del ingreso cambiará a
+                                    <strong>"Resuelto"</strong>.</span>
+                            </li>
+                            <li class="flex gap-3 items-start text-sm">
+                                <span class="material-symbols-outlined text-gob-success text-lg">check_circle</span>
+                                <span>El documento dejará de estar pendiente en su bandeja personal.</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -615,20 +700,21 @@ include '../../api/general/header.php';
     </div>
 
 
-    <!-- PESTAÑA: HISTORIAL -->
-    <div class="tab-pane fade" id="tab-historial" role="tabpanel">
-        <div class="bg-white gob-card rounded-2xl overflow-hidden p-8 shadow-sm">
-            <div class="flex justify-between items-center mb-8 border-b border-slate-50 pb-4">
-                <h5 class="font-bold text-slate-700 uppercase text-sm tracking-wide flex items-center gap-2">
-                    <span class="material-symbols-outlined text-primary-blue text-2xl">history_edu</span> Bitácora
-                    de Auditoría Completa
-                </h5>
-            </div>
-            <div class="space-y-4 mb-6 min-h-[100px]" id="lista_bitacora"></div>
-            <div id="paginacion_bitacora" class="flex justify-center items-center gap-2 pt-6 border-t border-slate-50">
+    <?php if ($p['bitacora']): ?>
+        <div class="tab-pane fade" id="tab-historial" role="tabpanel">
+            <div class="bg-white gob-card rounded-2xl overflow-hidden p-8 shadow-sm">
+                <div class="flex justify-between items-center mb-8 border-b border-slate-50 pb-4">
+                    <h5 class="font-bold text-slate-700 uppercase text-sm tracking-wide flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary-blue text-2xl">history_edu</span> Bitácora
+                        de Auditoría Completa
+                    </h5>
+                </div>
+                <div class="space-y-4 mb-6 min-h-[100px]" id="lista_bitacora"></div>
+                <div id="paginacion_bitacora" class="flex justify-center items-center gap-2 pt-6 border-t border-slate-50">
+                </div>
             </div>
         </div>
-    </div>
+    <?php endif; ?>
 </div>
 </div>
 
