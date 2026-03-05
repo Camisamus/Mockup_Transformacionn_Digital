@@ -73,6 +73,24 @@ class MailService
                 ];
             }
         }
+        $email = $params['destinatario_email'];
+
+        // 1. Validamos que sea un email válido
+        //if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+        // 2. Extraemos el dominio después del '@'
+        $dominio = substr(strrchr($email, "@"), 1);
+
+        // 3. Comprobamos si el dominio es DIFERENTE a 'test.cl'
+        if ($dominio !== 'munivina.cl') {
+            return [
+                'status' => 'ignore',
+                'message' => "El correo $email pertenece a un dominio externo: $dominio",
+                'registro_id' => null
+            ];
+        }
+        //} 
+
 
         $expedienteId = (int) $params['expediente_id'];
         $destinatarioEmail = $params['destinatario_email'];

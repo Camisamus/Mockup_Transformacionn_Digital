@@ -3,7 +3,9 @@ require_once '../general/cors.php';
 require_once '../general/session_start.php';
 require_once '../../src/Config/Database.php';
 require_once '../../src/Models/Bitacora.php';
-require_once '../../src/Models/oirs/gestion.php';
+require_once '../../src/Models/OIRS_Gestion.php';
+require_once '../../src/Models/OirsAsignacion.php';
+require_once '../../src/Models/OirsAsignacionComentario.php';
 require_once '../../src/Controllers/OIRS_GestionController.php';
 
 use App\Config\Database;
@@ -45,7 +47,6 @@ switch ($data['ACCION']) {
 
         // Handle Assignment Creation (History)
         if (!empty($data['oig_asignacion'])) {
-            require_once '../src/Models/OirsAsignacion.php';
             $asignacionModel = new \App\Models\OirsAsignacion($db);
 
             // Check if already assigned to this official
@@ -77,6 +78,40 @@ switch ($data['ACCION']) {
         $solicitud_id = $data['id'] ?? null;
         $response = $controller->getBySolicitud($solicitud_id);
         echo json_encode($response);
+        break;
+
+    case 'ASIGNACION_COMENTAR':
+        $asignacion_id = $data['oac_asignacion'] ?? null;
+        if (!$asignacion_id) {
+            echo json_encode(["status" => "error", "message" => "ID de asignación es requerido"]);
+            break;
+        }
+
+        $comentarioModel = new \App\Models\OirsAsignacionComentario($db);
+        $result = $comentarioModel->crear([
+            'oac_asignacion' => $asignacion_id,
+            'oac_emisor' => $_SESSION['user_id'] ?? 1,
+            'oac_mensaje' => $data['oac_mensaje'] ?? '',
+            'oac_marcado' => $data['oac_marcado'] ?? 0
+        ]);
+
+        if ($result) {
+            echo json_encode(["status" => "success", "message" => "Comentario registrado"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Error al registrar comentario"]);
+        }
+        break;
+
+    case 'ASIGNACION_HISTORIAL':
+        $asignacion_id = $data['oac_asignacion'] ?? null;
+        if (!$asignacion_id) {
+            echo json_encode(["status" => "error", "message" => "ID de asignación es requerido"]);
+            break;
+        }
+
+        $comentarioModel = new \App\Models\OirsAsignacionComentario($db);
+        $historial = $comentarioModel->obtenerPorAsignacion($asignacion_id);
+        echo json_encode(["status" => "success", "data" => $historial]);
         break;
 
     default:

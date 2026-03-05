@@ -167,7 +167,7 @@ function renderTable(items, tbody) {
             if (item.origen === 'DESVE') {
                 window.location.href = `desve/consultar.php?id=${item.id}`;
             } else if (item.origen === 'Ingresos') {
-                window.location.href = `ingresos/ver.php?id=${item.id}`;
+                window.location.href = `ingresos/ver.php?id=${item.idcif}`;
             } else if (item.origen === 'TAREAS') {
                 Swal.fire({
                     title: item.asunto,

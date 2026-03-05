@@ -78,7 +78,7 @@ async function cargarDatosPreparar(id) {
             if (btnDep) btnDep.style.display = perms.preparar ? 'block' : 'none';
 
             currentRequestId = data.tis_id;
-            currentRgtId = parseInt(data.tis_registro_tramite);
+            currentRgtId = data.tis_registro_tramite;
             document.getElementById('subtitulo_preparar').innerText = `Gestionando: ${data.tis_titulo} (ID: ${data.tis_id})`;
 
             const rgtIds = new Set();
@@ -86,8 +86,8 @@ async function cargarDatosPreparar(id) {
 
             if (data.multiancestro) {
                 Object.values(data.multiancestro).forEach(rel => {
-                    rgtIds.add(parseInt(rel.gma_padre));
-                    rgtIds.add(parseInt(rel.gma_hijo));
+                    rgtIds.add(rel.gma_padre);
+                    rgtIds.add(rel.gma_hijo);
                 });
             }
 
@@ -251,7 +251,7 @@ async function cargarSolicitudesParaDependencia() {
                 parseInt(sol.tis_propietario) === parseInt(currentUserId) &&
                 sol.tis_estado !== 'Resuelto_Favorable' &&
                 sol.tis_estado !== 'Resuelto_NO_Favorable' &&
-                parseInt(sol.tis_registro_tramite) !== parseInt(currentRgtId)
+                sol.tis_registro_tramite != currentRgtId
             );
 
             if (filtered.length === 0) {
@@ -316,13 +316,12 @@ function renderizarMapa(relaciones, detalles = [], userId = null) {
     const detallesMap = new Map();
 
     if (Array.isArray(detalles)) {
-        detalles.forEach(d => { if (d.rgt_id) detallesMap.set(parseInt(d.rgt_id), d); });
+        detalles.forEach(d => { if (d.rgt_id) detallesMap.set(d.rgt_id, d); });
     }
 
     function getColorForNode(rgtId) {
-        const idInt = parseInt(rgtId);
-        if (idInt === currentRgtId) return '#ffc107';
-        const det = detallesMap.get(idInt);
+        if (rgtId == currentRgtId) return '#ffc107';
+        const det = detallesMap.get(rgtId);
         if (det) {
             if (det.tis_estado === 'Resuelto_Favorable') return '#198754';
             if (det.tis_estado === 'Resuelto_NO_Favorable') return '#000000';
@@ -335,7 +334,7 @@ function renderizarMapa(relaciones, detalles = [], userId = null) {
     }
 
     function getTooltip(rgtId) {
-        const det = detallesMap.get(parseInt(rgtId));
+        const det = detallesMap.get(rgtId);
         return det ? det.tis_titulo : `RT-${rgtId}`;
     }
 
@@ -344,8 +343,8 @@ function renderizarMapa(relaciones, detalles = [], userId = null) {
 
     const childrenOf = {};
     Object.values(relaciones).forEach(rel => {
-        const p = parseInt(rel.gma_padre);
-        const h = parseInt(rel.gma_hijo);
+        const p = rel.gma_padre;
+        const h = rel.gma_hijo;
 
         // Visibility Filtering
         if (!showNoFavorables) {
@@ -397,7 +396,7 @@ function renderizarMapa(relaciones, detalles = [], userId = null) {
     network = new vis.Network(container, data, options);
 
     network.on("selectNode", (params) => {
-        const sid = parseInt(params.nodes[0]);
+        const sid = params.nodes[0];
         console.log("Node selected:", sid);
         console.log("Is clickable?", clickableNodes.has(sid));
 
@@ -570,14 +569,14 @@ function renderizarTablaHijas(data, detallesArbol = null) {
     tbody.innerHTML = '';
 
     // We need current rgtId
-    const rgtId = parseInt(data.tis_registro_tramite);
+    const rgtId = data.tis_registro_tramite;
     const relaciones = data.multiancestro || {};
 
     // Find all direct children
     const directChildrenRgtIds = [];
     Object.values(relaciones).forEach(rel => {
-        if (parseInt(rel.gma_padre) === rgtId) {
-            directChildrenRgtIds.push(parseInt(rel.gma_hijo));
+        if (rel.gma_padre == rgtId) {
+            directChildrenRgtIds.push(rel.gma_hijo);
         }
     });
 
@@ -588,7 +587,7 @@ function renderizarTablaHijas(data, detallesArbol = null) {
 
     const detallesList = detallesArbol || ((window.currentDataForMap && window.currentDataForMap.detallesArbol) ? window.currentDataForMap.detallesArbol : []);
     const detallesMap = new Map();
-    detallesList.forEach(d => { if (d.rgt_id) detallesMap.set(parseInt(d.rgt_id), d); });
+    detallesList.forEach(d => { if (d.rgt_id) detallesMap.set(d.rgt_id, d); });
 
     directChildrenRgtIds.forEach(hijoRgtId => {
         const det = detallesMap.get(hijoRgtId);

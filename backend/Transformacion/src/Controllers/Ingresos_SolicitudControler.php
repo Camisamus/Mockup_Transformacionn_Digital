@@ -6,19 +6,23 @@ use App\Models\Ingresos_ingreso;
 use App\Models\Bitacora; // Assuming Bitacora is used
 use App\Helpers\SimpleSMTP;
 use App\Helpers\ConfigLoader;
+use App\Helpers\MailService;
 
 require_once __DIR__ . '/../Helpers/SimpleSMTP.php';
 require_once __DIR__ . '/../Helpers/ConfigLoader.php';
+require_once __DIR__ . '/../Helpers/MailService.php';
 
 class Ingresos_SolicitudControler
 {
     private $db;
     private $solicitud;
+    private $mailService;
 
     public function __construct($db)
     {
         $this->db = $db;
         $this->solicitud = new Ingresos_ingreso($this->db);
+        $this->mailService = new MailService($this->db);
     }
 
     public function getAllMine($filters = [], $current_user_id = null)
@@ -55,6 +59,9 @@ class Ingresos_SolicitudControler
     {
         $result = $this->solicitud->create($data);
         if ($result[0]) {
+            // Notificar por email a los destinatarios asignados
+            $this->notificarDestinatarios($result[1], $data, 'creación');
+
             return ["status" => "success", "message" => "Solicitud created successfully", "id" => $result[1]];
         }
         return [
@@ -67,6 +74,9 @@ class Ingresos_SolicitudControler
     public function update($id, $data, $current_user_id = null)
     {
         if ($this->solicitud->update($id, $data, $current_user_id)) {
+            // Notificar por email a los destinatarios asignados
+            $this->notificarDestinatarios($id, $data, 'actualización');
+
             return ["status" => "success", "message" => "Solicitud updated successfully"];
         }
         return [
@@ -181,5 +191,98 @@ class Ingresos_SolicitudControler
     public function getChartData()
     {
         return ["status" => "success", "data" => $this->solicitud->getChartData()];
+    }
+
+    /**
+     * Notifica por email a todos los destinatarios (destinos) asignados a una solicitud.
+     */
+    private function notificarDestinatarios(int $solicitudId, array $data, string $accion): void
+    {
+        try {
+            // Obtener los datos completos de la solicitud para tener el rgt_id y los destinos actuales
+            $solicitudCompleta = $this->solicitud->getById($solicitudId);
+
+            if (!$solicitudCompleta || empty($solicitudCompleta['destinos'])) {
+                return;
+            }
+
+            $expedienteId = $solicitudCompleta['tis_registro_tramite'] ?? null;
+            if (!$expedienteId) {
+                return;
+            }
+
+            $titulo = $data['tis_titulo'] ?? $solicitudCompleta['tis_titulo'] ?? 'Sin título';
+            $asunto = "Ingresos - Solicitud {$accion}: {$titulo}";
+
+            $cuerpo = $this->construirCuerpoEmail($solicitudCompleta, $accion, $solicitudId);
+
+            // Preparar array de destinatarios para enviarMasivo
+            $destinatarios = [];
+            foreach ($solicitudCompleta['destinos'] as $destino) {
+                $email = $destino['usr_email'] ?? null;
+                if (!$email) {
+                    continue;
+                }
+
+                $destinatarios[] = [
+                    'email' => $email,
+                    'nombre' => ($destino['usr_nombre'] ?? '') . ' ' . ($destino['usr_apellido'] ?? ''),
+                    'funcionario_id' => $destino['tid_destino'] ?? null,
+                    'contribuyente_id' => null
+                ];
+            }
+
+            if (!empty($destinatarios)) {
+                $resultado = $this->mailService->enviarMasivo($destinatarios, $expedienteId, $asunto, $cuerpo);
+                error_log("Ingresos Mail - {$accion} solicitud #{$solicitudId}: enviados={$resultado['enviados']}, fallidos={$resultado['fallidos']}");
+            }
+        } catch (\Exception $e) {
+            error_log("Ingresos Mail Error en notificarDestinatarios: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Construye el cuerpo HTML del email de notificación.
+     */
+    private function construirCuerpoEmail(array $solicitud, string $accion, int $solicitudId): string
+    {
+        $titulo = htmlspecialchars($solicitud['tis_titulo'] ?? 'Sin título');
+        $contenido = htmlspecialchars($solicitud['tis_contenido'] ?? 'Sin contenido');
+        $fechaLimite = $solicitud['tis_fecha_limite'] ?? 'No especificada';
+        $accionTitulo = ucfirst($accion);
+
+        $cuerpo = "
+        <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;'>
+            <div style='background-color: #2c3e50; color: white; padding: 15px 20px; border-radius: 5px 5px 0 0;'>
+                <h2 style='margin: 0;'>Ingresos - {$accionTitulo} de Solicitud</h2>
+            </div>
+            <div style='border: 1px solid #ddd; border-top: none; padding: 20px; border-radius: 0 0 5px 5px;'>
+                <p>Estimado/a <strong>{nombre}</strong>,</p>
+                <p>Se le informa que se ha realizado la <strong>{$accion}</strong> de la siguiente solicitud en el módulo de Ingresos:</p>
+                <table style='width: 100%; border-collapse: collapse; margin: 15px 0;'>
+                    <tr style='border-bottom: 1px solid #eee;'>
+                        <td style='padding: 8px; font-weight: bold; width: 40%; color: #555;'>N° Solicitud:</td>
+                        <td style='padding: 8px;'>{$solicitudId}</td>
+                    </tr>
+                    <tr style='border-bottom: 1px solid #eee; background-color: #f9f9f9;'>
+                        <td style='padding: 8px; font-weight: bold; color: #555;'>Título:</td>
+                        <td style='padding: 8px;'>{$titulo}</td>
+                    </tr>
+                    <tr style='border-bottom: 1px solid #eee;'>
+                        <td style='padding: 8px; font-weight: bold; color: #555;'>Contenido:</td>
+                        <td style='padding: 8px;'>{$contenido}</td>
+                    </tr>
+                    <tr style='border-bottom: 1px solid #eee; background-color: #f9f9f9;'>
+                        <td style='padding: 8px; font-weight: bold; color: #555;'>Fecha Límite:</td>
+                        <td style='padding: 8px;'>{$fechaLimite}</td>
+                    </tr>
+                </table>
+                <p style='color: #777; font-size: 12px; margin-top: 20px;'>
+                    Este es un mensaje automático del Sistema de Transformación Digital. Por favor, ingrese al sistema para más detalles.
+                </p>
+            </div>
+        </div>";
+
+        return $cuerpo;
     }
 }

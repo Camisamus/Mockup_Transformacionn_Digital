@@ -71,6 +71,9 @@ async function cargarDatosExistentes(id) {
 
         if (result.status === 'success') {
             const data = result.data;
+            if (document.getElementById('header_tis_id')) {
+                document.getElementById('header_tis_id').innerText = `#${data.tis_id_raw || data.tis_id}`;
+            }
             currentRgtId = data.tis_registro_tramite;
 
             // Check RBAC Permissions

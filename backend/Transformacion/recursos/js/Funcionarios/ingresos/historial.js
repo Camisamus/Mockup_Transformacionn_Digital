@@ -78,7 +78,7 @@ function renderizarTabla(datos) {
         const statusColors = getStatusColors(item.tis_estado);
 
         tr.innerHTML = `
-            <td class="px-6 py-4 text-xs font-black text-slate-400 tracking-tight">#${item.tis_id}</td>
+            <td class="px-6 py-4 text-xs font-black text-slate-400 tracking-tight">#${item.tis_id_raw || item.tis_id}</td>
             <td class="px-6 py-4">
                 <button type="button" class="text-primary-blue hover:text-blue-800 transition-colors">
                     <span class="material-symbols-outlined text-[18px]">visibility</span>

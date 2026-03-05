@@ -99,7 +99,7 @@
                     <button class="list-group-item list-group-item-action p-1 border-0"
                         onclick="copyToLogin(this.textContent)">ramon.martinez@munivina.cl</button>
                     <button class="list-group-item list-group-item-action p-1 border-0"
-                        onclick="copyToLogin(this.textContent)">ingresos.admin@test.cl</button>
+                        onclick="copyToLogin(this.textContent)">daniela.ruiz@munivina.cl</button>
                     <button class="list-group-item list-group-item-action p-1 border-0"
                         onclick="copyToLogin(this.textContent)">ingresos.operador@test.cl</button>
                     <button class="list-group-item list-group-item-action p-1 border-0"

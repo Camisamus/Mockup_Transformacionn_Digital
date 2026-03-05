@@ -189,241 +189,238 @@ include '../../api/general/header.php';
                                     <label class="label-custom text-slate-400">Título</label>
                                     <div class="text-lg font-extrabold text-slate-800" id="info_titulo">-</div>
                                 </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div class="space-y-2">
-                                        <label class="label-custom text-slate-400">ID Trámite (RGT)</label>
-                                        <div class="text-[15px] font-bold text-slate-700" id="info_rgt_id">-</div>
-                                    </div>
-                                    <div class="space-y-2">
-                                        <label class="label-custom text-slate-400">ID Público</label>
-                                        <div class="inline-block bg-slate-50 border border-slate-100 px-3 py-1 rounded-lg text-xs font-mono text-primary-blue"
-                                            id="info_id_publica">-</div>
-                                    </div>
+                                <div class="space-y-2">
+                                    <label class="label-custom text-slate-400">ID Solicitud</label>
+                                    <div class="text-[15px] font-bold text-slate-700" id="info_tis_id">-</div>
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="label-custom text-slate-400">ID Trámite (RGT)</label>
+                                    <div class="text-[15px] font-bold text-slate-700" id="info_rgt_id">-</div>
+                                </div>
+                                <div class="space-y-2 col-span-2">
+                                    <label class="label-custom text-slate-400">ID Público</label>
+                                    <div class="inline-block bg-slate-50 border border-slate-100 px-3 py-1 rounded-lg text-xs font-mono text-primary-blue"
+                                        id="info_id_publica">-</div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-slate-50">
-                                <div class="space-y-1">
-                                    <label class="label-custom">Fecha Ingreso</label>
-                                    <div class="text-[14px] text-slate-600 font-medium" id="info_fecha">-</div>
-                                </div>
-                                <div class="space-y-1">
-                                    <label class="label-custom">Propietario</label>
-                                    <div class="text-[14px] text-slate-600 font-medium" id="info_responsable">-</div>
-                                </div>
-                                <div class="space-y-1">
-                                    <label class="label-custom">Fecha Vencimiento</label>
-                                    <div class="text-[14px] text-rose-600 font-black" id="info_fecha_limite">-</div>
-                                </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-slate-50">
+                            <div class="space-y-1">
+                                <label class="label-custom">Fecha Ingreso</label>
+                                <div class="text-[14px] text-slate-600 font-medium" id="info_fecha">-</div>
                             </div>
-
-                            <div class="space-y-3 pt-6 border-t border-slate-50">
-                                <label class="label-custom">Contenido / Cuerpo</label>
-                                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-[15px] text-slate-700 leading-relaxed italic"
-                                    id="info_contenido" style="white-space: pre-wrap; min-height: 150px;">-</div>
+                            <div class="space-y-1">
+                                <label class="label-custom">Propietario</label>
+                                <div class="text-[14px] text-slate-600 font-medium" id="info_responsable">-</div>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="label-custom">Fecha Vencimiento</label>
+                                <div class="text-[14px] text-rose-600 font-black" id="info_fecha_limite">-</div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="lg:col-span-4 space-y-6">
-                    <div class="bg-white gob-card rounded-2xl overflow-hidden">
-                        <div class="p-5 border-b border-slate-50 bg-white">
-                            <h5
-                                class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
-                                <span class="material-symbols-outlined text-primary-blue text-lg">link</span> Enlaces
-                                Adjuntos
-                            </h5>
+                        <div class="space-y-3 pt-6 border-t border-slate-50">
+                            <label class="label-custom">Contenido / Cuerpo</label>
+                            <div class="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-[15px] text-slate-700 leading-relaxed italic"
+                                id="info_contenido" style="white-space: pre-wrap; min-height: 150px;">-</div>
                         </div>
-                        <div id="lista_enlaces" class="p-4 space-y-2"></div>
-                    </div>
-
-                    <div class="bg-soft-cyan border border-cyan-border rounded-2xl overflow-hidden shadow-sm">
-                        <div class="p-5 border-b border-cyan-border">
-                            <h5
-                                class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
-                                <span class="material-symbols-outlined text-primary-blue text-lg">attach_file</span>
-                                Documentos Adjuntos
-                            </h5>
-                        </div>
-                        <div id="lista_documentos" class="p-4 space-y-2"></div>
-                    </div>
-
-                    <div class="bg-white gob-card rounded-2xl overflow-hidden">
-                        <div class="p-5 border-b border-slate-50 flex justify-between items-center bg-white">
-                            <h5
-                                class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
-                                <span class="material-symbols-outlined text-primary-blue text-lg">sticky_note_2</span>
-                                Comentarios
-                            </h5>
-                            <button type="button"
-                                class="bg-slate-800 text-white px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-all"
-                                id="btn_abrir_comentario">
-                                + Agregar
-                            </button>
-                        </div>
-                        <div id="lista_comentarios" class="p-4 max-h-[400px] overflow-auto space-y-3"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- PESTAÑA: DERIVACIÓN -->
-        <div class="tab-pane fade" id="tab-derivacion" role="tabpanel">
-            <div class="space-y-6">
-                <div class="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
-                    <div class="p-4 border-b border-slate-50 bg-white">
-                        <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
-                            <span class="material-symbols-outlined text-primary-blue">group</span> Destinatarios y
-                            Permisos
-                        </h3>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr
-                                    class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
-                                    <th class="px-6 py-4">Funcionario</th>
-                                    <!--<th class="px-6 py-4">Tipo</th>-->
-                                    <th class="px-6 py-4">Facultad</th>
-                                    <th class="px-6 py-4">Tarea</th>
-                                    <th class="px-6 py-4 text-center">Requerido</th>
-                                    <th class="px-6 py-4 text-right">Estado</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabla_destinos" class="divide-y divide-slate-100 text-[13px] text-slate-600">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div id="contenedor_respuestas" class="space-y-6"></div>
-            </div>
-        </div>
-
-        <!-- PESTAÑA: DEPENDENCIA -->
-        <div class="tab-pane fade" id="tab-dependencia" role="tabpanel">
-            <div class="bg-[#F0F9FF] border border-blue-100 rounded-3xl p-8 space-y-6">
-                <div class="flex justify-between items-center border-b border-blue-50 pb-4">
-                    <h5
-                        class="font-extrabold text-primary-blue uppercase text-sm tracking-widest flex items-center gap-3">
-                        <span class="material-symbols-outlined text-2xl font-black">account_tree</span> Relaciones
-                        Jerárquicas (Árbol RGT)
-                    </h5>
-                    <button type="button"
-                        class="flex items-center gap-2 bg-slate-800 hover:bg-black text-white font-bold py-2.5 px-6 rounded-xl shadow-lg transition-all text-[13px] uppercase tracking-wider"
-                        onclick="abrirModalEstablecerDependencia()" style="display: block;">
-                        + Nueva Dependencia
-                    </button>
-
-                    <a href="#" target="_blank" rel="noopener noreferrer" id="btn_crear_hija"
-                        class="flex items-center justify-center gap-2 bg-slate-800 hover:bg-black text-white font-bold py-2.5 px-6 rounded-xl shadow-lg transition-all text-[13px] uppercase tracking-wider">
-                        + Crear solicitud hija
-                    </a>
-                </div>
-                <div class="bg-white rounded-2xl overflow-hidden border border-blue-50 shadow-sm">
-                    <div class="p-4 bg-slate-50 border-b border-blue-50">
-                        <h6 class="font-bold text-slate-700 uppercase text-xs tracking-widest m-0">Solicitudes Hijas
-                            Directas</h6>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr
-                                    class="bg-white text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
-                                    <th class="px-6 py-4">Cód. Público / ID</th>
-                                    <th class="px-6 py-4">Título</th>
-                                    <th class="px-6 py-4">Estado</th>
-                                    <th class="px-6 py-4 text-right">Acción</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tabla_hijas_directas"
-                                class="divide-y divide-slate-100 text-[13px] text-slate-600">
-                                <tr>
-                                    <td colspan="4" class="text-center py-4 text-slate-400 italic">Cargando hijas...
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-white gob-card rounded-3xl overflow-hidden shadow-sm">
-                <div class="p-6 border-b border-slate-50 flex justify-between items-center bg-white">
-                    <h5 class="font-bold text-slate-700 uppercase text-sm tracking-widest flex items-center gap-2">
-                        <span class="material-symbols-outlined text-primary-blue">hub</span> Mapa de Relaciones Visual
-                    </h5>
-                    <div class="text-[11px] text-slate-400 font-bold flex items-center gap-2">
-                        <span class="material-symbols-outlined text-lg text-slate-300">mouse</span> Navegue con el ratón
-                        (zoom y arrastre).
-                    </div>
-                </div>
-                <div id="network-container" style="height: 700px;"></div>
-            </div>
-        </div>
-
-
-        <!-- PESTAÑA: VISAR -->
-        <div class="tab-pane fade" id="tab-visar" role="tabpanel">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div class="lg:col-span-8 space-y-6">
-                    <div class="bg-white gob-card rounded-2xl overflow-hidden">
-                        <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
-                            <span class="material-symbols-outlined text-gob-warning">verified_user</span>
-                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Estado de Aprobaciones
-                                (Circuito de Visación)</h3>
-                        </div>
-                        <div class="p-0">
-                            <div class="table-responsive">
-                                <table class="w-full text-left">
-                                    <thead
-                                        class="bg-slate-50 text-slate-400 font-bold uppercase text-[10px] tracking-widest">
-                                        <tr>
-                                            <th class="px-6 py-4">Funcionario</th>
-                                            <th class="px-6 py-4">Rol</th>
-                                            <th class="px-6 py-4 text-center">Requerido</th>
-                                            <th class="px-6 py-4 text-right">Estado</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tabla_destinos_status"
-                                        class="divide-y divide-slate-50 text-[13px] text-slate-600">
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white gob-card rounded-2xl p-8 border-t-4 border-gob-warning shadow-md text-center">
-                        <h4 class="text-slate-800 font-extrabold text-lg mb-2 tracking-tight">¿Desea visar este
-                            documento?</h4>
-                        <p class="text-slate-400 text-sm mb-6 italic">Su aprobación permitirá que el flujo continúe
-                            hacia el siguiente responsable.</p>
-                        <div class="flex justify-center gap-4">
-                            <button type="button" onclick="rechazarVisacion()"
-                                class="bg-rose-50 text-rose-600 border border-rose-100 px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-rose-100 transition-all">Rechazar</button>
-                            <button type="button" onclick="aprobarVisacion()"
-                                class="bg-gob-warning text-white px-8 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-yellow-200/50 hover:bg-amber-600 transition-all">Aprobar
-                                y Visar</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-4 space-y-6">
-                    <div class="bg-amber-50 border border-amber-100 rounded-2xl p-5">
-                        <h5
-                            class="text-amber-800 font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
-                            <span class="material-symbols-outlined text-sm">info</span> Regla de Negocio
+            <div class="lg:col-span-4 space-y-6">
+                <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-50 bg-white">
+                        <h5 class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary-blue text-lg">link</span> Enlaces
+                            Adjuntos
                         </h5>
-                        <p class="text-[12px] text-amber-700 leading-relaxed">
-                            Usted ha sido asignado como <strong>Visador</strong>. Su rol es técnico/administrativo y es
-                            requisito previo para la respuesta final.
-                        </p>
                     </div>
+                    <div id="lista_enlaces" class="p-4 space-y-2"></div>
+                </div>
+
+                <div class="bg-soft-cyan border border-cyan-border rounded-2xl overflow-hidden shadow-sm">
+                    <div class="p-5 border-b border-cyan-border">
+                        <h5 class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary-blue text-lg">attach_file</span>
+                            Documentos Adjuntos
+                        </h5>
+                    </div>
+                    <div id="lista_documentos" class="p-4 space-y-2"></div>
+                </div>
+
+                <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-50 flex justify-between items-center bg-white">
+                        <h5 class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary-blue text-lg">sticky_note_2</span>
+                            Comentarios
+                        </h5>
+                        <button type="button"
+                            class="bg-slate-800 text-white px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-all"
+                            id="btn_abrir_comentario">
+                            + Agregar
+                        </button>
+                    </div>
+                    <div id="lista_comentarios" class="p-4 max-h-[400px] overflow-auto space-y-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PESTAÑA: DERIVACIÓN -->
+    <div class="tab-pane fade" id="tab-derivacion" role="tabpanel">
+        <div class="space-y-6">
+            <div class="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
+                <div class="p-4 border-b border-slate-50 bg-white">
+                    <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary-blue">group</span> Destinatarios y
+                        Permisos
+                    </h3>
+                </div>
+                <div class="table-responsive">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr
+                                class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
+                                <th class="px-6 py-4">Funcionario</th>
+                                <!--<th class="px-6 py-4">Tipo</th>-->
+                                <th class="px-6 py-4">Facultad</th>
+                                <th class="px-6 py-4">Tarea</th>
+                                <th class="px-6 py-4 text-center">Requerido</th>
+                                <th class="px-6 py-4 text-right">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla_destinos" class="divide-y divide-slate-100 text-[13px] text-slate-600">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="contenedor_respuestas" class="space-y-6"></div>
+        </div>
+    </div>
+
+    <!-- PESTAÑA: DEPENDENCIA -->
+    <div class="tab-pane fade" id="tab-dependencia" role="tabpanel">
+        <div class="bg-[#F0F9FF] border border-blue-100 rounded-3xl p-8 space-y-6">
+            <div class="flex justify-between items-center border-b border-blue-50 pb-4">
+                <h5 class="font-extrabold text-primary-blue uppercase text-sm tracking-widest flex items-center gap-3">
+                    <span class="material-symbols-outlined text-2xl font-black">account_tree</span> Relaciones
+                    Jerárquicas (Árbol RGT)
+                </h5>
+                <button type="button"
+                    class="flex items-center gap-2 bg-slate-800 hover:bg-black text-white font-bold py-2.5 px-6 rounded-xl shadow-lg transition-all text-[13px] uppercase tracking-wider"
+                    onclick="abrirModalEstablecerDependencia()" style="display: block;">
+                    + Nueva Dependencia
+                </button>
+
+                <a href="#" target="_blank" rel="noopener noreferrer" id="btn_crear_hija"
+                    class="flex items-center justify-center gap-2 bg-slate-800 hover:bg-black text-white font-bold py-2.5 px-6 rounded-xl shadow-lg transition-all text-[13px] uppercase tracking-wider">
+                    + Crear solicitud hija
+                </a>
+            </div>
+            <div class="bg-white rounded-2xl overflow-hidden border border-blue-50 shadow-sm">
+                <div class="p-4 bg-slate-50 border-b border-blue-50">
+                    <h6 class="font-bold text-slate-700 uppercase text-xs tracking-widest m-0">Solicitudes Hijas
+                        Directas</h6>
+                </div>
+                <div class="table-responsive">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr
+                                class="bg-white text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
+                                <th class="px-6 py-4">Cód. Público / ID</th>
+                                <th class="px-6 py-4">Título</th>
+                                <th class="px-6 py-4">Estado</th>
+                                <th class="px-6 py-4 text-right">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla_hijas_directas" class="divide-y divide-slate-100 text-[13px] text-slate-600">
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-slate-400 italic">Cargando hijas...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
-        <!--<div class="lg:col-span-4">
+        <div class="bg-white gob-card rounded-3xl overflow-hidden shadow-sm">
+            <div class="p-6 border-b border-slate-50 flex justify-between items-center bg-white">
+                <h5 class="font-bold text-slate-700 uppercase text-sm tracking-widest flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary-blue">hub</span> Mapa de Relaciones Visual
+                </h5>
+                <div class="text-[11px] text-slate-400 font-bold flex items-center gap-2">
+                    <span class="material-symbols-outlined text-lg text-slate-300">mouse</span> Navegue con el ratón
+                    (zoom y arrastre).
+                </div>
+            </div>
+            <div id="network-container" style="height: 700px;"></div>
+        </div>
+    </div>
+
+
+    <!-- PESTAÑA: VISAR -->
+    <div class="tab-pane fade" id="tab-visar" role="tabpanel">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div class="lg:col-span-8 space-y-6">
+                <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
+                        <span class="material-symbols-outlined text-gob-warning">verified_user</span>
+                        <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Estado de Aprobaciones
+                            (Circuito de Visación)</h3>
+                    </div>
+                    <div class="p-0">
+                        <div class="table-responsive">
+                            <table class="w-full text-left">
+                                <thead
+                                    class="bg-slate-50 text-slate-400 font-bold uppercase text-[10px] tracking-widest">
+                                    <tr>
+                                        <th class="px-6 py-4">Funcionario</th>
+                                        <th class="px-6 py-4">Rol</th>
+                                        <th class="px-6 py-4 text-center">Requerido</th>
+                                        <th class="px-6 py-4 text-right">Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla_destinos_status"
+                                    class="divide-y divide-slate-50 text-[13px] text-slate-600">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white gob-card rounded-2xl p-8 border-t-4 border-gob-warning shadow-md text-center">
+                    <h4 class="text-slate-800 font-extrabold text-lg mb-2 tracking-tight">¿Desea visar este
+                        documento?</h4>
+                    <p class="text-slate-400 text-sm mb-6 italic">Su aprobación permitirá que el flujo continúe
+                        hacia el siguiente responsable.</p>
+                    <div class="flex justify-center gap-4">
+                        <button type="button" onclick="rechazarVisacion()"
+                            class="bg-rose-50 text-rose-600 border border-rose-100 px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-rose-100 transition-all">Rechazar</button>
+                        <button type="button" onclick="aprobarVisacion()"
+                            class="bg-gob-warning text-white px-8 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-yellow-200/50 hover:bg-amber-600 transition-all">Aprobar
+                            y Visar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-4 space-y-6">
+                <div class="bg-amber-50 border border-amber-100 rounded-2xl p-5">
+                    <h5 class="text-amber-800 font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">info</span> Regla de Negocio
+                    </h5>
+                    <p class="text-[12px] text-amber-700 leading-relaxed">
+                        Usted ha sido asignado como <strong>Visador</strong>. Su rol es técnico/administrativo y es
+                        requisito previo para la respuesta final.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--<div class="lg:col-span-4">
                     <div class="bg-white gob-card rounded-2xl p-6 border-l-4 border-gob-info">
                         <h5 class="text-gob-info font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
                             <span class="material-symbols-outlined text-sm">info</span> Información del Rol
@@ -451,193 +448,188 @@ include '../../api/general/header.php';
 
 
 
-        <!-- Modal Nuevo Comentario -->
-        <div class="modal fade" id="modalNuevoComentario" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow">
-                    <div class="modal-header bg-light">
-                        <h5 class="modal-title fw-bold fs-6">Agregar Comentario</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body p-4">
-                        <div class="mb-0">
-                            <label for="textoNuevoComentario" class="form-label small fw-bold">Su Comentario</label>
-                            <textarea class="form-control form-control-sm" id="textoNuevoComentario" rows="4"
-                                placeholder="Escriba aquí su comentario u observación..."></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer border-0 bg-light">
-                        <button type="button" class="btn btn-link text-muted text-decoration-none small"
-                            data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-dark btn-sm px-4"
-                            onclick="guardarComentario()">Guardar</button>
+    <!-- Modal Nuevo Comentario -->
+    <div class="modal fade" id="modalNuevoComentario" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold fs-6">Agregar Comentario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-0">
+                        <label for="textoNuevoComentario" class="form-label small fw-bold">Su Comentario</label>
+                        <textarea class="form-control form-control-sm" id="textoNuevoComentario" rows="4"
+                            placeholder="Escriba aquí su comentario u observación..."></textarea>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Modal OTP Firma -->
-        <div class="modal fade" id="modalOTP" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow">
-                    <div class="modal-header bg-dark ">
-                        <h5 class="modal-title fw-bold fs-6">Verificación de Firma</h5>
-                    </div>
-                    <div class="modal-body text-center p-5">
-                        <p class="mb-4 small text-muted">Ingrese el código de verificación enviado a su correo
-                            electrónico.
-                        </p>
-                        <div class="mb-4 d-flex justify-content-center">
-                            <input type="text" class="form-control text-center fw-bold fs-3 border-dark"
-                                id="inp_otp_code" maxlength="6" style="width: 200px; letter-spacing: 5px;"
-                                placeholder="000000">
-                        </div>
-                        <div class="text-danger fw-bold small d-flex align-items-center justify-content-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            Tiempo restante: <span id="otp_timer">04:00</span>
-                        </div>
-                    </div>
-                    <div class="modal-footer border-0 bg-light justify-content-center">
-                        <button type="button" class="btn btn-link text-muted text-decoration-none small me-3"
-                            onclick="cerrarOTP(true)">Cancelar</button>
-                        <button type="button" class="btn btn-dark btn-sm px-4" onclick="confirmarFirmaOTP()">Confirmar
-                            Firma</button>
-                    </div>
+                <div class="modal-footer border-0 bg-light">
+                    <button type="button" class="btn btn-link text-muted text-decoration-none small"
+                        data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-dark btn-sm px-4"
+                        onclick="guardarComentario()">Guardar</button>
                 </div>
-            </div>
-        </div>
-
-        <!--PESTAÑA: RESPONDER-->
-        <div class="tab-pane fade" id="tab-responder" role="tabpanel">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div class="lg:col-span-8 space-y-6">
-                    <div class="bg-white gob-card rounded-2xl overflow-hidden">
-                        <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
-                            <span class="material-symbols-outlined text-gob-success">maps_ugc</span>
-                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Emitir Respuesta Final
-                            </h3>
-                        </div>
-
-                        <div class="p-8">
-                            <form id="form_responder_ingreso" class="space-y-6">
-                                <div class="space-y-2">
-                                    <label for="tis_respuesta" class="label-custom">Contenido de la Respuesta
-                                        (Opcional)</label>
-                                    <textarea id="tis_respuesta" rows="6"
-                                        class="w-full border-slate-200 rounded-2xl focus:ring-primary-blue text-[15px] p-4 bg-slate-50 italic focus:bg-white transition-all"
-                                        placeholder="Escriba aquí la respuesta final o resolución..."></textarea>
-                                </div>
-
-                                <div class="space-y-2">
-                                    <label for="inp_archivo_decreto" class="label-custom">Incluir Decreto en respuesta
-                                        (Opcional)</label>
-                                    <div
-                                        class="flex items-center gap-4 p-4 bg-soft-cyan border border-cyan-border rounded-2xl">
-                                        <span
-                                            class="material-symbols-outlined text-primary-blue text-3xl">picture_as_pdf</span>
-                                        <div class="flex-1">
-                                            <input type="file" id="inp_archivo_decreto"
-                                                accept=".pdf,.doc,.docx,.jpg,.png"
-                                                class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[11px] file:font-bold file:bg-primary-blue file:text-white hover:file:bg-blue-700 cursor-pointer">
-                                        </div>
-                                    </div>
-                                    <p class="text-[10px] text-slate-400 font-medium italic mt-2">
-                                        * Si adjunta un archivo, este se guardará automáticamente con el prefijo
-                                        <strong>"Decreto - "</strong>.
-                                    </p>
-                                </div>
-
-                                <div class="pt-6 border-t border-slate-50 flex justify-end gap-3">
-                                    <button type="button"
-                                        class="text-slate-400 font-bold text-xs uppercase px-4 hover:text-slate-600">Limpiar</button>
-                                    <button type="submit"
-                                        class="bg-gob-success text-white font-bold py-3 px-10 rounded-xl shadow-lg shadow-emerald-200/50 text-xs uppercase tracking-widest hover:bg-emerald-600 transition-all flex items-center gap-2">
-                                        <span class="material-symbols-outlined text-[18px]">send</span> Enviar Respuesta
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-4 space-y-6">
-                    <div class="bg-slate-800 text-white rounded-2xl p-6 shadow-xl">
-                        <h5 class="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-4">Instrucciones de
-                            Cierre</h5>
-                        <ul class="space-y-4">
-                            <li class="flex gap-3 items-start text-sm">
-                                <span class="material-symbols-outlined text-gob-success text-lg">check_circle</span>
-                                <span>Al enviar la respuesta, el estado del ingreso cambiará a
-                                    <strong>"Resuelto"</strong>.</span>
-                            </li>
-                            <li class="flex gap-3 items-start text-sm">
-                                <span class="material-symbols-outlined text-gob-success text-lg">check_circle</span>
-                                <span>El documento dejará de estar pendiente en su bandeja personal.</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- Modal OTP Firma -->
-        <div class="modal fade" id="modalOTP" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow">
-                    <div class="modal-header bg-dark ">
-                        <h5 class="modal-title fw-bold fs-6">Verificación de Firma</h5>
-                    </div>
-                    <div class="modal-body text-center p-5">
-                        <p class="mb-4 small text-muted">Ingrese el código de verificación enviado a su correo
-                            electrónico.
-                        </p>
-                        <div class="mb-4 d-flex justify-content-center">
-                            <input type="text" class="form-control text-center fw-bold fs-3 border-dark"
-                                id="inp_otp_code" maxlength="6" style="width: 200px; letter-spacing: 5px;"
-                                placeholder="000000">
-                        </div>
-                        <div class="text-danger fw-bold small d-flex align-items-center justify-content-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            Tiempo restante: <span id="otp_timer">04:00</span>
-                        </div>
-                    </div>
-                    <div class="modal-footer border-0 bg-light justify-content-center">
-                        <button type="button" class="btn btn-link text-muted text-decoration-none small me-3"
-                            onclick="cerrarOTP(true)">Cancelar</button>
-                        <button type="button" class="btn btn-dark btn-sm px-4" onclick="confirmarFirmaOTP()">Confirmar
-                            Firma</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- PESTAÑA: HISTORIAL -->
-        <div class="tab-pane fade" id="tab-historial" role="tabpanel">
-            <div class="bg-white gob-card rounded-2xl overflow-hidden p-8 shadow-sm">
-                <div class="flex justify-between items-center mb-8 border-b border-slate-50 pb-4">
-                    <h5 class="font-bold text-slate-700 uppercase text-sm tracking-wide flex items-center gap-2">
-                        <span class="material-symbols-outlined text-primary-blue text-2xl">history_edu</span> Bitácora
-                        de Auditoría Completa
-                    </h5>
-                </div>
-                <div class="space-y-4 mb-6 min-h-[100px]" id="lista_bitacora"></div>
-                <div id="paginacion_bitacora"
-                    class="flex justify-center items-center gap-2 pt-6 border-t border-slate-50"></div>
             </div>
         </div>
     </div>
+
+    <!-- Modal OTP Firma -->
+    <div class="modal fade" id="modalOTP" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-dark ">
+                    <h5 class="modal-title fw-bold fs-6">Verificación de Firma</h5>
+                </div>
+                <div class="modal-body text-center p-5">
+                    <p class="mb-4 small text-muted">Ingrese el código de verificación enviado a su correo
+                        electrónico.
+                    </p>
+                    <div class="mb-4 d-flex justify-content-center">
+                        <input type="text" class="form-control text-center fw-bold fs-3 border-dark" id="inp_otp_code"
+                            maxlength="6" style="width: 200px; letter-spacing: 5px;" placeholder="000000">
+                    </div>
+                    <div class="text-danger fw-bold small d-flex align-items-center justify-content-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Tiempo restante: <span id="otp_timer">04:00</span>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 bg-light justify-content-center">
+                    <button type="button" class="btn btn-link text-muted text-decoration-none small me-3"
+                        onclick="cerrarOTP(true)">Cancelar</button>
+                    <button type="button" class="btn btn-dark btn-sm px-4" onclick="confirmarFirmaOTP()">Confirmar
+                        Firma</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--PESTAÑA: RESPONDER-->
+    <div class="tab-pane fade" id="tab-responder" role="tabpanel">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div class="lg:col-span-8 space-y-6">
+                <div class="bg-white gob-card rounded-2xl overflow-hidden">
+                    <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
+                        <span class="material-symbols-outlined text-gob-success">maps_ugc</span>
+                        <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Emitir Respuesta Final
+                        </h3>
+                    </div>
+
+                    <div class="p-8">
+                        <form id="form_responder_ingreso" class="space-y-6">
+                            <div class="space-y-2">
+                                <label for="tis_respuesta" class="label-custom">Contenido de la Respuesta
+                                    (Opcional)</label>
+                                <textarea id="tis_respuesta" rows="6"
+                                    class="w-full border-slate-200 rounded-2xl focus:ring-primary-blue text-[15px] p-4 bg-slate-50 italic focus:bg-white transition-all"
+                                    placeholder="Escriba aquí la respuesta final o resolución..."></textarea>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label for="inp_archivo_decreto" class="label-custom">Incluir Decreto en respuesta
+                                    (Opcional)</label>
+                                <div
+                                    class="flex items-center gap-4 p-4 bg-soft-cyan border border-cyan-border rounded-2xl">
+                                    <span
+                                        class="material-symbols-outlined text-primary-blue text-3xl">picture_as_pdf</span>
+                                    <div class="flex-1">
+                                        <input type="file" id="inp_archivo_decreto" accept=".pdf,.doc,.docx,.jpg,.png"
+                                            class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[11px] file:font-bold file:bg-primary-blue file:text-white hover:file:bg-blue-700 cursor-pointer">
+                                    </div>
+                                </div>
+                                <p class="text-[10px] text-slate-400 font-medium italic mt-2">
+                                    * Si adjunta un archivo, este se guardará automáticamente con el prefijo
+                                    <strong>"Decreto - "</strong>.
+                                </p>
+                            </div>
+
+                            <div class="pt-6 border-t border-slate-50 flex justify-end gap-3">
+                                <button type="button"
+                                    class="text-slate-400 font-bold text-xs uppercase px-4 hover:text-slate-600">Limpiar</button>
+                                <button type="submit"
+                                    class="bg-gob-success text-white font-bold py-3 px-10 rounded-xl shadow-lg shadow-emerald-200/50 text-xs uppercase tracking-widest hover:bg-emerald-600 transition-all flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-[18px]">send</span> Enviar Respuesta
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-4 space-y-6">
+                <div class="bg-slate-800 text-white rounded-2xl p-6 shadow-xl">
+                    <h5 class="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-4">Instrucciones de
+                        Cierre</h5>
+                    <ul class="space-y-4">
+                        <li class="flex gap-3 items-start text-sm">
+                            <span class="material-symbols-outlined text-gob-success text-lg">check_circle</span>
+                            <span>Al enviar la respuesta, el estado del ingreso cambiará a
+                                <strong>"Resuelto"</strong>.</span>
+                        </li>
+                        <li class="flex gap-3 items-start text-sm">
+                            <span class="material-symbols-outlined text-gob-success text-lg">check_circle</span>
+                            <span>El documento dejará de estar pendiente en su bandeja personal.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal OTP Firma -->
+    <div class="modal fade" id="modalOTP" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-dark ">
+                    <h5 class="modal-title fw-bold fs-6">Verificación de Firma</h5>
+                </div>
+                <div class="modal-body text-center p-5">
+                    <p class="mb-4 small text-muted">Ingrese el código de verificación enviado a su correo
+                        electrónico.
+                    </p>
+                    <div class="mb-4 d-flex justify-content-center">
+                        <input type="text" class="form-control text-center fw-bold fs-3 border-dark" id="inp_otp_code"
+                            maxlength="6" style="width: 200px; letter-spacing: 5px;" placeholder="000000">
+                    </div>
+                    <div class="text-danger fw-bold small d-flex align-items-center justify-content-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        Tiempo restante: <span id="otp_timer">04:00</span>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 bg-light justify-content-center">
+                    <button type="button" class="btn btn-link text-muted text-decoration-none small me-3"
+                        onclick="cerrarOTP(true)">Cancelar</button>
+                    <button type="button" class="btn btn-dark btn-sm px-4" onclick="confirmarFirmaOTP()">Confirmar
+                        Firma</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- PESTAÑA: HISTORIAL -->
+    <div class="tab-pane fade" id="tab-historial" role="tabpanel">
+        <div class="bg-white gob-card rounded-2xl overflow-hidden p-8 shadow-sm">
+            <div class="flex justify-between items-center mb-8 border-b border-slate-50 pb-4">
+                <h5 class="font-bold text-slate-700 uppercase text-sm tracking-wide flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary-blue text-2xl">history_edu</span> Bitácora
+                    de Auditoría Completa
+                </h5>
+            </div>
+            <div class="space-y-4 mb-6 min-h-[100px]" id="lista_bitacora"></div>
+            <div id="paginacion_bitacora" class="flex justify-center items-center gap-2 pt-6 border-t border-slate-50">
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 
 <div class="modal fade" id="modalMapa" tabindex="-1">

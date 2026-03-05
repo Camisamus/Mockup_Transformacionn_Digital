@@ -266,7 +266,7 @@ function renderizarTabla(data) {
 
         tr.innerHTML = `
             <td class="px-6 py-4">
-                <span class="font-black text-slate-400 tracking-tight">#${item.tis_id}</span>
+                <span class="font-black text-slate-400 tracking-tight">#${item.tis_id_raw || item.tis_id}</span>
             </td>
             <td class="px-6 py-4">
                 <button type="button" class="text-primary-blue hover:text-blue-800 transition-colors" title="Consultar">

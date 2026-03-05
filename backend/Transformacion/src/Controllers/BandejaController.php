@@ -2,14 +2,15 @@
 namespace App\Controllers;
 
 use PDO;
-
+use App\Helpers\Encode;
 class BandejaController
 {
     private PDO $db;
-
+    private $encoder;
     public function __construct(PDO $db)
     {
         $this->db = $db;
+        $this->encoder = new Encode();
     }
 
     public function getInbox(int $userId): array
@@ -48,6 +49,7 @@ class BandejaController
         // 4. Query 2: Ingresos Solicitudes (where user is a destination OR owner)
         $ingresosSql = "SELECT DISTINCT
                             sol.tis_id as id, 
+                            '0' as idcif,
                             sol.tis_titulo as asunto, 
                             sol.tis_creacion as fecha,
                             sol.tis_fecha_limite as fecha_limite,
@@ -122,6 +124,9 @@ class BandejaController
             if (isset($item['fecha_limite'])) {
                 $item['fecha_limite'] = \App\Helpers\Fechas::formatearFecha($item['fecha_limite']);
             }
+            if ($item['origen'] == 'Ingresos') {
+                $item['idcif'] = $this->encoder->cifrar($item['id']);
+            }
         }
 
         // Sort by original date descending
@@ -179,6 +184,7 @@ class BandejaController
         // 2. Query: Ingresos Solicitudes Cerradas
         $ingresosSql = "SELECT DISTINCT
                             sol.tis_id as id, 
+                            '0' as idcif,
                             sol.tis_titulo as asunto, 
                 sol.tis_creacion as fecha,
                 sol.tis_fecha_limite as fecha_cierre,
@@ -250,6 +256,10 @@ class BandejaController
             }
             if (isset($item['fecha_cierre'])) {
                 $item['fecha_cierre'] = \App\Helpers\Fechas::formatearFecha($item['fecha_cierre']);
+            }
+
+            if ($item['origen'] == 'Ingresos') {
+                $item['idcif'] = $this->encoder->cifrar($item['id']);
             }
         }
 

@@ -153,11 +153,11 @@ async function cargarDatosIngreso(params) {
 
             // Cargar detalles del árbol preventivamente para el mapa
             const rgtIds = new Set();
-            rgtIds.add(parseInt(data.tis_registro_tramite));
+            rgtIds.add(data.tis_registro_tramite);
             if (data.multiancestro) {
                 Object.values(data.multiancestro).forEach(rel => {
-                    rgtIds.add(parseInt(rel.gma_padre));
-                    rgtIds.add(parseInt(rel.gma_hijo));
+                    rgtIds.add(rel.gma_padre);
+                    rgtIds.add(rel.gma_hijo);
                 });
             }
 
@@ -222,7 +222,10 @@ async function cargarDatosIngreso(params) {
 function renderizarIngreso(data) {
     // Basic Info
     document.getElementById('info_titulo').innerText = data.tis_titulo || '-';
-    document.getElementById('info_rgt_id').innerText = data.rgt_id || '-';
+    if (document.getElementById('info_tis_id')) {
+        document.getElementById('info_tis_id').innerText = data.tis_id_raw || '-';
+    }
+    document.getElementById('info_rgt_id').innerText = data.rgt_id_raw || data.rgt_id || '-';
     document.getElementById('info_id_publica').innerText = data.rgt_id_publica || '-';
     document.getElementById('info_fecha').innerText = (data.tis_creacion && data.tis_creacion.length >= 10) ? data.tis_creacion.substring(0, 10) : '-';
     const responsable = data.resp_nombre ? `${data.resp_nombre} ${data.resp_apellido}` : `ID: ${data.tis_propietario}`;
@@ -510,13 +513,15 @@ function renderizarMapa(relaciones, detalles = [], currentRgtId, userId = null) 
     const detallesMap = new Map();
 
     if (Array.isArray(detalles)) {
-        detalles.forEach(d => { if (d.rgt_id) detallesMap.set(parseInt(d.rgt_id), d); });
+        detalles.forEach(d => {
+            const rid = d.rgt_id_raw || d.rgt_id;
+            if (rid) detallesMap.set(parseInt(rid), d);
+        });
     }
 
     function getColorForNode(rgtId) {
-        const idInt = parseInt(rgtId);
-        if (idInt === parseInt(currentRgtId)) return '#ffc107';
-        const det = detallesMap.get(idInt);
+        if (parseInt(rgtId) === parseInt(currentRgtId)) return '#ffc107';
+        const det = detallesMap.get(parseInt(rgtId));
         if (det) {
             if (det.tis_estado === 'Resuelto_Favorable') return '#198754';
             if (det.tis_estado === 'Resuelto_NO_Favorable') return '#000000';
@@ -535,15 +540,17 @@ function renderizarMapa(relaciones, detalles = [], currentRgtId, userId = null) 
 
     const childrenOf = {};
     Object.values(relaciones).forEach(rel => {
-        const p = parseInt(rel.gma_padre);
-        const h = parseInt(rel.gma_hijo);
+        const p = rel.gma_padre_raw || rel.gma_padre;
+        const h = rel.gma_hijo_raw || rel.gma_hijo;
 
         if (!childrenOf[p]) childrenOf[p] = [];
         childrenOf[p].push(h);
 
         [p, h].forEach(id => {
             if (!addedNodes.has(id)) {
-                nodes.add({ id, label: detallesMap.get(parseInt(id)).tis_titulo, color: getColorForNode(id), title: getTooltip(id) });
+                const det = detallesMap.get(parseInt(id));
+                const label = det ? (det.tis_titulo || `RT-${id}`) : `RT-${id}`;
+                nodes.add({ id, label: label, color: getColorForNode(id), title: getTooltip(id) });
                 addedNodes.add(id);
             }
         });
@@ -551,8 +558,10 @@ function renderizarMapa(relaciones, detalles = [], currentRgtId, userId = null) 
     });
 
     if (!addedNodes.has(parseInt(currentRgtId)) && currentRgtId) {
-        const curId = parseInt(currentRgtId);
-        nodes.add({ id: curId, label: `RT-${curId}`, color: '#ffc107', title: getTooltip(curId) });
+        const id = parseInt(currentRgtId);
+        const det = detallesMap.get(id);
+        const label = det ? (det.tis_titulo || `RT-${id}`) : `RT-${id}`;
+        nodes.add({ id, label: label, color: '#ffc107', title: getTooltip(id) });
     }
 
     const data = { nodes, edges };
@@ -583,10 +592,10 @@ function renderizarMapa(relaciones, detalles = [], currentRgtId, userId = null) 
     }, 500);
 
     network.on("selectNode", (params) => {
-        const sid = parseInt(params.nodes[0]);
-        const det = detallesMap.get(sid);
+        const sid = params.nodes[0];
+        const det = detallesMap.get(parseInt(sid));
         if (det && det.tis_id) {
-            if (sid === parseInt(currentRgtId)) return;
+            if (parseInt(sid) === parseInt(currentRgtId)) return;
             window.location.href = `ver.php?id=${det.tis_id}`;
         }
     });
@@ -601,14 +610,16 @@ function renderizarTablaHijas(data) {
     tbody.innerHTML = '';
 
     // We need current rgtId
-    const rgtId = parseInt(data.tis_registro_tramite);
+    const rgtId = parseInt(data.tis_registro_tramite_raw || data.tis_registro_tramite);
     const relaciones = data.multiancestro || {};
 
     // Find all direct children
     const directChildrenRgtIds = [];
     Object.values(relaciones).forEach(rel => {
-        if (parseInt(rel.gma_padre) === rgtId) {
-            directChildrenRgtIds.push(parseInt(rel.gma_hijo));
+        const pad = parseInt(rel.gma_padre_raw || rel.gma_padre);
+        const hij = parseInt(rel.gma_hijo_raw || rel.gma_hijo);
+        if (pad === rgtId) {
+            directChildrenRgtIds.push(hij);
         }
     });
 
@@ -619,7 +630,10 @@ function renderizarTablaHijas(data) {
 
     const detallesArbol = (window.currentDataForMap && window.currentDataForMap.detallesArbol) ? window.currentDataForMap.detallesArbol : [];
     const detallesMap = new Map();
-    detallesArbol.forEach(d => { if (d.rgt_id) detallesMap.set(parseInt(d.rgt_id), d); });
+    detallesArbol.forEach(d => {
+        const rid = d.rgt_id_raw || d.rgt_id;
+        if (rid) detallesMap.set(parseInt(rid), d);
+    });
 
     directChildrenRgtIds.forEach(hijoRgtId => {
         const det = detallesMap.get(hijoRgtId);
@@ -632,7 +646,7 @@ function renderizarTablaHijas(data) {
             const tr = document.createElement('tr');
             tr.className = 'hover:bg-slate-50/50 transition-colors';
             tr.innerHTML = `
-                <td class="px-6 py-4 font-bold text-slate-700">${det.rgt_id_publica || det.tis_id}</td>
+                <td class="px-6 py-4 font-bold text-slate-700">${det.rgt_id_publica || det.tis_id_raw || '-'}</td>
                 <td class="px-6 py-4 text-slate-600 font-medium">${det.tis_titulo || 'Sin título'}</td>
                 <td class="px-6 py-4">
                     <span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border ${badgeClass}">
@@ -640,7 +654,7 @@ function renderizarTablaHijas(data) {
                     </span>
                 </td>
                 <td class="px-6 py-4 text-right">
-                    <a href="ver.php?id=${det.tis_id}" target="_blank" class="inline-flex items-center gap-1 text-primary-blue hover:text-blue-800 font-bold text-xs uppercase tracking-widest bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors">
+                    <a href="ver.php?id=${det.tis_id}" class="inline-flex items-center gap-1 text-primary-blue hover:text-blue-800 font-bold text-xs uppercase tracking-widest bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors">
                         <span class="material-symbols-outlined text-[16px]">visibility</span> Ver
                     </a>
                 </td>

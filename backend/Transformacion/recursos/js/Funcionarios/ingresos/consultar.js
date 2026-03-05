@@ -63,12 +63,12 @@ function renderizarTabla(datos) {
     datos.forEach(item => {
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-slate-50/80 transition-all cursor-pointer group';
-        tr.onclick = () => window.location.href = `consultar.php?id=${item.tis_id}`;
+        tr.onclick = () => window.location.href = `ver.php?id=${item.tis_id}`;
 
         const statusColors = getStatusColors(item.tis_estado);
 
         tr.innerHTML = `
-            <td class="px-6 py-4 text-xs font-black text-slate-400 tracking-tight">#${item.tis_id}</td>
+            <td class="px-6 py-4 text-xs font-black text-slate-400 tracking-tight">#${item.tis_id_raw || item.tis_id}</td>
             <td class="px-6 py-4">
                 <button type="button" class="text-primary-blue hover:text-blue-800 transition-colors">
                     <span class="material-symbols-outlined text-[18px]">visibility</span>

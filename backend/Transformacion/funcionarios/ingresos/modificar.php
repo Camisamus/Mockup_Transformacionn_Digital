@@ -78,7 +78,8 @@ $id_ingreso = isset($_GET['id']) ? $_GET['id'] : '';
             <div class="space-y-1">
                 <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Actualizar Ingreso</h1>
                 <p class="text-slate-400 text-sm font-medium">Modifique los campos para actualizar el documento ID:
-                    <span class="text-slate-600 font-bold">#<?php echo $id_ingreso; ?></span></p>
+                    <span class="text-slate-600 font-bold" id="header_tis_id">#<?php echo $id_ingreso; ?></span>
+                </p>
             </div>
 
             <div class="flex items-center gap-4 w-full lg:w-auto justify-end">

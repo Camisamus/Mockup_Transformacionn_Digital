@@ -7,14 +7,119 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 header("Content-Type: application/json");
 use App\Config\Database;
 use App\Controllers\Ingresos_SolicitudControler;
+use App\Helpers\Encode;
 
 $database = new Database();
 $db = $database->getConnection();
 
 $controller = new Ingresos_SolicitudControler($db);
+$encoder = new Encode();
 
-$id = $data['ing_id'] ?? null;
+// Función auxiliar para descifrar IDs si vienen cifrados y validar seguridad (ACCESO DIRECTO)
+$descifrarSeguro = function ($valor, $campo = 'ID') {
+    global $encoder;
+    if (empty($valor))
+        return $valor;
+
+    if (is_string($valor) && strpos($valor, 'L$U') === 0) {
+        return $encoder->descifrar($valor);
+    }
+
+    // Si es un número o una cadena numérica sin el prefijo L$U, es un intento de acceso no autorizado con ID real
+    if (is_numeric($valor) || (is_string($valor) && ctype_digit($valor))) {
+        http_response_code(403);
+        echo json_encode(["status" => "error", "message" => "Acceso no autorizado: El $campo no es válido o no está cifrado para acceso directo."]);
+        exit;
+    }
+
+    return $valor;
+};
+
+// Función para descifrado opcional (FILTROS DE BÚSQUEDA)
+$descifrarSiAplica = function ($valor) use ($encoder) {
+    if (empty($valor))
+        return $valor;
+    if (is_string($valor) && strpos($valor, 'L$U') === 0) {
+        return $encoder->descifrar($valor);
+    }
+    return $valor;
+};
+
+// Descifrar IDs de ACCESO DIRECTO (Estricto)
+if (isset($data['ing_id']))
+    $data['ing_id'] = $descifrarSeguro($data['ing_id'], 'ing_id');
+if (isset($data['id']))
+    $data['id'] = $descifrarSeguro($data['id'], 'id');
+if (isset($data['rgt_id']))
+    $data['rgt_id'] = $descifrarSeguro($data['rgt_id'], 'rgt_id');
+
+// Descifrar IDs de FILTRADO o VÍNCULOS (Flexible)
+if (isset($data['tis_id']))
+    $data['tis_id'] = $descifrarSiAplica($data['tis_id']);
+if (isset($data['padre_id']))
+    $data['padre_id'] = $descifrarSiAplica($data['padre_id']);
+if (isset($data['hijo_id']))
+    $data['hijo_id'] = $descifrarSiAplica($data['hijo_id']);
+
+if (isset($data['rgt_ids']) && is_array($data['rgt_ids'])) {
+    foreach ($data['rgt_ids'] as &$rid) {
+        $rid = $descifrarSiAplica($rid);
+    }
+}
+
+$id = $data['ing_id'] ?? $data['id'] ?? null;
 $rgt_id = $data['rgt_id'] ?? null;
+
+// Función para cifrar IDs en la respuesta
+$cifrarRespuesta = function (&$item) use ($encoder) {
+    if (!is_array($item))
+        return;
+    if (isset($item['tis_id'])) {
+        $item['tis_id_raw'] = $item['tis_id'];
+        $item['tis_id'] = $encoder->cifrar($item['tis_id']);
+    }
+    if (isset($item['rgt_id'])) {
+        $item['rgt_id_raw'] = $item['rgt_id'];
+        $item['rgt_id'] = $encoder->cifrar($item['rgt_id']);
+    }
+    if (isset($item['ing_id'])) {
+        $item['ing_id_raw'] = $item['ing_id'];
+        $item['ing_id'] = $encoder->cifrar($item['ing_id']);
+    }
+    if (isset($item['tis_registro_tramite'])) {
+        $item['tis_registro_tramite_raw'] = $item['tis_registro_tramite'];
+        // tis_registro_tramite NO se cifra aquí porque se usa como ID de vinculación interna 
+        // y para el mapa vis.js que requiere IDs deterministas.
+    }
+    if (isset($item['padre_id'])) {
+        $item['padre_id_raw'] = $item['padre_id'];
+        $item['padre_id'] = $encoder->cifrar($item['padre_id']);
+    }
+    if (isset($item['hijo_id'])) {
+        $item['hijo_id_raw'] = $item['hijo_id'];
+        $item['hijo_id'] = $encoder->cifrar($item['hijo_id']);
+    }
+
+    if (isset($item['destinos']) && is_array($item['destinos'])) {
+        foreach ($item['destinos'] as &$d) {
+            if (isset($d['tid_ingreso_solicitud'])) {
+                $d['tid_ingreso_solicitud_raw'] = $d['tid_ingreso_solicitud'];
+                $d['tid_ingreso_solicitud'] = $encoder->cifrar($d['tid_ingreso_solicitud']);
+            }
+        }
+    }
+    // IMPORTANTE: multiancestro NO se cifra aquí para que el mapa vis.js pueda vincular nodos
+    // Usaremos los IDs numéricos originales como claves de vinculación interna
+    if (isset($item['multiancestro']) && is_array($item['multiancestro'])) {
+        foreach ($item['multiancestro'] as &$m) {
+            $m['gma_padre_raw'] = $m['gma_padre'];
+            $m['gma_hijo_raw'] = $m['gma_hijo'];
+            // Opcional: cifrar para enlaces, pero por ahora los mantendremos crudos para el mapa
+        }
+    }
+};
+
+$response = null;
 
 switch ($data['ACCION']) {
     case 'CONSULTAM':
@@ -27,29 +132,20 @@ switch ($data['ACCION']) {
         } elseif ($rgt_id) {
             $response = $controller->getByRgtId($rgt_id, $current_user_id);
         } else {
-            // Support for Bandeja Search Filters
-            $filters = $data;
-            // Remove non-filter fields if necessary, but the model only uses specific keys.
-            $response = $controller->getAllMine($filters, $current_user_id);
+            $response = $controller->getAllMine($data, $current_user_id);
         }
-        echo json_encode($response);
         break;
+
     case 'CONSULTAMALL':
         if (session_status() === PHP_SESSION_NONE)
             session_start();
         $current_user_id = $_SESSION['user_id'] ?? null;
-
-        // Support for Bandeja Search Filters
-        $filters = $data;
-        $response = $controller->getAll($filters, $current_user_id);
-        echo json_encode($response);
+        $response = $controller->getAll($data, $current_user_id);
         break;
 
     case 'CREAR':
         if ($data) {
             $response = $controller->create($data);
-
-            // Log CREAR
             if (($response['status'] ?? '') === 'success') {
                 require_once '../../src/Models/SystemLog.php';
                 $logModel = new \App\Models\SystemLog($db);
@@ -75,18 +171,14 @@ switch ($data['ACCION']) {
         } else {
             $response = ["status" => "error", "message" => "Invalid input"];
         }
-        echo json_encode($response);
         break;
 
     case 'ACTUALIZAR':
         if (session_status() === PHP_SESSION_NONE)
             session_start();
         $current_user_id = $_SESSION['user_id'] ?? null;
-
         if ($id && $data) {
             $response = $controller->update($id, $data, $current_user_id);
-
-            // Log ACTUALIZAR
             if (($response['status'] ?? '') === 'success') {
                 require_once '../src/Models/SystemLog.php';
                 $logModel = new \App\Models\SystemLog($db);
@@ -112,13 +204,10 @@ switch ($data['ACCION']) {
         } else {
             $response = ["status" => "error", "message" => "ID and Data required for update"];
         }
-        echo json_encode($response);
         break;
 
     case 'ACTUALIZAR_ESTADO':
         if ($id && isset($data['ing_estado_entrega'])) {
-            // Simplified call - we can either update Controller or call Model directly if Controller is thin
-            // For consistency, let's assume we might need a controller method or just use the model if it's simpler
             $solicitudModel = new \App\Models\Ingresos_ingreso($db);
             if ($solicitudModel->updateStatus($id, $data['ing_estado_entrega'])) {
                 $response = ["status" => "success", "message" => "Estado actualizado"];
@@ -128,14 +217,11 @@ switch ($data['ACCION']) {
         } else {
             $response = ["status" => "error", "message" => "ID and Estado required"];
         }
-        echo json_encode($response);
         break;
 
     case 'BORRAR':
         if ($id) {
             $response = $controller->delete($id);
-
-            // Log BORRAR
             if (($response['status'] ?? '') === 'success') {
                 require_once '../src/Models/SystemLog.php';
                 $logModel = new \App\Models\SystemLog($db);
@@ -155,7 +241,6 @@ switch ($data['ACCION']) {
         } else {
             $response = ["status" => "error", "message" => "ID required for delete"];
         }
-        echo json_encode($response);
         break;
 
     case 'VINCULAR_HIJO':
@@ -163,16 +248,10 @@ switch ($data['ACCION']) {
         $hijo = $data['hijo_id'] ?? null;
         if ($padre && $hijo) {
             $multiancestro = new \App\Models\Multiancestro($db);
-
-            // Validar reglas de dependencia
             [$valido, $mensaje] = $multiancestro->validarVinculo($padre, $hijo);
             if (!$valido) {
                 $response = ["status" => "error", "message" => $mensaje];
-                echo json_encode($response);
-                break;
-            }
-
-            if ($multiancestro->crear($padre, $hijo)) {
+            } else if ($multiancestro->crear($padre, $hijo)) {
                 $response = ["status" => "success", "message" => "Vínculo creado correctamente"];
             } else {
                 $response = ["status" => "error", "message" => "No se pudo crear el vínculo"];
@@ -180,18 +259,17 @@ switch ($data['ACCION']) {
         } else {
             $response = ["status" => "error", "message" => "Padre e Hijo IDs requeridos"];
         }
-        echo json_encode($response);
         break;
 
     case 'DETALLES_ARBOL':
         $rgt_ids = $data['rgt_ids'] ?? [];
+        // Los rgt_ids ya fueron descifrados al inicio del script si venían en $data
         if (!empty($rgt_ids)) {
             $detalles = $controller->getDetallesVarios($rgt_ids);
             $response = ["status" => "success", "data" => $detalles];
         } else {
             $response = ["status" => "error", "message" => "Array de rgt_ids requerido"];
         }
-        echo json_encode($response);
         break;
 
     case 'ELIMINAR_VINCULO':
@@ -207,7 +285,6 @@ switch ($data['ACCION']) {
         } else {
             $response = ["status" => "error", "message" => "Padre e Hijo IDs requeridos"];
         }
-        echo json_encode($response);
         break;
 
     case 'RESPONDER':
@@ -216,7 +293,6 @@ switch ($data['ACCION']) {
         } else {
             $response = ["status" => "error", "message" => "Ingreso ID required"];
         }
-        echo json_encode($response);
         break;
 
     case 'INIT_FIRMA':
@@ -225,22 +301,34 @@ switch ($data['ACCION']) {
         } else {
             $response = ["status" => "error", "message" => "Ingreso ID required for INIT_FIRMA"];
         }
-        echo json_encode($response);
         break;
 
     case 'METRICAS':
         $response = $controller->getMetrics();
-        echo json_encode($response);
         break;
-
     case 'GRAFICOS':
         $response = $controller->getChartData();
-        echo json_encode($response);
         break;
 
     default:
         http_response_code(400);
-        echo json_encode(["status" => "error", "message" => "Action not allowed"]);
+        $response = ["status" => "error", "message" => "Action not allowed"];
         break;
 }
+
+// Cifrar IDs en la respuesta
+if ($response && isset($response['data'])) {
+    if (is_array($response['data'])) {
+        if (isset($response['data'][0]) && is_array($response['data'][0])) {
+            foreach ($response['data'] as &$item)
+                $cifrarRespuesta($item);
+        } else {
+            $cifrarRespuesta($response['data']);
+        }
+    }
+}
+if ($response && isset($response['id']))
+    $response['id'] = $encoder->cifrar($response['id']);
+
+echo json_encode($response);
 ?>

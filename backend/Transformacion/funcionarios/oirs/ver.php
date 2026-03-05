@@ -143,7 +143,7 @@ if (isset($_GET['id'])) {
     </div>
 
     <div class="tab-content pt-4">
-        <!--Detalle de la OIRS-->
+        <!--PEstaña Detalle de la OIRS-->
         <div class="tab-pane fade show active" id="tab-detalle">
             <div class="bg-white gob-card rounded-2xl overflow-hidden p-6 lg:p-8 space-y-8">
                 <h6 class="text-primary-blue font-bold text-xs uppercase tracking-widest border-b border-slate-100 pb-3 flex items-center gap-2">
@@ -253,108 +253,114 @@ if (isset($_GET['id'])) {
                     <div class="space-y-4">
                         <div class="space-y-1">
                             <label class="label-custom text-primary-blue">Respuesta Preliminar</label>
-                            <textarea class="w-full rounded-2xl border-slate-200 text-[15px] p-4 focus:ring-primary-blue shadow-sm" id="oig_respuesta_preliminar" rows="4" placeholder="Escriba la respuesta oficial..."><?= $solicitudData['oig_respuesta_preliminar'] ?? '' ?></textarea>
+                            <textarea class="w-full rounded-2xl border-slate-200 text-[15px] p-4 focus:ring-primary-blue shadow-sm" id="oig_respuesta_preliminar" rows="4" placeholder="Escriba la respuesta oficial..."><?= $solicitudData['gestion']['oig_respuesta_preliminar'] ?? '' ?></textarea>
                         </div>
                         <div class="flex flex-col md:flex-row justify-between items-end gap-4">
                             <div class="w-full md:w-1/3 space-y-1">
                                 <label class="label-custom text-slate-500">¿Requiere respuesta técnica?</label>
-                                <select class="w-full rounded-xl border-slate-200 text-[15px]" id="oig_requiere_respuesta_tecnica">
-                                    <option value="1" <?= ($solicitudData['oig_requiere_respuesta_tecnica'] == 1) ? 'selected' : '' ?>>Si</option>
-                                    <option value="0" <?= ($solicitudData['oig_requiere_respuesta_tecnica'] == 0) ? 'selected' : '' ?>>No</option>
+                                <select id="oig_requiere_respuesta_tecnica" name="oig_requiere_respuesta_tecnica" class="form-control">
+                                    <option value="">Seleccione...</option>
+                                    <option value="1" <?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_requiere_respuesta_tecnica'] == 1 || $solicitudData['gestion']['oig_requiere_respuesta_tecnica'] === 'Si')) ? 'selected' : '' ?>>Si</option>
+                                    <option value="0" <?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_requiere_respuesta_tecnica'] == 0 || $solicitudData['gestion']['oig_requiere_respuesta_tecnica'] === 'No')) ? 'selected' : '' ?>>No</option>
                                 </select>
                             </div>
-                            <button class="bg-primary-blue text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-blue-700 transition-all text-xs uppercase tracking-widest flex items-center gap-2" id="btn_responder_preliminar">
+                            <button type="button" class="bg-primary-blue text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-blue-700 transition-all text-xs uppercase tracking-widest flex items-center gap-2" id="btn_responder_preliminar">
                                 <span class="material-symbols-outlined text-sm">send</span> Responder al Vecino
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-emerald-50/50 border border-emerald-100 rounded-3xl p-6 lg:p-8 space-y-6">
+                <div id="container_respuesta_tecnica" class="bg-emerald-50/50 border border-emerald-100 rounded-3xl p-6 lg:p-8 space-y-6" style="<?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_requiere_respuesta_tecnica'] == 1 || $solicitudData['gestion']['oig_requiere_respuesta_tecnica'] === 'Si')) ? '' : 'display: none;' ?>">
                     <h6 class="text-gob-success font-bold text-xs uppercase tracking-widest border-b border-emerald-200 pb-3 flex items-center gap-2">
                         <span class="material-symbols-outlined">engineering</span> Respuesta por Unidad Técnica
                     </h6>
                     <div class="space-y-4">
                         <div class="space-y-1">
                             <label class="label-custom text-gob-success">Respuesta Técnica</label>
-                            <textarea class="w-full rounded-2xl border-slate-200 text-[15px] p-4 shadow-sm" id="oig_respuesta_tecnica" rows="4" placeholder="Escriba la respuesta técnica..."><?= $solicitudData['oig_respuesta_tecnica'] ?? '' ?></textarea>
+                            <textarea class="w-full rounded-2xl border-slate-200 text-[15px] p-4 shadow-sm" id="oig_respuesta_tecnica" rows="4" placeholder="Escriba la respuesta técnica..."><?= $solicitudData['gestion']['oig_respuesta_tecnica'] ?? '' ?></textarea>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                             <div class="space-y-1">
                                 <label class="label-custom text-slate-500">¿La solicitud será ejecutada?</label>
                                 <select class="w-full rounded-xl border-slate-200 text-[15px]" id="oig_solicitud_ejecutada">
-                                    <option value="1">Si</option>
-                                    <option value="0">No</option>
+                                    <option value="">Seleccione...</option>
+                                    <option value="1" <?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_solicitud_ejecutada'] == 1 || $solicitudData['gestion']['oig_solicitud_ejecutada'] === 'Si')) ? 'selected' : '' ?>>Si</option>
+                                    <option value="0" <?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_solicitud_ejecutada'] == 0 || $solicitudData['gestion']['oig_solicitud_ejecutada'] === 'No')) ? 'selected' : '' ?>>No</option>
                                 </select>
                             </div>
                             <div class="space-y-1">
                                 <label class="label-custom text-slate-500">Fuente de Financiamiento</label>
                                 <select class="w-full rounded-xl border-slate-200 text-[15px]" id="oig_fuente_financiamiento">
-                                    <option value="Contrato de Licitación">Contrato de Licitación</option>
-                                    <option value="Recursos Propios">Recursos Propios</option>
-                                    <option value="Fondo Regional">Fondo Regional</option>
-                                    <option value="Fondo Nacional">Fondo Nacional</option>
+                                    <option value="">Seleccione...</option>
+                                    <option value="Contrato de Licitación" <?= ($solicitudData && isset($solicitudData['gestion']) && $solicitudData['gestion']['oig_fuente_financiamiento'] === 'Contrato de Licitación') ? 'selected' : '' ?>>Contrato de Licitación</option>
+                                    <option value="Recursos Propios" <?= ($solicitudData && isset($solicitudData['gestion']) && $solicitudData['gestion']['oig_fuente_financiamiento'] === 'Recursos Propios') ? 'selected' : '' ?>>Recursos Propios</option>
+                                    <option value="Fondo Regional" <?= ($solicitudData && isset($solicitudData['gestion']) && $solicitudData['gestion']['oig_fuente_financiamiento'] === 'Fondo Regional') ? 'selected' : '' ?>>Fondo Regional</option>
+                                    <option value="Fondo Nacional" <?= ($solicitudData && isset($solicitudData['gestion']) && $solicitudData['gestion']['oig_fuente_financiamiento'] === 'Fondo Nacional') ? 'selected' : '' ?>>Fondo Nacional</option>
                                 </select>
                             </div>
-                            <button class="bg-gob-success text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:bg-emerald-700 transition-all text-xs uppercase tracking-widest flex items-center justify-center gap-2">
-                                <span class="material-symbols-outlined text-sm">save</span> Guardar Respuesta
+                            <button type="button" class="bg-primary-blue text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-blue-700 transition-all text-xs uppercase tracking-widest flex items-center justify-center gap-2" id="btn_responder_tecnico">
+                                <span class="material-symbols-outlined text-sm">send</span> Responder al Vecino
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="bg-slate-50 border border-slate-200 rounded-3xl p-6 lg:p-8 space-y-6">
+                <div id="container_notificacion_ejecucion" class="bg-slate-50 border border-slate-200 rounded-3xl p-6 lg:p-8 space-y-6" style="<?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_solicitud_ejecutada'] == 1 || $solicitudData['gestion']['oig_solicitud_ejecutada'] === 'Si')) ? '' : 'display: none;' ?>">
                     <h6 class="text-slate-600 font-bold text-xs uppercase tracking-widest border-b border-slate-200 pb-3 flex items-center gap-2">
                         <span class="material-symbols-outlined">task_alt</span> Notificación de Ejecución
                     </h6>
                     <div class="space-y-4">
                         <div class="space-y-1">
                             <label class="label-custom">Mensaje de Notificación de Término</label>
-                            <textarea class="w-full rounded-2xl border-slate-200 text-[15px] p-4 shadow-sm" rows="3" placeholder="Notifica al contribuyente que su OIRS fue ejecutada..."></textarea>
+                            <textarea id="oig_notificacion_ejecucion" class="w-full rounded-2xl border-slate-200 text-[15px] p-4 shadow-sm" rows="3" placeholder="Notifica al contribuyente que su OIRS fue ejecutada..."><?= $solicitudData['gestion']['oig_notificacion_ejecucion'] ?? '' ?></textarea>
                         </div>
                         <div class="flex flex-col md:flex-row justify-between items-end gap-4">
                             <div class="w-full md:w-1/2 space-y-1">
                                 <label class="label-custom">¿Fue realizada en los plazos planificados?</label>
-                                <select class="w-full rounded-xl border-slate-200 text-[15px]">
-                                    <option value="1">Si</option>
-                                    <option value="0">No</option>
+                                <select id="oig_realizada_en_plazo" class="w-full rounded-xl border-slate-200 text-[15px]">
+                                    <option value="1" <?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_realizada_en_plazo'] == 1 || $solicitudData['gestion']['oig_realizada_en_plazo'] === 'Si')) ? 'selected' : '' ?>>Si</option>
+                                    <option value="0" <?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_realizada_en_plazo'] == 0 || $solicitudData['gestion']['oig_realizada_en_plazo'] === 'No')) ? 'selected' : '' ?>>No</option>
                                 </select>
                             </div>
-                            <button class="bg-slate-800 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-black transition-all text-xs uppercase tracking-widest flex items-center gap-2">
-                                <span class="material-symbols-outlined text-sm">check_circle</span> Finalizar OIRS
+                            <button type="button" class="bg-primary-blue text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-blue-700 transition-all text-xs uppercase tracking-widest flex items-center gap-2" id="btn_notificar_ejecucion">
+                                <span class="material-symbols-outlined text-sm">send</span> Responder al Vecino
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <?php if(!empty($solicitudData['oig_aclaratoria'])): ?>
-                <div class="border-2 border-warning/20 bg-warning/5 rounded-3xl p-6 lg:p-8 space-y-6">
-                    <h6 class="text-gob-warning font-bold text-xs uppercase tracking-widest flex items-center gap-2">
+                <div id="container_aclaratoria" class="bg-amber-50/50 border border-amber-100 rounded-3xl p-6 lg:p-8 space-y-6">
+                    <h6 class="text-amber-600 font-bold text-xs uppercase tracking-widest border-b border-amber-200 pb-3 flex items-center gap-2">
                         <span class="material-symbols-outlined">feedback</span> Aclaratoria del Contribuyente
                     </h6>
                     <div class="space-y-4">
                         <div class="space-y-1">
-                            <label class="label-custom text-gob-warning">Comentario del Vecino</label>
-                            <div class="p-4 bg-white rounded-2xl border border-warning/20 italic text-slate-700 text-[15px]">
-                                <?= htmlspecialchars($solicitudData['oig_aclaratoria']) ?>
+                            <label class="label-custom text-amber-600">Comentario del Vecino</label>
+                            <div class="p-4 bg-white/80 rounded-2xl border border-amber-100 italic text-slate-700 text-[15px] shadow-sm">
+                                <?= !empty($solicitudData['gestion']['oig_aclaratoria_contribuyente']) ? htmlspecialchars($solicitudData['gestion']['oig_aclaratoria_contribuyente']) : 'Sin comentarios adicionales del contribuyente.' ?>
                             </div>
                         </div>
                         <div class="space-y-1">
-                            <label class="label-custom">Respuesta a la Aclaratoria</label>
-                            <textarea class="w-full rounded-2xl border-slate-200 text-[15px] p-4 focus:ring-gob-warning" rows="3" placeholder="Escriba la aclaración final..."></textarea>
+                            <label class="label-custom text-slate-500">Respuesta a la Aclaratoria</label>
+                            <textarea id="oig_respuesta_aclaratoria" class="w-full rounded-2xl border-slate-200 text-[15px] p-4 focus:ring-primary-blue shadow-sm" rows="3" placeholder="Escriba la aclaración final..."><?= $solicitudData['gestion']['oig_respuesta_aclaratoria'] ?? '' ?></textarea>
+                        </div>
+                        <div class="flex justify-end pt-2">
+                             <button type="button" class="bg-primary-blue text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-blue-700 transition-all text-xs uppercase tracking-widest flex items-center gap-2" id="btn_responder_aclaratoria">
+                                <span class="material-symbols-outlined text-sm">send</span> Responder al Vecino
+                            </button>
                         </div>
                     </div>
                 </div>
-                <?php endif; ?>
 
                 <div class="pt-6 border-t border-slate-100 flex justify-end">
-                    <button class="bg-gob-success text-white font-extrabold py-4 px-10 rounded-2xl shadow-xl hover:scale-105 transition-all text-sm uppercase tracking-widest flex items-center gap-3">
+                    <button type="button" class="bg-gob-success text-white font-extrabold py-4 px-10 rounded-2xl shadow-xl hover:scale-105 transition-all text-sm uppercase tracking-widest flex items-center gap-3" id="btn_guardar_todo">
                         <span class="material-symbols-outlined">save_as</span> Guardar Todos los Cambios
                     </button>
                 </div>
             </div>
         </div>
 
-        <!--Datos del Contribuyente-->
+        <!--Pestaña Datos del Contribuyente-->
         <div class="tab-pane fade" id="tab-contribuyente">
             <div class="bg-white gob-card rounded-2xl p-6 lg:p-10 space-y-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
@@ -387,6 +393,7 @@ if (isset($_GET['id'])) {
             </div>
         </div>
 
+        <!--Pestaña Asignación-->
         <div class="tab-pane fade" id="tab-asignacion">
             <div class="bg-white gob-card rounded-2xl p-6 lg:p-8">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -422,6 +429,7 @@ if (isset($_GET['id'])) {
             </div>
         </div>
 
+        <!--Pestaña Adjuntos-->
         <div class="tab-pane fade" id="tab-adjuntos-muni">
             <div class="bg-white gob-card rounded-2xl p-6 lg:p-8 space-y-6">
                 <div class="bg-soft-cyan border border-cyan-border rounded-3xl p-8 text-center space-y-4">
@@ -453,6 +461,7 @@ if (isset($_GET['id'])) {
             </div>
         </div>
 
+        <!--Pestaña Historial-->
         <div class="tab-pane fade" id="tab-historial">
             <div class="bg-white gob-card rounded-2xl p-6 lg:p-8">
                 <div class="timeline space-y-6" id="timeline_container"></div>
@@ -462,6 +471,7 @@ if (isset($_GET['id'])) {
     </div>
 </div>
 
+<!--Modal Buscar Funcionario-->
 <div class="modal fade" id="modalBuscarFuncionario" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden">
@@ -527,5 +537,5 @@ use App\Config\AppConfig;
 $googleMapsKey = AppConfig::getGoogleMapsKey();
 ?>
 <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $googleMapsKey; ?>&callback=initMap&libraries=places" async defer></script>
-<script src="../../recursos/js/funcionarios/oirs/consulta.js"></script>
+<script src="../../recursos/js/funcionarios/oirs/ver.js"></script>
 <?php include '../../api/general/footer.php'; ?>

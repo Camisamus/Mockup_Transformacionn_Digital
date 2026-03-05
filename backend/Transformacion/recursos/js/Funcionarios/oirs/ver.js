@@ -10,49 +10,17 @@ $(document).ready(function () {
     const urlParams = new URLSearchParams(window.location.search);
     currentOirsId = urlParams.get('id');
 
-    /* if (!currentOirsId) {
-        solicitarID();
-        return;
-    } */
-
-    // --- ID Fixes for oirs_consulta.php (if missing) ---
-    // Fix: oig_respuesta_preliminar textarea
-    if ($('#oig_respuesta_preliminar').length === 0) {
-        // Find by placeholder or context
-        $('label:contains("Respuesta Preliminar")').next('textarea').attr('id', 'oig_respuesta_preliminar');
-        // Or if label structure is different
-        $('textarea[placeholder*="respuesta oficial"]').eq(0).attr('id', 'oig_respuesta_preliminar');
-    }
-    // Fix: btn_responder_preliminar
-    if ($('#btn_responder_preliminar').length === 0) {
-        $('button:contains("Responder al Vecino")').eq(0).attr('id', 'btn_responder_preliminar');
-    }
-    // Fix: oig_respuesta_tecnica
-    if ($('#oig_respuesta_tecnica').length === 0) {
-        $('label:contains("Respuesta por Unidad Técnica")').next('textarea').attr('id', 'oig_respuesta_tecnica');
-        $('textarea[placeholder*="respuesta oficial"]').eq(1).attr('id', 'oig_respuesta_tecnica');
-    }
-    // Fix: btn_responder_tecnico
-    if ($('#btn_responder_tecnico').length === 0) {
-        $('button:contains("Responder al Vecino")').eq(1).attr('id', 'btn_responder_tecnico');
-    }
-    // Fix: oig_solicitud_ejecutada
-    if ($('#oig_solicitud_ejecutada').length === 0) {
-        $('label:contains("¿La solicitud será ejecutada?")').next('select').attr('id', 'oig_solicitud_ejecutada');
-    }
-
-
     // Inicializar con datos del servidor
     if (window.oirsData && window.oirsData.solicitud) {
         renderizarDatos(window.oirsData.solicitud);
-    } else if (!currentOirsId && !window.oirsData.solicitud) {
+    } else if (!currentOirsId) {
         solicitarID();
     }
 
     // Event Listeners para Asignación
     $('#btn_asignar').on('click', guardarAsignacion);
 
-    // Event Listeners para Gestión
+    // Event Listeners para Gestión Individual
     $(document).on('click', '#btn_responder_preliminar', () => guardarGestion({
         oig_respuesta_preliminar: $('#oig_respuesta_preliminar').val(),
         oig_requiere_respuesta_tecnica: $('#oig_requiere_respuesta_tecnica').val()
@@ -73,19 +41,50 @@ $(document).ready(function () {
         oig_respuesta_aclaratoria: $('#oig_respuesta_aclaratoria').val()
     }));
 
-    // Event Listeners for File Upload (Municipio) - Added here to avoid duplication
+    // Toggle de visibilidad dinámica
+    $('#oig_requiere_respuesta_tecnica').on('change', function () {
+        if ($(this).val() == '1' || $(this).val() === 'Si') {
+            $('#container_respuesta_tecnica').slideDown();
+        } else {
+            $('#container_respuesta_tecnica').slideUp();
+        }
+    });
+
+    $('#oig_solicitud_ejecutada').on('change', function () {
+        if ($(this).val() == '1' || $(this).val() === 'Si') {
+            $('#container_notificacion_ejecucion').slideDown();
+        } else {
+            $('#container_notificacion_ejecucion').slideUp();
+        }
+    });
+
+    // BOTÓN GUARDAR TODOS LOS CAMBIOS
+    $(document).on('click', '#btn_guardar_todo', () => {
+        const payload = {
+            oig_respuesta_preliminar: $('#oig_respuesta_preliminar').val(),
+            oig_requiere_respuesta_tecnica: $('#oig_requiere_respuesta_tecnica').val(),
+            oig_respuesta_tecnica: $('#oig_respuesta_tecnica').val(),
+            oig_solicitud_ejecutada: $('#oig_solicitud_ejecutada').val(),
+            oig_fuente_financiamiento: $('#oig_fuente_financiamiento').val(),
+            oig_notificacion_ejecucion: $('#oig_notificacion_ejecucion').val(),
+            oig_realizada_en_plazo: $('#oig_realizada_en_plazo').val(),
+            oig_respuesta_aclaratoria: $('#oig_respuesta_aclaratoria').val()
+        };
+        guardarGestion(payload);
+    });
+
+    // Event Listeners for File Upload (Municipio)
     $('#customFileMuni').on('change', async function (e) {
         const files = e.target.files;
         if (files.length > 0) {
             for (let i = 0; i < files.length; i++) {
-                // Store file object
                 selectedFilesMuni.push({
                     nombre: files[i].name,
                     file: files[i]
                 });
             }
             renderFileListMuni();
-            $(this).val(''); // Clear input
+            $(this).val('');
         }
     });
 
@@ -185,19 +184,13 @@ function renderizarDatos(d) {
     }
 
     // 4. Aclaratoria
-    // Assume field key is 'aclaratoria_contribuyente' or 'oig_aclaratoria_contribuyente' inside 'd' or 'g'
     const aclaratoria = g.oig_aclaratoria_contribuyente || d.oig_aclaratoria_contribuyente || d.aclaratoria_contribuyente;
+    $('#container_aclaratoria').show();
     if (aclaratoria && aclaratoria.trim() !== '') {
-        $('#container_aclaratoria').show();
         $('#oig_aclaratoria_contribuyente').val(aclaratoria).prop('disabled', true);
-        $('#container_respuesta_aclaratoria').show();
-        // Assuming response for aclaratoria exists
-        const respAclaratoria = g.oig_respuesta_aclaratoria || d.oig_respuesta_aclaratoria;
-        $('#oig_respuesta_aclaratoria').val(respAclaratoria);
-    } else {
-        $('#container_aclaratoria').hide();
-        $('#container_respuesta_aclaratoria').hide();
     }
+    const respAclaratoria = g.oig_respuesta_aclaratoria || d.oig_respuesta_aclaratoria;
+    $('#oig_respuesta_aclaratoria').val(respAclaratoria);
 
 
 
@@ -206,6 +199,7 @@ function renderizarDatos(d) {
 
     // Asignaciones
     const asignaciones = d.asignaciones || [];
+    window.asignacionesActuales = asignaciones;
     renderAsignaciones(asignaciones);
 
     // Historial
@@ -324,53 +318,189 @@ function renderAdjuntosMuni(adjuntos) {
 }
 
 function renderAsignaciones(asignaciones) {
+    console.log('[OIRS] Renderizando asignaciones:', asignaciones);
     const container = $('#accordionAsignaciones');
     container.empty();
 
-    if (asignaciones.length === 0) {
+    if (!asignaciones || asignaciones.length === 0) {
         container.html('<div class="alert alert-light text-center border">No hay asignaciones registradas.</div>');
         return;
     }
 
     asignaciones.forEach((asg, index) => {
         const isFirst = index === 0;
-        const collapseId = `collapseAsg${index}`;
-        const headingId = `headingAsg${index}`;
+        const oiaId = asg.oia_id || `idx${index}`;
+        const collapseId = `collapseAsg${oiaId}`;
+        const headingId = `headingAsg${oiaId}`;
+        const chatContainerId = `chat_container_${oiaId}`;
+
+        // Determinar instrucción (manejar case sensitivity)
+        const instruccion = asg.oia_instruccion || asg.oia_Instruccion || '<i>Sin instrucción específica</i>';
 
         const item = `
-            <div class="card border mb-2 shadow-sm">
-                <div class="card-header bg-white p-3" id="${headingId}" data-bs-toggle="collapse"
-                    data-bs-target="#${collapseId}" aria-expanded="${isFirst}" aria-controls="${collapseId}"
-                    style="cursor: pointer;">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mr-3"
-                                style="width: 40px; height: 40px;">
-                                <span class="material-symbols-outlined text-primary">person</span>
-                            </div>
-                            <div>
-                                <h6 class="mb-0 font-weight-bold text-dark">${asg.usr_nombre} ${asg.usr_apellido}</h6>
-                            </div>
+            <div class="bg-white border border-slate-200 rounded-3xl overflow-hidden mb-4 shadow-sm hover:shadow-md transition-all">
+                <div class="p-5 flex justify-between align-items-center cursor-pointer hover:bg-slate-50 transition-colors" 
+                     id="${headingId}" data-bs-toggle="collapse" data-bs-target="#${collapseId}">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400">
+                            <span class="material-symbols-outlined text-2xl">person</span>
                         </div>
-                        <div class="text-right">
-                            <span class="badge badge-pill badge-success mb-1">Asignado</span>
+                        <div>
+                            <h6 class="text-[15px] font-bold text-slate-800 mb-0.5">${asg.usr_nombre || 'Funcionario'} ${asg.usr_apellido || ''}</h6>
+                            <p class="text-[11px] text-slate-400 uppercase tracking-widest font-medium">Asignado el ${asg.oia_creacion ? new Date(asg.oia_creacion).toLocaleDateString() : 'N/A'}</p>
                         </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="badge rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-600 border border-amber-100" style="background-color: #fffbeb; color: #d97706; border: 1px solid #fef3c7;">Pendiente Revisión</span>
+                        <span class="material-symbols-outlined text-slate-300 transition-transform dropdown-icon">expand_more</span>
                     </div>
                 </div>
 
-                <div id="${collapseId}" class="collapse ${isFirst ? 'show' : ''}" aria-labelledby="${headingId}"
-                    data-bs-parent="#accordionAsignaciones">
-                    <div class="card-body bg-light border-top">
-                        <h6 class="font-weight-bold" style="font-size: 13px;">Instrucción / Mensaje:</h6>
-                        <p class="mb-0 text-dark small">
-                            ${asg.oia_Instruccion || '<i>Sin instrucción</i>'}
-                        </p>
+                <div id="${collapseId}" class="collapse ${isFirst ? 'show' : ''}" data-bs-parent="#accordionAsignaciones">
+                    <div class="p-6 bg-slate-50 border-t border-slate-100" style="min-height: 100px;">
+                        <!-- Hilo de Chat -->
+                        <div class="mb-6 space-y-3" id="${chatContainerId}" style="min-height: 40px;">
+                            <div class="text-center py-4 text-slate-400">
+                                <span class="spinner-border spinner-border-sm mr-2"></span> Cargando conversaciones...
+                            </div>
+                        </div>
+
+                        <!-- Bloque Tu Gestión -->
+                        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm mt-4">
+                            <h6 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">edit_note</span> Tu Gestión para esta Tarea
+                            </h6>
+                            <div class="grid grid-cols-2 gap-3 mb-4">
+                                <button type="button" onclick="gestionarAsignacion(${asg.oia_id}, 1)" 
+                                        class="btn bg-success text-white font-bold py-2.5 px-4 rounded-xl transition-all shadow-sm text-xs uppercase tracking-widest d-flex align-items-center justify-content-center gap-2" style="background-color: #10b981 !important; border: none;">
+                                    <span class="material-symbols-outlined text-sm">check_circle</span> Aprobar Respuesta
+                                </button>
+                                <button type="button" onclick="gestionarAsignacion(${asg.oia_id}, 2)"
+                                        class="btn bg-danger text-white font-bold py-2.5 px-4 rounded-xl transition-all shadow-sm text-xs uppercase tracking-widest d-flex align-items-center justify-content-center gap-2" style="background-color: #f43f5e !important; border: none;">
+                                    <span class="material-symbols-outlined text-sm">error</span> Solicitar Corrección
+                                </button>
+                            </div>
+                            <div class="relative mt-3">
+                                <textarea id="msg_asg_${asg.oia_id}" 
+                                          class="form-control rounded-xl border-slate-200 text-sm p-3 focus:ring-primary-blue shadow-sm bg-slate-50 mb-2" 
+                                          style="min-height: 80px;"
+                                          placeholder="Escribe un comentario adicional para el funcionario..."></textarea>
+                                <div class="flex justify-end">
+                                    <button type="button" onclick="gestionarAsignacion(${asg.oia_id}, 0)"
+                                            class="btn btn-link p-0 text-primary-link text-[11px] font-bold uppercase tracking-widest hover:text-blue-700 flex items-center gap-1 transition-colors no-underline" style="color: #006FB3;">
+                                        Enviar Comentario <span class="material-symbols-outlined text-sm">send</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         `;
         container.append(item);
+
+        // Intentar cargar el historial de forma asíncrona
+        cargarHistorialAsignacion(asg.oia_id, asg.oia_creacion, instruccion, chatContainerId);
     });
+}
+
+function cargarHistorialAsignacion(asgId, fechaCreacion, instruccion, containerId) {
+    const chatContainer = $(`#${containerId}`);
+
+    fetch(`${apiBase}/oirs/gestion.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ACCION: 'ASIGNACION_HISTORIAL', oac_asignacion: asgId })
+    })
+        .then(response => {
+            if (!response.ok) throw new Error('Error en la red');
+            return response.json();
+        })
+        .then(res => {
+            const historial = res.data || [];
+            let htmlChat = '';
+
+            // Mensaje inicial (Instrucción)
+            htmlChat += `
+            <div class="flex items-start mb-4">
+                <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 max-w-[85%] shadow-sm">
+                    <div class="flex items-center mb-1">
+                        <span class="text-[10px] font-bold text-blue-600 uppercase tracking-widest mr-2">Asignador (Instrucción)</span>
+                        <span class="text-[9px] text-blue-400">${fechaCreacion ? new Date(fechaCreacion).toLocaleString() : 'N/A'}</span>
+                    </div>
+                    <p class="text-sm text-slate-700 m-0">${instruccion || '<i>Sin instrucción específica</i>'}</p>
+                </div>
+            </div>
+        `;
+
+            // Hilo de conversación
+            historial.forEach(msg => {
+                const isMe = msg.oac_emisor == (window.oirsData?.solicitud?.rgt_creador || 1); // Comparar con creador de la OIRS o el encargado
+                const alignment = isMe ? 'justify-end' : 'justify-start';
+                const bgColor = isMe ? 'bg-white border-slate-200' : 'bg-blue-50 border-blue-100';
+                const extraStyles = isMe ? 'margin-left: auto;' : 'margin-right: auto;';
+                const label = isMe ? 'Encargado (Tú)' : `${msg.usr_nombre} ${msg.usr_apellido}`;
+                const labelColor = isMe ? 'text-slate-500' : 'text-blue-600';
+
+                let statusBadge = '';
+                if (msg.oac_marcado == 1) statusBadge = '<span class="ml-2 px-2 py-0.5 bg-teal-100 text-teal-700 text-[9px] font-bold rounded-full uppercase" style="background-color: #d1fae5; color: #047857;">Aprobada</span>';
+                if (msg.oac_marcado == 2) statusBadge = '<span class="ml-2 px-2 py-0.5 bg-rose-100 text-rose-700 text-[9px] font-bold rounded-full uppercase" style="background-color: #ffe4e6; color: #be123e;">Corrección</span>';
+
+                htmlChat += `
+                <div class="flex ${alignment} mb-4" style="display: flex; ${isMe ? 'justify-content: flex-end;' : ''}">
+                    <div class="${bgColor} border rounded-2xl p-4 max-w-[85%] shadow-sm" style="${extraStyles} min-width: 200px; border: 1px solid #e2e8f0; background-color: ${isMe ? '#ffffff' : '#f0f9ff'};">
+                        <div class="flex items-center mb-1 gap-2" style="display: flex; align-items: center;">
+                            <span class="text-[10px] font-bold ${labelColor} uppercase tracking-widest">${label}</span>
+                            <span class="text-[9px] text-slate-400">${new Date(msg.oac_creacion).toLocaleString()}</span>
+                            ${statusBadge}
+                        </div>
+                        <p class="text-sm text-slate-700 m-0 mt-1">${msg.oac_mensaje}</p>
+                    </div>
+                </div>
+            `;
+            });
+
+            chatContainer.html(htmlChat);
+        })
+        .catch(err => {
+            console.error('[OIRS] Error cargando historial:', err);
+            chatContainer.html(`<div class="alert alert-warning text-xs p-2">Error al cargar historial: ${err.message}</div>`);
+        });
+}
+
+function gestionarAsignacion(asignacionId, marcado) {
+    const mensaje = $(`#msg_asg_${asignacionId}`).val();
+
+    if (marcado === 0 && !mensaje.trim()) {
+        Swal.fire('Atención', 'Por favor escribe un comentario.', 'warning');
+        return;
+    }
+
+    fetch(`${apiBase}/oirs/gestion.php`, {
+        method: 'POST',
+        body: JSON.stringify({
+            ACCION: 'ASIGNACION_COMENTAR',
+            oac_asignacion: asignacionId,
+            oac_mensaje: mensaje || (marcado === 1 ? 'Respuesta aprobada' : 'Se solicita corrección'),
+            oac_marcado: marcado
+        })
+    })
+        .then(response => response.json())
+        .then(res => {
+            if (res.status === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: 'Acción registrada correctamente',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                // Recargar datos para ver el nuevo comentario
+                renderAsignaciones(window.asignacionesActuales || []);
+            } else {
+                Swal.fire('Error', res.message, 'error');
+            }
+        });
 }
 
 async function descargarDocumento(Id, nombre) {
@@ -515,10 +645,14 @@ function seleccionarFuncionarioOIRS(id, nombre) {
     if (hiddenInput) hiddenInput.value = id;
     if (displayInput) displayInput.value = nombre.trim();
 
-    // Cerrar el modal simulando el clic en el botón de cerrar nativo de Bootstrap
-    const btnCerrar = document.querySelector('#modalBuscarFuncionario .close[data-bs-dismiss="modal"]');
-    if (btnCerrar) {
-        btnCerrar.click();
+    // Cerrar el modal usando API de Bootstrap
+    const modalEl = document.getElementById('modalBuscarFuncionario');
+    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    if (modalInstance) {
+        modalInstance.hide();
+    } else {
+        // Fallback si no hay instancia creada
+        $('#modalBuscarFuncionario').modal('hide');
     }
 }
 
