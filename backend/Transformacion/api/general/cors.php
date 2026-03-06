@@ -81,12 +81,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
+/*
 // Restringir a POST para todos los demás casos
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(["status" => "error", "message" => "Method not allowed"]);
     exit;
 }
+*/
 
 // Recolectar datos JSON globalmente
 $input = file_get_contents("php://input");
@@ -99,7 +101,7 @@ if (json_last_error() !== JSON_ERROR_NONE || !$data) {
 }
 
 // Validar que exista la ACCION para todos los POST
-if (!isset($data['ACCION'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($data['ACCION'])) {
     http_response_code(400);
     echo json_encode(["status" => "error", "message" => "ACCION is required", "payload" => $data]);
     exit;

@@ -176,8 +176,29 @@ $(document).ready(function () {
                 selectedFilesOirs.push(fileData);
             }
             renderFileListOirs();
-            // Limpiar input para permitir seleccionar el mismo archivo si se elimina
             $(this).val('');
+        }
+    });
+
+    // --- NUEVO: Copiar dirección contribuyente al incidente ---
+    $('#copy_address').on('change', function () {
+        if ($(this).is(':checked')) {
+            const direccionCont = $('#cont_direccion').val();
+            const latCont = $('#cont_lat').val();
+            const lngCont = $('#cont_lng').val();
+
+            if (direccionCont) {
+                $('#oirs_direccion_incidente').val(direccionCont);
+                $('#oirs_lat').val(latCont);
+                $('#oirs_lng').val(lngCont);
+
+                if (latCont && lngCont) {
+                    updateMap('inc', parseFloat(latCont), parseFloat(lngCont));
+                }
+            } else {
+                Swal.fire('Atención', 'No hay una dirección definida en el contribuyente.', 'warning');
+                $(this).prop('checked', false);
+            }
         }
     });
 
@@ -185,13 +206,11 @@ $(document).ready(function () {
     $('#btnFinalizar').click(async function () {
         let btn = $(this);
 
-        // 1. Validar campos mínimos
         if (!$('#oirs_descripcion').val() || !$('#oirs_tematica').val()) {
             Swal.fire('Atención', 'Por favor complete la descripción y temática de la solicitud.', 'warning');
             return;
         }
 
-        // 2. Confirmación
         const confirm = await Swal.fire({
             title: '¿Confirmar Registro?',
             text: "Se generará un nuevo folio de atención OIRS.",
@@ -205,12 +224,10 @@ $(document).ready(function () {
 
         if (!confirm.isConfirmed) return;
 
-        // 3. Preparar Payload
         btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm mr-2"></span>Registrando...');
 
         let payload = {
             ACCION: 'CREAR',
-            // Datos del Contribuyente
             cont_tipo_persona: $('#cont_tipo_persona').val(),
             cont_rut: $('#rut_contribuyente').val(),
             cont_nombres: $('#cont_nombre').val(),
@@ -228,13 +245,9 @@ $(document).ready(function () {
             cont_giro: $('#cont_giro').val(),
             cont_rep_rut: $('#cont_rep_rut').val(),
             cont_rep_nombre_completo: $('#cont_rep_nombre_completo').val(),
-
-            // Dirección Contribuyente (Opcional para historial)
             cont_direccion: $('#cont_direccion').val(),
             cont_latitud: $('#cont_lat').val(),
             cont_longitud: $('#cont_lng').val(),
-
-            // Datos de la Solicitud
             oirs_tipo_atencion: $('#oirs_tipo_atencion').val(),
             oirs_origen_consulta: $('#oirs_origen').val(),
             oirs_condicion: $('#oirs_condicion').val(),
@@ -244,19 +257,13 @@ $(document).ready(function () {
             oirs_calle: $('#oirs_direccion_incidente').val(),
             oirs_sector: $('#oirs_sector').val(),
             oirs_descripcion: $('#oirs_descripcion').val(),
-            oirs_estado: 1, // Recibida
-
-            // Coordenadas Incidente
+            oirs_estado: 1,
             oirs_latitud: $('#oirs_lat').val(),
             oirs_longitud: $('#oirs_lng').val(),
-
             oirs_respuesta: $('#oirs_respuesta').val(),
-
-            // Documentos
             documentos: selectedFilesOirs
         };
 
-        // 5. Enviar a API
         try {
             const response = await fetch('../../api/oirs/solicitudes.php', {
                 method: 'POST',
@@ -267,8 +274,7 @@ $(document).ready(function () {
             const res = await response.json();
 
             if (res.status === 'success') {
-                // ÉXITO: Pasar a la etapa 3
-                $('#oirs_folio_final').text('#OIRS-2602-' + res.id); // Placeholder format
+                $('#oirs_folio_final').text('#OIRS-2602-' + res.id);
 
                 $('.step-content').addClass('d-none');
                 $('#step-3').removeClass('d-none');
@@ -294,7 +300,13 @@ $(document).ready(function () {
             btn.prop('disabled', false).html('Finalizar Registro <span class="material-symbols-outlined ml-2" style="font-size: 18px;">check_circle</span>');
         }
     });
-});
+
+    // --- NUEVO: Evento para el botón de descarga PDF ---
+    $('#btnDescargarPDF').click(function () {
+        generarComprobante();
+    });
+
+}); // Fin del document.ready
 
 // Helper: Leer archivo como Base64
 function readFileAsBase64(file) {
@@ -463,6 +475,13 @@ async function updateMap(type, lat, lng, centerMap = true) {
         if (centerMap && mapCont) mapCont.setCenter(pos);
         $('#cont_lat').val(lat);
         $('#cont_lng').val(lng);
+
+        // --- AGREGAR ESTO: Si el checkbox está marcado, replicar en incidente ---
+        if ($('#copy_address').is(':checked')) {
+            updateMap('inc', lat, lng, centerMap);
+        }
+        // -----------------------------------------------------------------------
+
     } else {
         if (!markerInc) return;
         markerInc.setPosition(pos);
@@ -511,5 +530,44 @@ async function reverseGeocode(type, lat, lng) {
                 }
             }
         }
+    });
+}
+
+// Función para generar el comprobante PDF
+function generarComprobante() {
+    // 1. Capturar los datos reales de tus inputs de ingresar.js
+    const datos = {
+        nombre: $('#cont_nombre').val() + ' ' + $('#cont_apellido_p').val(),
+        rut: $('#rut_contribuyente').val(),
+        tipo: $('#oirs_tipo_atencion option:selected').text(), // Obtenemos el texto del select
+        tematica: $('#oirs_tematica option:selected').text(),
+        descripcion: $('#oirs_descripcion').val(),
+        folio: $('#oirs_folio_final').text(), // El folio que generó la API
+        fecha: new Date().toLocaleString()
+    };
+
+    // 2. Inyectarlos en los elementos de la plantilla HTML (la que pusimos en el paso anterior)
+    $('#pdf-nombre').text(datos.nombre);
+    $('#pdf-rut').text(datos.rut);
+    $('#pdf-tipo').text(datos.tipo);
+    $('#pdf-tematica').text(datos.tematica);
+    $('#pdf-descripcion').text(datos.descripcion);
+    $('#pdf-fecha').text(datos.fecha);
+    $('#pdf-folio').text(datos.folio);
+
+    // 3. Configurar y generar el PDF usando la librería html2pdf
+    const elemento = document.getElementById('plantilla-pdf');
+    $(elemento).show(); // Mostrar temporalmente para la captura
+
+    const opciones = {
+        margin: 0.5,
+        filename: `Comprobante_${datos.folio}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, logging: false },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opciones).from(elemento).save().then(() => {
+        $(elemento).hide(); // Ocultar de nuevo
     });
 }

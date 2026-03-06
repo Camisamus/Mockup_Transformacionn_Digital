@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\Ingresos_Destinos;
 use App\Models\Ingresos_ingreso;
 use App\Models\Bitacora; // Assuming Bitacora is used
 use App\Helpers\SimpleSMTP;
@@ -17,11 +18,13 @@ class Ingresos_SolicitudControler
     private $db;
     private $solicitud;
     private $mailService;
+    private $destinos;
 
     public function __construct($db)
     {
         $this->db = $db;
         $this->solicitud = new Ingresos_ingreso($this->db);
+        $this->destinos = new Ingresos_Destinos($this->db);
         $this->mailService = new MailService($this->db);
     }
 
@@ -191,6 +194,27 @@ class Ingresos_SolicitudControler
     public function getChartData()
     {
         return ["status" => "success", "data" => $this->solicitud->getChartData()];
+    }
+    ////RAMON LEE AQUI
+    public function getDestinatarios($solicitudId)
+    {
+        $destinatarios = $this->destinos->obtenerPorIngresoId($solicitudId);
+        $destinatarios = [];
+        foreach ($destinatarios as $destino) {
+            $email = $destino['usr_email'] ?? null;
+            if (!$email) {
+                continue;
+            }
+
+            $destinatarios[] = [
+                'email' => $email,
+                'Facultad' => $destino['tid_facultad'] ?? null,
+                'nombre' => ($destino['usr_nombre'] ?? '') . ' ' . ($destino['usr_apellido'] ?? ''),
+                'funcionario_id' => $destino['tid_destino'] ?? null,
+                'contribuyente_id' => null
+            ];
+        }
+        return $destinatarios;
     }
 
     /**

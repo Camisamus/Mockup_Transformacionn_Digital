@@ -37,7 +37,7 @@ class Ingresos_ingreso
         // 1. Mantenemos el JOIN para saber si el usuario es destino en esa fila específica
         // Solo traemos registros donde el usuario es el destino actual
         $query = "SELECT DISTINCT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido,
-                  sol.tis_fecha_limite,
+                  sol.tis_fecha_limite, titi.titi_nombre as tipo_nombre,
                   CASE 
                     WHEN sol.tis_propietario = :current_user THEN 'Propietario'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
@@ -45,6 +45,7 @@ class Ingresos_ingreso
                   FROM " . $this->table_name . " sol 
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
                   LEFT JOIN trd_acceso_usuarios usr ON sol.tis_propietario = usr.usr_id
+                  LEFT JOIN trd_ingresos_tipos_ingreso titi ON sol.tis_tipo = titi.titi_id
                   LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud 
                                                        AND dest.tid_borrado = 0
                                                        AND dest.tid_destino = :current_user_join
@@ -122,7 +123,7 @@ class Ingresos_ingreso
         // 1. Mantenemos el JOIN para saber si el usuario es destino en esa fila específica
         // Solo traemos registros donde el usuario es el destino actual
         $query = "SELECT DISTINCT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido,
-                  sol.tis_fecha_limite,
+                  sol.tis_fecha_limite, titi.titi_nombre as tipo_nombre,
                   CASE 
                     WHEN sol.tis_propietario = :current_user THEN 'Propietario'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
@@ -130,6 +131,7 @@ class Ingresos_ingreso
                   FROM " . $this->table_name . " sol 
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
                   LEFT JOIN trd_acceso_usuarios usr ON sol.tis_propietario = usr.usr_id
+                  LEFT JOIN trd_ingresos_tipos_ingreso titi ON sol.tis_tipo = titi.titi_id
                   LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud 
                                                        AND dest.tid_destino = :current_user_join 
                                                        AND dest.tid_borrado = 0
@@ -195,6 +197,7 @@ class Ingresos_ingreso
             // Requirement says "solo debes poder ver...". So strict filter.
             // If ID is null (e.g. cron), maybe show empty?
             // Let's assume ID is always passed from controller.
+            $params[':current_user_filter'] = 0;
         }
 
         if (!empty($filters['tis_titulo'])) {
@@ -264,7 +267,7 @@ class Ingresos_ingreso
     public function getById(int $id, ?int $current_user_id = null): array|null
     {
         $query = "SELECT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido,
-                  sol.tis_fecha_limite,
+                  sol.tis_fecha_limite, titi.titi_nombre as tipo_nombre,
                   CASE 
                     WHEN sol.tis_propietario = :current_user THEN 'Propietario'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
@@ -273,6 +276,7 @@ class Ingresos_ingreso
                   FROM " . $this->table_name . " sol 
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
                   LEFT JOIN trd_acceso_usuarios usr ON sol.tis_propietario = usr.usr_id
+                  LEFT JOIN trd_ingresos_tipos_ingreso titi ON sol.tis_tipo = titi.titi_id
                   LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :current_user_join
                   WHERE sol.tis_id = :id AND sol.tis_borrado = 0 AND rgt.rgt_borrado = 0
                   AND (
@@ -330,7 +334,7 @@ class Ingresos_ingreso
     public function getByRgtId(int $rgtId, ?int $current_user_id = null): array|null
     {
         $query = "SELECT sol.*, rgt.*, UPPER(usr.usr_nombre) as resp_nombre, UPPER(usr.usr_apellido) as resp_apellido,
-                  sol.tis_fecha_limite,
+                  sol.tis_fecha_limite, titi.titi_nombre as tipo_nombre,
                   CASE 
                     WHEN sol.tis_propietario = :current_user THEN 'Propietario'
                     WHEN dest.tid_facultad IS NOT NULL THEN dest.tid_facultad
@@ -339,6 +343,7 @@ class Ingresos_ingreso
                   FROM " . $this->table_name . " sol 
                   JOIN " . $this->table_name_parent . " rgt ON sol.tis_registro_tramite = rgt.rgt_id 
                   LEFT JOIN trd_acceso_usuarios usr ON sol.tis_propietario = usr.usr_id
+                  LEFT JOIN trd_ingresos_tipos_ingreso titi ON sol.tis_tipo = titi.titi_id
                   LEFT JOIN trd_ingresos_destinos dest ON sol.tis_id = dest.tid_ingreso_solicitud AND dest.tid_destino = :current_user_join
                   WHERE rgt.rgt_id = :rgtId AND sol.tis_borrado = 0 AND rgt.rgt_borrado = 0
                   AND (

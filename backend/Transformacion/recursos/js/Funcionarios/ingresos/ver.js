@@ -3,7 +3,7 @@
     if (window.serverData) {
         console.log("SSR: Usando datos precargados del servidor");
         // Nota: window.currentUserId ya viene inyectado desde ver.php
-        inicializarConSSR(window.serverData);
+        await inicializarConSSR(window.serverData);
     } else {
         // Fallback para CSR (aunque en esta versión siempre habrá serverData)
         const urlParams = new URLSearchParams(window.location.search);
@@ -17,33 +17,15 @@
         }
     }
 
-    // Inicialización de pestañas de Bootstrap
-    const triggerTabList = [].slice.call(document.querySelectorAll('#ingresosTabs button'));
-    triggerTabList.forEach(function (triggerEl) {
-        const tabTrigger = new bootstrap.Tab(triggerEl);
-        triggerEl.addEventListener('click', function (event) {
+    // Inicialización de pestañas de Bootstrap 5 nativa
+    const tabEls = document.querySelectorAll('button[data-bs-toggle="tab"]');
+    tabEls.forEach(tabEl => {
+        tabEl.addEventListener('click', function (event) {
             event.preventDefault();
-            tabTrigger.show();
+            const tab = bootstrap.Tab.getOrCreateInstance(this);
+            tab.show();
         });
     });
-
-    // Manejador para inicializar el mapa cuando se muestra la pestaña correspondiente
-    const mapaTab = document.querySelector('button[data-bs-target="#tab-mapa"]');
-    if (mapaTab) {
-        mapaTab.addEventListener('shown.bs.tab', function () {
-            if (window.currentDataForMap) {
-                // Pequeño delay para asegurar que el contenedor sea visible
-                setTimeout(() => {
-                    renderizarMapa(
-                        window.currentDataForMap.multiancestro,
-                        window.currentDataForMap.detallesArbol || [],
-                        window.currentDataForMap.tis_registro_tramite,
-                        window.currentUserId
-                    );
-                }, 100);
-            }
-        });
-    }
 
     // Search Form in Consultation
     const formFiltros = document.getElementById('form_filtros_consulta');
@@ -109,6 +91,26 @@ async function buscarYConsultar(filters) {
 
 let currentRgtId = null;
 
+
+async function crearDerivacion() {
+    const urlParams = new URLSearchParams(window.location.search);
+    currentRgtId = urlParams.get('id');
+    window.open(`../ingresos/crear.php?rgt_id_padre=${currentRgtId}`, '_blank');
+}
+
+function descargarExpediente() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+
+    if (!id) {
+        Swal.fire('Error', 'ID de solicitud no encontrado.', 'error');
+        return;
+    }
+
+    // Abrir directamente el PHP que genera el PDF en modo nativo
+    // Pasamos el ID por GET para acceso directo desde la nueva pestaña
+    window.open(`${window.API_BASE_URL}/reportes/pdf_ingresos_expediente.php?ID=${id}`, '_blank');
+}
 async function cargarDatosIngreso(params) {
     try {
         const body = { ACCION: 'CONSULTAM', ...params };
@@ -170,6 +172,7 @@ async function cargarDatosIngreso(params) {
             }
 
             try {
+                console.log(data['tis_id_raw']);
                 const respDetalles = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -233,153 +236,238 @@ function renderizarIngreso(data) {
     if (document.getElementById('info_tis_id')) {
         document.getElementById('info_tis_id').innerText = data.tis_id_raw || '-';
     }
-    document.getElementById('info_rgt_id').innerText = data.rgt_id_raw || data.rgt_id || '-';
-    document.getElementById('info_id_publica').innerText = data.rgt_id_publica || '-';
-    document.getElementById('info_fecha').innerText = (data.tis_creacion && data.tis_creacion.length >= 10) ? data.tis_creacion.substring(0, 10) : '-';
-    const responsable = data.resp_nombre ? `${data.resp_nombre} ${data.resp_apellido}` : `ID: ${data.tis_propietario}`;
-    document.getElementById('info_responsable').innerText = responsable;
-    document.getElementById('info_fecha_limite').innerText = data.tis_fecha_limite ? data.tis_fecha_limite.substring(0, 10) : 'Sin fecha límite';
+    //document.getElementById('info_rgt_id').innerText = data.rgt_id_raw || data.rgt_id || '-';
+    //document.getElementById('info_id_publica').innerText = data.rgt_id_publica || '-';
+    if (document.getElementById('info_tipo')) {
+        document.getElementById('info_tipo').innerText = data.tis_tipo || 'Ingreso General';
+    }
     document.getElementById('info_contenido').innerHTML = data.tis_contenido ? data.tis_contenido.replace(/\n/g, '<br>') : 'Sin contenido';
 
     const badgeEstado = document.getElementById('badge_estado');
     badgeEstado.innerText = data.tis_estado || 'Pendiente';
     badgeEstado.className = `badge ${data.tis_estado === 'Ingresado' ? 'bg-success' : 'bg-primary'}`;
 
-    document.getElementById('subtitulo_ingreso').innerText = `Expediente: ${data.tis_titulo} (Cód. ${data.rgt_id_publica})`;
+    //document.getElementById('subtitulo_ingreso').innerText = `Expediente: ${data.tis_titulo} (Cód. ${data.rgt_id_publica})`;
 
-    // Destinos
-    const tablaDestinos = document.getElementById('tabla_destinos');
-    tablaDestinos.innerHTML = '';
+    if (document.getElementById('info_fecha')) {
+        document.getElementById('info_fecha').innerText = (data.tis_creacion && data.tis_creacion.length >= 10) ? data.tis_creacion.substring(0, 10) : '-';
+    }
+    if (document.getElementById('info_responsable')) {
+        const responsable = data.resp_nombre ? `${data.resp_nombre} ${data.resp_apellido}` : `ID: ${data.tis_propietario}`;
+        document.getElementById('info_responsable').innerText = responsable;
+    }
+    if (document.getElementById('info_fecha_limite')) {
+        document.getElementById('info_fecha_limite').innerText = data.tis_fecha_limite ? data.tis_fecha_limite.substring(0, 10) : 'Sin fecha límite';
+    }
 
-    if (data.destinos && data.destinos.length > 0) {
-        data.destinos.forEach(dest => {
-            let estadoColors = 'bg-slate-50 text-slate-400 border-slate-100';
-            let estadoLabel = 'Pendiente';
+    // Flujo de Visación (Timeline Estilo Imagen 3)
+    const timeline = document.getElementById('flujo_visacion_timeline');
+    if (timeline && data.destinos) {
+        timeline.innerHTML = '';
+        data.destinos.forEach(d => {
+            let icon = 'radio_button_unchecked';
+            let iconColor = 'text-slate-300';
+            let statusText = 'En espera';
+            let statusClass = 'text-slate-400';
+            let detailText = '';
+            let canVisar = false;
 
-            if (dest.tid_responde == 1) {
-                estadoColors = 'bg-emerald-50 text-emerald-600 border-emerald-100';
-                estadoLabel = 'Aprobado';
-            } else if ((dest.tid_responde == 0 || dest.tid_responde === '0') && dest.tid_fecha_respuesta) {
-                estadoColors = 'bg-rose-50 text-rose-600 border-rose-100';
-                estadoLabel = 'Rechazado';
+            const esUsuarioActual = parseInt(d.tid_destino) === parseInt(window.currentUserId);
+
+            if (d.tid_responde == 1) {
+                icon = 'check_circle';
+                iconColor = 'text-cyan-600';
+                statusText = 'Visado';
+                statusClass = 'text-slate-400';
+                detailText = `Visado el ${d.tid_fecha_resp ? d.tid_fecha_resp.substring(0, 16).replace(' ', ' ') : ''}`;
+            } else if ((d.tid_responde == 0 || d.tid_responde === '0') && d.tid_fecha_respuesta) {
+                icon = 'cancel';
+                iconColor = 'text-rose-500';
+                statusText = 'Rechazado';
+                statusClass = 'text-rose-500';
+                detailText = `Rechazado el ${d.tid_fecha_respuesta.substring(0, 16)}`;
+            } else if (!d.tid_fecha_respuesta && d.tid_requeido == 1) {
+                // Si es el usuario actual, marcamos pendiente activa
+                if (esUsuarioActual) {
+                    icon = 'pending'; // El círculo con los tres puntitos
+                    iconColor = 'text-amber-500';
+                    statusText = 'Pendiente de Visación';
+                    statusClass = 'text-amber-500 font-bold';
+                    canVisar = true;
+                } else {
+                    icon = 'radio_button_unchecked';
+                    iconColor = 'text-slate-300';
+                    statusText = 'En espera';
+                    statusClass = 'text-slate-400';
+                }
             }
 
-            const row = document.createElement('tr');
-            row.className = 'hover:bg-slate-50/80 transition-all cursor-default group';
-            row.innerHTML = `
-                <td class="px-6 py-4">
-                    <div class="font-bold text-slate-700 text-sm">${dest.usr_nombre} ${dest.usr_apellido}</div>
-                    <div class="text-[10px] text-slate-400 truncate max-w-[180px]">${dest.usr_email}</div>
-                </td>
-                <!--<td class="px-6 py-4">
-                    <span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border bg-blue-50 text-primary-blue border-blue-100">
-                        ${dest.tid_tipo}
-                    </span>
-                </td>-->
-                <td class="px-6 py-4">
-                    <span class="text-xs font-medium text-slate-500">${dest.tid_facultad}</span>
-                </td>
-                <td class="px-6 py-4">
-                    <span class="text-xs text-slate-400 italic">${dest.tid_tarea || '-'}</span>
-                </td>
-                <td class="px-6 py-4 text-center">
-                    ${dest.tid_requeido === '1'
-                    ? '<span class="material-symbols-outlined text-emerald-500 text-lg">check_circle</span>'
-                    : '<span class="material-symbols-outlined text-slate-200 text-lg">radio_button_unchecked</span>'}
-                </td>
-                <td class="px-6 py-4 text-right">
-                    <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${estadoColors}">
-                        ${estadoLabel}
-                    </span>
-                </td>
+            const item = document.createElement('div');
+            item.className = 'px-6 py-5 flex items-center justify-between hover:bg-slate-50 transition-colors';
+            item.innerHTML = `
+                <div class="flex items-center gap-4">
+                    <div class="flex-shrink-0">
+                        <span class="material-symbols-outlined ${iconColor} text-[32px]">${icon}</span>
+                    </div>
+                    <div>
+                        <div class="font-black text-slate-700 text-[15px] leading-tight">
+                            ${esUsuarioActual ? 'Ud.' : d.usr_nombre + ' ' + d.usr_apellido} (${d.tid_facultad})
+                        </div>
+                        <div class="text-[12px] ${statusClass} mt-0.5">
+                            ${detailText || statusText}
+                        </div>
+                    </div>
+                </div>
+                ${canVisar ? `
+                    <button onclick="irAResponder()" class="px-4 py-1.5 bg-[#346d77] text-white rounded text-[12px] font-bold hover:bg-[#2a5861] transition-all shadow-sm">
+                        Visar
+                    </button>
+                ` : ''}
             `;
-            tablaDestinos.appendChild(row);
+            timeline.appendChild(item);
         });
-    } else {
-        tablaDestinos.innerHTML = '<tr><td colspan="6" class="px-6 py-10 text-center text-slate-400 italic">No hay destinatarios asignados.</td></tr>';
+    }
+
+    // Vista Rápida: Subtareas / Derivaciones (Estilo Imagen 2)
+    const miniTabla = document.getElementById('tabla_derivaciones_mini');
+    if (miniTabla) {
+        miniTabla.innerHTML = '';
+        if (data.destinos && data.destinos.length > 0) {
+            data.destinos.forEach(dest => {
+                let statusClass = 'bg-amber-100 text-amber-700';
+                let statusLabel = 'Pendiente';
+
+                if (dest.tid_responde == 1) {
+                    statusClass = 'bg-emerald-100 text-emerald-700';
+                    statusLabel = 'Completada';
+                } else if ((dest.tid_responde == 0 || dest.tid_responde === '0') && dest.tid_fecha_respuesta) {
+                    statusClass = 'bg-rose-100 text-rose-700';
+                    statusLabel = 'Rechazada';
+                }
+
+                const item = document.createElement('div');
+                item.className = 'flex items-center justify-between group py-2 px-1';
+                item.innerHTML = `
+                    <div class="flex items-start gap-2">
+                        <span class="material-symbols-outlined text-slate-300 text-lg rotate-180">subdirectory_arrow_right</span>
+                        <div>
+                            <div class="font-black text-slate-700 text-[12px] leading-tight mb-0.5">${dest.tid_tarea || 'Consultar / Revisar'}</div>
+                            <div class="text-[10px] text-slate-400 font-medium">Asignado a: ${dest.usr_nombre} ${dest.usr_apellido}</div>
+                        </div>
+                    </div>
+                    <span class="px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-tighter ${statusClass}">
+                        ${statusLabel}
+                    </span>
+                `;
+                miniTabla.appendChild(item);
+            });
+        } else {
+            miniTabla.innerHTML = '<div class="py-6 text-center text-slate-400 italic text-[11px]">Sin derivaciones activas.</div>';
+        }
     }
 
     // Bitácora con Paginación
     const listaBitacora = document.getElementById('lista_bitacora');
-    if (!listaBitacora) {
-        console.warn('Elemento lista_bitacora no encontrado');
-        return;
-    }
-
-    if (data.bitacora && Array.isArray(data.bitacora) && data.bitacora.length > 0) {
-        // Invertimos para ver lo más reciente primero
-        const bitacoraSorted = [...data.bitacora].reverse();
-        window.currentBitacoraData = bitacoraSorted;
-        renderBitacoraPagina(1);
+    if (listaBitacora) {
+        if (data.bitacora && Array.isArray(data.bitacora) && data.bitacora.length > 0) {
+            // Invertimos para ver lo más reciente primero
+            const bitacoraSorted = [...data.bitacora].reverse();
+            window.currentBitacoraData = bitacoraSorted;
+            renderBitacoraPagina(1);
+        } else {
+            listaBitacora.innerHTML = '<div class="p-4 text-center text-slate-400 text-xs italic">No hay registros de bitácora.</div>';
+            const pagContainer = document.getElementById('paginacion_bitacora');
+            if (pagContainer) pagContainer.innerHTML = '';
+        }
     } else {
-        listaBitacora.innerHTML = '<div class="p-4 text-center text-slate-400 text-xs italic">No hay registros de bitácora.</div>';
-        const pagContainer = document.getElementById('paginacion_bitacora');
-        if (pagContainer) pagContainer.innerHTML = '';
+        console.info('Elemento lista_bitacora no existe o no tiene permisos.');
     }
 
     // Enlaces
-    const listaEnlaces = document.getElementById('lista_enlaces');
-    listaEnlaces.innerHTML = '';
-    if (data.enlaces && data.enlaces.length > 0) {
-        data.enlaces.forEach(link => {
-            const a = document.createElement('a');
-            a.href = link.tge_enlace.startsWith('http') ? link.tge_enlace : `https://${link.tge_enlace}`;
-            a.target = '_blank';
-            a.className = 'list-group-item list-group-item-action d-flex align-items-center gap-2 py-2';
-            a.innerHTML = `
-                <i data-feather="link" style="width:14px"></i>
-                <div class="overflow-hidden text-nowrap text-truncate small">${link.tge_enlace}</div>
-            `;
-            listaEnlaces.appendChild(a);
-        });
-    } else {
-        listaEnlaces.innerHTML = '<div class="list-group-item text-muted small">Sin enlaces adjuntos.</div>';
+    const listaEnlaces = document.getElementById('lista_enlaces_grid');
+    if (listaEnlaces) {
+        listaEnlaces.innerHTML = '';
+        if (data.enlaces && data.enlaces.length > 0) {
+            data.enlaces.forEach(link => {
+                const url = link.tge_enlace.startsWith('http') ? link.tge_enlace : `https://${link.tge_enlace}`;
+                const div = document.createElement('div');
+                div.className = 'bg-slate-50 border border-slate-100 rounded-xl p-4 flex items-center justify-between group hover:bg-blue-50 hover:border-blue-100 transition-all cursor-pointer';
+                div.onclick = () => window.open(url, '_blank');
+                div.innerHTML = `
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-primary-blue group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined">link</span>
+                        </div>
+                        <div class="overflow-hidden">
+                            <div class="text-[13px] font-bold text-slate-700 truncate">${link.tge_enlace}</div>
+                            <div class="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Enlace Externo</div>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-300 group-hover:text-primary-blue transition-colors">open_in_new</span>
+                `;
+                listaEnlaces.appendChild(div);
+            });
+        }
     }
 
     // Documentos
-    const listaDocumentos = document.getElementById('lista_documentos');
-    listaDocumentos.innerHTML = '';
-    if (data.documentos && data.documentos.length > 0) {
-        data.documentos.forEach(doc => {
-            const div = document.createElement('div');
-            div.className = 'list-group-item list-group-item-action d-flex align-items-center justify-content-between py-2';
-            div.innerHTML = `
-                <div class="d-flex align-items-center gap-2 overflow-hidden">
-                    <i data-feather="file" style="width:14px" class="text-primary"></i>
-                    <div class="text-truncate small" title="${doc.doc_nombre_documento}">${doc.doc_nombre_documento}</div>
-                </div>
-                <button class="btn btn-sm btn-link p-0 text-primary" onclick="descargarDocumento('${doc.doc_id}', '${doc.doc_nombre_documento}')">
-                    <i data-feather="download" style="width:14px"></i>
-                </button>
-            `;
-            listaDocumentos.appendChild(div);
-        });
-    } else {
-        listaDocumentos.innerHTML = '<div class="list-group-item text-muted small">Sin documentos adjuntos.</div>';
+    const listaDocumentos = document.getElementById('lista_documentos_grid');
+    if (listaDocumentos) {
+        listaDocumentos.innerHTML = '';
+        if (data.documentos && data.documentos.length > 0) {
+            data.documentos.forEach(doc => {
+                const div = document.createElement('div');
+                div.className = 'bg-slate-50 border border-slate-100 rounded-xl p-4 flex items-center justify-between group hover:bg-blue-50 hover:border-blue-100 transition-all cursor-pointer';
+                div.onclick = () => descargarDocumento(doc.doc_id, doc.doc_nombre_documento);
+                div.innerHTML = `
+                    <div class="flex items-center gap-3 overflow-hidden">
+                        <div class="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-rose-500 group-hover:scale-110 transition-transform">
+                            <span class="material-symbols-outlined">description</span>
+                        </div>
+                        <div class="overflow-hidden">
+                            <div class="text-[13px] font-bold text-slate-700 truncate" title="${doc.doc_nombre_documento}">${doc.doc_nombre_documento}</div>
+                            <div class="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Documento PDF / Adjunto</div>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined text-slate-300 group-hover:text-primary-blue transition-colors">download</span>
+                `;
+                listaDocumentos.appendChild(div);
+            });
+        }
     }
 
     // Comentarios
     const listaComentarios = document.getElementById('lista_comentarios');
-    listaComentarios.innerHTML = '';
-    if (data.comentarios && data.comentarios.length > 0) {
-        data.comentarios.forEach(com => {
-            const div = document.createElement('div');
-            div.className = 'list-group-item py-3';
-            div.innerHTML = `
-                <div class="d-flex justify-content-between mb-1">
-                    <span class="fw-bold small text-primary">${com.usr_nombre} ${com.usr_apellido}</span>
-                    <span class="text-muted" style="font-size: 0.7rem;">${com.gco_creacion.substring(0, 10)}</span>
-                </div>
-                <div class="small text-dark">${com.gco_comentario}</div>
-            `;
-            listaComentarios.appendChild(div);
-        });
-    } else {
-        listaComentarios.innerHTML = '<div class="list-group-item text-muted small">Sin comentarios.</div>';
+    if (listaComentarios) {
+        listaComentarios.innerHTML = '';
+        if (data.comentarios && data.comentarios.length > 0) {
+            data.comentarios.forEach(com => {
+                const div = document.createElement('div');
+                div.className = 'bg-white border border-slate-100 rounded-2xl p-5 shadow-sm hover:border-blue-100 transition-colors';
+                div.innerHTML = `
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-full bg-blue-50 text-primary-blue flex items-center justify-center font-bold text-xs">
+                                ${com.usr_nombre[0]}${com.usr_apellido[0]}
+                            </div>
+                            <span class="text-[13px] font-black text-slate-800">${com.usr_nombre} ${com.usr_apellido}</span>
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">${com.gco_creacion.substring(0, 16)}</span>
+                    </div>
+                    <div class="text-[14px] text-slate-600 leading-relaxed italic border-l-4 border-slate-100 pl-4 py-1">
+                        ${com.gco_comentario}
+                    </div>
+                `;
+                listaComentarios.appendChild(div);
+            });
+        } else {
+            listaComentarios.innerHTML = '<div class="py-10 text-center text-slate-400 text-sm italic">No hay comentarios registrados aún.</div>';
+        }
     }
 
     // Multiancestro (Ancestry)
     renderizarTablaHijas(data);
+    renderizarTablaProgenitoras(data);
     // Respuestas detalladas
     renderizarRespuestas(data.destinos || []);
 
@@ -515,11 +603,17 @@ function renderPaginacionBitacora(total, paginaActual) {
 
 function renderizarMapa(relaciones, detalles = [], currentRgtId, userId = null) {
     const container = document.getElementById('network-container');
+    if (!container) return;
+
+    // Limpiar contenedor para evitar duplicados si se llama varias veces
+    container.innerHTML = '';
+
     const nodes = new vis.DataSet();
     const edges = new vis.DataSet();
     const addedNodes = new Set();
     const detallesMap = new Map();
 
+    // Normalizar detalles para búsqueda rápida
     if (Array.isArray(detalles)) {
         detalles.forEach(d => {
             const rid = d.rgt_id_raw || d.rgt_id;
@@ -528,76 +622,135 @@ function renderizarMapa(relaciones, detalles = [], currentRgtId, userId = null) 
     }
 
     function getColorForNode(rgtId) {
-        if (parseInt(rgtId) === parseInt(currentRgtId)) return '#ffc107';
+        if (parseInt(rgtId) === parseInt(currentRgtId)) return '#ffc107'; // Amarillo para actual
         const det = detallesMap.get(parseInt(rgtId));
         if (det) {
             if (det.tis_estado === 'Resuelto_Favorable') return '#198754';
-            if (det.tis_estado === 'Resuelto_NO_Favorable') return '#000000';
-            const hasDest = det.destinos && det.destinos.length > 0;
-            if (!hasDest) {
-                return (parseInt(det.tis_propietario) === parseInt(userId)) ? '#dc3545' : '#fd7e14';
-            }
+            if (det.tis_estado === 'Resuelto_NO_Favorable') return '#dc3545';
+            if (det.tis_estado === 'Ingresado') return '#0d6efd';
         }
-        return '#97c2fc';
+        return '#97c2fc'; // Color por defecto (Lector o Pendiente)
     }
 
     function getTooltip(rgtId) {
         const det = detallesMap.get(parseInt(rgtId));
-        return det ? det.tis_titulo : `RT-${rgtId}`;
+        return det ? `${det.tis_titulo}\nEstado: ${det.tis_estado || '?'}` : `RT-${rgtId}`;
     }
 
-    const childrenOf = {};
-    Object.values(relaciones).forEach(rel => {
-        const p = rel.gma_padre_raw || rel.gma_padre;
-        const h = rel.gma_hijo_raw || rel.gma_hijo;
+    // Convertir relaciones a array si es objeto
+    const relArray = Array.isArray(relaciones) ? relaciones : Object.values(relaciones);
 
-        if (!childrenOf[p]) childrenOf[p] = [];
-        childrenOf[p].push(h);
+    console.log("Renderizando mapa con relaciones:", relArray);
 
+    relArray.forEach(rel => {
+        const p = parseInt(rel.gma_padre_raw || rel.gma_padre);
+        const h = parseInt(rel.gma_hijo_raw || rel.gma_hijo);
+
+        if (isNaN(p) || isNaN(h)) return;
+
+        // Agregar Nodos
         [p, h].forEach(id => {
             if (!addedNodes.has(id)) {
-                const det = detallesMap.get(parseInt(id));
+                const det = detallesMap.get(id);
                 const label = det ? (det.tis_titulo || `RT-${id}`) : `RT-${id}`;
-                nodes.add({ id, label: label, color: getColorForNode(id), title: getTooltip(id) });
+                nodes.add({
+                    id,
+                    label: label,
+                    color: {
+                        background: getColorForNode(id),
+                        border: '#2b7ce9'
+                    },
+                    title: getTooltip(id)
+                });
                 addedNodes.add(id);
             }
         });
-        edges.add({ from: p, to: h, arrows: 'from' });
+
+        // Agregar Aristas (Flechas)
+        edges.add({
+            from: p,
+            to: h,
+            arrows: {
+                from: { enabled: true, scaleFactor: 1, type: 'arrow' }
+            },
+            color: { color: '#848484' }
+        });
     });
 
-    if (!addedNodes.has(parseInt(currentRgtId)) && currentRgtId) {
+    // Asegurar que el nodo actual esté presente aunque no tenga relaciones
+    if (currentRgtId && !addedNodes.has(parseInt(currentRgtId))) {
         const id = parseInt(currentRgtId);
         const det = detallesMap.get(id);
         const label = det ? (det.tis_titulo || `RT-${id}`) : `RT-${id}`;
-        nodes.add({ id, label: label, color: '#ffc107', title: getTooltip(id) });
+        nodes.add({
+            id,
+            label: label,
+            color: { background: '#ffc107', border: '#e67e22' },
+            title: getTooltip(id)
+        });
+        addedNodes.add(id);
     }
 
     const data = { nodes, edges };
     const options = {
-        layout: { hierarchical: { direction: 'UD', sortMethod: 'directed' } },
-        physics: false,
+        layout: {
+            hierarchical: {
+                enabled: true,
+                direction: 'UD',
+                sortMethod: 'directed',
+                nodeSpacing: 150,
+                levelSeparation: 150
+            }
+        },
+        physics: {
+            hierarchicalRepulsion: {
+                nodeDistance: 120
+            }
+        },
         nodes: {
             shape: 'box',
             margin: 10,
             widthConstraint: {
-                maximum: 92 // Forza al texto a hacer saltos de línea largos
+                maximum: 120
             },
             font: {
-                multi: 'html' // Opcional, pero vis soporta multiline automático limitando el wrap
+                size: 12,
+                face: 'Inter',
+                multi: 'html'
+            },
+            borderWidth: 2,
+            shadow: true
+        },
+        edges: {
+            width: 2,
+            shadow: true,
+            smooth: {
+                type: 'cubicBezier',
+                forceDirection: 'vertical',
+                roundness: 0.4
             }
         },
-        interaction: { hover: true, selectConnectedEdges: false }
+        interaction: {
+            hover: true,
+            selectConnectedEdges: false,
+            tooltipDelay: 200
+        }
     };
 
     let network = new vis.Network(container, data, options);
     window.currentNetworkInstance = network;
     window.currentRgtIdForMap = parseInt(currentRgtId);
 
-    // Ajustar y enfocar cuando carga inicialmente
-    setTimeout(() => {
+    // Ajustar y enfocar
+    network.once('afterDrawing', () => {
         network.fit();
-        network.focus(window.currentRgtIdForMap, { scale: 1.0, animation: { duration: 800, easingFunction: "easeInOutQuad" } });
-    }, 500);
+        if (window.currentRgtIdForMap) {
+            network.focus(window.currentRgtIdForMap, {
+                scale: 1.0,
+                animation: { duration: 1000, easingFunction: "easeInOutQuad" }
+            });
+        }
+    });
 
     network.on("selectNode", (params) => {
         const sid = params.nodes[0];
@@ -618,15 +771,17 @@ function renderizarTablaHijas(data) {
     tbody.innerHTML = '';
 
     // We need current rgtId
-    const rgtId = parseInt(data.tis_registro_tramite_raw || data.tis_registro_tramite);
+    const rgtId = parseInt(data.tis_registro_tramite_raw || data.tis_registro_tramite || data.rgt_id_raw || data.rgt_id);
     const relaciones = data.multiancestro || {};
 
     // Find all direct children
     const directChildrenRgtIds = [];
-    Object.values(relaciones).forEach(rel => {
+    const relArray = Array.isArray(relaciones) ? relaciones : Object.values(relaciones);
+
+    relArray.forEach(rel => {
         const pad = parseInt(rel.gma_padre_raw || rel.gma_padre);
         const hij = parseInt(rel.gma_hijo_raw || rel.gma_hijo);
-        if (pad === rgtId) {
+        if (pad && pad === rgtId && hij) {
             directChildrenRgtIds.push(hij);
         }
     });
@@ -683,60 +838,73 @@ function renderizarTablaHijas(data) {
     });
 }
 
-function renderizarMapaRelaciones(multiancestro, currentId) {
-    const container = document.getElementById('network-container');
-    const nodesMap = new Map();
-    const edges = [];
+function renderizarTablaProgenitoras(data) {
+    const tbody = document.getElementById('tabla_progenitoras');
+    if (!tbody) return;
+    tbody.innerHTML = '';
 
-    Object.values(multiancestro).forEach(rel => {
-        if (!nodesMap.has(rel.gma_padre)) {
-            nodesMap.set(rel.gma_padre, {
-                id: rel.gma_padre,
-                label: `ID: ${rel.gma_padre}`,
-                color: { background: '#ffffff', border: '#005cab' }
-            });
+    const rgtId = parseInt(data.tis_registro_tramite_raw || data.tis_registro_tramite || data.rgt_id_raw || data.rgt_id);
+    const relaciones = data.multiancestro || {};
+    const directParentRgtIds = [];
+    const relArray = Array.isArray(relaciones) ? relaciones : Object.values(relaciones);
+
+    relArray.forEach(rel => {
+        const pad = parseInt(rel.gma_padre_raw || rel.gma_padre);
+        const hij = parseInt(rel.gma_hijo_raw || rel.gma_hijo);
+        if (hij && hij === rgtId && pad) {
+            directParentRgtIds.push(pad);
         }
-        if (!nodesMap.has(rel.gma_hijo)) {
-            nodesMap.set(rel.gma_hijo, {
-                id: rel.gma_hijo,
-                label: `ID: ${rel.gma_hijo}`,
-                color: { background: '#ffffff', border: '#005cab' }
-            });
-        }
-        edges.push({ from: rel.gma_padre, to: rel.gma_hijo, arrows: 'from', color: '#005cab' });
     });
 
-    if (nodesMap.has(currentId)) {
-        const node = nodesMap.get(currentId);
-        node.color = { background: '#005cab', border: '#005cab' };
-        node.font = { color: '#ffffff', size: 14, bold: true };
-        node.label = `ESTE: ${currentId}`;
+    if (directParentRgtIds.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-slate-400 italic">No hay solicitudes progenitoras.</td></tr>';
+        return;
     }
 
-    const networkData = { nodes: Array.from(nodesMap.values()), edges: edges };
-    const options = {
-        nodes: { shape: 'box', margin: 10, shadow: true },
-        edges: { smooth: { type: 'cubicBezier', forceDirection: 'vertical' } },
-        layout: { hierarchical: { direction: 'UD', sortMethod: 'directed' } },
-        interaction: { hover: true, navigationButtons: true }
-    };
-
-    const network = new vis.Network(container, networkData, options);
-    window.currentNetworkInstance = network;
-    window.currentRgtIdForMap = parseInt(currentId);
-
-    setTimeout(() => {
-        network.fit();
-        network.focus(window.currentRgtIdForMap, { scale: 1.0, animation: { duration: 800, easingFunction: "easeInOutQuad" } });
-    }, 500);
-
-    network.on("doubleClick", (params) => {
-        if (params.nodes.length > 0 && params.nodes[0] != currentId) {
-            window.location.search = `?rgt_id=${params.nodes[0]}`;
-        }
+    const detallesArbol = (window.currentDataForMap && window.currentDataForMap.detallesArbol) ? window.currentDataForMap.detallesArbol : [];
+    const detallesMap = new Map();
+    detallesArbol.forEach(d => {
+        const rid = d.rgt_id_raw || d.rgt_id;
+        if (rid) detallesMap.set(parseInt(rid), d);
     });
 
-    if (window.feather) window.feather.replace();
+    directParentRgtIds.forEach(padreRgtId => {
+        const det = detallesMap.get(padreRgtId);
+        if (det) {
+            let badgeClass = 'bg-blue-50 text-primary-blue border-blue-100';
+            if (det.tis_estado === 'Resuelto_Favorable') badgeClass = 'bg-emerald-50 text-emerald-600 border-emerald-100';
+            else if (det.tis_estado === 'Resuelto_NO_Favorable') badgeClass = 'bg-rose-50 text-rose-600 border-rose-100';
+            else if (det.tis_estado === 'Ingresado') badgeClass = 'bg-amber-50 text-amber-600 border-amber-100';
+
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-slate-50/50 transition-colors';
+            tr.innerHTML = `
+                <td class="px-6 py-4 font-bold text-slate-700">${det.rgt_id_publica || det.tis_id_raw || '-'}</td>
+                <td class="px-6 py-4 text-slate-600 font-medium">${det.tis_titulo || 'Sin título'}</td>
+                <td class="px-6 py-4">
+                    <span class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider border ${badgeClass}">
+                        ${det.tis_estado}
+                    </span>
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <a href="ver.php?id=${det.tis_id}" class="inline-flex items-center gap-1 text-primary-blue hover:text-blue-800 font-bold text-xs uppercase tracking-widest bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors">
+                        <span class="material-symbols-outlined text-[16px]">visibility</span> Ver
+                    </a>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        } else {
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-slate-50/50 transition-colors';
+            tr.innerHTML = `
+                <td class="px-6 py-4 font-bold text-slate-400">RGT-${padreRgtId}</td>
+                <td class="px-6 py-4 text-slate-400 italic">Detalles no disponibles</td>
+                <td class="px-6 py-4">-</td>
+                <td class="px-6 py-4 text-right">-</td>
+            `;
+            tbody.appendChild(tr);
+        }
+    });
 }
 
 async function descargarDocumento(Id, nombre) {
@@ -906,27 +1074,6 @@ async function checkAndRequestID() {
     }
 }
 
-async function checkSession() {
-    try {
-        const response = await fetch(`${window.API_BASE_URL}/general/verify_session.php`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ACCION: "" })
-        });
-        const data = await response.json();
-        if (data.isAuthenticated) {
-            return data.user;
-        } else {
-            window.location.href = '../index.php';
-            return null;
-        }
-    } catch (e) {
-        console.error("Session check failed", e);
-        return null;
-    }
-}
-
 // Escuchar el evento cuando se muestra la pestaña "Dependencia"
 document.addEventListener('shown.bs.tab', async function (event) {
     if (event.target.getAttribute('data-bs-target') === '#tab-dependencia') {
@@ -944,33 +1091,19 @@ document.addEventListener('shown.bs.tab', async function (event) {
         }
 
         // Si no está renderizado, preparamos la data
-        if (window.currentDataForMap && window.currentDataForMap.multiancestro && Object.keys(window.currentDataForMap.multiancestro).length > 0) {
+        if (window.currentDataForMap && window.currentDataForMap.multiancestro) {
             const dataMap = window.currentDataForMap;
             const multiancestro = dataMap.multiancestro;
             const rgtId = dataMap.tis_registro_tramite;
 
-            const rgtIds = new Set();
-            rgtIds.add(parseInt(rgtId));
-            Object.values(multiancestro).forEach(rel => {
-                rgtIds.add(parseInt(rel.gma_padre));
-                rgtIds.add(parseInt(rel.gma_hijo));
-            });
-
             try {
-                // Fetch tree details for colors / tooltips
-                const respDetalles = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ACCION: 'DETALLES_ARBOL', rgt_ids: Array.from(rgtIds) })
-                });
-                const resDetalles = await respDetalles.json();
-
-                // Llama la función render pre-existente
-                setTimeout(() => renderizarMapa(multiancestro, resDetalles.data || [], rgtId, window.currentUserId), 100);
+                // Llama la función render con los detalles ya cargados
+                const currentIdNum = parseInt(rgtId);
+                setTimeout(() => renderizarMapa(multiancestro, window.currentDataForMap.detallesArbol || [], currentIdNum, window.currentUserId), 100);
             } catch (e) {
                 console.error("Error loading tree details:", e);
-                // Fallback sin detalles
-                setTimeout(() => renderizarMapaRelaciones(multiancestro, rgtId), 100);
+                const currentIdNum = parseInt(rgtId);
+                setTimeout(() => renderizarMapa(multiancestro, [], currentIdNum, window.currentUserId), 100);
             }
 
             window.mapRendered = true;
@@ -1094,9 +1227,9 @@ window.vincularComoPadre = async function (parentRgtId, parentTitle) {
     } catch (e) { console.error(e); }
 };
 
-function inicializarConSSR(data) {
-    currentRgtId = data.tis_registro_tramite;
-    window.currentUserId = window.currentUserId || 0;
+async function inicializarConSSR(data) {
+    currentRgtId = parseInt(data.tis_registro_tramite_raw || data.tis_registro_tramite);
+    window.currentUserId = parseInt(window.currentUserId || 0);
 
     // Configurar enlace para solicitud hija
     const btnHija = document.getElementById('btn_crear_hija');
@@ -1106,15 +1239,18 @@ function inicializarConSSR(data) {
 
     // Datos para el Mapa
     window.currentDataForMap = {
-        multiancestro: data.multiancestro,
-        tis_registro_tramite: data.tis_registro_tramite,
+        multiancestro: data.multiancestro || {},
+        tis_registro_tramite: currentRgtId,
         detallesArbol: []
     };
 
-    // Cargar detalles del árbol preventivamente
-    preCargarDetallesArbol(data);
+    // Await the details before rendering tables that need them
+    await preCargarDetallesArbol(data);
 
-    // Inicializar manejadores de botones (ya renderizados por PHP)
+    // Now render everything
+    renderizarIngreso(data);
+
+    // Restaurar manejadores de botones (ya renderizados por PHP)
     const id = data.tis_id;
     const btnResponder = document.getElementById('btn_ir_responder');
     if (btnResponder && id) {
@@ -1126,7 +1262,6 @@ function inicializarConSSR(data) {
         btnModificar.onclick = () => window.location.href = `modificar.php?id=${id}`;
     }
 
-    // Modal de comentario
     const btnComent = document.getElementById('btn_abrir_comentario');
     if (btnComent) {
         btnComent.onclick = () => {
@@ -1135,10 +1270,10 @@ function inicializarConSSR(data) {
         };
     }
 
-    // Cargar componentes secundarios si están visibles
-    if (document.getElementById('lista_bitacora')) {
-        actualizarBitacora(data.tis_id);
-    }
+    // Cargar bitácora si existe el contenedor
+    //if (document.getElementById('lista_bitacora')) {
+    //    actualizarBitacora(data.tis_id);
+    //}
 
     if (data.destinos && document.getElementById('tabla_destinos')) {
         renderizarDestinos(data.destinos);
@@ -1147,13 +1282,21 @@ function inicializarConSSR(data) {
 
 async function preCargarDetallesArbol(data) {
     const rgtIds = new Set();
-    rgtIds.add(data.tis_registro_tramite);
+    const mainRgtId = parseInt(data.tis_registro_tramite_raw || data.tis_registro_tramite);
+    if (!isNaN(mainRgtId)) rgtIds.add(mainRgtId);
+
     if (data.multiancestro) {
-        Object.values(data.multiancestro).forEach(rel => {
-            rgtIds.add(rel.gma_padre);
-            rgtIds.add(rel.gma_hijo);
+        const relNodes = Array.isArray(data.multiancestro) ? data.multiancestro : Object.values(data.multiancestro);
+        relNodes.forEach(rel => {
+            const p = parseInt(rel.gma_padre_raw || rel.gma_padre);
+            const h = parseInt(rel.gma_hijo_raw || rel.gma_hijo);
+            if (!isNaN(p)) rgtIds.add(p);
+            if (!isNaN(h)) rgtIds.add(h);
         });
     }
+
+    const idsArray = Array.from(rgtIds).filter(id => !isNaN(id) && id !== null);
+    if (idsArray.length === 0) return;
 
     try {
         const respDetalles = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
