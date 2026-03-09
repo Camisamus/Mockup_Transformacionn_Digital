@@ -25,6 +25,18 @@ class OIRS_Subtematica
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getByTematica($tem_id)
+    {
+        $query = "SELECT sub_id, tem_id, sub_nombre 
+                   FROM " . $this->table_name . " 
+                   WHERE tem_id = :tem_id AND sub_borrado = 0
+                   ORDER BY sub_nombre ASC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":tem_id", $tem_id);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getById($id)
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE sub_id = ? AND sub_borrado = 0 LIMIT 0,1";

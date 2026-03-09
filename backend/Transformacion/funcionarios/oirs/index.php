@@ -56,33 +56,70 @@ include '../../api/general/header.php';
         </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-primary-blue">
-            <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Total Solicitudes</p>
-            <div class="flex items-end justify-between">
-                <h3 class="text-3xl font-extrabold text-slate-800 mb-0" id="oirs-total-count">...</h3>
-                <span class="text-emerald-500 font-bold text-xs">+12% mes</span>
+    <div class="space-y-2">
+        <p class="text-slate-400 uppercase font-bold tracking-widest text-[10px] ml-1">Resumen Global de Solicitudes</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-primary-blue">
+                <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Total Solicitudes</p>
+                <div class="flex items-end justify-between">
+                    <h3 class="text-3xl font-extrabold text-slate-800 mb-0" id="oirs-total-count">...</h3>
+                    <span class="text-emerald-500 font-bold text-xs">+12% mes</span>
+                </div>
+            </div>
+            <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-gob-warning">
+                <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Pendientes</p>
+                <div class="flex items-end justify-between">
+                    <h3 class="text-3xl font-extrabold text-slate-800 mb-0" id="oirs-pending-count">...</h3>
+                    <span class="text-amber-500 font-bold text-xs uppercase">Crítico</span>
+                </div>
+            </div>
+            <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-slate-400">
+                <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Tiempo Promedio</p>
+                <div class="flex items-end justify-between">
+                    <h3 class="text-3xl font-extrabold text-slate-800 mb-0" id="oirs-avg-time">...</h3>
+                    <span class="text-slate-400 font-bold text-xs">Días hábiles</span>
+                </div>
+            </div>
+            <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-gob-success">
+                <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Resueltas (Mes)</p>
+                <div class="flex items-end justify-between">
+                    <h3 class="text-3xl font-extrabold text-slate-800 mb-0" id="oirs-resolved-month">...</h3>
+                    <span class="text-emerald-500 font-bold text-xs">94% tasa</span>
+                </div>
             </div>
         </div>
-        <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-gob-warning">
-            <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Pendientes</p>
-            <div class="flex items-end justify-between">
-                <h3 class="text-3xl font-extrabold text-slate-800 mb-0" id="oirs-pending-count">...</h3>
-                <span class="text-amber-500 font-bold text-xs uppercase">Crítico</span>
+    </div>
+
+    <div class="space-y-2">
+        <p class="text-slate-400 uppercase font-bold tracking-widest text-[10px] ml-1">Mi Gestión Personal</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-primary-blue">
+                <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Mis Solicitudes</p>
+                <div class="flex items-end justify-between">
+                    <h3 class="text-3xl font-extrabold text-slate-800 mb-0" id="user-oirs-total-count">0</h3>
+                    <span class="text-slate-300 font-bold text-xs">Asignadas</span>
+                </div>
             </div>
-        </div>
-        <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-slate-400">
-            <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Tiempo Promedio</p>
-            <div class="flex items-end justify-between">
-                <h3 class="text-3xl font-extrabold text-slate-800 mb-0" id="oirs-avg-time">...</h3>
-                <span class="text-slate-400 font-bold text-xs">Días hábiles</span>
+            <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-gob-warning">
+                <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Mis Pendientes</p>
+                <div class="flex items-end justify-between">
+                    <h3 class="text-3xl font-extrabold text-slate-800 mb-0" id="user-oirs-pending-count">0</h3>
+                    <span class="text-amber-400 font-bold text-xs uppercase">Pendiente</span>
+                </div>
             </div>
-        </div>
-        <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-gob-success">
-            <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Resueltas (Mes)</p>
-            <div class="flex items-end justify-between">
-                <h3 class="text-3xl font-extrabold text-slate-800 mb-0" id="oirs-resolved-month">...</h3>
-                <span class="text-emerald-500 font-bold text-xs">94% tasa</span>
+            <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-slate-400">
+                <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Por Vencer</p>
+                <div class="flex items-end justify-between">
+                    <h3 class="text-3xl font-extrabold text-slate-800 mb-0" id="user-oirs-expiring">0</h3>
+                    <span class="text-slate-400 font-bold text-xs">Próximos días</span>
+                </div>
+            </div>
+            <div class="bg-white gob-card rounded-xl p-6 border-l-4 border-l-gob-success">
+                <p class="text-slate-400 uppercase font-bold mb-1 tracking-widest text-[10px]">Mis Resueltas</p>
+                <div class="flex items-end justify-between">
+                    <h3 class="text-3xl font-extrabold text-slate-800 mb-0" id="user-oirs-resolved">0</h3>
+                    <span class="text-emerald-400 font-bold text-xs">Completadas</span>
+                </div>
             </div>
         </div>
     </div>
@@ -114,8 +151,8 @@ include '../../api/general/header.php';
             <h3 class="font-bold text-slate-700">Solicitudes Urgentes / Próximas a Vencer</h3>
             <span class="text-xs font-semibold text-slate-400">Mostrando top 5</span>
         </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-left">
+        <div class="overflow-x-auto p-4">
+            <table class="w-full text-left" id="table_oirs_urgentes">
                 <thead>
                     <tr
                         class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">

@@ -20,6 +20,15 @@ class OIRS_SubtematicaController
         return ["status" => "success", "data" => $result];
     }
 
+    public function getByTematica($tem_id)
+    {
+        if (empty($tem_id)) {
+            return ["status" => "error", "message" => "El ID de temática es obligatorio"];
+        }
+        $result = $this->subtematica->getByTematica($tem_id);
+        return ["status" => "success", "data" => $result];
+    }
+
     public function create($data)
     {
         if (empty($data['tem_id']) || empty($data['sub_nombre'])) {

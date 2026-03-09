@@ -56,7 +56,7 @@ if (isset($_GET['id'])) {
             "id": "1",
             "metrica_personal": false,
             "PrimeraRespuesta": false,
-            "RespuestaTecnica": ["Solo": false, "Multiple": false],
+            "RespuestaTecnica": { "Solo": false, "Multiple": false },
             "Notificacion_Ejecucion": false,
             "Asignaciones": [],
             "ApruebaRespuesta": [],
@@ -68,7 +68,7 @@ if (isset($_GET['id'])) {
             "id": "2",
             "metrica_personal": true,
             "PrimeraRespuesta": true,
-            "RespuestaTecnica": ["Solo": false, "Multiple": true],
+            "RespuestaTecnica": { "Solo": false, "Multiple": true },
             "Notificacion_Ejecucion": true,
             "Asignaciones": ["Jefe/Director"],
             "ApruebaRespuesta": [],
@@ -80,7 +80,7 @@ if (isset($_GET['id'])) {
             "id": "3",
             "metrica_personal": true,
             "PrimeraRespuesta": true,
-            "RespuestaTecnica": ["Solo": false, "Multiple": false],
+            "RespuestaTecnica": { "Solo": false, "Multiple": false },
             "Notificacion_Ejecucion": false,
             "Asignaciones": ["Jefe/Director", "Administrador Oirs"],
             "ApruebaRespuesta": [],
@@ -92,7 +92,7 @@ if (isset($_GET['id'])) {
             "id": "4",
             "metrica_personal": true,
             "PrimeraRespuesta": false,
-            "RespuestaTecnica": ["Solo": true, "Multiple": false],
+            "RespuestaTecnica": { "Solo": true, "Multiple": false },
             "Notificacion_Ejecucion": true,
             "Asignaciones": ["Encargado Temático"],
             "ApruebaRespuesta": ["Encargado Temático"],
@@ -104,7 +104,7 @@ if (isset($_GET['id'])) {
             "id": "5",
             "metrica_personal": true,
             "PrimeraRespuesta": false,
-            "RespuestaTecnica": ["Solo": false, "Multiple": false],
+            "RespuestaTecnica": { "Solo": false, "Multiple": false },
             "Notificacion_Ejecucion": true,
             "Asignaciones": [],
             "ApruebaRespuesta": [],
@@ -116,7 +116,7 @@ if (isset($_GET['id'])) {
             "id": "6",
             "metrica_personal": true,
             "PrimeraRespuesta": false,
-            "RespuestaTecnica": ["Solo": false, "Multiple": false],
+            "RespuestaTecnica": { "Solo": false, "Multiple": false },
             "Notificacion_Ejecucion": false,
             "Asignaciones": [],
             "ApruebaRespuesta": [],
@@ -404,9 +404,9 @@ if (isset($_GET['id'])) {
                                 <label class="label-custom text-slate-500">¿Requiere respuesta técnica?</label>
                                 <select id="oig_requiere_respuesta_tecnica" name="oig_requiere_respuesta_tecnica"
                                     class="form-control">
-                                    <option value="">Seleccione...</option>
+                                    <option value="" <?= ($solicitudData && (!isset($solicitudData['gestion']) || empty($solicitudData['gestion']['oig_requiere_respuesta_tecnica']))) ? 'selected' : '' ?>>Seleccione...</option>
                                     <option value="1" <?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_requiere_respuesta_tecnica'] == 1 || $solicitudData['gestion']['oig_requiere_respuesta_tecnica'] === 'Si')) ? 'selected' : '' ?>>Si</option>
-                                    <option value="0" <?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_requiere_respuesta_tecnica'] == 0 || $solicitudData['gestion']['oig_requiere_respuesta_tecnica'] === 'No')) ? 'selected' : '' ?>>No</option>
+                                    <option value="0" <?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_requiere_respuesta_tecnica'] === '0' || $solicitudData['gestion']['oig_requiere_respuesta_tecnica'] === 0 || $solicitudData['gestion']['oig_requiere_respuesta_tecnica'] === 'No')) ? 'selected' : '' ?>>No</option>
                                 </select>
                             </div>
                             <button type="button"
@@ -463,7 +463,7 @@ if (isset($_GET['id'])) {
                 </div>
                 <div id="container_notificacion_ejecucion"
                     class="bg-slate-50 border border-slate-200 rounded-3xl p-6 lg:p-8 space-y-6"
-                    style="<?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_solicitud_ejecutada'] == 1 || $solicitudData['gestion']['oig_solicitud_ejecutada'] === 'Si')) ? '' : 'display: none;' ?>">
+                    style="display: none;">
                     <h6
                         class="text-slate-600 font-bold text-xs uppercase tracking-widest border-b border-slate-200 pb-3 flex items-center gap-2">
                         <span class="material-symbols-outlined">task_alt</span> Notificación de Ejecución
@@ -494,7 +494,8 @@ if (isset($_GET['id'])) {
                 </div>
 
                 <div id="container_aclaratoria"
-                    class="bg-amber-50/50 border border-amber-100 rounded-3xl p-6 lg:p-8 space-y-6">
+                    class="bg-amber-50/50 border border-amber-100 rounded-3xl p-6 lg:p-8 space-y-6"
+                    style="display: none;">
                     <h6
                         class="text-amber-600 font-bold text-xs uppercase tracking-widest border-b border-amber-200 pb-3 flex items-center gap-2">
                         <span class="material-symbols-outlined">feedback</span> Aclaratoria del Contribuyente

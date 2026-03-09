@@ -132,6 +132,11 @@ class OirsSolicitudController
             $oirs['adjuntos'] = [];
         }
 
+        // Obtener Gestión (trd_oirs_gestion)
+        require_once __DIR__ . '/../Models/OIRS_Gestion.php';
+        $gestionModel = new \App\Models\OIRS_Gestion($this->db);
+        $oirs['gestion'] = $gestionModel->getBySolicitudId($id);
+
         // Obtener Asignaciones (trd_oirs_asignaciones)
         require_once __DIR__ . '/../Models/OirsAsignacion.php';
         $asignacionModel = new \App\Models\OirsAsignacion($this->db);
@@ -143,22 +148,18 @@ class OirsSolicitudController
     public function search($data)
     {
         $criteria = [];
-        if (!empty($data['id']))
-            $criteria['oirs_id'] = $data['id'];
-        if (!empty($data['folio']))
-            $criteria['folio'] = $data['folio'];
-        if (!empty($data['rut']))
-            $criteria['rut'] = $data['rut'];
-
-        if (empty($criteria)) {
-            return ["status" => "error", "message" => "Debe proporcionar al menos un criterio de búsqueda"];
-        }
+        $criteria['id'] = $data['id'] ?? null;
+        $criteria['folio'] = $data['folio'] ?? null;
+        $criteria['rut'] = $data['rut'] ?? null;
+        $criteria['fecha'] = $data['fecha'] ?? null;
+        $criteria['estado'] = $data['estado'] ?? null;
+        $criteria['sector'] = $data['sector'] ?? null;
+        $criteria['tematica'] = $data['tematica'] ?? null;
+        $criteria['subtematica'] = $data['subtematica'] ?? null;
+        $criteria['prioridad'] = $data['prioridad'] ?? null;
+        $criteria['search'] = $data['search'] ?? null;
 
         $result = $this->oirsModel->search($criteria);
-
-        if (empty($result)) {
-            return ["status" => "error", "message" => "No se encontraron resultados"];
-        }
 
         return ["status" => "success", "data" => $result];
     }

@@ -85,21 +85,23 @@ include '../../api/general/header.php';
                     <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Búsqueda Rápida (ID / RUT / Nombre)</label>
                     <div class="relative flex items-center">
                         <span class="material-symbols-outlined absolute left-3 text-slate-400 text-xl">search</span>
-                        <input type="text" class="w-full pl-10 pr-4 py-2.5 rounded-xl border-slate-200 focus:ring-primary-blue text-sm bg-slate-50/50" placeholder="Escribe para buscar...">
+                        <input type="text" id="filter-search" class="w-full pl-10 pr-4 py-2.5 rounded-xl border-slate-200 focus:ring-primary-blue text-sm bg-slate-50/50" placeholder="Escribe para buscar...">
                     </div>
                 </div>
                 <div class="md:col-span-3 space-y-2">
                     <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Fecha de Ingreso</label>
-                    <input type="date" class="w-full px-4 py-2.5 rounded-xl border-slate-200 focus:ring-primary-blue text-sm">
+                    <input type="date" id="filter-fecha" class="w-full px-4 py-2.5 rounded-xl border-slate-200 focus:ring-primary-blue text-sm">
                 </div>
                 <div class="md:col-span-3 space-y-2">
                     <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Estado de la Solicitud</label>
-                    <select class="w-full px-4 py-2.5 rounded-xl border-slate-200 focus:ring-primary-blue text-sm">
-                        <option>Todos los estados</option>
-                        <option>Recibida / Nueva</option>
-                        <option>En Proceso</option>
-                        <option>Finalizada / Resuelta</option>
-                        <option>Vencida / Fuera de Plazo</option>
+                    <select id="filter-estado" class="w-full px-4 py-2.5 rounded-xl border-slate-200 focus:ring-primary-blue text-sm">
+                        <option value="">Todos los estados</option>
+                        <option value="0">Recibida / Nueva</option>
+                        <option value="1">Visada</option>
+                        <option value="2">Resp. Ejecutar</option>
+                        <option value="3">Respondida</option>
+                        <option value="4">Ejecutada</option>
+                        <option value="5">Notificada</option>
                     </select>
                 </div>
                 <div class="md:col-span-2">
@@ -113,35 +115,29 @@ include '../../api/general/header.php';
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 pt-4 border-t border-slate-50">
                     <div class="space-y-2">
                         <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Sector Territorial</label>
-                        <select class="w-full px-4 py-2.5 rounded-xl border-slate-200 focus:ring-primary-blue text-sm">
-                            <option>Todos los sectores</option>
-                            <option>Plan de Viña</option>
-                            <option>Santa Inés</option>
-                            <option>Miraflores</option>
-                            <option>Reñaca</option>
+                        <select id="filter-sector" class="w-full px-4 py-2.5 rounded-xl border-slate-200 focus:ring-primary-blue text-sm">
+                            <option value="">Todos los sectores</option>
                         </select>
                     </div>
                     <div class="space-y-2">
                         <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Temática Principal</label>
-                        <select class="w-full px-4 py-2.5 rounded-xl border-slate-200 focus:ring-primary-blue text-sm">
-                            <option>Todas las temáticas</option>
-                            <option>Aseo y Ornato</option>
-                            <option>Infraestructura Urbana</option>
-                            <option>Seguridad Pública</option>
+                        <select id="filter-tematica" class="w-full px-4 py-2.5 rounded-xl border-slate-200 focus:ring-primary-blue text-sm">
+                            <option value="">Todas las temáticas</option>
                         </select>
                     </div>
                     <div class="space-y-2">
                         <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Subtemática</label>
-                        <select class="w-full px-4 py-2.5 rounded-xl border-slate-200 focus:ring-primary-blue text-sm">
-                            <option>Todas las subtemáticas</option>
+                        <select id="filter-subtematica" class="w-full px-4 py-2.5 rounded-xl border-slate-200 focus:ring-primary-blue text-sm">
+                            <option value="">Todas las subtemáticas</option>
                         </select>
                     </div>
                     <div class="space-y-2">
                         <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Prioridad</label>
-                        <select class="w-full px-4 py-2.5 rounded-xl border-slate-200 focus:ring-primary-blue text-sm">
-                            <option>Todas</option>
-                            <option>Urgente</option>
-                            <option>Alta</option>
+                        <select id="filter-prioridad" class="w-full px-4 py-2.5 rounded-xl border-slate-200 focus:ring-primary-blue text-sm">
+                            <option value="">Todas</option>
+                            <option value="3">Urgente</option>
+                            <option value="2">Alta</option>
+                            <option value="1">Normal</option>
                         </select>
                     </div>
                 </div>
@@ -149,7 +145,7 @@ include '../../api/general/header.php';
                     <button class="text-slate-400 font-bold text-[11px] uppercase tracking-widest hover:text-rose-500 transition-colors" id="btnReset">
                         LIMPIAR TODO
                     </button>
-                    <button class="bg-slate-800 text-white px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest hover:bg-black transition-all shadow-md">
+                    <button id="btnAplicarFiltros" class="bg-slate-800 text-white px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest hover:bg-black transition-all shadow-md">
                         APLICAR FILTROS
                     </button>
                 </div>
@@ -161,16 +157,12 @@ include '../../api/general/header.php';
         <div class="p-5 border-b border-slate-50 flex justify-between items-center bg-white">
             <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
                 <span class="material-symbols-outlined text-primary-blue">list_alt</span> Resultados encontrados
-                <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-[10px] ml-2 font-black border border-slate-200">12 SOLICITUDES</span>
+                <span id="solicitudes-count" class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-[10px] ml-2 font-black border border-slate-200">0 SOLICITUDES</span>
             </h3>
-            <div class="flex items-center gap-4 text-slate-400">
-                <span class="text-[11px] font-bold uppercase tracking-tighter">Ordenar por: <span class="text-slate-800">Recientes</span></span>
-                <span class="material-symbols-outlined cursor-pointer hover:text-primary-blue transition-colors">sort</span>
-            </div>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-left">
+        <div class="overflow-x-auto p-4">
+            <table class="w-full text-left" id="table-oirs-consulta">
                 <thead>
                     <tr class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
                         <th class="px-6 py-4">Folio / Fecha</th>
@@ -180,65 +172,16 @@ include '../../api/general/header.php';
                         <th class="px-6 py-4 text-right">Acciones</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 text-[15px] text-slate-600">
-                    <tr class="oirs-row hover:bg-slate-50/80 transition-all cursor-pointer" data-folio="2024-8851">
-                        <td class="px-6 py-4">
-                            <div class="flex flex-col">
-                                <span class="font-black text-slate-800 tracking-tight">#OIRS-2024-8851</span>
-                                <span class="text-slate-400 text-xs mt-0.5 italic">Hoy, 09:45 AM</span>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-blue-50 text-primary-blue flex items-center justify-center font-bold text-[10px] border border-blue-100">RC</div>
-                                <div class="flex flex-col">
-                                    <span class="font-bold text-slate-700">Rodrigo Canales</span>
-                                    <span class="text-slate-400 text-[10px] font-medium tracking-wide">15.441.229-K</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="flex flex-col">
-                                <span class="font-medium text-slate-700">Aseo y Ornato</span>
-                                <span class="text-slate-400 text-[10px] uppercase font-bold tracking-widest">Microbasural</span>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 text-center">
-                            <span class="status-badge badge-ingresada">Recibida</span>
-                        </td>
-                        <td class="px-6 py-4 text-right">
-                            <div class="flex justify-end gap-1">
-                                <button class="action-btn text-slate-400 hover:text-primary-blue" title="Ver Detalles">
-                                    <span class="material-symbols-outlined">visibility</span>
-                                </button>
-                                <button class="action-btn text-slate-400 hover:text-amber-500" title="Editar">
-                                    <span class="material-symbols-outlined">edit</span>
-                                </button>
-                                <button class="action-btn text-primary-blue" title="Responder">
-                                    <span class="material-symbols-outlined">reply</span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                <tbody id="tbody-oirs-consulta" class="divide-y divide-slate-100 text-[15px] text-slate-600">
+                    <!-- Datos cargados dinámicamente -->
                 </tbody>
             </table>
         </div>
-
-        <div class="p-6 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4 bg-white">
-            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Mostrando 1 a 3 de 12 registros</span>
-            
-            <nav class="flex items-center gap-1">
-                <button class="p-2 text-slate-400 hover:bg-slate-50 rounded-lg"><span class="material-symbols-outlined text-lg">chevron_left</span></button>
-                <div class="flex gap-1">
-                    <button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary-blue text-white font-bold text-xs">1</button>
-                    <button class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 font-bold text-xs hover:bg-slate-50">2</button>
-                    <button class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 font-bold text-xs hover:bg-slate-50">3</button>
-                </div>
-                <button class="p-2 text-slate-400 hover:bg-slate-50 rounded-lg"><span class="material-symbols-outlined text-lg">chevron_right</span></button>
-            </nav>
-        </div>
     </div>
 </div>
+
+<!-- Scripts OIRS -->
+<script src="../../recursos/js/funcionarios/oirs/consultar.js"></script>
 
 <script>
     $(document).ready(function () {

@@ -85,7 +85,7 @@ include '../../api/general/header.php';
                     class="text-slate-400 font-bold hover:text-slate-600 transition-all text-[13px] uppercase tracking-wider">Cancelar</button>
                 <button type="submit"
                     class="flex items-center gap-2 bg-primary-blue hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-[13px] uppercase tracking-wider">
-                    <span class="material-symbols-outlined text-[20px]">save</span> GUARDAR INGRESO
+                    <span class="material-symbols-outlined text-[20px]">save</span> ENVIAR INGRESO
                 </button>
             </div>
         </div>
@@ -121,8 +121,7 @@ include '../../api/general/header.php';
                             </div>
                             <div class="space-y-2">
                                 <label for="tis_fecha_limite"
-                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Fecha
-                                    Límite</label>
+                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Fecha de Vencimiento</label>
                                 <input type="date" id="tis_fecha_limite"
                                     class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3" />
                                 <p class="text-[10px] text-slate-400 italic">Por defecto: 20 días hábiles.</p>
@@ -131,8 +130,7 @@ include '../../api/general/header.php';
 
                         <div class="space-y-2">
                             <label for="tis_contenido"
-                                class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Contenido /
-                                Descripción</label>
+                                class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Contenido / Providencia</label>
                             <textarea id="tis_contenido" rows="8" placeholder="Detalle aquí la solicitud..."
                                 class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-4 bg-slate-50 italic focus:bg-white transition-all"></textarea>
                         </div>
@@ -182,8 +180,7 @@ include '../../api/general/header.php';
                             </h3>
                         </div>
                         <span
-                            class="bg-slate-100 text-slate-500 text-[10px] px-2 py-1 rounded font-bold uppercase border border-slate-200">Simulación
-                            DocDigital</span>
+                            class="bg-slate-100 text-slate-500 text-[10px] px-2 py-1 rounded font-bold uppercase border border-slate-200">Funcionarios Involucrados</span>
                     </div>
 
                     <div class="p-6 space-y-6">
@@ -212,7 +209,7 @@ include '../../api/general/header.php';
                                 <thead
                                     class="bg-slate-50 text-slate-400 font-bold uppercase text-[9px] tracking-widest">
                                     <tr>
-                                        <th class="px-2 py-3">Funcionario</th>
+                                        <th class="px-2 py-3">Funcionario(a)</th>
                                         <th class="px-2 py-3 text-center">Rol</th>
                                         <th class="px-2 py-3 text-right">Acción</th>
                                     </tr>

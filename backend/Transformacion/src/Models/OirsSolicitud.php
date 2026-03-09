@@ -168,7 +168,7 @@ class OirsSolicitud
 
     public function getById($id)
     {
-        $query = "SELECT o.*, r.*, t.tem_nombre, s.sub_nombre, 
+        $query = "SELECT o.*, r.*, t.tem_nombre, s.sub_nombre, sec.sec_nombre as sector_nombre,
                   tgc.tgc_nombre, tgc.tgc_apellido_paterno, tgc.tgc_apellido_materno, tgc.tgc_rut,
                   tgc.tgc_razon_social, tgc.tgc_tipo, tgc.tgc_correo_electronico, tgc.tgc_telefono_contacto, tgc.tgc_fecha_nacimiento,
                   tgc.tgc_sexo, tgc.tgc_estado_civil, tgc.tgc_nacionalidad, tgc.tgc_escolaridad,
@@ -178,6 +178,7 @@ class OirsSolicitud
                   JOIN " . $this->table_name_parent . " r ON o.oirs_registro_tramite = r.rgt_id
                   LEFT JOIN trd_oirs_tematicas t ON o.oirs_tematica = t.tem_id
                   LEFT JOIN trd_oirs_subtematicas s ON o.oirs_subtematica = s.sub_id
+                  LEFT JOIN trd_general_sectores sec ON o.oirs_sector = sec.sec_id
                   LEFT JOIN trd_general_contribuyentes tgc ON r.rgt_contribuyente = tgc.tgc_id
                   LEFT JOIN trd_cont_direcciones d ON tgc.tgc_id = d.tcd_contribuyente
                   WHERE o.oirs_id = :id AND o.oirs_borrado = 0 AND r.rgt_borrado = 0";
@@ -190,17 +191,21 @@ class OirsSolicitud
 
     public function search($criteria)
     {
-        $query = "SELECT o.oirs_id 
+        $query = "SELECT o.*, r.*, t.tem_nombre, s.sub_nombre, 
+                  tgc.tgc_nombre, tgc.tgc_apellido_paterno, tgc.tgc_apellido_materno, tgc.tgc_rut,
+                  tgc.tgc_razon_social, tgc.tgc_tipo
                   FROM " . $this->table_name . " o
                   JOIN " . $this->table_name_parent . " r ON o.oirs_registro_tramite = r.rgt_id
+                  LEFT JOIN trd_oirs_tematicas t ON o.oirs_tematica = t.tem_id
+                  LEFT JOIN trd_oirs_subtematicas s ON o.oirs_subtematica = s.sub_id
                   LEFT JOIN trd_general_contribuyentes tgc ON r.rgt_contribuyente = tgc.tgc_id
                   WHERE o.oirs_borrado = 0 AND r.rgt_borrado = 0";
 
         $params = [];
 
-        if (!empty($criteria['oirs_id'])) {
-            $query .= " AND o.oirs_id = :oirs_id";
-            $params[':oirs_id'] = $criteria['oirs_id'];
+        if (!empty($criteria['id'])) {
+            $query .= " AND o.oirs_id = :id";
+            $params[':id'] = $criteria['id'];
         }
 
         if (!empty($criteria['folio'])) {
@@ -213,7 +218,42 @@ class OirsSolicitud
             $params[':rut'] = $criteria['rut'];
         }
 
-        $query .= " ORDER BY o.oirs_id DESC LIMIT 10"; // Limit results
+        if (!empty($criteria['fecha'])) {
+            $query .= " AND DATE(o.oirs_creacion) = :fecha";
+            $params[':fecha'] = $criteria['fecha'];
+        }
+
+        if (isset($criteria['estado']) && $criteria['estado'] !== '' && $criteria['estado'] !== null) {
+            $query .= " AND o.oirs_estado = :estado";
+            $params[':estado'] = $criteria['estado'];
+        }
+
+        if (!empty($criteria['sector'])) {
+            $query .= " AND o.oirs_sector = :sector";
+            $params[':sector'] = $criteria['sector'];
+        }
+
+        if (!empty($criteria['tematica'])) {
+            $query .= " AND o.oirs_tematica = :tematica";
+            $params[':tematica'] = $criteria['tematica'];
+        }
+
+        if (!empty($criteria['subtematica'])) {
+            $query .= " AND o.oirs_subtematica = :subtematica";
+            $params[':subtematica'] = $criteria['subtematica'];
+        }
+
+        if (!empty($criteria['prioridad'])) {
+            $query .= " AND o.oirs_prioridad_municipal = :prioridad";
+            $params[':prioridad'] = $criteria['prioridad'];
+        }
+
+        if (!empty($criteria['search'])) {
+            $query .= " AND (r.rgt_id_publica LIKE :search OR tgc.tgc_nombre LIKE :search OR tgc.tgc_rut LIKE :search OR tgc.tgc_apellido_paterno LIKE :search)";
+            $params[':search'] = '%' . $criteria['search'] . '%';
+        }
+
+        $query .= " ORDER BY o.oirs_id DESC";
 
         $stmt = $this->conn->prepare($query);
         foreach ($params as $key => $val) {
@@ -234,11 +274,16 @@ class OirsSolicitud
             $queryPending = "SELECT COUNT(*) FROM " . $this->table_name . " WHERE oirs_borrado = 0 AND oirs_estado < 4";
             $pending = $this->conn->query($queryPending)->fetchColumn();
 
-            // 3. Resueltas este mes (Estado >= 4, dentro del mes actual)
-            $queryResolvedMonth = "SELECT COUNT(*) FROM " . $this->table_name . " 
-                                   WHERE oirs_borrado = 0 AND oirs_estado >= 4 
-                                   AND MONTH(oirs_creacion) = MONTH(CURRENT_DATE()) 
-                                   AND YEAR(oirs_creacion) = YEAR(CURRENT_DATE())";
+            // 3. Resueltas este mes (Estado >= 4, considerando la fecha del último evento de resolución)
+            $queryResolvedMonth = "SELECT COUNT(*) FROM (
+                                    SELECT o.oirs_id
+                                    FROM " . $this->table_name . " o
+                                    JOIN trd_general_bitacora b ON o.oirs_registro_tramite = b.bit_tramite_registrado
+                                    WHERE o.oirs_borrado = 0 AND o.oirs_estado >= 4
+                                    GROUP BY o.oirs_id
+                                    HAVING MONTH(MAX(b.bit_creacion)) = MONTH(CURRENT_DATE())
+                                    AND YEAR(MAX(b.bit_creacion)) = YEAR(CURRENT_DATE())
+                                ) as resolved_this_month";
             $resolvedMonth = $this->conn->query($queryResolvedMonth)->fetchColumn();
 
             // 4. Tiempo Promedio de Resolución (Días)

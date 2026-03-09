@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\Ingresos_Destinos;
 use App\Models\Ingresos_ingreso;
+use App\Helpers\Encode;
 use App\Models\Bitacora; // Assuming Bitacora is used
 use App\Helpers\SimpleSMTP;
 use App\Helpers\ConfigLoader;
@@ -19,6 +20,7 @@ class Ingresos_SolicitudControler
     private $solicitud;
     private $mailService;
     private $destinos;
+    private $encoder;
 
     public function __construct($db)
     {
@@ -26,6 +28,7 @@ class Ingresos_SolicitudControler
         $this->solicitud = new Ingresos_ingreso($this->db);
         $this->destinos = new Ingresos_Destinos($this->db);
         $this->mailService = new MailService($this->db);
+        $this->encoder = new Encode();
     }
 
     public function getAllMine($filters = [], $current_user_id = null)
@@ -44,6 +47,7 @@ class Ingresos_SolicitudControler
     {
         $result = $this->solicitud->getById($id, $current_user_id);
         if ($result) {
+            $result['tis_registro_tramite_cif'] = $this->encoder->cifrar($result['tis_registro_tramite']);
             return ["status" => "success", "data" => $result];
         }
         return ["status" => "error", "message" => "Solicitud not found"];
@@ -65,7 +69,12 @@ class Ingresos_SolicitudControler
             // Notificar por email a los destinatarios asignados
             $this->notificarDestinatarios($result[1], $data, 'creación');
 
-            return ["status" => "success", "message" => "Solicitud created successfully", "id" => $result[1]];
+            return [
+                "status" => "success",
+                "message" => "Solicitud created successfully",
+                "id" => $result[1],
+                "rgt_id" => $result[2] ?? null
+            ];
         }
         return [
             "status" => "error",
@@ -128,7 +137,7 @@ class Ingresos_SolicitudControler
                 $_SESSION['otp_firma']['ing_id'] != $id ||
                 time() > $_SESSION['otp_firma']['expires']
             ) {
-                return ["status" => "error", "message" => "Código de verificación inválido o expirado."];
+                return ["status" => "error", "message" => "Código de verificación inválido o expirado.", "id" => $id, "sesid" => $_SESSION['otp_firma']['ing_id']];
             }
             // Clear OTP on success
             unset($_SESSION['otp_firma']);

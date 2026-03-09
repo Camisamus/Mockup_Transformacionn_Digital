@@ -519,7 +519,7 @@ class Ingresos_ingreso
                 }
 
                 $this->conn->commit();
-                return [true, $data_id];
+                return [true, $data_id, $rgt_id];
             }
 
             $this->conn->rollBack();

@@ -5,7 +5,7 @@ require_once __DIR__ . '/../../src/Config/Database.php';
 
 use App\Config\Database;
 // Asumo que tienes un controlador para OIRS similar al de Ingresos
-use App\Controllers\OirsControler; 
+use App\Controllers\OirsSolicitudController; 
 use App\Helpers\Encode;
 use App\Helpers\Fechas;
 
@@ -13,7 +13,7 @@ use App\Helpers\Fechas;
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new OirsControler($db);
+$controller = new OirsSolicitudController($db);
 $encoder = new Encode();
 $fechaHelper = new Fechas();
 
@@ -41,23 +41,23 @@ try {
 
     $oirs = $response['data'];
 
-    // 4. Mapeo de variables (Ajusta los nombres según tu BD)
-    $folio = htmlspecialchars($oirs['oirs_folio'] ?? 'S/F');
-    $fecha_reg = isset($oirs['oirs_fecha_reg']) ? $fechaHelper->formatearFecha($oirs['oirs_fecha_reg']) : date('d/m/Y');
-    $hora_reg = htmlspecialchars($oirs['oirs_hora_reg'] ?? '--:--');
+    // 4. Mapeo de variables
+    $folio = htmlspecialchars($oirs['rgt_id_publica'] ?? 'S/F');
+    $fecha_reg = isset($oirs['oirs_creacion']) ? date('d/m/Y', strtotime($oirs['oirs_creacion'])) : date('d/m/Y');
+    $hora_reg = isset($oirs['oirs_creacion']) ? date('H:i', strtotime($oirs['oirs_creacion'])) : '--:--';
     
     // Datos Contribuyente
-    $nombre_completo = htmlspecialchars(($oirs['cont_nombre'] ?? '') . ' ' . ($oirs['cont_apellido_p'] ?? '') . ' ' . ($oirs['cont_apellido_m'] ?? ''));
-    $rut = htmlspecialchars($oirs['cont_rut'] ?? 'No registrado');
-    $email = htmlspecialchars($oirs['cont_email'] ?? 'No registrado');
-    $telefono = htmlspecialchars($oirs['cont_telefono'] ?? 'No registrado');
+    $nombre_completo = htmlspecialchars(($oirs['tgc_nombre'] ?? '') . ' ' . ($oirs['tgc_apellido_paterno'] ?? '') . ' ' . ($oirs['tgc_apellido_materno'] ?? ''));
+    $rut = htmlspecialchars($oirs['tgc_rut'] ?? 'No registrado');
+    $email = htmlspecialchars($oirs['tgc_correo_electronico'] ?? 'No registrado');
+    $telefono = htmlspecialchars($oirs['tgc_telefono_contacto'] ?? 'No registrado');
     
     // Detalles Solicitud
-    $tematica = htmlspecialchars($oirs['tematica_nombre'] ?? 'General');
-    $subtematica = htmlspecialchars($oirs['subtematica_nombre'] ?? 'Sin especificar');
+    $tematica = htmlspecialchars($oirs['tem_nombre'] ?? 'General');
+    $subtematica = htmlspecialchars($oirs['sub_nombre'] ?? 'Sin especificar');
     $sector = htmlspecialchars($oirs['sector_nombre'] ?? 'Toda la comuna');
     $descripcion = nl2br(htmlspecialchars($oirs['oirs_descripcion'] ?? 'Sin descripción'));
-    $respuesta = nl2br(htmlspecialchars($oirs['oirs_respuesta_inmediata'] ?? 'Sin respuesta registrada en el acto.'));
+    $respuesta = nl2br(htmlspecialchars($oirs['gestion']['oig_respuesta_preliminar'] ?? 'Sin respuesta registrada en el acto.'));
 
     // 5. Construcción del HTML para el PDF
     $html = '
@@ -141,7 +141,7 @@ try {
     <div class="section-title">3. DESCRIPCIÓN DE LA SOLICITUD</div>
     <div class="content-box">' . $descripcion . '</div>';
 
-    if (!empty($oirs['oirs_respuesta_inmediata'])) {
+    if (!empty($oirs['gestion']['oig_respuesta_preliminar'])) {
         $html .= '
         <div class="section-title">4. RESPUESTA ENTREGADA EN EL ACTO</div>
         <div class="content-box" style="border-left: 3px solid #10b981;">' . $respuesta . '</div>';

@@ -2,22 +2,153 @@
 let mapCont, markerCont, mapInc, markerInc, geocoder;
 let isUpdatingFromMapCont = false;
 let isUpdatingFromMapInc = false;
+let allSubtematicas = [];
 
 // Lista de archivos seleccionados
 let selectedFilesOirs = [];
 
 
+// Helper: Formatear RUT (Agregada para evitar errores de "undefined")
+function formatRut(rut) {
+    let value = rut.replace(/\./g, '').replace('-', '');
+    if (value.length < 2) return value;
+    let cuerpo = value.slice(0, -1);
+    let dv = value.slice(-1).toUpperCase();
+    return cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "-" + dv;
+}
+
 $('#rut_contribuyente').on('blur', function () {
-    // Formatear RUT 
     let formattedRut = formatRut($(this).val());
-    $('#rut_contribuyente').val(formattedRut);
+    $(this).val(formattedRut);
 });
 
 $(document).ready(function () {
-    // Initial data load
+    // Carga inicial
     cargarListas();
 
-    // Stepper Navigation Logic
+    // --- Cambio de Tipo de Persona ---
+    $('#cont_tipo_persona').change(function () {
+        const tipo = $(this).val();
+        if (tipo === 'natural') {
+            $('#campos_natural').removeClass('d-none');
+            $('#campos_juridica').addClass('d-none');
+        } else {
+            $('#campos_natural').addClass('d-none');
+            $('#campos_juridica').removeClass('d-none');
+        }
+    });
+
+    // --- Búsqueda de RUT Contribuyente ---
+    $('#btnBuscarRut').click(async function () {
+        const rut = $('#rut_contribuyente').val();
+        if (!rut) {
+            Swal.fire('Atención', 'Por favor ingrese un RUT para buscar.', 'warning');
+            return;
+        }
+
+        $('#rutStatus').show();
+        let btn = $(this);
+        btn.prop('disabled', true);
+
+        try {
+            const response = await fetch('../../api/sisadmin/mantenedores/general/contribuyentes_general.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ACCION: 'BUSCAR_RUT', tgc_rut: rut })
+            });
+
+            const res = await response.json();
+
+            if (res.status === 'success') {
+                const c = res.data;
+                // Autocompletar datos básicos
+                $('#cont_tipo_persona').val(c.tgc_tipo).trigger('change');
+
+                if (c.tgc_tipo === 'natural') {
+                    $('#cont_nombre').val(c.tgc_nombre);
+                    $('#cont_apellido_p').val(c.tgc_apellido_paterno);
+                    $('#cont_apellido_m').val(c.tgc_apellido_materno);
+                    $('#cont_sexo').val(c.tgc_sexo);
+                    $('#cont_fecha_nac').val(c.tgc_fecha_nacimiento);
+                    $('#cont_estado_civil').val(c.tgc_estado_civil);
+                    $('#cont_escolaridad').val(c.tgc_escolaridad);
+                } else {
+                    $('#cont_razon_social').val(c.tgc_razon_social);
+                    $('#cont_rep_rut').val(c.tgc_rep_rut);
+                    $('#cont_rep_nombre_completo').val(c.tgc_rep_nombre_completo);
+                }
+
+                $('#cont_email').val(c.tgc_correo_electronico);
+                $('#cont_telefono').val(c.tgc_telefono_contacto);
+
+                // Autocompletar Dirección y Mapa
+                if (c.tcd_calle) {
+                    const dirCompleta = `${c.tcd_calle}${c.tcd_numero ? ' ' + c.tcd_numero : ''}`;
+                    $('#cont_direccion').val(dirCompleta);
+                    if (c.tcd_latitud && c.tcd_longitud) {
+                        updateMap('cont', parseFloat(c.tcd_latitud), parseFloat(c.tcd_longitud));
+                    }
+                }
+
+                Swal.fire({
+                    title: 'Usuario Encontrado',
+                    text: 'Los datos del contribuyente han sido cargados.',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            } else {
+                Swal.fire({
+                    title: 'Usuario no registrado',
+                    text: 'El RUT ingresado no se encuentra en nuestros registros. Por favor, complete los datos manualmente.',
+                    icon: 'info'
+                });
+            }
+        } catch (error) {
+            console.error('Error al buscar RUT:', error);
+            Swal.fire('Error', 'Ocurrió un error al consultar el RUT.', 'error');
+        } finally {
+            $('#rutStatus').hide();
+            btn.prop('disabled', false);
+        }
+    });
+
+    // --- Geocodificación Automática al Escribir Dirección ---
+    // --- Búsqueda Manual de Dirección en Mapa ---
+
+    $('#btnBuscarDirCont').click(function () {
+        const address = $('#cont_direccion').val();
+        if (address) {
+            geocodeAddress('cont', address);
+        } else {
+            Swal.fire('Atención', 'Ingrese una dirección para buscar en el mapa.', 'info');
+        }
+    });
+
+    $('#btnBuscarDirInc').click(function () {
+        const address = $('#oirs_direccion_incidente').val();
+        if (address) {
+            geocodeAddress('inc', address);
+        } else {
+            Swal.fire('Atención', 'Ingrese una dirección para buscar en el mapa.', 'info');
+        }
+    });
+
+    $('#cont_direccion').on('keypress', function (e) {
+        if (e.which == 13) {
+            e.preventDefault();
+            $('#btnBuscarDirCont').click();
+        }
+    });
+
+    $('#oirs_direccion_incidente').on('keypress', function (e) {
+        if (e.which == 13) {
+            e.preventDefault();
+            $('#btnBuscarDirInc').click();
+        }
+    });
+
+    // --- Lógica de Navegación Stepper ---
     $('.btnNext').click(function () {
         let next = $(this).data('next');
         $('.step-content').addClass('d-none');
@@ -26,11 +157,7 @@ $(document).ready(function () {
         $(`#step-${next - 1}-indicator`).addClass('completed').removeClass('active');
         window.scrollTo(0, 0);
         if (window.feather) feather.replace();
-
-        // Si se entra al paso 2, nos aseguramos que el segundo mapa se redimensione (si es necesario)
-        if (next === 2 && mapInc) {
-            google.maps.event.trigger(mapInc, 'resize');
-        }
+        if (next === 2 && mapInc) google.maps.event.trigger(mapInc, 'resize');
     });
 
     $('.btnPrev').click(function () {
@@ -43,166 +170,23 @@ $(document).ready(function () {
         if (window.feather) feather.replace();
     });
 
-    // Toggle Persona Natural / Jurídica
-    $('#cont_tipo_persona').change(function () {
-        if ($(this).val() === 'juridica') {
-            $('#campos_natural').addClass('d-none');
-            $('#campos_juridica').removeClass('d-none');
-        } else {
-            $('#campos_natural').removeClass('d-none');
-            $('#campos_juridica').addClass('d-none');
-        }
+    // --- Gestión de PDF ---
+    $('#btnDescargarPDF').click(function () {
+        generarComprobante(); // La función interna ya maneja la extracción del ID
     });
 
-    // Búsqueda dinámica de RUT
-    $('#btnBuscarRut').click(async function () {
-        let rutValue = $('#rut_contribuyente').val().trim();
-        if (!rutValue) {
-            Swal.fire({
-                title: 'Atención',
-                text: 'Por favor ingrese un RUT para buscar.',
-                icon: 'warning',
-                confirmButtonColor: '#003399'
-            });
-            return;
-        }
-
-        $('#rutStatus').text('Buscando...').fadeIn();
-
-        try {
-            const response = await fetch('../../api/sisadmin/mantenedores/general/contribuyentes_general.php', {
-                method: 'POST',
-                body: JSON.stringify({
-                    ACCION: 'BUSCAR_RUT',
-                    tgc_rut: rutValue
-                })
-            });
-
-            const res = await response.json();
-
-            if (res.status === 'success' && res.data) {
-                const d = res.data;
-                $('#rutStatus').text('¡Datos encontrados!').delay(1000).fadeOut();
-
-                // Poblar campos
-                $('#cont_nombre').val(d.tgc_nombre || '');
-                $('#cont_apellido_p').val(d.tgc_apellido_paterno || '');
-                $('#cont_apellido_m').val(d.tgc_apellido_materno || '');
-                $('#cont_sexo').val(d.tgc_sexo || '');
-                $('#cont_fecha_nac').val(d.tgc_fecha_nacimiento || '');
-                $('#cont_estado_civil').val(d.tgc_estado_civil || '');
-                $('#cont_escolaridad').val(d.tgc_escolaridad || '');
-                $('#cont_nacionalidad').val(d.tgc_nacionalidad || 'Chilena');
-                $('#cont_email').val(d.tgc_correo_electronico || '');
-                $('#cont_telefono').val(d.tgc_telefono_contacto || '');
-
-                // Formatear dirección para el INPUT (Completa)
-                let dirDisplay = [];
-                if (d.tcd_calle) dirDisplay.push(d.tcd_calle);
-                if (d.tcd_numero) dirDisplay.push(d.tcd_numero);
-                if (d.tcd_casa) dirDisplay.push(`Casa ${d.tcd_casa}`);
-                if (d.tcd_departamento) dirDisplay.push(`Depto ${d.tcd_departamento}`);
-                if (d.tcd_aclaratoria) dirDisplay.push(`(${d.tcd_aclaratoria})`);
-                $('#cont_direccion').val(dirDisplay.join(' '));
-
-                // Formatear dirección para el MAPA (Geocodificación limpia)
-                let dirGeocode = [];
-                if (d.tcd_calle) dirGeocode.push(d.tcd_calle);
-                if (d.tcd_numero) dirGeocode.push(d.tcd_numero);
-
-                let comunaValue = $('#cont_comuna').val() || 'Viña del Mar';
-                let geocodeString = dirGeocode.join(' ') + ", " + comunaValue;
-
-                // Mapa Contribuyente: Prioridad a coordenadas de la BDD
-                if (d.tcd_latitud && d.tcd_longitud) {
-                    updateMap('cont', parseFloat(d.tcd_latitud), parseFloat(d.tcd_longitud), true);
-                } else if (dirGeocode.length > 0) {
-                    geocodeAddress('cont', geocodeString);
-                }
-
-            } else {
-                $('#rutStatus').text('No encontrado.').delay(1000).fadeOut();
-                $('#rut_contribuyente').prop('readonly', true);
-                $('#cont_nombre').focus();
-
-                Swal.fire({
-                    title: 'Contribuyente Nuevo',
-                    text: 'El RUT no se encuentra en nuestros registros. Por favor complete los datos manualmente.',
-                    icon: 'info',
-                    confirmButtonColor: '#003399'
-                });
-            }
-        } catch (error) {
-            console.error('Error in RUT search:', error);
-            $('#rutStatus').text('Error de conexión.').fadeOut();
-            Swal.fire('Error', 'No se pudo realizar la búsqueda.', 'error');
-        }
-    });
-
-    // Event listener para cambios en la dirección del contribuyente (Geocodificación)
-    $('#cont_direccion').on('blur', function () {
-        let address = $(this).val();
-        if (address && !isUpdatingFromMapCont) {
-            geocodeAddress('cont', address);
-        }
-    });
-
-    // Event listener para cambios en la dirección del incidente (Geocodificación)
-    $('#oirs_direccion_incidente').on('blur', function () {
-        let address = $(this).val();
-        if (address && !isUpdatingFromMapInc) {
-            geocodeAddress('inc', address);
-        }
-    });
-
-    // Event listener for Temática change to update Subtemáticas
+    // --- Cambio de Temática / Subtemática ---
     $('#oirs_tematica').change(function () {
         const temId = $(this).val();
         const subSelect = $('#oirs_subtematica');
         subSelect.empty().append('<option value="" selected disabled>Seleccione subtemática...</option>');
-
         const filtered = allSubtematicas.filter(s => s.tem_id == temId);
         filtered.forEach(s => {
             subSelect.append(`<option value="${s.sub_id}">${s.sub_nombre}</option>`);
         });
     });
 
-    // Lógica de Archivos Adjuntos
-    $('#oirs_adjuntos').on('change', async function (e) {
-        const files = e.target.files;
-        if (files.length > 0) {
-            for (let i = 0; i < files.length; i++) {
-                const fileData = await readFileAsBase64(files[i]);
-                selectedFilesOirs.push(fileData);
-            }
-            renderFileListOirs();
-            $(this).val('');
-        }
-    });
-
-    // --- NUEVO: Copiar dirección contribuyente al incidente ---
-    $('#copy_address').on('change', function () {
-        if ($(this).is(':checked')) {
-            const direccionCont = $('#cont_direccion').val();
-            const latCont = $('#cont_lat').val();
-            const lngCont = $('#cont_lng').val();
-
-            if (direccionCont) {
-                $('#oirs_direccion_incidente').val(direccionCont);
-                $('#oirs_lat').val(latCont);
-                $('#oirs_lng').val(lngCont);
-
-                if (latCont && lngCont) {
-                    updateMap('inc', parseFloat(latCont), parseFloat(lngCont));
-                }
-            } else {
-                Swal.fire('Atención', 'No hay una dirección definida en el contribuyente.', 'warning');
-                $(this).prop('checked', false);
-            }
-        }
-    });
-
-    // Finalizar Registro
+    // --- Finalizar Registro ---
     $('#btnFinalizar').click(async function () {
         let btn = $(this);
 
@@ -228,6 +212,7 @@ $(document).ready(function () {
 
         let payload = {
             ACCION: 'CREAR',
+            // ... (Se asume que todos los IDs de los inputs en tu HTML coinciden con estos)
             cont_tipo_persona: $('#cont_tipo_persona').val(),
             cont_rut: $('#rut_contribuyente').val(),
             cont_nombres: $('#cont_nombre').val(),
@@ -274,22 +259,23 @@ $(document).ready(function () {
             const res = await response.json();
 
             if (res.status === 'success') {
-                $('#oirs_folio_final').text('#OIRS-2602-' + res.id);
+                const nuevoId = res.id;
+                $('#oirs_folio_final').text('#OIRS-2602-' + nuevoId);
+
+                // ACTUALIZACIÓN: Re-vinculamos el botón para el ID recién creado
+                $('#btnDescargarPDF').off('click').on('click', function () {
+                    generarComprobante(nuevoId);
+                });
 
                 $('.step-content').addClass('d-none');
                 $('#step-3').removeClass('d-none');
                 $('#step-3-indicator').addClass('active completed');
                 $('#step-2-indicator').addClass('completed').removeClass('active');
+
                 window.scrollTo(0, 0);
                 if (window.feather) feather.replace();
 
-                Swal.fire({
-                    title: '¡Registrado!',
-                    text: 'La solicitud ha sido ingresada correctamente.',
-                    icon: 'success',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
+                Swal.fire({ title: '¡Registrado!', text: 'La solicitud ha sido ingresada correctamente.', icon: 'success', timer: 2000, showConfirmButton: false });
             } else {
                 throw new Error(res.message || 'Error desconocido');
             }
@@ -299,11 +285,6 @@ $(document).ready(function () {
         } finally {
             btn.prop('disabled', false).html('Finalizar Registro <span class="material-symbols-outlined ml-2" style="font-size: 18px;">check_circle</span>');
         }
-    });
-
-    // --- NUEVO: Evento para el botón de descarga PDF ---
-    $('#btnDescargarPDF').click(function () {
-        generarComprobante();
     });
 
 }); // Fin del document.ready
@@ -505,6 +486,14 @@ async function geocodeAddress(type, address) {
         if (status === "OK") {
             const loc = results[0].geometry.location;
             updateMap(type, loc.lat(), loc.lng());
+
+            // Si fue exitoso y estamos en un contexto manual, podemos dar un pequeño feedback visual o simplemente dejar que el pin se mueva
+        } else {
+            Swal.fire({
+                title: 'Ubicación no encontrada',
+                text: 'No logramos posicionar la dirección en el mapa. Intenta ser más específico o marca el punto directamente en el mapa.',
+                icon: 'warning'
+            });
         }
     });
 }
@@ -533,41 +522,19 @@ async function reverseGeocode(type, lat, lng) {
     });
 }
 
-// Función para generar el comprobante PDF
-function generarComprobante() {
-    // 1. Capturar los datos reales de tus inputs de ingresar.js
-    const datos = {
-        nombre: $('#cont_nombre').val() + ' ' + $('#cont_apellido_p').val(),
-        rut: $('#rut_contribuyente').val(),
-        tipo: $('#oirs_tipo_atencion option:selected').text(), // Obtenemos el texto del select
-        tematica: $('#oirs_tematica option:selected').text(),
-        descripcion: $('#oirs_descripcion').val(),
-        folio: $('#oirs_folio_final').text(), // El folio que generó la API
-        fecha: new Date().toLocaleString()
-    };
+// Nueva función para generar el comprobante PDF vía API Backend
+function generarComprobante(idSolicitud) {
+    if (!idSolicitud) {
+        // Si no hay ID (por ejemplo, si presionan el botón manualmente antes de registrar)
+        // Intentamos extraerlo del texto del folio si ya existe
+        const folioTexto = $('#oirs_folio_final').text();
+        idSolicitud = folioTexto.split('-').pop(); // Extrae el ID del final
+    }
 
-    // 2. Inyectarlos en los elementos de la plantilla HTML (la que pusimos en el paso anterior)
-    $('#pdf-nombre').text(datos.nombre);
-    $('#pdf-rut').text(datos.rut);
-    $('#pdf-tipo').text(datos.tipo);
-    $('#pdf-tematica').text(datos.tematica);
-    $('#pdf-descripcion').text(datos.descripcion);
-    $('#pdf-fecha').text(datos.fecha);
-    $('#pdf-folio').text(datos.folio);
-
-    // 3. Configurar y generar el PDF usando la librería html2pdf
-    const elemento = document.getElementById('plantilla-pdf');
-    $(elemento).show(); // Mostrar temporalmente para la captura
-
-    const opciones = {
-        margin: 0.5,
-        filename: `Comprobante_${datos.folio}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, logging: false },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-    };
-
-    html2pdf().set(opciones).from(elemento).save().then(() => {
-        $(elemento).hide(); // Ocultar de nuevo
-    });
+    if (idSolicitud && idSolicitud !== "") {
+        // Abrir la API en una pestaña nueva pasando el ID
+        window.open(`../../api/reportes/pdf_oirs_expediente.php?ID=${idSolicitud}`, '_blank');
+    } else {
+        Swal.fire('Error', 'No se encontró un ID de solicitud válido para generar el PDF.', 'error');
+    }
 }

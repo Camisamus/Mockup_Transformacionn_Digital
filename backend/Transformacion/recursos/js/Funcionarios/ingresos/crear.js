@@ -378,14 +378,8 @@ async function guardarIngreso() {
             const urlParams = new URLSearchParams(window.location.search);
             const idPadre = urlParams.get('rgt_id_padre');
             if (idPadre) {
-                const childRequestId = result.id;
-                const respChild = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ ACCION: 'CONSULTAM', ing_id: childRequestId })
-                });
-                const resChild = await respChild.json();
-                const childRgtId = resChild.data.tis_registro_tramite;
+                // Ya tenemos el rgt_id directo desde el retorno de CREAR
+                const childRgtId = result.rgt_id;
 
                 const respLink = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
                     method: 'POST',

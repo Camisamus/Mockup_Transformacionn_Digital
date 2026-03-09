@@ -31,6 +31,11 @@ switch ($data['ACCION']) {
         echo json_encode($response);
         break;
 
+    case 'CONSULTA_TEMATICA':
+        $response = $controller->getByTematica($data['tem_id'] ?? null);
+        echo json_encode($response);
+        break;
+
     case 'CREAR':
         $response = $controller->create($data);
         echo json_encode($response);

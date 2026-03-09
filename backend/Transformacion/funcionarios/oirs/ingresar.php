@@ -1,5 +1,6 @@
 <?php
 $pageTitle = "Ingresar Solicitud OIRS";
+date_default_timezone_set('America/Santiago');
 require_once '../../api/general/auth_check.php';
 include '../../api/general/header.php';
 ?>
@@ -227,7 +228,7 @@ include '../../api/general/header.php';
                                 <div class="space-y-2">
                                     <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Nombre
                                         Representante</label>
-                                    <input type="text" id="cont_rep_nombre"
+                                    <input type="text" id="cont_rep_nombre_completo"
                                         class="w-full h-11 rounded-xl border-slate-200 text-sm">
                                 </div>
                                 <div class="space-y-2">
@@ -253,8 +254,15 @@ include '../../api/general/header.php';
                         <div class="md:col-span-2 space-y-2">
                             <label
                                 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Dirección</label>
-                            <input type="text" id="cont_direccion" placeholder="Calle, Número, Depto/Casa"
-                                class="w-full h-11 rounded-xl border-slate-200 text-sm">
+                            <div class="flex gap-2">
+                                <input type="text" id="cont_direccion" placeholder="Calle, Número, Depto/Casa"
+                                    class="flex-1 h-11 rounded-xl border-slate-200 text-sm px-4 focus:ring-primary-blue">
+                                <button type="button" id="btnBuscarDirCont"
+                                    class="bg-slate-100 text-slate-600 px-4 rounded-xl hover:bg-slate-200 transition-all flex items-center border border-slate-200"
+                                    title="Buscar en el mapa">
+                                    <span class="material-symbols-outlined">map</span>
+                                </button>
+                            </div>
                         </div>
                         <div class="space-y-2">
                             <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Comuna</label>
@@ -351,8 +359,15 @@ include '../../api/general/header.php';
                             <div class="space-y-2">
                                 <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Dirección
                                     del Incidente</label>
-                                <input type="text" id="oirs_direccion_incidente" placeholder="¿Dónde ocurre?"
-                                    class="w-full h-11 rounded-xl border-slate-200 text-sm">
+                                <div class="flex gap-2">
+                                    <input type="text" id="oirs_direccion_incidente" placeholder="¿Dónde ocurre?"
+                                        class="flex-1 h-11 rounded-xl border-slate-200 text-sm px-4 focus:ring-primary-blue">
+                                    <button type="button" id="btnBuscarDirInc"
+                                        class="bg-slate-100 text-slate-600 px-4 rounded-xl hover:bg-slate-200 transition-all flex items-center border border-slate-200"
+                                        title="Buscar en el mapa">
+                                        <span class="material-symbols-outlined">map</span>
+                                    </button>
+                                </div>
                             </div>
                             <div id="map_incidente" class="w-full rounded-2xl border border-slate-100"
                                 style="height: 250px;"></div>
@@ -431,7 +446,7 @@ include '../../api/general/header.php';
                 <div class="h-px bg-slate-100 max-w-md mx-auto"></div>
 
                 <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-                    <button type="button" id="btnDescargarPDF"<!-- onclick="generarPDF_OIRS();"
+                    <button type="button" id="btnDescargarPDF" onclick="generarPDF_OIRS();"
                         class="flex items-center justify-center gap-2 bg-slate-800 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-black transition-all text-xs uppercase tracking-wider">
                         <span class="material-symbols-outlined">picture_as_pdf</span> Descargar Comprobante PDF
                     </button>

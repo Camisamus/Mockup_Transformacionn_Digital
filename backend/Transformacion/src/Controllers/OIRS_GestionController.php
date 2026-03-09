@@ -2,11 +2,13 @@
 namespace App\Controllers;
 
 use App\Models\OIRS_Gestion;
+use App\Controllers\MailController;
 
 class OIRS_GestionController
 {
     private $db;
     private $gestion;
+    private $mailController;
 
     public function __construct($db)
     {
@@ -39,7 +41,16 @@ class OIRS_GestionController
         }
 
         if ($this->gestion->update($solicitud_id, $data)) {
-            return ["status" => "success", "message" => "Gestión de OIRS actualizada correctamente"];
+            /* 
+            // Temporalmente desactivado para pruebas de flujo según requerimiento del usuario
+            switch ($data['oig_estado'] ?? '') {
+                case '1':
+                    $this->mailController->notificarTomaConocimiento($solicitud_id, 'Actualizacion');
+                    break;
+...
+            }
+            */
+            return ["status" => "success", "message" => "Respuesta guardada con éxito"];
         }
         return ["status" => "error", "message" => "No se pudo actualizar la gestión de OIRS"];
     }

@@ -35,14 +35,23 @@ $(document).ready(function () {
     }
 
     function renderUrgentTable(data) {
+        const table = $('#table_oirs_urgentes');
         const tbody = $('#tbody_desve');
+
+        // Destruir instance previa si existe
+        if ($.fn.DataTable.isDataTable('#table_oirs_urgentes')) {
+            table.DataTable().destroy();
+        }
+
         tbody.empty();
 
-        // Filtrar y ordenar: prioridad Urgente (supongamos 1 es urgente) o según fecha_limite
-        // Tomamos el top 5
+        // Filtrar solo pendientes (estado < 4) y ordenar por fecha límite
         const urgentItems = data
-            .sort((a, b) => new Date(a.oirs_fecha_limite) - new Date(b.oirs_fecha_limite))
-            .slice(0, 5);
+            .filter(item => parseInt(item.oirs_estado) < 4)
+            .sort((a, b) => new Date(a.oirs_fecha_limite) - new Date(b.oirs_fecha_limite));
+
+        // Actualizar subtítulo en index.php si es necesario, o solo mostrar todos.
+        // El usuario pidió "mostrar todas las oirs pendientes".
 
         if (urgentItems.length === 0) {
             tbody.html('<tr><td colspan="5" class="px-6 py-4 text-center text-slate-400">No hay solicitudes urgentes pendientes</td></tr>');
@@ -58,7 +67,7 @@ $(document).ready(function () {
                 <tr class="hover:bg-slate-50/80 transition-all cursor-pointer oirs-row" onclick="window.location.href='ver.php?id=${item.oirs_id}'">
                     <td class="px-6 py-4">
                         <div class="flex flex-col">
-                            <span class="font-black text-slate-800 tracking-tight">#${item.rgt_id_publica || item.oirs_id}</span>
+                            <span class="font-black text-slate-800 tracking-tight">#${item.o_id || item.oirs_id}</span>
                             <span class="text-slate-400 text-xs mt-0.5 italic">${formatDate(item.oirs_fecha_ingreso || item.created_at)}</span>
                         </div>
                     </td>
@@ -87,6 +96,28 @@ $(document).ready(function () {
                 </tr>
             `;
             tbody.append(row);
+        });
+
+        // Inicializar DataTable
+        table.DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+            },
+            pageLength: 5,
+            lengthMenu: [5, 10, 25, 50],
+            order: [[2, 'asc']], // Ordenar por días restantes (columna 2)
+            responsive: true,
+            dom: '<"flex flex-col sm:flex-row justify-between gap-4 mb-4"f>rt<"flex flex-col sm:flex-row justify-between items-center gap-4 mt-4"ip>',
+            drawCallback: function () {
+                // Ajustar clases de los elementos generados por DataTables para que coincidan con Tailwind
+                $('.dataTables_filter input').addClass('h-9 rounded-lg border-slate-200 text-sm px-3 focus:ring-primary-blue focus:border-primary-blue transition-all');
+                $('.dataTables_length select').addClass('h-9 rounded-lg border-slate-200 text-sm px-2 focus:ring-primary-blue focus:border-primary-blue transition-all');
+                $('.dataTables_info').addClass('text-xs font-semibold text-slate-500 uppercase tracking-widest');
+                $('.dataTables_paginate').addClass('flex gap-1');
+                $('.paginate_button').addClass('px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all cursor-pointer');
+                $('.paginate_button.current').addClass('bg-primary-blue !text-white border-primary-blue');
+                $('.paginate_button.disabled').addClass('opacity-50 cursor-not-allowed');
+            }
         });
     }
 

@@ -38,19 +38,29 @@ $solicitud['tis_id'] = $id_cifrado;
 $solicitud['tis_registro_tramite_raw'] = $solicitud['tis_registro_tramite'];
 
 // Cargar permisos desde PHP
-// Aquí replicamos la lógica de permisos.js en el servidor
 $r = strtolower($solicitud['rol_usuario'] ?? 'lector');
 $userId = $_SESSION['user_id'] ?? 0;
 
+// Verificar si el usuario ya respondió en la tabla de destinos
+$yaRespondio = false;
+if (!empty($solicitud['destinos'])) {
+    foreach ($solicitud['destinos'] as $d) {
+        if ((int) $d['tid_destino'] === (int) $userId && (!empty($d['tid_fecha_respuesta']) || $d['tid_responde'] !== null)) {
+            $yaRespondio = true;
+            break;
+        }
+    }
+}
+
 $p = [
     'consultar' => true,
-    'editar' => ($r === 'propietario'),
+    'editar' => ($r === 'propietario' && !$yaRespondio),
     'preparar' => in_array($r, ['responsable', 'visador', 'firmante', 'lector']),
     'comentar' => in_array($r, ['responsable', 'propietario', 'visador', 'firmante', 'lector']),
     'bitacora' => in_array($r, ['responsable', 'propietario', 'lector']),
-    'visar' => ($r === 'visador'),
-    'firmar' => ($r === 'firmante'),
-    'responder' => in_array($r, ['responsable', 'firmante'])
+    'visar' => ($r === 'visador' && !$yaRespondio),
+    'firmar' => ($r === 'firmante' && !$yaRespondio),
+    'responder' => (in_array($r, ['responsable', 'firmante']) && !$yaRespondio)
 ];
 
 include '../../api/general/header.php';
@@ -314,6 +324,25 @@ include '../../api/general/header.php';
                         </div>
                         <div id="lista_enlaces_grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
                             <!-- Se puebla por JS -->
+                        </div>
+                    </div>
+
+                    <!-- Comentarios / Observaciones -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 lg:p-8">
+                        <div class="flex justify-between items-center mb-8 border-b border-slate-50 pb-6">
+                            <h2 class="text-lg font-bold text-slate-800 mb-0 flex items-center gap-3">
+                                <span class="material-symbols-outlined text-primary-blue">chat_bubble</span>
+                                Comentarios y Observaciones
+                            </h2>
+                            <button type="button" id="btn_abrir_comentario"
+                                class="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 text-slate-600 font-bold py-2.5 px-6 rounded-xl border border-slate-200 transition-all text-[13px] uppercase tracking-wider">
+                                <span class="material-symbols-outlined text-sm">add_comment</span>
+                                Nuevo Comentario
+                            </button>
+                        </div>
+                        <div id="lista_comentarios" class="space-y-6">
+                            <!-- Se puebla por JS -->
+                            <div class="text-center py-12 text-slate-400 italic text-sm">Cargando comentarios...</div>
                         </div>
                     </div>
                 </div>
@@ -920,6 +949,15 @@ include '../../api/general/header.php';
     </div>
 </div>
 
+            <div class="modal-footer border-0 bg-light justify-content-center">
+                <button type="button" class="btn btn-link text-muted text-decoration-none small me-3"
+                    onclick="cerrarOTP(true)">Cancelar</button>
+                <button type="button" class="btn btn-dark btn-sm px-4" onclick="confirmarFirmaOTP()">Confirmar
+                    Firma</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="../../recursos/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/feather-icons"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -927,158 +965,5 @@ include '../../api/general/header.php';
 <script src="../../recursos/js/funcionarios/ingresos/permisos.js"></script>
 <script src="../../recursos/js/funcionarios/ingresos/ver.js"></script>
 
-<script>
-    // Lógica adicional para Visación y Respuestas
-    let isRechazando = false;
-
-    // Poblar la tabla de visación cuando los datos estén listos
-    const originalRenderizarIngreso = window.renderizarIngreso;
-    window.renderizarIngreso = function (data) {
-        if (typeof originalRenderizarIngreso === 'function') {
-            originalRenderizarIngreso(data);
-        }
-        renderizarTablaVisacion(data.destinos || []);
-    };
-
-    function renderizarTablaVisacion(destinos) {
-        const tabla = document.getElementById('tabla_destinos_status');
-        if (!tabla) return;
-        tabla.innerHTML = '';
-
-        destinos.forEach(dest => {
-            let estadoColors = 'bg-slate-50 text-slate-400 border-slate-100';
-            let estadoLabel = 'Pendiente';
-
-            if (dest.tid_responde == 1) {
-                estadoColors = 'bg-emerald-50 text-emerald-600 border-emerald-100';
-                estadoLabel = 'Aprobado';
-            } else if ((dest.tid_responde == 0 || dest.tid_responde === '0') && dest.tid_fecha_respuesta) {
-                estadoColors = 'bg-rose-50 text-rose-600 border-rose-100';
-                estadoLabel = 'Rechazado';
-            }
-
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td class="px-6 py-4">
-                    <div class="font-bold text-slate-700 text-sm">${dest.usr_nombre} ${dest.usr_apellido}</div>
-                    <div class="text-[10px] text-slate-400">${dest.usr_email}</div>
-                </td>
-                <td class="px-6 py-4">
-                    <span class="px-2 py-1 rounded-lg text-[10px] font-bold uppercase border bg-blue-50 text-primary-blue border-blue-100">${dest.tid_facultad}</span>
-                </td>
-                <td class="px-6 py-4 text-center">
-                    ${dest.tid_requeido == 1 ? '<span class="material-symbols-outlined text-emerald-500">check_circle</span>' : '-'}
-                </td>
-                <td class="px-6 py-4 text-right">
-                    <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase border ${estadoColors}">${estadoLabel}</span>
-                </td>
-            `;
-            tabla.appendChild(row);
-        });
-    }
-
-    async function aprobarVisacion() {
-        const { isConfirmed } = await Swal.fire({
-            title: '¿Confirmar Visación?',
-            text: "Su aprobación permitirá que el flujo continúe.",
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#1a5f9c',
-            cancelButtonColor: '#64748b',
-            confirmButtonText: 'Sí, Aprobar',
-            cancelButtonText: 'Cancelar'
-        });
-
-        if (isConfirmed) {
-            Swal.fire({ title: 'Procesando...', didOpen: () => Swal.showLoading() });
-            try {
-                const urlParams = new URLSearchParams(window.location.search);
-                const id = urlParams.get('id');
-
-                // 1. Responder Favorablemente
-                await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        ACCION: 'RESPONDER',
-                        ing_id: id,
-                        tis_estado: 'Resuelto_Favorable',
-                        tis_respuesta: 'Visación aprobada por responsable.'
-                    })
-                });
-
-                // 2. Cambiar estado a "Visado" (Como pide el usuario)
-                await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        ACCION: 'ACTUALIZAR_ESTADO',
-                        ing_id: id,
-                        ing_estado_entrega: 'Visado'
-                    })
-                });
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Aprobado y Visado',
-                    text: 'La visación ha sido registrada correctamente.',
-                    timer: 2000
-                }).then(() => location.reload());
-
-            } catch (e) {
-                console.error(e);
-                Swal.fire('Error', 'No se pudo procesar la visación', 'error');
-            }
-        }
-    }
-
-    function rechazarVisacion() {
-        isRechazando = true;
-        const modal = new bootstrap.Modal(document.getElementById('modalNuevoComentario'));
-        modal.show();
-    }
-
-    const originalGuardarComentario = window.guardarComentario;
-    window.guardarComentario = async function () {
-        if (!isRechazando) {
-            if (typeof originalGuardarComentario === 'function') originalGuardarComentario();
-            return;
-        }
-
-        const texto = document.getElementById('textoNuevoComentario').value.trim();
-        if (!texto) {
-            Swal.fire('Atención', 'Debe indicar por qué fue rechazada la visación.', 'warning');
-            return;
-        }
-
-        Swal.fire({ title: 'Rechazando...', didOpen: () => Swal.showLoading() });
-        try {
-            const urlParams = new URLSearchParams(window.location.search);
-            const id = urlParams.get('id');
-
-            await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    ACCION: 'RESPONDER',
-                    ing_id: id,
-                    tis_estado: 'Resuelto_NO_Favorable',
-                    tis_respuesta: 'Visación Rechazada: ' + texto
-                })
-            });
-
-            Swal.fire({
-                icon: 'error',
-                title: 'Visación Rechazada',
-                text: 'Se ha registrado el rechazo y el comentario.',
-                timer: 2000
-            }).then(() => location.reload());
-
-        } catch (e) {
-            console.error(e);
-            Swal.fire('Error', 'No se pudo registrar el rechazo', 'error');
-        }
-    };
-</script>
 
 <?php include '../../api/general/footer.php'; ?>

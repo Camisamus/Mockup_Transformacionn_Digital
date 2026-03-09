@@ -41,22 +41,7 @@ $(document).ready(function () {
         oig_respuesta_aclaratoria: $('#oig_respuesta_aclaratoria').val()
     }));
 
-    // Toggle de visibilidad dinámica
-    $('#oig_requiere_respuesta_tecnica').on('change', function () {
-        if ($(this).val() == '1' || $(this).val() === 'Si') {
-            $('#container_respuesta_tecnica').slideDown();
-        } else {
-            $('#container_respuesta_tecnica').slideUp();
-        }
-    });
-
-    $('#oig_solicitud_ejecutada').on('change', function () {
-        if ($(this).val() == '1' || $(this).val() === 'Si') {
-            $('#container_notificacion_ejecucion').slideDown();
-        } else {
-            $('#container_notificacion_ejecucion').slideUp();
-        }
-    });
+    /* OIRS: Visibilidad será estrictamente secuencial tras el guardado del paso anterior */
 
     // BOTÓN GUARDAR TODOS LOS CAMBIOS
     $(document).on('click', '#btn_guardar_todo', () => {
@@ -107,7 +92,7 @@ $('#oirs_tematica').on('change', function () {
 function renderizarDatos(d) {
     if (!d) return;
 
-    // Fix IDs if needed (from original code)
+    const isClosed = [4, 5].includes(parseInt(d.oirs_estado));
     if ($('#oig_respuesta_preliminar').length === 0) $('label:contains("Respuesta Preliminar")').next('textarea').attr('id', 'oig_respuesta_preliminar');
     if ($('#oig_respuesta_tecnica').length === 0) $('label:contains("Respuesta por Unidad Técnica")').next('textarea').attr('id', 'oig_respuesta_tecnica');
     if ($('#oig_solicitud_ejecutada').length === 0) $('label:contains("¿La solicitud será ejecutada?")').next('select').attr('id', 'oig_solicitud_ejecutada');
@@ -142,55 +127,79 @@ function renderizarDatos(d) {
     // Based on Controller, often it's flat if JOINed, but let's support both
     const g = d.gestion || d;
 
-    // 1. Respuesta Preliminar
+    // 1. Respuesta Preliminar (Siempre visible)
     $('#oig_respuesta_preliminar').val(g.oig_respuesta_preliminar);
-    if (g.oig_respuesta_preliminar && g.oig_respuesta_preliminar.trim() !== '') {
+    const hasPrelimRes = g.oig_respuesta_preliminar && g.oig_respuesta_preliminar.trim() !== '';
+    if (hasPrelimRes) {
         $('#oig_respuesta_preliminar').prop('disabled', true);
-        $('#btn_responder_preliminar').hide(); // Optionally hide button if already responded
+        $('#btn_responder_preliminar').hide();
     } else {
         $('#oig_respuesta_preliminar').prop('disabled', false);
         $('#btn_responder_preliminar').show();
     }
 
-    $('#oig_requiere_respuesta_tecnica').val(g.oig_requiere_respuesta_tecnica);
-    // Disable if closed
-    const isClosed = [4, 5].includes(parseInt(d.oirs_estado)); // Assuming 4=Cerrada, 5=Terminada based on common enums, or string check
-    // If state is string:
-    if (d.oirs_estado === 'Cerrada' || d.oirs_estado === 'Terminada') {
-        $('#oig_requiere_respuesta_tecnica').prop('disabled', true);
-        $('#btn_responder_preliminar').prop('disabled', true); // Also disable button if closed
-    }
+    $('#oig_requiere_respuesta_tecnica').val(g.oig_requiere_respuesta_tecnica || "");
 
     // 2. Respuesta Técnica
     const requiresTechnical = (g.oig_requiere_respuesta_tecnica == 1 || g.oig_requiere_respuesta_tecnica === 'Si');
-    if (requiresTechnical) {
+    // SEQUENTIAL: Mostrar bloque técnico SOLO si la preliminar ya fue guardada y requiere técnica
+    if (hasPrelimRes && requiresTechnical) {
         $('#container_respuesta_tecnica').show();
-        $('#oig_respuesta_tecnica').val(g.oig_respuesta_tecnica);
+        $('#oig_respuesta_tecnica').val(g.oig_respuesta_tecnica || "");
+
+        const hasTechnicalRes = g.oig_respuesta_tecnica && g.oig_respuesta_tecnica.trim() !== '';
+        if (hasTechnicalRes) {
+            $('#oig_respuesta_tecnica').prop('disabled', true);
+            $('#btn_responder_tecnico').hide();
+        } else {
+            $('#oig_respuesta_tecnica').prop('disabled', false);
+            $('#btn_responder_tecnico').show();
+        }
     } else {
         $('#container_respuesta_tecnica').hide();
     }
 
-    $('#oig_solicitud_ejecutada').val(g.oig_solicitud_ejecutada);
-    $('#oig_fuente_financiamiento').val(g.oig_fuente_financiamiento);
+    $('#oig_solicitud_ejecutada').val(g.oig_solicitud_ejecutada || "");
+    $('#oig_fuente_financiamiento').val(g.oig_fuente_financiamiento || "");
 
     // 3. Notificación Ejecución
-    const executionPlanned = (g.oig_solicitud_ejecutada === 'Si' || g.oig_solicitud_ejecutada == 1);
-    if (executionPlanned) {
+    const executionPlanned = (g.oig_solicitud_ejecutada == 1 || g.oig_solicitud_ejecutada === 'Si');
+    const hasTechnicalRes = g.oig_respuesta_tecnica && g.oig_respuesta_tecnica.trim() !== '';
+    // SEQUENTIAL: Mostrar bloque ejecución SOLO si la técnica ya fue guardada y está planificada
+    if (hasTechnicalRes && executionPlanned) {
         $('#container_notificacion_ejecucion').show();
-        $('#oig_notificacion_ejecucion').val(g.oig_notificacion_ejecucion);
-        $('#oig_realizada_en_plazo').val(g.oig_realizada_en_plazo);
+        $('#oig_notificacion_ejecucion').val(g.oig_notificacion_ejecucion || "");
+        $('#oig_realizada_en_plazo').val(g.oig_realizada_en_plazo || "");
+
+        const hasExecutionRes = g.oig_notificacion_ejecucion && g.oig_notificacion_ejecucion.trim() !== '';
+        if (hasExecutionRes) {
+            $('#oig_notificacion_ejecucion').prop('disabled', true);
+            $('#btn_notificar_ejecucion').hide();
+        } else {
+            $('#oig_notificacion_ejecucion').prop('disabled', false);
+            $('#btn_notificar_ejecucion').show();
+        }
     } else {
+        // Bloqueo de estado cerrado dentro de renderizarDatos general si es necesario
         $('#container_notificacion_ejecucion').hide();
     }
 
     // 4. Aclaratoria
     const aclaratoria = g.oig_aclaratoria_contribuyente || d.oig_aclaratoria_contribuyente || d.aclaratoria_contribuyente;
-    $('#container_aclaratoria').show();
-    if (aclaratoria && aclaratoria.trim() !== '') {
+    if (aclaratoria && aclaratoria.trim() !== '' && aclaratoria !== 'Sin comentarios adicionales del contribuyente.') {
+        $('#container_aclaratoria').show();
         $('#oig_aclaratoria_contribuyente').val(aclaratoria).prop('disabled', true);
+    } else {
+        $('#container_aclaratoria').hide();
     }
     const respAclaratoria = g.oig_respuesta_aclaratoria || d.oig_respuesta_aclaratoria;
-    $('#oig_respuesta_aclaratoria').val(respAclaratoria);
+    $('#oig_respuesta_aclaratoria').val(respAclaratoria || "");
+
+    // Disable all if closed
+    if (isClosed || d.oirs_estado === 'Cerrada' || d.oirs_estado === 'Terminada') {
+        $('#oig_requiere_respuesta_tecnica, #oig_solicitud_ejecutada, #oig_fuente_financiamiento, #oig_realizada_en_plazo').prop('disabled', true);
+        $('#btn_responder_preliminar, #btn_responder_tecnico, #btn_notificar_ejecucion, #btn_guardar_todo').hide();
+    }
 
 
 

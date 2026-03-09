@@ -93,9 +93,7 @@ let currentRgtId = null;
 
 
 async function crearDerivacion() {
-    const urlParams = new URLSearchParams(window.location.search);
-    currentRgtId = urlParams.get('id');
-    window.open(`../ingresos/crear.php?rgt_id_padre=${currentRgtId}`, '_blank');
+    window.open(`../ingresos/crear.php?rgt_id_padre=${serverData.tis_registro_tramite_cif}`, '_blank');
 }
 
 function descargarExpediente() {
@@ -200,13 +198,14 @@ async function cargarDatosIngreso(params) {
 
             // Button Event Handlers
             const id = data.tis_id;
-
+            /*
             const btnResponder = document.getElementById('btn_ir_responder');
             if (btnResponder && id) {
                 btnResponder.onclick = () => {
                     window.location.href = `responder.php?id=${id}`;
                 };
             }
+                */
 
             const btnModificar = document.getElementById('btn_ir_modificar');
             if (btnModificar && id) {
@@ -1251,12 +1250,12 @@ async function inicializarConSSR(data) {
     renderizarIngreso(data);
 
     // Restaurar manejadores de botones (ya renderizados por PHP)
-    const id = data.tis_id;
+    /*const id = data.tis_id;
     const btnResponder = document.getElementById('btn_ir_responder');
     if (btnResponder && id) {
         btnResponder.onclick = () => window.location.href = `responder.php?id=${id}`;
     }
-
+*/
     const btnModificar = document.getElementById('btn_ir_modificar');
     if (btnModificar && id) {
         btnModificar.onclick = () => window.location.href = `modificar.php?id=${id}`;
@@ -1347,3 +1346,354 @@ function renderizarDestinos(destinos) {
         tablaDestinos.appendChild(tr);
     });
 }
+// Lógica adicional para Visación y Respuestas
+let isRechazando = false;
+
+// Poblar la tabla de visación cuando los datos estén listos
+const originalRenderizarIngreso = window.renderizarIngreso;
+window.renderizarIngreso = function (data) {
+    if (typeof originalRenderizarIngreso === 'function') {
+        originalRenderizarIngreso(data);
+    }
+    renderizarTablaVisacion(data.destinos || []);
+};
+
+function renderizarTablaVisacion(destinos) {
+    const tabla = document.getElementById('tabla_destinos_status');
+    if (!tabla) return;
+    tabla.innerHTML = '';
+
+    destinos.forEach(dest => {
+        let estadoColors = 'bg-slate-50 text-slate-400 border-slate-100';
+        let estadoLabel = 'Pendiente';
+
+        if (dest.tid_responde == 1) {
+            estadoColors = 'bg-emerald-50 text-emerald-600 border-emerald-100';
+            estadoLabel = 'Aprobado';
+        } else if ((dest.tid_responde == 0 || dest.tid_responde === '0') && dest.tid_fecha_respuesta) {
+            estadoColors = 'bg-rose-50 text-rose-600 border-rose-100';
+            estadoLabel = 'Rechazado';
+        }
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+                <td class="px-6 py-4">
+                    <div class="font-bold text-slate-700 text-sm">${dest.usr_nombre} ${dest.usr_apellido}</div>
+                    <div class="text-[10px] text-slate-400">${dest.usr_email}</div>
+                </td>
+                <td class="px-6 py-4">
+                    <span class="px-2 py-1 rounded-lg text-[10px] font-bold uppercase border bg-blue-50 text-primary-blue border-blue-100">${dest.tid_facultad}</span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                    ${dest.tid_requeido == 1 ? '<span class="material-symbols-outlined text-emerald-500">check_circle</span>' : '-'}
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase border ${estadoColors}">${estadoLabel}</span>
+                </td>
+            `;
+        tabla.appendChild(row);
+    });
+}
+
+async function aprobarVisacion() {
+    const { isConfirmed } = await Swal.fire({
+        title: '¿Confirmar Visación?',
+        text: "Su aprobación permitirá que el flujo continúe.",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#1a5f9c',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Sí, Aprobar',
+        cancelButtonText: 'Cancelar'
+    });
+
+    if (isConfirmed) {
+        Swal.fire({ title: 'Procesando...', didOpen: () => Swal.showLoading() });
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+
+            // 1. Responder Favorablemente
+            await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ACCION: 'RESPONDER',
+                    ing_id: id,
+                    tis_estado: 'Resuelto_Favorable',
+                    tis_respuesta: 'Visación aprobada por responsable.'
+                })
+            });
+
+            // 2. Cambiar estado a "Visado" (Como pide el usuario)
+            await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ACCION: 'ACTUALIZAR_ESTADO',
+                    ing_id: id,
+                    ing_estado_entrega: 'Visado'
+                })
+            });
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Aprobado y Visado',
+                text: 'La visación ha sido registrada correctamente.',
+                timer: 2000
+            }).then(() => location.reload());
+
+        } catch (e) {
+            console.error(e);
+            Swal.fire('Error', 'No se pudo procesar la visación', 'error');
+        }
+    }
+}
+
+function rechazarVisacion() {
+    isRechazando = true;
+    const modal = new bootstrap.Modal(document.getElementById('modalNuevoComentario'));
+    modal.show();
+}
+
+const originalGuardarComentario = window.guardarComentario;
+window.guardarComentario = async function () {
+    if (!isRechazando) {
+        if (typeof originalGuardarComentario === 'function') originalGuardarComentario();
+        return;
+    }
+
+    const texto = document.getElementById('textoNuevoComentario').value.trim();
+    if (!texto) {
+        Swal.fire('Atención', 'Debe indicar por qué fue rechazada la visación.', 'warning');
+        return;
+    }
+
+    Swal.fire({ title: 'Rechazando...', didOpen: () => Swal.showLoading() });
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+
+        await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                ACCION: 'RESPONDER',
+                ing_id: id,
+                tis_estado: 'Resuelto_NO_Favorable',
+                tis_respuesta: 'Visación Rechazada: ' + texto
+            })
+        });
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Visación Rechazada',
+            text: 'Se ha registrado el rechazo y el comentario.',
+            timer: 2000
+        }).then(() => location.reload());
+
+    } catch (e) {
+        console.error(e);
+        Swal.fire('Error', 'No se pudo registrar el rechazo', 'error');
+    }
+};
+
+// --- Lógica de Firma y OTP (Portado de responder.js) ---
+let otpTimerInterval = null;
+let otpModal = null;
+
+// Extender inicialización para OTP y Formulario
+const originalInicializarConSSR = window.inicializarConSSR || (async () => { });
+window.inicializarConSSR = async function (data) {
+    await originalInicializarConSSR(data);
+
+    // Setup modal OTP
+    const modalEl = document.getElementById('modalOTP');
+    if (modalEl) otpModal = new bootstrap.Modal(modalEl);
+
+    // Setup Formulario Responder
+    const formResponder = document.getElementById('form_responder_ingreso');
+    if (formResponder) {
+        formResponder.onsubmit = async (e) => {
+            e.preventDefault();
+            const rol = data.rol_usuario ? data.rol_usuario.toLowerCase() : '';
+            // El responsable ahora también requiere firma (OTP) según requerimiento
+            const esFirma = (rol === 'firmante' || rol === 'responsable' || rol === 'firmador' || rol === 'firmafor');
+            await enviarRespuesta('Resuelto_Favorable', esFirma ? 'firmar' : 'responder');
+        };
+    }
+};
+
+async function enviarRespuesta(estado, accionLabel) {
+    const respuesta = document.getElementById('tis_respuesta').value.trim();
+
+    if (accionLabel === 'firmar') {
+        const confirm = await Swal.fire({
+            title: `Iniciar Proceso de Firma`,
+            text: `Se enviará un código de verificación a su correo. ¿Desea continuar?`,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, enviar código',
+            cancelButtonText: 'Cancelar'
+        });
+        if (!confirm.isConfirmed) return;
+
+        iniciarFirma(estado, accionLabel, respuesta);
+    } else {
+        const confirm = await Swal.fire({
+            title: `¿Confirmar respuesta?`,
+            text: `¿Está seguro de querer enviar esta respuesta?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, confirmar',
+            cancelButtonText: 'Cancelar'
+        });
+        if (!confirm.isConfirmed) return;
+
+        procesarRespuesta(estado, accionLabel, respuesta, null);
+    }
+}
+
+async function iniciarFirma(estado, accionLabel, respuesta) {
+    try {
+        Swal.fire({ title: 'Enviando código...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                ACCION: 'INIT_FIRMA',
+                ing_id: id
+            })
+        });
+
+        const result = await response.json();
+        Swal.close();
+
+        if (result.status === 'success') {
+            document.getElementById('inp_otp_code').value = '';
+            otpModal.show();
+            startOTPTimer();
+
+            window.pendingResponseData = { estado, accionLabel, respuesta };
+        } else {
+            Swal.fire('Error', result.message || 'Error al iniciar firma.', 'error');
+        }
+    } catch (e) {
+        Swal.fire('Error', 'Error de conexión.', 'error');
+    }
+}
+
+function startOTPTimer() {
+    let timeLeft = 240; // 4 minutes
+    const timerDisplay = document.getElementById('otp_timer');
+    if (!timerDisplay) return;
+
+    clearInterval(otpTimerInterval);
+    otpTimerInterval = setInterval(() => {
+        const m = Math.floor(timeLeft / 60);
+        const s = timeLeft % 60;
+        timerDisplay.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+
+        timeLeft--;
+        if (timeLeft < 0) {
+            cerrarOTP(false);
+            Swal.fire('Tiempo Expirado', 'El tiempo para ingresar el código ha expirado. El proceso se ha cancelado.', 'warning');
+        }
+    }, 1000);
+}
+
+function cerrarOTP(manual) {
+    clearInterval(otpTimerInterval);
+    if (otpModal) otpModal.hide();
+    window.pendingResponseData = null;
+}
+
+async function confirmarFirmaOTP() {
+    const code = document.getElementById('inp_otp_code').value.trim();
+    if (code.length !== 6) {
+        Swal.fire('Atención', 'El código debe tener 6 dígitos.', 'warning');
+        return;
+    }
+
+    const { estado, accionLabel, respuesta } = window.pendingResponseData;
+    cerrarOTP(false);
+
+    procesarRespuesta(estado, accionLabel, respuesta, code);
+}
+
+async function procesarRespuesta(estado, accionLabel, respuesta, otp) {
+    try {
+        Swal.fire({ title: 'Procesando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+
+        // 1. Manejo de archivos (Decreto)
+        const fileInput = document.getElementById('inp_archivo_decreto');
+        if (fileInput && fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('ACCION', 'Subir');
+            formData.append('tramite_id', id);
+            formData.append('responsable_id', window.currentUserId);
+            formData.append('es_docdigital', 0);
+
+            const renamedFile = new File([file], `Decreto - ${file.name}`, { type: file.type });
+            formData.append('archivo', renamedFile);
+            formData.append('doc_nombre_documento', renamedFile.name);
+
+            const uploadResp = await fetch(`${window.API_BASE_URL}/gesdoc/general.php`, {
+                method: 'POST',
+                body: formData
+            });
+            const uploadResult = await uploadResp.json();
+
+            if (uploadResult.status !== 'success') {
+                Swal.fire('Error', `Error al subir el decreto: ${uploadResult.message}`, 'error');
+                return;
+            }
+        }
+
+        // 2. Respuesta a la API
+        const payload = {
+            ACCION: 'RESPONDER',
+            ing_id: id,
+            tis_respuesta: respuesta,
+            tis_estado: estado,
+            accion_label: accionLabel
+        };
+        if (otp) payload.otp = otp;
+
+        const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            Swal.fire('¡Éxito!', `El trámite ha sido procesado correctamente.`, 'success').then(() => {
+                location.reload();
+            });
+        } else {
+            Swal.fire('Error', result.message || 'No se pudo procesar la solicitud.', 'error');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        Swal.fire('Error', 'Ocurrió un error al procesar la respuesta.', 'error');
+    }
+}
+
+window.confirmarFirmaOTP = confirmarFirmaOTP;
+window.cerrarOTP = cerrarOTP;
+window.irAResponder = () => {
+    const tabEl = document.querySelector('button[data-bs-target="#tab-responder"]');
+    if (tabEl) {
+        const tab = bootstrap.Tab.getOrCreateInstance(tabEl);
+        tab.show();
+    }
+};
