@@ -103,48 +103,133 @@ function extractData(response) {
 }
 
 /* renderTable replacement */
+
+
+/* renderTable replacement */
 function renderTable(data) {
-    const tbody = document.getElementById('tbody_desve');
-    const resultsCount = document.getElementById('resultados_count');
-    if (!tbody) return;
-    tbody.innerHTML = '';
+    const table = $('#tablaAtenciones');
+    const tbody = $('#tbody_desve');
 
-    const filteredData = aplicarFiltros(data);
-    resultsCount.innerText = filteredData.length;
-
-    if (filteredData.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-10 text-center text-slate-400">No se encontraron solicitudes con los filtros aplicados.</td></tr>';
-        return;
+    // Destruir instancia previa si existe
+    if ($.fn.DataTable.isDataTable('#tablaAtenciones')) {
+        dataTable.destroy();
     }
 
+    tbody.empty();
+
+    const filteredData = aplicarFiltros(data);
+
     filteredData.forEach(item => {
-        const row = document.createElement('tr');
-        row.className = "hover:bg-slate-50/50 transition-colors border-b border-slate-50 last:border-0";
-        row.innerHTML = `
-            <td class="px-6 py-4 text-center">
-                <button class="flex items-center justify-center w-8 h-8 mx-auto rounded-lg text-slate-400 hover:text-primary-blue hover:bg-blue-50 transition-all font-bold" 
-                    onclick="consultar('${item.sol_id}')" title="Consultar Registro">
-                    <span class="material-symbols-outlined text-xl">visibility</span>
-                </button>
-            </td>
-            <td class="px-6 py-4 font-bold text-slate-700">#${item.sol_id_raw || item.sol_id}</td>
-            <td class="px-6 py-4 text-slate-500">${formatDate(item.sol_mail_enviado_fecha) || 'N/A'}</td>
-            <td class="px-6 py-4">
-                <div class="flex flex-col">
-                    <span class="font-semibold text-slate-700 text-sm line-clamp-1">${item.sol_nombre_expediente || 'Sin Nombre'}</span>
-                    <span class="text-[10px] text-slate-400 uppercase tracking-wider font-medium">${item.sol_ingreso_desve || '-'}</span>
-                </div>
-            </td>
-            <td class="px-6 py-4 text-center">
-                ${(item.sol_estado_entrega == 1 || item.sol_estado_entrega === true)
-                ? '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 uppercase tracking-wider">Entregado</span>'
-                : '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 uppercase tracking-wider">Pendiente</span>'}
-            </td>
+        // Resolve Origen and TipoOrg using backend data
+        const resolvedOrigen = item.sol_origen_nombre || item.sol_origen_texto || '-';
+        const resolvedTipoOrg = item.sol_origen_tipo_nombre || 'N/A';
+
+        const prio = prioridades.find(p => p.pri_id == item.sol_prioridad_id) || {};
+        const func = funcionarios.find(f => f.fnc_id == item.sol_funcionario_id) || {};
+        const sec = sectores.find(s => s.sec_id == item.sol_sector_id) || {};
+
+        const mailsCount = item.sol_mails_count || 0;
+        const lastMailDate = formatDate(item.sol_mail_enviado_fecha) || 'N/A';
+
+        // Almacenamos los detalles en un atributo data para usarlos en la fila expandible
+        const detailsData = JSON.stringify({
+            rgt: item.sol_ingreso_desve || '-',
+            expediente: item.sol_nombre_expediente || '-',
+            organizacion: resolvedTipoOrg,
+            origen: resolvedOrigen,
+            funcionario: func.fnc_nombre || 'N/A',
+            sector: sec.sec_nombre || 'N/A',
+            mails: mailsCount,
+            lastMail: lastMailDate,
+            coordinador: (item.sol_entrego_coordinador == 1) ? 'Sí (' + (formatDate(item.sol_fecha_respuesta_coordinador) || '') + ')' : 'No',
+            vencimientoDays: item.sol_dias_vencimiento || 0,
+            transcurridosDays: item.sol_dias_transcurridos || 0,
+            observaciones: item.sol_observaciones || '',
+            reingresoId: item.sol_reingreso_id || '-'
+        }).replace(/'/g, "&apos;");
+
+        const tr = `
+            <tr data-details='${detailsData}'>
+                <td class="text-center font-bold text-slate-700">${item.sol_ingreso_desve || '-'}</td>
+                <td class="text-center">
+                    ${item.sol_propietario == item.yo
+                ? '<span class="px-2 py-1 rounded-md bg-amber-50 text-green-600 text-[12px] font-bold">Autor</span>'
+                : '<span class="px-2 py-1 rounded-md bg-amber-50 text-amber-600 text-[12px] font-bold">Responsable</span>'}
+                </td>
+                <td><b>${item.sol_nombre_expediente.toUpperCase() || '-'}</b><br>${resolvedOrigen.toUpperCase()}</td>>
+                <td class="text-center">${formatDate(item.sol_fecha_recepcion) || ''}</td>
+                <td class="text-center">${formatDate(item.sol_fecha_vencimiento) || ''}</td>
+                <td class="text-center">
+                    <span class="px-2 py-1 rounded-md text-[10px] font-bold ${item.sol_prioridad_id == 3 ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600'}">
+                        ${prio.pri_nombre || 'N/A'}
+                    </span>
+                </td>
+                <td class="text-center">
+                    ${(item.sol_estado_entrega == 1 || item.sol_estado_entrega === true)
+                ? '<span class="px-2 py-1 rounded-md bg-emerald-50 text-emerald-600 text-[10px] font-bold">Entregado</span>'
+                : '<span class="px-2 py-1 rounded-md bg-amber-50 text-amber-600 text-[10px] font-bold">Pendiente</span>'}
+                </td>
+                <td class="text-center">
+                    <button class="btn-toggle-details p-1 hover:bg-slate-100 rounded-full transition-colors">
+                        <span class="material-symbols-outlined text-slate-400">add_circle</span>
+                    </button>
+                </td>
+            </tr>
         `;
-        tbody.appendChild(row);
+        tbody.append(tr);
     });
 
-    if (window.feather) window.feather.replace();
+    // Inicializar DataTable
+    dataTable = table.DataTable({
+        responsive: true,
+        order: [[1, 'desc']],
+        language: {
+            processing: "Procesando...",
+            search: "Buscar:",
+            lengthMenu: "Mostrar _MENU_ registros",
+            info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+            infoFiltered: "(filtrado de un total de _MAX_ registros)",
+            infoPostFix: "",
+            loadingRecords: "Cargando...",
+            zeroRecords: "No se encontraron resultados",
+            emptyTable: "Ningún dato disponible en esta tabla",
+            paginate: {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Último"
+            },
+            aria: {
+                sortAscending: ": Activar para ordenar la columna de manera ascendente",
+                sortDescending: ": Activar para ordenar la columna de manera descendente"
+            }
+        },
+        columnDefs: [
+            { orderable: false, targets: [7] }
+        ],
+        drawCallback: function () {
+            if (window.feather) window.feather.replace();
+        }
+    });
+
+    // Manejo de filas expandibles
+    $('#tablaAtenciones tbody').on('click', '.btn-toggle-details', function () {
+        const tr = $(this).closest('tr');
+        const row = dataTable.row(tr);
+        const icon = $(this).find('.material-symbols-outlined');
+
+        if (row.child.isShown()) {
+            row.child.hide();
+            tr.removeClass('shown');
+            icon.text('add_circle').addClass('text-slate-400').removeClass('text-primary-blue');
+        } else {
+            const data = JSON.parse(tr.attr('data-details'));
+            row.child(formatDetails(data)).show();
+            tr.addClass('shown');
+            icon.text('cancel').removeClass('text-slate-400').addClass('text-primary-blue');
+        }
+    });
 }
 
 function formatDate(dateString) {
@@ -217,3 +302,6 @@ function consultar(id) {
     window.location.href = `consultar.php?id=${id}`;
 }
 
+function verMantenedor(id) {
+    window.location.href = `consultar.php?id=${id}`;
+}

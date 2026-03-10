@@ -100,6 +100,15 @@ class OirsAsignacion
         return $stmt->execute();
     }
 
+    public function finalizar($asignacionId)
+    {
+        // Finalizar la gestión de la asignación
+        $query = "UPDATE " . $this->table_name . " SET oia_estado = 2 WHERE oia_id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(":id", $asignacionId);
+        return $stmt->execute();
+    }
+
     private function getUserNameById($id)
     {
         $query = "SELECT usr_nombre, usr_apellido FROM trd_acceso_usuarios WHERE usr_id = :id";

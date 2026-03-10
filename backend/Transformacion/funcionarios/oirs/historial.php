@@ -183,8 +183,8 @@ include '../../api/general/header.php';
     });
 </script>
 
-<script src="../../recursos/js/funcionarios/oirs/oirs_bandeja.js"></script>
-<script src="../../recursos/js/funcionarios/oirs/oirs_tabla_flujo.js"></script>
+<script src="../../recursos/js/funcionarios/oirs/index.js"></script>
+<script src="../../recursos/js/funcionarios/oirs/tabla_flujo.js"></script>
 <script>
     $(document).ready(function () {
         // Inicialización original del historial

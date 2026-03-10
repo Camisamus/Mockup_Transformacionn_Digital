@@ -79,9 +79,13 @@ switch ($data['ACCION']) {
             if ($S == 'NL') {
                 $response = $controller->getAllNL();
             } elseif ($S == 'HISTORIAL') {
-                $response = $controller->getAllCompletedNL();
+                $response = $controller->getHistorial();
+            } elseif ($S == 'TODOS') {
+                $response = $controller->getTodos();
             } elseif ($S == 'REINGRESO') {
                 $response = $controller->getAllForReingreso();
+            } elseif ($S == 'PENDIENTES_DETAILED') {
+                $response = $controller->getAllPendientesDetailed();
             } else {
                 $response = $controller->getAll();
             }
@@ -112,7 +116,7 @@ switch ($data['ACCION']) {
                     'tipo' => 'info',
                     'severidad' => 'Bajo',
                     'modulo' => 'DESVE',
-                    'usuario_id' => $data['sol_responsable'] ?? $_SESSION['user_id'] ?? null,
+                    'usuario_id' => $data['sol_propietario'] ?? $_SESSION['user_id'] ?? null,
                     'accion' => 'CREAR_SOLICITUD',
                     'descripcion' => "Creación de solicitud DESVE: " . ($response['id'] ?? 'N/A'),
                     'detalles' => json_encode(['data' => $tempData]),

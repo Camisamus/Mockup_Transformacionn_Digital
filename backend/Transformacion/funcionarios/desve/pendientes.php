@@ -5,8 +5,13 @@ include '../../api/general/header.php';
 ?>
 
 <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+<link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
 
 <script id="tailwind-config">
     tailwind.config = {
@@ -25,8 +30,11 @@ include '../../api/general/header.php';
 
 <style>
     /* Reset y corrección de fuentes exacto a test.php */
-    body { background-color: #f8f9fa; font-family: 'Inter', sans-serif; }
-    
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Inter', sans-serif;
+    }
+
     .material-symbols-outlined {
         font-family: 'Material Symbols Outlined' !important;
         font-weight: normal;
@@ -41,83 +49,107 @@ include '../../api/general/header.php';
     }
 
     /* Estilos de estados de test.php */
-    .badge-alta { background-color: #fee2e2; color: #b91c1c; font-weight: 700; padding: 4px 10px; border-radius: 6px; font-size: 11px; }
-    .badge-media { background-color: #eff6ff; color: #1d4ed8; font-weight: 700; padding: 4px 10px; border-radius: 6px; font-size: 11px; }
-    
+    .badge-alta {
+        background-color: #fee2e2;
+        color: #b91c1c;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 11px;
+    }
+
+    .badge-media {
+        background-color: #eff6ff;
+        color: #1d4ed8;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 11px;
+    }
+
     /* Sombras exactas de test.php */
-    .gob-card { border: 1px solid rgba(226, 232, 240, 0.6); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+    .gob-card {
+        border: 1px solid rgba(226, 232, 240, 0.6);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Estilos DataTables para que no rompan el diseño Tailwind */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_processing,
+    .dataTables_wrapper .dataTables_paginate {
+        font-size: 12px;
+        color: #64748b !important;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    table.dataTable thead th {
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+
+    table.dataTable no-footer {
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: #1a5f9c !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
+    }
 </style>
 
 <div class="max-w-[1400px] mx-auto p-4 lg:p-8 space-y-6">
 
-    <div class="bg-white border border-slate-100 rounded-3xl p-6 lg:p-10 flex flex-col sm:flex-row justify-between items-center shadow-sm gap-6">
-        <div class="space-y-1 w-full text-left"> 
-            <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Listado de Solicitudes</h1>
-            <p class="text-slate-400 text-sm lg:text-[15px] font-medium">Aquí tienes las solicitudes que requieren tu atención. Puedes ver sus
-                        detalles y
-                        avanzar en su gestion desde la lista.</p>
+    <div
+        class="bg-white border border-slate-100 rounded-3xl p-6 lg:p-10 flex flex-col sm:flex-row justify-between items-center shadow-sm gap-6">
+        <div class="space-y-1 w-full text-left">
+            <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Solicitudes Pendientes</h1>
+            <p class="text-slate-400 text-sm lg:text-[15px] font-medium">En este listado encontrarás los ingresos pedidos por ti o aquellos que se encuentran bajo su reponsabilidad.</p>
         </div>
-        <div class="flex-shrink-0">
-            <button type="button" onclick="location.href='nuevo.php'"
-                class="bg-primary-blue hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-sm uppercase tracking-wider">
-                NUEVO DESVE
-            </button>
-        </div>
+
     </div>
 
     <div class="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
-        <div class="p-4 border-b border-slate-50 flex justify-between items-center bg-white">
-            <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary-blue">list_alt</span>
-                <h3 class="font-bold text-slate-700">Solicitudes Pendientes</h3>
-            </div>
-            
-            <select class="rounded-lg border-slate-200 text-xs font-semibold text-slate-400 focus:ring-primary-blue py-1.5" id="filtro_rango">
-                <option value="30">Últimos 30 días</option>
-                <option value="60">Últimos 60 días</option>
-            </select>
-        </div>
-
-        <div class="overflow-x-auto">
-            <table class="w-full text-left">
+      
+        <div class="overflow-x-auto p-4">
+            <table class="w-full text-left" id="tablaAtenciones">
                 <thead>
-                    <tr class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
-                        <th class="px-6 py-4 text-center">Acción</th>
-                        <th class="px-6 py-4">ID</th>
-                        <th class="px-6 py-4">Cod. DESVE</th>
-                        <th class="px-6 py-4">Solicitante</th>
-                        <th class="px-6 py-4">Fecha Rec.</th>
-                        <th class="px-6 py-4">Vencimiento</th>
-                        <th class="px-6 py-4 text-center">Prioridad</th>
-                        <th class="px-6 py-4 text-center">Estado</th>
+                    <tr
+                        class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
+                        <th class="text-center px-6 py-4">Cod. DESVE</th>
+                        <th class="px-6 py-4">Rol</th>
+                        <th class="px-6 py-4">Materia / Solicitante</th>
+                        <th class="text-center px-6 py-4">Fecha Rec.</th>
+                        <th class="text-center px-6 py-4">Vencimiento</th>
+                        <th class="text-center px-6 py-4">Prioridad</th>
+                        <th class="text-center px-6 py-4">Estado</th>
+                        <th class="text-center px-6 py-4">Acción</th>
                     </tr>
                 </thead>
                 <tbody id="tbody_desve" class="divide-y divide-slate-100 text-[13px] text-slate-600">
-                    </tbody>
+                </tbody>
             </table>
         </div>
 
         <div class="p-6 border-t border-slate-50 flex flex-col md:flex-row justify-between items-center gap-4 bg-white">
             <div class="flex gap-3">
-                <button type="button" class="flex items-center gap-2 bg-[#1d7344] hover:bg-[#155a34] text-white px-5 py-2.5 rounded-lg text-xs font-bold transition-all shadow-md uppercase tracking-wider" id="btn_excel">
+                <button type="button"
+                    class="flex items-center gap-2 bg-[#1d7344] hover:bg-[#155a34] text-white px-5 py-2.5 rounded-lg text-xs font-bold transition-all shadow-md uppercase tracking-wider"
+                    id="btn_excel">
                     <span class="material-symbols-outlined text-sm">description</span> EXCEL
                 </button>
-                <button type="button" class="flex items-center gap-2 bg-[#d32f2f] hover:bg-[#b71c1c] text-white px-5 py-2.5 rounded-lg text-xs font-bold transition-all shadow-md uppercase tracking-wider" id="btn_pdf">
+                <button type="button"
+                    class="flex items-center gap-2 bg-[#d32f2f] hover:bg-[#b71c1c] text-white px-5 py-2.5 rounded-lg text-xs font-bold transition-all shadow-md uppercase tracking-wider"
+                    id="btn_pdf">
                     <span class="material-symbols-outlined text-sm">picture_as_pdf</span> PDF
                 </button>
             </div>
 
-            <nav class="flex items-center gap-1">
-                <button class="p-2 text-slate-400 hover:bg-slate-50 rounded-lg"><span class="material-symbols-outlined">chevron_left</span></button>
-                <div class="flex gap-1" id="pagination_container">
-                    <button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary-blue text-white font-bold text-xs">1</button>
-                    <button class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 font-bold text-xs hover:bg-slate-50">2</button>
-                </div>
-                <button class="p-2 text-slate-400 hover:bg-slate-50 rounded-lg"><span class="material-symbols-outlined">chevron_right</span></button>
-            </nav>
-
-            <div class="text-slate-400 text-[11px] font-bold uppercase tracking-wider">
-                Mostrando <span id="current_view">1 a 4</span> de <span id="resultados_count">0</span> resultados
+            <div class="text-slate-400 text-[11px] font-bold uppercase tracking-wider d-none">
+                Mostrando <span id="current_view">1 a 4</span> de <span id="resultados_count_old">0</span> resultados
             </div>
         </div>
     </div>
@@ -126,8 +158,8 @@ include '../../api/general/header.php';
     <div class="card shadow-sm border-0">
 
         <div class="card-body p-4">-->
-            <!-- Main Header -->
-            <!--<div class="main-header mb-4">
+<!-- Main Header -->
+<!--<div class="main-header mb-4">
                 <div class="header-title">
                     <h2 class="fw-bold fs-4">Solicitudes DESVE</h2>
                     <p class="text-muted mb-0">Aquí tienes las solicitudes que requieren tu atención. Puedes ver sus
@@ -147,8 +179,8 @@ include '../../api/general/header.php';
             </div>
         </div>
     </div>-->
-    <!-- Filtros de Búsqueda -->
-    <!--<div class="card shadow-sm border-0 mb-4">
+<!-- Filtros de Búsqueda -->
+<!--<div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4" style="display: none;">
             <h5 class="fw-bold fs-6 mb-3">Filtros de Búsqueda</h5>
             <div class="row g-3">
@@ -172,8 +204,8 @@ include '../../api/general/header.php';
                     <label class="form-label small fw-bold">Sector</label>
                     <select class="form-select form-select-sm" id="filtro_sector">
                         <option value="">Todos</option>-->
-                        <!-- Dynamic -->
-                    <!--</select>
+<!-- Dynamic -->
+<!--</select>
                 </div>
 
                 <div class="col-md-6 d-flex align-items-center">
@@ -202,8 +234,8 @@ include '../../api/general/header.php';
         </div>
     </div>-->
 
-    <!-- Tabla de Resultados -->
-    <!--<div class="card shadow-sm border-0">
+<!-- Tabla de Resultados -->
+<!--<div class="card shadow-sm border-0">
         <div class="card-body p-0">
             <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
                 <div class="fw-bold small">Resultados (<span id="resultados_count">0</span>)</div>
@@ -225,8 +257,8 @@ include '../../api/general/header.php';
                         </tr>
                     </thead>
                     <tbody id="tbody_desve" class="small">-->
-                        <!-- Populated via JS -->
-                    <!--</tbody>
+<!-- Populated via JS -->
+<!--</tbody>
                 </table>
             </div>
         </div>
@@ -239,6 +271,9 @@ include '../../api/general/header.php';
 <!-- Export Libraries -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 <script src="../../recursos/js/export_utils.js"></script>
 <script>
     feather.replace();

@@ -218,7 +218,7 @@ window.abrirModalReingreso = function () {
         row.innerHTML = `
             <td>${s.sol_ingreso_desve || '-'}</td>
             <td>${s.sol_nombre_expediente || '-'}</td>
-            <td>${s.sol_fecha_recepcion ? s.sol_fecha_recepcion.split(' ')[0] : '-'}</td>
+            <td>${s.sol_fecha_recepcion ? formatearFecha(s.sol_fecha_recepcion.split(' ')[0]) : '-'}</td>
             <td class="text-end">
                 <button type="button" class="btn btn-sm btn-primary" onclick="seleccionarReingreso('${s.sol_id}')">Seleccionar</button>
             </td>
@@ -423,8 +423,8 @@ async function guardarSolicitud() {
         sol_sector_id: document.getElementById('Sector').value,
         sol_fecha_vencimiento: reverseDate(document.getElementById('FechaVecimiento').value) + ' 00:00:00',
         sol_observaciones: document.getElementById('Observaciones').value,
-        sol_responsable: document.getElementById('Responsable')?.getAttribute('data-user-id') || null,
-        sol_origen_esp: OrigenEspecial,
+        sol_propietario: document.getElementById('Responsable')?.getAttribute('data-user-id') || null,
+        sol_origen_esp: (OrigenEspecial === 0 && !document.getElementById('OrigenSolicitud').value.startsWith('OC_')) ? 3 : OrigenEspecial,
         sol_latitud: document.getElementById('chk_geoloc').checked ? document.getElementById('Latitud').value : null,
         sol_longitud: document.getElementById('chk_geoloc').checked ? document.getElementById('Longitud').value : null,
         sol_direccion: document.getElementById('chk_geoloc').checked ? document.getElementById('Geo_dir').value : null,

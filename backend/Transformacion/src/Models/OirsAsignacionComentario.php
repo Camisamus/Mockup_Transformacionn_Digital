@@ -7,7 +7,7 @@ use Exception;
 class OirsAsignacionComentario
 {
     private $conn;
-    private $table_name = "tdr_OIRS_asignaciones_comentarios";
+    private $table_name = "trd_oirs_asignaciones_comentarios";
     private $bitacora;
 
     public function __construct($db)
@@ -21,9 +21,11 @@ class OirsAsignacionComentario
      */
     public function obtenerPorAsignacion($asignacion_id)
     {
-        $query = "SELECT c.*, u.usr_nombre, u.usr_apellido 
+        $query = "SELECT c.oac_id, c.oac_asignacion, c.oac_marcado, c.oac_borrado, c.oac_creacion,
+                         c.oac_texto as oac_mensaje, c.oac_autor as oac_emisor, 
+                         u.usr_nombre, u.usr_apellido 
                   FROM " . $this->table_name . " c
-                  LEFT JOIN trd_acceso_usuarios u ON c.oac_emisor = u.usr_id
+                  LEFT JOIN trd_acceso_usuarios u ON c.oac_autor = u.usr_id
                   WHERE c.oac_asignacion = :asignacion_id AND c.oac_borrado = 0
                   ORDER BY c.oac_creacion ASC";
 
@@ -46,30 +48,37 @@ class OirsAsignacionComentario
     {
         $query = "INSERT INTO " . $this->table_name . " SET
                   oac_asignacion = :asignacion_id,
-                  oac_emisor = :emisor_id,
-                  oac_mensaje = :mensaje,
+                  oac_autor = :autor_id,
+                  oac_texto = :texto,
                   oac_marcado = :marcado,
                   oac_creacion = NOW()";
 
         try {
             $stmt = $this->conn->prepare($query);
             $stmt->bindValue(":asignacion_id", $data['oac_asignacion']);
-            $stmt->bindValue(":emisor_id", $data['oac_emisor']);
-            $stmt->bindValue(":mensaje", $data['oac_mensaje']);
+            $stmt->bindValue(":autor_id", $data['oac_emisor']); // data['oac_emisor'] comes from controller
+            $stmt->bindValue(":texto", $data['oac_mensaje']); // data['oac_mensaje'] comes from controller
             $stmt->bindValue(":marcado", $data['oac_marcado'] ?? 0);
 
             if ($stmt->execute()) {
+                $lastId = $this->conn->lastInsertId();
+
                 // Registrar en bitácora si es una acción marcada
                 $accion = "Comentario en asignación OIRS";
                 if (isset($data['oac_marcado'])) {
-                    if ($data['oac_marcado'] == 1) $accion = "Aprueba respuesta en asignación OIRS";
+                    if ($data['oac_marcado'] == 1) {
+                        $accion = "Aprueba respuesta en asignación OIRS";
+                        // FINALIZAR ASIGNACIÓN
+                        $asgModel = new \App\Models\OirsAsignacion($this->conn);
+                        $asgModel->finalizar($data['oac_asignacion']);
+                    }
                     if ($data['oac_marcado'] == 2) $accion = "Solicita corrección en asignación OIRS";
                 }
                 
                 // Intentar obtener el trámite para el log
                 $this->registrarBitacora($data['oac_asignacion'], $accion, $data['oac_emisor']);
                 
-                return $this->conn->lastInsertId();
+                return $lastId;
             }
         } catch (Exception $e) {
             error_log("Error en OirsAsignacionComentario::crear: " . $e->getMessage());

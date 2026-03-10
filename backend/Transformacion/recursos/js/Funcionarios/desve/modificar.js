@@ -384,7 +384,7 @@ async function loadSolicitationDetails(id, currentUser) {
                 Swal.fire("Error", "No se encontraron datos de la solicitud.", "error");
                 return;
             }
-            let aux = sol.sol_responsable === currentUser.id;
+            let aux = sol.sol_propietario === currentUser.id;
             // 3. Security Check (Only assigned official can respond)
             if (!aux) {
                 await Swal.fire({
@@ -399,10 +399,10 @@ async function loadSolicitationDetails(id, currentUser) {
             currentSolRegistroId = sol.sol_registro_tramite;
 
             // Debug Security Check
-            if (sol.sol_responsable && currentUser.id && sol.sol_responsable != String(currentUser.id)) {
-                console.warn(`Aviso: Usted no es el funcionario responsable (${sol.sol_responsable}) de esta solicitud (CurrentUser: ${currentUser.id}).`);
+            if (sol.sol_propietario && currentUser.id && sol.sol_propietario != String(currentUser.id)) {
+                console.warn(`Aviso: Usted no es el funcionario responsable (${sol.sol_propietario}) de esta solicitud (CurrentUser: ${currentUser.id}).`);
             }
-            if (!sol.sol_responsable) {
+            if (!sol.sol_propietario) {
                 console.warn("Aviso: Esta solicitud no tiene un funcionario responsable asignado.");
             }
 
@@ -424,7 +424,7 @@ async function loadSolicitationDetails(id, currentUser) {
             document.getElementById('Sector').value = sol.sol_sector_id || '';
             document.getElementById('Prioridad').value = sol.sol_prioridad_id || '';
             document.getElementById('FechaVecimiento').value = sol.sol_fecha_vencimiento || '';
-            document.getElementById('Responsable').value = sol.sol_responsable || '';
+            document.getElementById('Responsable').value = sol.sol_propietario || '';
             document.getElementById('Reingresado').value = sol.sol_reingreso_id || '';
 
             // Resolve Organization Type and Origen
@@ -434,10 +434,17 @@ async function loadSolicitationDetails(id, currentUser) {
 
             switch (parseInt(sol.sol_origen_esp)) {
                 case 0:
-                    let org = organizacionesComunitarias.find(o => o.orgc_id == solOrigenId) || organizaciones.find(o => o.org_id == solOrigenId);
-                    if (org) {
-                        orgTipoId = org.orgc_tipo_organizacion || org.org_tipo_id;
-                        if (!resolvedOrigenTexto) resolvedOrigenTexto = org.orgc_nombre || org.org_nombre;
+                    let orgC = organizacionesComunitarias.find(o => o.orgc_id == solOrigenId);
+                    if (orgC) {
+                        orgTipoId = orgC.orgc_tipo_organizacion;
+                        if (!resolvedOrigenTexto) resolvedOrigenTexto = orgC.orgc_nombre;
+                    }
+                    break;
+                case 3:
+                    let orgG = organizaciones.find(o => o.org_id == solOrigenId);
+                    if (orgG) {
+                        orgTipoId = orgG.org_tipo_id;
+                        if (!resolvedOrigenTexto) resolvedOrigenTexto = orgG.org_nombre;
                     }
                     break;
                 case 1:
@@ -503,7 +510,7 @@ async function loadSolicitationDetails(id, currentUser) {
             const fechaVenc = (sol.sol_fecha_vencimiento || '').split(' ')[0] || '';
             document.getElementById('FechaVecimiento').value = fechaVenc;
 
-            document.getElementById('Responsable').value = sol.sol_responsable;
+            document.getElementById('Responsable').value = sol.sol_propietario;
             document.getElementById('Reingresado').value = sol.sol_reingreso_id;
 
             if (document.getElementById('idIngresoVisible')) document.getElementById('idIngresoVisible').value = sol.sol_id_raw || sol.sol_id;
@@ -791,12 +798,12 @@ async function actualizarSolicitud() {
         sol_fecha_vencimiento: document.getElementById('FechaVecimiento').value,
         sol_estado_entrega: document.getElementById('estadoRespondido').checked,
         sol_observaciones: document.getElementById('Observaciones').value,
-        sol_responsable: document.getElementById('Responsable').value || null,
+        sol_propietario: document.getElementById('Responsable').value || null,
         sol_latitud: document.getElementById('chk_geoloc').checked ? document.getElementById('Latitud').value : null,
         sol_longitud: document.getElementById('chk_geoloc').checked ? document.getElementById('Longitud').value : null,
         sol_direccion: document.getElementById('chk_geoloc').checked ? document.getElementById('Geo_dir').value : null,
         destinos: destinos,
-        sol_origen_esp: OrigenEspecial,
+        sol_origen_esp: (OrigenEspecial === 0 && !document.getElementById('OrigenSolicitud').value.startsWith('OC_')) ? 3 : OrigenEspecial,
         documentos: selectedFiles,
         ACCION: "ACTUALIZAR"
     };

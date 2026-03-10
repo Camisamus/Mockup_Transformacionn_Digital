@@ -941,7 +941,7 @@ CREATE TABLE `trd_desve_solicitudes` (
   `sol_borrado` tinyint(1) DEFAULT 0,
   `sol_creacion` datetime DEFAULT current_timestamp(),
   `sol_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `sol_responsable` int(11) NOT NULL,
+  `sol_propietario` int(11) NOT NULL,
   `sol_registro_tramite` int(11) NOT NULL,
   `sol_origen_esp` tinyint(1) NOT NULL DEFAULT 0,
   `sol_direccion_completa` text DEFAULT NULL,

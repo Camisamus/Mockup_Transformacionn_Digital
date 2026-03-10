@@ -33,6 +33,17 @@ $sectores = $sectorCtrl->getAll()['data'] ?? [];
 $escolaridades = $escolaridadCtrl->getAll()['data'] ?? [];
 $funcionarios = $funcionarioCtrl->getAllOIRS()['data'] ?? [];
 
+// 3. Process Areas and Auth
+$areasUnicas = [];
+foreach ($funcionarios as $f) {
+    if (!empty($f['fnc_area_id']) && !empty($f['fnc_area_nombre'])) {
+        $areasUnicas[$f['fnc_area_id']] = $f['fnc_area_nombre'];
+    }
+}
+$userOirsInfo = $funcionarioCtrl->esOIRS();
+$esOirsArea = ($userOirsInfo && $userOirsInfo['Area'] === 'OIRS');
+$userAreaId = $userOirsInfo['tga_id'] ?? '';
+
 $solicitudData = null;
 if (isset($_GET['id'])) {
     $res = $solicitudCtrl->getById($_GET['id']);
@@ -711,11 +722,16 @@ if (isset($_GET['id'])) {
                     <input type="text" class="rounded-xl border-slate-200 text-sm p-3" id="buscar_fnc_input"
                         placeholder="Nombre, apellido o correo..." oninput="filtrarBusquedaFuncionariosOIRS()">
                     <select class="rounded-xl border-slate-200 text-sm" id="filtro_area_fnc_oirs"
-                        onchange="filtrarBusquedaFuncionariosOIRS()">
-                        <option value="">Todas las Áreas</option>
-                        <option value="SIN_AREA">Sin Área Asignada</option>
+                        onchange="filtrarBusquedaFuncionariosOIRS()" <?= (!$esOirsArea) ? 'disabled' : '' ?>>
+                        <?php if ($esOirsArea): ?>
+                            <option value="">Todas las Áreas</option>
+                            <option value="SIN_AREA">Sin Área Asignada</option>
+                        <?php endif; ?>
                         <?php foreach ($areasUnicas as $areaId => $areaNombre): ?>
-                            <option value="<?= $areaId ?>"><?= htmlspecialchars($areaNombre) ?></option>
+                            <?php if ($esOirsArea || $areaId == $userAreaId): ?>
+                                <option value="<?= $areaId ?>" <?= ($areaId == $userAreaId) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($areaNombre) ?></option>
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -749,7 +765,8 @@ if (isset($_GET['id'])) {
             sectores: <?php echo json_encode($sectores); ?>,
             escolaridades: <?php echo json_encode($escolaridades); ?>,
             funcionarios: <?php echo json_encode($funcionarios); ?>
-        }
+        },
+        currentUserId: <?php echo $_SESSION['user_id'] ?? 0; ?>
     };
 
     // Toggle original

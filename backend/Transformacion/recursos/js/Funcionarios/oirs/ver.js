@@ -357,6 +357,62 @@ function renderAsignaciones(asignaciones) {
 
         // Determinar instrucción (manejar case sensitivity)
         const instruccion = asg.oia_instruccion || asg.oia_Instruccion || '<i>Sin instrucción específica</i>';
+        
+        // --- Lógica de Permisos ---
+        const currentUserId = window.oirsData?.currentUserId || 0;
+        const esAsignador = currentUserId == asg.oia_asignador;
+        const esAsignado = currentUserId == asg.oia_asignacion;
+        const estaFinalizada = asg.oia_estado == 2;
+        const puedeGestionar = (esAsignador || esAsignado) && !estaFinalizada;
+
+        const deleteButton = esAsignador 
+            ? `<button type="button" onclick="eliminarAsignacion(event, ${asg.oia_id})" class="text-slate-400 hover:text-red-500 transition-colors p-1" title="Eliminar asignación">
+                   <span class="material-symbols-outlined text-lg">delete</span>
+               </button>` 
+            : '';
+
+        const managementBlock = puedeGestionar ? `
+            <!-- Bloque Tu Gestión -->
+            <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm mt-4">
+                <h6 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">edit_note</span> Tu Gestión para esta Tarea
+                </h6>
+                ${esAsignador ? `
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <button type="button" onclick="gestionarAsignacion(${asg.oia_id}, 1)" 
+                            class="btn bg-success text-white font-bold py-2.5 px-4 rounded-xl transition-all shadow-sm text-xs uppercase tracking-widest d-flex align-items-center justify-content-center gap-2" style="background-color: #10b981 !important; border: none;">
+                        <span class="material-symbols-outlined text-sm">check_circle</span> Aceptar
+                    </button>
+                    <button type="button" onclick="gestionarAsignacion(${asg.oia_id}, 2)"
+                            class="btn bg-danger text-white font-bold py-2.5 px-4 rounded-xl transition-all shadow-sm text-xs uppercase tracking-widest d-flex align-items-center justify-content-center gap-2" style="background-color: #f43f5e !important; border: none;">
+                        <span class="material-symbols-outlined text-sm">cancel</span> Rechazar
+                    </button>
+                </div>
+                ` : ''}
+                <div class="relative mt-3">
+                    <textarea id="msg_asg_${asg.oia_id}" 
+                              class="form-control rounded-xl border-slate-200 text-sm p-3 focus:ring-primary-blue shadow-sm bg-slate-50 mb-2" 
+                              style="min-height: 80px;"
+                              placeholder="${esAsignador ? 'Escribe un comentario adicional para el funcionario...' : 'Escribe tu respuesta o comentario aquí...'}"></textarea>
+                    <div class="flex justify-end">
+                        <button type="button" onclick="gestionarAsignacion(${asg.oia_id}, 0)"
+                                class="btn btn-link p-0 text-primary-link text-[11px] font-bold uppercase tracking-widest hover:text-blue-700 flex items-center gap-1 transition-colors no-underline" style="color: #006FB3;">
+                            Enviar Comentario <span class="material-symbols-outlined text-sm">send</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        ` : (estaFinalizada ? `
+            <div class="bg-teal-50 border border-teal-200 rounded-2xl p-4 text-center mt-4" style="background-color: #f0fdf4; border: 1px solid #bbf7d0;">
+                <p class="text-[11px] font-bold text-teal-600 uppercase tracking-widest mb-0 flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-sm">verified</span> Gestión Finalizada y Aceptada
+                </p>
+            </div>
+        ` : `
+            <div class="bg-slate-100 border border-slate-200 rounded-2xl p-4 text-center mt-4">
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-0">Vista de solo lectura (Sin permisos de gestión)</p>
+            </div>
+        `);
 
         const item = `
             <div class="bg-white border border-slate-200 rounded-3xl overflow-hidden mb-4 shadow-sm hover:shadow-md transition-all">
@@ -372,10 +428,11 @@ function renderAsignaciones(asignaciones) {
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
-                        <span class="badge rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-600 border border-amber-100" style="background-color: #fffbeb; color: #d97706; border: 1px solid #fef3c7;">Asignación</span>
-                        <button type="button" onclick="eliminarAsignacion(event, ${asg.oia_id})" class="text-slate-400 hover:text-red-500 transition-colors p-1" title="Eliminar asignación">
-                            <span class="material-symbols-outlined text-lg">delete</span>
-                        </button>
+                        ${estaFinalizada 
+                            ? '<span class="badge rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-teal-50 text-teal-600 border border-teal-100" style="background-color: #f0fdf4; color: #059669; border: 1px solid #bbf7d0;">Finalizada</span>'
+                            : '<span class="badge rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-600 border border-amber-100" style="background-color: #fffbeb; color: #d97706; border: 1px solid #fef3c7;">Asignación</span>'
+                        }
+                        ${deleteButton}
                         <span class="material-symbols-outlined text-slate-300 transition-transform dropdown-icon">expand_more</span>
                     </div>
                 </div>
@@ -389,34 +446,7 @@ function renderAsignaciones(asignaciones) {
                             </div>
                         </div>
 
-                        <!-- Bloque Tu Gestión -->
-                        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm mt-4">
-                            <h6 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                                <span class="material-symbols-outlined text-sm">edit_note</span> Tu Gestión para esta Tarea
-                            </h6>
-                            <div class="grid grid-cols-2 gap-3 mb-4">
-                                <button type="button" onclick="gestionarAsignacion(${asg.oia_id}, 1)" 
-                                        class="btn bg-success text-white font-bold py-2.5 px-4 rounded-xl transition-all shadow-sm text-xs uppercase tracking-widest d-flex align-items-center justify-content-center gap-2" style="background-color: #10b981 !important; border: none;">
-                                    <span class="material-symbols-outlined text-sm">check_circle</span> Aprobar Respuesta
-                                </button>
-                                <button type="button" onclick="gestionarAsignacion(${asg.oia_id}, 2)"
-                                        class="btn bg-danger text-white font-bold py-2.5 px-4 rounded-xl transition-all shadow-sm text-xs uppercase tracking-widest d-flex align-items-center justify-content-center gap-2" style="background-color: #f43f5e !important; border: none;">
-                                    <span class="material-symbols-outlined text-sm">error</span> Solicitar Corrección
-                                </button>
-                            </div>
-                            <div class="relative mt-3">
-                                <textarea id="msg_asg_${asg.oia_id}" 
-                                          class="form-control rounded-xl border-slate-200 text-sm p-3 focus:ring-primary-blue shadow-sm bg-slate-50 mb-2" 
-                                          style="min-height: 80px;"
-                                          placeholder="Escribe un comentario adicional para el funcionario..."></textarea>
-                                <div class="flex justify-end">
-                                    <button type="button" onclick="gestionarAsignacion(${asg.oia_id}, 0)"
-                                            class="btn btn-link p-0 text-primary-link text-[11px] font-bold uppercase tracking-widest hover:text-blue-700 flex items-center gap-1 transition-colors no-underline" style="color: #006FB3;">
-                                        Enviar Comentario <span class="material-symbols-outlined text-sm">send</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        ${managementBlock}
                     </div>
                 </div>
             </div>
@@ -558,28 +588,29 @@ function gestionarAsignacion(asignacionId, marcado) {
 
     fetch(`${apiBase}/oirs/gestion.php`, {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             ACCION: 'ASIGNACION_COMENTAR',
             oac_asignacion: asignacionId,
-            oac_mensaje: mensaje || (marcado === 1 ? 'Respuesta aprobada' : 'Se solicita corrección'),
+            oac_mensaje: mensaje || (marcado === 1 ? 'Aceptar' : 'Rechazar'),
             oac_marcado: marcado
         })
     })
         .then(response => response.json())
         .then(res => {
-            if (res.status === 'success') {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Éxito',
-                    text: 'Acción registrada correctamente',
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-                // Recargar datos para ver el nuevo comentario
-                renderAsignaciones(window.asignacionesActuales || []);
-            } else {
-                Swal.fire('Error', res.message, 'error');
-            }
+                if (res.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: 'Acción registrada correctamente',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire('Error', res.message, 'error');
+                }
         });
 }
 

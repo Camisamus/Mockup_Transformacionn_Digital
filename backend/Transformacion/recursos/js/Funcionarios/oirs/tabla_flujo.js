@@ -1,6 +1,7 @@
 const OirsTable = {
-    view: 'bandeja', // Default view
+    view: 'bandeja',
     containerId: '#tabla-resultados-oirs',
+    dataTableInstance: null,
 
     init: function (viewName, containerId = '#tabla-resultados-oirs') {
         this.view = viewName;
@@ -9,9 +10,8 @@ const OirsTable = {
     },
 
     loadData: function () {
-        // Show loading state
         const $container = $(this.containerId);
-        $container.html('<div class="text-center p-5"><div class="spinner-border text-primary" role="status"><span class="sr-only">Cargando...</span></div></div>');
+        $container.html('<div class="flex justify-center p-10"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-blue"></div></div>');
 
         fetch(`../../api/oirs/search.php?view=${this.view}`)
             .then(response => response.json())
@@ -19,123 +19,161 @@ const OirsTable = {
                 if (data.status === 'success') {
                     this.renderTable(data.data);
                 } else {
-                    $container.html(`<div class="alert alert-danger">Error al cargar datos: ${data.message}</div>`);
+                    $container.html(`<div class="bg-red-50 text-red-600 p-4 rounded-xl border border-red-100 italic">Error al cargar datos: ${data.message}</div>`);
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                $container.html('<div class="alert alert-danger">Error de conexión al cargar datos.</div>');
+                $container.html('<div class="bg-red-50 text-red-600 p-4 rounded-xl border border-red-100 italic">Error de conexión al cargar datos.</div>');
             });
     },
 
-    renderTable: function (rows) {
+    renderTable: function (data) {
         const $container = $(this.containerId);
-
-        if (rows.length === 0) {
-            $container.html(`
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body p-5 text-center">
-                        <span class="material-symbols-outlined text-muted" style="font-size: 48px; opacity: 0.5;">inbox</span>
-                        <h5 class="mt-3 text-muted">No se encontraron solicitudes</h5>
-                        <p class="text-muted small">No hay registros que coincidan con los filtros actuales.</p>
-                    </div>
-                </div>
-            `);
-            return;
+        
+        if (this.dataTableInstance) {
+            this.dataTableInstance.destroy();
         }
 
         let html = `
-            <div class="card search-card border-0 mb-4 overflow-hidden">
-                <div class="card-header bg-white p-4 border-0 d-flex justify-content-between align-items-center">
-                    <h3 class="h6 font-weight-bold text-dark mb-0">Resultados encontrados <span class="badge badge-light border ml-2">${rows.length} Solicitudes</span></h3>
-                    <div class="d-flex align-items-center" style="gap: 15px;">
-                        <span class="small text-muted">Ordenar por: <span class="text-dark font-weight-bold">Más recientes</span></span>
-                        <span class="material-symbols-outlined text-muted icon-md">sort</span>
-                    </div>
+            <div class="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
+                <div class="p-5 border-b border-slate-50 flex justify-between items-center bg-white">
+                    <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary-blue">list_alt</span> Resultados encontrados
+                        <span id="solicitudes-count" class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-[10px] ml-2 font-black border border-slate-200">${data.length} SOLICITUDES</span>
+                    </h3>
                 </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead class="bg-light text-muted table-header">
-                                <tr>
-                                    <th class="px-4 py-3 border-0">FOLIO / FECHA</th>
-                                    <th class="px-4 py-3 border-0">CONTRIBUYENTE</th>
-                                    <th class="px-4 py-3 border-0">TEMÁTICA</th>
-                                    <th class="px-4 py-3 border-0">ESTADO</th>
-                                    <th class="px-4 py-3 border-0 text-right">ACCIONES</th>
-                                </tr>
-                            </thead>
-                            <tbody class="table-body">
+
+                <div class="overflow-x-auto p-4">
+                    <table class="w-full text-left" id="table-oirs-render">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
+                                <th class="px-6 py-4">Folio / Fecha</th>
+                                <th class="px-6 py-4">Contribuyente</th>
+                                <th class="px-6 py-4">Temática</th>
+                                <th class="px-6 py-4 text-center">Estado</th>
+                                <th class="px-6 py-4 text-right">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-[15px] text-slate-600">
         `;
 
-        rows.forEach(row => {
-            const estado = this.getEstadoLabel(row.oirs_estado);
-            const fecha = new Date(row.oirs_fecha_ingreso).toLocaleDateString('es-CL', { day: '2-digit', month: 'short', year: 'numeric' });
-            // Initials for avatar
-            const initials = row.nombre_contribuyente ? row.nombre_contribuyente.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'NN';
+        data.forEach(item => {
+            const statusClass = this.getStatusClass(item.oirs_estado);
+            const statusLabel = this.getStatusLabel(item.oirs_estado);
+            const initials = item.nombre_contribuyente ? 
+                item.nombre_contribuyente.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'NN';
 
             html += `
-                <tr class="oirs-row" onclick="window.location.href='oirs_consulta.php?id=${row.oirs_id}'" style="cursor: pointer;">
-                    <td class="px-4 py-4 align-middle">
-                        <div class="d-flex flex-column">
-                            <span class="font-weight-bold text-dark mb-1">#${row.oirs_folio || 'S/F'}</span>
-                            <span class="text-muted small">${fecha}</span>
+                <tr class="hover:bg-slate-50/80 transition-all cursor-pointer oirs-row" data-id="${item.oirs_id}">
+                    <td class="px-6 py-4">
+                        <div class="flex flex-col">
+                            <span class="font-black text-slate-800 tracking-tight">#${item.oirs_folio || item.oirs_id}</span>
+                            <span class="text-slate-400 text-xs mt-0.5 italic">${this.formatDate(item.oirs_fecha_ingreso)}</span>
                         </div>
                     </td>
-                    <td class="px-4 py-4 align-middle">
-                        <div class="d-flex align-items-center">
-                            <div class="text-primary rounded-circle d-flex align-items-center justify-content-center mr-3 user-avatar user-avatar-primary" style="width: 32px; height: 32px; background-color: #e3f2fd; font-weight: bold; font-size: 12px;">
-                                ${initials}
-                            </div>
-                            <div class="d-flex flex-column">
-                                <span class="font-weight-bold">${row.nombre_contribuyente || 'Anónimo'}</span>
-                                <span class="text-muted text-xxs" style="font-size: 10px;">${row.rut_contribuyente || ''}</span>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-blue-50 text-primary-blue flex items-center justify-center font-bold text-[10px] border border-blue-100">${initials}</div>
+                            <div class="flex flex-col">
+                                <span class="font-bold text-slate-700">${item.nombre_contribuyente || 'Anónimo'}</span>
+                                <span class="text-slate-400 text-[10px] font-medium tracking-wide">${item.rut_contribuyente || ''}</span>
                             </div>
                         </div>
                     </td>
-                    <td class="px-4 py-4 align-middle">
-                        <div class="d-flex flex-column">
-                            <span class="text-dark mb-1">${row.oirs_tematica || 'General'}</span>
+                    <td class="px-6 py-4">
+                        <div class="flex flex-col">
+                            <span class="font-medium text-slate-700">${item.oirs_tematica || 'General'}</span>
                         </div>
                     </td>
-                    <td class="px-4 py-4 align-middle">
-                        ${estado}
+                    <td class="px-6 py-4 text-center">
+                        <span class="status-badge ${statusClass}">${statusLabel}</span>
                     </td>
-                    <td class="px-4 py-4 align-middle text-right">
-                        <button class="btn btn-link action-btn text-muted p-0" title="Ver Detalles">
-                            <span class="material-symbols-outlined icon-md">visibility</span>
-                        </button>
+                    <td class="px-6 py-4 text-right">
+                        <div class="flex justify-end gap-1">
+                            <button class="action-btn text-slate-400 hover:text-primary-blue btn-ver" title="Ver Detalles" data-id="${item.oirs_id}">
+                                <span class="material-symbols-outlined">visibility</span>
+                            </button>
+                        </div>
                     </td>
                 </tr>
             `;
         });
 
         html += `
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <!-- Pagination (Static for now) -->
-                <div class="card-footer bg-white border-top p-4">
-                    <nav class="d-flex justify-content-between align-items-center">
-                        <span class="small text-muted font-weight-bold">Mostrando ${rows.length} registros</span>
-                    </nav>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         `;
 
         $container.html(html);
+
+        // Inicializar DataTables
+        this.dataTableInstance = $('#table-oirs-render').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+            },
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100],
+            order: [[0, 'desc']],
+            dom: 'rtip',
+            drawCallback: () => {
+                this.applyTailwindStyles();
+            }
+        });
+
+        // Eventos
+        this.initEvents();
     },
 
-    getEstadoLabel: function (estado) {
-        const badges = {
-            '0': '<span class="badge badge-info status-badge">Creada</span>',
-            '1': '<span class="badge badge-warning status-badge">Visada</span>',
-            '2': '<span class="badge badge-warning status-badge">Resp. Ejecutar</span>',
-            '3': '<span class="badge badge-primary status-badge">Respondida</span>',
-            '4': '<span class="badge badge-success status-badge">Ejecutada</span>',
-            '5': '<span class="badge badge-success status-badge">Notificada</span>'
+    initEvents: function() {
+        // Redirección por fila
+        $(document).off('click', '.oirs-row').on('click', '.oirs-row', function () {
+            const id = $(this).data('id');
+            window.location.href = `ver.php?id=${id}`;
+        });
+
+        // Botón de acción (evitar propagación)
+        $(document).off('click', '.action-btn').on('click', '.action-btn', function (e) {
+            e.stopPropagation();
+            const id = $(this).data('id');
+            window.location.href = `ver.php?id=${id}`;
+        });
+    },
+
+    getStatusClass: function (status) {
+        switch (parseInt(status)) {
+            case 0: return 'badge-ingresada';
+            case 1: case 2: case 3: return 'badge-proceso';
+            case 4: case 5: return 'badge-resuelta';
+            default: return 'badge-vencida';
+        }
+    },
+
+    getStatusLabel: function (status) {
+        const labels = {
+            0: 'Recibida',
+            1: 'Visada',
+            2: 'Resp. Ejecutar',
+            3: 'Respondida',
+            4: 'Ejecutada',
+            5: 'Notificada'
         };
-        return badges[estado] || '<span class="badge badge-secondary status-badge">Desconocido</span>';
+        return labels[status] || 'Desconocido';
+    },
+
+    formatDate: function (dateString) {
+        if (!dateString) return 'N/A';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    },
+
+    applyTailwindStyles: function () {
+        $('.dataTables_info').addClass('text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-4');
+        $('.dataTables_paginate').addClass('flex items-center gap-1 mt-4');
+        $('.paginate_button').addClass('px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-all cursor-pointer');
+        $('.paginate_button.current').addClass('bg-primary-blue !text-white border-primary-blue');
+        $('.paginate_button.disabled').addClass('opacity-50 cursor-not-allowed');
     }
 };

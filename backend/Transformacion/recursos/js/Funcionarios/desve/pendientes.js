@@ -1,9 +1,8 @@
 ﻿let allSolicitudes = [];
-let organizaciones = [];
-let tiposOrganizacion = [];
 let prioridades = [];
 let funcionarios = [];
 let sectores = [];
+let dataTable = null;
 
 document.addEventListener('DOMContentLoaded', async function () {
     // Ensure API_BASE_URL is available
@@ -15,14 +14,18 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Auth handled by PHP
     renderTable(allSolicitudes);
 
-    document.getElementById('btn_buscar').addEventListener('click', buscarAtenciones);
-    document.getElementById('btn_limpiar').addEventListener('click', limpiarFiltros);
+    const btnBuscar = document.getElementById('btn_buscar');
+    if (btnBuscar) btnBuscar.addEventListener('click', buscarAtenciones);
+
+    const btnLimpiar = document.getElementById('btn_limpiar');
+    if (btnLimpiar) btnLimpiar.addEventListener('click', limpiarFiltros);
 
     // Export Listeners
     document.getElementById('btn_exportar_excel').addEventListener('click', () => {
         const dataToExport = allSolicitudes.map(item => {
-            const org = organizaciones.find(o => o.org_id == item.sol_origen_id) || {};
-            const tipoOrg = tiposOrganizacion.find(t => t.tor_id == org.org_tipo_id) || {};
+            const resolvedOrigen = item.sol_origen_nombre || item.sol_origen_texto || '-';
+            const resolvedTipoOrg = item.sol_origen_tipo_nombre || 'N/A';
+
             const prio = prioridades.find(p => p.pri_id == item.sol_prioridad_id) || {};
             const func = funcionarios.find(f => f.fnc_id == item.sol_funcionario_id) || {};
             const sec = sectores.find(s => s.sec_id == item.sol_sector_id) || {};
@@ -31,8 +34,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 "ID": item.sol_id,
                 "RGT": item.sol_ingreso_desve,
                 "Expediente": item.sol_nombre_expediente,
-                "Tipo Organización": tipoOrg.tor_nombre || 'N/A',
-                "Origen": item.sol_origen_texto || org.org_nombre || 'N/A',
+                "Tipo Organización": resolvedTipoOrg,
+                "Origen": resolvedOrigen,
                 "Fecha Recepción": formatDate(item.sol_fecha_recepcion),
                 "Prioridad": prio.pri_nombre || 'N/A',
                 "Funcionario": func.fnc_nombre || 'N/A',
@@ -66,20 +69,16 @@ async function loadInitialData() {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ACCION: "CONSULTAM" })
+            body: JSON.stringify({ ACCION: "CONSULTAM", S: "PENDIENTES_DETAILED" })
         };
-        const [solRes, orgRes, tipoRes, prioRes, funcRes, secRes] = await Promise.all([
+        const [solRes, prioRes, funcRes, secRes] = await Promise.all([
             fetch(`${window.API_BASE_URL}/desve/solicitudes.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/desve/organizaciones.php`, fetchOptions).then(r => r.json()),
-            fetch(`${window.API_BASE_URL}sisadmin/organizaciones/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/desve/prioridades.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/general/funcionarios.php`, fetchOptions).then(r => r.json()),
             fetch(`${window.API_BASE_URL}/general/sectores.php`, fetchOptions).then(r => r.json())
         ]);
 
         allSolicitudes = extractData(solRes);
-        organizaciones = extractData(orgRes);
-        tiposOrganizacion = extractData(tipoRes);
         prioridades = extractData(prioRes);
         funcionarios = extractData(funcRes);
         sectores = extractData(secRes);
@@ -97,17 +96,23 @@ function extractData(response) {
 
 /* renderTable replacement */
 function renderTable(data) {
-    const tbody = document.querySelector('#tablaAtenciones tbody');
-    const resultsCount = document.getElementById('resultados_count');
-    tbody.innerHTML = '';
+    const table = $('#tablaAtenciones');
+    const tbody = $('#tbody_desve');
+
+    // Destruir instancia previa si existe
+    if ($.fn.DataTable.isDataTable('#tablaAtenciones')) {
+        dataTable.destroy();
+    }
+
+    tbody.empty();
 
     const filteredData = aplicarFiltros(data);
-    resultsCount.innerText = filteredData.length;
 
     filteredData.forEach(item => {
-        // Find related data using new API field names
-        const org = organizaciones.find(o => o.org_id == item.sol_origen_id) || {};
-        const tipoOrg = tiposOrganizacion.find(t => t.tor_id == org.org_tipo_id) || {};
+        // Resolve Origen and TipoOrg using backend data
+        const resolvedOrigen = item.sol_origen_nombre || item.sol_origen_texto || '-';
+        const resolvedTipoOrg = item.sol_origen_tipo_nombre || 'N/A';
+
         const prio = prioridades.find(p => p.pri_id == item.sol_prioridad_id) || {};
         const func = funcionarios.find(f => f.fnc_id == item.sol_funcionario_id) || {};
         const sec = sectores.find(s => s.sec_id == item.sol_sector_id) || {};
@@ -115,59 +120,151 @@ function renderTable(data) {
         const mailsCount = item.sol_mails_count || 0;
         const lastMailDate = formatDate(item.sol_mail_enviado_fecha) || 'N/A';
 
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>
-                <button class="btn btn-sm btn-dark" onclick="verMantenedor('${item.sol_id}')" title="Ver Registro">
-                    <i data-feather="eye" style="width: 14px;"></i>
-                </button>
-            </td>
-            <td class="d-none d-md-table-cell">${item.sol_id_raw || item.sol_id}</td>
-            <td class="d-none d-sm-table-cell">${item.sol_ingreso_desve || '-'}</td>
-            <td class="d-none d-md-table-cell">${org.org_nombre || item.sol_origen_texto || '-'}</td>
-            <td class="d-none d-sm-table-cell">${formatDate(item.sol_fecha_recepcion) || ''}</td>
-            <td class="d-none d-sm-table-cell">${formatDate(item.sol_fecha_vencimiento) || ''}</td>
-            <td class="d-none d-md-table-cell"><span class="badge bg-info text-dark">${prio.pri_nombre || 'N/A'}</span></td>
-            <td class="d-none d-md-table-cell text-center">${(item.sol_estado_entrega == 1 || item.sol_estado_entrega === true) ? '<span class="badge bg-success">Entregado</span>' : '<span class="badge bg-warning text-dark">Pendiente</span>'}</td>
-            <td class="text-center">
-                <button class="btn btn-sm btn-outline-secondary" onclick="toggleDetails('${item.sol_id}')">
-                    <i data-feather="plus" id="icon-details-${item.sol_id}" style="width: 14px;"></i>
-                </button>
-            </td>
-        `;
-        tbody.appendChild(row);
+        // Almacenamos los detalles en un atributo data para usarlos en la fila expandible
+        const detailsData = JSON.stringify({
+            rgt: item.sol_ingreso_desve || '-',
+            expediente: item.sol_nombre_expediente || '-',
+            organizacion: resolvedTipoOrg,
+            origen: resolvedOrigen,
+            funcionario: func.fnc_nombre || 'N/A',
+            sector: sec.sec_nombre || 'N/A',
+            mails: mailsCount,
+            lastMail: lastMailDate,
+            coordinador: (item.sol_entrego_coordinador == 1) ? 'Sí (' + (formatDate(item.sol_fecha_respuesta_coordinador) || '') + ')' : 'No',
+            vencimientoDays: item.sol_dias_vencimiento || 0,
+            transcurridosDays: item.sol_dias_transcurridos || 0,
+            observaciones: item.sol_observaciones || '',
+            reingresoId: item.sol_reingreso_id || '-'
+        }).replace(/'/g, "&apos;");
 
-        // Add the collapsible details row
-        const detailRow = document.createElement('tr');
-        detailRow.id = `details-${item.sol_id}`;
-        detailRow.className = 'd-none row-details';
-        detailRow.innerHTML = `
-            <td colspan="7">
-                <div class="p-3">
-                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="detail-item"><span class="detail-label">RGT/Expediente:</span> ${item.sol_ingreso_desve || '-'} / ${item.sol_nombre_expediente || '-'}</div>
-                            <div class="detail-item"><span class="detail-label">Organización:</span> ${tipoOrg.tor_nombre || 'N/A'}</div>
-                            <div class="detail-item"><span class="detail-label">Origen:</span> ${org.org_nombre || item.sol_origen_texto || '-'}</div>
-                            <div class="detail-item"><span class="detail-label">Funcionario:</span> ${func.fnc_nombre || 'N/A'}</div>
-                            <div class="detail-item"><span class="detail-label">Sector:</span> ${sec.sec_nombre || 'N/A'}</div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="detail-item"><span class="detail-label">Cant. Mails:</span> ${mailsCount} (Último: ${lastMailDate})</div>
-                             <div class="detail-item"><span class="detail-label">Entrega Coordinador:</span> ${(item.sol_entrego_coordinador == 1) ? 'Sí (' + (formatDate(item.sol_fecha_respuesta_coordinador) || '') + ')' : 'No'}</div>
-                            <div class="detail-item"><span class="detail-label">Días Vencimiento:</span> ${item.sol_dias_vencimiento || 0}</div>
-                            <div class="detail-item"><span class="detail-label">Días Transcurridos:</span> ${item.sol_dias_transcurridos || 0}</div>
-                             <div class="detail-item"><span class="detail-label">Observaciones:</span> ${item.sol_observaciones || ''}</div>
-                             <div class="detail-item"><span class="detail-label">Reingreso ID:</span> ${item.sol_reingreso_id || '-'}</div>
-                        </div>
-                     </div>
-                </div>
-            </td>
+        const tr = `
+            <tr data-details='${detailsData}'>
+                <td class="text-center font-bold text-slate-700">${item.sol_ingreso_desve || '-'}</td>
+                <td class="text-center">
+                    ${item.sol_propietario == item.yo
+                ? '<span class="px-2 py-1 rounded-md bg-amber-50 text-green-600 text-[12px] font-bold">Autor</span>'
+                : '<span class="px-2 py-1 rounded-md bg-amber-50 text-amber-600 text-[12px] font-bold">Responsable</span>'}
+                </td>
+                <td><b>${item.sol_nombre_expediente.toUpperCase() || '-'}</b><br>${resolvedOrigen.toUpperCase()}</td>
+                <td class="text-center">${formatDate(item.sol_fecha_recepcion) || ''}</td>
+                <td class="text-center">${formatDate(item.sol_fecha_vencimiento) || ''}</td>
+
+                <td class="text-center">
+                    <span class="px-2 py-1 rounded-md text-[10px] font-bold ${item.sol_prioridad_id == 3 ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600'}">
+                        ${prio.pri_nombre || 'N/A'}
+                    </span>
+                </td>
+                <td class="text-center">
+                    ${(item.sol_estado_entrega == 1 || item.sol_estado_entrega === true)
+                ? '<span class="px-2 py-1 rounded-md bg-emerald-50 text-emerald-600 text-[10px] font-bold">Entregado</span>'
+                : '<span class="px-2 py-1 rounded-md bg-amber-50 text-amber-600 text-[10px] font-bold">Pendiente</span>'}
+                </td>
+                <td class="text-center">
+                    <button class="btn-toggle-details p-1 hover:bg-slate-100 rounded-full transition-colors">
+                        <span class="material-symbols-outlined text-slate-400">add_circle</span>
+                    </button>
+                </td>
+            </tr>
         `;
-        tbody.appendChild(detailRow);
+        tbody.append(tr);
     });
 
-    if (window.feather) window.feather.replace();
+    // Inicializar DataTable
+    dataTable = table.DataTable({
+        responsive: true,
+        order: [[1, 'desc']],
+        language: {
+            processing: "Procesando...",
+            search: "Buscar:",
+            lengthMenu: "Mostrar _MENU_ registros",
+            info: "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            infoEmpty: "Mostrando registros del 0 al 0 de un total de 0 registros",
+            infoFiltered: "(filtrado de un total de _MAX_ registros)",
+            infoPostFix: "",
+            loadingRecords: "Cargando...",
+            zeroRecords: "No se encontraron resultados",
+            emptyTable: "Ningún dato disponible en esta tabla",
+            paginate: {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Último"
+            },
+            aria: {
+                sortAscending: ": Activar para ordenar la columna de manera ascendente",
+                sortDescending: ": Activar para ordenar la columna de manera descendente"
+            }
+        },
+        columnDefs: [
+            { orderable: false, targets: [7] }
+        ],
+        drawCallback: function () {
+            if (window.feather) window.feather.replace();
+        }
+    });
+
+    // Manejo de filas expandibles
+    $('#tablaAtenciones tbody').on('click', '.btn-toggle-details', function () {
+        const tr = $(this).closest('tr');
+        const row = dataTable.row(tr);
+        const icon = $(this).find('.material-symbols-outlined');
+
+        if (row.child.isShown()) {
+            row.child.hide();
+            tr.removeClass('shown');
+            icon.text('add_circle').addClass('text-slate-400').removeClass('text-primary-blue');
+        } else {
+            const data = JSON.parse(tr.attr('data-details'));
+            row.child(formatDetails(data)).show();
+            tr.addClass('shown');
+            icon.text('cancel').removeClass('text-slate-400').addClass('text-primary-blue');
+        }
+    });
+}
+
+function formatDetails(d) {
+    return `
+        <div class="p-4 bg-slate-50/50 rounded-xl border border-slate-100 m-2">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <div class="flex justify-between border-b border-slate-100 pb-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">RGT/Expediente</span>
+                        <span class="text-[12px] font-medium text-slate-700">${d.rgt} / ${d.expediente}</span>
+                    </div>
+                    <div class="flex justify-between border-b border-slate-100 pb-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Organización</span>
+                        <span class="text-[12px] font-medium text-slate-700">${d.organizacion}</span>
+                    </div>
+                    <div class="flex justify-between border-b border-slate-100 pb-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Origen</span>
+                        <span class="text-[12px] font-medium text-slate-700">${d.origen}</span>
+                    </div>
+                    <div class="flex justify-between border-b border-slate-100 pb-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Funcionario</span>
+                        <span class="text-[12px] font-medium text-slate-700">${d.funcionario}</span>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between border-b border-slate-100 pb-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Cant. Mails</span>
+                        <span class="text-[12px] font-medium text-slate-700">${d.mails} (Último: ${d.lastMail})</span>
+                    </div>
+                    <div class="flex justify-between border-b border-slate-100 pb-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Días Transcurridos</span>
+                        <span class="text-[12px] font-medium text-slate-700">${d.transcurridosDays} días</span>
+                    </div>
+                    <div class="flex justify-between border-b border-slate-100 pb-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Observaciones</span>
+                        <span class="text-[12px] font-medium text-slate-700">${d.observaciones}</span>
+                    </div>
+                    <div class="flex justify-between border-b border-slate-100 pb-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Reingreso ID</span>
+                        <span class="text-[12px] font-medium text-slate-700">${d.reingresoId}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
 }
 
 function formatDate(dateString) {
@@ -191,32 +288,21 @@ function formatDate(dateString) {
     }
 }
 
-function toggleDetails(id) {
-    const details = document.getElementById(`details-${id}`);
-    const button = document.querySelector(`button[onclick="toggleDetails('${id}')"]`);
-
-    if (details.classList.contains('d-none')) {
-        details.classList.remove('d-none');
-        button.innerHTML = '<i data-feather="minus" style="width: 14px;"></i>';
-    } else {
-        details.classList.add('d-none');
-        button.innerHTML = '<i data-feather="plus" style="width: 14px;"></i>';
-    }
-
-    if (window.feather) window.feather.replace();
-}
+// Eliminado toggleDetails ya que se maneja via DataTable Child Rows
 
 function aplicarFiltros(data) {
-    const hideReingresos = document.getElementById('filtro_ocultar_reingresos').checked;
-    const fechaDesde = document.getElementById('filtro_fecha_desde').value;
-    const fechaHasta = document.getElementById('filtro_fecha_hasta').value;
+    const elFechaDesde = document.getElementById('filtro_fecha_desde');
+    const elFechaHasta = document.getElementById('filtro_fecha_hasta');
+    const elOcultar = document.getElementById('filtro_ocultar_reingresos');
+
+    const fechaDesde = elFechaDesde ? elFechaDesde.value : '';
+    const fechaHasta = elFechaHasta ? elFechaHasta.value : '';
+    const hideReingresos = elOcultar ? elOcultar.checked : false;
 
     return data.filter(item => {
         if (hideReingresos && item.sol_reingreso_id) return false;
-
         if (fechaDesde && item.sol_fecha_recepcion < fechaDesde) return false;
         if (fechaHasta && item.sol_fecha_recepcion > fechaHasta) return false;
-
         return true;
     });
 }
@@ -226,9 +312,14 @@ function buscarAtenciones() {
 }
 
 function limpiarFiltros() {
-    document.getElementById('filtro_fecha_desde').value = '';
-    document.getElementById('filtro_fecha_hasta').value = '';
-    document.getElementById('filtro_ocultar_reingresos').checked = false;
+    const elFechaDesde = document.getElementById('filtro_fecha_desde');
+    const elFechaHasta = document.getElementById('filtro_fecha_hasta');
+    const elOcultar = document.getElementById('filtro_ocultar_reingresos');
+
+    if (elFechaDesde) elFechaDesde.value = '';
+    if (elFechaHasta) elFechaHasta.value = '';
+    if (elOcultar) elOcultar.checked = false;
+
     renderTable(allSolicitudes);
 }
 

@@ -28,6 +28,162 @@ class DESVE_Solicitud
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getTodos()
+    {
+
+        $yo = $_SESSION['user_id'];
+
+        $query = "SELECT 
+                        desve.*,
+                        usu.usr_nombre as Propietario_nombre,
+                        usu.usr_apellido as Propietario_apellido,
+                        ex.rgt_id_publica, 
+                        sol_propietario,  
+                        :usu as yo, 
+                        CASE 
+                            WHEN desve.sol_propietario = :usu THEN 'Autor'
+                            WHEN EXISTS (
+                                SELECT 1 FROM transformacion_digital.trd_desve_destinos 
+                                WHERE tid_desve_solicitud = desve.sol_id 
+                                AND tid_destino = :usu 
+                                AND tid_borrado = 0
+                            ) THEN 'Responsable'
+                            ELSE 'Ninguno'
+                        END as mi_rol,
+
+                        CASE 
+                            WHEN desve.sol_origen_esp = 0 THEN oc.orgc_nombre
+                            WHEN desve.sol_origen_esp = 3 THEN og.org_nombre
+                            WHEN desve.sol_origen_esp = 1 THEN CONCAT(c.tgc_nombre, ' ', c.tgc_apellido_paterno)
+                            WHEN desve.sol_origen_esp = 2 THEN od.org_nombre
+                            ELSE desve.sol_origen_texto
+                        END as sol_origen_nombre,
+                        CASE 
+                            WHEN desve.sol_origen_esp = 0 THEN toc.tor_nombre
+                            WHEN desve.sol_origen_esp = 3 THEN tog.tor_nombre
+                            WHEN desve.sol_origen_esp = 1 THEN 'Particular / Contribuyente'
+                            WHEN desve.sol_origen_esp = 2 THEN tod.tor_nombre
+                            ELSE 'N/A'
+                        END as sol_origen_tipo_nombre
+                    FROM trd_desve_solicitudes desve
+                    INNER JOIN trd_general_registro_general_expedientes ex ON desve.sol_registro_tramite = ex.rgt_id
+                    LEFT JOIN trd_general_organizaciones_comunitarias oc ON desve.sol_origen_esp = 0 AND desve.sol_origen_id = oc.orgc_id
+                    LEFT JOIN trd_general_tipos_organizacion toc ON oc.orgc_tipo_organizacion = toc.tor_id
+                    LEFT JOIN trd_general_organizaciones og ON desve.sol_origen_esp = 3 AND desve.sol_origen_id = og.org_id
+                    LEFT JOIN trd_general_tipos_organizacion tog ON og.org_tipo_id = tog.tor_id
+                    LEFT JOIN trd_general_contribuyentes c ON desve.sol_origen_esp = 1 AND desve.sol_origen_id = c.tgc_id
+                    LEFT JOIN trd_desve_organizaciones od ON desve.sol_origen_esp = 2 AND desve.sol_origen_id = od.org_id
+                    LEFT JOIN trd_general_tipos_organizacion tod ON od.org_tipo_id = tod.tor_id
+                    LEFT JOIN trd_acceso_usuarios usu ON desve.sol_propietario = usu.usr_id
+                    WHERE ex.rgt_tramite = 'desve_solicitud' 
+                    AND desve.sol_borrado = 0";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':usu', $yo);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function getHistorial()
+    {
+        $yo = $_SESSION['user_id'];
+        $query = "SELECT 
+                    desve.*,
+                    usu.usr_nombre as Propietario_nombre,
+                    usu.usr_apellido as Propietario_apellido,
+                    ex.rgt_id_publica, sol_propietario,  $yo yo,
+                    CASE 
+                        WHEN desve.sol_origen_esp = 0 THEN oc.orgc_nombre
+                        WHEN desve.sol_origen_esp = 3 THEN og.org_nombre
+                        WHEN desve.sol_origen_esp = 1 THEN CONCAT(c.tgc_nombre, ' ', c.tgc_apellido_paterno)
+                        WHEN desve.sol_origen_esp = 2 THEN od.org_nombre
+                        ELSE desve.sol_origen_texto
+                    END as sol_origen_nombre,
+                    CASE 
+                        WHEN desve.sol_origen_esp = 0 THEN toc.tor_nombre
+                        WHEN desve.sol_origen_esp = 3 THEN tog.tor_nombre
+                        WHEN desve.sol_origen_esp = 1 THEN 'Particular / Contribuyente'
+                        WHEN desve.sol_origen_esp = 2 THEN tod.tor_nombre
+                        ELSE 'N/A'
+                    END as sol_origen_tipo_nombre
+                  FROM trd_desve_solicitudes desve
+                  INNER JOIN trd_general_registro_general_expedientes ex ON desve.sol_registro_tramite = ex.rgt_id
+                  LEFT JOIN trd_general_organizaciones_comunitarias oc ON desve.sol_origen_esp = 0 AND desve.sol_origen_id = oc.orgc_id
+                  LEFT JOIN trd_general_tipos_organizacion toc ON oc.orgc_tipo_organizacion = toc.tor_id
+                  LEFT JOIN trd_general_organizaciones og ON desve.sol_origen_esp = 3 AND desve.sol_origen_id = og.org_id
+                  LEFT JOIN trd_general_tipos_organizacion tog ON og.org_tipo_id = tog.tor_id
+                  LEFT JOIN trd_general_contribuyentes c ON desve.sol_origen_esp = 1 AND desve.sol_origen_id = c.tgc_id
+                  LEFT JOIN trd_desve_organizaciones od ON desve.sol_origen_esp = 2 AND desve.sol_origen_id = od.org_id
+                  LEFT JOIN trd_general_tipos_organizacion tod ON od.org_tipo_id = tod.tor_id
+                  LEFT JOIN trd_acceso_usuarios usu ON desve.sol_propietario = usu.usr_id
+                  WHERE ex.rgt_tramite = 'desve_solicitud' 
+                  AND (desve.sol_propietario = :usu or sol_id in ( SELECT tid_desve_solicitud FROM transformacion_digital.trd_desve_destinos where tid_destino=:usu  and tid_borrado=0 )) 
+                  AND desve.sol_borrado = 0";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':usu', $yo);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    public function getAllPendientesDetailed()
+    {
+        $yo = $_SESSION['user_id'];
+        $query = "SELECT 
+                    desve.*,
+                    usu.usr_nombre as Propietario_nombre,
+                    usu.usr_apellido as Propietario_apellido,
+                    ex.rgt_id_publica, sol_propietario, $yo yo, 
+                    CASE 
+                        WHEN desve.sol_origen_esp = 0 THEN oc.orgc_nombre
+                        WHEN desve.sol_origen_esp = 3 THEN og.org_nombre
+                        WHEN desve.sol_origen_esp = 1 THEN CONCAT(c.tgc_nombre, ' ', c.tgc_apellido_paterno)
+                        WHEN desve.sol_origen_esp = 2 THEN od.org_nombre
+                        ELSE desve.sol_origen_texto
+                    END as sol_origen_nombre,
+                    CASE 
+                        WHEN desve.sol_origen_esp = 0 THEN toc.tor_nombre
+                        WHEN desve.sol_origen_esp = 3 THEN tog.tor_nombre
+                        WHEN desve.sol_origen_esp = 1 THEN 'Particular / Contribuyente'
+                        WHEN desve.sol_origen_esp = 2 THEN tod.tor_nombre
+                        ELSE 'N/A'
+                    END as sol_origen_tipo_nombre
+                  FROM trd_desve_solicitudes desve
+                  INNER JOIN trd_general_registro_general_expedientes ex ON desve.sol_registro_tramite = ex.rgt_id
+                  LEFT JOIN trd_general_organizaciones_comunitarias oc ON desve.sol_origen_esp = 0 AND desve.sol_origen_id = oc.orgc_id
+                  LEFT JOIN trd_general_tipos_organizacion toc ON oc.orgc_tipo_organizacion = toc.tor_id
+                  LEFT JOIN trd_general_organizaciones og ON desve.sol_origen_esp = 3 AND desve.sol_origen_id = og.org_id
+                  LEFT JOIN trd_general_tipos_organizacion tog ON og.org_tipo_id = tog.tor_id
+                  LEFT JOIN trd_general_contribuyentes c ON desve.sol_origen_esp = 1 AND desve.sol_origen_id = c.tgc_id
+                  LEFT JOIN trd_desve_organizaciones od ON desve.sol_origen_esp = 2 AND desve.sol_origen_id = od.org_id
+                  LEFT JOIN trd_general_tipos_organizacion tod ON od.org_tipo_id = tod.tor_id
+                  LEFT JOIN trd_acceso_usuarios usu ON desve.sol_propietario = usu.usr_id
+                  WHERE ex.rgt_tramite = 'desve_solicitud' 
+                  AND (desve.sol_propietario = :usu or sol_id in ( SELECT tid_desve_solicitud FROM transformacion_digital.trd_desve_destinos where tid_destino=:usu  and tid_borrado=0 )) 
+                  AND desve.sol_estado_entrega = 0 
+                  AND desve.sol_borrado = 0";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':usu', $yo);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getAllPendientes()
+    {
+        $yo = $_SESSION['user_id'];
+        $query = "SELECT desve.* FROM  trd_general_registro_general_expedientes ex,
+                trd_desve_solicitudes desve
+                where ex.rgt_tramite='desve_solicitud' and sol_registro_tramite=rgt_id  
+                and (sol_propietario=:usu or ex.rgt_creador=:usu) and sol_estado_entrega=0 ";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':usu', $yo);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getAllForReingreso()
     {
         $query = "SELECT * FROM " . $this->table_name . " WHERE sol_borrado = 0 ORDER BY sol_id DESC";
@@ -43,7 +199,7 @@ WHERE tds.sol_borrado = 0
 AND tdd.tid_borrado = 0
 AND tds.sol_estado_entrega = 0
 AND tdd.tid_destino = :usu
-OR tds.sol_responsable = :usu
+OR tds.sol_propietario = :usu
 ORDER BY tds.sol_id DESC;";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':usu', $_SESSION['user_id']);
@@ -59,8 +215,8 @@ LEFT JOIN trd_desve_destinos tdd ON tds.sol_id = tdd.tid_desve_solicitud AND tdd
 WHERE tds.sol_borrado = 0 
 AND tdd.tid_borrado = 0
 AND tds.sol_estado_entrega = 1
-AND (tdd.tid_destino IS NOT NULL OR tds.sol_responsable = :usu)
-OR tds.sol_responsable = :usu
+AND (tdd.tid_destino IS NOT NULL OR tds.sol_propietario = :usu)
+OR tds.sol_propietario = :usu
 ORDER BY tds.sol_id DESC;";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':usu', $_SESSION['user_id']);
@@ -83,7 +239,7 @@ ORDER BY tds.sol_id DESC;";
 LEFT JOIN trd_desve_destinos tdd ON tds.sol_id = tdd.tid_desve_solicitud AND tdd.tid_destino = :usu
 WHERE tds.sol_borrado = 0 
 AND tds.sol_estado_entrega = 1
-AND (tdd.tid_destino IS NOT NULL OR tds.sol_responsable = :usu)
+AND (tdd.tid_destino IS NOT NULL OR tds.sol_propietario = :usu)
 AND DATE(tds.sol_fecha_recepcion) >= :fecha_inicio
 AND DATE(tds.sol_fecha_recepcion) <= :fecha_fin
 ORDER BY tds.sol_id DESC;";
@@ -192,7 +348,7 @@ ORDER BY tds.sol_id DESC;";
             $this->conn->beginTransaction();
 
             // Fallback for responsible user from session if not provided
-            $responsable_id = $data['sol_responsable'] ?? ($_SESSION['user_id'] ?? 1);
+            $responsable_id = $data['sol_propietario'] ?? ($_SESSION['user_id'] ?? 1);
 
             // 1. Crear registro general de trámite
             $random_str = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2);
@@ -230,7 +386,7 @@ ORDER BY tds.sol_id DESC;";
                 sol_direccion=:sol_direccion,
                 sol_latitud=:sol_latitud,
                 sol_longitud=:sol_longitud,
-                sol_responsable=:sol_responsable,
+                sol_propietario=:sol_propietario,
                 sol_registro_tramite=:sol_registro_tramite,
                 sol_origen_esp=:sol_origen_esp,
                 sol_direccion_completa=:sol_direccion_completa";
@@ -262,7 +418,7 @@ ORDER BY tds.sol_id DESC;";
             $stmt->bindValue(":sol_direccion", $data['sol_direccion'] ?? null);
             $stmt->bindValue(":sol_latitud", $data['sol_latitud'] ?? null);
             $stmt->bindValue(":sol_longitud", $data['sol_longitud'] ?? null);
-            $stmt->bindValue(":sol_responsable", $responsable_id);
+            $stmt->bindValue(":sol_propietario", $responsable_id);
             $stmt->bindValue(":sol_registro_tramite", $rgt_id);
             // Cast to int directly to preserve 0, 1, 2 values
             $stmt->bindValue(":sol_origen_esp", (int) ($data['sol_origen_esp'] ?? 0), PDO::PARAM_INT);
@@ -290,7 +446,7 @@ ORDER BY tds.sol_id DESC;";
                                 [$fileInfo['array']],
                                 [
                                     'tramite_id' => $rgt_id,
-                                    'user_id' => $data['sol_responsable'] ?? ($_SESSION['user_id'] ?? 1)
+                                    'user_id' => $data['sol_propietario'] ?? ($_SESSION['user_id'] ?? 1)
                                 ]
                             );
                             fclose($fileInfo['file']);
@@ -355,7 +511,7 @@ ORDER BY tds.sol_id DESC;";
             sol_direccion=:sol_direccion,
             sol_latitud=:sol_latitud,
             sol_longitud=:sol_longitud,
-            sol_responsable=:sol_responsable,
+            sol_propietario=:sol_propietario,
             sol_funcionario_id=:sol_funcionario_id,
             sol_origen_esp=:sol_origen_esp,
             sol_direccion_completa=:sol_direccion_completa
@@ -387,7 +543,7 @@ ORDER BY tds.sol_id DESC;";
         $stmt->bindValue(":sol_direccion", $data['sol_direccion'] ?? $current['sol_direccion']);
         $stmt->bindValue(":sol_latitud", $data['sol_latitud'] ?? $current['sol_latitud']);
         $stmt->bindValue(":sol_longitud", $data['sol_longitud'] ?? $current['sol_longitud']);
-        $stmt->bindValue(":sol_responsable", $data['sol_responsable'] ?? $current['sol_responsable']);
+        $stmt->bindValue(":sol_propietario", $data['sol_propietario'] ?? $current['sol_propietario']);
         $stmt->bindValue(":sol_funcionario_id", $toNull($data['sol_funcionario_id'] ?? $current['sol_funcionario_id']));
         $stmt->bindValue(":sol_origen_esp", (int) ($data['sol_origen_esp'] ?? $current['sol_origen_esp']), PDO::PARAM_INT);
         $stmt->bindValue(":id", $id);
@@ -507,7 +663,7 @@ ORDER BY tds.sol_id DESC;";
                                 [$fileInfo['array']],
                                 [
                                     'tramite_id' => $current['sol_registro_tramite'],
-                                    'user_id' => $data['sol_responsable'] ?? ($_SESSION['user_id'] ?? 1)
+                                    'user_id' => $data['sol_propietario'] ?? ($_SESSION['user_id'] ?? 1)
                                 ]
                             );
                             fclose($fileInfo['file']);

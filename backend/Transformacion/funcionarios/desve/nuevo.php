@@ -499,6 +499,7 @@ include '../../api/general/header.php';
 <script src="../../recursos/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../../recursos/js/funcionarios/desve/nuevo.js"></script>
+<script src="../../recursos/js/helpers.js"></script>
 <script>
     document.getElementById('chk_geoloc').addEventListener('change', function () {
         const area = document.getElementById('geolocalizacion_area');

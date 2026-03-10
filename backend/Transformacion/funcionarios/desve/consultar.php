@@ -105,13 +105,15 @@ include '../../api/general/header.php';
                     <!-- Fila Principal: Expediente e ID DESVE -->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
                         <div class="md:col-span-3 space-y-2">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.1em]">Nombre del Expediente</label>
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.1em]">Nombre del
+                                Expediente</label>
                             <div class="text-xl font-extrabold text-slate-800 p-4 bg-slate-50/50 rounded-xl border border-slate-100"
                                 id="info_expediente">-</div>
                         </div>
                         <div class="space-y-2">
                             <label
-                                class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.1em] text-right block">Código DESVE</label>
+                                class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.1em] text-right block">Código
+                                DESVE</label>
                             <div class="text-center font-mono text-lg text-primary-blue bg-blue-50 py-4 rounded-xl border border-blue-100 font-bold"
                                 id="info_desve">-</div>
                         </div>
@@ -119,7 +121,7 @@ include '../../api/general/header.php';
 
                     <!-- Fila 2: IDs Secundarios -->
                     <div class="grid grid-cols-1">
- 
+
                         <div class="space-y-2">
                             <label
                                 class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.1em]">Reingreso</label>
@@ -147,7 +149,8 @@ include '../../api/general/header.php';
                     <!-- Fila 4: Fechas y Prioridad -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="space-y-2">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.1em]">Fecha Recepción</label>
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.1em]">Fecha
+                                Recepción</label>
                             <div
                                 class="flex items-center gap-3 p-3 bg-white border border-slate-200 rounded-xl text-slate-700 text-[14px] font-medium">
                                 <span class="material-symbols-outlined text-slate-400 text-lg">calendar_month</span>
@@ -220,7 +223,8 @@ include '../../api/general/header.php';
 
                         <!-- Contenedor del Mapa -->
                         <div id="section_map" class="hidden space-y-2 pt-4">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.1em]">Ubicación en Mapa</label>
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.1em]">Ubicación en
+                                Mapa</label>
                             <div id="map_desve" style="height: 400px;"
                                 class="w-full border border-slate-100 rounded-2xl shadow-inner bg-slate-50 flex items-center justify-center">
                                 <div class="flex flex-col items-center text-slate-300">
@@ -349,7 +353,8 @@ include '../../api/general/header.php';
                 </div>
             </div>
 
-            <div id="card_reingreso" class="bg-soft-cyan border border-cyan-border rounded-2xl overflow-hidden shadow-sm">
+            <div id="card_reingreso"
+                class="bg-soft-cyan border border-cyan-border rounded-2xl overflow-hidden shadow-sm">
                 <div class="p-5 border-b border-cyan-border flex items-center gap-2">
                     <span class="material-symbols-outlined text-slate-500">link</span>
                     <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest">Reingresos Vinculados</h3>

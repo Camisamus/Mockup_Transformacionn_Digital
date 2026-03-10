@@ -12,7 +12,7 @@ class VecinosAuthController
     public function __construct(PDO $db)
     {
         $this->conn = $db;
-        
+
         // Cargar MailService si está disponible
         if (class_exists('App\Helpers\MailService')) {
             $this->mailService = new \App\Helpers\MailService($this->conn);
@@ -34,13 +34,13 @@ class VecinosAuthController
     }
 
     /**
-     * Login para vecinos validando contra trd_general_contribuyentes con RUT y Clave
+     * Login para vecinos validando contra trd_acceso_vecinos con RUT y Clave
      */
     public function loginByRut(string $rut, string $password): array
     {
-        $sql = "SELECT tgc_id, tgc_nombre, tgc_apellido_paterno, tgc_rut, tgc_correo_electronico, tgc_clave_acceso 
-                FROM trd_general_contribuyentes 
-                WHERE tgc_rut = :rut AND tgc_borrado = 0
+        $sql = "SELECT usr_id, usr_nombre, usr_apellido, usr_rut, usr_email, usr_clave 
+                FROM trd_acceso_vecinos 
+                WHERE usr_rut = :rut AND usr_borrado = 0
                 LIMIT 1";
 
         $stmt = $this->conn->prepare($sql);
@@ -52,95 +52,135 @@ class VecinosAuthController
         if (!$vecino) {
             return [
                 'success' => false,
-                'message' => 'RUT no registrado.'
+                'message' => 'RUT no registrado en el sistema de acceso.'
             ];
         }
 
-        // Verificar clave (asumiendo hash o texto plano por ahora, preferible password_verify)
-        // El usuario pidió "incorporar una clave", así que si no existe el campo lo manejaremos
-        if (!isset($vecino['tgc_clave_acceso']) || !password_verify($password, $vecino['tgc_clave_acceso'])) {
+        if (empty($vecino['usr_clave']) || !password_verify($password, $vecino['usr_clave'])) {
             return [
                 'success' => false,
                 'message' => 'Clave de acceso incorrecta.'
             ];
         }
 
-        return $this->setSession($vecino);
+        return $this->setSession([
+            'tgc_id' => $vecino['usr_id'],
+            'tgc_nombre' => $vecino['usr_nombre'],
+            'tgc_apellido_paterno' => $vecino['usr_apellido'],
+            'tgc_rut' => $vecino['usr_rut'],
+            'tgc_correo_electronico' => $vecino['usr_email']
+        ]);
     }
 
     /**
-     * Registro de nuevo contribuyente
+     * Busca un contribuyente por RUT para pre-cargar datos
+     */
+    public function buscarContribuyentePorRut(string $rut): array
+    {
+        $sql = "SELECT tgc_id, tgc_nombre, tgc_apellido_paterno, tgc_apellido_materno, tgc_correo_electronico, tgc_telefono_contacto 
+                FROM trd_general_contribuyentes 
+                WHERE tgc_rut = :rut AND tgc_borrado = 0
+                LIMIT 1";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':rut', $rut);
+        $stmt->execute();
+
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($data) {
+            return ['success' => true, 'data' => $data];
+        }
+
+        return ['success' => false, 'message' => 'No encontrado'];
+    }
+
+    /**
+     * Registro de nuevo vecino (Contribuyente + Acceso)
      */
     public function registerContribuyente(array $data): array
     {
-        // 1. Verificamos si el RUT ya existe y si tiene clave
-        $check = "SELECT tgc_id, tgc_clave_acceso FROM trd_general_contribuyentes WHERE tgc_rut = :rut LIMIT 1";
-        $stmtCheck = $this->conn->prepare($check);
-        $stmtCheck->bindParam(':rut', $data['tgc_rut']);
-        $stmtCheck->execute();
-        $existing = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+        $rut = $data['tgc_rut'] ?? '';
 
-        if ($existing && !empty($existing['tgc_clave_acceso'])) {
-            return ['success' => false, 'message' => 'El RUT ya se encuentra registrado y tiene una cuenta activa.'];
+        // 1. Verificar si ya tiene acceso en trd_acceso_vecinos
+        $checkAcceso = "SELECT usr_id FROM trd_acceso_vecinos WHERE usr_rut = :rut AND usr_borrado = 0 LIMIT 1";
+        $stmtCheck = $this->conn->prepare($checkAcceso);
+        $stmtCheck->bindParam(':rut', $rut);
+        $stmtCheck->execute();
+        if ($stmtCheck->fetch()) {
+            return ['success' => false, 'message' => 'El RUT ya tiene una cuenta de acceso activa.'];
         }
 
         $hashedPassword = password_hash($data['tgc_clave_acceso'], PASSWORD_DEFAULT);
-        $privacidad = isset($data['tgc_acepta_privacidad']) && $data['tgc_acepta_privacidad'] == 1 ? 1 : 0;
+        $this->conn->beginTransaction();
 
         try {
-            if ($existing) {
-                // Si EXISTE pero NO TIENE CLAVE, actualizamos el registro (Activación)
-                $sql = "UPDATE trd_general_contribuyentes SET 
-                            tgc_tipo = :tipo,
+            // 2. Manejar trd_general_contribuyentes
+            $checkGeneral = "SELECT tgc_id FROM trd_general_contribuyentes WHERE tgc_rut = :rut LIMIT 1";
+            $stmtGen = $this->conn->prepare($checkGeneral);
+            $stmtGen->bindParam(':rut', $rut);
+            $stmtGen->execute();
+            $existingGen = $stmtGen->fetch(PDO::FETCH_ASSOC);
+
+            if ($existingGen) {
+                // Actualizar (ignorando campos restringidos)
+                $sqlGen = "UPDATE trd_general_contribuyentes SET 
                             tgc_nombre = :nombre,
                             tgc_apellido_paterno = :paterno,
                             tgc_apellido_materno = :materno,
                             tgc_correo_electronico = :email,
                             tgc_telefono_contacto = :telefono,
-                            tgc_clave_acceso = :clave,
                             tgc_acepta_privacidad = :privacidad,
                             tgc_fecha_acepta_privacidad = NOW()
-                        WHERE tgc_id = :id";
-                $stmt = $this->conn->prepare($sql);
-                $stmt->bindParam(':id', $existing['tgc_id'], PDO::PARAM_INT);
+                          WHERE tgc_id = :id";
+                $stmtStep1 = $this->conn->prepare($sqlGen);
+                $stmtStep1->bindParam(':id', $existingGen['tgc_id']);
             } else {
-                // Si NO EXISTE, creamos un registro nuevo
-                $sql = "INSERT INTO trd_general_contribuyentes (
-                            tgc_rut, tgc_tipo, tgc_nombre, tgc_apellido_paterno, tgc_apellido_materno, 
-                            tgc_correo_electronico, tgc_telefono_contacto, tgc_clave_acceso, tgc_acepta_privacidad, tgc_fecha_acepta_privacidad
-                        ) VALUES (
-                            :rut, :tipo, :nombre, :paterno, :materno, 
-                            :email, :telefono, :clave, :privacidad, NOW()
-                        )";
-                $stmt = $this->conn->prepare($sql);
-                $stmt->bindParam(':rut', $data['tgc_rut']);
+                // Insertar nuevo contribuyente
+                $sqlGen = "INSERT INTO trd_general_contribuyentes (
+                            tgc_rut, tgc_nombre, tgc_apellido_paterno, tgc_apellido_materno, 
+                            tgc_correo_electronico, tgc_telefono_contacto, tgc_acepta_privacidad, tgc_fecha_acepta_privacidad
+                          ) VALUES (
+                            :rut, :nombre, :paterno, :materno, :email, :telefono, :privacidad, NOW()
+                          )";
+                $stmtStep1 = $this->conn->prepare($sqlGen);
+                $stmtStep1->bindParam(':rut', $rut);
             }
 
-            $stmt->bindParam(':tipo', $data['tgc_tipo']);
-            $stmt->bindParam(':nombre', $data['tgc_nombre']);
-            $stmt->bindParam(':paterno', $data['tgc_apellido_paterno']);
-            $stmt->bindParam(':materno', $data['tgc_apellido_materno']);
-            $stmt->bindParam(':email', $data['tgc_correo_electronico']);
-            $stmt->bindParam(':telefono', $data['tgc_telefono_contacto']);
-            $stmt->bindParam(':clave', $hashedPassword);
-            $stmt->bindParam(':privacidad', $privacidad);
-            
-            if ($stmt->execute()) {
-                $targetId = $existing ? (int)$existing['tgc_id'] : (int)$this->conn->lastInsertId();
-                
-                // Enviar correo de bienvenida
-                if ($this->mailService) {
-                    $this->sendWelcomeEmail($targetId, $data);
-                }
+            $stmtStep1->bindParam(':nombre', $data['tgc_nombre']);
+            $stmtStep1->bindParam(':paterno', $data['tgc_apellido_paterno']);
+            $stmtStep1->bindParam(':materno', $data['tgc_apellido_materno']);
+            $stmtStep1->bindParam(':email', $data['tgc_correo_electronico']);
+            $stmtStep1->bindParam(':telefono', $data['tgc_telefono_contacto']);
+            $privacidadVal = $data['tgc_acepta_privacidad'] ?? 1;
+            $stmtStep1->bindParam(':privacidad', $privacidadVal);
+            $stmtStep1->execute();
 
-                $msg = $existing ? 'Cuenta activada correctamente.' : 'Registro exitoso.';
-                return ['success' => true, 'message' => "{$msg} Se ha enviado un correo de bienvenida. Ahora puede iniciar sesión."];
+            // 3. Manejar trd_acceso_vecinos
+            $sqlAcceso = "INSERT INTO trd_acceso_vecinos (usr_rut, usr_nombre, usr_apellido, usr_email, usr_clave, usr_creacion)
+                          VALUES (:rut, :nombre, :apellido, :email, :clave, NOW())";
+            $stmtStep2 = $this->conn->prepare($sqlAcceso);
+            $stmtStep2->bindParam(':rut', $rut);
+            $stmtStep2->bindParam(':nombre', $data['tgc_nombre']);
+            $apellidoCompuesto = trim($data['tgc_apellido_paterno'] . ' ' . $data['tgc_apellido_materno']);
+            $stmtStep2->bindParam(':apellido', $apellidoCompuesto);
+            $stmtStep2->bindParam(':email', $data['tgc_correo_electronico']);
+            $stmtStep2->bindParam(':clave', $hashedPassword);
+            $stmtStep2->execute();
+
+            $this->conn->commit();
+
+            // 4. Enviar correo de bienvenida
+            if ($this->mailService) {
+                $this->sendWelcomeEmail($existingGen ? (int) $existingGen['tgc_id'] : (int) $this->conn->lastInsertId(), $data);
             }
+
+            return ['success' => true, 'message' => 'Registro exitoso. Se ha enviado un correo de bienvenida.'];
+
         } catch (\Exception $e) {
+            $this->conn->rollBack();
             return ['success' => false, 'message' => 'Error al procesar el registro: ' . $e->getMessage()];
         }
-
-        return ['success' => false, 'message' => 'No se pudo completar la operación.'];
     }
     /**
      * Envía un correo de bienvenida al vecino recién registrado
@@ -153,7 +193,7 @@ class VecinosAuthController
         $clave = $data['tgc_clave_acceso'];
 
         $asunto = "Bienvenido al Portal de Vecinos - Municipalidad de Viña del Mar";
-        
+
         $cuerpo = "
         <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; color: #1e293b;'>
             <div style='background: linear-gradient(135deg, #006FB3 0%, #004a7c 100%); padding: 30px; text-align: center;'>
@@ -218,32 +258,117 @@ class VecinosAuthController
         ];
     }
 
-    public function loginByEmail(string $email): array
+    public function loginByEmail(string $email, string $password): array
     {
-        // ... mantiene compatibilidad si existe trd_acceso_vecinos
-        $sql = "SELECT usr_id as id, usr_nombre as nombre, usr_apellido as apellido, usr_rut as rut, usr_email as email 
+        $sql = "SELECT usr_id, usr_nombre, usr_apellido, usr_rut, usr_email, usr_clave 
                 FROM trd_acceso_vecinos 
                 WHERE usr_email = :email AND usr_borrado = 0
                 LIMIT 1";
-        
-        // Pero priorizamos trd_general_contribuyentes si es necesario
-        // Por ahora mantengamos la lógica anterior pero refactorizada para usar setSession
+
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':email', $email);
         $stmt->execute();
         $vecino = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($vecino) {
+        if ($vecino && !empty($vecino['usr_clave']) && password_verify($password, $vecino['usr_clave'])) {
             return $this->setSession([
-                'tgc_id' => $vecino['id'],
-                'tgc_correo_electronico' => $vecino['email'],
-                'tgc_rut' => $vecino['rut'],
-                'tgc_nombre' => $vecino['nombre'],
-                'tgc_apellido_paterno' => $vecino['apellido']
+                'tgc_id' => $vecino['usr_id'],
+                'tgc_correo_electronico' => $vecino['usr_email'],
+                'tgc_rut' => $vecino['usr_rut'],
+                'tgc_nombre' => $vecino['usr_nombre'],
+                'tgc_apellido_paterno' => $vecino['usr_apellido']
             ]);
         }
 
-        return ['success' => false, 'message' => 'Usuario no encontrado.'];
+        return ['success' => false, 'message' => 'Credenciales incorrectas.'];
+    }
+
+    /**
+     * Solicita recuperación de contraseña
+     */
+    public function requestPasswordReset(string $email): array
+    {
+        $sql = "SELECT usr_id, usr_nombre, usr_rut FROM trd_acceso_vecinos WHERE usr_email = :email AND usr_borrado = 0 LIMIT 1";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user) {
+            return ['success' => false, 'message' => 'El correo electrónico no está registrado.'];
+        }
+
+        $token = bin2hex(random_bytes(32));
+        $expires = date('Y-m-d H:i:s', strtotime('+2 hours'));
+
+        // Necesitamos una tabla para tokens o usar un campo en trd_acceso_vecinos
+        // Por simplicidad para el mockup, intentaremos añadir la columna si no existe
+        try {
+            $this->conn->exec("ALTER TABLE trd_acceso_vecinos ADD COLUMN IF NOT EXISTS usr_reset_token VARCHAR(255) DEFAULT NULL, ADD COLUMN IF NOT EXISTS usr_reset_expires DATETIME DEFAULT NULL");
+        } catch (\Exception $e) {
+        }
+
+        $update = "UPDATE trd_acceso_vecinos SET usr_reset_token = :token, usr_reset_expires = :expires WHERE usr_id = :id";
+        $stmtUp = $this->conn->prepare($update);
+        $stmtUp->bindParam(':token', $token);
+        $stmtUp->bindParam(':expires', $expires);
+        $stmtUp->bindParam(':id', $user['usr_id']);
+        $stmtUp->execute();
+
+        if ($this->mailService) {
+            $link = "http://192.168.0.169/Transformacion/vecinos/restablecer_password.php?token=" . $token;
+            $nombre = $user['usr_nombre'];
+            $asunto = "Recuperación de Contraseña - Portal de Vecinos";
+            $cuerpo = "
+            <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; padding: 30px;'>
+                <h2 style='color: #006FB3;'>Recuperación de Contraseña</h2>
+                <p>Hola {$nombre},</p>
+                <p>Has solicitado restablecer tu contraseña. Haz clic en el siguiente botón para continuar:</p>
+                <p style='text-align: center; margin: 30px 0;'>
+                    <a href='{$link}' style='background-color: #006FB3; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold;'>Restablecer Contraseña</a>
+                </p>
+                <p>Este enlace expirará en 2 horas.</p>
+                <p style='font-size: 12px; color: #64748b;'>Si no has solicitado este cambio, puedes ignorar este correo.</p>
+            </div>";
+
+            $this->mailService->enviar([
+                'expediente_id' => 1,
+                'destinatario_email' => $email,
+                'asunto' => $asunto,
+                'cuerpo' => $cuerpo,
+                'from_name' => 'Municipalidad de Viña del Mar'
+            ]);
+        }
+
+        return ['success' => true, 'message' => 'Se ha enviado un correo con instrucciones para restablecer su contraseña.'];
+    }
+
+    /**
+     * Procesa el cambio de contraseña con token
+     */
+    public function resetPassword(string $token, string $newPassword): array
+    {
+        $sql = "SELECT usr_id FROM trd_acceso_vecinos WHERE usr_reset_token = :token AND usr_reset_expires > NOW() AND usr_borrado = 0 LIMIT 1";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':token', $token);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user) {
+            return ['success' => false, 'message' => 'El enlace es inválido o ha expirado.'];
+        }
+
+        $hashed = password_hash($newPassword, PASSWORD_DEFAULT);
+        $update = "UPDATE trd_acceso_vecinos SET usr_clave = :pass, usr_reset_token = NULL, usr_reset_expires = NULL WHERE usr_id = :id";
+        $stmtUp = $this->conn->prepare($update);
+        $stmtUp->bindParam(':pass', $hashed);
+        $stmtUp->bindParam(':id', $user['usr_id']);
+
+        if ($stmtUp->execute()) {
+            return ['success' => true, 'message' => 'Su contraseña ha sido actualizada correctamente.'];
+        }
+
+        return ['success' => false, 'message' => 'No se pudo actualizar la contraseña.'];
     }
 
     public function logout(): void

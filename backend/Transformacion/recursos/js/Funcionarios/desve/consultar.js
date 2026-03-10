@@ -156,7 +156,7 @@ async function loadSolicitationDetails(id) {
                 }
             });
             if (!aux) {
-                aux = sol.sol_responsable === currentUser.id;
+                aux = sol.sol_propietario === currentUser.id;
             }
             // 3. Security Check (Only assigned official can respond)
             if (!aux) {
@@ -201,21 +201,23 @@ async function loadSolicitationDetails(id) {
 
             switch (parseInt(sol.sol_origen_esp)) {
                 case 0:
-                    // Try Community Orgs first
+                    // Only Community Orgs
                     org = organizacionesComunitarias.find(o => o.orgc_id == sol.sol_origen_id);
                     if (org) {
                         tiporg = tiposOrganizacion.find(t => t.tor_id == org.orgc_tipo_organizacion);
                         document.getElementById('info_origen').innerText = org.orgc_nombre;
-                    } else {
-                        // Fallback to General Orgs
-                        org = organizaciones.find(o => o.org_id == sol.sol_origen_id);
-                        if (org) {
-                            tiporg = tiposOrganizacion.find(t => t.tor_id == org.org_tipo_id); // Assuming field mismatch
-                            document.getElementById('info_origen').innerText = org.org_nombre;
-                        }
                     }
                     if (!org) document.getElementById('info_origen').innerText = sol.sol_origen_texto || 'Desconocido/Texto Manual';
 
+                    break;
+                case 3:
+                    // General Orgs
+                    org = organizaciones.find(o => o.org_id == sol.sol_origen_id);
+                    if (org) {
+                        tiporg = tiposOrganizacion.find(t => t.tor_id == org.org_tipo_id);
+                        document.getElementById('info_origen').innerText = org.org_nombre;
+                    }
+                    if (!org) document.getElementById('info_origen').innerText = sol.sol_origen_texto || 'Desconocido/Texto Manual';
                     break;
                 case 1:
                     org = contribuyentes.find(o => o.tgc_id == sol.sol_origen_id);
@@ -272,8 +274,8 @@ async function loadSolicitationDetails(id) {
             document.getElementById('info_vencimiento').innerText = formatearFecha(sol.sol_fecha_vencimiento.substring(0, 10)) || '-';
 
             // Responsable
-            const resp = funcionarios.find(f => f.fnc_id == sol.sol_responsable);
-            document.getElementById('info_responsable').innerText = resp ? `${resp.fnc_nombre} ${resp.fnc_apellido}` : (sol.sol_responsable || '-');
+            const resp = funcionarios.find(f => f.fnc_id == sol.sol_propietario);
+            document.getElementById('info_responsable').innerText = resp ? `${resp.fnc_nombre} ${resp.fnc_apellido}` : (sol.sol_propietario || '-');
 
             document.getElementById('info_detalle').innerText = sol.sol_detalle || 'Sin detalle';
             document.getElementById('info_observaciones').innerText = sol.sol_observaciones || 'Sin observaciones';

@@ -23,6 +23,25 @@ class DESVE_SolicitudController
         $result = $this->solicitud->getAll();
         return ["status" => "success", "data" => $result];
     }
+    public function getTodos()
+    {
+        $result = $this->solicitud->getTodos();
+        return ["status" => "success", "data" => $result];
+    }
+    public function getAllPendientesDetailed()
+    {
+        $result = $this->solicitud->getAllPendientesDetailed();
+
+        return ["status" => "success", "data" => $result];
+    }
+
+    public function getHistorial()
+    {
+        $result = $this->solicitud->getHistorial();
+
+        return ["status" => "success", "data" => $result];
+    }
+
     public function getAllNL()
     {
         $result = $this->solicitud->getAllNL();

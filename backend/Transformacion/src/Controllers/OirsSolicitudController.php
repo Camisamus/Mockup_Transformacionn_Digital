@@ -119,12 +119,10 @@ class OirsSolicitudController
 
         // Obtener Historial (Bitacora)
         if (!empty($oirs['oirs_registro_tramite'])) {
-            require_once __DIR__ . '/../Models/Bitacora.php';
             $bitacoraModel = new \App\Models\Bitacora($this->db);
             $oirs['historial'] = $bitacoraModel->obtenerPorTramite($oirs['oirs_registro_tramite']);
 
             // Obtener Adjuntos (GesDoc)
-            require_once __DIR__ . '/../Models/GesDoc.php';
             $gesDocModel = new \App\Models\GesDoc($this->db);
             $oirs['adjuntos'] = $gesDocModel->getDocumentosByTramite($oirs['oirs_registro_tramite']);
         } else {
@@ -133,12 +131,10 @@ class OirsSolicitudController
         }
 
         // Obtener Gestión (trd_oirs_gestion)
-        require_once __DIR__ . '/../Models/OIRS_Gestion.php';
         $gestionModel = new \App\Models\OIRS_Gestion($this->db);
         $oirs['gestion'] = $gestionModel->getBySolicitudId($id);
 
         // Obtener Asignaciones (trd_oirs_asignaciones)
-        require_once __DIR__ . '/../Models/OirsAsignacion.php';
         $asignacionModel = new \App\Models\OirsAsignacion($this->db);
         $oirs['asignaciones'] = $asignacionModel->getBySolicitud($id);
 

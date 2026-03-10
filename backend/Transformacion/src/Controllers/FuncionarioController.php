@@ -59,7 +59,7 @@ class FuncionarioController
         }
 
         $currentuser = $_SESSION['user_id'];
-        $query = "SELECT tga.tga_codigo_area, ofa.ofa_p 
+        $query = "SELECT tga.tga_codigo_area, ofa.ofa_p, ofa.ofa_area as tga_id 
                   FROM trd_general_areas tga
                   JOIN trd_oirs_funcionarios_areas ofa ON ofa.ofa_area = tga.tga_id
                   WHERE ofa.ofa_funcionario = :usr_id 
@@ -74,7 +74,8 @@ class FuncionarioController
         if ($result) {
             return [
                 "Area" => $result["tga_codigo_area"],
-                "jefe" => $result["ofa_p"]
+                "jefe" => $result["ofa_p"],
+                "tga_id" => $result["tga_id"]
             ];
         }
 

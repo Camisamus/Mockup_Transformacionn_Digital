@@ -79,14 +79,9 @@ include '../../api/general/header.php';
         <div class="space-y-1 w-full text-left">
             <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Historial DESVE</h1>
             <p class="text-slate-400 text-sm lg:text-[15px] font-medium">Visualiza el historial de las solicitudes DESVE
-                Cerradas asignadas a ti.</p>
+                solicitadas o asignadas a ti.</p>
         </div>
-        <div class="flex-shrink-0">
-            <button type="button" onclick="location.href='nuevo.php'"
-                class="bg-primary-blue hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-sm uppercase tracking-wider">
-                NUEVO DESVE
-            </button>
-        </div>
+
     </div>
 
     <div class="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
@@ -134,16 +129,22 @@ include '../../api/general/header.php';
                 </div>
             </div>
         </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse" id="tablaAtenciones">
+        
+        <div class="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
+      
+        <div class="overflow-x-auto p-4">
+            <table class="w-full text-left" id="tablaAtenciones">
                 <thead>
                     <tr
                         class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
-                        <th class="px-6 py-4 text-center w-[80px]">Acción</th>
-                        <th class="px-6 py-4 w-[100px]">ID</th>
-                        <th class="px-6 py-4">Fecha de Respuesta</th>
-                        <th class="px-6 py-4">Nombre del Expediente</th>
-                        <th class="px-6 py-4 text-center">Estado</th>
+                        <th class="text-center px-6 py-4">Cod. DESVE</th>
+                        <th class="px-6 py-4">Rol</th>
+                        <th class="px-6 py-4">Materia / Solicitante</th>
+                        <th class="text-center px-6 py-4">Fecha Rec.</th>
+                        <th class="text-center px-6 py-4">Vencimiento</th>
+                        <th class="text-center px-6 py-4">Prioridad</th>
+                        <th class="text-center px-6 py-4">Estado</th>
+                        <th class="text-center px-6 py-4">Acción</th>
                     </tr>
                 </thead>
                 <tbody id="tbody_desve" class="divide-y divide-slate-100 text-[13px] text-slate-600">
@@ -152,7 +153,6 @@ include '../../api/general/header.php';
         </div>
 
         <div class="p-6 border-t border-slate-50 flex flex-col md:flex-row justify-between items-center gap-4 bg-white">
-
             <div class="flex gap-3">
                 <button type="button"
                     class="flex items-center gap-2 bg-[#1d7344] hover:bg-[#155a34] text-white px-5 py-2.5 rounded-lg text-xs font-bold transition-all shadow-md uppercase tracking-wider"
@@ -166,26 +166,12 @@ include '../../api/general/header.php';
                 </button>
             </div>
 
-            <nav class="flex items-center gap-1">
-                <button class="p-2 text-slate-400 hover:bg-slate-50 rounded-lg transition-colors">
-                    <span class="material-symbols-outlined">chevron_left</span>
-                </button>
-                <div class="flex gap-1" id="pagination_container">
-                    <button
-                        class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary-blue text-white font-bold text-xs">1</button>
-                    <button
-                        class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 font-bold text-xs hover:bg-slate-50">2</button>
-                </div>
-                <button class="p-2 text-slate-400 hover:bg-slate-50 rounded-lg transition-colors">
-                    <span class="material-symbols-outlined">chevron_right</span>
-                </button>
-            </nav>
-
-            <div class="text-slate-400 text-[11px] font-bold uppercase tracking-wider">
-                Resultados (<span id="resultados_count">0</span>)
+            <div class="text-slate-400 text-[11px] font-bold uppercase tracking-wider d-none">
+                Mostrando <span id="current_view">1 a 4</span> de <span id="resultados_count_old">0</span> resultados
             </div>
         </div>
     </div>
+
 </div>
 <!--<div class="container-fluid py-4">
     <div class="card shadow-sm border-0">

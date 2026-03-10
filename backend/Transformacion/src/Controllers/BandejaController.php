@@ -30,12 +30,12 @@ class BandejaController
                             'DESVE' as origen,
                             'Pendiente' as estado,
                             CASE 
-                                WHEN sol.sol_responsable = :fid_owner THEN 'Responsable'
+                                WHEN sol.sol_propietario = :fid_owner THEN 'Responsable'
                                 ELSE 'Destino'
                             END as rol_usuario
                         FROM trd_desve_solicitudes sol
                         LEFT JOIN trd_desve_destinos dest ON sol.sol_id = dest.tid_desve_solicitud AND dest.tid_destino = :fid
-                        WHERE (sol.sol_responsable = :fid_owner2 OR dest.tid_destino IS NOT NULL)
+                        WHERE (sol.sol_propietario = :fid_owner2 OR dest.tid_destino IS NOT NULL)
                         AND sol.sol_borrado = 0 
                         AND sol.sol_estado_entrega = 0";
 
@@ -161,12 +161,12 @@ class BandejaController
                             'DESVE' as origen,
                             'Cerrado' as estado,
                             CASE 
-                                WHEN sol.sol_responsable = :fid_owner THEN 'Responsable'
+                                WHEN sol.sol_propietario = :fid_owner THEN 'Responsable'
                                 ELSE 'Destino'
                             END as rol_usuario
                         FROM trd_desve_solicitudes sol
                         LEFT JOIN trd_desve_destinos dest ON sol.sol_id = dest.tid_desve_solicitud AND dest.tid_destino = :fid
-                        WHERE (sol.sol_responsable = :fid_owner2 OR dest.tid_destino IS NOT NULL)
+                        WHERE (sol.sol_propietario = :fid_owner2 OR dest.tid_destino IS NOT NULL)
                         AND sol.sol_borrado = 0 
                         AND sol.sol_estado_entrega = 1
                         AND DATE(sol.sol_fecha_recepcion) >= :fecha_inicio_desve

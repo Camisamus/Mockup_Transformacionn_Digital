@@ -149,6 +149,16 @@ class OIRS_Gestion
      */
     public function getOirsByView($userId, $view, $filters = [])
     {
+        // 1. Identificar Perfil OIRS del usuario activo
+        $perfilSql = "SELECT ofa_area, ofa_p FROM trd_oirs_funcionarios_areas 
+                      WHERE ofa_funcionario = :userId AND (ofa_borrado = 0 OR ofa_borrado IS NULL) LIMIT 1";
+        $pStmt = $this->conn->prepare($perfilSql);
+        $pStmt->bindValue(':userId', $userId);
+        $pStmt->execute();
+        $perfil = $pStmt->fetch(PDO::FETCH_ASSOC);
+
+        $esAdminOirs = ($perfil && $perfil['ofa_area'] == 2); // Area 2 = OIRS
+        
         // Base Query - Updated to join with parent table (tramite) and contributor
         $query = "SELECT s.*, 
                          s.oirs_creacion as oirs_fecha_ingreso,
@@ -161,43 +171,52 @@ class OIRS_Gestion
                   JOIN " . $this->table_name_parent . " r ON s.oirs_registro_tramite = r.rgt_id
                   LEFT JOIN trd_oirs_gestion t ON s.oirs_id = t.oig_solicitud AND t.oig_borrado = 0
                   LEFT JOIN trd_general_contribuyentes tgc ON r.rgt_contribuyente = tgc.tgc_id AND tgc.tgc_borrado = 0
-                  LEFT JOIN trd_oirs_tematicas tem ON s.oirs_tematica = tem.tem_id AND tem.tem_borrado = 0
-                  LEFT JOIN trd_oirs_asignaciones a ON s.oirs_id = a.oia_solicitud AND a.oia_asignacion = :userId AND a.oia_borrado = 0
-                  WHERE s.oirs_borrado = 0 AND r.rgt_borrado = 0";
-
-        $params = [':userId' => $userId];
+                  LEFT JOIN trd_oirs_tematicas tem ON s.oirs_tematica = tem.tem_id AND tem.tem_borrado = 0";
+        
+        // Si es Admin OIRS, el join con asignaciones es global para la vista revisar
+        if ($esAdminOirs && $view === 'revisar') {
+            $query .= " LEFT JOIN trd_oirs_asignaciones a ON s.oirs_id = a.oia_solicitud AND a.oia_borrado = 0";
+        } else {
+            $query .= " LEFT JOIN trd_oirs_asignaciones a ON s.oirs_id = a.oia_solicitud AND a.oia_asignacion = :u_join AND a.oia_borrado = 0";
+        }
+        
+        $query .= " WHERE s.oirs_borrado = 0 AND r.rgt_borrado = 0";
 
         switch ($view) {
             case 'bandeja':
                 // (Created by User OR Assigned) AND State < 2
-                $query .= " AND (r.rgt_creador = :userId OR a.oia_asignacion = :userId) 
+                $query .= " AND (r.rgt_creador = :u1 OR a.oia_asignacion = :u2) 
                             AND s.oirs_estado < 2";
                 break;
 
             case 'listar':
                 // Created by User (Owner) AND State IN (0, 1, 2)
-                $query .= " AND r.rgt_creador = :userId 
+                $query .= " AND r.rgt_creador = :u1 
                             AND s.oirs_estado IN (0, 1, 2)";
                 break;
 
             case 'revisar':
-                // Assigned to User AND State = 1
-                $query .= " AND a.oia_asignacion = :userId 
-                            AND s.oirs_estado = 1";
+                // Si es Admin OIRS ve todas las visadas (estado 1)
+                // Si no, solo las que tiene asignadas personalmente
+                if (!$esAdminOirs) {
+                    $query .= " AND a.oia_asignacion = :u1";
+                }
+                $query .= " AND s.oirs_estado = 1";
                 break;
 
             case 'visar':
                 // Assigned to User AND State = 0.
-                // Note: Original requirement mentioned 'assignment level 1'. 
-                // We keep it simple for now as per specific request updates.
-                $query .= " AND a.oia_asignacion = :userId 
+                $query .= " AND a.oia_asignacion = :u1 
                             AND s.oirs_estado = 0";
                 break;
 
             case 'historial':
-                // (Created OR Assigned) AND State > 3 (4 or 5)
-                $query .= " AND (r.rgt_creador = :userId OR a.oia_asignacion = :userId) 
-                            AND s.oirs_estado > 3";
+                // Si es Admin OIRS ve todo lo finalizado (estado > 3)
+                // Si no, ve lo que creó o lo que le fue asignado
+                if (!$esAdminOirs) {
+                    $query .= " AND (r.rgt_creador = :u1 OR a.oia_asignacion = :u2)";
+                }
+                $query .= " AND s.oirs_estado > 3";
                 break;
 
             default:
@@ -205,6 +224,13 @@ class OIRS_Gestion
         }
 
         $query .= " ORDER BY s.oirs_creacion DESC";
+
+        $params = [];
+        foreach([':u_join', ':u1', ':u2'] as $p) {
+            if (strpos($query, $p) !== false) {
+                $params[$p] = $userId;
+            }
+        }
 
         try {
             $stmt = $this->conn->prepare($query);

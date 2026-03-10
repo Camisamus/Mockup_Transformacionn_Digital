@@ -3,7 +3,7 @@ require_once '../general/cors.php';
 require_once '../general/session_start.php';
 
 require_once '../../src/Config/Database.php';
-require_once '../../src/Models/oirs/gestion.php';
+require_once '../../src/Models/OIRS_Gestion.php';
 require_once '../../src/Models/Bitacora.php'; // Dependency of OIRS_Gestion
 
 use App\Config\Database;
