@@ -156,10 +156,10 @@ function extractData(response) {
 function renderSolicitationInfo() {
     if (!currentSol) return;
 
-    document.getElementById('header_public_id').innerText = `Responder DESVE: ${currentSol.sol_ingreso_desve || currentSol.sol_id}`;
+    document.getElementById('header_public_id').innerText = `Responder DESVE: ${currentSol.sol_ingreso_desve || currentSol.sol_id_raw || currentSol.sol_id}`;
     document.getElementById('header_expediente').innerText = currentSol.sol_nombre_expediente || '';
 
-    document.getElementById('display-id').innerText = currentSol.sol_id;
+    document.getElementById('display-id').innerText = currentSol.sol_id_raw || currentSol.sol_id;
     document.getElementById('display-desve').innerText = currentSol.sol_ingreso_desve || 'N/A';
     document.getElementById('display-expediente').innerText = currentSol.sol_nombre_expediente || '-';
     document.getElementById('display-recepcion').innerText = currentSol.sol_fecha_recepcion?.split(' ')[0] || '-';

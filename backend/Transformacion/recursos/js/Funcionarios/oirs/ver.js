@@ -423,7 +423,7 @@ function renderAsignaciones(asignaciones) {
         `;
         container.append(item);
 
-        const nombreAsignadorReal = asg.creador_nombre ? `${asg.creador_nombre} ${asg.creador_apellido || ''}` : 'Asignador';
+        const nombreAsignadorReal = asg.asignador_nombre ? `${asg.asignador_nombre} ${asg.asignador_apellido || ''}` : (asg.creador_nombre ? `${asg.creador_nombre} ${asg.creador_apellido || ''}` : 'Asignador');
         // Intentar cargar el historial de forma asíncrona
         cargarHistorialAsignacion(asg.oia_id, asg.oia_creacion, instruccion, chatContainerId, nombreAsignadorReal);
     });

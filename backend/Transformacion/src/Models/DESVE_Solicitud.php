@@ -97,7 +97,7 @@ ORDER BY tds.sol_id DESC;";
         return $solicitudes;
     }
 
-    public function getById(int $id): array|null
+    public function getById(int $id, bool $log_access = true): array|null
     {
         $query = "SELECT tds.*, rgt.rgt_id_publica 
                   FROM " . $this->table_name . " tds
@@ -122,8 +122,8 @@ ORDER BY tds.sol_id DESC;";
             // Obtener destinos
             $solicitud['destinos'] = $this->getDestinosBySolicitud($id);
 
-            // Registrar consulta en bitácora (si hay sesión de usuario)
-            if (isset($_SESSION['user_id'])) {
+            // Registrar consulta en bitácora (si hay sesión de usuario y se solicita)
+            if ($log_access && isset($_SESSION['user_id'])) {
                 $this->bitacora->registrar($solicitud['sol_registro_tramite'], "Consulta solicitud");
             }
             // Obtener bitácora
@@ -327,8 +327,8 @@ ORDER BY tds.sol_id DESC;";
 
     public function update($id, $data)
     {
-        // 1. Obtener estado actual para comparación
-        $current = $this->getById($id);
+        // 1. Obtener estado actual para comparación (sin registrar "Consulta solicitud" en bitácora)
+        $current = $this->getById($id, false);
         if (!$current) {
             $this->lastError = "Solicitud not found or access denied for ID: $id";
             return false;
@@ -399,15 +399,91 @@ ORDER BY tds.sol_id DESC;";
                 // 2. Detectar cambios y registrar en bitácora
                 $cambios = [];
                 $campos_seguimiento = [
-                    'sol_funcionario_id' => 'funcionario asignado',
-                    'sol_sector_id' => 'sector',
-                    'sol_prioridad_id' => 'prioridad'
+                    'sol_ingreso_desve' => 'N° Ingreso',
+                    'sol_nombre_expediente' => 'Nombre Expediente',
+                    'sol_funcionario_id' => 'Funcionario',
+                    'sol_sector_id' => 'Sector',
+                    'sol_prioridad_id' => 'Prioridad',
+                    'sol_origen_id' => 'Origen',
+                    'sol_fecha_recepcion' => 'Fecha de Recepción',
+                    'sol_fecha_vencimiento' => 'Fecha de Vencimiento',
+                    'sol_estado_entrega' => 'Estado Entrega',
+                    'sol_entrego_coordinador' => 'Entregado a Coordinador',
+                    'sol_observaciones' => 'Observaciones',
+                    'sol_detalle' => 'Detalle',
+                    'sol_direccion' => 'Dirección',
+                    'sol_reingreso_id' => 'ID Reingreso'
                 ];
 
                 foreach ($campos_seguimiento as $campo => $label) {
-                    if (isset($data[$campo]) && $data[$campo] != $current[$campo]) {
-                        $cambios[] = "$label de \"{$current[$campo]}\" a \"{$data[$campo]}\"";
+                    if (array_key_exists($campo, $data)) {
+                        $vData = $data[$campo];
+                        $vCurr = $current[$campo] ?? null;
+
+                        // Normalización de datos para comparación justa
+                        if ($vData === '' || $vData === 'null')
+                            $vData = null;
+                        if ($vCurr === '' || $vCurr === 'null')
+                            $vCurr = null;
+
+                        // Comparación booleana
+                        if ($campo === 'sol_estado_entrega' || $campo === 'sol_entrego_coordinador') {
+                            $vData = filter_var($vData, FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+                            $vCurr = filter_var($vCurr, FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+                        }
+                        // Comparación de fechas
+                        elseif ((strpos($campo, 'fecha') !== false) && $vData && $vCurr) {
+                            $vData = date('Y-m-d', strtotime($vData));
+                            $vCurr = date('Y-m-d', strtotime($vCurr));
+                        }
+
+                        // Solo registrar si realmente hay un cambio tras la limpieza
+                        if ($vData != $vCurr) {
+
+                            $strViejo = $vCurr;
+                            $strNuevo = $vData;
+
+                            if ($campo === 'sol_estado_entrega' || $campo === 'sol_entrego_coordinador') {
+                                $strViejo = $vCurr ? 'Sí' : 'No';
+                                $strNuevo = $vData ? 'Sí' : 'No';
+                            }
+                            // Si los valores originales eran nulos (no mapeados booleanos) mostrar como "Vacío"
+                            if (is_null($vCurr) || $vCurr === '')
+                                $strViejo = 'Vacío';
+                            if (is_null($vData) || $vData === '')
+                                $strNuevo = 'Vacío';
+
+                            // Asegurarnos que no son objetos o arrays antes de concatenar (no debería, pero por sanidad)
+                            if (!is_array($strViejo) && !is_object($strViejo) && !is_array($strNuevo) && !is_object($strNuevo)) {
+                                $cambios[] = "$label de \"$strViejo\" a \"$strNuevo\"";
+                            } else {
+                                $cambios[] = $label;
+                            }
+                        }
                     }
+                }
+
+                if (isset($data['destinos']) && is_array($data['destinos'])) {
+                    $newDestIds = array_map(function ($d) {
+                        return is_array($d) ? ($d['usr_id'] ?? null) : $d;
+                    }, $data['destinos']);
+                    $currDestIds = array_map(function ($d) {
+                        return $d['tid_destino'] ?? null;
+                    }, $current['destinos'] ?? []);
+
+                    // Filtrar nulos y ordenar
+                    $newDestIds = array_filter($newDestIds);
+                    $currDestIds = array_filter($currDestIds);
+                    sort($newDestIds);
+                    sort($currDestIds);
+
+                    if ($newDestIds != $currDestIds) {
+                        $cambios[] = 'Destinos';
+                    }
+                }
+
+                if (isset($data['documentos']) && !empty($data['documentos'])) {
+                    $cambios[] = 'Documentos';
                 }
 
                 if (!empty($cambios)) {
@@ -475,7 +551,7 @@ ORDER BY tds.sol_id DESC;";
 
     public function updateStatus($id, $status, $entrega)
     {
-        $current = $this->getById($id);
+        $current = $this->getById($id, false);
         if (!$current)
             return false;
 

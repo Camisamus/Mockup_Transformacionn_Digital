@@ -72,7 +72,7 @@ function renderTable(data) {
         const row = document.createElement('tr');
         row.innerHTML = `
 
-                        <td class="px-6 py-4 font-bold text-slate-700">${item.sol_id}</td>
+                        <td class="px-6 py-4 font-bold text-slate-700">${item.sol_id_raw || item.sol_id}</td>
                         <td class="px-6 py-4 text-slate-600 font-medium">${item.sol_nombre_expediente || '-'}</td>
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-2 text-rose-500 font-bold text-sm">
@@ -84,7 +84,7 @@ function renderTable(data) {
                         </td>
                         <td class="px-6 py-4 text-right">
                             <button
-                                class="text-primary-blue font-bold hover:text-blue-800 transition-all text-sm"  onclick="verMantenedor(${item.sol_id})" >Gestionar</button>
+                                class="text-primary-blue font-bold hover:text-blue-800 transition-all text-sm"  onclick="verMantenedor('${item.sol_id}')" >Gestionar</button>
                         </td>
 
 
@@ -118,7 +118,7 @@ function formatDate(dateString) {
 
 function toggleDetails(id) {
     const details = document.getElementById(`details-${id}`);
-    const button = document.querySelector(`button[onclick="toggleDetails(${id})"]`);
+    const button = document.querySelector(`button[onclick="toggleDetails('${id}')"]`);
 
     if (details.classList.contains('d-none')) {
         details.classList.remove('d-none');

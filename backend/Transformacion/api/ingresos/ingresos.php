@@ -180,7 +180,7 @@ switch ($data['ACCION']) {
         if ($id && $data) {
             $response = $controller->update($id, $data, $current_user_id);
             if (($response['status'] ?? '') === 'success') {
-                require_once '../src/Models/SystemLog.php';
+                require_once '../../src/Models/SystemLog.php';
                 $logModel = new \App\Models\SystemLog($db);
                 $tempData = $data;
                 if (isset($tempData['documentos']) && is_array($tempData['documentos'])) {
@@ -223,7 +223,7 @@ switch ($data['ACCION']) {
         if ($id) {
             $response = $controller->delete($id);
             if (($response['status'] ?? '') === 'success') {
-                require_once '../src/Models/SystemLog.php';
+                require_once '../../src/Models/SystemLog.php';
                 $logModel = new \App\Models\SystemLog($db);
                 $logModel->crear([
                     'evento' => 'DELETE',

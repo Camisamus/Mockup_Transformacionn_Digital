@@ -25,6 +25,18 @@ function formatRut(rut) {
  * @param {string} rut 
  * @returns {boolean}
  */
+
+function formatearFecha(fechaAnioMesDia) {
+    // Si la fecha viene vacía o nula, retornamos un aviso o string vacío
+    if (!fechaAnioMesDia) return "";
+
+    // Dividimos la cadena por el guion
+    const [anio, mes, dia] = fechaAnioMesDia.split("-");
+
+    // Retornamos en el nuevo orden deseado
+    return `${dia}-${mes}-${anio}`;
+}
+
 function validateRut(rut) {
     if (!rut) return false;
     let clean = rut.replace(/[.\- ]/g, '').toUpperCase();

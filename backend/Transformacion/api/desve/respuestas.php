@@ -7,11 +7,20 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 header("Content-Type: application/json");
 use App\Config\Database;
 use App\Controllers\DESVE_RespuestaController;
+use App\Helpers\Encode;
 
 $database = new Database();
 $db = $database->getConnection();
 
 $controller = new DESVE_RespuestaController($db);
+
+$encoder = new Encode();
+if (isset($data['sol_id']) && is_string($data['sol_id']) && strpos($data['sol_id'], 'L$U') === 0) {
+    $data['sol_id'] = $encoder->descifrar($data['sol_id']);
+}
+if (isset($data['res_id']) && is_string($data['res_id']) && strpos($data['res_id'], 'L$U') === 0) {
+    $data['res_id'] = $encoder->descifrar($data['res_id']);
+}
 
 switch ($data['ACCION']) {
     case 'CREAR':

@@ -51,9 +51,17 @@ window.initMap = function () {
     map = new google.maps.Map(mapElement, {
         zoom: 15,
         center: defaultLocation,
+
         mapTypeControl: false,
         streetViewControl: false,
         fullscreenControl: true,
+        // --- PROPIEDADES PARA BLOQUEAR EL MAPA ---
+        gestureHandling: 'none',      // Desactiva todos los gestos (arrastrar, zoom con dedos, etc.)
+        zoomControl: false,           // Quita los botones de +/-
+        scrollwheel: false,           // Desactiva el zoom con la rueda del ratón
+        disableDoubleClickZoom: true, // Desactiva el zoom al hacer doble clic
+        draggable: false,
+
         styles: [
             {
                 "featureType": "poi",
@@ -164,7 +172,7 @@ async function loadSolicitationDetails(id) {
             currentSolRegistroId = sol.sol_registro_tramite;
 
             // Header info
-            document.getElementById('header_public_id').innerText = `Consulta DESVE: ${sol.sol_ingreso_desve || sol.sol_id}`;
+            document.getElementById('header_public_id').innerText = `Consulta DESVE: ${sol.sol_ingreso_desve || sol.sol_id_raw || sol.sol_id}`;
             document.getElementById('header_expediente').innerText = sol.sol_nombre_expediente || 'Sin nombre de expediente';
 
             // Badge status
@@ -179,10 +187,8 @@ async function loadSolicitationDetails(id) {
 
             // Main Info
             document.getElementById('info_expediente').innerText = sol.sol_nombre_expediente || '-';
-            document.getElementById('info_id').innerText = sol.sol_id || '-';
-            document.getElementById('info_rgt').innerText = sol.rgt_id_publica || '-';
             document.getElementById('info_desve').innerText = sol.sol_ingreso_desve || '';
-            document.getElementById('info_reingreso').innerText = sol.sol_reingreso_id || '';
+            document.getElementById('info_reingreso').innerText = sol.sol_reingreso_id || 'No Aplica';
 
             // Resolve Origin
             let originName = '-';
@@ -233,8 +239,6 @@ async function loadSolicitationDetails(id) {
                 document.getElementById('info_tipo_org').innerText = tiporg.tor_nombre;
             }
 
-            document.getElementById('info_latitud').innerText = sol.sol_latitud || '-';
-            document.getElementById('info_longitud').innerText = sol.sol_longitud || '-';
             document.getElementById('info_direccion').innerText = sol.sol_direccion || '-';
 
             if (sol.sol_latitud && sol.sol_longitud) {
@@ -260,12 +264,12 @@ async function loadSolicitationDetails(id) {
             const sector = sectores.find(s => s.sec_id == sol.sol_sector_id);
             document.getElementById('info_sector').innerText = sector ? sector.sec_nombre : '-';
 
-            document.getElementById('info_fecha_recepcion').innerText = sol.sol_fecha_recepcion.substring(0, 10) || '-';
+            document.getElementById('info_fecha_recepcion').innerText = formatearFecha(sol.sol_fecha_recepcion.substring(0, 10)) || '-';
 
             const prio = prioridades.find(p => p.pri_id == sol.sol_prioridad_id);
             document.getElementById('info_prioridad').innerText = prio ? prio.pri_nombre : '-';
 
-            document.getElementById('info_vencimiento').innerText = sol.sol_fecha_vencimiento.substring(0, 10) || '-';
+            document.getElementById('info_vencimiento').innerText = formatearFecha(sol.sol_fecha_vencimiento.substring(0, 10)) || '-';
 
             // Responsable
             const resp = funcionarios.find(f => f.fnc_id == sol.sol_responsable);

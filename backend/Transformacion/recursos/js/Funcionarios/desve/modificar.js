@@ -407,7 +407,7 @@ async function loadSolicitationDetails(id, currentUser) {
             }
 
 
-            document.getElementById('header_public_id').innerText = `Modificar DESVE: ${sol.sol_ingreso_desve || sol.sol_id}`;
+            document.getElementById('header_public_id').innerText = `Modificar DESVE: ${sol.sol_ingreso_desve || sol.sol_id_raw || sol.sol_id}`;
             document.getElementById('header_expediente').innerText = sol.sol_nombre_expediente || '';
 
             // Map Fields
@@ -506,7 +506,7 @@ async function loadSolicitationDetails(id, currentUser) {
             document.getElementById('Responsable').value = sol.sol_responsable;
             document.getElementById('Reingresado').value = sol.sol_reingreso_id;
 
-            if (document.getElementById('idIngresoVisible')) document.getElementById('idIngresoVisible').value = sol.sol_id;
+            if (document.getElementById('idIngresoVisible')) document.getElementById('idIngresoVisible').value = sol.sol_id_raw || sol.sol_id;
             if (document.getElementById('Codigo_RGT')) document.getElementById('Codigo_RGT').value = sol.rgt_id_publica || '';
 
             currentSolRegistroId = sol.sol_registro_tramite;

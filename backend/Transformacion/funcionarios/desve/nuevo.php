@@ -206,8 +206,8 @@ include '../../api/general/header.php';
                                 Mapa</label>
                         </div>
                     </div>
-                    <div id="geolocalizacion_area" class="p-6 lg:p-10 space-y-6 hidden">
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div id="geolocalizacion_area" class="px-6 py-2 lg:px-10 lg:py-4 space-y-6 hidden">
+                        <div class="grid grid-cols-1 ">
                             <div class="md:col-span-2 space-y-2">
                                 <label
                                     class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Dirección</label>
@@ -216,15 +216,16 @@ include '../../api/general/header.php';
                                         class="flex-grow border-slate-200 rounded-l-xl px-4" /><button type="button"
                                         id="btn_buscar_geo" class="bg-slate-800 text-white px-6 rounded-r-xl"><span
                                             class="material-symbols-outlined">search</span></button></div>
-                            </div>
-                            <div class="space-y-2"><label
-                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Latitud</label><input
-                                    type="text" id="Latitud" readonly
-                                    class="w-full border-slate-200 rounded-xl text-sm bg-slate-50 p-3" /></div>
-                            <div class="space-y-2"><label
-                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Longitud</label><input
-                                    type="text" id="Longitud" readonly
-                                    class="w-full border-slate-200 rounded-xl text-sm bg-slate-50 p-3" /></div>
+                            
+                            <input
+                                    type="hidden" id="Latitud" readonly
+                                    class="w-full border-slate-200 rounded-xl text-sm bg-slate-50 p-3" />
+                                <input
+                                    type="hidden" id="Longitud" readonly
+                                    class="w-full border-slate-200 rounded-xl text-sm bg-slate-50 p-3" />
+
+                                        </div>
+                            
                         </div>
                         <div id="map_desve" style="height: 400px;" class="w-full border border-slate-100 rounded-2xl">
                         </div>

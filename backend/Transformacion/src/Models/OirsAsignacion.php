@@ -22,9 +22,11 @@ class OirsAsignacion
         // Assumed schema: asg_id, asg_solicitud, asg_funcionario, asg_instruccion, asg_fecha_creacion
         // Joining with funcionarios to get names
         $query = "SELECT a.*, f.usr_nombre, f.usr_apellido, 
-                         c.usr_nombre as creador_nombre, c.usr_apellido as creador_apellido
+                         c.usr_nombre as creador_nombre, c.usr_apellido as creador_apellido,
+                         assignor.usr_nombre as asignador_nombre, assignor.usr_apellido as asignador_apellido
                   FROM " . $this->table_name . " a
                   LEFT JOIN trd_acceso_usuarios f ON a.oia_asignacion = f.usr_id
+                  LEFT JOIN trd_acceso_usuarios assignor ON a.oia_asignador = assignor.usr_id
                   LEFT JOIN trd_oirs_solicitud s ON a.oia_solicitud = s.oirs_id
                   LEFT JOIN trd_general_registro_general_expedientes r ON s.oirs_registro_tramite = r.rgt_id
                   LEFT JOIN trd_acceso_usuarios c ON r.rgt_creador = c.usr_id
@@ -41,12 +43,14 @@ class OirsAsignacion
         $query = "INSERT INTO " . $this->table_name . " SET
             oia_solicitud = :solicitud,
             oia_asignacion = :funcionario,
+            oia_asignador = :asignador,
             oia_instruccion = :instruccion,
             oia_nivel_asignacion = 1";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(":solicitud", $data['solicitud']);
         $stmt->bindValue(":funcionario", $data['funcionario']);
+        $stmt->bindValue(":asignador", $data['asignador'] ?? ($_SESSION['user_id'] ?? 1));
         $stmt->bindValue(":instruccion", $data['instruccion'] ?? null);
 
         if ($stmt->execute()) {
@@ -62,7 +66,9 @@ class OirsAsignacion
                     $funcionarioId = $data['funcionario'];
                     // Get funcionario name for better log? Or just ID. 
                     // Let's use ID for simplicity as Bitacora text usually is simple.
-                    $this->bitacora->registrar($solicitud['oirs_registro_tramite'], "Asignación de OIRS (Funcionario ID: $funcionarioId)", $_SESSION['user_id'] ?? 1);
+                    $asignadorId = $data['asignador'] ?? ($_SESSION['user_id'] ?? 1);
+                    $asignadorName = $this->getUserNameById($asignadorId);
+                    $this->bitacora->registrar($solicitud['oirs_registro_tramite'], "Asignación de OIRS por $asignadorName (Funcionario ID: $funcionarioId)", $asignadorId);
                 }
             } catch (\Exception $e) {
                 error_log("Error logging OIRS assignment: " . $e->getMessage());
@@ -92,5 +98,18 @@ class OirsAsignacion
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(":id", $asignacionId);
         return $stmt->execute();
+    }
+
+    private function getUserNameById($id)
+    {
+        $query = "SELECT usr_nombre, usr_apellido FROM trd_acceso_usuarios WHERE usr_id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindValue(":id", $id);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            return $row['usr_nombre'] . " " . $row['usr_apellido'];
+        }
+        return "Desconocido";
     }
 }

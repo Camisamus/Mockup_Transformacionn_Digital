@@ -7,14 +7,69 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 header("Content-Type: application/json");
 use App\Config\Database;
 use App\Controllers\DESVE_SolicitudController;
+use App\Helpers\Encode;
 
 $database = new Database();
 $db = $database->getConnection();
 
 $controller = new DESVE_SolicitudController($db);
+$encoder = new Encode();
 
-$id = $data['sol_id'] ?? null;
+// Función auxiliar para descifrar IDs si vienen cifrados y validar seguridad (ACCESO DIRECTO)
+$descifrarSeguro = function ($valor, $campo = 'ID') {
+    global $encoder;
+    if (empty($valor))
+        return $valor;
+
+    if (is_string($valor) && strpos($valor, 'L$U') === 0) {
+        return $encoder->descifrar($valor);
+    }
+
+    if (is_numeric($valor) || (is_string($valor) && ctype_digit($valor))) {
+        http_response_code(403);
+        echo json_encode(["status" => "error", "message" => "Acceso no autorizado: El $campo no es válido o no está cifrado para acceso directo."]);
+        exit;
+    }
+
+    return $valor;
+};
+
+// Función para descifrado opcional (FILTROS DE BÚSQUEDA)
+$descifrarSiAplica = function ($valor) use ($encoder) {
+    if (empty($valor))
+        return $valor;
+    if (is_string($valor) && strpos($valor, 'L$U') === 0) {
+        return $encoder->descifrar($valor);
+    }
+    return $valor;
+};
+
+if (isset($data['sol_id'])) {
+    $data['sol_id'] = $descifrarSeguro($data['sol_id'], 'sol_id');
+}
+if (isset($data['id'])) {
+    $data['id'] = $descifrarSeguro($data['id'], 'id');
+}
+if (isset($data['sol_reingreso_id'])) {
+    $data['sol_reingreso_id'] = $descifrarSeguro($data['sol_reingreso_id'], 'sol_reingreso_id');
+}
+
+$id = $data['sol_id'] ?? $data['id'] ?? null;
 $S = $data['S'] ?? null;
+
+// Función para cifrar IDs en la respuesta
+$cifrarRespuesta = function (&$item) use ($encoder) {
+    if (!is_array($item))
+        return;
+    if (isset($item['sol_id'])) {
+        $item['sol_id_raw'] = $item['sol_id'];
+        $item['sol_id'] = $encoder->cifrar($item['sol_id']);
+    }
+    if (isset($item['id'])) {
+        $item['id_raw'] = $item['id'];
+        $item['id'] = $encoder->cifrar($item['id']);
+    }
+};
 
 switch ($data['ACCION']) {
     case 'CONSULTAM':
@@ -31,7 +86,6 @@ switch ($data['ACCION']) {
                 $response = $controller->getAll();
             }
         }
-        echo json_encode($response);
         break;
 
     case 'CREAR':
@@ -69,7 +123,6 @@ switch ($data['ACCION']) {
         } else {
             $response = ["status" => "error", "message" => "Invalid input"];
         }
-        echo json_encode($response);
         break;
 
     case 'ACTUALIZAR':
@@ -106,7 +159,6 @@ switch ($data['ACCION']) {
         } else {
             $response = ["status" => "error", "message" => "ID and Data required for update"];
         }
-        echo json_encode($response);
         break;
 
     case 'ACTUALIZAR_ESTADO':
@@ -122,7 +174,6 @@ switch ($data['ACCION']) {
         } else {
             $response = ["status" => "error", "message" => "ID and Estado required"];
         }
-        echo json_encode($response);
         break;
 
     case 'BORRAR':
@@ -149,12 +200,35 @@ switch ($data['ACCION']) {
         } else {
             $response = ["status" => "error", "message" => "ID required for delete"];
         }
-        echo json_encode($response);
         break;
 
     default:
         http_response_code(400);
-        echo json_encode(["status" => "error", "message" => "Action not allowed"]);
+        $response = ["status" => "error", "message" => "Action not allowed"];
         break;
 }
+
+// Cifrar IDs en la respuesta
+if (isset($response['data'])) {
+    if (is_array($response['data'])) {
+        if (isset($response['data'][0]) && is_array($response['data'][0])) {
+            foreach ($response['data'] as &$item) {
+                $cifrarRespuesta($item);
+            }
+        } else {
+            $cifrarRespuesta($response['data']);
+        }
+    }
+} else if ($response !== null) {
+    $cifrarRespuesta($response);
+}
+
+if (isset($response['id'])) {
+    $response['id'] = $encoder->cifrar($response['id']);
+}
+if (isset($response['sol_id'])) {
+    $response['sol_id'] = $encoder->cifrar($response['sol_id']);
+}
+
+echo json_encode($response);
 ?>

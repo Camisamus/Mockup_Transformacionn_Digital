@@ -118,11 +118,11 @@ function renderTable(data) {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>
-                <button class="btn btn-sm btn-dark" onclick="verMantenedor(${item.sol_id})" title="Ver Registro">
+                <button class="btn btn-sm btn-dark" onclick="verMantenedor('${item.sol_id}')" title="Ver Registro">
                     <i data-feather="eye" style="width: 14px;"></i>
                 </button>
             </td>
-            <td class="d-none d-md-table-cell">${item.sol_id}</td>
+            <td class="d-none d-md-table-cell">${item.sol_id_raw || item.sol_id}</td>
             <td class="d-none d-sm-table-cell">${item.sol_ingreso_desve || '-'}</td>
             <td class="d-none d-md-table-cell">${org.org_nombre || item.sol_origen_texto || '-'}</td>
             <td class="d-none d-sm-table-cell">${formatDate(item.sol_fecha_recepcion) || ''}</td>
@@ -130,7 +130,7 @@ function renderTable(data) {
             <td class="d-none d-md-table-cell"><span class="badge bg-info text-dark">${prio.pri_nombre || 'N/A'}</span></td>
             <td class="d-none d-md-table-cell text-center">${(item.sol_estado_entrega == 1 || item.sol_estado_entrega === true) ? '<span class="badge bg-success">Entregado</span>' : '<span class="badge bg-warning text-dark">Pendiente</span>'}</td>
             <td class="text-center">
-                <button class="btn btn-sm btn-outline-secondary" onclick="toggleDetails(${item.sol_id})">
+                <button class="btn btn-sm btn-outline-secondary" onclick="toggleDetails('${item.sol_id}')">
                     <i data-feather="plus" id="icon-details-${item.sol_id}" style="width: 14px;"></i>
                 </button>
             </td>
@@ -193,7 +193,7 @@ function formatDate(dateString) {
 
 function toggleDetails(id) {
     const details = document.getElementById(`details-${id}`);
-    const button = document.querySelector(`button[onclick="toggleDetails(${id})"]`);
+    const button = document.querySelector(`button[onclick="toggleDetails('${id}')"]`);
 
     if (details.classList.contains('d-none')) {
         details.classList.remove('d-none');
