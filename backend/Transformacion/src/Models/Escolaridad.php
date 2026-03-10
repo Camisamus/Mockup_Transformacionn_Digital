@@ -6,7 +6,7 @@ use PDO;
 class Escolaridad
 {
     private $conn;
-    private $table_name = "trd_cont_escolaridad";
+    private $table_name = "trd_general_contribuyente_escolaridad";
 
     public function __construct($db)
     {

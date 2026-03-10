@@ -33,6 +33,18 @@ switch ($data['ACCION']) {
         }
         $data['creador_id'] = $_SESSION['user_id'] ?? 1;
 
+        if (isset($data['oig_respuesta_preliminar'])) {
+            $data['oig_res_pre_origen'] = $_SESSION['user_id'] ?? 1;
+            $data['oig_res_pre_fecha'] = date('Y-m-d H:i:s');
+        }
+        if (isset($data['oig_respuesta_tecnica'])) {
+            $data['oig_res_tec_origen'] = $_SESSION['user_id'] ?? 1;
+            $data['oig_res_tec_fecha'] = date('Y-m-d H:i:s');
+        }
+        if (isset($data['oig_notificacion_ejecucion'])) {
+            $data['oig_res_not_origen'] = $_SESSION['user_id'] ?? 1;
+            $data['oig_res_not_fecha'] = date('Y-m-d H:i:s');
+        }
 
         $response = $controller->update($solicitud_id, $data);
         echo json_encode($response);
@@ -112,6 +124,21 @@ switch ($data['ACCION']) {
         $comentarioModel = new \App\Models\OirsAsignacionComentario($db);
         $historial = $comentarioModel->obtenerPorAsignacion($asignacion_id);
         echo json_encode(["status" => "success", "data" => $historial]);
+        break;
+
+    case 'ELIMINAR_ASIGNACION':
+        $asignacion_id = $data['oia_id'] ?? null;
+        if (!$asignacion_id) {
+            echo json_encode(["status" => "error", "message" => "ID de asignación es requerido"]);
+            break;
+        }
+
+        $asignacionModel = new \App\Models\OirsAsignacion($db);
+        if ($asignacionModel->eliminar($asignacion_id)) {
+            echo json_encode(["status" => "success", "message" => "Asignación eliminada correctamente"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Error al eliminar la asignación"]);
+        }
         break;
 
     default:

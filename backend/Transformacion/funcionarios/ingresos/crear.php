@@ -121,7 +121,8 @@ include '../../api/general/header.php';
                             </div>
                             <div class="space-y-2">
                                 <label for="tis_fecha_limite"
-                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Fecha de Vencimiento</label>
+                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Fecha de
+                                    Vencimiento</label>
                                 <input type="date" id="tis_fecha_limite"
                                     class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3" />
                                 <p class="text-[10px] text-slate-400 italic">Por defecto: 20 días hábiles.</p>
@@ -130,7 +131,8 @@ include '../../api/general/header.php';
 
                         <div class="space-y-2">
                             <label for="tis_contenido"
-                                class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Contenido / Providencia</label>
+                                class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Contenido /
+                                Providencia</label>
                             <textarea id="tis_contenido" rows="8" placeholder="Detalle aquí la solicitud..."
                                 class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-4 bg-slate-50 italic focus:bg-white transition-all"></textarea>
                         </div>
@@ -180,7 +182,8 @@ include '../../api/general/header.php';
                             </h3>
                         </div>
                         <span
-                            class="bg-slate-100 text-slate-500 text-[10px] px-2 py-1 rounded font-bold uppercase border border-slate-200">Funcionarios Involucrados</span>
+                            class="bg-slate-100 text-slate-500 text-[10px] px-2 py-1 rounded font-bold uppercase border border-slate-200">Funcionarios
+                            Involucrados</span>
                     </div>
 
                     <div class="p-6 space-y-6">
@@ -320,7 +323,7 @@ include '../../api/general/header.php';
                         </select>
                     </div>
 
-                    <div>
+                    <div id="container_m_destino_tarea">
                         <label for="m_destino_tarea"
                             class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Labor a Realizar</label>
                         <select class="form-select rounded-xl text-sm w-full border-slate-200 focus:ring-primary-blue"

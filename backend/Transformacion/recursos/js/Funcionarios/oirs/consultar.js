@@ -9,6 +9,55 @@ $(document).ready(function () {
     // 2. Cargar Datos de la Tabla
     loadTableData();
 
+    // 3. Exportar Excel
+    $('#btn_exportar_excel').click(async function () {
+        try {
+            const filters = {
+                ACCION: 'REPORTE',
+                fecha: $('#filter-fecha').val(),
+                estado: $('#filter-estado').val(),
+                sector: $('#filter-sector').val(),
+                tematica: $('#filter-tematica').val(),
+                subtematica: $('#filter-subtematica').val(),
+                prioridad: $('#filter-prioridad').val(),
+                search: $('#filter-search').val()
+            };
+
+            const response = await fetch(`../../api/reportes/excel_oirs.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(filters)
+            });
+
+            if (!response.ok) throw new Error('Error de red al exportar');
+
+            const hexStr = await response.text();
+
+            // Decodificar cadena hexadecimal validando cada par (2 caracteres)
+            const byteRegex = /.{1,2}/g;
+            const matches = hexStr.match(byteRegex);
+            if (!matches) {
+                Swal.fire('Error', 'El formato de archivo recibido no es válido', 'error');
+                return;
+            }
+            const bytes = new Uint8Array(matches.map(byte => parseInt(byte, 16)));
+            const blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+            // Iniciar Descarga
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Resultados_Consulta_OIRS_' + new Date().getTime() + '.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Error al exportar a Excel:", error);
+            Swal.fire('Error', 'No se pudo generar el documento Excel.', 'error');
+        }
+    });
+
     async function loadFiltros() {
         try {
             // Cargar Sectores

@@ -1250,12 +1250,7 @@ async function inicializarConSSR(data) {
     renderizarIngreso(data);
 
     // Restaurar manejadores de botones (ya renderizados por PHP)
-    /*const id = data.tis_id;
-    const btnResponder = document.getElementById('btn_ir_responder');
-    if (btnResponder && id) {
-        btnResponder.onclick = () => window.location.href = `responder.php?id=${id}`;
-    }
-*/
+    const id = data.tis_id;
     const btnModificar = document.getElementById('btn_ir_modificar');
     if (btnModificar && id) {
         btnModificar.onclick = () => window.location.href = `modificar.php?id=${id}`;

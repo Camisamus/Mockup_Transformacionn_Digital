@@ -18,6 +18,10 @@ switch ($data['ACCION']) {
         $response = $controller->getAll();
         echo json_encode($response);
         break;
+    case 'CONSULTAMOIRS':
+        $response = $controller->getAllOIRS();
+        echo json_encode($response);
+        break;
 
     // CREAR case removed as per requirement to disable creation of officials
 

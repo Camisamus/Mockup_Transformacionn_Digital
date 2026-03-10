@@ -31,7 +31,7 @@ $tematicas = $tematicaCtrl->getAll()['data'] ?? [];
 $subtematicas = $subtematicaCtrl->getAll()['data'] ?? [];
 $sectores = $sectorCtrl->getAll()['data'] ?? [];
 $escolaridades = $escolaridadCtrl->getAll()['data'] ?? [];
-$funcionarios = $funcionarioCtrl->getAll()['data'] ?? [];
+$funcionarios = $funcionarioCtrl->getAllOIRS()['data'] ?? [];
 
 $solicitudData = null;
 if (isset($_GET['id'])) {
@@ -415,6 +415,11 @@ if (isset($_GET['id'])) {
                                 <span class="material-symbols-outlined text-sm">send</span> Responder al Vecino
                             </button>
                         </div>
+                        <div id="info_auditoria_preliminar"
+                            class="text-sm text-slate-600 mt-3 font-medium flex justify-between bg-white/50 p-2 rounded-lg border border-slate-100">
+                            <span id="txt_preliminar_user">Respuesta entregada por: -</span>
+                            <span id="txt_preliminar_fec">Fecha: -</span>
+                        </div>
                     </div>
                 </div>
 
@@ -459,11 +464,15 @@ if (isset($_GET['id'])) {
                                 <span class="material-symbols-outlined text-sm">send</span> Responder al Vecino
                             </button>
                         </div>
+                        <div id="info_auditoria_tecnica"
+                            class="text-sm text-slate-600 mt-3 font-medium flex justify-between bg-white/50 p-2 rounded-lg border border-slate-100">
+                            <span id="txt_tecnica_user">Respuesta entregada por: -</span>
+                            <span id="txt_tecnica_fec">Fecha: -</span>
+                        </div>
                     </div>
                 </div>
                 <div id="container_notificacion_ejecucion"
-                    class="bg-slate-50 border border-slate-200 rounded-3xl p-6 lg:p-8 space-y-6"
-                    style="display: none;">
+                    class="bg-slate-50 border border-slate-200 rounded-3xl p-6 lg:p-8 space-y-6" style="display: none;">
                     <h6
                         class="text-slate-600 font-bold text-xs uppercase tracking-widest border-b border-slate-200 pb-3 flex items-center gap-2">
                         <span class="material-symbols-outlined">task_alt</span> Notificación de Ejecución
@@ -489,6 +498,11 @@ if (isset($_GET['id'])) {
                                 id="btn_notificar_ejecucion">
                                 <span class="material-symbols-outlined text-sm">send</span> Responder al Vecino
                             </button>
+                        </div>
+                        <div id="info_auditoria_ejecucion"
+                            class="text-sm text-slate-600 mt-3 font-medium flex justify-between bg-white/50 p-2 rounded-lg border border-slate-100">
+                            <span id="txt_ejecucion_user">Respuesta entregada por: -</span>
+                            <span id="txt_ejecucion_fec">Fecha: -</span>
                         </div>
                     </div>
                 </div>

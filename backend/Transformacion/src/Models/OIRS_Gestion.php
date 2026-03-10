@@ -125,7 +125,15 @@ class OIRS_Gestion
 
     public function getBySolicitudId($solicitud_id)
     {
-        $query = "SELECT * FROM " . $this->table_name . " WHERE oig_solicitud = :solicitud_id LIMIT 1";
+        $query = "SELECT g.*, 
+                  CONCAT(up.usr_nombre, ' ', up.usr_apellido) as oig_res_pre_origen_nombre,
+                  CONCAT(ut.usr_nombre, ' ', ut.usr_apellido) as oig_res_tec_origen_nombre,
+                  CONCAT(un.usr_nombre, ' ', un.usr_apellido) as oig_res_not_origen_nombre
+                  FROM " . $this->table_name . " g
+                  LEFT JOIN trd_acceso_usuarios up ON g.oig_res_pre_origen = up.usr_id
+                  LEFT JOIN trd_acceso_usuarios ut ON g.oig_res_tec_origen = ut.usr_id
+                  LEFT JOIN trd_acceso_usuarios un ON g.oig_res_not_origen = un.usr_id
+                  WHERE g.oig_solicitud = :solicitud_id LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(":solicitud_id", $solicitud_id);
         $stmt->execute();

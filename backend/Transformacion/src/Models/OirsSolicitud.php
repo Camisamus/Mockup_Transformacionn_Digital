@@ -180,7 +180,7 @@ class OirsSolicitud
                   LEFT JOIN trd_oirs_subtematicas s ON o.oirs_subtematica = s.sub_id
                   LEFT JOIN trd_general_sectores sec ON o.oirs_sector = sec.sec_id
                   LEFT JOIN trd_general_contribuyentes tgc ON r.rgt_contribuyente = tgc.tgc_id
-                  LEFT JOIN trd_cont_direcciones d ON tgc.tgc_id = d.tcd_contribuyente
+                  LEFT JOIN trd_general_contribuyente_direcciones d ON tgc.tgc_id = d.tcd_contribuyente
                   WHERE o.oirs_id = :id AND o.oirs_borrado = 0 AND r.rgt_borrado = 0";
 
         $stmt = $this->conn->prepare($query);
@@ -299,10 +299,10 @@ class OirsSolicitud
             $avgTime = $this->conn->query($queryAvgTime)->fetchColumn();
 
             return [
-                "total" => (int)$total,
-                "pending" => (int)$pending,
-                "resolvedMonth" => (int)$resolvedMonth,
-                "avgTime" => round((float)$avgTime, 1)
+                "total" => (int) $total,
+                "pending" => (int) $pending,
+                "resolvedMonth" => (int) $resolvedMonth,
+                "avgTime" => round((float) $avgTime, 1)
             ];
         } catch (PDOException $e) {
             error_log("Error in OirsSolicitud::getMetrics: " . $e->getMessage());
@@ -336,7 +336,7 @@ class OirsSolicitud
                 $label = $stateLabels[$row['oirs_estado']] ?? 'Otro';
                 $dataEstado[] = [
                     "label" => $label,
-                    "value" => (int)$row['count']
+                    "value" => (int) $row['count']
                 ];
             }
 

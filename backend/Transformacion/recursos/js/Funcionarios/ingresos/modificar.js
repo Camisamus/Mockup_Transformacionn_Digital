@@ -55,6 +55,24 @@ async function cargarListas() {
             funcionarios = resultFunc.data;
         }
 
+        // Cargar Áreas
+        const respAreas = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/areas_general.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ACCION: 'CONSULTAM' })
+        });
+        const resultAreas = await respAreas.json();
+        const selectArea = document.getElementById('filtro_area_fnc');
+        if (selectArea && resultAreas.status === 'success') {
+            selectArea.innerHTML = '<option value="">Todas las Áreas</option>';
+            resultAreas.data.forEach(a => {
+                const opt = document.createElement('option');
+                opt.value = a.tga_id;
+                opt.textContent = a.tga_nombre;
+                selectArea.appendChild(opt);
+            });
+        }
+
     } catch (error) {
         console.error('Error al cargar listas:', error);
     }
@@ -167,26 +185,60 @@ function setupEventListeners() {
         renderizarBusquedaFuncionarios(e.target.value);
     });
 
-    // Control de requerido según facultad
+    const filtroArea = document.getElementById('filtro_area_fnc');
+    if (filtroArea) {
+        filtroArea.addEventListener('change', () => {
+            renderizarBusquedaFuncionarios(document.getElementById('buscar_fnc_input').value);
+        });
+    }
+
     const selectFacultad = document.getElementById('m_destino_facultad');
     if (selectFacultad) {
         selectFacultad.addEventListener('change', (e) => {
             const checkReq = document.getElementById('m_destino_requerido');
             const tareaSelect = document.getElementById('m_destino_tarea');
-            const tareaContainer = tareaSelect.closest('.col-md-12'); // Assuming it's in a col-md-12
+            const tareaContainer = document.getElementById('container_m_destino_tarea');
+            const facultad = e.target.value;
 
-            if (e.target.value === 'Lector') {
-                checkReq.checked = false;
-                checkReq.disabled = true;
-                tareaContainer.style.display = 'block';
-            } else if (e.target.value === 'Visador') {
+            // Limpiar opciones actuales de labor
+            tareaSelect.innerHTML = '';
+            tareaContainer.classList.remove('hidden');
+            tareaContainer.style.display = 'block'; // Reset display style if set by previous logic
+
+            if (facultad === 'Responsable' || facultad === 'Firmante') {
+                const options = [
+                    { val: 'ejecutar lo requerido', text: 'Ejecutar lo requerido' },
+                    { val: 'generar informe', text: 'Generar informe técnico' },
+                    { val: 'tomar conocimiento', text: 'Tomar conocimiento' },
+                    { val: 'responder al remitente', text: 'Responder al remitente' }
+                ];
+                options.forEach(opt => {
+                    const el = document.createElement('option');
+                    el.value = opt.val;
+                    el.textContent = opt.text;
+                    tareaSelect.appendChild(el);
+                });
+                checkReq.disabled = false;
+            } else if (facultad === 'Visador') {
+                const el = document.createElement('option');
+                el.value = 'ejecutar lo requerido';
+                el.textContent = 'Ejecutar lo requerido';
+                tareaSelect.appendChild(el);
+                tareaSelect.value = 'ejecutar lo requerido';
+
+                tareaContainer.classList.add('hidden');
+                tareaContainer.style.display = 'none';
                 checkReq.checked = true;
                 checkReq.disabled = false;
-                tareaContainer.style.display = 'none';
+            } else if (facultad === 'Lector') {
+                const el = document.createElement('option');
+                el.value = 'tomar conocimiento';
+                el.textContent = 'Tomar conocimiento';
+                tareaSelect.appendChild(el);
                 tareaSelect.value = 'tomar conocimiento';
-            } else {
-                checkReq.disabled = false;
-                tareaContainer.style.display = 'block';
+
+                checkReq.checked = false;
+                checkReq.disabled = true;
             }
         });
     }
@@ -248,28 +300,35 @@ function renderizarBusquedaFuncionarios(filtro) {
     tbody.innerHTML = '';
 
     const term = filtro.toLowerCase();
-    const filtrados = funcionarios.filter(f =>
-        f.fnc_nombre.toLowerCase().includes(term) ||
-        f.fnc_apellido.toLowerCase().includes(term) ||
-        (f.fnc_email && f.fnc_email.toLowerCase().includes(term))
-    );
+    const areaId = document.getElementById('filtro_area_fnc').value;
+
+    const filtrados = funcionarios.filter(f => {
+        const matchesTerm = f.fnc_nombre.toLowerCase().includes(term) ||
+            f.fnc_apellido.toLowerCase().includes(term) ||
+            (f.fnc_email && f.fnc_email.toLowerCase().includes(term));
+
+        const matchesArea = !areaId || f.fnc_area_id == areaId;
+
+        return matchesTerm && matchesArea;
+    });
 
     filtrados.forEach(f => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td>${f.fnc_id || '-'}</td>
             <td>${f.fnc_email || '-'}</td>
-            <td>${f.fnc_nombre}</td>
-            <td>${f.fnc_apellido}</td>
+            <td>
+                <div class="font-bold text-slate-700">${f.fnc_nombre} ${f.fnc_apellido}</div>
+                <div class="text-[10px] text-slate-400 uppercase tracking-tighter">${f.fnc_area_nombre || 'Sin Área'}</div>
+            </td>
             <td class="text-end">
-                <button type="button" class="btn btn-sm btn-outline-primary" onclick="seleccionarFuncionario(${f.fnc_id}, '${f.fnc_nombre} ${f.fnc_apellido}')">
-                    <i data-feather="plus"></i> Seleccionar
+                <button type="button" class="flex items-center gap-1 bg-primary-blue/10 text-primary-blue hover:bg-primary-blue hover:text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase transition-all ms-auto" 
+                    onclick="seleccionarFuncionario(${f.fnc_id}, '${f.fnc_nombre} ${f.fnc_apellido}')">
+                    <span class="material-symbols-outlined text-[14px]">add</span> Seleccionar
                 </button>
             </td>
         `;
         tbody.appendChild(tr);
     });
-    if (window.feather) window.feather.replace();
 }
 
 function abrirModalBuscarFuncionario() {
@@ -282,13 +341,14 @@ function seleccionarFuncionario(id, nombre) {
     document.getElementById('fnc_id_config').value = id;
     document.getElementById('fnc_nombre_config').textContent = nombre;
     document.getElementById('m_destino_tipo').value = 'Para';
-    document.getElementById('m_destino_facultad').value = 'Firmante';
-    document.getElementById('m_destino_tarea').value = 'ejecutar lo requerido';
-    const checkReq = document.getElementById('m_destino_requerido');
-    checkReq.checked = true;
-    checkReq.disabled = false;
+    document.getElementById('m_destino_facultad').value = 'Responsable';
 
+    const modalElem = document.getElementById('modalConfigurarFactores') || document.getElementById('modalConfigurarDestino');
     modalBusqueda.hide();
+
+    // Disparar evento para inicializar opciones según el rol por defecto (Responsable)
+    document.getElementById('m_destino_facultad').dispatchEvent(new Event('change'));
+
     modalConfig.show();
 }
 

@@ -8,14 +8,6 @@ let allSubtematicas = [];
 let selectedFilesOirs = [];
 
 
-// Helper: Formatear RUT (Agregada para evitar errores de "undefined")
-function formatRut(rut) {
-    let value = rut.replace(/\./g, '').replace('-', '');
-    if (value.length < 2) return value;
-    let cuerpo = value.slice(0, -1);
-    let dv = value.slice(-1).toUpperCase();
-    return cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "-" + dv;
-}
 
 $('#rut_contribuyente').on('blur', function () {
     let formattedRut = formatRut($(this).val());

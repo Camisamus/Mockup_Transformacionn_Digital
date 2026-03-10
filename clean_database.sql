@@ -40,6 +40,6 @@ TRUNCATE TABLE `trd_oirs_solicitud`;
 
 -- Otros
 TRUNCATE TABLE `trd_tareas`;
-TRUNCATE TABLE `trd_cont_direcciones`;
+TRUNCATE TABLE `trd_general_contribuyente_direcciones`;
 
 SET FOREIGN_KEY_CHECKS = 1;

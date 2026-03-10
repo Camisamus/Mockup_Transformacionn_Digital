@@ -72,7 +72,7 @@ include '../../api/general/header.php';
             <p class="text-slate-400 text-sm lg:text-[15px] font-medium uppercase tracking-wider italic">Buscador Inteligente de Solicitudes</p>
         </div>
         <div class="flex-shrink-0">
-            <button type="button" class="bg-primary-blue hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-sm uppercase tracking-wider flex items-center gap-2">
+            <button type="button" id="btn_exportar_excel" class="bg-primary-blue hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-sm uppercase tracking-wider flex items-center gap-2">
                 <span class="material-symbols-outlined text-[20px]">download</span> EXPORTAR RESULTADOS
             </button>
         </div>

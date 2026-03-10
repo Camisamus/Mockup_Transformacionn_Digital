@@ -192,6 +192,14 @@ include '../../api/general/header.php';
                 <span class="material-symbols-outlined text-sm">arrow_back</span> Volver
             </a>
 
+            <!-- Modificar -->
+            <?php if ($p['editar']): ?>
+                <button id="btn_ir_modificar"
+                    class="flex items-center gap-2 px-4 py-2 bg-primary-blue text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition-all">
+                    <span class="material-symbols-outlined text-sm">edit</span> Modificar Ingreso
+                </button>
+            <?php endif; ?>
+
             <!-- Derivar -->
             <button onclick="crearDerivacion()"
                 class="flex items-center gap-2 px-4 py-2 bg-ref-amber text-white rounded-lg text-xs font-bold hover:bg-amber-500 transition-all">
@@ -949,14 +957,14 @@ include '../../api/general/header.php';
     </div>
 </div>
 
-            <div class="modal-footer border-0 bg-light justify-content-center">
-                <button type="button" class="btn btn-link text-muted text-decoration-none small me-3"
-                    onclick="cerrarOTP(true)">Cancelar</button>
-                <button type="button" class="btn btn-dark btn-sm px-4" onclick="confirmarFirmaOTP()">Confirmar
-                    Firma</button>
-            </div>
-        </div>
-    </div>
+<div class="modal-footer border-0 bg-light justify-content-center">
+    <button type="button" class="btn btn-link text-muted text-decoration-none small me-3"
+        onclick="cerrarOTP(true)">Cancelar</button>
+    <button type="button" class="btn btn-dark btn-sm px-4" onclick="confirmarFirmaOTP()">Confirmar
+        Firma</button>
+</div>
+</div>
+</div>
 </div>
 <script src="../../recursos/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/feather-icons"></script>

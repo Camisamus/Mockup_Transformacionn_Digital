@@ -10,149 +10,261 @@
 </head>
 
 <body class="watermark-bg"
-    style="font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);">
+    style="font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); overflow: auto !important; height: auto !important; min-height: 100vh;">
 
-    <div id="login-screen" class="d-flex align-items-center justify-content-center vh-100">
-        <div class="card shadow-2xl border-0" style="width: 400px; border-radius: 24px !important; overflow: hidden;">
+    <div id="login-screen" class="d-flex align-items-center justify-content-center min-vh-100 py-5">
+        <div class="card shadow-2xl border-0 overflow-hidden" style="width: 450px; border-radius: 28px !important;">
             <div class="card-body p-5">
-                <div class="text-center mb-8">
-                    <div class="bg-primary rounded-2xl d-inline-flex align-items-center justify-content-center mb-4 shadow-lg"
-                        style="width: 72px; height: 72px; background: linear-gradient(135deg, #006FB3 0%, #004a7c 100%) !important;">
-                        <i data-feather="home" class="text-white" style="width: 36px; height: 36px;"></i>
-                    </div>
-                    <h3 class="fw-bold text-slate-800 mb-1" style="letter-spacing: -0.025em;">Acceso Vecinos</h3>
-                    <p class="text-slate-500 small">Portal Ciudadano de Solicitudes</p>
+                <div class="text-center mb-5">
+                    <img src="/Transformacion/recursos/img/logo_vina_del_mar.png" alt="Logo Viña del Mar" class="img-fluid mb-4" style="width: 180px;">
+                    <h3 class="fw-bold text-slate-800 mb-1" style="letter-spacing: -0.025em;" id="main-title">Acceso Vecinos</h3>
+                    <p class="text-slate-500 small" id="main-subtitle">Ingrese sus credenciales para continuar</p>
                 </div>
 
-                <div id="login-container">
-                    <div class="mb-4">
-                        <label for="emailInput" class="form-label small fw-bold text-slate-700 mb-2">Correo
-                            Electrónico</label>
-                        <input type="email" class="form-control form-control-lg border-slate-200" id="emailInput"
-                            placeholder="tu@correo.cl" style="border-radius: 12px; font-size: 0.95rem;">
-                    </div>
-                    <div class="d-grid gap-3">
-                        <button type="button" class="btn btn-primary btn-lg w-100 py-3 shadow-md fw-bold border-0"
-                            style="border-radius: 12px; background: #006FB3; transition: all 0.2s;"
-                            onclick="handleEmailLogin()">
-                            Ingresar al Portal
-                        </button>
-                    </div>
+                <!-- Tabs Custom -->
+                <div class="d-flex bg-slate-100 p-1 mb-5 rounded-4" style="border-radius: 16px !important;">
+                    <button class="btn btn-primary flex-fill fw-bold py-2 rounded-4 shadow-sm" id="btn-tab-login" onclick="showForm('login')" style="border-radius: 12px !important; font-size: 0.85rem;">Iniciar Sesión</button>
+                    <button class="btn text-slate-600 flex-fill fw-bold py-2 rounded-4 border-0" id="btn-tab-register" onclick="showForm('register')" style="border-radius: 12px !important; font-size: 0.85rem;">Registrarme</button>
                 </div>
+
+                <!-- Login Form -->
+                <form id="login-container" onsubmit="event.preventDefault(); handleLogin();">
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-slate-700 mb-2">RUT</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-slate-50 border-slate-200 ps-3 pe-2"><i data-feather="user" style="width: 18px; color: #64748b;"></i></span>
+                            <input type="text" class="form-control form-control-lg border-slate-200 border-start-0 ps-1" id="rutInput" placeholder="12.345.678-9" style="border-radius: 0 12px 12px 0; font-size: 0.95rem;" required>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <label class="form-label small fw-bold text-slate-700 mb-2">Clave de Acceso</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-slate-50 border-slate-200 ps-3 pe-2"><i data-feather="lock" style="width: 18px; color: #64748b;"></i></span>
+                            <input type="password" class="form-control form-control-lg border-slate-200 border-start-0 ps-1" id="passInput" placeholder="••••••••" style="border-radius: 0 12px 12px 0; font-size: 0.95rem;" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg w-100 py-3 shadow-lg fw-bold border-0" style="border-radius: 14px; background: linear-gradient(135deg, #006FB3 0%, #004a7c 100%); transition: all 0.3s;">
+                        Ingresar al Portal
+                    </button>
+                </form>
+
+                <!-- Register Form -->
+                <form id="register-container" class="d-none" onsubmit="event.preventDefault(); handleRegister();">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-slate-700 mb-1">Tipo Cuenta</label>
+                            <select class="form-select border-slate-200" id="regTipo" style="border-radius: 10px;">
+                                <option value="natural">Persona Natural</option>
+                                <option value="juridica">Persona Jurídica</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label small fw-bold text-slate-700 mb-1">RUT</label>
+                            <input type="text" class="form-control border-slate-200" id="regRut" placeholder="12.345.678-9" required style="border-radius: 10px;">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-slate-700 mb-1">Nombres</label>
+                            <input type="text" class="form-control border-slate-200" id="regNombre" placeholder="Nombres" required style="border-radius: 10px;">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-slate-700 mb-1">Apellido Paterno</label>
+                            <input type="text" class="form-control border-slate-200" id="regPaterno" placeholder="Apellido Paterno" required style="border-radius: 10px;">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold text-slate-700 mb-1">Apellido Materno</label>
+                            <input type="text" class="form-control border-slate-200" id="regMaterno" placeholder="Apellido Materno" required style="border-radius: 10px;">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-slate-700 mb-1">Correo Electrónico</label>
+                            <input type="email" class="form-control border-slate-200" id="regEmail" placeholder="correo@ejemplo.com" required style="border-radius: 10px;">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-slate-700 mb-1">Clave de Acceso</label>
+                            <input type="password" class="form-control border-slate-200" id="regPass" placeholder="Clave de Acceso" required style="border-radius: 10px;">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-slate-700 mb-1">Confirmar Clave</label>
+                            <input type="password" class="form-control border-slate-200" id="regPassConfirm" placeholder="Confirmar Clave" required style="border-radius: 10px;">
+                        </div>
+                        <div class="col-12 mt-4">
+                            <div class="form-check small">
+                                <input class="form-check-input" type="checkbox" id="regPrivacy" required>
+                                <label class="form-check-label text-slate-500" for="regPrivacy">
+                                    Acepto las <a href="#" class="text-primary fw-bold text-decoration-none" data-bs-toggle="modal" data-bs-target="#privacyModal">Políticas de Privacidad y Tratamiento de Datos</a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-lg w-100 py-3 mt-4 shadow-lg fw-bold border-0" style="border-radius: 14px; background: #10b981;">
+                        Crear mi Cuenta
+                    </button>
+                </form>
 
                 <div id="loading-spinner" class="text-center d-none mt-4">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Cargando...</span>
-                    </div>
-                    <p class="text-slate-500 small mt-3 font-medium">Autenticando sesión...</p>
+                    <div class="spinner-border text-primary" role="status" style="width: 2rem; height: 2rem;"></div>
+                    <p class="text-slate-500 small mt-3 fw-bold">Procesando solicitud...</p>
                 </div>
 
-                <div id="login-error" class="alert alert-danger mt-4 small d-none" style="border-radius: 12px;">
-                    Error
-                </div>
+                <div id="status-message" class="alert mt-4 small d-none" style="border-radius: 12px;"></div>
             </div>
             <div class="card-footer bg-slate-50 text-center py-4 border-0">
-                <small class="text-slate-400 font-medium">Sistema Municipal &copy; 2026</small>
-            </div>
-        </div>
-    </div>
-
-    <!-- Accounts for Testing -->
-    <div class="position-fixed bottom-0 start-0 p-4" style="z-index: 1000; max-width: 320px;">
-        <div class="card shadow-xl border-0"
-            style="border-radius: 16px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(8px);">
-            <div class="card-header bg-slate-800 text-white p-3 small fw-bold d-flex justify-content-between align-items-center"
-                style="border-radius: 16px 16px 0 0;">
-                <span>Cuentas de Vecinos</span>
-                <button type="button" class="btn-close btn-close-white" style="font-size: 0.6rem;"
-                    onclick="this.parentElement.parentElement.parentElement.remove()"></button>
-            </div>
-            <div class="card-body p-2">
-                <div class="list-group list-group-flush small">
-                    <button class="list-group-item list-group-item-action p-2 border-0 rounded-lg mb-1"
-                        onclick="copyToLogin(this.textContent)">vecino@test.cl</button>
-                    <button class="list-group-item list-group-item-action p-2 border-0 rounded-lg"
-                        onclick="copyToLogin(this.textContent)">maria.vecina@test.cl</button>
-                </div>
-            </div>
-            <div class="card-footer p-2 text-center bg-slate-50" style="border-radius: 0 0 16px 16px;">
-                <small class="text-slate-400" style="font-size: 0.7rem;">Click para copiar</small>
+                <small class="text-slate-400 font-medium">Sistema Municipal de Cuidados &copy; 2026</small>
             </div>
         </div>
     </div>
 
     <script src="recursos/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         feather.replace();
 
-        function copyToLogin(email) {
-            const input = document.getElementById('emailInput');
-            if (input) {
-                input.value = email;
-                input.focus();
+        function showForm(type) {
+            const loginBtn = document.getElementById('btn-tab-login');
+            const regBtn = document.getElementById('btn-tab-register');
+            const loginForm = document.getElementById('login-container');
+            const regForm = document.getElementById('register-container');
+            const subtitle = document.getElementById('main-subtitle');
+            const statusMsg = document.getElementById('status-message');
+
+            statusMsg.classList.add('d-none');
+
+            if (type === 'login') {
+                loginBtn.classList.add('btn-primary', 'shadow-sm');
+                loginBtn.classList.remove('text-slate-600');
+                regBtn.classList.add('text-slate-600');
+                regBtn.classList.remove('btn-primary', 'shadow-sm');
+                loginForm.classList.remove('d-none');
+                regForm.classList.add('d-none');
+                subtitle.textContent = 'Ingrese sus credenciales para continuar';
+            } else {
+                regBtn.classList.add('btn-primary', 'shadow-sm');
+                regBtn.classList.remove('text-slate-600');
+                loginBtn.classList.add('text-slate-600');
+                loginBtn.classList.remove('btn-primary', 'shadow-sm');
+                regForm.classList.remove('d-none');
+                loginForm.classList.add('d-none');
+                subtitle.textContent = 'Complete el formulario para unirse al portal';
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Reset login state if needed, or redirect if already logged in as neighbor
-            if (localStorage.getItem('isLoggedInVecino') === 'true') {
-                window.location.href = 'vecinos/index.php';
-            }
-        });
-
-        window.handleEmailLogin = function () {
-            const email = document.getElementById('emailInput').value;
-            const loginError = document.getElementById('login-error');
-            const loginContainer = document.getElementById('login-container');
+        window.handleLogin = function () {
+            const rut = document.getElementById('rutInput').value;
+            const password = document.getElementById('passInput').value;
+            const statusMsg = document.getElementById('status-message');
+            const loginForm = document.getElementById('login-container');
             const loadingSpinner = document.getElementById('loading-spinner');
 
-            if (!email) {
-                loginError.classList.remove('d-none');
-                loginError.textContent = 'Por favor, ingrese su correo electrónico.';
-                return;
-            }
-
-            loginContainer.classList.add('d-none');
             loadingSpinner.classList.remove('d-none');
-            loginError.classList.add('d-none');
+            loginForm.classList.add('d-none');
+            statusMsg.classList.add('d-none');
 
             fetch('apivec/general/login_vecinos.php', {
                 method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: email,
-                    ACCION: 'LOGIN_VECINO'
-                })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ rut, password, ACCION: 'LOGIN_VECINO' })
             })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        localStorage.setItem('isLoggedInVecino', 'true');
-                        if (data.data && data.data.vecino) {
-                            localStorage.setItem('vecino_data', JSON.stringify({ vecino: data.data.vecino }));
-                        }
-                        window.location.href = 'vecinos/index.php';
-                    } else {
-                        loadingSpinner.classList.add('d-none');
-                        loginContainer.classList.remove('d-none');
-                        loginError.classList.remove('d-none');
-                        loginError.textContent = data.message || 'Error en la autenticación.';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    localStorage.setItem('isLoggedInVecino', 'true');
+                    window.location.href = 'vecinos/index.php';
+                } else {
                     loadingSpinner.classList.add('d-none');
-                    loginContainer.classList.remove('d-none');
-                    loginError.classList.remove('d-none');
-                    loginError.textContent = 'Error de conexión con el servidor.';
-                });
+                    loginForm.classList.remove('d-none');
+                    statusMsg.className = 'alert alert-danger mt-4 small';
+                    statusMsg.textContent = data.message;
+                    statusMsg.classList.remove('d-none');
+                }
+            });
+        }
+
+        window.handleRegister = function () {
+            const password = document.getElementById('regPass').value;
+            const passwordConfirm = document.getElementById('regPassConfirm').value;
+            const statusMsg = document.getElementById('status-message');
+
+            if (password !== passwordConfirm) {
+                statusMsg.className = 'alert alert-danger mt-4 small';
+                statusMsg.textContent = 'Las claves ingresadas no coinciden.';
+                statusMsg.classList.remove('d-none');
+                return;
+            }
+
+            const payload = {
+                ACCION: 'REGISTRO_VECINO',
+                tipo: document.getElementById('regTipo').value,
+                rut: document.getElementById('regRut').value,
+                nombre: document.getElementById('regNombre').value,
+                paterno: document.getElementById('regPaterno').value,
+                materno: document.getElementById('regMaterno').value,
+                email: document.getElementById('regEmail').value,
+                password: password,
+                privacidad: document.getElementById('regPrivacy').checked ? 1 : 0
+            };
+
+            const regForm = document.getElementById('register-container');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            // statusMsg already defined above, no need to redefine
+            // const statusMsg = document.getElementById('status-message');
+
+            loadingSpinner.classList.remove('d-none');
+            regForm.classList.add('d-none');
+
+            fetch('apivec/general/registro_vecinos.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                loadingSpinner.classList.add('d-none');
+                if (data.status === 'success') {
+                    Swal.fire({
+                        title: '¡Excelente!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'Ir al Login'
+                    }).then(() => {
+                        showForm('login');
+                        regForm.classList.remove('d-none');
+                    });
+                } else {
+                    regForm.classList.remove('d-none');
+                    statusMsg.className = 'alert alert-danger mt-4 small';
+                    statusMsg.textContent = data.message;
+                    statusMsg.classList.remove('d-none');
+                }
+            });
         }
     </script>
-</body>
+    <!-- Privacy Policy Modal -->
+    <div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-2xl" style="border-radius: 24px;">
+                <div class="modal-header border-0 p-4 pb-0">
+                    <h5 class="modal-title fw-bold text-slate-800" id="privacyModalLabel">Política de Privacidad y Tratamiento de Datos Personales</h5>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 pt-4" style="max-height: 60vh; overflow-y: auto;">
+                    <div class="text-slate-600 space-y-4">
+                        <p class="small lh-base mb-4">Los datos personales proporcionados en este registro, incluyendo RUT, nombre, datos de contacto y demás información ingresada, serán recopilados y tratados por la Municipalidad de Viña del Mar con el único propósito de gestionar el acceso a la plataforma municipal y permitir la prestación de servicios digitales a la comunidad.</p>
+                        
+                        <p class="small lh-base mb-4">Esta información podrá ser utilizada para la identificación del usuario, gestión de solicitudes, reserva de horas, postulación a programas o fondos municipales, ingreso y seguimiento de requerimientos a través de la OIRS, y otras gestiones propias de la atención ciudadana.</p>
+                        
+                        <p class="small lh-base mb-4">El tratamiento de los datos se realizará conforme a lo establecido en la Ley N°19.628 sobre Protección de la Vida Privada, resguardando la confidencialidad, integridad y seguridad de la información. Los datos no serán utilizados para fines comerciales ni para finalidades distintas a las propias de la gestión municipal.</p>
+                        
+                        <p class="small lh-base fw-bold">Al registrarse en la plataforma, el usuario declara que la información proporcionada es verídica y autoriza su tratamiento para los fines señalados.</p>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-slate-100 fw-bold border-0 px-4" style="border-radius: 12px; background: #f1f5f9; color: #475569;" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary fw-bold px-4" style="border-radius: 12px; background: #006FB3;" data-bs-dismiss="modal">Entendido</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+</body>
 </html>

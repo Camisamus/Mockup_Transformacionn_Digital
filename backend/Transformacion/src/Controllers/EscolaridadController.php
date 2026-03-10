@@ -19,6 +19,11 @@ class EscolaridadController
         $result = $this->escolaridad->getAll();
         return ["status" => "success", "data" => $result];
     }
+    public function getAllOIRS()
+    {
+        $result = $this->escolaridad->getAllOIRS();
+        return ["status" => "success", "data" => $result];
+    }
 
     public function create($data)
     {

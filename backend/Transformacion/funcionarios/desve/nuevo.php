@@ -122,7 +122,7 @@ include '../../api/general/header.php';
 
                         <div class="space-y-2">
                             <label
-                                class="text-[11px] font-bold text-slate-400 uppercase tracking-widest text-center block">Reingreso</label>
+                                class="text-[11px] font-bold text-slate-400 uppercase tracking-widest text-left block">Reingreso</label>
                             <div class="flex shadow-sm h-[48px]">
                                 <input type="text" id="ReingresoDisplay" readonly
                                     placeholder="Seleccione solicitud previa..."

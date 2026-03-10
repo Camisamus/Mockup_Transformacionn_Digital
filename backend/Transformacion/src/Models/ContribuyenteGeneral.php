@@ -136,6 +136,23 @@ class ContribuyenteGeneral
         return false;
     }
 
+    public function cambioContraseña($id, $data)
+    {
+        $query = "UPDATE " . $this->table_name . " SET
+            tgc_clave_acceso=:tgc_clave_acceso
+            WHERE tgc_id=:tgc_id";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindValue(":tgc_id", $id);
+        $stmt->bindValue(":tgc_clave_acceso", $data['tgc_clave_acceso'] ?? null);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+
     public function getDetailsByRut($rut)
     {
         $query = "SELECT c.*, 
@@ -143,10 +160,10 @@ class ContribuyenteGeneral
                          d.tcd_latitud, d.tcd_longitud
                   FROM " . $this->table_name . " c
                   LEFT JOIN (
-                      SELECT * FROM trd_cont_direcciones 
+                      SELECT * FROM trd_general_contribuyente_direcciones 
                       WHERE (tcd_contribuyente, tcd_creacion) IN (
                           SELECT tcd_contribuyente, MAX(tcd_creacion)
-                          FROM trd_cont_direcciones
+                          FROM trd_general_contribuyente_direcciones
                           GROUP BY tcd_contribuyente
                       )
                   ) d ON c.tgc_id = d.tcd_contribuyente

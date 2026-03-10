@@ -429,18 +429,18 @@ DROP TABLE IF EXISTS `trd_acceso_rol_usuario`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `trd_acceso_rol_usuario` (
   `usp_usuario_id` int(11) NOT NULL,
-  `usp_perfil_id` int(11) NOT NULL,
+  `usp_rol_id` int(11) NOT NULL,
   `usp_fecha_inicio` datetime DEFAULT current_timestamp(),
   `usp_fecha_termino` datetime DEFAULT NULL,
   `usp_usuario_subrogante_id` int(11) DEFAULT NULL,
   `usp_borrado` tinyint(1) DEFAULT 0,
   `usp_creacion` datetime DEFAULT current_timestamp(),
   `usp_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`usp_usuario_id`,`usp_perfil_id`),
-  KEY `usp_perfil_id` (`usp_perfil_id`),
+  PRIMARY KEY (`usp_usuario_id`,`usp_rol_id`),
+  KEY `usp_rol_id` (`usp_rol_id`),
   KEY `usp_usuario_subrogante_id` (`usp_usuario_subrogante_id`),
   CONSTRAINT `1` FOREIGN KEY (`usp_usuario_id`) REFERENCES `trd_acceso_usuarios` (`usr_id`),
-  CONSTRAINT `2` FOREIGN KEY (`usp_perfil_id`) REFERENCES `trd_acceso_roles` (`prf_id`),
+  CONSTRAINT `2` FOREIGN KEY (`usp_rol_id`) REFERENCES `trd_acceso_roles` (`prf_id`),
   CONSTRAINT `3` FOREIGN KEY (`usp_usuario_subrogante_id`) REFERENCES `trd_acceso_usuarios` (`usr_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -486,15 +486,15 @@ DROP TABLE IF EXISTS `trd_acceso_rol_usuario_vecinos`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `trd_acceso_rol_usuario_vecinos` (
   `usp_usuario_id` int(11) NOT NULL,
-  `usp_perfil_id` int(11) NOT NULL,
+  `usp_rol_id` int(11) NOT NULL,
   `usp_fecha_inicio` datetime DEFAULT current_timestamp(),
   `usp_fecha_termino` datetime DEFAULT NULL,
   `usp_usuario_subrogante_id` int(11) DEFAULT NULL,
   `usp_borrado` tinyint(1) DEFAULT 0,
   `usp_creacion` datetime DEFAULT current_timestamp(),
   `usp_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`usp_usuario_id`,`usp_perfil_id`),
-  KEY `usp_perfil_id` (`usp_perfil_id`) USING BTREE,
+  PRIMARY KEY (`usp_usuario_id`,`usp_rol_id`),
+  KEY `usp_rol_id` (`usp_rol_id`) USING BTREE,
   KEY `usp_usuario_subrogante_id` (`usp_usuario_subrogante_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -676,13 +676,13 @@ UNLOCK TABLES;
 commit;
 
 --
--- Table structure for table `trd_cont_direcciones`
+-- Table structure for table `trd_general_contribuyente_direcciones`
 --
 
-DROP TABLE IF EXISTS `trd_cont_direcciones`;
+DROP TABLE IF EXISTS `trd_general_contribuyente_direcciones`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `trd_cont_direcciones` (
+CREATE TABLE `trd_general_contribuyente_direcciones` (
   `tcd_id` int(11) NOT NULL AUTO_INCREMENT,
   `tcd_contribuyente` int(11) NOT NULL,
   `tcd_tipo_direccion` varchar(50) DEFAULT 'Particular',
@@ -698,19 +698,19 @@ CREATE TABLE `trd_cont_direcciones` (
   `tcd_borrado` tinyint(1) DEFAULT 0,
   `tcd_direccion_completa` text DEFAULT NULL,
   PRIMARY KEY (`tcd_id`),
-  KEY `trd_cont_direcciones_trd_general_contribuyentes_FK` (`tcd_contribuyente`),
-  CONSTRAINT `trd_cont_direcciones_trd_general_contribuyentes_FK` FOREIGN KEY (`tcd_contribuyente`) REFERENCES `trd_general_contribuyentes` (`tgc_id`)
+  KEY `trd_general_contribuyente_direcciones_trd_general_contribuyentes_FK` (`tcd_contribuyente`),
+  CONSTRAINT `trd_general_contribuyente_direcciones_trd_general_contribuyentes_FK` FOREIGN KEY (`tcd_contribuyente`) REFERENCES `trd_general_contribuyentes` (`tgc_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `trd_cont_direcciones`
+-- Dumping data for table `trd_general_contribuyente_direcciones`
 --
 
-LOCK TABLES `trd_cont_direcciones` WRITE;
-/*!40000 ALTER TABLE `trd_cont_direcciones` DISABLE KEYS */;
+LOCK TABLES `trd_general_contribuyente_direcciones` WRITE;
+/*!40000 ALTER TABLE `trd_general_contribuyente_direcciones` DISABLE KEYS */;
 set autocommit=0;
-INSERT INTO `trd_cont_direcciones` VALUES
+INSERT INTO `trd_general_contribuyente_direcciones` VALUES
 (1,5,'OIRS','Habana 414, 2580329 Viña del Mar, Valparaíso, Chile',NULL,NULL,NULL,NULL,-33.02885369,-71.56879448,'2026-03-04 14:04:23','2026-03-04 14:04:23',0,'Habana 414, 2580329 Viña del Mar, Valparaíso, Chile'),
 (2,2,'OIRS','Las Magnolias 38, 2551470',NULL,NULL,NULL,NULL,-33.01044300,-71.50243120,'2026-03-05 13:14:00','2026-03-05 13:14:00',0,'Las Magnolias 38, 2551470'),
 (3,6,'OIRS','Quilpué 200, 2520477 Viña del Mar, Valparaíso, Chile',NULL,NULL,NULL,NULL,-33.02568739,-71.54763721,'2026-03-06 10:00:42','2026-03-06 10:00:42',0,'Quilpué 200, 2520477 Viña del Mar, Valparaíso, Chile'),
@@ -718,18 +718,18 @@ INSERT INTO `trd_cont_direcciones` VALUES
 (5,7,'OIRS','Av. Valparaíso 1367, 2520520 Viña del Mar, Valparaíso, Chile',NULL,NULL,NULL,NULL,-33.02644300,-71.54291652,'2026-03-06 11:29:09','2026-03-06 11:29:09',0,'Av. Valparaíso 1367, 2520520 Viña del Mar, Valparaíso, Chile'),
 (6,8,'OIRS','Padre Hurtado 400, 2520000 Viña del Mar, Valparaíso, Chile',NULL,NULL,NULL,NULL,-33.03608539,-71.56278633,'2026-03-06 11:41:57','2026-03-06 11:41:57',0,'Padre Hurtado 400, 2520000 Viña del Mar, Valparaíso, Chile'),
 (7,9,'OIRS','Las Maravillas / Cancha, 2552748 Viña del Mar, Valparaíso, Chile',NULL,NULL,NULL,NULL,-32.99930912,-71.49862789,'2026-03-06 12:01:57','2026-03-06 12:01:57',0,'Las Maravillas / Cancha, 2552748 Viña del Mar, Valparaíso, Chile');
-/*!40000 ALTER TABLE `trd_cont_direcciones` ENABLE KEYS */;
+/*!40000 ALTER TABLE `trd_general_contribuyente_direcciones` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
 
 --
--- Table structure for table `trd_cont_escolaridad`
+-- Table structure for table `trd_general_contribuyente_escolaridad`
 --
 
-DROP TABLE IF EXISTS `trd_cont_escolaridad`;
+DROP TABLE IF EXISTS `trd_general_contribuyente_escolaridad`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
-CREATE TABLE `trd_cont_escolaridad` (
+CREATE TABLE `trd_general_contribuyente_escolaridad` (
   `esc_id` int(11) NOT NULL AUTO_INCREMENT,
   `esc_nombre` varchar(100) NOT NULL,
   `esc_borrado` tinyint(1) DEFAULT 0,
@@ -740,13 +740,13 @@ CREATE TABLE `trd_cont_escolaridad` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `trd_cont_escolaridad`
+-- Dumping data for table `trd_general_contribuyente_escolaridad`
 --
 
-LOCK TABLES `trd_cont_escolaridad` WRITE;
-/*!40000 ALTER TABLE `trd_cont_escolaridad` DISABLE KEYS */;
+LOCK TABLES `trd_general_contribuyente_escolaridad` WRITE;
+/*!40000 ALTER TABLE `trd_general_contribuyente_escolaridad` DISABLE KEYS */;
 set autocommit=0;
-INSERT INTO `trd_cont_escolaridad` VALUES
+INSERT INTO `trd_general_contribuyente_escolaridad` VALUES
 (1,'Sin instrucción',0,'2026-02-19 19:44:52','2026-02-19 19:44:52'),
 (2,'Básica Incompleta',0,'2026-02-19 19:44:52','2026-02-19 19:44:52'),
 (3,'Básica Completa',0,'2026-02-19 19:44:52','2026-02-19 19:44:52'),
@@ -758,7 +758,7 @@ INSERT INTO `trd_cont_escolaridad` VALUES
 (9,'Superior Profesional Incompleta',0,'2026-02-19 19:44:52','2026-02-19 19:44:52'),
 (10,'Superior Profesional Completa',0,'2026-02-19 19:44:52','2026-02-19 19:44:52'),
 (11,'Postgrado (Magíster/Doctorado)',0,'2026-02-19 19:44:52','2026-02-19 19:44:52');
-/*!40000 ALTER TABLE `trd_cont_escolaridad` ENABLE KEYS */;
+/*!40000 ALTER TABLE `trd_general_contribuyente_escolaridad` ENABLE KEYS */;
 UNLOCK TABLES;
 commit;
 
@@ -1832,8 +1832,8 @@ CREATE TABLE `trd_general_contribuyentes` (
   `tgc_creacion` datetime DEFAULT current_timestamp(),
   `tgc_actualizacion` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`tgc_id`),
-  KEY `trd_general_contribuyentes_trd_cont_escolaridad_FK` (`tgc_escolaridad`),
-  CONSTRAINT `trd_general_contribuyentes_trd_cont_escolaridad_FK` FOREIGN KEY (`tgc_escolaridad`) REFERENCES `trd_cont_escolaridad` (`esc_id`)
+  KEY `trd_general_contribuyentes_trd_general_contribuyente_escolaridad_FK` (`tgc_escolaridad`),
+  CONSTRAINT `trd_general_contribuyentes_trd_general_contribuyente_escolaridad_FK` FOREIGN KEY (`tgc_escolaridad`) REFERENCES `trd_general_contribuyente_escolaridad` (`esc_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

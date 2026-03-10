@@ -457,8 +457,8 @@ class Ingresos_ingreso
             $stmt->bindValue(":tis_estado", $data['tis_estado'] ?? 'Ingresado');
             $stmt->bindValue(":tis_propietario", $creador_id);
             $stmt->bindValue(":tis_respuesta", $data['tis_respuesta'] ?? null);
-            $stmt->bindValue(":tis_creacion", $data['tis_creacion'] ?? date('Y-m-d'));
-            $stmt->bindValue(":tis_fecha_limite", $data['tis_fecha_limite']);
+            $stmt->bindValue(":tis_creacion", \App\Helpers\Fechas::desformatearFecha($data['tis_creacion'] ?? date('Y-m-d')));
+            $stmt->bindValue(":tis_fecha_limite", \App\Helpers\Fechas::desformatearFecha($data['tis_fecha_limite']));
             $stmt->bindValue(":tis_registro_tramite", $rgt_id);
 
             if ($stmt->execute()) {
@@ -566,14 +566,18 @@ class Ingresos_ingreso
 
             $stmt = $this->conn->prepare($query);
 
+            if (!class_exists('App\Helpers\Fechas')) {
+                require_once __DIR__ . '/../Helpers/Fechas.php';
+            }
+
             $stmt->bindValue(":tis_tipo", $data['tis_tipo'] ?? $current['tis_tipo']);
             $stmt->bindValue(":tis_titulo", $data['tis_titulo'] ?? $current['tis_titulo']);
             $stmt->bindValue(":tis_contenido", $data['tis_contenido'] ?? $current['tis_contenido']);
             $stmt->bindValue(":tis_estado", $data['tis_estado'] ?? $current['tis_estado']);
             $stmt->bindValue(":tis_propietario", $data['tis_propietario'] ?? $current['tis_propietario']);
             $stmt->bindValue(":tis_respuesta", $data['tis_respuesta'] ?? $current['tis_respuesta']);
-            $stmt->bindValue(":tis_creacion", $data['tis_creacion'] ?? $current['tis_creacion']);
-            $stmt->bindValue(":tis_fecha_limite", $data['tis_fecha_limite'] ?? $current['tis_fecha_limite']);
+            $stmt->bindValue(":tis_creacion", \App\Helpers\Fechas::desformatearFecha($data['tis_creacion'] ?? $current['tis_creacion']));
+            $stmt->bindValue(":tis_fecha_limite", \App\Helpers\Fechas::desformatearFecha($data['tis_fecha_limite'] ?? $current['tis_fecha_limite']));
             $stmt->bindValue(":id", $id);
 
             if (!$stmt->execute()) {

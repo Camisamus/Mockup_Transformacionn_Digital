@@ -30,8 +30,8 @@ switch ($data['ACCION']) {
         break;
 
     case 'ACTUALIZAR':
-        if (isset($data['usp_usuario_id']) && isset($data['usp_perfil_id'])) {
-            $response = $controller->update($data['usp_usuario_id'], $data['usp_perfil_id'], $data);
+        if (isset($data['usp_usuario_id']) && isset($data['usp_rol_id'])) {
+            $response = $controller->update($data['usp_usuario_id'], $data['usp_rol_id'], $data);
         } else {
             $response = ["status" => "error", "message" => "IDs de usuario y perfil requeridos"];
         }
@@ -39,8 +39,8 @@ switch ($data['ACCION']) {
         break;
 
     case 'BORRAR':
-        if (isset($data['usp_usuario_id']) && isset($data['usp_perfil_id'])) {
-            $response = $controller->delete($data['usp_usuario_id'], $data['usp_perfil_id']);
+        if (isset($data['usp_usuario_id']) && isset($data['usp_rol_id'])) {
+            $response = $controller->delete($data['usp_usuario_id'], $data['usp_rol_id']);
         } else {
             $response = ["status" => "error", "message" => "IDs de usuario y perfil requeridos"];
         }

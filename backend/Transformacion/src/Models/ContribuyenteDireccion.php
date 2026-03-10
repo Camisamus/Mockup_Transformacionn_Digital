@@ -6,7 +6,7 @@ use PDO;
 class ContribuyenteDireccion
 {
     private $conn;
-    private $table_name = "trd_cont_direcciones";
+    private $table_name = "trd_general_contribuyente_direcciones";
 
     public function __construct($db)
     {

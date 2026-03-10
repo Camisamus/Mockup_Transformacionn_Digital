@@ -32,20 +32,23 @@ if (!$db) {
 // Obtener datos del request
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (!isset($data['email']) || !isset($data['ACCION']) || $data['ACCION'] !== "LOGIN_VECINO") {
+if (!isset($data['ACCION']) || $data['ACCION'] !== "LOGIN_VECINO") {
     http_response_code(400);
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'Email y ACCION LOGIN_VECINO requeridos'
-    ]);
+    echo json_encode(['status' => 'error', 'message' => 'ACCION LOGIN_VECINO requerida'], JSON_UNESCAPED_UNICODE);
     exit;
 }
 
 $authController = new VecinosAuthController($db);
-$result = $authController->loginByEmail($data['email']);
 
-$authController = new VecinosAuthController($db);
-$result = $authController->loginByEmail($data['email']);
+if (isset($data['rut']) && isset($data['password'])) {
+    $result = $authController->loginByRut($data['rut'], $data['password']);
+} else if (isset($data['email'])) {
+    $result = $authController->loginByEmail($data['email']);
+} else {
+    http_response_code(400);
+    echo json_encode(['status' => 'error', 'message' => 'Email o RUT/Password requeridos'], JSON_UNESCAPED_UNICODE);
+    exit;
+}
 
 if ($result['success']) {
     http_response_code(200);
@@ -55,12 +58,12 @@ if ($result['success']) {
         'data' => [
             'vecino' => $result['vecino']
         ]
-    ]);
+    ], JSON_UNESCAPED_UNICODE);
 } else {
     http_response_code(401);
     echo json_encode([
         'status' => 'error',
         'message' => $result['message']
-    ]);
+    ], JSON_UNESCAPED_UNICODE);
 }
 exit;

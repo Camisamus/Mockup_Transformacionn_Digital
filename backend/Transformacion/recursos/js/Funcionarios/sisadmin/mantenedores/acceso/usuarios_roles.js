@@ -127,10 +127,10 @@ function renderTable(dataItems) {
             <td><small>${fInicio} - ${fTermino}</small></td>
             <td><small>${subrogante}</small></td>
             <td class="text-end">
-                <button class="btn btn-sm btn-outline-secondary me-1" onclick="editItem(${item.usp_usuario_id}, ${item.usp_perfil_id})">
+                <button class="btn btn-sm btn-outline-secondary me-1" onclick="editItem(${item.usp_usuario_id}, ${item.usp_rol_id})">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                 </button>
-                <button class="btn btn-sm btn-outline-danger" onclick="deleteItem(${item.usp_usuario_id}, ${item.usp_perfil_id})">
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteItem(${item.usp_usuario_id}, ${item.usp_rol_id})">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                 </button>
             </td>
@@ -183,7 +183,7 @@ window.openModal = function (mode, data = null) {
 
         document.getElementById('entry-usuario').value = data.usp_usuario_id;
         document.getElementById('entry-usuario-label').value = `${data.usuario_nombre} ${data.usuario_apellido}`;
-        document.getElementById('entry-perfil').value = data.usp_perfil_id;
+        document.getElementById('entry-perfil').value = data.usp_rol_id;
         document.getElementById('entry-perfil-label').value = data.perfil_nombre;
 
         // Disable search for user and profile in edit mode (as they are part of composite primary key usually)
@@ -207,7 +207,7 @@ window.openModal = function (mode, data = null) {
 }
 
 window.editItem = function (usr_id, prf_id) {
-    const item = allData.find(o => o.usp_usuario_id == usr_id && o.usp_perfil_id == prf_id);
+    const item = allData.find(o => o.usp_usuario_id == usr_id && o.usp_rol_id == prf_id);
     if (item) openModal('edit', item);
 }
 
@@ -231,7 +231,7 @@ window.deleteItem = async function (usr_id, prf_id) {
                 body: JSON.stringify({
                     ACCION: 'BORRAR',
                     usp_usuario_id: usr_id,
-                    usp_perfil_id: prf_id
+                    usp_rol_id: prf_id
                 })
             });
 
@@ -263,7 +263,7 @@ async function saveData() {
     const payload = {
         ACCION: currentMode === 'create' ? 'CREAR' : 'ACTUALIZAR',
         usp_usuario_id: parseInt(usuario),
-        usp_perfil_id: parseInt(perfil),
+        usp_rol_id: parseInt(perfil),
         usp_fecha_inicio: inicio || null,
         usp_fecha_termino: termino || null,
         usp_usuario_subrogante_id: subrogante ? parseInt(subrogante) : null

@@ -123,7 +123,7 @@ class AuthController
                     r.rol_orden
                 FROM trd_acceso_permisos r
                 JOIN trd_acceso_permiso_rol pr ON r.rol_id = pr.pfr_rol_id
-                JOIN trd_acceso_rol_usuario up ON pr.pfr_perfil_id = up.usp_perfil_id
+                JOIN trd_acceso_rol_usuario up ON pr.pfr_perfil_id = up.usp_rol_id
                 WHERE up.usp_usuario_id = :usuario_id 
                   AND r.rol_borrado = 0
                   AND up.usp_borrado = 0

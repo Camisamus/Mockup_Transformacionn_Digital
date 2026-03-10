@@ -95,13 +95,14 @@ function setupEventListeners() {
     document.getElementById('m_destino_facultad').addEventListener('change', (e) => {
         const checkReq = document.getElementById('m_destino_requerido');
         const tareaSelect = document.getElementById('m_destino_tarea');
+        const tareaContainer = document.getElementById('container_m_destino_tarea');
         const facultad = e.target.value;
 
         // Limpiar opciones actuales de labor
         tareaSelect.innerHTML = '';
+        tareaContainer.classList.remove('hidden');
 
         if (facultad === 'Responsable' || facultad === 'Firmante') {
-            // Desplegar las 4 opciones
             const options = [
                 { val: 'ejecutar lo requerido', text: 'Ejecutar lo requerido' },
                 { val: 'generar informe', text: 'Generar informe técnico' },
@@ -116,20 +117,21 @@ function setupEventListeners() {
             });
             checkReq.disabled = false;
         } else if (facultad === 'Visador') {
-            // Solo desplegar "Ejecutar lo requerido"
             const el = document.createElement('option');
             el.value = 'ejecutar lo requerido';
             el.textContent = 'Ejecutar lo requerido';
             tareaSelect.appendChild(el);
+            tareaSelect.value = 'ejecutar lo requerido';
 
+            tareaContainer.classList.add('hidden');
             checkReq.checked = true;
             checkReq.disabled = false;
         } else if (facultad === 'Lector') {
-            // Solo desplegar "Tomar conocimiento"
             const el = document.createElement('option');
             el.value = 'tomar conocimiento';
             el.textContent = 'Tomar conocimiento';
             tareaSelect.appendChild(el);
+            tareaSelect.value = 'tomar conocimiento';
 
             checkReq.checked = false;
             checkReq.disabled = true;

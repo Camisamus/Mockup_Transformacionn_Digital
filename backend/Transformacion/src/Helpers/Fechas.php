@@ -4,12 +4,6 @@ namespace App\Helpers;
 class Fechas
 {
     /**
-     * Suma días hábiles (Lunes a Viernes) a una fecha.
-     * @param string $fecha Fecha inicial (Y-m-d)
-     * @param int $dias Cantidad de días hábiles a sumar
-     * @return string Fecha resultante (Y-m-d)
-     */
-    /**
      * Suma días hábiles (Lunes a Viernes) a una fecha, considerando feriados si se provee conexión.
      * @param string $fecha Fecha inicial (Y-m-d)
      * @param int $dias Cantidad de días hábiles a sumar
@@ -23,10 +17,8 @@ class Fechas
         $feriados = [];
         if ($conn) {
             try {
-                // Consultamos feriados en un rango razonable (ej: 60 días desde la fecha inicial)
-                // Usamos un margen amplio para asegurar que cubrimos los 20+ días hábiles
                 $fecha_fin_estimada = clone $fecha_dt;
-                $fecha_fin_estimada->modify('+' . ($dias * 2) . ' days'); // Estimación generosa
+                $fecha_fin_estimada->modify('+' . ($dias * 2) . ' days');
 
                 $query = "SELECT fer_fecha FROM trd_soporte_feriados 
                           WHERE fer_fecha BETWEEN :inicio AND :fin";
@@ -70,6 +62,29 @@ class Fechas
             return $dt->format('d-m-Y');
         } catch (\Exception $e) {
             return '-';
+        }
+    }
+
+    /**
+     * Convierte una fecha de d-m-Y a Y-m-d para la base de datos
+     * @param string|null $fecha
+     * @return string|null
+     */
+    public static function desformatearFecha($fecha)
+    {
+        if (!$fecha || $fecha === '-')
+            return null;
+        try {
+            if (preg_match('/^\d{4}-\d{2}-\d{2}/', $fecha)) {
+                return substr($fecha, 0, 10);
+            }
+            $dt = \DateTime::createFromFormat('d-m-Y', $fecha);
+            if ($dt) {
+                return $dt->format('Y-m-d');
+            }
+            return (new \DateTime($fecha))->format('Y-m-d');
+        } catch (\Exception $e) {
+            return null;
         }
     }
 }

@@ -133,9 +133,13 @@ function renderizarDatos(d) {
     if (hasPrelimRes) {
         $('#oig_respuesta_preliminar').prop('disabled', true);
         $('#btn_responder_preliminar').hide();
+        $('#info_auditoria_preliminar').show();
+        $('#txt_preliminar_user').text(`Respuesta entregada por: ${g.oig_res_pre_origen_nombre || '-'}`);
+        $('#txt_preliminar_fec').text(`Fecha: ${g.oig_res_pre_fecha || '-'}`);
     } else {
         $('#oig_respuesta_preliminar').prop('disabled', false);
         $('#btn_responder_preliminar').show();
+        $('#info_auditoria_preliminar').hide();
     }
 
     $('#oig_requiere_respuesta_tecnica').val(g.oig_requiere_respuesta_tecnica || "");
@@ -151,9 +155,13 @@ function renderizarDatos(d) {
         if (hasTechnicalRes) {
             $('#oig_respuesta_tecnica').prop('disabled', true);
             $('#btn_responder_tecnico').hide();
+            $('#info_auditoria_tecnica').show();
+            $('#txt_tecnica_user').text(`Respuesta entregada por: ${g.oig_res_tec_origen_nombre || '-'}`);
+            $('#txt_tecnica_fec').text(`Fecha: ${g.oig_res_tec_fecha || '-'}`);
         } else {
             $('#oig_respuesta_tecnica').prop('disabled', false);
             $('#btn_responder_tecnico').show();
+            $('#info_auditoria_tecnica').hide();
         }
     } else {
         $('#container_respuesta_tecnica').hide();
@@ -175,9 +183,13 @@ function renderizarDatos(d) {
         if (hasExecutionRes) {
             $('#oig_notificacion_ejecucion').prop('disabled', true);
             $('#btn_notificar_ejecucion').hide();
+            $('#info_auditoria_ejecucion').show();
+            $('#txt_ejecucion_user').text(`Respuesta entregada por: ${g.oig_res_not_origen_nombre || '-'}`);
+            $('#txt_ejecucion_fec').text(`Fecha: ${g.oig_res_not_fecha || '-'}`);
         } else {
             $('#oig_notificacion_ejecucion').prop('disabled', false);
             $('#btn_notificar_ejecucion').show();
+            $('#info_auditoria_ejecucion').hide();
         }
     } else {
         // Bloqueo de estado cerrado dentro de renderizarDatos general si es necesario
@@ -360,7 +372,10 @@ function renderAsignaciones(asignaciones) {
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
-                        <span class="badge rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-600 border border-amber-100" style="background-color: #fffbeb; color: #d97706; border: 1px solid #fef3c7;">Pendiente Revisión</span>
+                        <span class="badge rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-600 border border-amber-100" style="background-color: #fffbeb; color: #d97706; border: 1px solid #fef3c7;">Asignación</span>
+                        <button type="button" onclick="eliminarAsignacion(event, ${asg.oia_id})" class="text-slate-400 hover:text-red-500 transition-colors p-1" title="Eliminar asignación">
+                            <span class="material-symbols-outlined text-lg">delete</span>
+                        </button>
                         <span class="material-symbols-outlined text-slate-300 transition-transform dropdown-icon">expand_more</span>
                     </div>
                 </div>
@@ -408,8 +423,9 @@ function renderAsignaciones(asignaciones) {
         `;
         container.append(item);
 
+        const nombreAsignadorReal = asg.creador_nombre ? `${asg.creador_nombre} ${asg.creador_apellido || ''}` : 'Asignador';
         // Intentar cargar el historial de forma asíncrona
-        cargarHistorialAsignacion(asg.oia_id, asg.oia_creacion, instruccion, chatContainerId);
+        cargarHistorialAsignacion(asg.oia_id, asg.oia_creacion, instruccion, chatContainerId, nombreAsignadorReal);
     });
 
     // Delegación de evento para el toggle manual (más robusto)
@@ -426,7 +442,49 @@ function renderAsignaciones(asignaciones) {
     });
 }
 
-function cargarHistorialAsignacion(asgId, fechaCreacion, instruccion, containerId) {
+function eliminarAsignacion(e, asgId) {
+    if (e) {
+        e.stopPropagation(); // Evitar que el acordeón se despliegue al hacer clic
+    }
+
+    Swal.fire({
+        title: '¿Eliminar Asignación?',
+        text: 'Esta acción removerá permanentemente esta asignación.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#f43f5e',
+        cancelButtonColor: '#94a3b8',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({ title: 'Eliminando...', allowOutsideClick: false });
+            Swal.showLoading();
+
+            fetch(`${apiBase}/oirs/gestion.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ACCION: 'ELIMINAR_ASIGNACION', oia_id: asgId })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        Swal.fire('¡Eliminada!', 'La asignación se ha removido correctamente.', 'success').then(() => {
+                            location.reload(); // Refrescar tras eliminar
+                        });
+                    } else {
+                        Swal.fire('Error', data.message || 'No se pudo eliminar.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error("Error al eliminar Asignación:", error);
+                    Swal.fire('Error', 'Hubo un error de comunicación con el servidor.', 'error');
+                });
+        }
+    });
+}
+
+function cargarHistorialAsignacion(asgId, fechaCreacion, instruccion, containerId, nombreAsignador = "Asignador") {
     const chatContainer = $(`#${containerId}`);
 
     fetch(`${apiBase}/oirs/gestion.php`, {
@@ -447,7 +505,7 @@ function cargarHistorialAsignacion(asgId, fechaCreacion, instruccion, containerI
             <div class="flex items-start mb-4">
                 <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 max-w-[85%] shadow-sm">
                     <div class="flex items-center mb-1">
-                        <span class="text-[10px] font-bold text-blue-600 uppercase tracking-widest mr-2">Asignador (Instrucción)</span>
+                        <span class="text-[10px] font-bold text-blue-600 uppercase tracking-widest mr-2">${nombreAsignador}</span>
                         <span class="text-[9px] text-blue-400">${fechaCreacion ? new Date(fechaCreacion).toLocaleString() : 'N/A'}</span>
                     </div>
                     <p class="text-sm text-slate-700 m-0">${instruccion || '<i>Sin instrucción específica</i>'}</p>

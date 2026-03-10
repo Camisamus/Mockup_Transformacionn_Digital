@@ -22,7 +22,7 @@ class UsuarioPerfilControllerAcceso
 
     public function create($data)
     {
-        if (empty($data['usp_usuario_id']) || empty($data['usp_perfil_id'])) {
+        if (empty($data['usp_usuario_id']) || empty($data['usp_rol_id'])) {
             return ["status" => "error", "message" => "Usuario y Perfil son obligatorios"];
         }
 

@@ -335,7 +335,7 @@ $id_ingreso = isset($_GET['id']) ? $_GET['id'] : '';
                             <option value="Lector">Lector (Solo lectura)</option>
                         </select>
                     </div>
-                    <div>
+                    <div id="container_m_destino_tarea">
                         <label class="text-[11px] font-bold text-slate-400 uppercase block mb-1">Labor a
                             Realizar</label>
                         <select class="form-select rounded-xl text-sm w-full border-slate-200" id="m_destino_tarea">
