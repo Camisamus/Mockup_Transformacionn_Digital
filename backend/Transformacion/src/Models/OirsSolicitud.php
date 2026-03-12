@@ -150,7 +150,11 @@ class OirsSolicitud
     {
         $query = "SELECT o.*, r.*, t.tem_nombre, s.sub_nombre, 
                   tgc.tgc_nombre, tgc.tgc_apellido_paterno, tgc.tgc_apellido_materno, tgc.tgc_rut,
-                  tgc.tgc_razon_social, tgc.tgc_tipo
+                  tgc.tgc_razon_social, tgc.tgc_tipo,
+                  (SELECT ofa.ofa_rol FROM trd_oirs_asignaciones oia 
+                   JOIN trd_oirs_funcionarios_areas ofa ON oia.oia_asignacion = ofa.ofa_funcionario 
+                   WHERE oia.oia_solicitud = o.oirs_id AND oia.oia_borrado = 0 
+                   ORDER BY oia.oia_id DESC LIMIT 1) as ofa_rol
                   FROM " . $this->table_name . " o
                   JOIN " . $this->table_name_parent . " r ON o.oirs_registro_tramite = r.rgt_id
                   LEFT JOIN trd_oirs_tematicas t ON o.oirs_tematica = t.tem_id
@@ -193,7 +197,11 @@ class OirsSolicitud
     {
         $query = "SELECT o.*, r.*, t.tem_nombre, s.sub_nombre, 
                   tgc.tgc_nombre, tgc.tgc_apellido_paterno, tgc.tgc_apellido_materno, tgc.tgc_rut,
-                  tgc.tgc_razon_social, tgc.tgc_tipo
+                  tgc.tgc_razon_social, tgc.tgc_tipo,
+                  (SELECT ofa.ofa_rol FROM trd_oirs_asignaciones oia 
+                   JOIN trd_oirs_funcionarios_areas ofa ON oia.oia_asignacion = ofa.ofa_funcionario 
+                   WHERE oia.oia_solicitud = o.oirs_id AND oia.oia_borrado = 0 
+                   ORDER BY oia.oia_id DESC LIMIT 1) as ofa_rol
                   FROM " . $this->table_name . " o
                   JOIN " . $this->table_name_parent . " r ON o.oirs_registro_tramite = r.rgt_id
                   LEFT JOIN trd_oirs_tematicas t ON o.oirs_tematica = t.tem_id

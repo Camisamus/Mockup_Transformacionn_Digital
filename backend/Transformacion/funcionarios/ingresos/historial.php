@@ -11,6 +11,8 @@ include '../../api/general/header.php';
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     rel="stylesheet" />
 
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
 <script id="tailwind-config">
     tailwind.config = {
         theme: {
@@ -38,71 +40,37 @@ include '../../api/general/header.php';
         line-height: 1;
     }
 
+    /* Sombras suaves */
     .gob-card {
         border: 1px solid rgba(226, 232, 240, 0.6);
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
 
-    /* Estilo para que la paginación de DataTables combine con tu interfaz (Unidos) */
-    .dataTables_paginate {
-        padding: 15px;
-        display: flex;
-        justify-content: flex-end;
-        gap: 0 !important;
-    }
-
-    .paginate_button {
-        padding: 8px 16px !important;
-        border: 1px solid #e2e8f0 !important;
-        background: white !important;
-        color: #1a5f9c !important;
-        /* Azul primario */
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        margin-left: -1px;
-        /* Une los botones */
-        transition: all 0.2s ease;
-        text-decoration: none !important;
-        display: inline-block;
-    }
-
-    /* Botón Anterior */
-    .paginate_button:first-child,
-    .previous.paginate_button {
-        border-radius: 8px 0 0 8px !important;
-        margin-left: 0;
-        background: #f1f5f9 !important;
-        /* Gris de la imagen */
+    /* Estilos DataTables para que no rompan el diseño Tailwind */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_processing,
+    .dataTables_wrapper .dataTables_paginate {
+        font-size: 12px;
         color: #64748b !important;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
     }
 
-    /* Botón Siguiente */
-    .paginate_button:last-child,
-    .next.paginate_button {
-        border-radius: 0 8px 8px 0 !important;
+    table.dataTable thead th {
+        border-bottom: 1px solid #f1f5f9 !important;
     }
 
-    /* Botón Activo */
-    .paginate_button.current {
-        background: #007bff !important;
-        /* Azul vibrante */
+    table.dataTable no-footer {
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: #1a5f9c !important;
         color: white !important;
-        border-color: #007bff !important;
-        z-index: 3;
-    }
-
-    /* Puntos suspensivos / deshabilitados */
-    .paginate_button.disabled:not(.previous):not(.next),
-    .ellipsis {
-        background: #f1f5f9 !important;
-        color: #64748b !important;
-        cursor: default;
-    }
-
-    .paginate_button:hover:not(.current):not(.disabled) {
-        background: #f8fafc !important;
-        z-index: 2;
+        border: none !important;
+        border-radius: 8px !important;
     }
 </style>
 
@@ -162,9 +130,10 @@ include '../../api/general/header.php';
                             class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Estado</label>
                         <select class="w-full px-4 py-2.5 rounded-xl border-slate-200 focus:ring-primary-blue text-sm"
                             id="filtro_estado">
-                            <option value="">Todos (Favorables y No Favorables)</option>
-                            <option value="Resuelto_Favorable">Favorable</option>
-                            <option value="Resuelto_NO_Favorable">No Favorable</option>
+                            <option value="">Todos los Estados</option>
+                            <option value="Ingresado">Pendiente (Ingresado)</option>
+                            <option value="Resuelto_Favorable">Resuelto: Favorable</option>
+                            <option value="Resuelto_NO_Favorable">Resuelto: No Favorable</option>
                         </select>
                     </div>
                 </div>
@@ -188,168 +157,52 @@ include '../../api/general/header.php';
     <div class="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden min-h-[400px]">
         <div class="p-5 border-b border-slate-50 flex justify-between items-center bg-white">
             <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary-blue">list_alt</span> Resultados encontrados
-                <span
-                    class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-[10px] ml-2 font-black border border-slate-200"
-                    id="resultados_count">0</span>
+                <span class="material-symbols-outlined text-primary-blue">history</span> Historial de Solicitudes
             </h3>
+            <div class="flex gap-3">
+                <button type="button"
+                    class="flex items-center gap-2 bg-[#1d7344] hover:bg-[#155a34] text-white px-5 py-2.5 rounded-lg text-xs font-bold transition-all shadow-md uppercase tracking-wider"
+                    id="btn_exportar_excel">
+                    <span class="material-symbols-outlined text-sm">description</span> EXCEL
+                </button>
+                <button type="button"
+                    class="flex items-center gap-2 bg-[#d32f2f] hover:bg-[#b71c1c] text-white px-5 py-2.5 rounded-lg text-xs font-bold transition-all shadow-md uppercase tracking-wider"
+                    id="btn_exportar_pdf">
+                    <span class="material-symbols-outlined text-sm">picture_as_pdf</span> PDF
+                </button>
+            </div>
         </div>
 
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto p-4">
             <table class="w-full text-left" id="tablaResultados">
                 <thead>
                     <tr
                         class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
                         <th class="px-6 py-4">ID</th>
-                        <th class="px-6 py-4">Ver</th>
+                        <th class="px-6 py-4">Rol</th>
                         <th class="px-6 py-4">Título / Contenido</th>
-                        <th class="px-6 py-4 text-center">Fecha</th>
+                        <th class="px-6 py-4 text-center">Fecha Ing.</th>
+                        <th class="px-6 py-4 text-center">Vencimiento</th>
                         <th class="px-6 py-4 text-center">Estado</th>
-                        <th class="px-6 py-4">Tipo Ingreso</th>
-                        <th class="px-6 py-4">Responsable</th>
+                        <th class="px-6 py-4 text-center">Acción</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 text-[13px] text-slate-600">
+                <tbody id="tbody_ingresos" class="divide-y divide-slate-100 text-[13px] text-slate-600">
                 </tbody>
             </table>
         </div>
-
-        <div id="pagination_container" class="p-6 bg-white border-t border-slate-50 flex justify-between items-center">
-        </div>
     </div>
 
 </div>
 
-<script src="../../recursos/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/feather-icons"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<!-- Export Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="../../recursos/js/export_utils.js"></script>
 <script>
-    feather.replace();
+    if (window.feather) feather.replace();
 </script>
 <script src="../../recursos/js/funcionarios/ingresos/historial.js"></script>
-
-<!--<div class="container-fluid py-4">-->
-<!-- Header & Toolbar -->
-<!--<div class="main-header mb-4">
-        <div class="header-title">
-            <h2 class="fw-bold fs-4">Historial de Ingresos</h2>
-            <p class="text-muted mb-0">Consulta y revisión histórica de ingresos</p>
-        </div>
-        <div class="toolbar">
-            <button class="btn btn-toolbar" onclick="buscarIngresos()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-                Buscar
-            </button>
-            <button class="btn btn-toolbar">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="16" y1="13" x2="8" y2="13"></line>
-                    <line x1="16" y1="17" x2="8" y2="17"></line>
-                    <polyline points="10 9 9 9 8 9"></polyline>
-                </svg>
-                Exportar Excel
-            </button>
-        </div>
-    </div>-->
-
-<!-- Filtros de Búsqueda -->
-<!--<div class="card shadow-sm border-0 mb-4">
-        <div class="card-body p-4">
-            <h5 class="fw-bold fs-6 mb-1">Filtros de Búsqueda</h5>
-            <p class="text-muted small mb-4">Aplique filtros para refinar los resultados</p>
-
-            <form id="formFiltros" onsubmit="event.preventDefault(); buscarIngresos();">
-                <div class="row g-3">
-                    <div class="col-md-3">
-                        <label for="filtro_id" class="form-label small fw-bold">ID Ingreso</label>
-                        <input type="text" class="form-control form-control-sm" id="filtro_id"
-                            placeholder="Ej: ID Interno">
-                    </div>
-                    <div class="col-md-3">
-                        <label for="filtro_fecha_inicio" class="form-label small fw-bold">Fecha (Inicio)</label>
-                        <input type="date" class="form-control form-control-sm" id="filtro_fecha_inicio">
-                    </div>
-                    <div class="col-md-3">
-                        <label for="filtro_fecha_fin" class="form-label small fw-bold">Fecha (Fin)</label>
-                        <input type="date" class="form-control form-control-sm" id="filtro_fecha_fin">
-                    </div>
-                    <div class="col-md-3">
-                        <label for="filtro_estado" class="form-label small fw-bold">Estado</label>
-                        <select class="form-select form-select-sm" id="filtro_estado">
-                            <option value="">Todos (Favorables y No Favorables)</option>
-                            <option value="Resuelto_Favorable">Favorable</option>
-                            <option value="Resuelto_NO_Favorable">No Favorable</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="filtro_responsable" class="form-label small fw-bold">Responsable</label>
-                        <input type="text" class="form-control form-control-sm" id="filtro_responsable"
-                            placeholder="Nombre Responsable">
-                    </div>
-
-                    <div class="col-12 d-flex gap-2 mt-4">
-                        <button type="submit" class="btn btn-dark d-flex align-items-center gap-2 px-4 shadow-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                            </svg>
-                            Buscar
-                        </button>
-                        <button type="button" class="btn btn-link text-decoration-none text-muted small"
-                            onclick="limpiarFiltros()">
-                            Limpiar Filtros
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>-->
-
-<!-- Resultados -->
-<!--<div class="card shadow-sm border-0 mb-4">
-        <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="fw-bold fs-6">Resultados (<span id="resultados_count">0</span>)</div>
-            </div>
-
-            <div class="table-responsive">
-                <table class="table table-hover align-middle" id="tablaResultados">
-                    <thead class="table-light text-uppercase small">
-                        <tr>
-                            <th>ID</th>
-                            <th>Fecha</th>
-                            <th>Estado</th>
-                            <th>Tipo Ingreso</th>
-                            <th>Responsable</th>
-                            <th class="text-end">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody class="small">-->
-<!-- Data loaded dynamically -->
-<!--</tbody>
-                </table>
-            </div>
-            <div id="pagination_container" class="py-3 border-top"></div>
-        </div>
-    </div>
-
-</div>
-
-<script src="../../recursos/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/feather-icons"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    feather.replace();
-</script>
-<script src="../../recursos/js/funcionarios/ingresos/historial.js"></script>-->
-
-
 <?php include '../../api/general/footer.php'; ?>

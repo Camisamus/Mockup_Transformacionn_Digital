@@ -252,7 +252,7 @@ $(document).ready(function () {
 
             if (res.status === 'success') {
                 const nuevoId = res.id;
-                $('#oirs_folio_final').text('#OIRS-2602-' + nuevoId);
+                $('#oirs_folio_final').text('OIRS #' + nuevoId);
 
                 // ACTUALIZACIÓN: Re-vinculamos el botón para el ID recién creado
                 $('#btnDescargarPDF').off('click').on('click', function () {

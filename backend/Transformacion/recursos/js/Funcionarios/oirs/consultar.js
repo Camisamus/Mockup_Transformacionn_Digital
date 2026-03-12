@@ -150,43 +150,55 @@ $(document).ready(function () {
         data.forEach(item => {
             const statusClass = getStatusClass(item.oirs_estado);
             const statusLabel = getStatusLabel(item.oirs_estado);
-            const iniciales = (item.tgc_nombre || '?').substring(0, 1) + (item.tgc_apellido_paterno || '?').substring(0, 1);
+            let name = item.tgc_nombre ? (item.tgc_nombre + ' ' + (item.tgc_apellido_paterno || '')) : 'Anónimo';
+            let rut = item.tgc_rut || 'Sin RUT';
+            const iniciales = name !== 'Anónimo' ? name.substring(0, 1) + (item.tgc_apellido_paterno ? item.tgc_apellido_paterno.substring(0, 1) : '') : 'NN';
+
+            const materia = item.tem_nombre || 'Sin temática';
+            const rol = item.ofa_rol ? item.ofa_rol : '<span class="text-slate-400 italic">Sin Asignar</span>';
+
+            const fechaRec = formatDate(item.oirs_creacion);
+            const fechaVenc = formatDate(item.oirs_fecha_limite);
+
+            const paramPrioridad = item.oirs_prioridad_municipal || 1;
+            let prioridadBadge = '';
+            if (paramPrioridad == 3) prioridadBadge = '<span class="status-badge bg-red-100 text-red-600 border border-red-200" title="Urgente"><span class="material-symbols-outlined text-[10px] mr-1">keyboard_double_arrow_up</span>Urgente</span>';
+            else if (paramPrioridad == 2) prioridadBadge = '<span class="status-badge bg-orange-100 text-orange-600 border border-orange-200" title="Alta"><span class="material-symbols-outlined text-[10px] mr-1">keyboard_arrow_up</span>Alta</span>';
+            else prioridadBadge = '<span class="status-badge bg-slate-100 text-slate-600 border border-slate-200" title="Normal">Normal</span>';
 
             const row = `
                 <tr class="hover:bg-slate-50/80 transition-all cursor-pointer oirs-row" data-id="${item.oirs_id}">
-                    <td class="px-6 py-4">
-                        <div class="flex flex-col">
-                            <span class="font-black text-slate-800 tracking-tight">#${item.o_id || item.oirs_id}</span>
-                            <span class="text-slate-400 text-xs mt-0.5 italic">${formatDate(item.oirs_creacion)}</span>
-                        </div>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="font-black text-slate-800 tracking-tight">#${item.oirs_id}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        ${item.ofa_rol ? `<span class="text-[10px] font-bold text-slate-700 bg-blue-50 px-2 py-1 rounded border border-blue-100 uppercase">${rol}</span>` : rol}
                     </td>
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-full bg-blue-50 text-primary-blue flex items-center justify-center font-bold text-[10px] border border-blue-100">${iniciales}</div>
+                            <div class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-[10px] border border-slate-200 shrink-0">${iniciales.toUpperCase()}</div>
                             <div class="flex flex-col">
-                                <span class="font-bold text-slate-700">${item.tgc_nombre} ${item.tgc_apellido_paterno}</span>
-                                <span class="text-slate-400 text-[10px] font-medium tracking-wide">${item.tgc_rut}</span>
+                                <span class="font-bold text-slate-700 leading-tight block w-[200px] truncate" title="${materia}">${materia}</span>
+                                <span class="text-slate-400 text-[10px] font-medium mt-0.5">${name} &bull; ${rut}</span>
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-4">
-                        <div class="flex flex-col">
-                            <span class="font-medium text-slate-700">${item.tem_nombre || 'Sin temática'}</span>
-                            <span class="text-slate-400 text-[10px] uppercase font-bold tracking-widest">${item.sub_nombre || 'General'}</span>
-                        </div>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-slate-600 text-[11px] font-medium flex items-center gap-1"><i class="material-symbols-outlined text-[14px] text-slate-400">calendar_today</i>${fechaRec}</span>
                     </td>
-                    <td class="px-6 py-4 text-center">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-slate-600 text-[11px] font-medium flex items-center gap-1"><i class="material-symbols-outlined text-[14px] text-slate-400">event_busy</i>${fechaVenc}</span>
+                    </td>
+                    <td class="px-6 py-4 text-center whitespace-nowrap">
+                        ${prioridadBadge}
+                    </td>
+                    <td class="px-6 py-4 text-center whitespace-nowrap">
                         <span class="status-badge ${statusClass}">${statusLabel}</span>
                     </td>
-                    <td class="px-6 py-4 text-right">
-                        <div class="flex justify-end gap-1">
-                            <button class="action-btn text-slate-400 hover:text-primary-blue btn-ver" title="Ver Detalles" data-id="${item.oirs_id}">
-                                <span class="material-symbols-outlined">visibility</span>
-                            </button>
-                            <button class="action-btn text-primary-blue btn-responder" title="Responder" data-id="${item.oirs_id}">
-                                <span class="material-symbols-outlined">reply</span>
-                            </button>
-                        </div>
+                    <td class="px-6 py-4 text-center whitespace-nowrap">
+                        <button class="action-btn text-slate-400 hover:text-primary-blue transition-colors p-2 rounded-lg hover:bg-blue-50" title="Ver Detalles" data-id="${item.oirs_id}">
+                            <span class="material-symbols-outlined">visibility</span>
+                        </button>
                     </td>
                 </tr>
             `;
@@ -285,12 +297,15 @@ $(document).ready(function () {
 
     function getStatusLabel(status) {
         const labels = {
-            0: 'Recibida',
-            1: 'Visada',
-            2: 'Resp. Ejecutar',
-            3: 'Respondida',
-            4: 'Ejecutada',
-            5: 'Notificada'
+            0: 'Pendiente',
+            1: 'Respondida',
+            2: 'Derivada a Unidad Técnica',
+            3: 'Respondida por U. Técnica',
+            4: 'Planificada',
+            5: 'Ejecutada',
+            6: 'No Ejecutada',
+            7: 'Con Observación',
+            8: 'Cerrada'
         };
         return labels[status] || 'Desconocido';
     }

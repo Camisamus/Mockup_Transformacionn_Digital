@@ -38,21 +38,30 @@
                     <div class="mb-4">
                         <label class="form-label small fw-bold text-slate-700 mb-2">RUT</label>
                         <div class="input-group">
-                            <span class="input-group-text bg-slate-50 border-slate-200 ps-3 pe-2"><i data-feather="user" style="width: 18px; color: #64748b;"></i></span>
-                            <input type="text" class="form-control form-control-lg border-slate-200 border-start-0 ps-1" id="rutInput" placeholder="12.345.678-9" style="border-radius: 0 12px 12px 0; font-size: 0.95rem;" required>
+                            <span class="input-group-text bg-slate-50 border-slate-200 ps-3 pe-2"><i data-feather="user"
+                                    style="width: 18px; color: #64748b;"></i></span>
+                            <input type="text" class="form-control form-control-lg border-slate-200 border-start-0 ps-1"
+                                id="rutInput" placeholder="12.345.678-9"
+                                style="border-radius: 0 12px 12px 0; font-size: 0.95rem;" required>
                         </div>
                     </div>
                     <div class="mb-4">
                         <label class="form-label small fw-bold text-slate-700 mb-2">Clave de Acceso</label>
                         <div class="input-group">
-                            <span class="input-group-text bg-slate-50 border-slate-200 ps-3 pe-2"><i data-feather="lock" style="width: 18px; color: #64748b;"></i></span>
-                            <input type="password" class="form-control form-control-lg border-slate-200 border-start-0 ps-1" id="passInput" placeholder="••••••••" style="border-radius: 0 12px 12px 0; font-size: 0.95rem;" required>
+                            <span class="input-group-text bg-slate-50 border-slate-200 ps-3 pe-2"><i data-feather="lock"
+                                    style="width: 18px; color: #64748b;"></i></span>
+                            <input type="password"
+                                class="form-control form-control-lg border-slate-200 border-start-0 ps-1" id="passInput"
+                                placeholder="••••••••" style="border-radius: 0 12px 12px 0; font-size: 0.95rem;"
+                                required>
                         </div>
                     </div>
                     <div class="text-end mb-5">
-                        <a href="javascript:void(0)" onclick="showForm('forgot')" class="text-primary small fw-bold text-decoration-none">¿Olvidó su contraseña?</a>
+                        <a href="javascript:void(0)" onclick="showForm('forgot')"
+                            class="text-primary small fw-bold text-decoration-none">¿Olvidó su contraseña?</a>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-lg w-100 py-3 shadow-lg fw-bold border-0" style="border-radius: 14px; background: linear-gradient(135deg, #006FB3 0%, #004a7c 100%); transition: all 0.3s;">
+                    <button type="submit" class="btn btn-primary btn-lg w-100 py-3 shadow-lg fw-bold border-0"
+                        style="border-radius: 14px; background: linear-gradient(135deg, #006FB3 0%, #004a7c 100%); transition: all 0.3s;">
                         Ingresar al Portal
                     </button>
                 </form>
@@ -63,8 +72,11 @@
                         <div class="col-12" id="step-rut">
                             <label class="form-label small fw-bold text-slate-700 mb-1">RUT para Comenzar</label>
                             <div class="input-group">
-                                <input type="text" class="form-control border-slate-200" id="regRut" placeholder="12.345.678-9" required style="border-radius: 10px 0 0 10px;">
-                                <button type="button" id="btn-check-rut" onclick="checkRut()" class="btn btn-primary px-4 fw-bold" style="border-radius: 0 10px 10px 0;">Verificar</button>
+                                <input type="text" class="form-control border-slate-200" id="regRut"
+                                    placeholder="12.345.678-9" required style="border-radius: 10px 0 0 10px;">
+                                <button type="button" id="btn-check-rut" onclick="checkRut()"
+                                    class="btn btn-primary px-4 fw-bold"
+                                    style="border-radius: 0 10px 10px 0;">Verificar</button>
                             </div>
                         </div>
 
@@ -72,41 +84,53 @@
                         <div id="register-fields" class="row g-3 d-none">
                             <div class="col-12">
                                 <label class="form-label small fw-bold text-slate-700 mb-1">Nombres</label>
-                                <input type="text" class="form-control border-slate-200" id="regNombre" placeholder="Nombres" required style="border-radius: 10px;">
+                                <input type="text" class="form-control border-slate-200" id="regNombre"
+                                    placeholder="Nombres" required style="border-radius: 10px;">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-slate-700 mb-1">Apellido Paterno</label>
-                                <input type="text" class="form-control border-slate-200" id="regPaterno" placeholder="Apellido Paterno" required style="border-radius: 10px;">
+                                <input type="text" class="form-control border-slate-200" id="regPaterno"
+                                    placeholder="Apellido Paterno" required style="border-radius: 10px;">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-slate-700 mb-1">Apellido Materno</label>
-                                <input type="text" class="form-control border-slate-200" id="regMaterno" placeholder="Apellido Materno" required style="border-radius: 10px;">
+                                <input type="text" class="form-control border-slate-200" id="regMaterno"
+                                    placeholder="Apellido Materno" required style="border-radius: 10px;">
                             </div>
                             <div class="col-12">
                                 <label class="form-label small fw-bold text-slate-700 mb-1">Correo Electrónico</label>
-                                <input type="email" class="form-control border-slate-200" id="regEmail" placeholder="correo@ejemplo.com" required style="border-radius: 10px;">
+                                <input type="email" class="form-control border-slate-200" id="regEmail"
+                                    placeholder="correo@ejemplo.com" required style="border-radius: 10px;">
                             </div>
                             <div class="col-12">
                                 <label class="form-label small fw-bold text-slate-700 mb-1">Teléfono de Contacto</label>
-                                <input type="text" class="form-control border-slate-200" id="regTelefono" placeholder="+569 ..." style="border-radius: 10px;">
+                                <input type="text" class="form-control border-slate-200" id="regTelefono"
+                                    placeholder="+569 ..." style="border-radius: 10px;">
                             </div>
                             <div class="col-12">
-                                <label class="form-label small fw-bold text-slate-700 mb-1">Nueva Clave de Acceso</label>
-                                <input type="password" class="form-control border-slate-200" id="regPass" placeholder="Clave de Acceso" required style="border-radius: 10px;">
+                                <label class="form-label small fw-bold text-slate-700 mb-1">Nueva Clave de
+                                    Acceso</label>
+                                <input type="password" class="form-control border-slate-200" id="regPass"
+                                    placeholder="Clave de Acceso" required style="border-radius: 10px;">
                             </div>
                             <div class="col-12">
                                 <label class="form-label small fw-bold text-slate-700 mb-1">Confirmar Clave</label>
-                                <input type="password" class="form-control border-slate-200" id="regPassConfirm" placeholder="Confirmar Clave" required style="border-radius: 10px;">
+                                <input type="password" class="form-control border-slate-200" id="regPassConfirm"
+                                    placeholder="Confirmar Clave" required style="border-radius: 10px;">
                             </div>
                             <div class="col-12 mt-4">
                                 <div class="form-check small">
                                     <input class="form-check-input" type="checkbox" id="regPrivacy" required>
                                     <label class="form-check-label text-slate-500" for="regPrivacy">
-                                        Acepto las <a href="#" class="text-primary fw-bold text-decoration-none" data-bs-toggle="modal" data-bs-target="#privacyModal">Políticas de Privacidad</a>
+                                        Acepto las <a href="#" class="text-primary fw-bold text-decoration-none"
+                                            data-bs-toggle="modal" data-bs-target="#privacyModal">Políticas de
+                                            Privacidad</a>
                                     </label>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-success btn-lg w-100 py-3 mt-4 shadow-lg fw-bold border-0" style="border-radius: 14px; background: #10b981;">
+                            <button type="submit"
+                                class="btn btn-success btn-lg w-100 py-3 mt-4 shadow-lg fw-bold border-0"
+                                style="border-radius: 14px; background: #10b981;">
                                 Crear mi Cuenta
                             </button>
                         </div>
@@ -118,15 +142,21 @@
                     <div class="mb-4">
                         <label class="form-label small fw-bold text-slate-700 mb-2">Correo Electrónico</label>
                         <div class="input-group">
-                            <span class="input-group-text bg-slate-50 border-slate-200 ps-3 pe-2"><i data-feather="mail" style="width: 18px; color: #64748b;"></i></span>
-                            <input type="email" class="form-control form-control-lg border-slate-200 border-start-0 ps-1" id="forgotEmail" placeholder="correo@ejemplo.com" style="border-radius: 0 12px 12px 0; font-size: 0.95rem;" required>
+                            <span class="input-group-text bg-slate-50 border-slate-200 ps-3 pe-2"><i data-feather="mail"
+                                    style="width: 18px; color: #64748b;"></i></span>
+                            <input type="email"
+                                class="form-control form-control-lg border-slate-200 border-start-0 ps-1"
+                                id="forgotEmail" placeholder="correo@ejemplo.com"
+                                style="border-radius: 0 12px 12px 0; font-size: 0.95rem;" required>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-lg w-100 py-3 shadow-lg fw-bold border-0" style="border-radius: 14px; background: #006FB3;">
+                    <button type="submit" class="btn btn-primary btn-lg w-100 py-3 shadow-lg fw-bold border-0"
+                        style="border-radius: 14px; background: #006FB3;">
                         Enviar Link de Recuperación
                     </button>
                     <div class="text-center mt-4">
-                        <a href="javascript:void(0)" onclick="showForm('login')" class="text-slate-500 small fw-bold text-decoration-none">Volver al Login</a>
+                        <a href="javascript:void(0)" onclick="showForm('login')"
+                            class="text-slate-500 small fw-bold text-decoration-none">Volver al Login</a>
                     </div>
                 </form>
 
@@ -350,6 +380,7 @@
                     }
                 });
         }
+
     </script>
     <!-- Privacy Policy Modal -->
     <div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">

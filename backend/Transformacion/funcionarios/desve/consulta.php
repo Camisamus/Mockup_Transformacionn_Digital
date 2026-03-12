@@ -10,6 +10,8 @@ include '../../api/general/header.php';
 <link
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
 
 <script id="tailwind-config">
     tailwind.config = {
@@ -65,10 +67,36 @@ include '../../api/general/header.php';
         font-size: 11px;
     }
 
-    /* Sombras exactas de test2.php */
     .gob-card {
         border: 1px solid rgba(226, 232, 240, 0.6);
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Estilos DataTables para que no rompan el diseño Tailwind */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_processing,
+    .dataTables_wrapper .dataTables_paginate {
+        font-size: 12px;
+        color: #64748b !important;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    table.dataTable thead th {
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+
+    table.dataTable no-footer {
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: #1a5f9c !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
     }
 </style>
 
@@ -314,6 +342,9 @@ include '../../api/general/header.php';
 <!-- Export Libraries -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 <script src="../../recursos/js/export_utils.js"></script>
 <script>
     feather.replace();

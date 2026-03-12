@@ -10,7 +10,10 @@ include '../../api/general/header.php';
 <link
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script id="tailwind-config">
 
 <script id="tailwind-config">
     tailwind.config = {
@@ -46,70 +49,37 @@ include '../../api/general/header.php';
         vertical-align: middle;
     }
 
+    /* Sombras suaves */
     .gob-card {
         border: 1px solid rgba(226, 232, 240, 0.6);
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
 
-    /* Estilo para que la paginación de DataTables combine con tu interfaz */
-    .dataTables_paginate {
-        padding: 15px;
-        display: flex;
-        justify-content: flex-end;
-        gap: 0 !important;
-    }
-
-    .paginate_button {
-        border: 1px solid #e2e8f0 !important;
-        background: white !important;
-        color: #1a5f9c !important;
-        /* Azul primario */
-        font-size: 13px;
-        font-weight: 600;
-        cursor: pointer;
-        margin-left: -1px;
-        /* Une los botones */
-        transition: all 0.2s ease;
-        text-decoration: none !important;
-        display: inline-block;
-    }
-
-    /* Botón Anterior */
-    .paginate_button:first-child,
-    .previous.paginate_button {
-        border-radius: 8px 0 0 8px !important;
-        margin-left: 0;
-        background: #f1f5f9 !important;
-        /* Gris de la imagen */
+    /* Estilos DataTables para que no rompan el diseño Tailwind */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_processing,
+    .dataTables_wrapper .dataTables_paginate {
+        font-size: 12px;
         color: #64748b !important;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
     }
 
-    /* Botón Siguiente */
-    .paginate_button:last-child,
-    .next.paginate_button {
-        border-radius: 0 8px 8px 0 !important;
+    table.dataTable thead th {
+        border-bottom: 1px solid #f1f5f9 !important;
     }
 
-    /* Botón Activo */
-    .paginate_button.current {
-        background: #007bff !important;
-        /* Azul vibrante de la imagen */
+    table.dataTable no-footer {
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: #1a5f9c !important;
         color: white !important;
-        border-color: #007bff !important;
-        z-index: 3;
-    }
-
-    /* Puntos suspensivos / deshabilitados */
-    .paginate_button.disabled:not(.previous):not(.next),
-    .ellipsis {
-        background: #f1f5f9 !important;
-        color: #64748b !important;
-        cursor: default;
-    }
-
-    .paginate_button:hover:not(.current):not(.disabled) {
-        background: #f8fafc !important;
-        z-index: 2;
+        border: none !important;
+        border-radius: 8px !important;
     }
 </style>
 
@@ -187,51 +157,37 @@ include '../../api/general/header.php';
     </div>
 
     <div class="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
-        <div class="p-4 border-b border-slate-50 bg-white">
+        <div class="p-4 border-b border-slate-50 bg-white flex justify-between items-center">
             <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary-blue">list_alt</span> Listado de Ingresos Recientes
+                <span class="material-symbols-outlined text-primary-blue">list_alt</span> Ingresos Pendientes (Vista Rápida)
             </h3>
+            <span class="text-xs font-semibold text-slate-400">Listado de trámites activos</span>
         </div>
-        <div class="p-0">
-            <div class="table-responsive">
-                <table id="tablaPrincipal" class="w-full text-left border-collapse">
-                    <thead>
-                        <tr
-                            class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
-                            <th class="px-6 py-4">ID</th>
-                            <th class="px-6 py-4">Accion</th>
-                            <th class="px-6 py-4">Título / Contenido</th>
-                            <th class="px-6 py-4 text-center">Fecha Ingreso</th>
-                            <th class="px-6 py-4 text-center">Fecha Vencimiento</th>
-                            <th class="px-6 py-4 text-center">Estado</th>
-                            <th class="px-6 py-4">Asignación</th>
-                            <th class="px-6 py-4 text-right">Cód. Público</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabla_ingresos" class="divide-y divide-slate-100 text-[13px] text-slate-600">
-                        <tr>
-                            <td colspan="8" class="px-6 py-10 text-center">
-                                <div class="flex flex-col items-center gap-2 text-slate-400">
-                                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-blue"></div>
-                                    <span class="font-medium italic">Cargando registros...</span>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div id="pagination_container"
-            class="p-4 bg-slate-50/50 flex justify-between items-center border-t border-slate-100">
-            <div class="pagination-info text-xs font-semibold text-slate-400">Mostrando registros recientes</div>
+        <div class="overflow-x-auto p-4">
+            <table class="w-full text-left" id="tablaPrincipal">
+                <thead>
+                    <tr
+                        class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
+                        <th class="text-center px-6 py-4">Cod. Ingreso</th>
+                        <th class="px-6 py-4">Rol</th>
+                        <th class="px-6 py-4">Materia / Título</th>
+                        <th class="text-center px-6 py-4">Fecha Ing.</th>
+                        <th class="text-center px-6 py-4">Vencimiento</th>
+                        <th class="text-center px-6 py-4">Estado</th>
+                        <th class="text-center px-6 py-4">Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla_ingresos" class="divide-y divide-slate-100 text-[13px] text-slate-600">
+                </tbody>
+            </table>
         </div>
     </div>
 
 </div>
 
-<script src="../../recursos/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/feather-icons"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 <script>
     feather.replace();
 </script>

@@ -145,10 +145,9 @@ function renderTable(data) {
                 ? '<span class="px-2 py-1 rounded-md bg-amber-50 text-green-600 text-[12px] font-bold">Autor</span>'
                 : '<span class="px-2 py-1 rounded-md bg-amber-50 text-amber-600 text-[12px] font-bold">Responsable</span>'}
                 </td>
-                <td><b>${item.sol_nombre_expediente.toUpperCase() || '-'}</b><br>${resolvedOrigen.toUpperCase()}</td>
+                <td><a href="ver.php?id=${item.sol_id}" class="link">${item.sol_nombre_expediente.toUpperCase() || '-'}</a><br>${resolvedOrigen.toUpperCase()}</td>>
                 <td class="text-center">${formatDate(item.sol_fecha_recepcion) || ''}</td>
                 <td class="text-center">${formatDate(item.sol_fecha_vencimiento) || ''}</td>
-
                 <td class="text-center">
                     <span class="px-2 py-1 rounded-md text-[10px] font-bold ${item.sol_prioridad_id == 3 ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600'}">
                         ${prio.pri_nombre || 'N/A'}

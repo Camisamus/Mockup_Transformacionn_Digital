@@ -98,6 +98,8 @@ function renderizarDatos(d) {
     if ($('#oig_solicitud_ejecutada').length === 0) $('label:contains("¿La solicitud será ejecutada?")').next('select').attr('id', 'oig_solicitud_ejecutada');
 
     // Datos Principales (Some pre-filled by PHP, others need JS processing)
+    $('#oirs_id_visual').val(d.oirs_id || 'N/A');
+    $('#oirs_estado_visual').val(d.oirs_estado || 'Sin asignar');
     $('#oirs_folio').html(`Folio: <strong class="text-white">${d.rgt_id_publica || d.oirs_id || 'N/A'}</strong>`);
 
     const fechaHora = d.oirs_creacion ? d.oirs_creacion.split(' ') : ['', ''];
@@ -135,7 +137,12 @@ function renderizarDatos(d) {
         $('#btn_responder_preliminar').hide();
         $('#info_auditoria_preliminar').show();
         $('#txt_preliminar_user').text(`Respuesta entregada por: ${g.oig_res_pre_origen_nombre || '-'}`);
-        $('#txt_preliminar_fec').text(`Fecha: ${g.oig_res_pre_fecha || '-'}`);
+        let fPre = '-';
+        if (g.oig_res_pre_fecha) {
+            let partes = g.oig_res_pre_fecha.split(' ')[0].split('-');
+            fPre = partes.length === 3 ? `${partes[2]}-${partes[1]}-${partes[0]}` : g.oig_res_pre_fecha;
+        }
+        $('#txt_preliminar_fec').text(`Fecha: ${fPre}`);
     } else {
         $('#oig_respuesta_preliminar').prop('disabled', false);
         $('#btn_responder_preliminar').show();
@@ -147,7 +154,8 @@ function renderizarDatos(d) {
     // 2. Respuesta Técnica
     const requiresTechnical = (g.oig_requiere_respuesta_tecnica == 1 || g.oig_requiere_respuesta_tecnica === 'Si');
     // SEQUENTIAL: Mostrar bloque técnico SOLO si la preliminar ya fue guardada y requiere técnica
-    if (hasPrelimRes && requiresTechnical) {
+    const mostrarPorPermiso = window.oirsData && window.oirsData.permisos ? window.oirsData.permisos.mostrarBloqueTecnica : true;
+    if (hasPrelimRes && requiresTechnical && mostrarPorPermiso) {
         $('#container_respuesta_tecnica').show();
         $('#oig_respuesta_tecnica').val(g.oig_respuesta_tecnica || "");
 
@@ -157,7 +165,12 @@ function renderizarDatos(d) {
             $('#btn_responder_tecnico').hide();
             $('#info_auditoria_tecnica').show();
             $('#txt_tecnica_user').text(`Respuesta entregada por: ${g.oig_res_tec_origen_nombre || '-'}`);
-            $('#txt_tecnica_fec').text(`Fecha: ${g.oig_res_tec_fecha || '-'}`);
+            let fTec = '-';
+            if (g.oig_res_tec_fecha) {
+                let partes = g.oig_res_tec_fecha.split(' ')[0].split('-');
+                fTec = partes.length === 3 ? `${partes[2]}-${partes[1]}-${partes[0]}` : g.oig_res_tec_fecha;
+            }
+            $('#txt_tecnica_fec').text(`Fecha: ${fTec}`);
         } else {
             $('#oig_respuesta_tecnica').prop('disabled', false);
             $('#btn_responder_tecnico').show();
@@ -174,7 +187,8 @@ function renderizarDatos(d) {
     const executionPlanned = (g.oig_solicitud_ejecutada == 1 || g.oig_solicitud_ejecutada === 'Si');
     const hasTechnicalRes = g.oig_respuesta_tecnica && g.oig_respuesta_tecnica.trim() !== '';
     // SEQUENTIAL: Mostrar bloque ejecución SOLO si la técnica ya fue guardada y está planificada
-    if (hasTechnicalRes && executionPlanned) {
+    const mostrarEjecucionPorPermiso = window.oirsData && window.oirsData.permisos ? window.oirsData.permisos.mostrarBloqueEjecucion : true;
+    if (hasTechnicalRes && executionPlanned && mostrarEjecucionPorPermiso) {
         $('#container_notificacion_ejecucion').show();
         $('#oig_notificacion_ejecucion').val(g.oig_notificacion_ejecucion || "");
         $('#oig_realizada_en_plazo').val(g.oig_realizada_en_plazo || "");
@@ -185,7 +199,12 @@ function renderizarDatos(d) {
             $('#btn_notificar_ejecucion').hide();
             $('#info_auditoria_ejecucion').show();
             $('#txt_ejecucion_user').text(`Respuesta entregada por: ${g.oig_res_not_origen_nombre || '-'}`);
-            $('#txt_ejecucion_fec').text(`Fecha: ${g.oig_res_not_fecha || '-'}`);
+            let fExe = '-';
+            if (g.oig_res_not_fecha) {
+                let partes = g.oig_res_not_fecha.split(' ')[0].split('-');
+                fExe = partes.length === 3 ? `${partes[2]}-${partes[1]}-${partes[0]}` : g.oig_res_not_fecha;
+            }
+            $('#txt_ejecucion_fec').text(`Fecha: ${fExe}`);
         } else {
             $('#oig_notificacion_ejecucion').prop('disabled', false);
             $('#btn_notificar_ejecucion').show();
@@ -267,12 +286,89 @@ function renderHistorial(historial) {
     const container = $('#timeline_container');
     container.empty();
 
-    historial.forEach(h => {
-        const fecha = new Date(h.bit_creacion).toLocaleString('es-CL');
+    if (!historial || historial.length === 0) {
+        container.append('<p class="text-muted text-center p-4">No hay registros en el historial aún.</p>');
+        return;
+    }
+
+    historial.forEach((h, index) => {
+        // 1. Formatear la fecha a un formato limpio: DD/MM/AAAA HH:mm AM/PM
+        let fechaFormateada = 'Fecha no disponible';
+        if (h.bit_creacion) {
+            const dateObj = new Date(h.bit_creacion);
+            fechaFormateada = dateObj.toLocaleDateString('es-CL', {
+                day: '2-digit', month: '2-digit', year: 'numeric'
+            }) + ' ' + dateObj.toLocaleDateString('en-US', { // en-US para obtener AM/PM
+                hour: '2-digit', minute: '2-digit', hour12: true
+            }).split(', ')[1]; // Tomar solo la parte de la hora
+        }
+
+        const usuario = `${h.usr_nombre || ''} ${h.usr_apellido || ''}`.trim();
+
+        // 2. Limpiar el título del evento (Especial para asignaciones)
+        let eventoVisual = h.bit_evento;
+        if (h.bit_evento.includes('Asignación de OIRS')) {
+            // Buscamos el ID del funcionario asignado en la cadena: "... (Funcionario ID: X)"
+            const regex = /\(Funcionario ID: (\d+)\)/;
+            const match = h.bit_evento.match(regex);
+            
+            if (match && match[1]) {
+                const idAsignado = match[1];
+                
+                // 1. Buscar en la lista global de funcionarios
+                let funcionario = window.oirsData?.listas?.funcionarios?.find(f => (f.fnc_id == idAsignado || f.id == idAsignado));
+                let nombreAsignado = '';
+
+                if (funcionario) {
+                    nombreAsignado = `${funcionario.fnc_nombre || funcionario.nombre || ''} ${funcionario.fnc_apellido || funcionario.apellido || ''}`.trim();
+                } else {
+                    // 2. Buscar como respaldo en las asignaciones de la solicitud (donde ya vienen los nombres resueltos del backend)
+                    const asgResp = window.oirsData?.solicitud?.asignaciones?.find(a => a.oia_asignacion == idAsignado);
+                    if (asgResp) {
+                        nombreAsignado = `${asgResp.usr_nombre || ''} ${asgResp.usr_apellido || ''}`.trim();
+                    }
+                }
+                
+                if (nombreAsignado) {
+                    eventoVisual = `Asignación de OIRS a ${nombreAsignado}`;
+                } else {
+                    // Si no lo encuentra, al menos quitamos el "(Funcionario ID: X)" para que se vea más limpio
+                    eventoVisual = h.bit_evento.split(' por ')[0] + ' a Funcionario (ID: ' + idAsignado + ')';
+                }
+            }
+        }
+
+        // 3. Determinar si es el último elemento para ocultar la línea conectoras
+        const isLast = index === historial.length - 1;
+        const lineClass = isLast ? 'd-none' : '';
+
+        // 4. Construir el ítem de la línea de tiempo
         const item = `
-            <div class="timeline-item">
-                <span class="d-block font-weight-bold text-dark">${h.bit_evento}</span>
-                <small class="text-muted">${fecha} - ${h.usr_nombre || ''} ${h.usr_apellido || ''}</small>
+            <div class="timeline-item d-flex position-relative mb-0">
+                <div class="timeline-markers d-flex flex-col align-items-center position-relative me-4">
+                    <div class="timeline-badge bg-primary rounded-circle" 
+                         style="width: 12px; height: 12px; margin-top: 6px; z-index: 2;">
+                    </div>
+                    <div class="timeline-line position-absolute ${lineClass}" 
+                         style="width: 2px; background-color: #e0e6ed; top: 12px; bottom: -12px; left: 5px; z-index: 1;">
+                    </div>
+                </div>
+
+                <div class="timeline-content pb-5">
+                    <h5 class="font-weight-bold text-dark mb-1" style="font-size: 1.1rem; line-height: 1.2;">
+                        ${eventoVisual}
+                    </h5>
+                    
+                    <div class="text-muted mb-2" style="font-size: 0.9rem;">
+                        ${fechaFormateada} - Por ${usuario || 'Sistema'}
+                    </div>
+
+                    ${h.bit_comentario ? `
+                        <p class="text-secondary mb-0" style="font-size: 0.95rem; max-width: 600px;">
+                            ${h.bit_comentario}
+                        </p>
+                    ` : ''}
+                </div>
             </div>
         `;
         container.append(item);
@@ -357,7 +453,7 @@ function renderAsignaciones(asignaciones) {
 
         // Determinar instrucción (manejar case sensitivity)
         const instruccion = asg.oia_instruccion || asg.oia_Instruccion || '<i>Sin instrucción específica</i>';
-        
+
         // --- Lógica de Permisos ---
         const currentUserId = window.oirsData?.currentUserId || 0;
         const esAsignador = currentUserId == asg.oia_asignador;
@@ -365,10 +461,10 @@ function renderAsignaciones(asignaciones) {
         const estaFinalizada = asg.oia_estado == 2;
         const puedeGestionar = (esAsignador || esAsignado) && !estaFinalizada;
 
-        const deleteButton = esAsignador 
+        const deleteButton = esAsignador
             ? `<button type="button" onclick="eliminarAsignacion(event, ${asg.oia_id})" class="text-slate-400 hover:text-red-500 transition-colors p-1" title="Eliminar asignación">
                    <span class="material-symbols-outlined text-lg">delete</span>
-               </button>` 
+               </button>`
             : '';
 
         const managementBlock = puedeGestionar ? `
@@ -428,10 +524,10 @@ function renderAsignaciones(asignaciones) {
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
-                        ${estaFinalizada 
-                            ? '<span class="badge rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-teal-50 text-teal-600 border border-teal-100" style="background-color: #f0fdf4; color: #059669; border: 1px solid #bbf7d0;">Finalizada</span>'
-                            : '<span class="badge rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-600 border border-amber-100" style="background-color: #fffbeb; color: #d97706; border: 1px solid #fef3c7;">Asignación</span>'
-                        }
+                        ${estaFinalizada
+                ? '<span class="badge rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-teal-50 text-teal-600 border border-teal-100" style="background-color: #f0fdf4; color: #059669; border: 1px solid #bbf7d0;">Finalizada</span>'
+                : '<span class="badge rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-600 border border-amber-100" style="background-color: #fffbeb; color: #d97706; border: 1px solid #fef3c7;">Asignación</span>'
+            }
                         ${deleteButton}
                         <span class="material-symbols-outlined text-slate-300 transition-transform dropdown-icon">expand_more</span>
                     </div>
@@ -556,13 +652,19 @@ function cargarHistorialAsignacion(asgId, fechaCreacion, instruccion, containerI
                 if (msg.oac_marcado == 1) statusBadge = '<span class="ml-2 px-2 py-0.5 bg-teal-100 text-teal-700 text-[9px] font-bold rounded-full uppercase" style="background-color: #d1fae5; color: #047857;">Aprobada</span>';
                 if (msg.oac_marcado == 2) statusBadge = '<span class="ml-2 px-2 py-0.5 bg-rose-100 text-rose-700 text-[9px] font-bold rounded-full uppercase" style="background-color: #ffe4e6; color: #be123e;">Corrección</span>';
 
+                const copyBtn = !isMe ? `
+                    <button type="button" class="ml-auto text-slate-400 hover:text-primary-blue transition-colors flex items-center justify-center p-1 rounded-lg hover:bg-slate-100" title="Copiar respuesta" onclick="copiarTextoPortapapeles(\`${msg.oac_mensaje.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)">
+                        <span class="material-symbols-outlined text-[16px]">content_copy</span>
+                    </button>` : '';
+
                 htmlChat += `
                 <div class="flex ${alignment} mb-4" style="display: flex; ${isMe ? 'justify-content: flex-end;' : ''}">
                     <div class="${bgColor} border rounded-2xl p-4 max-w-[85%] shadow-sm" style="${extraStyles} min-width: 200px; border: 1px solid #e2e8f0; background-color: ${isMe ? '#ffffff' : '#f0f9ff'};">
-                        <div class="flex items-center mb-1 gap-2" style="display: flex; align-items: center;">
+                        <div class="flex items-center mb-1 gap-2" style="display: flex; align-items: center; width: 100%;">
                             <span class="text-[10px] font-bold ${labelColor} uppercase tracking-widest">${label}</span>
                             <span class="text-[9px] text-slate-400">${new Date(msg.oac_creacion).toLocaleString()}</span>
                             ${statusBadge}
+                            ${copyBtn}
                         </div>
                         <p class="text-sm text-slate-700 m-0 mt-1">${msg.oac_mensaje}</p>
                     </div>
@@ -598,19 +700,19 @@ function gestionarAsignacion(asignacionId, marcado) {
     })
         .then(response => response.json())
         .then(res => {
-                if (res.status === 'success') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Éxito',
-                        text: 'Acción registrada correctamente',
-                        timer: 1500,
-                        showConfirmButton: false
-                    }).then(() => {
-                        location.reload();
-                    });
-                } else {
-                    Swal.fire('Error', res.message, 'error');
-                }
+            if (res.status === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Éxito',
+                    text: 'Acción registrada correctamente',
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                Swal.fire('Error', res.message, 'error');
+            }
         });
 }
 
@@ -799,13 +901,69 @@ function ejecutarActualizacion(data) {
                 Swal.fire('Error', res.message, 'error');
             }
         } catch (e) {
-            console.error('Error parsing JSON:', text);
-            Swal.fire('Error', 'Respuesta inválida del servidor: ' + text.substring(0, 100), 'error');
+            console.error('[OIRS] Error parseando respuesta:', e, 'Texto recibido:', text);
+            Swal.fire('Error', 'Error al procesar la respuesta del servidor.', 'error');
         }
-    }).catch(err => {
-        console.error('Error en actualización:', err);
-        Swal.fire('Error', 'No se pudo conectar con el servidor: ' + err.message, 'error');
+    }).catch(error => {
+        console.error("Error en ejecución:", error);
+        Swal.fire('Error', 'Hubo un error al procesar la solicitud.', 'error');
     });
+}
+
+function copiarTextoPortapapeles(texto) {
+    if (!texto) return;
+
+    const copiarYNotificar = () => {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+        Toast.fire({
+            icon: 'success',
+            title: 'Mensaje copiado al portapapeles'
+        });
+    };
+
+    // Intento con API moderna (Requiere HTTPS o localhost)
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(texto).then(copiarYNotificar).catch(err => {
+            console.error('Error al copiar al portapapeles:', err);
+            fallbackCopiarTexto(texto, copiarYNotificar);
+        });
+    } else {
+        // Fallback para contextos no seguros (HTTP)
+        fallbackCopiarTexto(texto, copiarYNotificar);
+    }
+}
+
+function fallbackCopiarTexto(text, callback) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+
+    // Asegurar que no sea visible pero esté en el DOM
+    textArea.style.position = "fixed";
+    textArea.style.left = "-999999px";
+    textArea.style.top = "-999999px";
+    document.body.appendChild(textArea);
+
+    textArea.focus();
+    textArea.select();
+
+    try {
+        const successful = document.execCommand('copy');
+        if (successful && callback) callback();
+    } catch (err) {
+        console.error('Error en el fallback de copia:', err);
+    }
+
+    document.body.removeChild(textArea);
 }
 
 window.initMap = function (latI, lngI, latH, lngH, addressH) {
@@ -829,6 +987,11 @@ window.initMap = function (latI, lngI, latH, lngH, addressH) {
     mapIncidente = new google.maps.Map(document.getElementById("map_incidente"), {
         center: posI,
         zoom: 15,
+        gestureHandling: 'none',      // Desactiva todos los gestos (arrastrar, zoom con dedos, etc.)
+        zoomControl: false,           // Quita los botones de +/-
+        scrollwheel: false,           // Desactiva el zoom con la rueda del ratón
+        disableDoubleClickZoom: true, // Desactiva el zoom al hacer doble clic
+        draggable: false,
     });
     markerIncidente = new google.maps.Marker({
         position: posI,
@@ -841,6 +1004,11 @@ window.initMap = function (latI, lngI, latH, lngH, addressH) {
         mapHome = new google.maps.Map(document.getElementById("map_home"), {
             center: location,
             zoom: 15,
+            gestureHandling: 'none',      // Desactiva todos los gestos (arrastrar, zoom con dedos, etc.)
+            zoomControl: false,           // Quita los botones de +/-
+            scrollwheel: false,           // Desactiva el zoom con la rueda del ratón
+            disableDoubleClickZoom: true, // Desactiva el zoom al hacer doble clic
+            draggable: false,
         });
         markerHome = new google.maps.Marker({
             position: location,

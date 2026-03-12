@@ -165,11 +165,14 @@ include '../../api/general/header.php';
             <table class="w-full text-left" id="table-oirs-consulta">
                 <thead>
                     <tr class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
-                        <th class="px-6 py-4">Folio / Fecha</th>
-                        <th class="px-6 py-4">Contribuyente</th>
-                        <th class="px-6 py-4">Temática</th>
+                        <th class="px-6 py-4">ID</th>
+                        <th class="px-6 py-4">Rol</th>
+                        <th class="px-6 py-4">Materia / Solicitante</th>
+                        <th class="px-6 py-4">Fech. Recepción</th>
+                        <th class="px-6 py-4">Fech. Venc.</th>
+                        <th class="px-6 py-4 text-center">Prioridad</th>
                         <th class="px-6 py-4 text-center">Estado</th>
-                        <th class="px-6 py-4 text-right">Acciones</th>
+                        <th class="px-6 py-4 text-center">Acción</th>
                     </tr>
                 </thead>
                 <tbody id="tbody-oirs-consulta" class="divide-y divide-slate-100 text-[15px] text-slate-600">

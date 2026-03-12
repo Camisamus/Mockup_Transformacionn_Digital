@@ -9,6 +9,8 @@ include '../../api/general/header.php';
 <link
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script id="tailwind-config">
     tailwind.config = {
@@ -69,6 +71,33 @@ include '../../api/general/header.php';
     .gob-card {
         border: 1px solid rgba(226, 232, 240, 0.6);
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Estilos DataTables para que no rompan el diseño Tailwind */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_processing,
+    .dataTables_wrapper .dataTables_paginate {
+        font-size: 12px;
+        color: #64748b !important;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    table.dataTable thead th {
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+
+    table.dataTable no-footer {
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: #1a5f9c !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
     }
 </style>
 <div class="max-w-[1400px] mx-auto p-4 lg:p-8 space-y-6">
@@ -143,22 +172,25 @@ include '../../api/general/header.php';
 
     <div class="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
         <div class="p-4 border-b border-slate-50 bg-white flex justify-between items-center">
-            <h3 class="font-bold text-slate-700">Solicitudes Urgentes / Próximas a Vencer</h3>
-            <span class="text-xs font-semibold text-slate-400">Mostrando top 5</span>
+            <h3 class="font-bold text-slate-700">Solicitudes Pendientes (Vista Rápida)</h3>
+            <span class="text-xs font-semibold text-slate-400">Listado completo de pendientes</span>
         </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-left">
+        <div class="overflow-x-auto p-4">
+            <table class="w-full text-left" id="tablaAtenciones">
                 <thead>
                     <tr
                         class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
-                        <th class="px-6 py-4">ID</th>
-                        <th class="px-6 py-4">Asunto</th>
-                        <th class="px-6 py-4">Días Restantes</th>
-                        <th class="px-6 py-4 text-center">Prioridad</th>
-                        <th class="px-6 py-4 text-right">Acción</th>
+                        <th class="text-center px-6 py-4">Cod. DESVE</th>
+                        <th class="px-6 py-4">Rol</th>
+                        <th class="px-6 py-4">Materia / Solicitante</th>
+                        <th class="text-center px-6 py-4">Fecha Rec.</th>
+                        <th class="text-center px-6 py-4">Vencimiento</th>
+                        <th class="text-center px-6 py-4">Prioridad</th>
+                        <th class="text-center px-6 py-4">Estado</th>
+                        <th class="text-center px-6 py-4">Acción</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100" id="tbody_desve">
+                <tbody id="tbody_desve" class="divide-y divide-slate-100 text-[13px] text-slate-600">
                 </tbody>
             </table>
         </div>
@@ -172,6 +204,9 @@ include '../../api/general/header.php';
 <!-- Export Libraries -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
 <script src="../../recursos/js/export_utils.js"></script>
 <script>
     feather.replace();

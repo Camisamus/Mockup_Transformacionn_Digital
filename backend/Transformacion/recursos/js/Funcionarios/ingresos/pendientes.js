@@ -1,4 +1,4 @@
-﻿let allData = [];
+let allData = [];
 let dataTable = null;
 
 document.addEventListener('DOMContentLoaded', async function () {
@@ -6,51 +6,25 @@ document.addEventListener('DOMContentLoaded', async function () {
         window.API_BASE_URL = 'http://127.0.0.1/Transformacion/api';
     }
 
-    await cargarDatos();
+    await cargarPendientes();
 
     document.getElementById('btn_exportar_excel').addEventListener('click', () => {
-        exportToExcel('tablaResultados', 'Historial_Ingresos');
+        exportToExcel('tablaPendientes', 'Ingresos_Pendientes');
     });
     document.getElementById('btn_exportar_pdf').addEventListener('click', () => {
-        exportElementToPDF('tablaResultados', 'Historial_Ingresos');
+        exportElementToPDF('tablaPendientes', 'Ingresos_Pendientes');
     });
-
-    // Global filtering functions
-    window.buscarIngresos = function () {
-        const filtros = {
-            tis_id: document.getElementById('filtro_id').value,
-            fecha_inicio: document.getElementById('filtro_fecha_inicio').value,
-            fecha_fin: document.getElementById('filtro_fecha_fin').value,
-            tis_estado: document.getElementById('filtro_estado').value
-        };
-        cargarDatos(filtros);
-    };
-
-    window.limpiarFiltros = function () {
-        document.getElementById('formFiltros').reset();
-        cargarDatos();
-    };
 });
 
-async function cargarDatos(filters = {}) {
+async function cargarPendientes() {
     try {
-        const payload = {
-            ACCION: 'CONSULTAM',
-            S: 'HISTORIAL',
-            ...filters
-        };
-
-        // If tis_estado is selected as 'all' or not selected, don't force a filter
-        if (filters.tis_estado === '' || !filters.tis_estado) {
-            delete payload.tis_estado;
-        } else {
-            payload.tis_estado = [filters.tis_estado];
-        }
-
         const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({
+                ACCION: 'CONSULTAM',
+                tis_estado: 'Ingresado' // Solo pendientes
+            })
         });
 
         const result = await response.json();
@@ -60,15 +34,15 @@ async function cargarDatos(filters = {}) {
             renderizarTabla(allData);
         }
     } catch (error) {
-        console.error('Error loading history:', error);
+        console.error('Error loading pendientes:', error);
     }
 }
 
 function renderizarTabla(data) {
-    const table = $('#tablaResultados');
-    const tbody = $('#tbody_ingresos');
+    const table = $('#tablaPendientes');
+    const tbody = $('#tbody_pendientes');
 
-    if ($.fn.DataTable.isDataTable('#tablaResultados')) {
+    if ($.fn.DataTable.isDataTable('#tablaPendientes')) {
         dataTable.destroy();
     }
 
@@ -122,7 +96,7 @@ function renderizarTabla(data) {
 
     dataTable = table.DataTable({
         responsive: true,
-        order: [[0, 'desc']],
+        order: [[4, 'asc']], // Vencimiento más próximo primero
         pageLength: 10,
         language: {
             url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json"
@@ -136,7 +110,7 @@ function renderizarTabla(data) {
     });
 
     // Toggle details
-    $('#tablaResultados tbody').on('click', '.btn-toggle-details', function (e) {
+    $('#tablaPendientes tbody').on('click', '.btn-toggle-details', function (e) {
         e.stopPropagation();
         const tr = $(this).closest('tr');
         const row = dataTable.row(tr);
@@ -189,8 +163,9 @@ function formatDetails(d) {
 function getStatusColors(estado) {
     if (!estado) return 'bg-blue-50 text-blue-600 border-blue-100';
     estado = estado.toLowerCase();
-    if (estado.includes('favorable') && !estado.includes('no_favorable')) return 'bg-emerald-50 text-emerald-600 border-emerald-100';
+    if (estado.includes('favorable')) return 'bg-emerald-50 text-emerald-600 border-emerald-100';
     if (estado.includes('rechazado') || estado.includes('no_favorable')) return 'bg-rose-50 text-rose-600 border-rose-100';
+    if (estado.includes('pendiente') || estado.includes('ingresado')) return 'bg-amber-50 text-amber-600 border-amber-100';
     return 'bg-blue-50 text-blue-600 border-blue-100';
 }
 

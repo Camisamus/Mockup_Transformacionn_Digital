@@ -10,6 +10,8 @@ include '../../api/general/header.php';
 <link
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
 <link href="https://unpkg.com/vis-network/styles/vis-network.min.css" rel="stylesheet" type="text/css" />
 
 <script id="tailwind-config">
@@ -135,9 +137,37 @@ include '../../api/general/header.php';
         line-height: 1;
     }
 
+    /* Sombras suaves */
     .gob-card {
         border: 1px solid rgba(226, 232, 240, 0.6);
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Estilos DataTables para que no rompan el diseño Tailwind */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_processing,
+    .dataTables_wrapper .dataTables_paginate {
+        font-size: 12px;
+        color: #64748b !important;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    table.dataTable thead th {
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+
+    table.dataTable no-footer {
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: #1a5f9c !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 8px !important;
     }
 </style>
 
@@ -220,47 +250,56 @@ include '../../api/general/header.php';
         </div>
     </div>
 
-    <div class="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden min-h-[400px]">
+    <div class="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
         <div class="p-5 border-b border-slate-50 flex justify-between items-center bg-white">
             <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
                 <span class="material-symbols-outlined text-primary-blue">list_alt</span> Resultados encontrados
-                <span
-                    class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-[10px] ml-2 font-black border border-slate-200"
-                    id="resultados_count">0</span>
             </h3>
+            <div class="flex gap-3">
+                <button type="button"
+                    class="flex items-center gap-2 bg-[#1d7344] hover:bg-[#155a34] text-white px-5 py-2.5 rounded-lg text-xs font-bold transition-all shadow-md uppercase tracking-wider"
+                    id="btn_exportar_excel">
+                    <span class="material-symbols-outlined text-sm">description</span> EXCEL
+                </button>
+                <button type="button"
+                    class="flex items-center gap-2 bg-[#d32f2f] hover:bg-[#b71c1c] text-white px-5 py-2.5 rounded-lg text-xs font-bold transition-all shadow-md uppercase tracking-wider"
+                    id="btn_exportar_pdf">
+                    <span class="material-symbols-outlined text-sm">picture_as_pdf</span> PDF
+                </button>
+            </div>
         </div>
 
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto p-4">
             <table class="w-full text-left" id="tablaResultados">
                 <thead>
                     <tr
                         class="bg-slate-50 text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-100">
                         <th class="px-6 py-4">ID</th>
-                        <th class="px-6 py-4">Ver</th>
+                        <th class="px-6 py-4">Rol</th>
                         <th class="px-6 py-4">Título / Contenido</th>
-                        <th class="px-6 py-4 text-center">Fecha</th>
+                        <th class="px-6 py-4 text-center">Fecha Ing.</th>
+                        <th class="px-6 py-4 text-center">Vencimiento</th>
                         <th class="px-6 py-4 text-center">Estado</th>
-                        <th class="px-6 py-4">Tipo Ingreso</th>
-                        <th class="px-6 py-4">Responsable</th>
+                        <th class="px-6 py-4 text-center">Acción</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 text-[13px] text-slate-600">
+                <tbody id="tbody_ingresos" class="divide-y divide-slate-100 text-[13px] text-slate-600">
                 </tbody>
             </table>
-        </div>
-
-        <div id="pagination_container" class="p-6 bg-white border-t border-slate-50 flex justify-between items-center">
         </div>
     </div>
 </div>
 
-<script src="../../recursos/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/feather-icons"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<!-- Export Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="../../recursos/js/export_utils.js"></script>
 <script>
     feather.replace();
 </script>
 <script src="../../recursos/js/funcionarios/ingresos/permisos.js"></script>
-<script src="../../recursos/js/funcionarios/ingresos/consultar.js"></script>
+<script src="../../recursos/js/funcionarios/ingresos/consulta.js"></script>
 
 <?php include '../../api/general/footer.php'; ?>

@@ -174,13 +174,14 @@ class OIRS_Gestion
                   LEFT JOIN trd_oirs_tematicas tem ON s.oirs_tematica = tem.tem_id AND tem.tem_borrado = 0";
         
         // Si es Admin OIRS, el join con asignaciones es global para la vista revisar
-        if ($esAdminOirs && $view === 'revisar') {
+        if ($esAdminOirs && $view === 'por_revisar') {
             $query .= " LEFT JOIN trd_oirs_asignaciones a ON s.oirs_id = a.oia_solicitud AND a.oia_borrado = 0";
         } else {
             $query .= " LEFT JOIN trd_oirs_asignaciones a ON s.oirs_id = a.oia_solicitud AND a.oia_asignacion = :u_join AND a.oia_borrado = 0";
         }
         
         $query .= " WHERE s.oirs_borrado = 0 AND r.rgt_borrado = 0";
+
 
         switch ($view) {
             case 'bandeja':
@@ -195,13 +196,28 @@ class OIRS_Gestion
                             AND s.oirs_estado IN (0, 1, 2)";
                 break;
 
-            case 'revisar':
+            case 'por_revisar':
                 // Si es Admin OIRS ve todas las visadas (estado 1)
                 // Si no, solo las que tiene asignadas personalmente
                 if (!$esAdminOirs) {
                     $query .= " AND a.oia_asignacion = :u1";
                 }
-                $query .= " AND s.oirs_estado = 1";
+                $query = "SELECT s.*, 
+                         s.oirs_creacion as oirs_fecha_ingreso,
+                         r.rgt_creador, r.rgt_id_publica as folio,
+                         t.oig_asignacion, t.oig_solicitud_ejecutada,
+                         CONCAT(tgc.tgc_nombre, ' ', tgc.tgc_apellido_paterno, ' ', tgc.tgc_apellido_materno) as nombre_contribuyente,
+                         tgc.tgc_rut as rut_contribuyente,
+                         tem.tem_nombre as oirs_tematica_nombre,
+                         subt.sub_nombre as oirs_subtematica_nombre
+                  FROM trd_oirs_solicitud s
+                  JOIN trd_general_registro_general_expedientes r ON s.oirs_registro_tramite = r.rgt_id
+                  LEFT JOIN trd_oirs_gestion t ON s.oirs_id = t.oig_solicitud AND t.oig_borrado = 0
+                  LEFT JOIN trd_general_contribuyentes tgc ON r.rgt_contribuyente = tgc.tgc_id AND tgc.tgc_borrado = 0
+                  LEFT JOIN trd_oirs_tematicas tem ON s.oirs_tematica = tem.tem_id AND tem.tem_borrado = 0 
+                  LEFT JOIN trd_oirs_subtematicas subt ON s.oirs_tematica = subt.sub_id AND subt.sub_borrado = 0 
+                  WHERE s.oirs_borrado = 0 AND r.rgt_borrado = 0 and oirs_estado=0 ";
+
                 break;
 
             case 'visar':

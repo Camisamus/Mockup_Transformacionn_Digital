@@ -8,63 +8,33 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     await cargarDatos();
 
-    document.getElementById('btn_exportar_excel').addEventListener('click', () => {
-        exportToExcel('tablaResultados', 'Historial_Ingresos');
-    });
-    document.getElementById('btn_exportar_pdf').addEventListener('click', () => {
-        exportElementToPDF('tablaResultados', 'Historial_Ingresos');
-    });
-
-    // Global filtering functions
-    window.buscarIngresos = function () {
-        const filtros = {
-            tis_id: document.getElementById('filtro_id').value,
-            fecha_inicio: document.getElementById('filtro_fecha_inicio').value,
-            fecha_fin: document.getElementById('filtro_fecha_fin').value,
-            tis_estado: document.getElementById('filtro_estado').value
-        };
-        cargarDatos(filtros);
-    };
-
-    window.limpiarFiltros = function () {
-        document.getElementById('formFiltros').reset();
-        cargarDatos();
-    };
+    document.getElementById('btn_exportar_excel').addEventListener('click', exportarExcel);
+    document.getElementById('btn_exportar_pdf').addEventListener('click', exportarPDF);
 });
 
 async function cargarDatos(filters = {}) {
     try {
-        const payload = {
-            ACCION: 'CONSULTAM',
-            S: 'HISTORIAL',
-            ...filters
-        };
-
-        // If tis_estado is selected as 'all' or not selected, don't force a filter
-        if (filters.tis_estado === '' || !filters.tis_estado) {
-            delete payload.tis_estado;
-        } else {
-            payload.tis_estado = [filters.tis_estado];
-        }
-
         const response = await fetch(`${window.API_BASE_URL}/ingresos/ingresos.php`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({
+                ACCION: 'CONSULTAMALL',
+                ...filters
+            })
         });
 
         const result = await response.json();
 
         if (result.status === 'success') {
             allData = result.data;
-            renderizarTabla(allData);
+            renderzarTabla(allData);
         }
     } catch (error) {
-        console.error('Error loading history:', error);
+        console.error('Error loading data:', error);
     }
 }
 
-function renderizarTabla(data) {
+function renderzarTabla(data) {
     const table = $('#tablaResultados');
     const tbody = $('#tbody_ingresos');
 
@@ -219,6 +189,29 @@ function getDeadlineBadge(fecha) {
     return `<span class="text-xs ${colorClass}">${fecha.substring(0, 10)}</span>`;
 }
 
+window.buscarIngresos = function () {
+    const filters = {
+        tis_id: document.getElementById('filtro_id').value,
+        fecha_inicio: document.getElementById('filtro_fecha_inicio').value,
+        fecha_fin: document.getElementById('filtro_fecha_fin').value,
+        tis_estado: document.getElementById('filtro_estado').value
+    };
+    cargarDatos(filters);
+}
+
+window.limpiarFiltros = function () {
+    document.getElementById('formFiltros').reset();
+    cargarDatos();
+}
+
 function verRegistro(id) {
     window.location.href = `ver.php?id=${id}`;
+}
+
+async function exportarExcel() {
+    exportToExcel('tablaResultados', 'Consulta_Ingresos');
+}
+
+async function exportarPDF() {
+    exportElementToPDF('tablaResultados', 'Consulta_Ingresos');
 }

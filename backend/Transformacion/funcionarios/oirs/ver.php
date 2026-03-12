@@ -52,6 +52,88 @@ if (isset($_GET['id'])) {
     }
 }
 
+if($_GET['debug']==1){
+    print_r($solicitudData);
+
+    echo "------<br><br>";
+    print_r($userOirsInfo);
+
+    echo "------<br><br>";
+    echo "Es Area<br>";
+
+
+    print_r($esOirsArea);
+}
+
+
+// Usamos (int) para asegurarnos de que la comparación sea numérica
+
+// Si requiere respuesta técnica 
+
+$respuestaTecnica=0;
+
+$esTecnica = ((int)$solicitudData['gestion']['oig_requiere_respuesta_tecnica'] === 1);
+
+if ($esTecnica) {
+    // Aquí tu lógica cuando requiere respuesta técnica
+    $respuestaTecnica=1;
+}
+
+$esAreaValida = 0; // Verificar si eres OIRS o eres un Asignado 
+
+// Son Encargado OIRS lo que estàn mirando.... 
+if (isset($userOirsInfo['tga_id']) && $userOirsInfo['tga_id'] == 2) {
+    // El area 2 es de OIRS y puede asignar 
+    $esAreaValida = 1;
+} 
+
+// Yo puedo asignar (Si o No)
+$yo = $_SESSION['user_id'];
+
+// Extraemos solo los IDs de la columna 'oia_asignacion'
+$asignadosIds = array_column($solicitudData['asignaciones'], 'oia_asignacion');
+
+// Validamos si tu ID está ahí
+if (in_array($yo, $asignadosIds)) {
+
+    // 
+    // ESTÁS ASIGNADO
+    $esAreaValida=1; // porque estoy metido en el mambo 
+} 
+
+
+/* si es administrador puede asignar porque si */ 
+
+
+$mostrarAsignacion=0;
+
+if($respuestaTecnica==1 && $esAreaValida==1){
+    $mostrarAsignacion=1;
+}
+
+
+/* esta oirs esta cerrada, nadie puede asginar más... . */ 
+
+// Lógica para Respuesta Preliminar
+$rolOIRS = $userOirsInfo['rol'] ?? '';
+$puedeResponderPreliminar = (strpos(strtolower($rolOIRS), 'encargado oirs') !== false || strpos(strtolower($rolOIRS), 'administrador oirs') !== false);
+$tieneRespuestaPreliminar = !empty($solicitudData['gestion']['oig_respuesta_preliminar']);
+
+// Visibilidad del bloque "Información al Contribuyente"
+$mostrarBloquePreliminar = $puedeResponderPreliminar || $tieneRespuestaPreliminar;
+$soloLecturaPreliminar = !$puedeResponderPreliminar && $tieneRespuestaPreliminar;
+
+// Lógica para Respuesta por Unidad Técnica
+$puedeResponderTecnica = (strpos(strtolower($rolOIRS), 'jefe/director') !== false || strpos(strtolower($rolOIRS), 'administrador oirs') !== false);
+$tieneRespuestaTecnica = !empty($solicitudData['gestion']['oig_respuesta_tecnica']);
+$mostrarBloqueTecnica = $puedeResponderTecnica || $tieneRespuestaTecnica;
+$soloLecturaTecnica = !$puedeResponderTecnica && $tieneRespuestaTecnica;
+
+// Lógica para Notificación de Ejecución
+$puedeNotificarEjecucion = (strpos(strtolower($rolOIRS), 'jefe/director') !== false || strpos(strtolower($rolOIRS), 'encargado temático') !== false || strpos(strtolower($rolOIRS), 'administrador oirs') !== false);
+$tieneNotificacionEjecucion = !empty($solicitudData['gestion']['oig_notificacion_ejecucion']);
+$mostrarBloqueEjecucion = $puedeNotificarEjecucion || $tieneNotificacionEjecucion;
+$soloLecturaEjecucion = !$puedeNotificarEjecucion && $tieneNotificacionEjecucion;
 ?>
 
 
@@ -274,6 +356,19 @@ if (isset($_GET['id'])) {
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div class="space-y-1">
+                        <label class="label-custom">N° OIRS</label>
+                        <input type="text" class="w-full rounded-xl border-slate-200 text-[15px] bg-slate-50 font-bold text-primary-blue text-center"
+                            id="oirs_id_visual" disabled>
+                    </div>
+                    <div class="space-y-1 md:col-start-4">
+                        <label class="label-custom">ESTADO</label>
+                        <input type="text" class="w-full rounded-xl border-slate-200 text-[15px] bg-slate-50 font-bold text-center"
+                            id="oirs_estado_visual" disabled placeholder="Sin asignar">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="space-y-1">
                         <label class="label-custom">Tipo Atención</label>
                         <select class="w-full rounded-xl border-slate-200 text-[15px] bg-slate-50 font-medium"
                             id="oirs_tipo_atencion" disabled>
@@ -398,33 +493,35 @@ if (isset($_GET['id'])) {
                         id="oirs_descripcion" rows="4" disabled></textarea>
                 </div>
 
-                <div class="bg-blue-50/50 border border-blue-100 rounded-3xl p-6 lg:p-8 space-y-6">
+                <div class="bg-blue-50/50 border border-blue-100 rounded-3xl p-6 lg:p-8 space-y-6" style="<?= !$mostrarBloquePreliminar ? 'display: none;' : '' ?>">
                     <h6
                         class="text-primary-blue font-bold text-xs uppercase tracking-widest border-b border-blue-200 pb-3">
-                        Información al Contribuyente</h6>
+                        Información al Contribuyente <?= $soloLecturaPreliminar ? '<span class="text-[10px] text-slate-400 font-normal ml-2">(Modo Lectura)</span>' : '' ?></h6>
                     <div class="space-y-4">
                         <div class="space-y-1">
                             <label class="label-custom text-primary-blue">Respuesta Preliminar</label>
                             <textarea
-                                class="w-full rounded-2xl border-slate-200 text-[15px] p-4 focus:ring-primary-blue shadow-sm"
+                                class="w-full rounded-2xl border-slate-200 text-[15px] p-4 shadow-sm <?= $soloLecturaPreliminar ? 'bg-slate-100 text-slate-500 cursor-not-allowed' : 'focus:ring-primary-blue' ?>"
                                 id="oig_respuesta_preliminar" rows="4"
-                                placeholder="Escriba la respuesta oficial..."><?= $solicitudData['gestion']['oig_respuesta_preliminar'] ?? '' ?></textarea>
+                                placeholder="Escriba la respuesta oficial..." <?= $soloLecturaPreliminar ? 'disabled' : '' ?>><?= $solicitudData['gestion']['oig_respuesta_preliminar'] ?? '' ?></textarea>
                         </div>
                         <div class="flex flex-col md:flex-row justify-between items-end gap-4">
                             <div class="w-full md:w-1/3 space-y-1">
                                 <label class="label-custom text-slate-500">¿Requiere respuesta técnica?</label>
                                 <select id="oig_requiere_respuesta_tecnica" name="oig_requiere_respuesta_tecnica"
-                                    class="form-control">
+                                    class="form-control <?= $soloLecturaPreliminar ? 'bg-slate-100 text-slate-500 cursor-not-allowed' : '' ?>" <?= $soloLecturaPreliminar ? 'disabled' : '' ?>>
                                     <option value="" <?= ($solicitudData && (!isset($solicitudData['gestion']) || empty($solicitudData['gestion']['oig_requiere_respuesta_tecnica']))) ? 'selected' : '' ?>>Seleccione...</option>
                                     <option value="1" <?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_requiere_respuesta_tecnica'] == 1 || $solicitudData['gestion']['oig_requiere_respuesta_tecnica'] === 'Si')) ? 'selected' : '' ?>>Si</option>
                                     <option value="0" <?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_requiere_respuesta_tecnica'] === '0' || $solicitudData['gestion']['oig_requiere_respuesta_tecnica'] === 0 || $solicitudData['gestion']['oig_requiere_respuesta_tecnica'] === 'No')) ? 'selected' : '' ?>>No</option>
                                 </select>
                             </div>
+                            <?php if (!$soloLecturaPreliminar): ?>
                             <button type="button"
                                 class="bg-primary-blue text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-blue-700 transition-all text-xs uppercase tracking-widest flex items-center gap-2"
                                 id="btn_responder_preliminar">
                                 <span class="material-symbols-outlined text-sm">send</span> Responder al Vecino
                             </button>
+                            <?php endif; ?>
                         </div>
                         <div id="info_auditoria_preliminar"
                             class="text-sm text-slate-600 mt-3 font-medium flex justify-between bg-white/50 p-2 rounded-lg border border-slate-100">
@@ -436,23 +533,23 @@ if (isset($_GET['id'])) {
 
                 <div id="container_respuesta_tecnica"
                     class="bg-emerald-50/50 border border-emerald-100 rounded-3xl p-6 lg:p-8 space-y-6"
-                    style="<?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_requiere_respuesta_tecnica'] == 1 || $solicitudData['gestion']['oig_requiere_respuesta_tecnica'] === 'Si')) ? '' : 'display: none;' ?>">
+                    style="<?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_requiere_respuesta_tecnica'] == 1 || $solicitudData['gestion']['oig_requiere_respuesta_tecnica'] === 'Si')) && $mostrarBloqueTecnica ? '' : 'display: none;' ?>">
                     <h6
                         class="text-gob-success font-bold text-xs uppercase tracking-widest border-b border-emerald-200 pb-3 flex items-center gap-2">
-                        <span class="material-symbols-outlined">engineering</span> Respuesta por Unidad Técnica
+                        <span class="material-symbols-outlined">engineering</span> Respuesta por Unidad Técnica <?= $soloLecturaTecnica ? '<span class="text-[10px] text-slate-400 font-normal ml-2">(Modo Lectura)</span>' : '' ?>
                     </h6>
                     <div class="space-y-4">
                         <div class="space-y-1">
                             <label class="label-custom text-gob-success">Respuesta Técnica</label>
-                            <textarea class="w-full rounded-2xl border-slate-200 text-[15px] p-4 shadow-sm"
+                            <textarea class="w-full rounded-2xl border-slate-200 text-[15px] p-4 shadow-sm <?= $soloLecturaTecnica ? 'bg-slate-100 text-slate-500 cursor-not-allowed' : 'focus:ring-gob-success' ?>"
                                 id="oig_respuesta_tecnica" rows="4"
-                                placeholder="Escriba la respuesta técnica..."><?= $solicitudData['gestion']['oig_respuesta_tecnica'] ?? '' ?></textarea>
+                                placeholder="Escriba la respuesta técnica..." <?= $soloLecturaTecnica ? 'disabled' : '' ?>><?= $solicitudData['gestion']['oig_respuesta_tecnica'] ?? '' ?></textarea>
                         </div>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                             <div class="space-y-1">
                                 <label class="label-custom text-slate-500">¿La solicitud será ejecutada?</label>
-                                <select class="w-full rounded-xl border-slate-200 text-[15px]"
-                                    id="oig_solicitud_ejecutada">
+                                <select class="w-full rounded-xl border-slate-200 text-[15px] <?= $soloLecturaTecnica ? 'bg-slate-100 text-slate-500 cursor-not-allowed' : '' ?>"
+                                    id="oig_solicitud_ejecutada" <?= $soloLecturaTecnica ? 'disabled' : '' ?>>
                                     <option value="">Seleccione...</option>
                                     <option value="1" <?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_solicitud_ejecutada'] == 1 || $solicitudData['gestion']['oig_solicitud_ejecutada'] === 'Si')) ? 'selected' : '' ?>>Si</option>
                                     <option value="0" <?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_solicitud_ejecutada'] == 0 || $solicitudData['gestion']['oig_solicitud_ejecutada'] === 'No')) ? 'selected' : '' ?>>No</option>
@@ -460,8 +557,8 @@ if (isset($_GET['id'])) {
                             </div>
                             <div class="space-y-1">
                                 <label class="label-custom text-slate-500">Fuente de Financiamiento</label>
-                                <select class="w-full rounded-xl border-slate-200 text-[15px]"
-                                    id="oig_fuente_financiamiento">
+                                <select class="w-full rounded-xl border-slate-200 text-[15px] <?= $soloLecturaTecnica ? 'bg-slate-100 text-slate-500 cursor-not-allowed' : '' ?>"
+                                    id="oig_fuente_financiamiento" <?= $soloLecturaTecnica ? 'disabled' : '' ?>>
                                     <option value="">Seleccione...</option>
                                     <option value="Contrato de Licitación" <?= ($solicitudData && isset($solicitudData['gestion']) && $solicitudData['gestion']['oig_fuente_financiamiento'] === 'Contrato de Licitación') ? 'selected' : '' ?>>Contrato de Licitación</option>
                                     <option value="Recursos Propios" <?= ($solicitudData && isset($solicitudData['gestion']) && $solicitudData['gestion']['oig_fuente_financiamiento'] === 'Recursos Propios') ? 'selected' : '' ?>>Recursos Propios</option>
@@ -469,11 +566,13 @@ if (isset($_GET['id'])) {
                                     <option value="Fondo Nacional" <?= ($solicitudData && isset($solicitudData['gestion']) && $solicitudData['gestion']['oig_fuente_financiamiento'] === 'Fondo Nacional') ? 'selected' : '' ?>>Fondo Nacional</option>
                                 </select>
                             </div>
+                            <?php if (!$soloLecturaTecnica): ?>
                             <button type="button"
                                 class="bg-primary-blue text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-blue-700 transition-all text-xs uppercase tracking-widest flex items-center justify-center gap-2"
                                 id="btn_responder_tecnico">
                                 <span class="material-symbols-outlined text-sm">send</span> Responder al Vecino
                             </button>
+                            <?php endif; ?>
                         </div>
                         <div id="info_auditoria_tecnica"
                             class="text-sm text-slate-600 mt-3 font-medium flex justify-between bg-white/50 p-2 rounded-lg border border-slate-100">
@@ -483,32 +582,34 @@ if (isset($_GET['id'])) {
                     </div>
                 </div>
                 <div id="container_notificacion_ejecucion"
-                    class="bg-slate-50 border border-slate-200 rounded-3xl p-6 lg:p-8 space-y-6" style="display: none;">
+                    class="bg-slate-50 border border-slate-200 rounded-3xl p-6 lg:p-8 space-y-6" style="<?= $mostrarBloqueEjecucion ? 'display: none;' : 'display: none;' /* JS will handle the display logic but we still apply inline style here as base */ ?>">
                     <h6
                         class="text-slate-600 font-bold text-xs uppercase tracking-widest border-b border-slate-200 pb-3 flex items-center gap-2">
-                        <span class="material-symbols-outlined">task_alt</span> Notificación de Ejecución
+                        <span class="material-symbols-outlined">task_alt</span> Notificación de Ejecución <?= $soloLecturaEjecucion ? '<span class="text-[10px] text-slate-400 font-normal ml-2">(Modo Lectura)</span>' : '' ?>
                     </h6>
                     <div class="space-y-4">
                         <div class="space-y-1">
                             <label class="label-custom">Mensaje de Notificación de Término</label>
                             <textarea id="oig_notificacion_ejecucion"
-                                class="w-full rounded-2xl border-slate-200 text-[15px] p-4 shadow-sm" rows="3"
-                                placeholder="Notifica al contribuyente que su OIRS fue ejecutada..."><?= $solicitudData['gestion']['oig_notificacion_ejecucion'] ?? '' ?></textarea>
+                                class="w-full rounded-2xl border-slate-200 text-[15px] p-4 shadow-sm <?= $soloLecturaEjecucion ? 'bg-slate-100 text-slate-500 cursor-not-allowed' : 'focus:ring-primary-blue' ?>" rows="3"
+                                placeholder="Notifica al contribuyente que su OIRS fue ejecutada..." <?= $soloLecturaEjecucion ? 'disabled' : '' ?>><?= $solicitudData['gestion']['oig_notificacion_ejecucion'] ?? '' ?></textarea>
                         </div>
                         <div class="flex flex-col md:flex-row justify-between items-end gap-4">
                             <div class="w-full md:w-1/2 space-y-1">
                                 <label class="label-custom">¿Fue realizada en los plazos planificados?</label>
                                 <select id="oig_realizada_en_plazo"
-                                    class="w-full rounded-xl border-slate-200 text-[15px]">
+                                    class="w-full rounded-xl border-slate-200 text-[15px] <?= $soloLecturaEjecucion ? 'bg-slate-100 text-slate-500 cursor-not-allowed' : '' ?>" <?= $soloLecturaEjecucion ? 'disabled' : '' ?>>
                                     <option value="1" <?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_realizada_en_plazo'] == 1 || $solicitudData['gestion']['oig_realizada_en_plazo'] === 'Si')) ? 'selected' : '' ?>>Si</option>
                                     <option value="0" <?= ($solicitudData && isset($solicitudData['gestion']) && ($solicitudData['gestion']['oig_realizada_en_plazo'] == 0 || $solicitudData['gestion']['oig_realizada_en_plazo'] === 'No')) ? 'selected' : '' ?>>No</option>
                                 </select>
                             </div>
+                            <?php if (!$soloLecturaEjecucion): ?>
                             <button type="button"
                                 class="bg-primary-blue text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:bg-blue-700 transition-all text-xs uppercase tracking-widest flex items-center gap-2"
                                 id="btn_notificar_ejecucion">
                                 <span class="material-symbols-outlined text-sm">send</span> Responder al Vecino
                             </button>
+                            <?php endif; ?>
                         </div>
                         <div id="info_auditoria_ejecucion"
                             class="text-sm text-slate-600 mt-3 font-medium flex justify-between bg-white/50 p-2 rounded-lg border border-slate-100">
@@ -550,13 +651,13 @@ if (isset($_GET['id'])) {
                     </div>
                 </div>
 
-                <div class="pt-6 border-t border-slate-100 flex justify-end">
+                <!--<div class="pt-6 border-t border-slate-100 flex justify-end">
                     <button type="button"
                         class="bg-gob-success text-white font-extrabold py-4 px-10 rounded-2xl shadow-xl hover:scale-105 transition-all text-sm uppercase tracking-widest flex items-center gap-3"
                         id="btn_guardar_todo">
                         <span class="material-symbols-outlined">save_as</span> Guardar Todos los Cambios
                     </button>
-                </div>
+                </div>-->
             </div>
         </div>
 
@@ -608,14 +709,24 @@ if (isset($_GET['id'])) {
         </div>
 
         <!--Pestaña Asignación-->
+
+
+
         <div class="tab-pane fade" id="tab-asignacion">
             <div class="bg-white gob-card rounded-2xl p-6 lg:p-8">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <div class="grid grid-cols-1 <?= ($mostrarAsignacion==1) ? 'md:grid-cols-2' : '' ?> gap-6"0">
+                     <?php
+            if($mostrarAsignacion==1){
+            ?>
+
                     <div class="space-y-6">
+                               
+
                         <h6
                             class="text-primary-blue font-bold text-xs uppercase tracking-widest border-b pb-3 flex items-center gap-2">
                             <span class="material-symbols-outlined text-lg">person_add</span> Nueva Asignación
                         </h6>
+
                         <div class="space-y-4">
                             <div class="space-y-1">
                                 <label class="label-custom">Funcionario / Departamento</label>
@@ -642,7 +753,12 @@ if (isset($_GET['id'])) {
                                 class="w-full bg-primary-blue text-white font-bold py-3 rounded-xl shadow-lg uppercase text-xs tracking-widest"
                                 id="btn_asignar">Asignar y Notificar</button>
                         </div>
+
+
                     </div>
+                                                                    <?php 
+            } 
+            ?>
                     <div class="space-y-6">
                         <h6
                             class="text-slate-700 font-bold text-xs uppercase tracking-widest border-b pb-3 flex items-center gap-2">
@@ -766,7 +882,11 @@ if (isset($_GET['id'])) {
             escolaridades: <?php echo json_encode($escolaridades); ?>,
             funcionarios: <?php echo json_encode($funcionarios); ?>
         },
-        currentUserId: <?php echo $_SESSION['user_id'] ?? 0; ?>
+        currentUserId: <?php echo $_SESSION['user_id'] ?? 0; ?>,
+        permisos: {
+            mostrarBloqueTecnica: <?php echo $mostrarBloqueTecnica ? 'true' : 'false'; ?>,
+            mostrarBloqueEjecucion: <?php echo $mostrarBloqueEjecucion ? 'true' : 'false'; ?>
+        }
     };
 
     // Toggle original

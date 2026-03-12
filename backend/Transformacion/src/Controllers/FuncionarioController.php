@@ -14,6 +14,36 @@ class FuncionarioController
         $this->funcionario = new Funcionario($this->db);
     }
 
+    public function getMiRolOIRS()
+    {
+        if (!isset($_SESSION['user_id'])) {
+            return null;
+        }
+
+        $currentuser = $_SESSION['user_id'];
+        $query = "SELECT tga.tga_codigo_area, ofa.ofa_p, ofa.ofa_area as tga_id, ofa.ofa_rol 
+                  FROM trd_general_areas tga
+                  JOIN trd_oirs_funcionarios_areas ofa ON ofa.ofa_area = tga.tga_id
+                  WHERE ofa.ofa_funcionario = :usr_id 
+                  AND (ofa.ofa_borrado = 0 OR ofa.ofa_borrado IS NULL)";
+
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(":usr_id", $currentuser);
+        $stmt->execute();
+
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if ($result) {
+            return [
+                "Area" => $result["tga_codigo_area"],
+                "jefe" => $result["ofa_p"],
+                "tga_id" => $result["tga_id"],
+                "rol" => $result["ofa_rol"]
+            ];
+        }
+
+        return null;
+    }
     public function getAll()
     {
         $result = $this->funcionario->getAll();
@@ -59,7 +89,7 @@ class FuncionarioController
         }
 
         $currentuser = $_SESSION['user_id'];
-        $query = "SELECT tga.tga_codigo_area, ofa.ofa_p, ofa.ofa_area as tga_id 
+        $query = "SELECT tga.tga_codigo_area, ofa.ofa_p, ofa.ofa_area as tga_id, ofa.ofa_rol 
                   FROM trd_general_areas tga
                   JOIN trd_oirs_funcionarios_areas ofa ON ofa.ofa_area = tga.tga_id
                   WHERE ofa.ofa_funcionario = :usr_id 
@@ -75,7 +105,8 @@ class FuncionarioController
             return [
                 "Area" => $result["tga_codigo_area"],
                 "jefe" => $result["ofa_p"],
-                "tga_id" => $result["tga_id"]
+                "tga_id" => $result["tga_id"],
+                "rol" => $result["ofa_rol"]
             ];
         }
 

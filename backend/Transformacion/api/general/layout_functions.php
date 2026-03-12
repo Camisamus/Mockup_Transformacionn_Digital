@@ -26,7 +26,10 @@ function getIcon($name, $class = "", $attrs = [])
 
         return $svg;
     }
-    return ''; // Fallback
+    
+    // Fallback: Material Symbols
+    $classAttr = $class ? ' ' . $class : '';
+    return '<span class="material-symbols-outlined' . $classAttr . '" style="font-size: 16px;">' . $name . '</span>';
 }
 
 function buildMenuHierarchy($flatItems)

@@ -360,7 +360,7 @@ include '../../api/general/header.php';
                     <!-- Flujo de Visación -->
                     <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
                         <div class="px-6 py-4 border-b border-slate-50 overflow-hidden">
-                            <h2 class="text-[17px] font-black text-slate-800 mb-0">Flujo de Visación</h2>
+                            <h2 class="text-[17px] font-black text-slate-800 mb-0">Flujo de Derivación</h2>
 
                         </div>
                         <div id="flujo_visacion_timeline" class="divide-y divide-slate-100">

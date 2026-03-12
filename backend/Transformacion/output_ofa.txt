@@ -1,0 +1,138 @@
+Array
+(
+    [0] => Array
+        (
+            [ofa_funcionario] => 1
+            [ofa_p] => 0
+            [ofa_rol] => Encargado Temático
+        )
+
+    [1] => Array
+        (
+            [ofa_funcionario] => 2
+            [ofa_p] => 0
+            [ofa_rol] => Encargado OIRS
+        )
+
+    [2] => Array
+        (
+            [ofa_funcionario] => 3
+            [ofa_p] => 1
+            [ofa_rol] => Jefe/Director
+        )
+
+    [3] => Array
+        (
+            [ofa_funcionario] => 1
+            [ofa_p] => 0
+            [ofa_rol] => Encargado Temático
+        )
+
+    [4] => Array
+        (
+            [ofa_funcionario] => 4
+            [ofa_p] => 1
+            [ofa_rol] => Jefe/Director
+        )
+
+    [5] => Array
+        (
+            [ofa_funcionario] => 17
+            [ofa_p] => 0
+            [ofa_rol] => 
+        )
+
+    [6] => Array
+        (
+            [ofa_funcionario] => 18
+            [ofa_p] => 0
+            [ofa_rol] => 
+        )
+
+    [7] => Array
+        (
+            [ofa_funcionario] => 19
+            [ofa_p] => 1
+            [ofa_rol] => Jefe/Director
+        )
+
+    [8] => Array
+        (
+            [ofa_funcionario] => 20
+            [ofa_p] => 0
+            [ofa_rol] => 
+        )
+
+    [9] => Array
+        (
+            [ofa_funcionario] => 21
+            [ofa_p] => 1
+            [ofa_rol] => Jefe/Director
+        )
+
+)
+
+Roles:
+Array
+(
+    [0] => Array
+        (
+            [prf_id] => 1
+            [prf_nombre] => Administrador de Sistema
+        )
+
+    [1] => Array
+        (
+            [prf_id] => 2
+            [prf_nombre] => Patentes Comerciales
+        )
+
+    [2] => Array
+        (
+            [prf_id] => 3
+            [prf_nombre] => Organizaciones_comunitarias
+        )
+
+    [3] => Array
+        (
+            [prf_id] => 4
+            [prf_nombre] => Desarollo_Vecinal
+        )
+
+    [4] => Array
+        (
+            [prf_id] => 5
+            [prf_nombre] => Atenciones
+        )
+
+    [5] => Array
+        (
+            [prf_id] => 6
+            [prf_nombre] => 6
+        )
+
+    [6] => Array
+        (
+            [prf_id] => 7
+            [prf_nombre] => Subvenciones
+        )
+
+    [7] => Array
+        (
+            [prf_id] => 8
+            [prf_nombre] => Ingresos
+        )
+
+    [8] => Array
+        (
+            [prf_id] => 9
+            [prf_nombre] => administrador DESVE
+        )
+
+    [9] => Array
+        (
+            [prf_id] => 10
+            [prf_nombre] => OIRS
+        )
+
+)

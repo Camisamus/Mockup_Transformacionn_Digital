@@ -157,7 +157,7 @@ function renderTable(data) {
                 ? '<span class="px-2 py-1 rounded-md bg-amber-50 text-green-600 text-[12px] font-bold">Autor</span>'
                 : item.mi_rol == 'Responsable' ? '<span class="px-2 py-1 rounded-md bg-amber-50 text-amber-600 text-[12px] font-bold">Responsable</span>' : '<span class="px-2 py-1 rounded-md bg-amber-50 text-white-600 text-[12px] font-bold">Ninguno</span>'}
                 </td>
-                <td><b>${item.sol_nombre_expediente.toUpperCase() || '-'}</b><br>${resolvedOrigen.toUpperCase()}</td>
+                <td><a href="ver.php?id=${item.sol_id}" class="link">${item.sol_nombre_expediente.toUpperCase() || '-'}</a><br>${resolvedOrigen.toUpperCase()}</td>>
                 <td class="text-center">${formatDate(item.sol_fecha_recepcion) || ''}</td>
                 <td class="text-center">${formatDate(item.sol_fecha_vencimiento) || ''}</td>
                 <td class="text-center">
@@ -171,8 +171,8 @@ function renderTable(data) {
                 : '<span class="px-2 py-1 rounded-md bg-amber-50 text-amber-600 text-[10px] font-bold">Pendiente</span>'}
                 </td>
                 <td class="text-center">
-                    <button class="btn btn-sm bg-slate-800 text-white hover:bg-slate-700" onclick="verMantenedor('${item.sol_id}')" title="Ver Registro">
-                        <span class="material-symbols-outlined text-sm">visibility</span>
+                    <button class="btn-toggle-details p-1 hover:bg-slate-100 rounded-full transition-colors">
+                        <span class="material-symbols-outlined text-slate-400">add_circle</span>
                     </button>
                 </td>
             </tr>

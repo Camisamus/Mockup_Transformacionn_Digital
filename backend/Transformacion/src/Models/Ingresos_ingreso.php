@@ -142,10 +142,20 @@ class Ingresos_ingreso
             // Si explícitamente están pidiendo "Visado" (o resueltos), no aplicar el filtro de ocultar al Visador
             $is_history_query = false;
 
+            if (($filters['S'] ?? '') === 'HISTORIAL') {
+                $is_history_query = true;
+            }
+
             if (!empty($filters['tis_estado'])) {
                 $estados_solicitados = is_array($filters['tis_estado']) ? $filters['tis_estado'] : [$filters['tis_estado']];
-                if (in_array('Visado', $estados_solicitados) || in_array('Resuelto_Favorable', $estados_solicitados)) {
-                    $is_history_query = true;
+                $resolved_states = ['Visado', 'Resuelto_Favorable', 'Resuelto_NO_Favorable'];
+                
+                // Si cualquiera de los estados buscados es un estado final/resuelto, es una consulta de historial
+                foreach($estados_solicitados as $est) {
+                    if (in_array($est, $resolved_states)) {
+                        $is_history_query = true;
+                        break;
+                    }
                 }
             }
 
@@ -247,6 +257,11 @@ class Ingresos_ingreso
 
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Debug: Log the search and result count
+        error_log("Ingresos Search: " . $query);
+        error_log("Params: " . json_encode($params));
+        error_log("Count in Model: " . count($results));
 
         if (!class_exists('App\Helpers\Fechas')) {
             require_once __DIR__ . '/../Helpers/Fechas.php';

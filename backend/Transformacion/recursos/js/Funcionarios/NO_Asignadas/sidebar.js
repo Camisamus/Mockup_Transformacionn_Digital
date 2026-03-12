@@ -50,13 +50,10 @@ function buildMenuHtml(items, level = 0) {
             const hasChildren = item.contenido && item.contenido.length > 0;
             if (hasChildren) {
                 html += `
-                    <a class="nav-link collapsed " data-bs-toggle="collapse" href="#${uniqueId}" role="button" aria-expanded="false" ${paddingLeft}>
-                        <span class="material-symbols-outlined">${item.rol_simbolo}</span>    
-                        <span>
-                           ${item.icon ? `<i data-feather="${item.icon}" style="width:18px; margin-right:8px;"></i>` : ''} 
-                           ${item.nombre}
-                        </span>
-                        <i data-feather="chevron-down" style="width:14px;"></i>
+                    <a class="nav-link collapsed d-flex align-items-center" data-bs-toggle="collapse" href="#${uniqueId}" role="button" aria-expanded="false" ${paddingLeft}>
+                        ${item.icon ? `<i data-feather="${item.icon}" style="width:18px; margin-right:8px;"></i>` : `<span class="material-symbols-outlined me-2" style="font-size:18px;">${item.rol_simbolo}</span>`} 
+                        <span>${item.nombre}</span>
+                        <i data-feather="chevron-down" class="ms-auto" style="width:14px;"></i>
                     </a>
                     <ul class="collapse submenu list-unstyled" id="${uniqueId}">
                         ${buildMenuHtml(item.contenido, level + 1)}
@@ -67,12 +64,9 @@ function buildMenuHtml(items, level = 0) {
             // If it has a specific link, pass it, otherwise just label
             const linkArg = item.Enlace ? `'${item.nombre}', '${item.Enlace}'` : `'${item.nombre}'`;
             html += `
-                <a class="nav-link leaf-link -50" href="#" onclick="handleNavClick(${linkArg})" ${paddingLeft}>
-                    <span class="material-symbols-outlined">${item.rol_simbolo}</span>    
-                        <span>
-                       ${item.icon ? `<i data-feather="${item.icon}" style="width:18px; margin-right:8px;"></i>` : ''} 
-                       ${item.nombre}
-                    </span>
+                <a class="nav-link leaf-link -50 d-flex align-items-center" href="#" onclick="handleNavClick(${linkArg})" ${paddingLeft}>
+                    ${item.icon ? `<i data-feather="${item.icon}" style="width:18px; margin-right:8px;"></i>` : `<span class="material-symbols-outlined me-2" style="font-size:18px;">${item.rol_simbolo}</span>`} 
+                    <span>${item.nombre}</span>
                 </a>
             `;
         }
