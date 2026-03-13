@@ -113,7 +113,7 @@ class oirs_solicitudes
 
                 // 4. Documentos
                 if (isset($data['documentos']) && is_array($data['documentos'])) {
-                    $docController = new \App\Controllers\GesDocController($this->conn);
+                    $docController = new \App\Controllers\gesdoc_controller($this->conn);
                     foreach ($data['documentos'] as $doc) {
                         try {
                             $fileInfo = $docController->base64ToFileArray($doc['base64'], $doc['nombre']);

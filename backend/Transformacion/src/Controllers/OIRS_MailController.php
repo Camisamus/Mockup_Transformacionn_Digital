@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Helpers\MailService;
 
-class OIRS_MailController
+class oirs_mailcontroller
 {
     private $db;
     private $mailService;

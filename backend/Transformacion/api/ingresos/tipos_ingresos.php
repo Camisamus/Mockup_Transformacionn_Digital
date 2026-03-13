@@ -5,12 +5,12 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\Ingresos_TiposDeIngresosController;
+use App\Controllers\ingresos_tiposdeingresoscontroller;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new Ingresos_TiposDeIngresosController($db);
+$controller = new ingresos_tiposdeingresoscontroller($db);
 
 $accion = $data['ACCION'] ?? '';
 

@@ -3,13 +3,13 @@
 require_once __DIR__ . '/../general/cors.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use App\Controllers\GesDocController;
+use App\Controllers\gesdoc_controller;
 use App\Config\Database;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$gesdocController = new GesDocController($db);
+$gesdocController = new gesdoc_controller($db);
 
 // Asumimos que $data viene de general/cors.php (decodificación de JSON)
 $accion = $data['ACCION'] ?? $_POST['ACCION'] ?? '';

@@ -5,14 +5,14 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 header("Content-Type: application/json; charset=UTF-8");
 
 use App\Config\Database;
-use App\Controllers\AuthController;
-use App\Controllers\BandejaController;
+use App\Controllers\sistema_authcontroller;
+use App\Controllers\sistema_bandejacontroller;
 
 $database = new Database();
 $db = $database->getConnection();
 
 // 1. Verify Authentication
-$authController = new AuthController($db);
+$authController = new sistema_authcontroller($db);
 if (!$authController->isAuthenticated()) {
     http_response_code(401);
     echo json_encode(["status" => "error", "message" => "No autorizado"]);
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fechaInicio = $input['fecha_inicio'] ?? null;
     $fechaFin = $input['fecha_fin'] ?? null;
 
-    $controller = new BandejaController($db);
+    $controller = new sistema_bandejacontroller($db);
     $historial = $controller->getHistorial($userId, $fechaInicio, $fechaFin);
 
     echo json_encode([

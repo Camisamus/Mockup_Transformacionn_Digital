@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use PDO;
 
-class AuthController
+class sistema_authcontroller
 {
     private PDO $conn;
 
@@ -195,7 +195,7 @@ class AuthController
         }
 
         // Verificar que el cliente ID coincida
-        // Note: Constants are global, ensure they are defined or use hardcoded/class const
+        // Note: Constants are global, ensure they are defined or use hardcoded/class sistema_authcontroller
         if (!isset($decoded['aud']) || $decoded['aud'] !== GOOGLE_CLIENT_ID) {
             // throw new \Exception('Client ID no coincide');
         }

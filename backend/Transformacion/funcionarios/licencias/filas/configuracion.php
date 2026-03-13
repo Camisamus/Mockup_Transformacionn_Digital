@@ -3,7 +3,7 @@ $pageTitle = "Gestor de Cupos";
 require_once '../../../api/general/auth_check.php';
 
 // Cargar trámites desde la BD
-$tramiteController = new \App\Controllers\LicenciaTramiteController($db);
+$tramiteController = new \App\Controllers\licencias_tramitecontroller($db);
 $tramiteResult = $tramiteController->getAll();
 $tramites = $tramiteResult['data'] ?? [];
 

@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\general_tipos_organizacion;
 
-class TipoOrganizacionController
+class general_tipoorganizacioncontroller
 {
     private $db;
     private $tipoOrganizacion;

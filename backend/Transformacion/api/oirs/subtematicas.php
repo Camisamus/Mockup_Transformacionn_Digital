@@ -5,12 +5,12 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\OIRS_SubtematicaController;
+use App\Controllers\oirs_subtematicacontroller;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new OIRS_SubtematicaController($db);
+$controller = new oirs_subtematicacontroller($db);
 
 // Get JSON input
 $data = json_decode(file_get_contents("php://input"), true);

@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\general_organizaciones;
 
-class OrganizacionController
+class sistema_organizacioncontroller
 {
     private $db;
     private $organizacion;

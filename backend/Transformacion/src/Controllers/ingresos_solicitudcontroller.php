@@ -14,7 +14,7 @@ require_once __DIR__ . '/../Helpers/SimpleSMTP.php';
 require_once __DIR__ . '/../Helpers/ConfigLoader.php';
 require_once __DIR__ . '/../Helpers/MailService.php';
 
-class Ingresos_SolicitudControler
+class ingresos_solicitudcontroller
 {
     private $db;
     private $solicitud;

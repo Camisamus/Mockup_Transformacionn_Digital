@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\GENERAL_ESCOLARIDADES;
 
-class EscolaridadController
+class general_escolaridadcontroller
 {
     private $db;
     private $escolaridad;

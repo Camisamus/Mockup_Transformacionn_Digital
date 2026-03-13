@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\oirs_roles;
 
-class OIRS_RolOirsController
+class oirs_roloirscontroller
 {
     private $db;
     private $mapping;

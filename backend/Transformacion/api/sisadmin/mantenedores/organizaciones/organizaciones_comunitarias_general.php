@@ -6,12 +6,12 @@ require_once __DIR__ . '../../../../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\OrganizacionComunitariaControllerGeneral;
+use App\Controllers\general_organizacioncomunitariacontroller;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new OrganizacionComunitariaControllerGeneral($db);
+$controller = new general_organizacioncomunitariacontroller($db);
 
 $data = json_decode(file_get_contents("php://input"), true);
 

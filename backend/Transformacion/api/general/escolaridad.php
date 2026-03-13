@@ -5,12 +5,12 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\EscolaridadController;
+use App\Controllers\general_escolaridadcontroller;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new EscolaridadController($db);
+$controller = new general_escolaridadcontroller($db);
 
 // Get JSON input
 $data = json_decode(file_get_contents("php://input"), true);

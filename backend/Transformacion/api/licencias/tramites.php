@@ -5,12 +5,12 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 header("Content-Type: application/json");
 
 use App\Config\Database;
-use App\Controllers\LicenciaTramiteController;
+use App\Controllers\licencias_tramitecontroller;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new LicenciaTramiteController($db);
+$controller = new licencias_tramitecontroller($db);
 
 // Get JSON input
 $data = json_decode(file_get_contents("php://input"), true);

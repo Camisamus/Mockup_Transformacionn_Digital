@@ -6,13 +6,13 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 header("Content-Type: application/json");
 
 use App\Config\Database;
-use App\Controllers\VecinosAuthController;
+use App\Controllers\general_vecinosauthcontroller;
 
 $database = new Database();
 $db = $database->getConnection();
 
 // 1. Verify Authentication
-$authController = new VecinosAuthController($db);
+$authController = new general_vecinosauthcontroller($db);
 if (!$authController->isAuthenticated()) {
     http_response_code(401);
     echo json_encode(["status" => "error", "message" => "No autorizado"]);

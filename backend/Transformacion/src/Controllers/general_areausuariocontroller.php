@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\GENERAL_AREAS_USUARIOS;
 
-class AreaUsuarioControllerGeneral
+class general_areausuariocontroller
 {
     private $db;
     private $mapping;

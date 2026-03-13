@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\Prioridad;
 
-class PrioridadController
+class sistema_prioridadcontroller
 {
     private $db;
     private $prioridad;

@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use PDO;
 
-class VecinosAuthController
+class general_vecinosauthcontroller
 {
     private PDO $conn;
     private $mailService;

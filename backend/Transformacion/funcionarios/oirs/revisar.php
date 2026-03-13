@@ -3,9 +3,9 @@ $pageTitle = "Bandeja OIRS";
 require_once '../../api/general/auth_check.php';
 include '../../api/general/header.php';
 
-use App\Controllers\FuncionarioController;
+use App\Controllers\sistema_funcionariocontroller;
 
-$funcionarioCtrl = new FuncionarioController($db);
+$funcionarioCtrl = new sistema_funcionariocontroller($db);
 $rol = $funcionarioCtrl->getMiRolOIRS();
 ?>
 

@@ -513,7 +513,7 @@ class ingresos_solicitudes
 
                 // 6. Registrar documentos
                 if (isset($data['documentos']) && is_array($data['documentos'])) {
-                    $docController = new \App\Controllers\GesDocController($this->conn);
+                    $docController = new \App\Controllers\gesdoc_controller($this->conn);
                     foreach ($data['documentos'] as $doc) {
                         try {
                             $fileInfo = $docController->base64ToFileArray($doc['base64'], $doc['nombre']);
@@ -638,7 +638,7 @@ class ingresos_solicitudes
 
             // 4. Manejar Nuevos Documentos
             if (isset($data['documentos']) && is_array($data['documentos'])) {
-                $docController = new \App\Controllers\GesDocController($this->conn);
+                $docController = new \App\Controllers\gesdoc_controller($this->conn);
                 $propietario_id = $data['tis_propietario'] ?? ($_SESSION['user_id'] ?? 1);
                 foreach ($data['documentos'] as $doc) {
                     try {

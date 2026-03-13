@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use PDO;
 use App\Helpers\Encode;
-class BandejaController
+class sistema_bandejacontroller
 {
     private PDO $db;
     private $encoder;

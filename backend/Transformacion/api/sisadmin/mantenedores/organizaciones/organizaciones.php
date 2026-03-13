@@ -6,12 +6,12 @@ require_once __DIR__ . '../../../../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\OrganizacionController;
+use App\Controllers\sistema_organizacioncontroller;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new OrganizacionController($db);
+$controller = new sistema_organizacioncontroller($db);
 
 switch ($data['ACCION']) {
     case 'CONSULTAM':

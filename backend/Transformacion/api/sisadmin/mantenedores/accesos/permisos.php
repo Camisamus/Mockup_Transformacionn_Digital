@@ -4,12 +4,12 @@ require_once '../../../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\RolControllerAcceso;
+use App\Controllers\general_rolcontroller;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new RolControllerAcceso($db);
+$controller = new general_rolcontroller($db);
 
 $data = json_decode(file_get_contents("php://input"), true);
 

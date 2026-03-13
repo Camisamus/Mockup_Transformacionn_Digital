@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\oirs_tipos_atencion;
 
-class OIRS_TipoAtencionController
+class oirs_tipoatencioncontroller
 {
     private $db;
     private $tipoAtencion;

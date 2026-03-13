@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\DESVE_SOLICITUDES;
 use App\Helpers\MailService;
 
-class DESVE_SolicitudController
+class desve_solicitudcontroller
 {
     private $db;
     private $solicitud;

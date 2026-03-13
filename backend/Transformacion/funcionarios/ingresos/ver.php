@@ -3,12 +3,12 @@ $pageTitle = "Ver Ingreso";
 require_once '../../api/general/auth_check.php';
 
 // SSR Logic
-use App\Controllers\Ingresos_SolicitudControler;
+use App\Controllers\ingresos_solicitudcontroller;
 use App\Helpers\Encode;
 use App\Helpers\Fechas;
 $fecha = new Fechas();
 $encoder = new Encode();
-$controller = new Ingresos_SolicitudControler($db);
+$controller = new ingresos_solicitudcontroller($db);
 
 $id_cifrado = $_GET['id'] ?? null;
 $id_raw = null;

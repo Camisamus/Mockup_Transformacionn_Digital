@@ -7,12 +7,12 @@ require_once __DIR__ . '/../general/app_autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\OirsSolicitudController;
+use App\Controllers\oirs_solicitudcontroller;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new OirsSolicitudController($db);
+$controller = new oirs_solicitudcontroller($db);
 
 // Get JSON data
 $data = json_decode(file_get_contents("php://input"), true);

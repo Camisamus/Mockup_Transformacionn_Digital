@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\oirs_tematicas;
 
-class OIRS_TematicaController
+class oirs_tematicacontroller
 {
     private $db;
     private $tematica;

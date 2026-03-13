@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\DESECON_EMPRENDIMIENTOS;
 
-class DESECON_EmprendimientoController
+class desecon_emprendimientocontroller
 {
     private $db;
     private $emprendimiento;

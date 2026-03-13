@@ -5,7 +5,7 @@ use App\Models\oirs_solicitudes;
 use App\Models\general_contribuyentes;
 use App\Models\general_contribuyente_direcciones;
 
-class OirsSolicitudController
+class oirs_solicitudcontroller
 {
     private $db;
     private $oirsModel;
@@ -87,7 +87,7 @@ class OirsSolicitudController
 
         // 4. SIEMPRE crear registro de gestión
         if ($result['status'] === 'success') {
-            $gestController = new \App\Controllers\OIRS_GestionController($this->db);
+            $gestController = new \App\Controllers\oirs_gestioncontroller($this->db);
             $gestController->create([
                 'oig_solicitud' => $result['id'],
                 'oig_respuesta_preliminar' => $data['oirs_respuesta'] ?? null,
@@ -113,7 +113,7 @@ class OirsSolicitudController
         }
 
         // Obtener gestión
-        $gestController = new \App\Controllers\OIRS_GestionController($this->db);
+        $gestController = new \App\Controllers\oirs_gestioncontroller($this->db);
         $gestion = $gestController->getBySolicitud($id);
         $oirs['gestion'] = $gestion['data'] ?? null;
 

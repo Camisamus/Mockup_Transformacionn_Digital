@@ -2,7 +2,7 @@
 require_once 'session_start.php';
 
 use App\Config\Database;
-use App\Controllers\AuthController;
+use App\Controllers\sistema_authcontroller;
 
 // Handle GET request for direct link access
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -46,7 +46,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 $database = new Database();
 $db = $database->getConnection();
 
-$authController = new AuthController($db);
+$authController = new sistema_authcontroller($db);
 $authController->logout();
 
 echo json_encode([

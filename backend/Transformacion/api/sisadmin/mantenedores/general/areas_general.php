@@ -4,12 +4,12 @@ require_once __DIR__ . '/../../../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\AreaControllerGeneral;
+use App\Controllers\general_areacontroller;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new AreaControllerGeneral($db);
+$controller = new general_areacontroller($db);
 
 $data = json_decode(file_get_contents("php://input"), true);
 

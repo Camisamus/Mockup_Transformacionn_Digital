@@ -13,7 +13,7 @@ if (!file_exists($autoload)) {
 require_once $autoload;
 
 use App\Config\Database;
-use App\Controllers\VecinosAuthController;
+use App\Controllers\general_vecinosauthcontroller;
 
 header("Content-Type: application/json; charset=UTF-8");
 
@@ -38,7 +38,7 @@ if (!isset($data['ACCION']) || $data['ACCION'] !== "LOGIN_VECINO") {
     exit;
 }
 
-$authController = new VecinosAuthController($db);
+$authController = new general_vecinosauthcontroller($db);
 
 if (isset($data['rut']) && isset($data['password'])) {
     $result = $authController->loginByRut($data['rut'], $data['password']);

@@ -14,7 +14,7 @@ if (!file_exists($autoload)) {
 require_once $autoload;
 
 use App\Config\Database;
-use App\Controllers\AuthController;
+use App\Controllers\sistema_authcontroller;
 
 header("Content-Type: application/json; charset=UTF-8");
 
@@ -30,7 +30,7 @@ if (!$db) {
     exit;
 }
 
-$authController = new AuthController($db);
+$authController = new sistema_authcontroller($db);
 
 if (!isset($data['email']) || !isset($data['ACCION']) || $data['ACCION'] !== "LOGIN") {
     http_response_code(400);

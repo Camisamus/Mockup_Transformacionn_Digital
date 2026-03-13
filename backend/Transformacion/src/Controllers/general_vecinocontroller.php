@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\general_acceso_vecinos;
 
-class VecinoControllerAcceso
+class general_vecinocontroller
 {
     private $db;
     private $vecino;

@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\general_sectores;
 
-class SectorController
+class general_sectorcontroller
 {
     private $db;
     private $sector;

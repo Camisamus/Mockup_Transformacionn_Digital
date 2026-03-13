@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\GENERAL_ENLACES;
 
-class EnlaceController
+class sistema_enlacecontroller
 {
     private $db;
     private $enlace;

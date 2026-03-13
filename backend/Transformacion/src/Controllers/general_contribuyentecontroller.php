@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\GENERAL_CONTRIBUYENTES;
 
-class ContribuyenteControllerGeneral
+class general_contribuyentecontroller
 {
     private $db;
     private $contribuyente;

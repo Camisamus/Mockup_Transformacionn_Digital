@@ -438,7 +438,7 @@ ORDER BY tds.sol_id DESC;";
 
                 // 5. Registrar documentos adjuntos (Base64)
                 if (isset($data['documentos']) && is_array($data['documentos'])) {
-                    $docController = new \App\Controllers\GesDocController($this->conn);
+                    $docController = new \App\Controllers\gesdoc_controller($this->conn);
                     foreach ($data['documentos'] as $doc) {
                         try {
                             $fileInfo = $docController->base64ToFileArray($doc['base64'], $doc['nombre']);
@@ -655,7 +655,7 @@ ORDER BY tds.sol_id DESC;";
 
                 // Manejar nuevos documentos adjuntos (Base64)
                 if (isset($data['documentos']) && is_array($data['documentos'])) {
-                    $docController = new \App\Controllers\GesDocController($this->conn);
+                    $docController = new \App\Controllers\gesdoc_controller($this->conn);
                     foreach ($data['documentos'] as $doc) {
                         try {
                             $fileInfo = $docController->base64ToFileArray($doc['base64'], $doc['nombre']);

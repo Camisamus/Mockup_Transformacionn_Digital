@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../src/Config/Database.php';
 
 use App\Config\Database;
-use App\Controllers\Ingresos_SolicitudControler;
+use App\Controllers\ingresos_solicitudcontroller;
 use App\Helpers\Encode;
 use App\Helpers\Fechas;
 
@@ -12,7 +12,7 @@ use App\Helpers\Fechas;
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new Ingresos_SolicitudControler($db);
+$controller = new ingresos_solicitudcontroller($db);
 $encoder = new Encode();
 $fechaHelper = new Fechas();
 

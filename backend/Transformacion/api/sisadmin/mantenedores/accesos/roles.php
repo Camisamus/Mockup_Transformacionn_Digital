@@ -4,12 +4,12 @@ require_once '../../../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\PerfilControllerAcceso;
+use App\Controllers\general_perfilcontroller;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new PerfilControllerAcceso($db);
+$controller = new general_perfilcontroller($db);
 
 $data = json_decode(file_get_contents("php://input"), true);
 

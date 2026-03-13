@@ -3,13 +3,13 @@
 require_once __DIR__ . '/cors.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-use App\Controllers\GesDocController;
+use App\Controllers\gesdoc_controller;
 use App\Config\Database;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$gesdocController = new GesDocController($db);
+$gesdocController = new gesdoc_controller($db);
 
 // Asumimos que $data viene de general/cors.php (decodificación de JSON)
 $accion = $data['ACCION'] ?? $_POST['ACCION'] ?? '';
@@ -18,7 +18,7 @@ switch ($accion) {
     case 'Subir':
         // Verificamos si viene por $_FILES
         if (isset($_FILES['archivo'])) {
-            // Adaptar para GesDocController::subirArchivo
+            // Adaptar para gesdoc_controller::subirArchivo
             // GesDoc espera un array de archivos, y data con tramite_id/user_id
             $files = [$_FILES['archivo']]; // Envolver en array si es único, o pasar directo si estructura coincide
 

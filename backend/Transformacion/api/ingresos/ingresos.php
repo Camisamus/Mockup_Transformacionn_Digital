@@ -6,13 +6,13 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\Ingresos_SolicitudControler;
+use App\Controllers\ingresos_solicitudcontroller;
 use App\Helpers\Encode;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new Ingresos_SolicitudControler($db);
+$controller = new ingresos_solicitudcontroller($db);
 $encoder = new Encode();
 
 // Función auxiliar para descifrar IDs si vienen cifrados y validar seguridad (ACCESO DIRECTO)

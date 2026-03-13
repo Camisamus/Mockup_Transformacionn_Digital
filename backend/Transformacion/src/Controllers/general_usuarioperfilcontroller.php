@@ -1,9 +1,9 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\general_acceso_vecino_roles;
+use App\Models\general_acceso_usuario_roles;
 
-class VecinoPerfilControllerAcceso
+class general_usuarioperfilcontroller
 {
     private $db;
     private $mapping;
@@ -11,7 +11,7 @@ class VecinoPerfilControllerAcceso
     public function __construct($db)
     {
         $this->db = $db;
-        $this->mapping = new general_acceso_vecino_roles($this->db);
+        $this->mapping = new general_acceso_usuario_roles($this->db);
     }
 
     public function getAll()
@@ -28,14 +28,14 @@ class VecinoPerfilControllerAcceso
 
         try {
             if ($this->mapping->create($data)) {
-                return ["status" => "success", "message" => "Perfil asignado exitosamente al vecino"];
+                return ["status" => "success", "message" => "Perfil asignado exitosamente"];
             }
         } catch (\PDOException $e) {
             if ($e->getCode() == 23000) {
-                return ["status" => "error", "message" => "Este vecino ya tiene este perfil asignado."];
+                return ["status" => "error", "message" => "Este usuario ya tiene este perfil asignado."];
             }
         }
-        return ["status" => "error", "message" => "No se pudo asignar el perfil al vecino"];
+        return ["status" => "error", "message" => "No se pudo asignar el perfil"];
     }
 
     public function update($usuario_id, $perfil_id, $data)

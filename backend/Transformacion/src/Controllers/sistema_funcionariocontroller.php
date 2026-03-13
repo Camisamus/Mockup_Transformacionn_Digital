@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\general_funcionarios;
 
-class FuncionarioController
+class sistema_funcionariocontroller
 {
     private $db;
     private $funcionario;

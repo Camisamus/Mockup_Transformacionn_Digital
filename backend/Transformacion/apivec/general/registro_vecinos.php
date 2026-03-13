@@ -11,7 +11,7 @@ if (!file_exists($autoload)) {
 require_once $autoload;
 
 use App\Config\Database;
-use App\Controllers\VecinosAuthController;
+use App\Controllers\general_vecinosauthcontroller;
 
 header("Content-Type: application/json; charset=UTF-8");
 
@@ -38,7 +38,7 @@ if (!isset($data['ACCION'])) {
     exit;
 }
 
-$authController = new VecinosAuthController($db);
+$authController = new general_vecinosauthcontroller($db);
 
 if ($data['ACCION'] === "BUSCAR_RUT") {
     $rut = $data['rut'] ?? '';

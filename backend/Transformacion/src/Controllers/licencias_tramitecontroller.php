@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\LicenciaTramite;
 
-class LicenciaTramiteController
+class licencias_tramitecontroller
 {
     private $db;
     private $tramite;

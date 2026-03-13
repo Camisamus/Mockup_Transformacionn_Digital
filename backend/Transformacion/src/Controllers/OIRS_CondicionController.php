@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\oirs_condiciones;
 
-class OIRS_CondicionController
+class oirs_condicioncontroller
 {
     private $db;
     private $condicion;

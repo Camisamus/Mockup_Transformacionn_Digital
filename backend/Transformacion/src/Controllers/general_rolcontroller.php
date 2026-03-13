@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\general_acceso_permisos;
 
-class RolControllerAcceso
+class general_rolcontroller
 {
     private $db;
     private $rol;

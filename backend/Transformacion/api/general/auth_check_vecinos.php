@@ -15,11 +15,11 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/app_autoload.php';
 
 use App\Config\Database;
-use App\Controllers\VecinosAuthController;
+use App\Controllers\general_vecinosauthcontroller;
 
 $database = new Database();
 $db = $database->getConnection();
-$auth = new VecinosAuthController($db);
+$auth = new general_vecinosauthcontroller($db);
 
 $currentScriptPath = $_SERVER['SCRIPT_NAME'];
 $pathPrefix = './';

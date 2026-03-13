@@ -6,13 +6,13 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\DESVE_RespuestaController;
+use App\Controllers\desve_respuestacontroller;
 use App\Helpers\Encode;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new DESVE_RespuestaController($db);
+$controller = new desve_respuestacontroller($db);
 
 $encoder = new Encode();
 if (isset($data['sol_id']) && is_string($data['sol_id']) && strpos($data['sol_id'], 'L$U') === 0) {

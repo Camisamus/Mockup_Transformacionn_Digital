@@ -5,24 +5,24 @@ include '../../api/general/header.php';
 
 
 // --- Server-Side Data Fetching ---
-use App\Controllers\OIRS_TipoAtencionController;
-use App\Controllers\OIRS_CondicionController;
-use App\Controllers\OIRS_TematicaController;
-use App\Controllers\OIRS_SubtematicaController;
-use App\Controllers\SectorController;
-use App\Controllers\EscolaridadController;
-use App\Controllers\FuncionarioController;
-use App\Controllers\OirsSolicitudController;
+use App\Controllers\oirs_tipoatencioncontroller;
+use App\Controllers\oirs_condicioncontroller;
+use App\Controllers\oirs_tematicacontroller;
+use App\Controllers\oirs_subtematicacontroller;
+use App\Controllers\general_sectorcontroller;
+use App\Controllers\general_escolaridadcontroller;
+use App\Controllers\sistema_funcionariocontroller;
+use App\Controllers\oirs_solicitudcontroller;
 
 // 1. Init Controllers
-$tipoAtencionCtrl = new OIRS_TipoAtencionController($db);
-$condicionCtrl = new OIRS_CondicionController($db);
-$tematicaCtrl = new OIRS_TematicaController($db);
-$subtematicaCtrl = new OIRS_SubtematicaController($db);
-$sectorCtrl = new SectorController($db);
-$escolaridadCtrl = new EscolaridadController($db);
-$funcionarioCtrl = new FuncionarioController($db);
-$solicitudCtrl = new OirsSolicitudController($db);
+$tipoAtencionCtrl = new oirs_tipoatencioncontroller($db);
+$condicionCtrl = new oirs_condicioncontroller($db);
+$tematicaCtrl = new oirs_tematicacontroller($db);
+$subtematicaCtrl = new oirs_subtematicacontroller($db);
+$sectorCtrl = new general_sectorcontroller($db);
+$escolaridadCtrl = new general_escolaridadcontroller($db);
+$funcionarioCtrl = new sistema_funcionariocontroller($db);
+$solicitudCtrl = new oirs_solicitudcontroller($db);
 
 // 2. Fetch Lists
 $tiposAtencion = $tipoAtencionCtrl->getAll()['data'] ?? [];

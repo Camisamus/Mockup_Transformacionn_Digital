@@ -4,12 +4,12 @@ require_once '../../../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\PerfilRolControllerAcceso;
+use App\Controllers\general_perfilrolcontroller;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new PerfilRolControllerAcceso($db);
+$controller = new general_perfilrolcontroller($db);
 
 $data = json_decode(file_get_contents("php://input"), true);
 

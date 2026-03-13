@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\desve_organizaciones;
 
-class OrganizacionControllerDESVE
+class desve_organizacioncontroller
 {
     private $db;
     private $organizacion;

@@ -4,12 +4,12 @@ require_once '../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\OIRS_RolOirsController;
+use App\Controllers\oirs_roloirscontroller;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new OIRS_RolOirsController($db);
+$controller = new oirs_roloirscontroller($db);
 
 $data = json_decode(file_get_contents("php://input"), true);
 

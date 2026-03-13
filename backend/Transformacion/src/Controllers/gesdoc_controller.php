@@ -6,7 +6,7 @@ use App\Models\GESDOC_DOCUMENTOS_CARPETA;
 use App\Models\GENERAL_BITACORA;
 use App\Helpers\FileEncryption;
 
-class GesDocController
+class gesdoc_controller
 {
     private $db;
     private $gesdoc;

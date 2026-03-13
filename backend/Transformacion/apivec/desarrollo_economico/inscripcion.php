@@ -11,7 +11,7 @@ if (!file_exists($autoload)) {
 require_once $autoload;
 
 use App\Config\Database;
-use App\Controllers\DESECON_EmprendimientoController;
+use App\Controllers\desecon_emprendimientocontroller;
 
 header("Content-Type: application/json; charset=UTF-8");
 
@@ -32,7 +32,7 @@ if (!$data) {
     exit;
 }
 
-$controller = new DESECON_EmprendimientoController($db);
+$controller = new desecon_emprendimientocontroller($db);
 
 // Determinamos la acción (por defecto asumo CREATE si no viene ACCION)
 $accion = $data['ACCION'] ?? 'CREATE';

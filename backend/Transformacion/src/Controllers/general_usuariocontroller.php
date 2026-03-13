@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\general_acceso_usuarios;
 
-class UsuarioControllerAcceso
+class general_usuariocontroller
 {
     private $db;
     private $usuario;

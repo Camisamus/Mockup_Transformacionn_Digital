@@ -1,6 +1,6 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) {
-    // Config same as AuthController just in case
+    // Config same as sistema_authcontroller just in case
     session_set_cookie_params([
         'lifetime' => 0,
         'path' => '/',
@@ -17,11 +17,11 @@ require_once __DIR__ . '/app_autoload.php';
 require_once __DIR__ . '/layout_functions.php';
 
 use App\Config\Database;
-use App\Controllers\AuthController;
+use App\Controllers\sistema_authcontroller;
 
 $database = new Database();
 $db = $database->getConnection();
-$auth = new AuthController($db);
+$auth = new sistema_authcontroller($db);
 
 // Determine Paths
 // If this file is included from Funcionarios/, script path is .../Funcionarios/foo.php

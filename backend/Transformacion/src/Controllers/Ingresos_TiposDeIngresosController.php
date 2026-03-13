@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\Ingresos_TiposDeIngresos;
 
-class Ingresos_TiposDeIngresosController
+class ingresos_tiposdeingresoscontroller
 {
     private $db;
     private $model;

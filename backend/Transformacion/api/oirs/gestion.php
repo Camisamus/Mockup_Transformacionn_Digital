@@ -6,15 +6,15 @@ require_once '../../src/Models/general_bitacora.php';
 require_once '../../src/Models/oirs_gestiones.php';
 require_once '../../src/Models/oirs_asignaciones.php';
 require_once '../../src/Models/oirs_asignacion_comentarios.php';
-require_once '../../src/Controllers/OIRS_GestionController.php';
+require_once '../../src/Controllers/oirs_gestioncontroller.php';
 
 use App\Config\Database;
-use App\Controllers\OIRS_GestionController;
+use App\Controllers\oirs_gestioncontroller;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new OIRS_GestionController($db);
+$controller = new oirs_gestioncontroller($db);
 
 $data = json_decode(file_get_contents("php://input"), true);
 

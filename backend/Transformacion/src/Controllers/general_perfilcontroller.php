@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\general_acceso_roles;
 
-class PerfilControllerAcceso
+class general_perfilcontroller
 {
     private $db;
     private $perfil;

@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\GENERAL_AREAS;
 
-class AreaControllerGeneral
+class general_areacontroller
 {
     private $db;
     private $area;

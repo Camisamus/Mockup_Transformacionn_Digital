@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\oirs_gestiones;
 
-class OIRS_GestionController
+class oirs_gestioncontroller
 {
     private $db;
     private $gestion;

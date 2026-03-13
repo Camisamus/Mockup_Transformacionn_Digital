@@ -5,12 +5,12 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\OIRS_CondicionController;
+use App\Controllers\oirs_condicioncontroller;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new OIRS_CondicionController($db);
+$controller = new oirs_condicioncontroller($db);
 
 // Get JSON input
 $data = json_decode(file_get_contents("php://input"), true);

@@ -5,7 +5,7 @@ require_once __DIR__ . '/../../src/Config/Database.php';
 
 use App\Config\Database;
 // Asumo que tienes un controlador para OIRS similar al de Ingresos
-use App\Controllers\OirsSolicitudController; 
+use App\Controllers\oirs_solicitudcontroller; 
 use App\Helpers\Encode;
 use App\Helpers\Fechas;
 
@@ -13,7 +13,7 @@ use App\Helpers\Fechas;
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new OirsSolicitudController($db);
+$controller = new oirs_solicitudcontroller($db);
 $encoder = new Encode();
 $fechaHelper = new Fechas();
 

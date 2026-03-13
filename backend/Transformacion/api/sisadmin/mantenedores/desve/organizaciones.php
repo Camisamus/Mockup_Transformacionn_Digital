@@ -6,12 +6,12 @@ require_once __DIR__ . '../../../../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\OrganizacionControllerDESVE;
+use App\Controllers\desve_organizacioncontroller;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controllerDESVE = new OrganizacionControllerDESVE($db);
+$controllerDESVE = new desve_organizacioncontroller($db);
 
 switch ($data['ACCION']) {
     case 'CONSULTAM':

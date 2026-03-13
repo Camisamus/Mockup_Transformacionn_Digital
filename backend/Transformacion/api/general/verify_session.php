@@ -4,7 +4,7 @@ require_once __DIR__ . '/cors.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use App\Config\Database;
-use App\Controllers\AuthController;
+use App\Controllers\sistema_authcontroller;
 
 header("Content-Type: application/json; charset=UTF-8");
 
@@ -24,7 +24,7 @@ if (!$db) {
 $data = json_decode(file_get_contents("php://input"), true);
 $googleToken = $data['google_token'] ?? null;
 
-$authController = new AuthController($db);
+$authController = new sistema_authcontroller($db);
 $permissions = $authController->isAuthenticated($googleToken);
 
 if ($permissions !== false) {

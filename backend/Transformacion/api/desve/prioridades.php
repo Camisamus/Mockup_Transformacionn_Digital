@@ -6,12 +6,12 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 header("Content-Type: application/json");
 use App\Config\Database;
-use App\Controllers\PrioridadController;
+use App\Controllers\sistema_prioridadcontroller;
 
 $database = new Database();
 $db = $database->getConnection();
 
-$controller = new PrioridadController($db);
+$controller = new sistema_prioridadcontroller($db);
 
 switch ($data['ACCION']) {
     case 'CONSULTAM':

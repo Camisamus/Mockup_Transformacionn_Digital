@@ -3,7 +3,7 @@ namespace App\Controllers;
 
 use App\Models\DESVE_RESPUESTAS;
 
-class DESVE_RespuestaController
+class desve_respuestacontroller
 {
     private $db;
     private $respuesta;

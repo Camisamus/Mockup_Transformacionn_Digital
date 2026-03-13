@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\general_logs;
 use PDO;
 
-class SystemLogController
+class general_systemlogcontroller
 {
     private $logModel;
     private $db;

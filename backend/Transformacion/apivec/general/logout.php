@@ -5,7 +5,7 @@ require_once 'app_autoload.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use App\Config\Database;
-use App\Controllers\VecinosAuthController;
+use App\Controllers\general_vecinosauthcontroller;
 
 // Handle GET request for direct link access
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -43,7 +43,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 $database = new Database();
 $db = $database->getConnection();
 
-$authController = new VecinosAuthController($db);
+$authController = new general_vecinosauthcontroller($db);
 $authController->logout();
 
 echo json_encode([
