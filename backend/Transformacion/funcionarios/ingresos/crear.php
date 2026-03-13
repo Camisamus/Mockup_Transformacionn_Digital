@@ -120,7 +120,13 @@ $googleMapsKey = AppConfig::getGoogleMapsKey();
                                     Documento</label>
                                 <select id="tis_tipo" required
                                     class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3">
-                                    <option value="" selected disabled>Cargando tipos...</option>
+                                    <option value="" selected disabled>Seleccione un tipo...</option>
+                                    <option value="Memoramdum">Memoramdum</option>
+                                    <option value="Informe">Informe</option>
+                                    <option value="Oficio">Oficio</option>
+                                    <option value="Orden de servicio">Orden de servicio</option>
+                                    <option value="Decreto alcaldicio">Decreto alcaldicio</option>
+                                    <option value="No aplica">No aplica</option>
                                 </select>
                             </div>
                             <div class="space-y-2">

@@ -32,7 +32,16 @@ $subtematicas = $subtematicaCtrl->getAll()['data'] ?? [];
 $sectores = $sectorCtrl->getAll()['data'] ?? [];
 $escolaridades = $escolaridadCtrl->getAll()['data'] ?? [];
 // Ahora traemos Cargos en lugar de Funcionarios para la bandeja de asignación
-$cargosOirs = $funcionarioCtrl->getAllCargosOIRS()['data'] ?? [];
+
+// Filtros manuales para destinatarios de la OIRS
+$destinos = [
+    "car_nivel" => 3, // 3: Funcionarios, 2: Jefes, 1: Administradores
+    "area_id"   => 2  // ID del Área (trd_general_areas)
+];
+
+$cargosOirs = $funcionarioCtrl->getAllCargosOIRS($destinos)['data'] ?? [];
+
+
 $misCargos = $funcionarioCtrl->getMisCargosOIRS();
 $misCargosIds = array_column($misCargos, 'car_id');
 
@@ -103,6 +112,12 @@ if (!empty($intersect)) {
     $esAreaValida = 1;
 } 
 
+if (isset($userOirsInfo['tga_id']) && $userOirsInfo['tga_id'] == 1) {
+    // El area 2 es de OIRS y puede asignar 
+
+    // Eres temàtico, no puedes asignar
+    $esAreaValida = 0;
+} 
 
 /* si es administrador puede asignar porque si */ 
 

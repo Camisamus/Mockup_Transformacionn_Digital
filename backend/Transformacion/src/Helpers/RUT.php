@@ -61,4 +61,21 @@ class RUT
 
         return strtoupper($dv) == (string) $dvr;
     }
+
+    /**
+     * Checks if a RUT belongs to a legal entity (empresa).
+     * In Chile, company RUTs start from 50,000,000.
+     * 
+     * @param string $rut
+     * @return bool
+     */
+    public static function isLegalEntity($rut)
+    {
+        $rut = preg_replace('/[^0-9]/', '', $rut);
+        if (empty($rut))
+            return false;
+        $num = (int) $rut;
+        // Business RUTs are usually > 50.000.000
+        return $num > 50000000;
+    }
 }

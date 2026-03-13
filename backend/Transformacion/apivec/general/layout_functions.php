@@ -61,6 +61,42 @@ function renderSidebarVecinos($permissions, $pathPrefix, $currentScript)
         return isset($item['rol_modulo']) && $item['rol_modulo'] === $module;
     });
 
+    // Fallback: Si no hay permisos definidos para el módulo OIRS, agregamos los básicos
+    if ($module === 'oirs' && empty($filteredPermissions)) {
+        $filteredPermissions = [
+            [
+                "rol_id" => "V.O.1",
+                "rol_nombre" => "Mis Solicitudes",
+                "rol_enlace" => "vecinos/oirs/index.php",
+                "rol_simbolo" => "list",
+                "rol_tipo" => "Pagina",
+                "rol_formato" => "menu",
+                "rol_modulo" => "oirs",
+                "rol_orden" => 1
+            ],
+            [
+                "rol_id" => "V.O.2",
+                "rol_nombre" => "Nueva Solicitud",
+                "rol_enlace" => "vecinos/oirs/nuevo.php",
+                "rol_simbolo" => "plus-circle",
+                "rol_tipo" => "Pagina",
+                "rol_formato" => "menu",
+                "rol_modulo" => "oirs",
+                "rol_orden" => 2
+            ],
+            [
+                "rol_id" => "V.O.3",
+                "rol_nombre" => "Mis Datos",
+                "rol_enlace" => "vecinos/oirs/mis_datos.php",
+                "rol_simbolo" => "user",
+                "rol_tipo" => "Pagina",
+                "rol_formato" => "menu",
+                "rol_modulo" => "oirs",
+                "rol_orden" => 3
+            ]
+        ];
+    }
+
     // 3. Renderizar usando la nueva interfaz estilizada
     return renderSidebarPrincipal($filteredPermissions, $currentScript, $pathPrefix, $module);
 }

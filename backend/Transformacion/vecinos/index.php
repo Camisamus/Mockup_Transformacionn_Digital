@@ -17,9 +17,28 @@ include '../apivec/general/header.php';
                     <?php echo htmlspecialchars($_SESSION['vecino_nombre']); ?>!
                 </h2>
                 <p class="text-muted">Estamos preparando nuevas funciones para tu portal ciudadano.</p>
+                
+                <div class="row g-4 mt-4 text-start">
+                    <div class="col-md-6 mx-auto">
+                        <a href="oirs/index.php" class="card border-0 shadow-sm card-hover text-decoration-none" style="border-radius: 20px; transition: all 0.3s;">
+                            <div class="card-body p-4 d-flex align-items-center gap-4">
+                                <div class="bg-primary bg-opacity-10 text-primary rounded-4 p-3">
+                                    <i data-feather="message-square" style="width: 28px; height: 28px;"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold text-dark mb-1">OIRS</h5>
+                                    <p class="small text-muted mb-0">Gestión de consultas, reclamos y sugerencias.</p>
+                                </div>
+                                <div class="ms-auto text-muted opacity-25">
+                                    <i data-feather="chevron-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
                 <div class="mt-4 pt-4 border-top">
-                    <p class="small text-secondary mb-0">Próximamente podrás realizar solicitudes y seguir tus trámites
-                        desde aquí.</p>
+                    <p class="small text-secondary mb-0">Próximamente podrás realizar trámites y seguir tus gestiones desde aquí.</p>
                 </div>
             </div>
         </div>

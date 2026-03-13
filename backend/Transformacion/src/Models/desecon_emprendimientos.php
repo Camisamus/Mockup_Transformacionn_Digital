@@ -58,7 +58,8 @@ class desecon_emprendimientos
                 dee_direccion = :direccion,
                 dee_lat = :lat,
                 dee_lon = :lon,
-                dee_estado = :estado";
+                dee_estado = :estado,
+                dee_registro_general_de_expedientes = :expediente";
 
             $stmt = $this->conn->prepare($query);
 
@@ -74,6 +75,7 @@ class desecon_emprendimientos
             $stmt->bindValue(':lat', isset($data['dee_lat']) ? (float) $data['dee_lat'] : null);
             $stmt->bindValue(':lon', isset($data['dee_lon']) ? (float) $data['dee_lon'] : null);
             $stmt->bindValue(':estado', $data['dee_estado'] ?? 'Por Validar');
+            $stmt->bindValue(':expediente', $data['dee_registro_general_de_expedientes'] ?? null);
 
             if ($stmt->execute()) {
                 // Registrar en bitácora si es posible (asumiendo que hay un registro de trámite si se requiere)

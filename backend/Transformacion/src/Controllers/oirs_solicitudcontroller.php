@@ -102,6 +102,9 @@ class oirs_solicitudcontroller
     public function getAll()
     {
         $result = $this->oirsModel->getAll();
+        if (isset($result['status']) && $result['status'] === 'error') {
+            return $result;
+        }
         return ["status" => "success", "data" => $result];
     }
 
@@ -156,6 +159,10 @@ class oirs_solicitudcontroller
         $criteria['search'] = $data['search'] ?? null;
 
         $result = $this->oirsModel->search($criteria);
+        
+        if (isset($result['status']) && $result['status'] === 'error') {
+            return $result;
+        }
 
         return ["status" => "success", "data" => $result];
     }
@@ -169,6 +176,24 @@ class oirs_solicitudcontroller
     public function getChartData()
     {
         $data = $this->oirsModel->getChartData();
+        return ["status" => "success", "data" => $data];
+    }
+
+    public function getByContribuyente($contribuyente_id)
+    {
+        if (!$contribuyente_id) {
+            return ["status" => "error", "message" => "ID de contribuyente es requerido"];
+        }
+        $data = $this->oirsModel->getByContribuyente($contribuyente_id);
+        return ["status" => "success", "data" => $data];
+    }
+
+    public function getSummaryByContribuyente($contribuyente_id)
+    {
+        if (!$contribuyente_id) {
+            return ["status" => "error", "message" => "ID de contribuyente es requerido"];
+        }
+        $data = $this->oirsModel->getSummaryByContribuyente($contribuyente_id);
         return ["status" => "success", "data" => $data];
     }
 }

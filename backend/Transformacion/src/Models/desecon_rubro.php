@@ -23,7 +23,7 @@ class desecon_rubro
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
-            error_log("Error en DESECON_RUBRO::getAll: " . $e->getMessage());
+            error_log("Error en desecon_rubro::getAll: " . $e->getMessage());
             return [];
         }
     }
@@ -37,7 +37,7 @@ class desecon_rubro
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
-            error_log("Error en DESECON_RUBRO::getById: " . $e->getMessage());
+            error_log("Error en desecon_rubro::getById: " . $e->getMessage());
             return null;
         }
     }
@@ -45,14 +45,15 @@ class desecon_rubro
     public function create($data)
     {
         try {
-            $query = "INSERT INTO {$this->table} (rub_id, rub_nombre, rub_creacion) 
-                      VALUES (:id, :nombre, NOW())";
+            $query = "INSERT INTO {$this->table} (rub_id, rub_nombre, rub_icono, rub_creacion) 
+                      VALUES (:id, :nombre, :icono, NOW())";
             $stmt = $this->db->prepare($query);
             $stmt->bindParam(':id', $data['rub_id']);
             $stmt->bindParam(':nombre', $data['rub_nombre']);
+            $stmt->bindParam(':icono', $data['rub_icono']);
             return $stmt->execute();
         } catch (Exception $e) {
-            error_log("Error en DESECON_RUBRO::create: " . $e->getMessage());
+            error_log("Error en desecon_rubro::create: " . $e->getMessage());
             return false;
         }
     }
@@ -60,13 +61,14 @@ class desecon_rubro
     public function update($id, $data)
     {
         try {
-            $query = "UPDATE {$this->table} SET rub_nombre = :nombre WHERE rub_id = :id";
+            $query = "UPDATE {$this->table} SET rub_nombre = :nombre, rub_icono = :icono WHERE rub_id = :id";
             $stmt = $this->db->prepare($query);
             $stmt->bindParam(':id', $id);
             $stmt->bindParam(':nombre', $data['rub_nombre']);
+            $stmt->bindParam(':icono', $data['rub_icono']);
             return $stmt->execute();
         } catch (Exception $e) {
-            error_log("Error en DESECON_RUBRO::update: " . $e->getMessage());
+            error_log("Error en desecon_rubro::update: " . $e->getMessage());
             return false;
         }
     }
@@ -79,7 +81,7 @@ class desecon_rubro
             $stmt->bindParam(':id', $id);
             return $stmt->execute();
         } catch (Exception $e) {
-            error_log("Error en DESECON_RUBRO::delete: " . $e->getMessage());
+            error_log("Error en desecon_rubro::delete: " . $e->getMessage());
             return false;
         }
     }

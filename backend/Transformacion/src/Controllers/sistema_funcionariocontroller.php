@@ -99,11 +99,11 @@ class sistema_funcionariocontroller
         }
 
         if ($maxNivelPropio == 3) {
-            // "El más pulento" (Admin OIRS) -> Deriva a Jefes (Nivel 2)
-            $filters['car_nivel'] = 2;
+            // "El más pulento" (Admin OIRS) -> Deriva a Jefes (Nivel 2) por defecto
+            if (!isset($filters['car_nivel'])) $filters['car_nivel'] = 2;
         } elseif ($maxNivelPropio == 2) {
-            // "Jefe" -> Deriva a Subordinados (Nivel 1) de su área
-            $filters['car_nivel'] = 1;
+            // "Jefe" -> Deriva a Subordinados (Nivel 1) de su área por defecto
+            if (!isset($filters['car_nivel'])) $filters['car_nivel'] = 1;
 
             // Priorizamos el área del jefe si no se especificó un filtro manual
             if (!isset($filters['area_id'])) {
@@ -113,8 +113,8 @@ class sistema_funcionariocontroller
                     $filters['area_id'] = $misCargos[0]['car_area'];
                 }
             }
-        } else {
-            // Nivel 1 o inferior -> No tiene personal a cargo para derivar
+        } elseif ($maxNivelPropio < 2 && !isset($filters['car_nivel'])) {
+            // Si es nivel 1 y no pide nada específico, no ve a nadie para derivar
             return ["status" => "success", "data" => []];
         }
 

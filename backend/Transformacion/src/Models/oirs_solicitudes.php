@@ -146,13 +146,65 @@ class oirs_solicitudes
         }
     }
 
+    public function logQuery($query, $params = [])
+    {
+        $logFile = __DIR__ . "/../../logs_oirs_solicitudes.txt";
+        $logData = date('Y-m-d H:i:s') . " - QUERY: " . $query . " - PARAMS: " . json_encode($params) . "\n";
+        file_put_contents($logFile, $logData, FILE_APPEND);
+    }
+
+    public function getByContribuyente($contribuyente_id)
+    {
+        $query = "SELECT s.*, rgt.rgt_id_publica, rgt.rgt_creacion, rgt.rgt_estado as rgt_estado_gral,
+                         t.tem_nombre, st.sub_nombre, ta.tat_nombre
+                  FROM " . $this->table_name . " s
+                  JOIN " . $this->table_name_parent . " rgt ON s.oirs_registro_tramite = rgt.rgt_id
+                  LEFT JOIN trd_oirs_tematicas t ON s.oirs_tematica = t.tem_id
+                  LEFT JOIN trd_oirs_subtematicas st ON s.oirs_subtematica = st.sub_id
+                  LEFT JOIN trd_oirs_tipo_atencion ta ON s.oirs_tipo_atencion = ta.tat_id
+                  WHERE rgt.rgt_contribuyente = :id AND rgt.rgt_borrado = 0
+                  ORDER BY rgt.rgt_creacion DESC";
+
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindValue(":id", $contribuyente_id);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            error_log("Error in OirsSolicitud::getByContribuyente: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function getSummaryByContribuyente($contribuyente_id)
+    {
+        $query = "SELECT 
+                    COUNT(*) as total,
+                    SUM(CASE WHEN s.oirs_estado IN (0, 1, 2) THEN 1 ELSE 0 END) as pendientes,
+                    SUM(CASE WHEN s.oirs_estado = 4 THEN 1 ELSE 0 END) as finalizadas,
+                    SUM(CASE WHEN s.oirs_estado = 5 THEN 1 ELSE 0 END) as cerradas
+                  FROM " . $this->table_name . " s
+                  JOIN " . $this->table_name_parent . " rgt ON s.oirs_registro_tramite = rgt.rgt_id
+                  WHERE rgt.rgt_contribuyente = :id AND rgt.rgt_borrado = 0";
+
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindValue(":id", $contribuyente_id);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            error_log("Error in OirsSolicitud::getSummaryByContribuyente: " . $e->getMessage());
+            return ["total" => 0, "pendientes" => 0, "finalizadas" => 0, "cerradas" => 0];
+        }
+    }
+
     public function getAll($filters = [])
     {
         $query = "SELECT o.*, r.*, t.tem_nombre, s.sub_nombre, 
                   tgc.tgc_nombre, tgc.tgc_apellido_paterno, tgc.tgc_apellido_materno, tgc.tgc_rut,
                   tgc.tgc_razon_social, tgc.tgc_tipo,
-                  (SELECT ofa.ofa_rol FROM trd_oirs_asignaciones oia 
-                   JOIN trd_oirs_funcionarios_areas ofa ON oia.oia_asignacion = ofa.ofa_funcionario 
+                  (SELECT car.car_nombre FROM trd_oirs_asignaciones oia 
+                   JOIN trd_general_cargos car ON oia.oia_asignacion = car.car_id 
                    WHERE oia.oia_solicitud = o.oirs_id AND oia.oia_borrado = 0 
                    ORDER BY oia.oia_id DESC LIMIT 1) as ofa_rol
                   FROM " . $this->table_name . " o
@@ -165,9 +217,16 @@ class oirs_solicitudes
         // basic filtering could go here
         $query .= " ORDER BY o.oirs_id DESC";
 
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $this->logQuery($query);
+
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error en oirs_solicitudes::getAll: " . $e->getMessage());
+            return ["status" => "error", "message" => "Error SQL: " . $e->getMessage()];
+        }
     }
 
     public function getById($id)
@@ -198,8 +257,8 @@ class oirs_solicitudes
         $query = "SELECT o.*, r.*, t.tem_nombre, s.sub_nombre, 
                   tgc.tgc_nombre, tgc.tgc_apellido_paterno, tgc.tgc_apellido_materno, tgc.tgc_rut,
                   tgc.tgc_razon_social, tgc.tgc_tipo,
-                  (SELECT ofa.ofa_rol FROM trd_oirs_asignaciones oia 
-                   JOIN trd_oirs_funcionarios_areas ofa ON oia.oia_asignacion = ofa.ofa_funcionario 
+                  (SELECT car.car_nombre FROM trd_oirs_asignaciones oia 
+                   JOIN trd_general_cargos car ON oia.oia_asignacion = car.car_id 
                    WHERE oia.oia_solicitud = o.oirs_id AND oia.oia_borrado = 0 
                    ORDER BY oia.oia_id DESC LIMIT 1) as ofa_rol
                   FROM " . $this->table_name . " o
@@ -262,13 +321,19 @@ class oirs_solicitudes
         }
 
         $query .= " ORDER BY o.oirs_id DESC";
+        $this->logQuery($query, $params);
 
-        $stmt = $this->conn->prepare($query);
-        foreach ($params as $key => $val) {
-            $stmt->bindValue($key, $val);
+        try {
+            $stmt = $this->conn->prepare($query);
+            foreach ($params as $key => $val) {
+                $stmt->bindValue($key, $val);
+            }
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error en oirs_solicitudes::search: " . $e->getMessage());
+            return ["status" => "error", "message" => "Error SQL Search: " . $e->getMessage()];
         }
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getMetrics()

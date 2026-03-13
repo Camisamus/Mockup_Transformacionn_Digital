@@ -1,0 +1,325 @@
+--- 2026-03-13 18:16:00 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":1,":area_id":"1"}
+RESULTADOS: 0 encontrados
+
+--- 2026-03-13 18:41:14 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":1,":area_id":"1"}
+RESULTADOS: 0 encontrados
+
+--- 2026-03-13 18:42:30 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":1,":area_id":2}
+RESULTADOS: 0 encontrados
+
+--- 2026-03-13 18:43:37 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 2 encontrados
+
+--- 2026-03-13 18:46:51 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":1,":area_id":"1"}
+RESULTADOS: 0 encontrados
+
+--- 2026-03-13 18:47:01 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":1,":area_id":"1"}
+RESULTADOS: 0 encontrados
+
+--- 2026-03-13 18:47:19 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":1,":area_id":"1"}
+RESULTADOS: 0 encontrados
+
+--- 2026-03-13 18:48:34 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 4 encontrados
+
+--- 2026-03-13 18:48:51 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 4 encontrados
+
+--- 2026-03-13 19:09:18 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 4 encontrados
+
+--- 2026-03-13 19:17:38 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 4 encontrados
+
+--- 2026-03-13 19:20:06 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 4 encontrados
+
+--- 2026-03-13 19:25:41 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 4 encontrados
+
+--- 2026-03-13 19:26:12 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 4 encontrados
+
+--- 2026-03-13 19:26:26 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 4 encontrados
+
+--- 2026-03-13 19:30:01 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 4 encontrados
+
+--- 2026-03-13 19:31:16 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 4 encontrados
+
+--- 2026-03-13 19:32:06 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 4 encontrados
+
+--- 2026-03-13 19:34:13 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 4 encontrados
+
+--- 2026-03-13 19:38:16 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 4 encontrados
+
+--- 2026-03-13 19:39:50 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 4 encontrados
+
+--- 2026-03-13 19:40:05 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 4 encontrados
+
+--- 2026-03-13 19:43:06 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 4 encontrados
+
+--- 2026-03-13 19:51:06 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 4 encontrados
+
+--- 2026-03-13 19:51:12 ---
+QUERY: SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0 AND c.car_nivel = :car_nivel AND c.car_area = :area_id ORDER BY c.car_nombre ASC
+PARAMS: {":car_nivel":3,":area_id":2}
+RESULTADOS: 4 encontrados
+

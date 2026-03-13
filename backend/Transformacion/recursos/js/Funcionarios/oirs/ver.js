@@ -10,12 +10,47 @@ $(document).ready(function () {
     const urlParams = new URLSearchParams(window.location.search);
     currentOirsId = urlParams.get('id');
 
-    // Inicializar con datos del servidor
+    // 1. Inicializar con datos del servidor
     if (window.oirsData && window.oirsData.solicitud) {
         renderizarDatos(window.oirsData.solicitud);
     } else if (!currentOirsId) {
         solicitarID();
     }
+
+    // 2. Persistencia de Pestañas (Tabs)
+    const restoreTab = () => {
+        const activeTab = localStorage.getItem('activeTab_oirs_ver');
+        if (activeTab) {
+            try {
+                const tabEl = document.querySelector(`#oirsTabs a[href="${activeTab}"]`);
+                if (tabEl) {
+                    if (window.bootstrap && bootstrap.Tab) {
+                        const tab = new bootstrap.Tab(tabEl);
+                        tab.show();
+                    } else if ($(tabEl).tab) {
+                        $(tabEl).tab('show');
+                    } else {
+                        tabEl.click();
+                    }
+                }
+            } catch (e) {
+                console.warn('[OIRS] Error restaurando pestaña:', e);
+            }
+        }
+    };
+
+    // Intentar restaurar inmediatamente o cuando cargue todo
+    if (document.readyState === 'complete') {
+        restoreTab();
+    } else {
+        window.addEventListener('load', restoreTab);
+    }
+
+    // Escuchar el cambio de pestaña para guardarlo
+    $(document).on('shown.bs.tab', 'a[data-bs-toggle="tab"]', function (e) {
+        const target = $(e.target).attr('href');
+        localStorage.setItem('activeTab_oirs_ver', target);
+    });
 
     // Event Listeners para Asignación
     $('#btn_asignar').on('click', guardarAsignacion);
@@ -629,16 +664,19 @@ function cargarHistorialAsignacion(asgId, fechaCreacion, instruccion, containerI
             const historial = res.data || [];
             let htmlChat = '';
 
-            // Mensaje inicial (Instrucción) - Aplicamos lógica isMe
-            const isMeInit = parseInt(asignadorId) === parseInt(window.oirsData.currentUserId);
-            const alignmentInit = isMeInit ? 'justify-end' : 'justify-start';
-            const bgColorInit = isMeInit ? 'bg-white border-slate-200' : 'bg-blue-50 border-blue-100';
+            // Mensaje inicial (Instrucción) - SIEMPRE a la izquierda (Autor)
+            const sessionId = parseInt(window.oirsData.currentUserId);
+            const asgAsignadorId = parseInt(asignadorId);
+            const isMeInit = (asgAsignadorId == sessionId);
+
+            const alignmentInit = 'justify-start'; // Siempre inicio
+            const bgColorInit = 'bg-blue-50 border-blue-100'; // Color de autor (azul suave)
             const labelInit = isMeInit ? 'Yo' : nombreAsignador;
-            const labelColorInit = isMeInit ? 'text-slate-500' : 'text-blue-600';
+            const labelColorInit = 'text-blue-600';
 
             htmlChat += `
-            <div class="flex ${alignmentInit} mb-4" style="display: flex; ${isMeInit ? 'justify-content: flex-end;' : ''}">
-                <div class="${bgColorInit} border rounded-2xl p-4 max-w-[85%] shadow-sm" style="${isMeInit ? 'margin-left: auto;' : 'margin-right: auto;'} min-width: 200px; border: 1px solid #e2e8f0; background-color: ${isMeInit ? '#ffffff' : '#f0f9ff'};">
+            <div class="flex ${alignmentInit} mb-4" style="display: flex; justify-content: flex-start;">
+                <div class="${bgColorInit} border rounded-2xl p-4 max-w-[85%] shadow-sm" style="margin-right: auto; min-width: 200px; border: 1px solid #e2e8f0; background-color: #f0f9ff;">
                     <div class="flex items-center mb-1 gap-2">
                         <span class="text-[10px] font-bold ${labelColorInit} uppercase tracking-widest">${labelInit}</span>
                         <span class="text-[9px] text-slate-400">${fechaCreacion ? new Date(fechaCreacion).toLocaleString() : 'N/A'}</span>
@@ -650,12 +688,19 @@ function cargarHistorialAsignacion(asgId, fechaCreacion, instruccion, containerI
 
             // Hilo de conversación
             historial.forEach(msg => {
-                const isMe = parseInt(msg.oac_emisor) === parseInt(window.oirsData.currentUserId);
-                const alignment = isMe ? 'justify-end' : 'justify-start';
-                const bgColor = isMe ? 'bg-white border-slate-200' : 'bg-blue-50 border-blue-100';
-                const extraStyles = isMe ? 'margin-left: auto;' : 'margin-right: auto;';
+                const sessionUserId = parseInt(window.oirsData.currentUserId);
+                const msgEmisorId = parseInt(msg.oac_emisor);
+                const assignorId = parseInt(asignadorId);
+
+                // Autor (Asignador) -> Izquierda, Otros (Respondedores) -> Derecha
+                const isAssignor = (msgEmisorId == assignorId);
+                const isMe = (msgEmisorId == sessionUserId);
+
+                const alignment = isAssignor ? 'justify-start' : 'justify-end';
+                const bgColor = isAssignor ? 'bg-blue-50 border-blue-100' : 'bg-white border-slate-200';
+                const extraStyles = isAssignor ? 'margin-right: auto;' : 'margin-left: auto;';
                 const label = isMe ? 'Yo' : `${msg.usr_nombre} ${msg.usr_apellido}`;
-                const labelColor = isMe ? 'text-slate-500' : 'text-blue-600';
+                const labelColor = isAssignor ? 'text-blue-600' : 'text-slate-500';
 
                 let statusBadge = '';
                 if (msg.oac_marcado == 1) statusBadge = '<span class="ml-2 px-2 py-0.5 bg-teal-100 text-teal-700 text-[9px] font-bold rounded-full uppercase" style="background-color: #d1fae5; color: #047857;">Aprobada</span>';
@@ -667,8 +712,8 @@ function cargarHistorialAsignacion(asgId, fechaCreacion, instruccion, containerI
                     </button>` : '';
 
                 htmlChat += `
-                <div class="flex ${alignment} mb-4" style="display: flex; ${isMe ? 'justify-content: flex-end;' : ''}">
-                    <div class="${bgColor} border rounded-2xl p-4 max-w-[85%] shadow-sm" style="${extraStyles} min-width: 200px; border: 1px solid #e2e8f0; background-color: ${isMe ? '#ffffff' : '#f0f9ff'};">
+                <div class="flex ${alignment} mb-4" style="display: flex; ${!isAssignor ? 'justify-content: flex-end;' : 'justify-content: flex-start;'}">
+                    <div class="${bgColor} border rounded-2xl p-4 max-w-[85%] shadow-sm" style="${extraStyles} min-width: 200px; border: 1px solid #e2e8f0; background-color: ${isAssignor ? '#f0f9ff' : '#ffffff'};">
                         <div class="flex items-center mb-1 gap-2" style="display: flex; align-items: center; width: 100%;">
                             <span class="text-[10px] font-bold ${labelColor} uppercase tracking-widest">${label}</span>
                             <span class="text-[9px] text-slate-400">${new Date(msg.oac_creacion).toLocaleString()}</span>

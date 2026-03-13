@@ -58,7 +58,8 @@ async function cargarListas() {
             fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/desve/organizaciones.php`, fetchOptions).then(r => r.json())
         ]);
 
-        // 1. Tipos de Ingreso
+        // 1. Tipos de Ingreso (Comentado temporalmente para mostrar opciones de front-end)
+        /*
         const selectTipo = document.getElementById('tis_tipo');
         selectTipo.innerHTML = '<option value="" selected disabled>Seleccione un tipo...</option>';
         if (respTipos.status === 'success') {
@@ -69,6 +70,7 @@ async function cargarListas() {
                 selectTipo.appendChild(opt);
             });
         }
+        */
 
         // 2. Funcionarios
         if (respFunc.status === 'success') {
@@ -171,7 +173,13 @@ function setupEventListeners() {
         const area = document.getElementById('geolocalizacion_area');
         area.classList.toggle('hidden', !this.checked);
         if (this.checked && typeof google !== 'undefined') { 
-            setTimeout(() => { if (map) google.maps.event.trigger(map, 'resize'); }, 100); 
+            setTimeout(() => { 
+                if (!map && typeof window.initMap === 'function') {
+                    window.initMap();
+                } else if (map) {
+                    google.maps.event.trigger(map, 'resize'); 
+                }
+            }, 100); 
         }
     });
 
@@ -439,10 +447,18 @@ function eliminarDocumento(index) { documentos.splice(index, 1); renderizarDocum
 
 async function guardarIngreso() {
     try {
+        const tipoSelect = document.getElementById('tis_tipo');
+        const tipoVal = tipoSelect.value;
+        const tipoEsTexto = isNaN(tipoVal) && tipoVal !== '';
+        
+        const tituloBase = document.getElementById('tis_titulo').value;
+        const tituloFinal = tipoEsTexto ? `[${tipoVal}] ${tituloBase}` : tituloBase;
+        const tipoIdFinal = tipoEsTexto ? 1 : tipoVal; // Usa 1 como fallback si es texto para evitar error 500 en DB
+
         const payload = {
             ACCION: 'CREAR',
-            tis_titulo: document.getElementById('tis_titulo').value,
-            tis_tipo: document.getElementById('tis_tipo').value,
+            tis_titulo: tituloFinal,
+            tis_tipo: tipoIdFinal,
             tis_contenido: document.getElementById('tis_contenido').value,
             tis_id_solicitante: document.getElementById('tis_id_solicitante').value,
             tis_nombre_solicitante: document.getElementById('tis_nombre_solicitante').value,
@@ -714,30 +730,40 @@ window.guardarNuevoContribuyente = async function() {
 // --- FUNCIONES GOOGLE MAPS (REPLICADAS DE DESVE) ---
 
 window.initMap = function () {
-    if (!document.getElementById("map_desve")) return;
+    const mapElement = document.getElementById("map_desve");
+    if (!mapElement) return;
 
-    geocoder = new google.maps.Geocoder();
-    map = new google.maps.Map(document.getElementById("map_desve"), {
-        zoom: 15,
-        center: defaultLocation,
-        mapTypeControl: false,
-        streetViewControl: false,
-    });
+    // Verificar si google.maps ya está disponible
+    if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
+        console.warn('Google Maps API aún no está cargada.');
+        return;
+    }
 
-    marker = new google.maps.Marker({
-        map: map,
-        draggable: true,
-        position: defaultLocation,
-    });
+    // Inicializar sólo si no se ha inicializado antes
+    if (!map) {
+        geocoder = new google.maps.Geocoder();
+        map = new google.maps.Map(mapElement, {
+            zoom: 15,
+            center: defaultLocation,
+            mapTypeControl: false,
+            streetViewControl: false,
+        });
 
-    marker.addListener("dragend", function (event) {
-        updateCoordinates(event.latLng);
-    });
+        marker = new google.maps.Marker({
+            map: map,
+            draggable: true,
+            position: defaultLocation,
+        });
 
-    map.addListener("click", function (event) {
-        marker.setPosition(event.latLng);
-        updateCoordinates(event.latLng);
-    });
+        marker.addListener("dragend", function (event) {
+            updateCoordinates(event.latLng);
+        });
+
+        map.addListener("click", function (event) {
+            marker.setPosition(event.latLng);
+            updateCoordinates(event.latLng);
+        });
+    }
 };
 
 function updateCoordinates(latLng) {

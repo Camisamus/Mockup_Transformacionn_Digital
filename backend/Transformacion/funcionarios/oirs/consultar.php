@@ -186,40 +186,6 @@ include '../../api/general/header.php';
 <!-- Scripts OIRS -->
 <script src="../../recursos/js/funcionarios/oirs/consultar.js"></script>
 
-<script>
-    $(document).ready(function () {
-        // Toggle filtros avanzados
-        $('#btnAdvanced').click(function () {
-            $('#advancedPanel').toggleClass('show');
-            const isActive = $('#advancedPanel').hasClass('show');
-            $(this).toggleClass('bg-primary-blue text-white border-primary-blue');
-            $(this).html(isActive ? 
-                '<span class="material-symbols-outlined text-lg">expand_less</span> MENOS FILTROS' : 
-                '<span class="material-symbols-outlined text-lg">tune</span> MÁS FILTROS');
-        });
-
-        // Limpiar Filtros
-        $('#btnReset').click(function () {
-            $('input, select').val('');
-        });
-
-        // Acción botones
-        $('.action-btn').click(function (e) {
-            e.stopPropagation();
-            Swal.fire({
-                title: 'Vista previa',
-                text: 'Aquí se abrirá la gestión de la solicitud seleccionada.',
-                icon: 'info',
-                confirmButtonColor: '#1a5f9c'
-            });
-        });
-
-        // Redirección por fila
-        $('.oirs-row').click(function () {
-            let folio = $(this).data('folio');
-            if(folio) window.location.href = 'oirs-ver.php?folio=' + folio;
-        });
-    });
-</script>
+<!-- Redundancia eliminada: La lógica está en consultar.js -->
 
 <?php include '../../api/general/footer.php'; ?>

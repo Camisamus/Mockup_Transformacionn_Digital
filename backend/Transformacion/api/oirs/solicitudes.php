@@ -17,6 +17,10 @@ $controller = new oirs_solicitudcontroller($db);
 // Get JSON data
 $data = json_decode(file_get_contents("php://input"), true);
 
+if (isset($_GET['debug'])) {
+    print_r($data);
+}
+
 if (!$data || !isset($data['ACCION'])) {
     http_response_code(400);
     echo json_encode(["status" => "error", "message" => "Acción no especificada"]);
@@ -64,6 +68,8 @@ switch ($data['ACCION']) {
                 'ip' => $_SERVER['REMOTE_ADDR'],
                 'resultado' => 'Exitoso'
             ]);
+        } catch (\Exception $e) {
+            error_log("Error al crear log de auditoría OIRS: " . $e->getMessage());
         }
 
         echo json_encode($response);

@@ -127,17 +127,15 @@ class general_funcionarios
 
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        /*
-                // ESCUELA DE LA VIEJA GUARDIA: Ver directamente en pantalla
-                echo "<pre style='background:#000; color:#0f0; padding:20px; border:5px solid #f00;'>";
-                echo "EROR 5102\n";
-                echo "SQL: " . $query . "\n";
-                echo "PARAMS: " . json_encode($params) . "\n";
-                echo "RESULTADOS:\n";
-                print_r($results);
-                echo "</pre>";
-                die();
-        */
+
+        // DEBUG PARA COMPA: Guardar en un TXT para revisar la consulta
+        $logFile = __DIR__ . "/../../debug_cargos_oirs.txt";
+        $logData = "--- " . date('Y-m-d H:i:s') . " ---\n";
+        $logData .= "QUERY: " . $query . "\n";
+        $logData .= "PARAMS: " . json_encode($params) . "\n";
+        $logData .= "RESULTADOS: " . count($results) . " encontrados\n\n";
+        file_put_contents($logFile, $logData, FILE_APPEND);
+
         return $results;
     }
 

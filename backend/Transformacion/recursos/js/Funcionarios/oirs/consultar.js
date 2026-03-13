@@ -9,6 +9,32 @@ $(document).ready(function () {
     // 2. Cargar Datos de la Tabla
     loadTableData();
 
+    // Toggle filtros avanzados
+    $('#btnAdvanced').click(function () {
+        $('#advancedPanel').toggleClass('show');
+        const isActive = $('#advancedPanel').hasClass('show');
+        $(this).toggleClass('bg-primary-blue text-white border-primary-blue');
+        $(this).html(isActive ?
+            '<span class="material-symbols-outlined text-lg">expand_less</span> MENOS FILTROS' :
+            '<span class="material-symbols-outlined text-lg">tune</span> MÁS FILTROS');
+    });
+
+    // Acción botones (Previsualización)
+    $(document).on('click', '.action-btn', function (e) {
+        e.stopPropagation();
+        const id = $(this).data('id');
+        // Aquí podrías abrir un modal, por ahora redirigimos o avisamos
+        Swal.fire({
+            title: 'Detalles de la Solicitud',
+            text: 'Redirigiendo a la vista detallada...',
+            icon: 'info',
+            timer: 1000,
+            showConfirmButton: false
+        }).then(() => {
+            window.location.href = `ver.php?id=${id}`;
+        });
+    });
+
     // 3. Exportar Excel
     $('#btn_exportar_excel').click(async function () {
         try {
@@ -61,6 +87,7 @@ $(document).ready(function () {
     async function loadFiltros() {
         try {
             // Cargar Sectores
+            /*
             const resSectores = await $.ajax({
                 url: '../../api/sisadmin/mantenedores/general/sectores.php',
                 method: 'POST',
@@ -71,7 +98,7 @@ $(document).ready(function () {
                 resSectores.data.forEach(sec => {
                     $('#filter-sector').append(`<option value="${sec.sec_id}">${sec.sec_nombre}</option>`);
                 });
-            }
+            }*/
 
             // Cargar Temáticas
             const resTematicas = await $.ajax({
