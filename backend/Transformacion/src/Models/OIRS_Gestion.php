@@ -34,19 +34,23 @@ class OIRS_Gestion
 
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bindValue(":solicitud_id", $data['oig_solicitud']);
-        $stmt->bindValue(":asignacion", $data['oig_asignacion'] ?? null);
-        $stmt->bindValue(":respuesta_preliminar", $data['oig_respuesta_preliminar'] ?? null);
-        $stmt->bindValue(":requiere_tecnica", $data['oig_requiere_respuesta_tecnica'] ?? null);
-        $stmt->bindValue(":respuesta_tecnica", $data['oig_respuesta_tecnica'] ?? null);
-        $stmt->bindValue(":ejecutada", $data['oig_solicitud_ejecutada'] ?? null);
-        $stmt->bindValue(":fuente", $data['oig_fuente_financiamiento'] ?? null);
-        $stmt->bindValue(":notificacion", $data['oig_notificacion_ejecucion'] ?? null);
-        $stmt->bindValue(":en_plazo", $data['oig_realizada_en_plazo'] ?? null);
-        $stmt->bindValue(":aclaratoria_cont", $data['oig_aclaratoria_contribuyente'] ?? null);
-        $stmt->bindValue(":resp_aclaratoria", $data['oig_respuesta_aclaratoria'] ?? null);
+        $params = [
+            ":solicitud_id" => $data['oig_solicitud'],
+            ":asignacion" => $data['oig_asignacion'] ?? null,
+            ":respuesta_preliminar" => $data['oig_respuesta_preliminar'] ?? null,
+            ":requiere_tecnica" => $data['oig_requiere_respuesta_tecnica'] ?? null,
+            ":respuesta_tecnica" => $data['oig_respuesta_tecnica'] ?? null,
+            ":ejecutada" => $data['oig_solicitud_ejecutada'] ?? null,
+            ":fuente" => $data['oig_fuente_financiamiento'] ?? null,
+            ":notificacion" => $data['oig_notificacion_ejecucion'] ?? null,
+            ":en_plazo" => $data['oig_realizada_en_plazo'] ?? null,
+            ":aclaratoria_cont" => $data['oig_aclaratoria_contribuyente'] ?? null,
+            ":resp_aclaratoria" => $data['oig_respuesta_aclaratoria'] ?? null
+        ];
 
-        if ($stmt->execute()) {
+        $this->logQuery($query, $params);
+
+        if ($stmt->execute($params)) {
             // Log en Bitácora si hay respuesta preliminar
             if (!empty($data['oig_respuesta_preliminar'])) {
                 try {
@@ -85,6 +89,8 @@ class OIRS_Gestion
 
         $query = "UPDATE " . $this->table_name . " SET " . implode(", ", $fields) . " WHERE oig_solicitud = :solicitud_id";
         $stmt = $this->conn->prepare($query);
+
+        $this->logQuery($query, $params);
 
         if ($stmt->execute($params)) {
             // Log en Bitácora según lo que se actualizó
@@ -136,6 +142,9 @@ class OIRS_Gestion
                   WHERE g.oig_solicitud = :solicitud_id LIMIT 1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindValue(":solicitud_id", $solicitud_id);
+
+        $this->logQuery($query, [":solicitud_id" => $solicitud_id]);
+
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -154,83 +163,74 @@ class OIRS_Gestion
                       WHERE ofa_funcionario = :userId AND (ofa_borrado = 0 OR ofa_borrado IS NULL) LIMIT 1";
         $pStmt = $this->conn->prepare($perfilSql);
         $pStmt->bindValue(':userId', $userId);
+        
+        $this->logQuery($perfilSql, [':userId' => $userId]);
+
+        $this->logQuery("Vista: ".$view,"");
+
+        
         $pStmt->execute();
         $perfil = $pStmt->fetch(PDO::FETCH_ASSOC);
 
         $esAdminOirs = ($perfil && $perfil['ofa_area'] == 2); // Area 2 = OIRS
         
         // Base Query - Updated to join with parent table (tramite) and contributor
+        // Se une con trd_oirs_funcionarios_cargos para validar si el usuario actual ocupa el cargo asignado
         $query = "SELECT s.*, 
                          s.oirs_creacion as oirs_fecha_ingreso,
                          r.rgt_creador, r.rgt_id_publica as folio,
                          t.oig_asignacion, t.oig_solicitud_ejecutada,
                          CONCAT(tgc.tgc_nombre, ' ', tgc.tgc_apellido_paterno, ' ', tgc.tgc_apellido_materno) as nombre_contribuyente,
                          tgc.tgc_rut as rut_contribuyente,
-                         tem.tem_nombre as oirs_tematica_nombre
+                         tem.tem_nombre as oirs_tematica_nombre,
+                         sub.sub_nombre as oirs_subtematica_nombre
                   FROM trd_oirs_solicitud s
                   JOIN " . $this->table_name_parent . " r ON s.oirs_registro_tramite = r.rgt_id
                   LEFT JOIN trd_oirs_gestion t ON s.oirs_id = t.oig_solicitud AND t.oig_borrado = 0
                   LEFT JOIN trd_general_contribuyentes tgc ON r.rgt_contribuyente = tgc.tgc_id AND tgc.tgc_borrado = 0
-                  LEFT JOIN trd_oirs_tematicas tem ON s.oirs_tematica = tem.tem_id AND tem.tem_borrado = 0";
-        
-        // Si es Admin OIRS, el join con asignaciones es global para la vista revisar
-        if ($esAdminOirs && $view === 'por_revisar') {
-            $query .= " LEFT JOIN trd_oirs_asignaciones a ON s.oirs_id = a.oia_solicitud AND a.oia_borrado = 0";
-        } else {
-            $query .= " LEFT JOIN trd_oirs_asignaciones a ON s.oirs_id = a.oia_solicitud AND a.oia_asignacion = :u_join AND a.oia_borrado = 0";
-        }
-        
+                  LEFT JOIN trd_oirs_tematicas tem ON s.oirs_tematica = tem.tem_id AND tem.tem_borrado = 0
+                  LEFT JOIN trd_oirs_subtematicas sub ON s.oirs_subtematica = sub.sub_id AND sub.sub_borrado = 0
+                  LEFT JOIN trd_oirs_asignaciones a ON s.oirs_id = a.oia_solicitud AND a.oia_borrado = 0
+                  LEFT JOIN trd_oirs_funcionarios_cargos fc ON a.oia_asignacion = fc.ofc_cargo 
+                    AND fc.ofc_funcionario = :userId 
+                    AND fc.ofc_estado = 1 
+                    AND fc.ofc_desde <= NOW() 
+                    AND (fc.ofc_hasta IS NULL OR fc.ofc_hasta >= NOW())";
+
         $query .= " WHERE s.oirs_borrado = 0 AND r.rgt_borrado = 0";
 
 
         switch ($view) {
             case 'bandeja':
-                // (Created by User OR Assigned) AND State < 2
-                $query .= " AND (r.rgt_creador = :u1 OR a.oia_asignacion = :u2) 
+                // Creado por usuario O asignado a su cargo actual
+                $query .= " AND (r.rgt_creador = :u1 OR fc.ofc_id IS NOT NULL) 
                             AND s.oirs_estado < 2";
                 break;
-
+ 
             case 'listar':
-                // Created by User (Owner) AND State IN (0, 1, 2)
-                $query .= " AND r.rgt_creador = :u1 
-                            AND s.oirs_estado IN (0, 1, 2)";
+                // Soy el creador
+                $query .= " AND r.rgt_creador = :u1";
                 break;
-
+ 
             case 'por_revisar':
-                // Si es Admin OIRS ve todas las visadas (estado 1)
-                // Si no, solo las que tiene asignadas personalmente
+                // Si es Admin OIRS ve todas las nuevas (estado 0)
+                // Si no, solo las que tiene asignadas su cargo
                 if (!$esAdminOirs) {
-                    $query .= " AND a.oia_asignacion = :u1";
+                    $query .= " AND fc.ofc_id IS NOT NULL";
                 }
-                $query = "SELECT s.*, 
-                         s.oirs_creacion as oirs_fecha_ingreso,
-                         r.rgt_creador, r.rgt_id_publica as folio,
-                         t.oig_asignacion, t.oig_solicitud_ejecutada,
-                         CONCAT(tgc.tgc_nombre, ' ', tgc.tgc_apellido_paterno, ' ', tgc.tgc_apellido_materno) as nombre_contribuyente,
-                         tgc.tgc_rut as rut_contribuyente,
-                         tem.tem_nombre as oirs_tematica_nombre,
-                         subt.sub_nombre as oirs_subtematica_nombre
-                  FROM trd_oirs_solicitud s
-                  JOIN trd_general_registro_general_expedientes r ON s.oirs_registro_tramite = r.rgt_id
-                  LEFT JOIN trd_oirs_gestion t ON s.oirs_id = t.oig_solicitud AND t.oig_borrado = 0
-                  LEFT JOIN trd_general_contribuyentes tgc ON r.rgt_contribuyente = tgc.tgc_id AND tgc.tgc_borrado = 0
-                  LEFT JOIN trd_oirs_tematicas tem ON s.oirs_tematica = tem.tem_id AND tem.tem_borrado = 0 
-                  LEFT JOIN trd_oirs_subtematicas subt ON s.oirs_tematica = subt.sub_id AND subt.sub_borrado = 0 
-                  WHERE s.oirs_borrado = 0 AND r.rgt_borrado = 0 and oirs_estado=0 ";
-
+                $query .= " AND s.oirs_estado = 0";
                 break;
-
+ 
             case 'visar':
-                // Assigned to User AND State = 0.
-                $query .= " AND a.oia_asignacion = :u1 
+                // Asignadas a mi cargo y en estado 0
+                $query .= " AND fc.ofc_id IS NOT NULL 
                             AND s.oirs_estado = 0";
                 break;
-
+ 
             case 'historial':
-                // Si es Admin OIRS ve todo lo finalizado (estado > 3)
-                // Si no, ve lo que creó o lo que le fue asignado
+                // Finalizadas (estado > 3)
                 if (!$esAdminOirs) {
-                    $query .= " AND (r.rgt_creador = :u1 OR a.oia_asignacion = :u2)";
+                    $query .= " AND (r.rgt_creador = :u1 OR fc.ofc_id IS NOT NULL)";
                 }
                 $query .= " AND s.oirs_estado > 3";
                 break;
@@ -242,7 +242,8 @@ class OIRS_Gestion
         $query .= " ORDER BY s.oirs_creacion DESC";
 
         $params = [];
-        foreach([':u_join', ':u1', ':u2'] as $p) {
+        // Soporta múltiples variantes de nombres de parámetros para mayor compatibilidad
+        foreach([':userId', ':userid', ':u1', ':u2', ':u_join'] as $p) {
             if (strpos($query, $p) !== false) {
                 $params[$p] = $userId;
             }
@@ -250,6 +251,9 @@ class OIRS_Gestion
 
         try {
             $stmt = $this->conn->prepare($query);
+            
+            $this->logQuery($query, $params);
+
             $stmt->execute($params);
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
@@ -266,5 +270,20 @@ class OIRS_Gestion
         }
 
         return $results;
+    }
+
+    private function logQuery($query, $params = [])
+    {
+        try {
+            $logFile = __DIR__ . "/../../logs_oirs_queries.txt";
+            $date = date('Y-m-d H:i:s');
+            // Clean up query newlines and extra spaces for one-line log
+            $cleanQuery = preg_replace('/\s+/', ' ', trim($query));
+            $paramsStr = !empty($params) ? " | Params: " . json_encode($params) : "";
+            $message = "[$date] $cleanQuery$paramsStr" . PHP_EOL . "---" . PHP_EOL;
+            file_put_contents($logFile, $message, FILE_APPEND);
+        } catch (Exception $e) {
+            error_log("OIRS_Gestion::logQuery Error: " . $e->getMessage());
+        }
     }
 }

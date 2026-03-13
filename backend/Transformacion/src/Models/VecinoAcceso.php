@@ -3,10 +3,10 @@ namespace App\Models;
 
 use PDO;
 
-class UsuarioAcceso
+class VecinoAcceso
 {
     private $conn;
-    private $table_name = "trd_acceso_usuarios";
+    private $table_name = "trd_acceso_vecinos";
 
     public function __construct($db)
     {
@@ -42,8 +42,8 @@ class UsuarioAcceso
             if ($stmt->execute()) {
                 $usr_id = $this->conn->lastInsertId();
 
-                // Asignar rol básico (ID 1) por defecto para funcionarios
-                $queryRol = "INSERT INTO trd_acceso_rol_usuario (usp_usuario_id, usp_rol_id, usp_creacion) 
+                // Asignar rol básico (ID 1) por defecto para vecinos
+                $queryRol = "INSERT INTO trd_acceso_rol_usuario_vecinos (usp_usuario_id, usp_rol_id, usp_creacion) 
                              VALUES (:usr_id, 1, NOW())";
                 $stmtRol = $this->conn->prepare($queryRol);
                 $stmtRol->bindParam(":usr_id", $usr_id);

@@ -74,6 +74,58 @@ class FuncionarioController
         $result = $this->funcionario->getAllOIRS($filters);
         return ["status" => "success", "data" => $result];
     }
+    public function getAllCargosOIRS($filters = [])
+    {
+        if (!isset($_SESSION['user_id'])) {
+             return ["status" => "success", "data" => []];
+        }
+
+        $misCargos = $this->getMisCargosOIRS();
+        $oirsInfo = $this->esOIRS();
+
+        $maxNivelPropio = 0;
+        foreach($misCargos as $c) {
+            $nivel = isset($c['car_nivel']) ? (int)$c['car_nivel'] : 1;
+            if ($nivel > $maxNivelPropio) $maxNivelPropio = $nivel;
+        }
+        
+        // El usuario proporcionó este ejemplo: 
+        // [Area] => OIRS [jefe] => 0 [tga_id] => 2 [rol] => Encargado OIRS
+        if ($oirsInfo && $oirsInfo['rol'] == 'Encargado OIRS') {
+            $maxNivelPropio = 3;
+        } elseif ($oirsInfo && $oirsInfo['jefe'] == 1 && $maxNivelPropio < 2) {
+            $maxNivelPropio = 2;
+        }
+
+        if ($maxNivelPropio == 3) {
+            // "El más pulento" (Admin OIRS) -> Deriva a Jefes (Nivel 2)
+            $filters['car_nivel'] = 2;
+        } elseif ($maxNivelPropio == 2) {
+            // "Jefe" -> Deriva a Subordinados (Nivel 1) de su área
+            $filters['car_nivel'] = 1;
+            
+            // Priorizamos el área del jefe si no se especificó un filtro manual
+            if (!isset($filters['area_id'])) {
+                if ($oirsInfo && $oirsInfo['jefe'] == 1) {
+                    $filters['area_id'] = $oirsInfo['tga_id'];
+                } elseif (!empty($misCargos)) {
+                    $filters['area_id'] = $misCargos[0]['car_area'];
+                }
+            }
+        } else {
+            // Nivel 1 o inferior -> No tiene personal a cargo para derivar
+            return ["status" => "success", "data" => []];
+        }
+
+        $result = $this->funcionario->getAllCargosOIRS($filters);
+        return ["status" => "success", "data" => $result];
+    }
+
+    public function getMisCargosOIRS()
+    {
+        if (!isset($_SESSION['user_id'])) return [];
+        return $this->funcionario->getCargosByUser($_SESSION['user_id']);
+    }
 
     public function create($data)
     {

@@ -90,7 +90,7 @@ include '../../api/general/header.php';
             </button>
             <button type="button"
                 class="flex-1 lg:flex-none whitespace-nowrap bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all text-[13px] uppercase tracking-wider flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined text-[18px]">description</span> EXPORTAR EXCEL
+                <span class="material-symbols-outlined text-[18px]">description</span> DESCARGAR REPORTE
             </button>
         </div>
     </div>
@@ -159,7 +159,7 @@ include '../../api/general/header.php';
             <h3 class="font-bold text-slate-700 uppercase text-xs tracking-widest flex items-center gap-2">
                 <span class="material-symbols-outlined text-primary-blue">history</span> Historial de Solicitudes
             </h3>
-            <div class="flex gap-3">
+            <!--<div class="flex gap-3">
                 <button type="button"
                     class="flex items-center gap-2 bg-[#1d7344] hover:bg-[#155a34] text-white px-5 py-2.5 rounded-lg text-xs font-bold transition-all shadow-md uppercase tracking-wider"
                     id="btn_exportar_excel">
@@ -170,7 +170,7 @@ include '../../api/general/header.php';
                     id="btn_exportar_pdf">
                     <span class="material-symbols-outlined text-sm">picture_as_pdf</span> PDF
                 </button>
-            </div>
+            </div>-->
         </div>
 
         <div class="overflow-x-auto p-4">

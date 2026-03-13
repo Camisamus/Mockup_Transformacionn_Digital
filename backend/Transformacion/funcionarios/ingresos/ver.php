@@ -45,7 +45,7 @@ $userId = $_SESSION['user_id'] ?? 0;
 $yaRespondio = false;
 if (!empty($solicitud['destinos'])) {
     foreach ($solicitud['destinos'] as $d) {
-        if ((int) $d['tid_destino'] === (int) $userId && (!empty($d['tid_fecha_respuesta']) || $d['tid_responde'] !== null)) {
+        if ((int)$d['tid_destino'] === (int)$userId && (!empty($d['tid_fecha_respuesta']) || $d['tid_responde'] !== null)) {
             $yaRespondio = true;
             break;
         }
@@ -198,7 +198,8 @@ include '../../api/general/header.php';
                     class="flex items-center gap-2 px-4 py-2 bg-primary-blue text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition-all">
                     <span class="material-symbols-outlined text-sm">edit</span> Modificar Ingreso
                 </button>
-            <?php endif; ?>
+            <?php
+endif; ?>
 
             <!-- Derivar -->
             <button onclick="crearDerivacion()"
@@ -213,13 +214,7 @@ include '../../api/general/header.php';
             </button>
 
             <!-- Visar -->
-            <?php if ($p['visar'] || $p['firmar']): ?>
-                <button onclick="irAResponder()"
-                    class="flex items-center gap-2 px-4 py-2 bg-ref-slate text-white rounded-lg text-xs font-bold hover:bg-slate-700 transition-all">
-                    <span class="material-symbols-outlined text-sm">verified</span>
-                    <?php echo $p['firmar'] ? 'Firmar' : 'Visar'; ?> Documento
-                </button>
-            <?php endif; ?>
+            
         </div>
     </div>
 
@@ -243,21 +238,24 @@ include '../../api/general/header.php';
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-visar" type="button"
                         role="tab">Visar</button>
                 </li>
-            <?php endif; ?>
+            <?php
+endif; ?>
 
             <?php if ($p['responder']): ?>
                 <li class="nav-item" role="presentation" id="nav-responder">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-responder" type="button"
                         role="tab">Responder</button>
                 </li>
-            <?php endif; ?>
+            <?php
+endif; ?>
 
             <?php if ($p['bitacora']): ?>
                 <li class="nav-item" role="presentation" id="nav-historial">
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-historial" type="button"
                         role="tab">Historial</button>
                 </li>
-            <?php endif; ?>
+            <?php
+endif; ?>
         </ul>
     </div>
 
@@ -367,48 +365,52 @@ include '../../api/general/header.php';
                             <?php if (!empty($solicitud['destinos'])): ?>
                                 <?php foreach ($solicitud['destinos'] as $d):
 
-                                    $esUsuarioActual = (int) $d['tid_destino'] === (int) $_SESSION['user_id'];
-                                    $icon = 'radio_button_unchecked';
-                                    $iconColor = 'text-slate-300';
-                                    $statusText = 'En espera';
-                                    $statusClass = 'text-slate-400';
-                                    $detailText = '';
-                                    $canVisar = false;
+        $esUsuarioActual = (int)$d['tid_destino'] === (int)$_SESSION['user_id'];
+        $icon = 'radio_button_unchecked';
+        $iconColor = 'text-slate-300';
+        $statusText = 'En espera';
+        $statusClass = 'text-slate-400';
+        $detailText = '';
+        $canVisar = false;
 
-                                    if ($d['tid_responde'] == 1) {
-                                        $icon = 'check_circle';
-                                        $iconColor = 'text-cyan-600';
-                                        $statusText = 'Visado';
-                                        $statusClass = 'text-slate-400';
+        if ($d['tid_responde'] == 1) {
+            $icon = 'check_circle';
+            $iconColor = 'text-cyan-600';
+            $statusText = 'Visado';
+            $statusClass = 'text-slate-400';
 
-                                        if ($d['tid_facultad'] == "Visador") {
-                                            $statusText = 'Visado';
-                                        } else {
-                                            $statusText = 'Respondido';
-                                        }
+            if ($d['tid_facultad'] == "Visador") {
+                $statusText = 'Visado';
+            }
+            else {
+                $statusText = 'Respondido';
+            }
 
-                                        $detailText = $statusText . ' el ' . ($d['tid_fecha_respuesta'] ? $fecha->formatearFecha($d['tid_fecha_respuesta']) : '');
-                                    } elseif (($d['tid_responde'] == 0 || $d['tid_responde'] === '0') && !empty($d['tid_fecha_respuesta'])) {
-                                        $icon = 'cancel';
-                                        $iconColor = 'text-rose-500';
-                                        $statusText = 'Rechazado';
-                                        $statusClass = 'text-rose-500';
-                                        $detailText = 'Rechazado el ' . $fecha->formatearFecha($d['tid_fecha_respuesta']);
-                                    } elseif (empty($d['tid_fecha_respuesta']) && $d['tid_requeido'] == 1) {
-                                        if ($esUsuarioActual) {
-                                            $icon = 'pending';
-                                            $iconColor = 'text-amber-500';
-                                            $statusText = 'Pendiente de Visación';
-                                            $statusClass = 'text-amber-500 font-bold';
-                                            $canVisar = true;
-                                        } else {
-                                            $icon = 'radio_button_unchecked';
-                                            $iconColor = 'text-slate-300';
-                                            $statusText = 'En espera';
-                                            $statusClass = 'text-slate-400';
-                                        }
-                                    }
-                                    ?>
+            $detailText = $statusText . ' el ' . ($d['tid_fecha_respuesta'] ? $fecha->formatearFecha($d['tid_fecha_respuesta']) : '');
+        }
+        elseif (($d['tid_responde'] == 0 || $d['tid_responde'] === '0') && !empty($d['tid_fecha_respuesta'])) {
+            $icon = 'cancel';
+            $iconColor = 'text-rose-500';
+            $statusText = 'Rechazado';
+            $statusClass = 'text-rose-500';
+            $detailText = 'Rechazado el ' . $fecha->formatearFecha($d['tid_fecha_respuesta']);
+        }
+        elseif (empty($d['tid_fecha_respuesta']) && $d['tid_requeido'] == 1) {
+            if ($esUsuarioActual) {
+                $icon = 'pending';
+                $iconColor = 'text-amber-500';
+                $statusText = 'Pendiente de Visación';
+                $statusClass = 'text-amber-500 font-bold';
+                $canVisar = true;
+            }
+            else {
+                $icon = 'radio_button_unchecked';
+                $iconColor = 'text-slate-300';
+                $statusText = 'En espera';
+                $statusClass = 'text-slate-400';
+            }
+        }
+?>
                                     <div
                                         class="px-6 py-2 flex items-center justify-between hover:bg-slate-50 transition-colors">
                                         <div class="flex items-center gap-4">
@@ -431,13 +433,17 @@ include '../../api/general/header.php';
                                                 class="px-4 py-1.5 bg-[#346d77] text-white rounded text-[12px] font-bold hover:bg-[#2a5861] transition-all shadow-sm">
                                                 Visar
                                             </button>
-                                        <?php endif; ?>
+                                        <?php
+        endif; ?>
                                     </div>
-                                <?php endforeach; ?>
-                            <?php else: ?>
+                                <?php
+    endforeach; ?>
+                            <?php
+else: ?>
                                 <div class="p-6 text-center text-slate-400 italic text-sm">No hay funcionarios asignados al
                                     flujo.</div>
-                            <?php endif; ?>
+                            <?php
+endif; ?>
                         </div>
                     </div>
 
@@ -583,9 +589,8 @@ include '../../api/general/header.php';
         <!-- FIN PESTAÑA: DEPENDENCIA -->
 
 
-    </div>
-</div>
-</div>
+
+
 
 
 
@@ -594,60 +599,72 @@ include '../../api/general/header.php';
 
 <!-- PESTAÑA: VISAR -->
 <div class="tab-pane fade" id="tab-visar" role="tabpanel">
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <?php if ($p['visar']): ?>
-            <div class="lg:col-span-8 space-y-6">
-                <div class="bg-white gob-card rounded-2xl overflow-hidden">
-                    <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
-                        <span class="material-symbols-outlined text-gob-warning">verified_user</span>
-                        <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Estado de Aprobaciones
-                            (Circuito de Visación)</h3>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <?php if ($p['visar']): ?>
+                <div class="lg:col-span-8 space-y-6">
+                    
+                    <div class="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
+                        <div class="p-6 border-b border-slate-50 flex items-center gap-3 bg-white">
+                            <span class="material-symbols-outlined text-amber-500 text-[22px]">verified_user</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">
+                                Estado de Aprobaciones (Circuito de Visación)
+                            </h3>
+                        </div>
+                        
+                        <div class="p-0">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left">
+                                    <thead class="bg-slate-50 text-slate-400 font-bold uppercase text-[10px] tracking-widest">
+                                        <tr>
+                                            <th class="px-8 py-4">Funcionario</th>
+                                            <th class="px-6 py-4">Rol</th>
+                                            <th class="px-6 py-4 text-center">Requerido</th>
+                                            <th class="px-8 py-4 text-right">Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla_destinos_status" class="divide-y divide-slate-50 text-[13px] text-slate-600">
+                                        </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-0">
-                        <div class="table-responsive">
-                            <table class="w-full text-left">
-                                <thead class="bg-slate-50 text-slate-400 font-bold uppercase text-[10px] tracking-widest">
-                                    <tr>
-                                        <th class="px-6 py-4">Funcionario</th>
-                                        <th class="px-6 py-4">Rol</th>
-                                        <th class="px-6 py-4 text-center">Requerido</th>
-                                        <th class="px-6 py-4 text-right">Estado</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tabla_destinos_status"
-                                    class="divide-y divide-slate-50 text-[13px] text-slate-600">
-                                </tbody>
-                            </table>
+
+                    <div class="bg-white rounded-2xl p-8 border-t-4 border-amber-500 shadow-md text-center">
+                        <h4 class="text-slate-800 font-extrabold text-lg mb-2 tracking-tight">
+                            ¿Desea visar este documento?
+                        </h4>
+                        <p class="text-slate-400 text-sm mb-6 italic">
+                            Su aprobación permitirá que el flujo continúe hacia el siguiente responsable.
+                        </p>
+                        <div class="flex justify-center gap-4">
+                            <button type="button" onclick="rechazarVisacion()"
+                                class="bg-rose-50 text-rose-600 border border-rose-100 px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-rose-100 transition-all">
+                                Rechazar
+                            </button>
+                            
+                            <button type="button" onclick="aprobarVisacion()"
+                                class="bg-[#f59e0b] hover:bg-[#d97706] text-white px-8 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-yellow-200/50 transition-all">
+                                Aprobar y Visar
+                            </button>
                         </div>
                     </div>
                 </div>
+            <?php
+endif; ?>
 
-                <div class="bg-white gob-card rounded-2xl p-8 border-t-4 border-gob-warning shadow-md text-center">
-                    <h4 class="text-slate-800 font-extrabold text-lg mb-2 tracking-tight">¿Desea visar este
-                        documento?</h4>
-                    <p class="text-slate-400 text-sm mb-6 italic">Su aprobación permitirá que el flujo continúe
-                        hacia el siguiente responsable.</p>
-                    <div class="flex justify-center gap-4">
-                        <button type="button" onclick="rechazarVisacion()"
-                            class="bg-rose-50 text-rose-600 border border-rose-100 px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-rose-100 transition-all">Rechazar</button>
-                        <button type="button" onclick="aprobarVisacion()"
-                            class="bg-gob-warning text-white px-8 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-yellow-200/50 hover:bg-amber-600 transition-all">Aprobar
-                            y Visar</button>
-                    </div>
+            <div class="lg:col-span-4">
+                <div class="bg-[#fffbeb] border border-amber-100 rounded-2xl p-6 shadow-sm">
+                    <h5 class="text-amber-800 font-bold text-[11px] uppercase tracking-widest mb-3 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">info</span> Regla de Negocio
+                    </h5>
+                    <p class="text-[12px] text-amber-700 leading-relaxed">
+                        Usted ha sido asignado como <strong>Visador</strong>. Su rol es técnico/administrativo y es
+                        requisito previo para la respuesta final.
+                    </p>
                 </div>
             </div>
-        <?php endif; ?>
 
-        <div class="lg:col-span-4 space-y-6">
-            <div class="bg-amber-50 border border-amber-100 rounded-2xl p-5">
-                <h5 class="text-amber-800 font-bold text-xs uppercase tracking-widest mb-3 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-sm">info</span> Regla de Negocio
-                </h5>
-                <p class="text-[12px] text-amber-700 leading-relaxed">
-                    Usted ha sido asignado como <strong>Visador</strong>. Su rol es técnico/administrativo y es
-                    requisito previo para la respuesta final.
-                </p>
-            </div>
         </div>
     </div>
 </div>
@@ -806,7 +823,8 @@ include '../../api/general/header.php';
                     </ul>
                 </div>
             </div>
-        <?php endif; ?>
+        <?php
+endif; ?>
     </div>
 </div>
 
@@ -860,7 +878,8 @@ include '../../api/general/header.php';
             </div>
         </div>
     </div>
-<?php endif; ?>
+<?php
+endif; ?>
 </div>
 </div>
 

@@ -31,13 +31,16 @@ $tematicas = $tematicaCtrl->getAll()['data'] ?? [];
 $subtematicas = $subtematicaCtrl->getAll()['data'] ?? [];
 $sectores = $sectorCtrl->getAll()['data'] ?? [];
 $escolaridades = $escolaridadCtrl->getAll()['data'] ?? [];
-$funcionarios = $funcionarioCtrl->getAllOIRS()['data'] ?? [];
+// Ahora traemos Cargos en lugar de Funcionarios para la bandeja de asignación
+$cargosOirs = $funcionarioCtrl->getAllCargosOIRS()['data'] ?? [];
+$misCargos = $funcionarioCtrl->getMisCargosOIRS();
+$misCargosIds = array_column($misCargos, 'car_id');
 
 // 3. Process Areas and Auth
 $areasUnicas = [];
-foreach ($funcionarios as $f) {
-    if (!empty($f['fnc_area_id']) && !empty($f['fnc_area_nombre'])) {
-        $areasUnicas[$f['fnc_area_id']] = $f['fnc_area_nombre'];
+foreach ($cargosOirs as $c) {
+    if (!empty($c['area_id']) && !empty($c['area_nombre'])) {
+        $areasUnicas[$c['area_id']] = $c['area_nombre'];
     }
 }
 $userOirsInfo = $funcionarioCtrl->esOIRS();
@@ -90,15 +93,14 @@ if (isset($userOirsInfo['tga_id']) && $userOirsInfo['tga_id'] == 2) {
 // Yo puedo asignar (Si o No)
 $yo = $_SESSION['user_id'];
 
-// Extraemos solo los IDs de la columna 'oia_asignacion'
-$asignadosIds = array_column($solicitudData['asignaciones'], 'oia_asignacion');
+// Extraemos solo los IDs de los CARGOS asignados
+$asignadosCargosIds = array_column($solicitudData['asignaciones'] ?? [], 'oia_asignacion');
 
-// Validamos si tu ID está ahí
-if (in_array($yo, $asignadosIds)) {
-
-    // 
-    // ESTÁS ASIGNADO
-    $esAreaValida=1; // porque estoy metido en el mambo 
+// Validamos si alguno de tus cargos actuales está en las asignaciones de la OIRS
+$intersect = array_intersect($misCargosIds, $asignadosCargosIds);
+if (!empty($intersect)) {
+    // ESTÁS ASIGNADO VIA CARGO
+    $esAreaValida = 1;
 } 
 
 
@@ -736,7 +738,7 @@ $soloLecturaEjecucion = !$puedeNotificarEjecucion && $tieneNotificacionEjecucion
                                         id="oig_asignacion_display" readonly placeholder="Buscar funcionario...">
                                     <button class="bg-primary-blue text-white p-2 rounded-xl shadow-md"
                                         data-bs-toggle="modal" data-bs-target="#modalBuscarFuncionario"
-                                        onclick="abrirModalBuscarFuncionario()">
+                                        onclick="abrirModalBuscarCargos()">
                                         <span class="material-symbols-outlined">search</span>
                                     </button>
                                 </div>
@@ -829,35 +831,21 @@ $soloLecturaEjecucion = !$puedeNotificarEjecucion && $tieneNotificacionEjecucion
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden">
             <div class="modal-header bg-slate-50 border-b p-6">
-                <h5 class="modal-title font-extrabold text-slate-800 text-sm uppercase tracking-widest">Buscar
-                    Funcionario Destino</h5>
+                <h5 class="modal-title font-extrabold text-slate-800 text-sm uppercase tracking-widest">Buscar Cargo Destino</h5>
                 <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"></button>
             </div>
             <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <input type="text" class="rounded-xl border-slate-200 text-sm p-3" id="buscar_fnc_input"
-                        placeholder="Nombre, apellido o correo..." oninput="filtrarBusquedaFuncionariosOIRS()">
-                    <select class="rounded-xl border-slate-200 text-sm" id="filtro_area_fnc_oirs"
-                        onchange="filtrarBusquedaFuncionariosOIRS()" <?= (!$esOirsArea) ? 'disabled' : '' ?>>
-                        <?php if ($esOirsArea): ?>
-                            <option value="">Todas las Áreas</option>
-                            <option value="SIN_AREA">Sin Área Asignada</option>
-                        <?php endif; ?>
-                        <?php foreach ($areasUnicas as $areaId => $areaNombre): ?>
-                            <?php if ($esOirsArea || $areaId == $userAreaId): ?>
-                                <option value="<?= $areaId ?>" <?= ($areaId == $userAreaId) ? 'selected' : '' ?>>
-                                    <?= htmlspecialchars($areaNombre) ?></option>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                    </select>
+                <div class="mb-6">
+                    <input type="text" class="w-full rounded-xl border-slate-200 text-sm p-3" id="buscar_fnc_input"
+                        placeholder="Buscar por nombre del cargo...">
                 </div>
                 <div class="table-responsive max-h-[400px] rounded-xl border border-slate-100">
                     <table class="table table-hover align-middle mb-0">
                         <thead
                             class="bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b sticky top-0">
                             <tr>
-                                <th class="px-4 py-3 text-left">ID</th>
-                                <th class="px-4 py-3">Nombre / Correo</th>
+                                <th class="px-4 py-3 text-left">ID / Cargo</th>
+                                <th class="px-4 py-3 text-left">Área</th>
                                 <th class="text-end px-4 py-3">Seleccionar</th>
                             </tr>
                         </thead>
@@ -880,9 +868,10 @@ $soloLecturaEjecucion = !$puedeNotificarEjecucion && $tieneNotificacionEjecucion
             subtematicas: <?php echo json_encode($subtematicas); ?>,
             sectores: <?php echo json_encode($sectores); ?>,
             escolaridades: <?php echo json_encode($escolaridades); ?>,
-            funcionarios: <?php echo json_encode($funcionarios); ?>
+            cargos: <?php echo json_encode($cargosOirs); ?>
         },
         currentUserId: <?php echo $_SESSION['user_id'] ?? 0; ?>,
+        misCargos: <?php echo json_encode($misCargos); ?>,
         permisos: {
             mostrarBloqueTecnica: <?php echo $mostrarBloqueTecnica ? 'true' : 'false'; ?>,
             mostrarBloqueEjecucion: <?php echo $mostrarBloqueEjecucion ? 'true' : 'false'; ?>

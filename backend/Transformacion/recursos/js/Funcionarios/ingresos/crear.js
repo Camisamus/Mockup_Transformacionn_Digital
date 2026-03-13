@@ -1,4 +1,4 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     cargarListas();
     setupEventListeners();
 });
@@ -15,55 +15,72 @@ let areas = [];
 let destinos = [];
 let enlaces = [];
 let documentos = [];
+let tiposOrganizacion = [];
+let organizacionesDESVE = [];
 
 // Modals
 let modalBusqueda = null;
 let modalConfig = null;
+let modalBuscarOrg = null;
+let modalBuscarContrib = null;
+let modalNuevaOrg = null;
+let modalNuevoContrib = null;
+
+// Listas de Solicitantes
+let organizacionesComunitarias = [];
+let contribuyentes = [];
+let organizacionesGenerales = [];
+
+// Variables de Mapa (DESVE)
+let map, marker, geocoder;
+const defaultLocation = { lat: -33.0248, lng: -71.5570 }; // Viña del Mar
 
 async function cargarListas() {
     try {
-        // Cargar Tipos de Ingreso desde DB
-        const respTipos = await fetch(`${window.API_BASE_URL}/ingresos/tipos_ingresos.php`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ACCION: 'CONSULTAM' })
-        });
-        const resultTipos = await respTipos.json();
+        Swal.fire({ title: 'Cargando datos...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
+        const fetchOptions = {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ACCION: "CONSULTAM" })
+        };
+
+        // Cargar múltiples listas en paralelo (Replicando lógica DESVE)
+        const [respTipos, respFunc, respAreas, respOrgCom, respContrib, respOrgGen, respTipoOrg, respOrgDESVE] = await Promise.all([
+            fetch(`${window.API_BASE_URL}/ingresos/tipos_ingresos.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/general/funcionarios.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/areas_general.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/organizaciones_comunitarias_general.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/contribuyentes_general.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/tipo_organizaciones.php`, fetchOptions).then(r => r.json()),
+            fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/desve/organizaciones.php`, fetchOptions).then(r => r.json())
+        ]);
+
+        // 1. Tipos de Ingreso
         const selectTipo = document.getElementById('tis_tipo');
         selectTipo.innerHTML = '<option value="" selected disabled>Seleccione un tipo...</option>';
-
-        if (resultTipos.status === 'success') {
-            resultTipos.data.forEach(t => {
+        if (respTipos.status === 'success') {
+            respTipos.data.forEach(t => {
                 const opt = document.createElement('option');
-                opt.value = t.titi_id; // O titi_id si prefieres usar ID
+                opt.value = t.titi_id;
                 opt.textContent = t.titi_nombre;
                 selectTipo.appendChild(opt);
             });
         }
 
-        // Cargar Funcionarios para búsqueda
-        const respFunc = await fetch(`${window.API_BASE_URL}/general/funcionarios.php`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ACCION: 'CONSULTAM' })
-        });
-        const resultFunc = await respFunc.json();
-        if (resultFunc.status === 'success') {
-            funcionarios = resultFunc.data;
+        // 2. Funcionarios
+        if (respFunc.status === 'success') {
+            funcionarios = respFunc.data;
         }
 
-        // Cargar Áreas
-        const respAreas = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/areas_general.php`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ACCION: 'CONSULTAM' })
-        });
-        const resultAreas = await respAreas.json();
-        if (resultAreas.status === 'success') {
-            areas = resultAreas.data;
+        // 3. Áreas
+        if (respAreas.status === 'success') {
+            areas = respAreas.data;
             const selectArea = document.getElementById('filtro_area_fnc');
             if (selectArea) {
+                selectArea.innerHTML = '<option value="">Todas las Áreas</option><option value="SIN_AREA">Sin Área Asignada</option>';
                 areas.forEach(a => {
                     const opt = document.createElement('option');
                     opt.value = a.tga_id;
@@ -73,14 +90,93 @@ async function cargarListas() {
             }
         }
 
+        // 4. Organizaciones Comunitarias
+        organizacionesComunitarias = extractData(respOrgCom);
+
+        // 5. Contribuyentes (Personas Naturales)
+        contribuyentes = extractData(respContrib);
+
+        // 6. Organizaciones Generales (Personas Jurídicas)
+        organizacionesGenerales = extractData(respOrgGen);
+
+        // 7. Tipos de Organización (Para dropdown Tipo Solicitante)
+        tiposOrganizacion = extractData(respTipoOrg);
+        const selectTipoSol = document.getElementById('tis_tipo_solicitante');
+        selectTipoSol.innerHTML = '<option value="" selected disabled>Seleccione tipo...</option>';
+        tiposOrganizacion.forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t.tor_id;
+            opt.textContent = t.tor_nombre;
+            selectTipoSol.appendChild(opt);
+        });
+
+        // 8. Organizaciones DESVE (Especiales)
+        organizacionesDESVE = extractData(respOrgDESVE);
+
+        Swal.close();
     } catch (error) {
         console.error('Error al cargar listas:', error);
+        Swal.fire('Error', 'No se pudieron cargar algunas listas de datos.', 'error');
     }
+}
+
+function extractData(response) {
+    if (Array.isArray(response)) return response;
+    if (response.data && Array.isArray(response.data)) return response.data;
+    return [];
 }
 
 function setupEventListeners() {
     modalBusqueda = new bootstrap.Modal(document.getElementById('modalBusquedaFuncionario'));
     modalConfig = new bootstrap.Modal(document.getElementById('modalConfigurarDestino'));
+    modalBuscarOrg = new bootstrap.Modal(document.getElementById('modalBuscarOrganizacion'));
+    modalBuscarContrib = new bootstrap.Modal(document.getElementById('modalBuscarContribuyente'));
+    modalNuevaOrg = new bootstrap.Modal(document.getElementById('modalNuevaOrganizacion'));
+    modalNuevoContrib = new bootstrap.Modal(document.getElementById('modalNuevoContribuyente'));
+
+    // Botón de búsqueda de solicitante
+    document.getElementById('btn_buscar_solicitante').onclick = () => {
+        const idTipo = document.getElementById('tis_tipo_solicitante').value;
+        if (!idTipo) {
+            Swal.fire('Atención', 'Seleccione primero el tipo de solicitante.', 'warning');
+            return;
+        }
+
+        handleTipoSolicitanteAction(idTipo);
+    };
+
+    document.getElementById('tis_tipo_solicitante').addEventListener('change', (e) => {
+        handleTipoSolicitanteChange(e.target.value);
+    });
+
+    // Filtros de búsqueda en tiempo real
+    document.getElementById('filtroOrganizacion').onkeyup = function() {
+        const val = this.value.toLowerCase();
+        const rows = document.querySelectorAll('#lista_busqueda_org tr');
+        rows.forEach(tr => tr.style.display = tr.innerText.toLowerCase().includes(val) ? '' : 'none');
+    };
+
+    document.getElementById('filtroContribuyente').onkeyup = function() {
+        const val = this.value.toLowerCase();
+        const rows = document.querySelectorAll('#lista_busqueda_contrib tr');
+        rows.forEach(tr => tr.style.display = tr.innerText.toLowerCase().includes(val) ? '' : 'none');
+    };
+
+    // Formateo de RUT al perder foco
+    document.getElementById('orgc_rut').onblur = function() { this.value = formatRut(this.value); };
+    document.getElementById('nc_rut').onblur = function() { this.value = formatRut(this.value); };
+
+    // Lógica del Mapa (DESVE)
+    document.getElementById('chk_geoloc').addEventListener('change', function () {
+        const area = document.getElementById('geolocalizacion_area');
+        area.classList.toggle('hidden', !this.checked);
+        if (this.checked && typeof google !== 'undefined') { 
+            setTimeout(() => { if (map) google.maps.event.trigger(map, 'resize'); }, 100); 
+        }
+    });
+
+    document.getElementById('btn_buscar_geo').onclick = buscarDireccion;
+    document.getElementById('Geo_dir').onkeypress = (e) => { if (e.key === 'Enter') buscarDireccion(); };
 
     // Búsqueda de funcionarios
     document.getElementById('buscar_fnc_input').addEventListener('input', () => {
@@ -348,11 +444,19 @@ async function guardarIngreso() {
             tis_titulo: document.getElementById('tis_titulo').value,
             tis_tipo: document.getElementById('tis_tipo').value,
             tis_contenido: document.getElementById('tis_contenido').value,
+            tis_id_solicitante: document.getElementById('tis_id_solicitante').value,
+            tis_nombre_solicitante: document.getElementById('tis_nombre_solicitante').value,
+            tis_tipo_solicitante: document.getElementById('tis_tipo_solicitante').value,
             tis_estado: 'Ingresado',
             tis_fecha: new Date().toISOString().split('T')[0],
             destinos: destinos,
             enlaces: enlaces,
-            documentos: documentos
+            documentos: documentos,
+            // Datos de Geolocalización
+            Latitud: document.getElementById('Latitud').value,
+            Longitud: document.getElementById('Longitud').value,
+            Geo_dir: document.getElementById('Geo_dir').value,
+            tis_geolocalizacion: document.getElementById('chk_geoloc').checked ? 1 : 0
         };
 
         if (destinos.length === 0) {
@@ -427,3 +531,232 @@ async function guardarIngreso() {
     }
 }
 
+// --- FUNCIONES DE LÓGICA DE SOLICITANTES (REPLICADAS DE DESVE) ---
+
+function handleTipoSolicitanteChange(idTipo) {
+    const orgDisplay = document.getElementById('tis_nombre_solicitante');
+    const orgHidden = document.getElementById('tis_id_solicitante');
+    const btnBuscar = document.getElementById('btn_buscar_solicitante');
+
+    // Reset current selection
+    orgDisplay.value = '';
+    orgHidden.value = '';
+    btnBuscar.style.display = 'flex';
+
+    // Lógica especial para tipos 6 y 7 (Auto-completado)
+    if (["6", "7"].includes(idTipo)) {
+        const matchingDESVE = organizacionesDESVE.filter(o => o.org_tipo_id == idTipo);
+        if (matchingDESVE.length > 0) {
+            orgDisplay.value = matchingDESVE[0].org_nombre;
+            orgHidden.value = matchingDESVE[0].org_id;
+            btnBuscar.style.display = 'none';
+        }
+    }
+}
+
+function handleTipoSolicitanteAction(idTipo) {
+    if (idTipo == "1" || idTipo == "2") {
+        // Territorial (1) o Funcional (2) -> Buscar Organizaciones Comunitarias
+        abrirModalBuscarOrganizacion(idTipo);
+    } else if (idTipo == "3" || idTipo == "5") {
+        // Particular (3) o Ley Transparencia (5) -> Buscar Contribuyentes (Personas)
+        abrirModalBuscarContribuyente();
+    } else if (idTipo == "4") {
+        // Concejales (4) -> Buscar en Organizaciones Generales o DESVE con filtro 4
+        abrirModalBuscarOrganizacion(idTipo);
+    } else {
+        // Otros casos o por defecto
+        abrirModalBuscarOrganizacion(idTipo);
+    }
+}
+
+function abrirModalBuscarOrganizacion(idTipo = null) {
+    const tbody = document.getElementById('lista_busqueda_org');
+    tbody.innerHTML = '';
+
+    // Filtrar según el tipo si se proporciona
+    let listado = [];
+    if (idTipo == "1" || idTipo == "2") {
+        listado = organizacionesComunitarias.filter(o => o.orgc_tipo_organizacion == idTipo).map(o => ({ 
+            id: `OC_${o.orgc_id}`, 
+            nombre: o.orgc_nombre, 
+            rut: o.orgc_rut 
+        }));
+    } else if (idTipo == "4") {
+        listado = organizacionesDESVE.filter(o => o.org_tipo_id == idTipo).map(o => ({ 
+            id: o.org_id, 
+            nombre: o.org_nombre, 
+            rut: '-' 
+        }));
+    } else {
+        // Combinación de todo lo que no sea persona
+        listado = [...organizacionesGenerales.map(o => ({ id: o.org_id, nombre: o.org_nombre, rut: '-' })), 
+                   ...organizacionesComunitarias.map(o => ({ id: `OC_${o.orgc_id}`, nombre: o.orgc_nombre, rut: o.orgc_rut }))];
+    }
+
+    if (listado.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center py-4 text-slate-400 italic">No se encontraron registros para este tipo.</td></tr>';
+    }
+
+    listado.forEach(o => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 cursor-pointer transition-colors';
+        tr.innerHTML = `
+            <td class="px-4 py-3">${o.rut || '-'}</td>
+            <td class="px-4 py-3 font-medium">${o.nombre}</td>
+            <td class="px-4 py-3 text-end">
+                <button type="button" class="btn btn-sm btn-primary px-3 rounded-lg" onclick="seleccionarSolicitante('${o.id}', '${o.nombre}')">Seleccionar</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+    modalBuscarOrg.show();
+}
+
+function abrirModalBuscarContribuyente() {
+    const tbody = document.getElementById('lista_busqueda_contrib');
+    tbody.innerHTML = '';
+
+    contribuyentes.forEach(c => {
+        const nombreCompleto = `${c.tgc_nombre} ${c.tgc_apellido_paterno} ${c.tgc_apellido_materno}`.trim();
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 cursor-pointer transition-colors';
+        tr.innerHTML = `
+            <td class="px-4 py-3">${c.tgc_rut || '-'}</td>
+            <td class="px-4 py-3 font-medium">${nombreCompleto}</td>
+            <td class="px-4 py-3 text-end">
+                <button type="button" class="btn btn-sm btn-primary px-3 rounded-lg" onclick="seleccionarSolicitante('CONTRIB_${c.tgc_id}', '${nombreCompleto}')">Seleccionar</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+    modalBuscarContrib.show();
+}
+
+window.seleccionarSolicitante = function (id, nombre) {
+    document.getElementById('tis_nombre_solicitante').value = nombre;
+    document.getElementById('tis_id_solicitante').value = id;
+    
+    // Cerrar modales abiertos
+    if (modalBuscarOrg) modalBuscarOrg.hide();
+    if (modalBuscarContrib) modalBuscarContrib.hide();
+};
+
+window.abrirModalNuevaOrganizacion = function() { modalBuscarOrg.hide(); modalNuevaOrg.show(); };
+window.abrirModalNuevoContribuyente = function() { modalBuscarContrib.hide(); modalNuevoContrib.show(); };
+
+window.guardarNuevaOrganizacion = async function() {
+    const rut = document.getElementById('orgc_rut').value;
+    const nombre = document.getElementById('orgc_nombre').value;
+    if(!rut || !nombre) return Swal.fire('Error', 'RUT y Nombre son obligatorios', 'error');
+
+    try {
+        const body = {
+            ACCION: 'CREAR',
+            orgc_rut: rut,
+            orgc_nombre: nombre,
+            orgc_codigo: document.getElementById('orgc_codigo').value,
+            orgc_rpj: document.getElementById('orgc_rpj').value,
+            orgc_tipo_organizacion: '1' // Por defecto Territorial si no se especifica
+        };
+
+        const resp = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/organizaciones/organizaciones_comunitarias_general.php`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        const res = await resp.json();
+
+        if(res.status === 'success') {
+            await cargarListas(); // Recargar listas
+            modalNuevaOrg.hide();
+            Swal.fire('Éxito', 'Organización creada correctamente', 'success').then(() => abrirModalBuscarOrganizacion());
+        } else {
+            Swal.fire('Error', res.message || 'Error al guardar', 'error');
+        }
+    } catch (e) { console.error(e); }
+};
+
+window.guardarNuevoContribuyente = async function() {
+    const rut = document.getElementById('nc_rut').value;
+    const nombre = document.getElementById('nc_nombre').value;
+    const paterno = document.getElementById('nc_paterno').value;
+    if(!rut || !nombre || !paterno) return Swal.fire('Error', 'Faltan campos obligatorios', 'error');
+
+    try {
+        const body = {
+            ACCION: 'CREAR',
+            tgc_rut: rut,
+            tgc_nombre: nombre,
+            tgc_apellido_paterno: paterno,
+            tgc_apellido_materno: document.getElementById('nc_materno').value
+        };
+
+        const resp = await fetch(`${window.API_BASE_URL}/sisadmin/mantenedores/general/contribuyentes_general.php`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        const res = await resp.json();
+
+        if(res.status === 'success') {
+            await cargarListas(); // Recargar listas
+            modalNuevoContrib.hide();
+            Swal.fire('Éxito', 'Contribuyente creado correctamente', 'success').then(() => abrirModalBuscarContribuyente());
+        } else {
+            Swal.fire('Error', res.message || 'Error al guardar', 'error');
+        }
+    } catch (e) { console.error(e); }
+};
+
+// --- FUNCIONES GOOGLE MAPS (REPLICADAS DE DESVE) ---
+
+window.initMap = function () {
+    if (!document.getElementById("map_desve")) return;
+
+    geocoder = new google.maps.Geocoder();
+    map = new google.maps.Map(document.getElementById("map_desve"), {
+        zoom: 15,
+        center: defaultLocation,
+        mapTypeControl: false,
+        streetViewControl: false,
+    });
+
+    marker = new google.maps.Marker({
+        map: map,
+        draggable: true,
+        position: defaultLocation,
+    });
+
+    marker.addListener("dragend", function (event) {
+        updateCoordinates(event.latLng);
+    });
+
+    map.addListener("click", function (event) {
+        marker.setPosition(event.latLng);
+        updateCoordinates(event.latLng);
+    });
+};
+
+function updateCoordinates(latLng) {
+    document.getElementById("Latitud").value = latLng.lat().toFixed(6);
+    document.getElementById("Longitud").value = latLng.lng().toFixed(6);
+}
+
+function buscarDireccion() {
+    const address = document.getElementById("Geo_dir").value;
+    if (!address) return;
+
+    geocoder.geocode({ address: address + ", Viña del Mar, Chile" }, function (results, status) {
+        if (status === "OK") {
+            const pos = results[0].geometry.location;
+            map.setCenter(pos);
+            marker.setPosition(pos);
+            updateCoordinates(pos);
+        } else {
+            Swal.fire('Error', 'No se pudo encontrar la dirección: ' + status, 'error');
+        }
+    });
+}

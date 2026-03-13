@@ -2,7 +2,11 @@
 $pageTitle = "Nuevo Ingreso";
 require_once '../../api/general/auth_check.php';
 include '../../api/general/header.php';
+
+use App\Config\AppConfig;
+$googleMapsKey = AppConfig::getGoogleMapsKey();
 ?>
+<script src="https://maps.googleapis.com/maps/api/js?key=<?php echo $googleMapsKey; ?>&libraries=places&callback=initMap" async defer></script>
 
 <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
@@ -113,7 +117,7 @@ include '../../api/general/header.php';
                             <div class="space-y-2">
                                 <label for="tis_tipo"
                                     class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Tipo de
-                                    Ingreso</label>
+                                    Documento</label>
                                 <select id="tis_tipo" required
                                     class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3">
                                     <option value="" selected disabled>Cargando tipos...</option>
@@ -129,6 +133,32 @@ include '../../api/general/header.php';
                             </div>
                         </div>
 
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label for="tis_tipo_solicitante"
+                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Tipo solicitante</label>
+                                <select id="tis_tipo_solicitante"
+                                    class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-[15px] p-3">
+                                    <option value="" selected disabled>Seleccione tipo...</option>
+                                    <option value="natural">Persona Natural</option>
+                                    <option value="juridica">Persona Jurídica</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label for="tis_nombre_solicitante"
+                                    class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Nombre del solicitante</label>
+                                <div class="flex shadow-sm">
+                                    <input type="text" id="tis_nombre_solicitante" readonly placeholder="Seleccione un solicitante..."
+                                        class="flex-grow border-slate-200 rounded-l-xl focus:ring-primary-blue text-[15px] p-3 bg-slate-50 italic" />
+                                    <input type="hidden" id="tis_id_solicitante">
+                                    <button type="button" id="btn_buscar_solicitante"
+                                        class="bg-slate-800 text-white px-4 rounded-r-xl hover:bg-black transition-colors flex items-center">
+                                        <span class="material-symbols-outlined">search</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="space-y-2">
                             <label for="tis_contenido"
                                 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Contenido /
@@ -139,10 +169,42 @@ include '../../api/general/header.php';
                     </div>
                 </div>
 
+                <!-- BLOQUE 2: GEOLOCALIZACIÓN -->
+                <div class="bg-white gob-card rounded-2xl overflow-hidden shadow-sm border border-slate-100">
+                    <div class="p-5 border-b border-slate-50 flex items-center justify-between bg-white">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary-blue">location_on</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">2. Geolocalización</h3>
+                        </div>
+                        <div class="flex items-center bg-slate-100 px-4 py-2 rounded-xl">
+                            <input type="checkbox" id="chk_geoloc"
+                                class="w-4 h-4 text-primary-blue border-slate-300 rounded focus:ring-primary-blue cursor-pointer">
+                            <label for="chk_geoloc"
+                                class="ml-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest cursor-pointer">Activar Mapa</label>
+                        </div>
+                    </div>
+                    <div id="geolocalizacion_area" class="px-6 py-6 lg:px-10 space-y-6 hidden">
+                        <div class="space-y-2">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Dirección</label>
+                            <div class="flex shadow-sm">
+                                <input type="text" id="Geo_dir" placeholder="Calle, número, Viña del Mar"
+                                    class="flex-grow border-slate-200 rounded-l-xl px-4 py-3 text-sm focus:ring-primary-blue" />
+                                <button type="button" id="btn_buscar_geo" 
+                                    class="bg-slate-800 text-white px-6 rounded-r-xl hover:bg-black transition-colors">
+                                    <span class="material-symbols-outlined">search</span>
+                                </button>
+                            </div>
+                            <input type="hidden" id="Latitud">
+                            <input type="hidden" id="Longitud">
+                        </div>
+                        <div id="map_desve" style="height: 400px;" class="w-full border border-slate-100 rounded-2xl"></div>
+                    </div>
+                </div>
+
                 <div class="bg-white gob-card rounded-2xl overflow-hidden">
                     <div class="p-5 border-b border-slate-50 flex items-center gap-2 bg-white">
-                        <span class="text-primary-blue font-bold">2.</span>
-                        <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Adjuntos y Enlaces</h3>
+                        <span class="material-symbols-outlined text-primary-blue">upload_file</span>
+                        <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">3. Adjuntos y Enlaces</h3>
                     </div>
                     <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-4">
@@ -177,9 +239,8 @@ include '../../api/general/header.php';
                 <div class="bg-white gob-card rounded-2xl overflow-hidden sticky top-32">
                     <div class="p-5 border-b border-slate-50 flex items-center justify-between bg-white">
                         <div class="flex items-center gap-2">
-                            <span class="text-primary-blue font-bold">3.</span>
-                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">Distribución y Flujo
-                            </h3>
+                            <span class="material-symbols-outlined text-primary-blue">group_add</span>
+                            <h3 class="font-bold text-slate-700 uppercase text-sm tracking-wide">4. Distribución y Flujo</h3>
                         </div>
                         <span
                             class="bg-slate-100 text-slate-500 text-[10px] px-2 py-1 rounded font-bold uppercase border border-slate-200">Funcionarios
@@ -370,5 +431,166 @@ include '../../api/general/header.php';
 <script src="../../recursos/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../../recursos/js/funcionarios/ingresos/crear.js"></script>
+<script src="../../recursos/js/helpers.js"></script>
+
+<!-- MODALES DE BÚSQUEDA DE SOLICITANTES (REPLICADOS DE DESVE) -->
+
+<!-- Modal Buscar Organización -->
+<div class="modal fade" id="modalBuscarOrganizacion" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden">
+            <div class="modal-header bg-slate-800 border-0 py-4">
+                <h5 class="modal-title text-white fw-bold fs-6">Buscar Organización / Entidad</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-6">
+                <div class="d-flex mb-4 gap-2">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0 rounded-start-xl">
+                            <span class="material-symbols-outlined text-slate-400 text-sm">search</span>
+                        </span>
+                        <input type="text" class="form-control border-start-0 rounded-end-xl text-sm"
+                            id="filtroOrganizacion" placeholder="Filtrar por nombre o RUT...">
+                    </div>
+                    <button type="button" class="bg-primary-blue text-white px-4 rounded-xl hover:bg-blue-700 transition-colors flex items-center"
+                        onclick="abrirModalNuevaOrganizacion()">
+                        <span class="material-symbols-outlined">add</span>
+                    </button>
+                </div>
+                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-uppercase text-[10px] tracking-widest sticky-top">
+                            <tr>
+                                <th>RUT</th>
+                                <th>Nombre</th>
+                                <th class="text-end">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista_busqueda_org" class="text-xs text-slate-600">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nueva Organización -->
+<div class="modal fade" id="modalNuevaOrganizacion" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden">
+            <div class="modal-header bg-primary-blue border-0 py-4">
+                <h5 class="modal-title text-white fw-bold fs-6">Nueva Organización</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-6">
+                <form id="form_nueva_organizacion" class="space-y-4">
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">RUT *</label>
+                        <input type="text" class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-sm p-3" id="orgc_rut" required>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Nombre *</label>
+                        <input type="text" class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-sm p-3" id="orgc_nombre" required>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Código</label>
+                            <input type="text" class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-sm p-3" id="orgc_codigo">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">RPJ</label>
+                            <input type="text" class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-sm p-3" id="orgc_rpj">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer bg-slate-50 border-0 p-4">
+                <button type="button" class="text-slate-400 font-bold text-[11px] uppercase" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="bg-primary-blue text-white px-6 py-2 rounded-xl font-bold text-[11px] uppercase shadow-lg"
+                    onclick="guardarNuevaOrganizacion()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Buscar Contribuyente -->
+<div class="modal fade" id="modalBuscarContribuyente" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden">
+            <div class="modal-header bg-slate-800 border-0 py-4">
+                <h5 class="modal-title text-white fw-bold fs-6">Buscar Persona / Contribuyente</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-6">
+                <div class="d-flex mb-4 gap-2">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0 rounded-start-xl">
+                            <span class="material-symbols-outlined text-slate-400 text-sm">search</span>
+                        </span>
+                        <input type="text" class="form-control border-start-0 rounded-end-xl text-sm"
+                            id="filtroContribuyente" placeholder="Buscar por nombre o RUT...">
+                    </div>
+                    <button type="button" class="bg-primary-blue text-white px-4 rounded-xl hover:bg-blue-700 transition-colors flex items-center"
+                        onclick="abrirModalNuevoContribuyente()">
+                        <span class="material-symbols-outlined">add</span>
+                    </button>
+                </div>
+                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-uppercase text-[10px] tracking-widest sticky-top">
+                            <tr>
+                                <th>RUT</th>
+                                <th>Nombre Completo</th>
+                                <th class="text-end">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista_busqueda_contrib" class="text-xs text-slate-600">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nuevo Contribuyente -->
+<div class="modal fade" id="modalNuevoContribuyente" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-2xl rounded-3xl overflow-hidden">
+            <div class="modal-header bg-primary-blue border-0 py-4">
+                <h5 class="modal-title text-white fw-bold fs-6">Nuevo Contribuyente</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-6">
+                <form id="form_nuevo_contribuyente" class="space-y-4">
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">RUT *</label>
+                        <input type="text" id="nc_rut" required class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-sm p-3">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Nombres *</label>
+                        <input type="text" id="nc_nombre" required class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-sm p-3">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Apellido Paterno *</label>
+                            <input type="text" id="nc_paterno" required class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-sm p-3">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Apellido Materno</label>
+                            <input type="text" id="nc_materno" class="w-full border-slate-200 rounded-xl focus:ring-primary-blue text-sm p-3">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer bg-slate-50 border-0 p-4">
+                <button type="button" class="text-slate-400 font-bold text-[11px] uppercase" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="bg-primary-blue text-white px-6 py-2 rounded-xl font-bold text-[11px] uppercase shadow-lg"
+                    onclick="guardarNuevoContribuyente()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <?php include '../../api/general/footer.php'; ?>

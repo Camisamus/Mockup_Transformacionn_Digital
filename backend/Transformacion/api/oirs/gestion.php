@@ -61,9 +61,9 @@ switch ($data['ACCION']) {
         if (!empty($data['oig_asignacion'])) {
             $asignacionModel = new \App\Models\OirsAsignacion($db);
 
-            // Check if already assigned to this official
+            // Check if already assigned to this cargo
             if ($asignacionModel->checkDuplicate($solicitud_id, $data['oig_asignacion'])) {
-                echo json_encode(["status" => "error", "message" => "El funcionario ya tiene asignada esta solicitud."]);
+                echo json_encode(["status" => "error", "message" => "Este cargo ya tiene asignada esta solicitud."]);
                 break;
             }
 
@@ -81,7 +81,7 @@ switch ($data['ACCION']) {
                 echo json_encode(["status" => "error", "message" => "Error al crear la asignación"]);
             }
         } else {
-            echo json_encode(["status" => "error", "message" => "Funcionario no seleccionado"]);
+            echo json_encode(["status" => "error", "message" => "Cargo no seleccionado"]);
         }
 
         break;

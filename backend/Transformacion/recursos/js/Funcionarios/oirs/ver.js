@@ -308,32 +308,32 @@ function renderHistorial(historial) {
         // 2. Limpiar el título del evento (Especial para asignaciones)
         let eventoVisual = h.bit_evento;
         if (h.bit_evento.includes('Asignación de OIRS')) {
-            // Buscamos el ID del funcionario asignado en la cadena: "... (Funcionario ID: X)"
+            // Buscamos el ID del CARGO asignado en la cadena: "... (Funcionario ID: X)"
             const regex = /\(Funcionario ID: (\d+)\)/;
             const match = h.bit_evento.match(regex);
-            
+
             if (match && match[1]) {
                 const idAsignado = match[1];
-                
-                // 1. Buscar en la lista global de funcionarios
-                let funcionario = window.oirsData?.listas?.funcionarios?.find(f => (f.fnc_id == idAsignado || f.id == idAsignado));
+
+                // 1. Buscar en la lista global de CARGOS
+                let cargo = window.oirsData?.listas?.cargos?.find(c => (c.car_id == idAsignado));
                 let nombreAsignado = '';
 
-                if (funcionario) {
-                    nombreAsignado = `${funcionario.fnc_nombre || funcionario.nombre || ''} ${funcionario.fnc_apellido || funcionario.apellido || ''}`.trim();
+                if (cargo) {
+                    nombreAsignado = cargo.car_nombre;
                 } else {
                     // 2. Buscar como respaldo en las asignaciones de la solicitud (donde ya vienen los nombres resueltos del backend)
                     const asgResp = window.oirsData?.solicitud?.asignaciones?.find(a => a.oia_asignacion == idAsignado);
                     if (asgResp) {
-                        nombreAsignado = `${asgResp.usr_nombre || ''} ${asgResp.usr_apellido || ''}`.trim();
+                        nombreAsignado = asgResp.car_nombre || 'Cargo Desconocido';
                     }
                 }
-                
+
                 if (nombreAsignado) {
                     eventoVisual = `Asignación de OIRS a ${nombreAsignado}`;
                 } else {
                     // Si no lo encuentra, al menos quitamos el "(Funcionario ID: X)" para que se vea más limpio
-                    eventoVisual = h.bit_evento.split(' por ')[0] + ' a Funcionario (ID: ' + idAsignado + ')';
+                    eventoVisual = h.bit_evento.split(' por ')[0] + ' a Cargo (ID: ' + idAsignado + ')';
                 }
             }
         }
@@ -456,8 +456,11 @@ function renderAsignaciones(asignaciones) {
 
         // --- Lógica de Permisos ---
         const currentUserId = window.oirsData?.currentUserId || 0;
+        const misCargosIds = window.oirsData?.misCargos?.map(c => parseInt(c.car_id)) || [];
+
         const esAsignador = currentUserId == asg.oia_asignador;
-        const esAsignado = currentUserId == asg.oia_asignacion;
+        // Ahora esAsignado significa que mi cargo está asignado
+        const esAsignado = misCargosIds.includes(parseInt(asg.oia_asignacion));
         const estaFinalizada = asg.oia_estado == 2;
         const puedeGestionar = (esAsignador || esAsignado) && !estaFinalizada;
 
@@ -515,11 +518,11 @@ function renderAsignaciones(asignaciones) {
                 <div class="p-5 flex justify-between align-items-center cursor-pointer hover:bg-slate-50 transition-colors asg-header-toggle" 
                      data-target="#${collapseId}">
                     <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400">
-                            <span class="material-symbols-outlined text-2xl">person</span>
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-400">
+                            <span class="material-symbols-outlined text-2xl">badge</span>
                         </div>
                         <div>
-                            <h6 class="text-[15px] font-bold text-slate-800 mb-0.5">${asg.usr_nombre || 'Funcionario'} ${asg.usr_apellido || ''}</h6>
+                            <h6 class="text-[15px] font-bold text-slate-800 mb-0.5">${asg.car_nombre || 'Cargo Desconocido'}</h6>
                             <p class="text-[11px] text-slate-400 uppercase tracking-widest font-medium">Asignado el ${asg.oia_creacion ? new Date(asg.oia_creacion).toLocaleDateString() : 'N/A'}</p>
                         </div>
                     </div>
@@ -759,7 +762,7 @@ function guardarAsignacion() {
     };
 
     if (!data.oig_asignacion) {
-        Swal.fire('Atención', 'Seleccione un funcionario para asignar', 'warning');
+        Swal.fire('Atención', 'Seleccione un cargo para asignar', 'warning');
         return;
     }
 
@@ -779,71 +782,66 @@ function guardarAsignacion() {
 // o bien aquí en tiempo de ejecución sobre this.funcionariosOIRS.
 // ============================================================
 
-let _funcionariosOIRS = null; // caché local
+// ============================================================
+// MODAL BUSCAR CARGO
+// ============================================================
 
-function _getFuncionariosOIRS() {
-    if (!_funcionariosOIRS) {
-        _funcionariosOIRS = (window.oirsData && window.oirsData.listas && window.oirsData.listas.funcionarios)
-            ? window.oirsData.listas.funcionarios
+let _cargosOIRS = null; // caché local
+
+function _getCargosOIRS() {
+    if (!_cargosOIRS) {
+        _cargosOIRS = (window.oirsData && window.oirsData.listas && window.oirsData.listas.cargos)
+            ? window.oirsData.listas.cargos
             : [];
     }
-    return _funcionariosOIRS;
+    return _cargosOIRS;
 }
 
-function abrirModalBuscarFuncionario() {
+function abrirModalBuscarCargos() {
     const buscarInput = document.getElementById('buscar_fnc_input');
-    const filtroArea = document.getElementById('filtro_area_fnc_oirs');
     if (buscarInput) buscarInput.value = '';
-    if (filtroArea) filtroArea.value = '';
-    renderizarBusquedaFuncionariosOIRS(_getFuncionariosOIRS());
+    renderizarBusquedaCargosOIRS(_getCargosOIRS());
 }
 
-function filtrarBusquedaFuncionariosOIRS() {
+function filtrarBusquedaCargosOIRS() {
     const term = $('#buscar_fnc_input').val().toLowerCase();
-    const areaId = $('#filtro_area_fnc_oirs').val();
 
-    const filtrados = _getFuncionariosOIRS().filter(f => {
-        const matchesTerm =
-            (f.fnc_nombre && f.fnc_nombre.toLowerCase().includes(term)) ||
-            (f.fnc_apellido && f.fnc_apellido.toLowerCase().includes(term)) ||
-            (f.fnc_email && f.fnc_email.toLowerCase().includes(term));
-
-        let matchesArea = true;
-        if (areaId === 'SIN_AREA') {
-            matchesArea = !f.fnc_area_id;
-        } else if (areaId) {
-            matchesArea = f.fnc_area_id == areaId;
-        }
-
-        return matchesTerm && matchesArea;
+    const filtrados = _getCargosOIRS().filter(c => {
+        return (c.car_nombre && c.car_nombre.toLowerCase().includes(term));
     });
 
-    renderizarBusquedaFuncionariosOIRS(filtrados);
+    renderizarBusquedaCargosOIRS(filtrados);
 }
 
-function renderizarBusquedaFuncionariosOIRS(lista) {
+// Hook original para el input
+$(document).on('input', '#buscar_fnc_input', filtrarBusquedaCargosOIRS);
+
+function renderizarBusquedaCargosOIRS(lista) {
     const tbody = document.getElementById('lista_busqueda_fnc_oirs');
     if (!tbody) return;
     tbody.innerHTML = '';
 
     if (lista.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-3">No se encontraron funcionarios.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-3">No se encontraron cargos.</td></tr>';
         return;
     }
 
-    lista.forEach(f => {
+    lista.forEach(c => {
         const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 cursor-pointer';
+        tr.onclick = () => seleccionarCargoOIRS(c.car_id, c.car_nombre);
         tr.innerHTML = `
-            <td class="small">${f.fnc_id || '-'}</td>
-            <td class="small">${f.fnc_email || '-'}</td>
-            <td class="small">
-                <div>${f.fnc_nombre || '-'}</div>
-                <div class="text-muted" style="font-size:11px">${f.fnc_area_nombre || 'Sin Área'}</div>
+            <td class="px-4 py-3">
+                <div class="font-bold text-slate-700">#${c.car_id}</div>
+                <div class="text-[13px] text-slate-800">${c.car_nombre}</div>
             </td>
-            <td class="small">${f.fnc_apellido || '-'}</td>
-            <td class="text-right">
-                <button class="btn btn-sm btn-outline-primary"
-                    onclick="seleccionarFuncionarioOIRS(${f.fnc_id}, '${(f.fnc_nombre || '')} ${(f.fnc_apellido || '')}')">
+            <td class="px-4 py-3">
+                <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded-md text-[11px] uppercase font-black">
+                    ${c.area_nombre || 'Sin Área'}
+                </span>
+            </td>
+            <td class="text-end px-4 py-3">
+                <button class="bg-indigo-50 text-indigo-600 px-3 py-1 rounded-lg font-bold text-[11px] uppercase tracking-wider hover:bg-indigo-100 transition-all">
                     Seleccionar
                 </button>
             </td>
@@ -852,7 +850,7 @@ function renderizarBusquedaFuncionariosOIRS(lista) {
     });
 }
 
-function seleccionarFuncionarioOIRS(id, nombre) {
+function seleccionarCargoOIRS(id, nombre) {
     const hiddenInput = document.getElementById('oig_asignacion');
     const displayInput = document.getElementById('oig_asignacion_display');
     if (hiddenInput) hiddenInput.value = id;
@@ -860,12 +858,9 @@ function seleccionarFuncionarioOIRS(id, nombre) {
 
     // Cerrar el modal usando API de Bootstrap
     const modalEl = document.getElementById('modalBuscarFuncionario');
-    const modalInstance = bootstrap.Modal.getInstance(modalEl);
+    const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
     if (modalInstance) {
         modalInstance.hide();
-    } else {
-        // Fallback si no hay instancia creada
-        $('#modalBuscarFuncionario').modal('hide');
     }
 }
 

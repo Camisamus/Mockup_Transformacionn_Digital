@@ -78,6 +78,16 @@ include '../../api/general/header.php';
             <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-800 tracking-tight">Ingresos Pendientes</h1>
             <p class="text-slate-400 text-sm lg:text-[15px] font-medium">En este listado encontrarás los ingresos pedidos por ti o aquellos que se encuentran bajo su responsabilidad.</p>
         </div>
+        <div class="flex flex-row gap-3 w-full lg:w-auto justify-center lg:justify-end">
+            <button type="button" onclick="buscarIngresos()"
+                class="flex-1 lg:flex-none whitespace-nowrap bg-primary-blue hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-[13px] uppercase tracking-wider flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">search</span> BUSCAR
+            </button>
+            <button type="button"
+                class="flex-1 lg:flex-none whitespace-nowrap bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all text-[13px] uppercase tracking-wider flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-[18px]">description</span> DESCARGAR REPORTE
+            </button>
+        </div>
     </div>
 
     <div class="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
@@ -101,7 +111,7 @@ include '../../api/general/header.php';
         </div>
 
         <div class="p-6 border-t border-slate-50 flex flex-col md:flex-row justify-between items-center gap-4 bg-white">
-            <div class="flex gap-3">
+            <!--<div class="flex gap-3">
                 <button type="button"
                     class="flex items-center gap-2 bg-[#1d7344] hover:bg-[#155a34] text-white px-5 py-2.5 rounded-lg text-xs font-bold transition-all shadow-md uppercase tracking-wider"
                     id="btn_exportar_excel">
@@ -112,7 +122,7 @@ include '../../api/general/header.php';
                     id="btn_exportar_pdf">
                     <span class="material-symbols-outlined text-sm">picture_as_pdf</span> PDF
                 </button>
-            </div>
+            </div>-->
         </div>
     </div>
 </div>

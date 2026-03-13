@@ -79,6 +79,84 @@ class Funcionario
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getAllCargosOIRS($filters = [])
+    {
+        $params = [];
+        $query = "SELECT DISTINCT
+                    c.car_id, 
+                    c.car_nombre,
+                    c.car_nivel,
+                    ga.tga_nombre as area_nombre,
+                    ga.tga_id as area_id
+                  FROM trd_general_cargos c
+                  JOIN trd_general_areas ga ON c.car_area = ga.tga_id
+                  WHERE c.car_borrado = 0";
+
+        if (isset($filters['car_nivel'])) {
+            $query .= " AND c.car_nivel = :car_nivel";
+            $params[':car_nivel'] = $filters['car_nivel'];
+        }
+
+        if (isset($filters['max_nivel'])) {
+            $query .= " AND c.car_nivel <= :max_nivel";
+            $params[':max_nivel'] = $filters['max_nivel'];
+        }
+
+        if (isset($filters['area_id'])) {
+            $query .= " AND c.car_area = :area_id";
+            $params[':area_id'] = $filters['area_id'];
+        }
+
+        if (!empty($filters['search'])) {
+            $query .= " AND (c.car_nombre LIKE :search)";
+            $params[':search'] = '%' . $filters['search'] . '%';
+        }
+
+        $query .= " ORDER BY c.car_nombre ASC";
+
+
+        
+        $stmt = $this->conn->prepare($query);
+        foreach ($params as $key => $val) {
+            $stmt->bindValue($key, $val);
+        }
+
+        // DEBUG: Imprimir en el log de errores de PHP
+        error_log("[DEBUG_OIRS] SQL: " . $query);
+        error_log("[DEBUG_OIRS] Params: " . json_encode($params));
+
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+/*
+        // ESCUELA DE LA VIEJA GUARDIA: Ver directamente en pantalla
+        echo "<pre style='background:#000; color:#0f0; padding:20px; border:5px solid #f00;'>";
+        echo "EROR 5102\n";
+        echo "SQL: " . $query . "\n";
+        echo "PARAMS: " . json_encode($params) . "\n";
+        echo "RESULTADOS:\n";
+        print_r($results);
+        echo "</pre>";
+        die();
+*/
+        return $results;
+    }
+
+    public function getCargosByUser($userId)
+    {
+        $query = "SELECT fc.ofc_cargo as car_id, c.car_nombre, c.car_nivel, c.car_area
+                  FROM trd_oirs_funcionarios_cargos fc
+                  JOIN trd_general_cargos c ON fc.ofc_cargo = c.car_id
+                  WHERE fc.ofc_funcionario = :usr_id 
+                  AND fc.ofc_estado = 1 
+                  AND fc.ofc_desde <= NOW() 
+                  AND (fc.ofc_hasta IS NULL OR fc.ofc_hasta >= NOW())";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":usr_id", $userId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
     public function getById($id)
     {

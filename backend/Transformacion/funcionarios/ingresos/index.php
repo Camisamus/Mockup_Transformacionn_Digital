@@ -96,7 +96,7 @@ include '../../api/general/header.php';
         </div>
         <div class="flex-shrink-0">
             <button type="button" onclick="location.href='crear.php'"
-                class="bg-primary-blue hover:bg-blue-700 text-white font-bold py-3.5 px-8 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-sm uppercase tracking-wider flex items-center gap-2">
+                class="bg-[#1e56a0] hover:bg-[#164687] text-white font-bold py-3.5 px-8 rounded-xl shadow-lg shadow-blue-200/50 transition-all text-sm uppercase tracking-wider flex items-center gap-2">
                 <span class="material-symbols-outlined text-[20px]">add_circle</span> NUEVO INGRESO
             </button>
         </div>

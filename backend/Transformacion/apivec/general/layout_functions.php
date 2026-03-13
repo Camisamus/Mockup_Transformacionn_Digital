@@ -26,7 +26,7 @@ function getIcon($name, $class = "", $attrs = [])
 
         return $svg;
     }
-    
+
     // Fallback: Material Symbols
     $classAttr = $class ? ' ' . $class : '';
     return '<span class="material-symbols-outlined' . $classAttr . '" style="font-size: inherit;">' . $name . '</span>';
@@ -272,179 +272,13 @@ function isChildActive($item, $currentScript)
     return false;
 }
 
-function renderLayoutScripts($pathPrefix)
+function renderLayoutScriptsVecinos($pathPrefix)
 {
     ?>
+    <script src="<?php echo $pathPrefix; ?>recursos/js/layout_manager.js"></script>
     <script>
-        // Global API Configuration
-        (function () {
-            const origin = window.location.origin;
-            const path = window.location.pathname;
-            const transformacionIdx = path.indexOf('/Transformacion/');
-
-            if (transformacionIdx !== -1) {
-                window.API_BASE_URL = origin + path.substring(0, transformacionIdx) + '/Transformacion/api';
-            } else {
-                window.API_BASE_URL = origin + '/transformacion/api';
-            }
-        })();
-
-        // --- Drill-down Menu Logic ---
-        window.drillDown = function (event, categoryId) {
-            if (event) event.preventDefault();
-            localStorage.setItem('active_category', categoryId);
-            applyMenuState(categoryId);
-        };
-
-        window.goBackToPanel = function (event) {
-            if (event) event.preventDefault();
-            localStorage.removeItem('active_category');
-            applyMenuState(null);
-        };
-
-        function applyMenuState(activeCategoryId) {
-            const topLevelCategories = document.querySelectorAll('.top-level-category');
-            const subItems = document.querySelectorAll('.sub-item');
-            const backButton = document.getElementById('back-to-panel-item');
-
-            if (activeCategoryId) {
-                topLevelCategories.forEach(el => {
-                    const catId = el.getAttribute('data-category-id');
-                    const anchor = el.querySelector('.nav-link');
-
-                    if (catId === activeCategoryId) {
-                        el.classList.remove('d-none');
-                        if (anchor) anchor.classList.add('category-header-active');
-                        const collapse = el.querySelector('.collapse');
-                        if (collapse) {
-                            collapse.classList.add('show');
-                            collapse.querySelectorAll('.sub-item').forEach(sub => sub.classList.remove('d-none'));
-                        }
-                    } else {
-                        el.classList.add('d-none');
-                    }
-                });
-                if (backButton) backButton.classList.remove('d-none');
-            } else {
-                topLevelCategories.forEach(el => {
-                    el.classList.remove('d-none');
-                    const anchor = el.querySelector('.nav-link');
-                    if (anchor) anchor.classList.remove('category-header-active');
-                    const collapse = el.querySelector('.collapse');
-                    if (collapse) collapse.classList.remove('show');
-                });
-                subItems.forEach(el => el.classList.add('d-none'));
-                if (backButton) backButton.classList.add('d-none');
-            }
-
-
-        }
-
-        // --- Logout Logic ---
-        window.logout = async function () {
-            try {
-                await fetch(`${window.API_BASE_URL}/general/logout.php`, {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        ACCION: "logout"
-                    })
-                });
-            } catch (e) {
-                console.error('Logout failed on server', e);
-            }
-
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('is_contribuyente');
-            localStorage.removeItem('current_representation');
-            localStorage.removeItem('user_data');
-            localStorage.removeItem('google_token');
-            localStorage.removeItem('active_category');
-            location.reload();
-        };
-
-        // --- Representation Selector (Contribuyente) ---
-        function renderRepresentationSelector() {
-            const nav = document.querySelector('#sidebar-container nav');
-            const menuContainer = document.getElementById('menu-container');
-
-            if (nav && menuContainer && !document.getElementById('representation-selector')) {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'mb-3 px-2';
-                wrapper.innerHTML = `
-                <label class="form-label -50 small text-uppercase fw-bold mb-1">Sesión representando a:</label>
-                <select class="form-select form-select-sm bg-primary-subtle border-0" id="representation-selector">
-                    <option value="personal">Persona Natural</option>
-                </select>
-            `;
-                nav.insertBefore(wrapper, menuContainer);
-
-                const companies = JSON.parse(localStorage.getItem('local_companies')) || [];
-                const selector = document.getElementById('representation-selector');
-                companies.forEach(company => {
-                    const option = document.createElement('option');
-                    option.value = company.rut;
-                    option.textContent = company.nombre;
-                    selector.appendChild(option);
-                });
-
-                selector.value = localStorage.getItem('current_representation') || 'personal';
-                selector.addEventListener('change', (e) => {
-                    const newVal = e.target.value;
-                    localStorage.setItem('current_representation', newVal);
-                    const name = e.target.options[e.target.selectedIndex].text;
-                    Swal.fire({
-                        title: 'Verificando representación',
-                        text: `Usted está actuando ahora en nombre de: ${name}`,
-                        icon: 'info',
-                        confirmButtonText: 'Entendido'
-                    });
-                });
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check representation selector
-            if (localStorage.getItem('is_contribuyente') === 'true') renderRepresentationSelector();
-
-            // Initialize menu state
-            let activeCategory = localStorage.getItem('active_category');
-
-            // Detect active category from current page to prevent flicker/reset
-            const activePageLink = document.querySelector('.active-page');
-            if (activePageLink) {
-                // Check if it's a sub-item
-                const subItemLi = activePageLink.closest('.sub-item');
-                if (subItemLi) {
-                    activeCategory = subItemLi.getAttribute('data-parent-category');
-                } else {
-                    // Check if it's a top-level category item (like Bandeja)
-                    const topLevelLi = activePageLink.closest('.top-level-category');
-                    if (topLevelLi) {
-                        activeCategory = topLevelLi.getAttribute('data-category-id');
-                        // For items like A.0, the group is A
-                        if (activeCategory && activeCategory.includes('.')) {
-                            activeCategory = activeCategory.split('.')[0];
-                        }
-                    }
-                }
-
-                if (activeCategory) {
-                    // If it's the Bandeja group (A), we don't save it as an active category
-                    if (activeCategory === 'A') {
-                        activeCategory = null;
-                        localStorage.removeItem('active_category');
-                    } else {
-                        localStorage.setItem('active_category', activeCategory);
-                    }
-                }
-            }
-
-            applyMenuState(activeCategory);
-        });
+        // No es necesario duplicar el código aquí, layout_manager.js ya maneja el logout y el menú.
+        // Solo inicializamos si es necesario algo específico.
     </script>
     <?php
 }

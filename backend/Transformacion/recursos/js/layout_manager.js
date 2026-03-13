@@ -4,38 +4,19 @@
 // Global API Configuration
 (function () {
     const path = window.location.pathname;
-    const backendIdx = path.indexOf('/backend/');
-    if (backendIdx !== -1) {
-        // We are in a subfolder structure
-        // path is like /.../backend/Transformacion/Funcionarios/dashboard.php
-        // we want /.../backend/Transformacion/api
-        // But wait, the original logic found '/backend/' and appended 'backend/api'.
-        // If path is .../backend/Transformacion/... 
-        // Original: path.substring(0, backendIdx) + '/backend/api' -> root/backend/api
-        // This assumes 'backend/api' exists.
-        // My files are in backend/Transformacion/api.
-        // Let's stick to the relative detection that worked before or improve it.
+    const transIdx = path.indexOf('/Transformacion/'); // Smart detection
 
-        // Actually, let's look at the PHP structure.
-        // backend/Transformacion/api 
-        // backend/Transformacion/index.php
-
-        // If I am at .../Transformacion/Funcionarios/dashboard.php
-        // API is at ../api
-
-        // JS often uses absolute paths. 
-        // Let's try to detect 'Transformacion'
-
-        const transformacionIdx = path.indexOf('/Transformacion/');
-        if (transformacionIdx !== -1) {
-            window.API_BASE_URL = window.location.origin + path.substring(0, transformacionIdx) + '/Transformacion/api';
-        } else {
-            // Fallback
-            window.API_BASE_URL = window.location.origin + '/transformacion/api';
-        }
+    if (transIdx !== -1) {
+        const basePath = path.substring(0, transIdx) + '/Transformacion';
+        const isVecino = path.includes('/vecinos/') || path.includes('/apivec/');
+        window.API_BASE_URL = window.location.origin + basePath + (isVecino ? '/apivec' : '/api');
     } else {
-        window.API_BASE_URL = window.location.origin + '/transformacion/api';
+        // Fallback for root installations or lowercase
+        const isVecino = path.toLowerCase().includes('/vecinos/') || path.toLowerCase().includes('/apivec/');
+        window.API_BASE_URL = window.location.origin + '/transformacion' + (isVecino ? '/apivec' : '/api');
     }
+
+    console.log("API Base URL detected:", window.API_BASE_URL);
 })();
 
 document.addEventListener('DOMContentLoaded', () => {

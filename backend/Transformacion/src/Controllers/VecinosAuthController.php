@@ -401,7 +401,7 @@ class VecinosAuthController
                     r.rol_orden
                 FROM trd_acceso_permisos_vecinos r
                 JOIN trd_acceso_permiso_rol_vecinos pr ON r.rol_id = pr.pfr_rol_id
-                JOIN trd_acceso_rol_usuario_vecinos up ON pr.pfr_perfil_id = up.usp_rol_id
+                JOIN trd_acceso_rol_usuario_vecinos up ON pr.pfr_perfil_id = up.usp_perfil_id
                 WHERE up.usp_usuario_id = :vecino_id 
                   AND r.rol_borrado = 0
                   AND up.usp_borrado = 0
