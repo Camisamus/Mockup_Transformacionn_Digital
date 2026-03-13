@@ -2,14 +2,14 @@
 echo "TIME: " . time() . "<br>";
 echo "VERSION: 3<br>";
 require_once __DIR__ . '/src/Config/Database.php';
-require_once __DIR__ . '/src/Models/OIRS_Gestion.php';
-require_once __DIR__ . '/src/Models/Bitacora.php';
+require_once __DIR__ . '/src/Models/OIRS_GESTIONES.php';
+require_once __DIR__ . '/src/Models/GENERAL_BITACORA.php';
 
 use App\Config\Database;
-use App\Models\OIRS_Gestion;
+use App\Models\OIRS_GESTIONES;
 
 $db = (new Database())->getConnection();
-$oirs = new OIRS_Gestion($db);
+$oirs = new OIRS_GESTIONES($db);
 
 $testUsers = [2, 3]; // Leticia (Admin), Ramon (Jefe)
 $view = 'revisar';

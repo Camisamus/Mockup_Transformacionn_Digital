@@ -2,14 +2,14 @@
 require_once __DIR__ . '/cors.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../src/Config/Database.php';
-require_once __DIR__ . '/../../src/Models/Comentario.php';
+require_once __DIR__ . '/../../src/Models/general_comentarios.php';
 
 use App\Config\Database;
-use App\Models\Comentario;
+use App\Models\general_comentarios;
 
 $database = new Database();
 $db = $database->getConnection();
-$comentario = new Comentario($db);
+$model = new general_comentarios($db);
 
 $accion = $data['ACCION'] ?? '';
 

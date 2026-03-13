@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\DESVE_Respuesta;
+use App\Models\DESVE_RESPUESTAS;
 
 class DESVE_RespuestaController
 {
@@ -11,7 +11,7 @@ class DESVE_RespuestaController
     public function __construct($db)
     {
         $this->db = $db;
-        $this->respuesta = new DESVE_Respuesta($this->db);
+        $this->respuesta = new desve_respuestas($this->db);
     }
 
     public function create($data)

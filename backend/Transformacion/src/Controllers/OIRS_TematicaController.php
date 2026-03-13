@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\OIRS_Tematica;
+use App\Models\oirs_tematicas;
 
 class OIRS_TematicaController
 {
@@ -11,7 +11,7 @@ class OIRS_TematicaController
     public function __construct($db)
     {
         $this->db = $db;
-        $this->tematica = new OIRS_Tematica($this->db);
+        $this->tematica = new oirs_tematicas($this->db);
     }
 
     public function getAll()

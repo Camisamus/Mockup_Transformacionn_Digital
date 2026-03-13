@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\AreaGeneral;
+use App\Models\GENERAL_AREAS;
 
 class AreaControllerGeneral
 {
@@ -11,7 +11,7 @@ class AreaControllerGeneral
     public function __construct($db)
     {
         $this->db = $db;
-        $this->area = new AreaGeneral($this->db);
+        $this->area = new general_areas($this->db);
     }
 
     public function getAll()

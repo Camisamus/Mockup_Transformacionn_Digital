@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\OrganizacionDESVE;
+use App\Models\desve_organizaciones;
 
 class OrganizacionControllerDESVE
 {
@@ -11,7 +11,7 @@ class OrganizacionControllerDESVE
     public function __construct($db)
     {
         $this->db = $db;
-        $this->organizacion = new OrganizacionDESVE($this->db);
+        $this->organizacion = new desve_organizaciones($this->db);
     }
 
     public function getAll()

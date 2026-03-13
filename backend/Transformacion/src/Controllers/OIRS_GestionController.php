@@ -1,19 +1,17 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\OIRS_Gestion;
-use App\Controllers\MailController;
+use App\Models\oirs_gestiones;
 
 class OIRS_GestionController
 {
     private $db;
     private $gestion;
-    private $mailController;
 
     public function __construct($db)
     {
         $this->db = $db;
-        $this->gestion = new OIRS_Gestion($this->db);
+        $this->gestion = new oirs_gestiones($this->db);
     }
 
     public function create($data)

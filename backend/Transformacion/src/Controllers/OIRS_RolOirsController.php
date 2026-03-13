@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\OIRS_RolOirs;
+use App\Models\oirs_roles;
 
 class OIRS_RolOirsController
 {
@@ -11,7 +11,7 @@ class OIRS_RolOirsController
     public function __construct($db)
     {
         $this->db = $db;
-        $this->mapping = new OIRS_RolOirs($this->db);
+        $this->mapping = new oirs_roles($this->db);
     }
 
     public function getAll()

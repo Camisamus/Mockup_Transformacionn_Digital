@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\DESVE_Solicitud;
+use App\Models\DESVE_SOLICITUDES;
 use App\Helpers\MailService;
 
 class DESVE_SolicitudController
@@ -14,7 +14,7 @@ class DESVE_SolicitudController
     public function __construct($db)
     {
         $this->db = $db;
-        $this->solicitud = new DESVE_Solicitud($this->db);
+        $this->solicitud = new desve_solicitudes($this->db);
         $this->mailService = new MailService($this->db);
     }
 

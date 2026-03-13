@@ -44,8 +44,8 @@ $authController = new VecinosAuthController($db);
 $result = $authController->loginByEmail($data['email']);
 
 // Logging logic (opcional para vecinos, pero recomendado)
-require_once '../../src/Models/SystemLog.php';
-$logModel = new \App\Models\SystemLog($db);
+require_once '../../src/Models/general_logs.php';
+$logModel = new \App\Models\general_logs($db);
 $logData = [
     'evento' => $result['success'] ? 'LOGIN_VECINO_SUCCESS' : 'LOGIN_VECINO_FAILED',
     'tipo' => $result['success'] ? 'info' : 'warning',

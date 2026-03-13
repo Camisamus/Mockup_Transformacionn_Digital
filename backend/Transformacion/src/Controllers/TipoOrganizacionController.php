@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\TipoOrganizacion;
+use App\Models\general_tipos_organizacion;
 
 class TipoOrganizacionController
 {
@@ -11,7 +11,7 @@ class TipoOrganizacionController
     public function __construct($db)
     {
         $this->db = $db;
-        $this->tipoOrganizacion = new TipoOrganizacion($this->db);
+        $this->tipoOrganizacion = new general_tipos_organizacion($this->db);
     }
 
     public function getAll()

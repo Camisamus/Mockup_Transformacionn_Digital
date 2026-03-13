@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\Sector;
+use App\Models\general_sectores;
 
 class SectorController
 {
@@ -11,7 +11,7 @@ class SectorController
     public function __construct($db)
     {
         $this->db = $db;
-        $this->sector = new Sector($this->db);
+        $this->sector = new general_sectores($this->db);
     }
 
     public function getAll()

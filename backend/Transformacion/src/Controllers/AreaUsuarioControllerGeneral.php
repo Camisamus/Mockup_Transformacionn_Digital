@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\AreaUsuarioGeneral;
+use App\Models\GENERAL_AREAS_USUARIOS;
 
 class AreaUsuarioControllerGeneral
 {
@@ -11,7 +11,7 @@ class AreaUsuarioControllerGeneral
     public function __construct($db)
     {
         $this->db = $db;
-        $this->mapping = new AreaUsuarioGeneral($this->db);
+        $this->mapping = new general_areas_usuarios($this->db);
     }
 
     public function getAll()

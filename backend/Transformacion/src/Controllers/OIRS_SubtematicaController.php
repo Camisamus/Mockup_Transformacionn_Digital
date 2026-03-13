@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\OIRS_Subtematica;
+use App\Models\oirs_subtematicas;
 
 class OIRS_SubtematicaController
 {
@@ -11,7 +11,7 @@ class OIRS_SubtematicaController
     public function __construct($db)
     {
         $this->db = $db;
-        $this->subtematica = new OIRS_Subtematica($this->db);
+        $this->subtematica = new oirs_subtematicas($this->db);
     }
 
     public function getAll()

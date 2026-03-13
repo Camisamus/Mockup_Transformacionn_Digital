@@ -3,7 +3,7 @@ namespace App\Models;
 
 use PDO;
 
-class Ingresos_Destinos
+class ingresos_destinos
 {
     private $conn;
     private $table_name_detalle = "trd_acceso_usuarios";

@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\SystemLog;
+use App\Models\general_logs;
 use PDO;
 
 class SystemLogController
@@ -13,7 +13,7 @@ class SystemLogController
     public function __construct($db)
     {
         $this->db = $db;
-        $this->logModel = new SystemLog($db);
+        $this->logModel = new general_logs($db);
     }
 
     public function handleRequest($method)

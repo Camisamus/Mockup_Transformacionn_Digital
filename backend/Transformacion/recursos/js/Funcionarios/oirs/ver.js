@@ -554,7 +554,7 @@ function renderAsignaciones(asignaciones) {
 
         const nombreAsignadorReal = asg.asignador_nombre ? `${asg.asignador_nombre} ${asg.asignador_apellido || ''}` : (asg.creador_nombre ? `${asg.creador_nombre} ${asg.creador_apellido || ''}` : 'Asignador');
         // Intentar cargar el historial de forma asíncrona
-        cargarHistorialAsignacion(asg.oia_id, asg.oia_creacion, instruccion, chatContainerId, nombreAsignadorReal);
+        cargarHistorialAsignacion(asg.oia_id, asg.oia_creacion, instruccion, chatContainerId, nombreAsignadorReal, asg.oia_asignador);
     });
 
     // Delegación de evento para el toggle manual (más robusto)
@@ -613,7 +613,7 @@ function eliminarAsignacion(e, asgId) {
     });
 }
 
-function cargarHistorialAsignacion(asgId, fechaCreacion, instruccion, containerId, nombreAsignador = "Asignador") {
+function cargarHistorialAsignacion(asgId, fechaCreacion, instruccion, containerId, nombreAsignador = "Asignador", asignadorId = null) {
     const chatContainer = $(`#${containerId}`);
 
     fetch(`${apiBase}/oirs/gestion.php`, {
@@ -629,26 +629,32 @@ function cargarHistorialAsignacion(asgId, fechaCreacion, instruccion, containerI
             const historial = res.data || [];
             let htmlChat = '';
 
-            // Mensaje inicial (Instrucción)
+            // Mensaje inicial (Instrucción) - Aplicamos lógica isMe
+            const isMeInit = parseInt(asignadorId) === parseInt(window.oirsData.currentUserId);
+            const alignmentInit = isMeInit ? 'justify-end' : 'justify-start';
+            const bgColorInit = isMeInit ? 'bg-white border-slate-200' : 'bg-blue-50 border-blue-100';
+            const labelInit = isMeInit ? 'Yo' : nombreAsignador;
+            const labelColorInit = isMeInit ? 'text-slate-500' : 'text-blue-600';
+
             htmlChat += `
-            <div class="flex items-start mb-4">
-                <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 max-w-[85%] shadow-sm">
-                    <div class="flex items-center mb-1">
-                        <span class="text-[10px] font-bold text-blue-600 uppercase tracking-widest mr-2">${nombreAsignador}</span>
-                        <span class="text-[9px] text-blue-400">${fechaCreacion ? new Date(fechaCreacion).toLocaleString() : 'N/A'}</span>
+            <div class="flex ${alignmentInit} mb-4" style="display: flex; ${isMeInit ? 'justify-content: flex-end;' : ''}">
+                <div class="${bgColorInit} border rounded-2xl p-4 max-w-[85%] shadow-sm" style="${isMeInit ? 'margin-left: auto;' : 'margin-right: auto;'} min-width: 200px; border: 1px solid #e2e8f0; background-color: ${isMeInit ? '#ffffff' : '#f0f9ff'};">
+                    <div class="flex items-center mb-1 gap-2">
+                        <span class="text-[10px] font-bold ${labelColorInit} uppercase tracking-widest">${labelInit}</span>
+                        <span class="text-[9px] text-slate-400">${fechaCreacion ? new Date(fechaCreacion).toLocaleString() : 'N/A'}</span>
                     </div>
-                    <p class="text-sm text-slate-700 m-0">${instruccion || '<i>Sin instrucción específica</i>'}</p>
+                    <p class="text-sm text-slate-700 m-0 mt-1">${instruccion || '<i>Sin instrucción específica</i>'}</p>
                 </div>
             </div>
         `;
 
             // Hilo de conversación
             historial.forEach(msg => {
-                const isMe = msg.oac_emisor == (window.oirsData?.solicitud?.rgt_creador || 1); // Comparar con creador de la OIRS o el encargado
+                const isMe = parseInt(msg.oac_emisor) === parseInt(window.oirsData.currentUserId);
                 const alignment = isMe ? 'justify-end' : 'justify-start';
                 const bgColor = isMe ? 'bg-white border-slate-200' : 'bg-blue-50 border-blue-100';
                 const extraStyles = isMe ? 'margin-left: auto;' : 'margin-right: auto;';
-                const label = isMe ? 'Encargado (Tú)' : `${msg.usr_nombre} ${msg.usr_apellido}`;
+                const label = isMe ? 'Yo' : `${msg.usr_nombre} ${msg.usr_apellido}`;
                 const labelColor = isMe ? 'text-slate-500' : 'text-blue-600';
 
                 let statusBadge = '';

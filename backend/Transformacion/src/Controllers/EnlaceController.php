@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\Enlace;
+use App\Models\GENERAL_ENLACES;
 
 class EnlaceController
 {
@@ -11,7 +11,7 @@ class EnlaceController
     public function __construct($db)
     {
         $this->db = $db;
-        $this->enlace = new Enlace($this->db);
+        $this->enlace = new general_enlaces($this->db);
     }
 
     public function getAll($data)

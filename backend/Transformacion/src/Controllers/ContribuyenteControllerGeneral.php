@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\ContribuyenteGeneral;
+use App\Models\GENERAL_CONTRIBUYENTES;
 
 class ContribuyenteControllerGeneral
 {
@@ -11,7 +11,7 @@ class ContribuyenteControllerGeneral
     public function __construct($db)
     {
         $this->db = $db;
-        $this->contribuyente = new ContribuyenteGeneral($this->db);
+        $this->contribuyente = new general_contribuyentes($this->db);
     }
 
     public function getAll()

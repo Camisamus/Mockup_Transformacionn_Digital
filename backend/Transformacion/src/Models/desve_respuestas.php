@@ -1,0 +1,91 @@
+<?php
+namespace App\Models;
+
+use PDO;
+use Exception;
+
+class desve_respuestas
+{
+    private $conn;
+    private $table_name = "trd_desve_respuestas";
+    private $bitacora;
+
+    public function __construct($db)
+    {
+        $this->conn = $db;
+        $this->bitacora = new general_bitacora($db);
+    }
+
+    public function create($data)
+    {
+        // ID para buscar respuestas: puede ser el actual o el original si es un re-ingreso
+        if (isset($data['sol_reingreso_id'])) {
+            $id_para_respuestas = $data['sol_reingreso_id'];
+        } else {
+            $id_para_respuestas = $data['res_solicitud_id'];
+        }
+        $query = "INSERT INTO " . $this->table_name . " SET
+            res_solicitud_id=:res_solicitud_id,
+            res_texto=:res_texto,
+            res_tipo=:res_tipo,
+            res_funcionario=:res_funcionario";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(":res_solicitud_id", $id_para_respuestas);
+        $stmt->bindParam(":res_texto", $data['res_texto']);
+        $stmt->bindValue(":res_tipo", $data['res_tipo'] ?? 'Comentario');
+
+        // Get user ID from session 
+        $funcionarioId = $_SESSION['user_id'];
+        $stmt->bindValue(":res_funcionario", $funcionarioId);
+
+        if ($stmt->execute()) {
+            // Log in Bitacora
+            $this->conn->beginTransaction();
+            try {
+                // Get the registro_tramite ID from the solicitud
+                $query_sol = "SELECT sol_registro_tramite FROM trd_desve_solicitudes WHERE sol_id = :id LIMIT 1";
+                $stmt_sol = $this->conn->prepare($query_sol);
+                $stmt_sol->bindParam(":id", $data['res_solicitud_id']);
+                $stmt_sol->execute();
+                $solicitud = $stmt_sol->fetch(PDO::FETCH_ASSOC);
+
+                if ($solicitud && $solicitud['sol_registro_tramite']) {
+                    $rgt_id = $solicitud['sol_registro_tramite'];
+                    $this->bitacora->registrar($rgt_id, "Responde solicitud", $funcionarioId);
+
+                    // Registrar documentos adjuntos (Base64)
+                    if (isset($data['documentos']) && is_array($data['documentos'])) {
+                        $docController = new \App\Controllers\GesDocController($this->conn);
+                        foreach ($data['documentos'] as $doc) {
+                            try {
+                                $fileInfo = $docController->base64ToFileArray($doc['base64'], $doc['nombre']);
+                                $result = $docController->subirArchivo(
+                                    [$fileInfo['array']],
+                                    [
+                                        'tramite_id' => $rgt_id,
+                                        'user_id' => $funcionarioId
+                                    ]
+                                );
+                                fclose($fileInfo['file']);
+                                if ($result['status'] !== 'success') {
+                                    error_log("Error uploading document {$doc['nombre']}: " . ($result['message'] ?? 'Unknown error'));
+                                }
+                            } catch (\Exception $e) {
+                                error_log("Exception uploading document: " . $e->getMessage());
+                            }
+                        }
+                    }
+                }
+                $this->conn->commit();
+            } catch (Exception $e) {
+                $this->conn->rollBack();
+                error_log("Error logging response in Bitacora: " . $e->getMessage());
+            }
+
+            return true;
+        }
+        return false;
+    }
+}

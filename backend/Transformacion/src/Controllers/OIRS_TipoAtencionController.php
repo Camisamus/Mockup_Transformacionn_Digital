@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\OIRS_TipoAtencion;
+use App\Models\oirs_tipos_atencion;
 
 class OIRS_TipoAtencionController
 {
@@ -11,7 +11,7 @@ class OIRS_TipoAtencionController
     public function __construct($db)
     {
         $this->db = $db;
-        $this->tipoAtencion = new OIRS_TipoAtencion($this->db);
+        $this->tipoAtencion = new oirs_tipos_atencion($this->db);
     }
 
     public function getAll()

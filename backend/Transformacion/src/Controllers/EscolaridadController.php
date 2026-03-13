@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\Escolaridad;
+use App\Models\GENERAL_ESCOLARIDADES;
 
 class EscolaridadController
 {
@@ -11,7 +11,7 @@ class EscolaridadController
     public function __construct($db)
     {
         $this->db = $db;
-        $this->escolaridad = new Escolaridad($this->db);
+        $this->escolaridad = new general_escolaridades($this->db);
     }
 
     public function getAll()
@@ -21,7 +21,7 @@ class EscolaridadController
     }
     public function getAllOIRS()
     {
-        $result = $this->escolaridad->getAllOIRS();
+        $result = $this->escolaridad->getAll();
         return ["status" => "success", "data" => $result];
     }
 

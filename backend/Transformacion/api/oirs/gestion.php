@@ -2,10 +2,10 @@
 require_once '../general/cors.php';
 require_once '../general/session_start.php';
 require_once '../../src/Config/Database.php';
-require_once '../../src/Models/Bitacora.php';
-require_once '../../src/Models/OIRS_Gestion.php';
-require_once '../../src/Models/OirsAsignacion.php';
-require_once '../../src/Models/OirsAsignacionComentario.php';
+require_once '../../src/Models/general_bitacora.php';
+require_once '../../src/Models/oirs_gestiones.php';
+require_once '../../src/Models/oirs_asignaciones.php';
+require_once '../../src/Models/oirs_asignacion_comentarios.php';
 require_once '../../src/Controllers/OIRS_GestionController.php';
 
 use App\Config\Database;
@@ -59,7 +59,7 @@ switch ($data['ACCION']) {
 
         // Handle Assignment Creation (History)
         if (!empty($data['oig_asignacion'])) {
-            $asignacionModel = new \App\Models\OirsAsignacion($db);
+            $asignacionModel = new \App\Models\oirs_asignaciones($db);
 
             // Check if already assigned to this cargo
             if ($asignacionModel->checkDuplicate($solicitud_id, $data['oig_asignacion'])) {
@@ -99,7 +99,7 @@ switch ($data['ACCION']) {
             break;
         }
 
-        $comentarioModel = new \App\Models\OirsAsignacionComentario($db);
+        $comentarioModel = new \App\Models\oirs_asignacion_comentarios($db);
         $result = $comentarioModel->crear([
             'oac_asignacion' => $asignacion_id,
             'oac_emisor' => $_SESSION['user_id'] ?? 1,
@@ -121,7 +121,7 @@ switch ($data['ACCION']) {
             break;
         }
 
-        $comentarioModel = new \App\Models\OirsAsignacionComentario($db);
+        $comentarioModel = new \App\Models\oirs_asignacion_comentarios($db);
         $historial = $comentarioModel->obtenerPorAsignacion($asignacion_id);
         echo json_encode(["status" => "success", "data" => $historial]);
         break;
@@ -133,7 +133,7 @@ switch ($data['ACCION']) {
             break;
         }
 
-        $asignacionModel = new \App\Models\OirsAsignacion($db);
+        $asignacionModel = new \App\Models\oirs_asignaciones($db);
         if ($asignacionModel->eliminar($asignacion_id)) {
             echo json_encode(["status" => "success", "message" => "Asignación eliminada correctamente"]);
         } else {

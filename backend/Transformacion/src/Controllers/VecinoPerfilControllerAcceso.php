@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\VecinoPerfilAcceso;
+use App\Models\general_acceso_vecino_roles;
 
 class VecinoPerfilControllerAcceso
 {
@@ -11,7 +11,7 @@ class VecinoPerfilControllerAcceso
     public function __construct($db)
     {
         $this->db = $db;
-        $this->mapping = new VecinoPerfilAcceso($this->db);
+        $this->mapping = new general_acceso_vecino_roles($this->db);
     }
 
     public function getAll()

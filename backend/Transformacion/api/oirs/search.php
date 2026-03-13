@@ -3,11 +3,13 @@ require_once '../general/cors.php';
 require_once '../general/session_start.php';
 
 require_once '../../src/Config/Database.php';
-require_once '../../src/Models/OIRS_Gestion.php';
-require_once '../../src/Models/Bitacora.php'; // Dependency of OIRS_Gestion
+require_once '../../src/Models/oirs_gestiones.php';
+require_once '../../src/Models/general_bitacora.php'; // Dependency of OIRS_Gestion
+
+header('Content-Type: application/json');
 
 use App\Config\Database;
-use App\Models\OIRS_Gestion;
+use App\Models\OIRS_GESTIONES;
 
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
@@ -17,7 +19,7 @@ if (!isset($_SESSION['user_id'])) {
 
 $database = new Database();
 $db = $database->getConnection();
-$oirs = new OIRS_Gestion($db);
+$oirs = new oirs_gestiones($db);
 
 $view = $_GET['view'] ?? 'bandeja';
 $userId = $_SESSION['user_id'];

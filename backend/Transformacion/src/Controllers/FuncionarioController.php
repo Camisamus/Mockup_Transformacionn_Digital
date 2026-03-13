@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\Funcionario;
+use App\Models\general_funcionarios;
 
 class FuncionarioController
 {
@@ -11,7 +11,7 @@ class FuncionarioController
     public function __construct($db)
     {
         $this->db = $db;
-        $this->funcionario = new Funcionario($this->db);
+        $this->funcionario = new general_funcionarios($this->db);
     }
 
     public function getMiRolOIRS()
@@ -77,18 +77,19 @@ class FuncionarioController
     public function getAllCargosOIRS($filters = [])
     {
         if (!isset($_SESSION['user_id'])) {
-             return ["status" => "success", "data" => []];
+            return ["status" => "success", "data" => []];
         }
 
         $misCargos = $this->getMisCargosOIRS();
         $oirsInfo = $this->esOIRS();
 
         $maxNivelPropio = 0;
-        foreach($misCargos as $c) {
-            $nivel = isset($c['car_nivel']) ? (int)$c['car_nivel'] : 1;
-            if ($nivel > $maxNivelPropio) $maxNivelPropio = $nivel;
+        foreach ($misCargos as $c) {
+            $nivel = isset($c['car_nivel']) ? (int) $c['car_nivel'] : 1;
+            if ($nivel > $maxNivelPropio)
+                $maxNivelPropio = $nivel;
         }
-        
+
         // El usuario proporcionó este ejemplo: 
         // [Area] => OIRS [jefe] => 0 [tga_id] => 2 [rol] => Encargado OIRS
         if ($oirsInfo && $oirsInfo['rol'] == 'Encargado OIRS') {
@@ -103,7 +104,7 @@ class FuncionarioController
         } elseif ($maxNivelPropio == 2) {
             // "Jefe" -> Deriva a Subordinados (Nivel 1) de su área
             $filters['car_nivel'] = 1;
-            
+
             // Priorizamos el área del jefe si no se especificó un filtro manual
             if (!isset($filters['area_id'])) {
                 if ($oirsInfo && $oirsInfo['jefe'] == 1) {
@@ -123,7 +124,8 @@ class FuncionarioController
 
     public function getMisCargosOIRS()
     {
-        if (!isset($_SESSION['user_id'])) return [];
+        if (!isset($_SESSION['user_id']))
+            return [];
         return $this->funcionario->getCargosByUser($_SESSION['user_id']);
     }
 

@@ -2,10 +2,10 @@
 
 namespace App\Controllers;
 
-use App\Models\Ingresos_Destinos;
-use App\Models\Ingresos_ingreso;
-use App\Helpers\Encode;
-use App\Models\Bitacora; // Assuming Bitacora is used
+use App\Models\ingresos_destinos;
+use App\Models\ingresos_solicitudes;
+use App\Models\general_bitacora;
+use App\Helpers\Encode; // Assuming Bitacora is used
 use App\Helpers\SimpleSMTP;
 use App\Helpers\ConfigLoader;
 use App\Helpers\MailService;
@@ -25,8 +25,8 @@ class Ingresos_SolicitudControler
     public function __construct($db)
     {
         $this->db = $db;
-        $this->solicitud = new Ingresos_ingreso($this->db);
-        $this->destinos = new Ingresos_Destinos($this->db);
+        $this->solicitud = new ingresos_solicitudes($this->db);
+        $this->destinos = new ingresos_destinos($this->db);
         $this->mailService = new MailService($this->db);
         $this->encoder = new Encode();
     }

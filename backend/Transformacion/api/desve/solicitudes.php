@@ -98,8 +98,8 @@ switch ($data['ACCION']) {
 
             // Log CREAR
             if (($response['status'] ?? '') === 'success') {
-                require_once __DIR__ . '/../../src/Models/SystemLog.php';
-                $logModel = new \App\Models\SystemLog($db);
+                require_once __DIR__ . '/../../src/Models/general_logs.php';
+                $logModel = new \App\Models\general_logs($db);
                 $tempData = $data;
                 if (isset($tempData['sol_documentos']) && is_array($tempData['sol_documentos'])) {
                     $tempData['sol_documentos'] = array_map(function ($d) {
@@ -134,8 +134,8 @@ switch ($data['ACCION']) {
             $response = $controller->update($id, $data);
             // Log ACTUALIZAR
             if (($response['status'] ?? '') === 'success') {
-                require_once __DIR__ . '/../../src/Models/SystemLog.php';
-                $logModel = new \App\Models\SystemLog($db);
+                require_once __DIR__ . '/../../src/Models/general_logs.php';
+                $logModel = new \App\Models\general_logs($db);
                 $tempData = $data;
                 if (isset($tempData['sol_documentos']) && is_array($tempData['sol_documentos'])) {
                     $tempData['sol_documentos'] = array_map(function ($d) {
@@ -169,7 +169,7 @@ switch ($data['ACCION']) {
         if ($id && isset($data['sol_estado_entrega'])) {
             // Simplified call - we can either update Controller or call Model directly if Controller is thin
             // For consistency, let's assume we might need a controller method or just use the model if it's simpler
-            $solicitudModel = new \App\Models\DESVE_Solicitud($db);
+            $solicitudModel = new \App\Models\desve_solicitudes($db);
             if ($solicitudModel->updateStatus($id, $data['sol_estado_entrega'], $data['sol_entrego_coordinador'] ?? false)) {
                 $response = ["status" => "success", "message" => "Estado actualizado"];
             } else {
@@ -186,8 +186,8 @@ switch ($data['ACCION']) {
 
             // Log BORRAR
             if (($response['status'] ?? '') === 'success') {
-                require_once '../src/Models/SystemLog.php';
-                $logModel = new \App\Models\SystemLog($db);
+                require_once __DIR__ . '/../../src/Models/general_logs.php';
+                $logModel = new \App\Models\general_logs($db);
                 $logModel->crear([
                     'evento' => 'DELETE',
                     'tipo' => 'warning',

@@ -2,7 +2,7 @@
 
 require_once '../../general/cors.php';
 require_once '../../../src/Config/Database.php';
-require_once '../../../src/Models/SystemLog.php';
+require_once '../../../src/Models/general_logs.php';
 require_once '../../../src/Controllers/SystemLogController.php';
 
 use App\Config\Database;

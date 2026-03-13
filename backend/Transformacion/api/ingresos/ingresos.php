@@ -147,8 +147,8 @@ switch ($data['ACCION']) {
         if ($data) {
             $response = $controller->create($data);
             if (($response['status'] ?? '') === 'success') {
-                require_once '../../src/Models/SystemLog.php';
-                $logModel = new \App\Models\SystemLog($db);
+                require_once '../../src/Models/general_logs.php';
+                $logModel = new \App\Models\general_logs($db);
                 $tempData = $data;
                 if (isset($tempData['documentos']) && is_array($tempData['documentos'])) {
                     $tempData['documentos'] = array_map(function ($d) {
@@ -180,8 +180,8 @@ switch ($data['ACCION']) {
         if ($id && $data) {
             $response = $controller->update($id, $data, $current_user_id);
             if (($response['status'] ?? '') === 'success') {
-                require_once '../../src/Models/SystemLog.php';
-                $logModel = new \App\Models\SystemLog($db);
+                require_once '../../src/Models/general_logs.php';
+                $logModel = new \App\Models\general_logs($db);
                 $tempData = $data;
                 if (isset($tempData['documentos']) && is_array($tempData['documentos'])) {
                     $tempData['documentos'] = array_map(function ($d) {
@@ -208,7 +208,7 @@ switch ($data['ACCION']) {
 
     case 'ACTUALIZAR_ESTADO':
         if ($id && isset($data['ing_estado_entrega'])) {
-            $solicitudModel = new \App\Models\Ingresos_ingreso($db);
+            $solicitudModel = new \App\Models\ingresos_solicitudes($db);
             if ($solicitudModel->updateStatus($id, $data['ing_estado_entrega'])) {
                 $response = ["status" => "success", "message" => "Estado actualizado"];
             } else {
@@ -223,8 +223,8 @@ switch ($data['ACCION']) {
         if ($id) {
             $response = $controller->delete($id);
             if (($response['status'] ?? '') === 'success') {
-                require_once '../../src/Models/SystemLog.php';
-                $logModel = new \App\Models\SystemLog($db);
+                require_once '../../src/Models/general_logs.php';
+                $logModel = new \App\Models\general_logs($db);
                 $logModel->crear([
                     'evento' => 'DELETE',
                     'tipo' => 'warning',
@@ -247,7 +247,7 @@ switch ($data['ACCION']) {
         $padre = $data['padre_id'] ?? null;
         $hijo = $data['hijo_id'] ?? null;
         if ($padre && $hijo) {
-            $multiancestro = new \App\Models\Multiancestro($db);
+            $multiancestro = new \App\Models\general_multiancestro($db);
             [$valido, $mensaje] = $multiancestro->validarVinculo($padre, $hijo);
             if (!$valido) {
                 $response = ["status" => "error", "message" => $mensaje];
@@ -276,7 +276,7 @@ switch ($data['ACCION']) {
         $padre = $data['padre_id'] ?? null;
         $hijo = $data['hijo_id'] ?? null;
         if ($padre && $hijo) {
-            $solicitudModel = new \App\Models\Ingresos_ingreso($db);
+            $solicitudModel = new \App\Models\ingresos_solicitudes($db);
             if ($solicitudModel->eliminarVinculo($padre, $hijo)) {
                 $response = ["status" => "success", "message" => "Vínculo eliminado"];
             } else {

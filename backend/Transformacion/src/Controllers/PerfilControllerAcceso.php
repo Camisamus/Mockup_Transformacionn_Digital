@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\PerfilAcceso;
+use App\Models\general_acceso_roles;
 
 class PerfilControllerAcceso
 {
@@ -11,7 +11,7 @@ class PerfilControllerAcceso
     public function __construct($db)
     {
         $this->db = $db;
-        $this->perfil = new PerfilAcceso($this->db);
+        $this->perfil = new general_acceso_roles($this->db);
     }
 
     public function getAll()

@@ -39,9 +39,10 @@ switch ($data['ACCION']) {
         $response = $controller->create($data);
 
         // Audit log (SystemLog)
-        if (($response['status'] ?? '') === 'success') {
-            require_once __DIR__ . '/../../src/Models/SystemLog.php';
-            $logModel = new \App\Models\SystemLog($db);
+        // Audit log (SystemLog)
+        try {
+            require_once __DIR__ . '/../../src/Models/general_logs.php';
+            $logModel = new \App\Models\general_logs($db);
 
             // Clean data for logging (remove base64)
             $logData = $data;

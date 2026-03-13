@@ -2,8 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Models\GesDoc;
-use App\Models\Bitacora;
+use App\Models\GESDOC_DOCUMENTOS_CARPETA;
+use App\Models\GENERAL_BITACORA;
 use App\Helpers\FileEncryption;
 
 class GesDocController
@@ -15,8 +15,8 @@ class GesDocController
     public function __construct($db)
     {
         $this->db = $db;
-        $this->gesdoc = new GesDoc($this->db);
-        $this->bitacora = new Bitacora($this->db);
+        $this->gesdoc = new gesdoc_documentos_carpeta($this->db);
+        $this->bitacora = new general_bitacora($this->db);
     }
 
     /**

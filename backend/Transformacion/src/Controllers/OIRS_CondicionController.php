@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\OIRS_Condicion;
+use App\Models\oirs_condiciones;
 
 class OIRS_CondicionController
 {
@@ -11,7 +11,7 @@ class OIRS_CondicionController
     public function __construct($db)
     {
         $this->db = $db;
-        $this->condicion = new OIRS_Condicion($this->db);
+        $this->condicion = new oirs_condiciones($this->db);
     }
 
     public function getAll()

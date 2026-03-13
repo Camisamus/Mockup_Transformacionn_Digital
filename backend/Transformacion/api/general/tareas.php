@@ -2,14 +2,14 @@
 require_once 'cors.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../src/Config/Database.php';
-require_once __DIR__ . '/../../src/Models/Tarea.php';
+require_once __DIR__ . '/../../src/Models/general_tareas.php';
 
 use App\Config\Database;
-use App\Models\Tarea;
+use App\Models\general_tareas;
 
 $database = new Database();
 $db = $database->getConnection();
-$tarea = new Tarea($db);
+$taskModel = new general_tareas($db);
 
 $accion = $data['ACCION'] ?? '';
 

@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\UsuarioAcceso;
+use App\Models\general_acceso_usuarios;
 
 class UsuarioControllerAcceso
 {
@@ -11,7 +11,7 @@ class UsuarioControllerAcceso
     public function __construct($db)
     {
         $this->db = $db;
-        $this->usuario = new UsuarioAcceso($this->db);
+        $this->usuario = new general_acceso_usuarios($this->db);
     }
 
     public function getAll()

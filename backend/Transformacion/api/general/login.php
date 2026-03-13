@@ -44,8 +44,8 @@ if (!isset($data['email']) || !isset($data['ACCION']) || $data['ACCION'] !== "LO
 $result = $authController->loginByEmail($data['email']);
 
 // Logging logic
-require_once '../../src/Models/SystemLog.php';
-$logModel = new \App\Models\SystemLog($db);
+require_once '../../src/Models/general_logs.php';
+$logModel = new \App\Models\general_logs($db);
 $logData = [
     'evento' => $result['success'] ? 'LOGIN_SUCCESS' : 'LOGIN_FAILED',
     'tipo' => $result['success'] ? 'info' : 'warning',

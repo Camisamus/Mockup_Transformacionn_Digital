@@ -1,9 +1,9 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\OirsSolicitud;
-use App\Models\ContribuyenteGeneral;
-use App\Models\ContribuyenteDireccion;
+use App\Models\oirs_solicitudes;
+use App\Models\general_contribuyentes;
+use App\Models\general_contribuyente_direcciones;
 
 class OirsSolicitudController
 {
@@ -15,9 +15,9 @@ class OirsSolicitudController
     public function __construct($db)
     {
         $this->db = $db;
-        $this->oirsModel = new OirsSolicitud($db);
-        $this->contModel = new ContribuyenteGeneral($db);
-        $this->dirModel = new ContribuyenteDireccion($db);
+        $this->oirsModel = new oirs_solicitudes($db);
+        $this->contModel = new general_contribuyentes($db);
+        $this->dirModel = new general_contribuyente_direcciones($db);
     }
 
     public function create($data)
@@ -119,11 +119,11 @@ class OirsSolicitudController
 
         // Obtener Historial (Bitacora)
         if (!empty($oirs['oirs_registro_tramite'])) {
-            $bitacoraModel = new \App\Models\Bitacora($this->db);
+            $bitacoraModel = new \App\Models\general_bitacora($this->db);
             $oirs['historial'] = $bitacoraModel->obtenerPorTramite($oirs['oirs_registro_tramite']);
 
             // Obtener Adjuntos (GesDoc)
-            $gesDocModel = new \App\Models\GesDoc($this->db);
+            $gesDocModel = new \App\Models\gesdoc_documentos_carpeta($this->db);
             $oirs['adjuntos'] = $gesDocModel->getDocumentosByTramite($oirs['oirs_registro_tramite']);
         } else {
             $oirs['historial'] = [];
@@ -131,11 +131,11 @@ class OirsSolicitudController
         }
 
         // Obtener Gestión (trd_oirs_gestion)
-        $gestionModel = new \App\Models\OIRS_Gestion($this->db);
+        $gestionModel = new \App\Models\oirs_gestiones($this->db);
         $oirs['gestion'] = $gestionModel->getBySolicitudId($id);
 
         // Obtener Asignaciones (trd_oirs_asignaciones)
-        $asignacionModel = new \App\Models\OirsAsignacion($this->db);
+        $asignacionModel = new \App\Models\oirs_asignaciones($this->db);
         $oirs['asignaciones'] = $asignacionModel->getBySolicitud($id);
 
         return ["status" => "success", "data" => $oirs];

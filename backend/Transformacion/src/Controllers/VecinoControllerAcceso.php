@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\VecinoAcceso;
+use App\Models\general_acceso_vecinos;
 
 class VecinoControllerAcceso
 {
@@ -11,7 +11,7 @@ class VecinoControllerAcceso
     public function __construct($db)
     {
         $this->db = $db;
-        $this->vecino = new VecinoAcceso($this->db);
+        $this->vecino = new general_acceso_vecinos($this->db);
     }
 
     public function getAll()

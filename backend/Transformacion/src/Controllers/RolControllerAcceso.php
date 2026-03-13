@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\RolAcceso;
+use App\Models\general_acceso_permisos;
 
 class RolControllerAcceso
 {
@@ -11,7 +11,7 @@ class RolControllerAcceso
     public function __construct($db)
     {
         $this->db = $db;
-        $this->rol = new RolAcceso($this->db);
+        $this->rol = new general_acceso_permisos($this->db);
     }
 
     public function getAll()

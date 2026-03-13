@@ -1,7 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\OrganizacionComunitariaGeneral;
+use App\Models\general_organizaciones_comunitarias;
 
 class OrganizacionComunitariaControllerGeneral
 {
@@ -11,7 +11,7 @@ class OrganizacionComunitariaControllerGeneral
     public function __construct($db)
     {
         $this->db = $db;
-        $this->org = new OrganizacionComunitariaGeneral($this->db);
+        $this->org = new general_organizaciones_comunitarias($this->db);
     }
 
     public function getAll()
